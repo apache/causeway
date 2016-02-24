@@ -52,7 +52,7 @@ public class Object_downloadLayoutXml {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "550.1")
+    @MemberOrder(name = "Metadata", sequence = "700.1")
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName,
@@ -67,10 +67,6 @@ public class Object_downloadLayoutXml {
         return new Clob(Util.withSuffix(fileName, style.name().toLowerCase() + ".xml"), "text/xml", xml);
     }
 
-    public boolean hide$$() {
-        // can use either style to determine whether this action should be hidden
-        return getGrid(GridService.Style.NORMALIZED) == null;
-    }
     public String default0$$() {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout");
     }

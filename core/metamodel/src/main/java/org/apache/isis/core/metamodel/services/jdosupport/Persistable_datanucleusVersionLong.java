@@ -30,15 +30,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
 @Mixin
-public class Persistable_datanucleusVersion {
+public class Persistable_datanucleusVersionLong {
 
     private final Persistable persistable;
 
-    public Persistable_datanucleusVersion(final Persistable persistable) {
+    public Persistable_datanucleusVersionLong(final Persistable persistable) {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersion> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersionLong> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -52,13 +52,13 @@ public class Persistable_datanucleusVersion {
             hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "Metadata", sequence = "800.2")
-    public Long datanucleusVersion() {
+    public Long $$() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof Long ? (Long) version : null;
     }
 
-    public boolean hideDatanucleusVersion() {
-        return datanucleusVersion() == null;
+    public boolean hide$$() {
+        return $$() == null;
     }
 
 }

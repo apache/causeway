@@ -19,7 +19,6 @@ package org.apache.isis.core.metamodel.services.jdosupport;
 import javax.jdo.JDOHelper;
 
 import org.datanucleus.enhancement.Persistable;
-import org.datanucleus.identity.DatastoreId;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -31,15 +30,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
 @Mixin
-public class Persistable_datanucleusId {
+public class Persistable_datanucleusVersionTimestamp {
 
     private final Persistable persistable;
 
-    public Persistable_datanucleusId(final Persistable persistable) {
+    public Persistable_datanucleusVersionTimestamp(final Persistable persistable) {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusId> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersionTimestamp> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -49,23 +48,17 @@ public class Persistable_datanucleusId {
             contributed = Contributed.AS_ASSOCIATION
     )
     @PropertyLayout(
-            named = "Id",
+            named = "Version",
             hidden = Where.ALL_TABLES
     )
-    @MemberOrder(name = "Metadata", sequence = "800.1")
-    public Long $$() {
-        final Object objectId = JDOHelper.getObjectId(persistable);
-        if(objectId instanceof DatastoreId) {
-            final DatastoreId datastoreId = (DatastoreId) objectId;
-            final Object id = datastoreId.getKeyAsObject();
-            return id != null && id instanceof Long ? (Long) id : null;
-        }
-        return null;
+    @MemberOrder(name = "Metadata", sequence = "800.2")
+    public java.sql.Timestamp $$() {
+        final Object version = JDOHelper.getVersion(persistable);
+        return version != null && version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;
     }
 
     public boolean hide$$() {
         return $$() == null;
     }
-
 
 }
