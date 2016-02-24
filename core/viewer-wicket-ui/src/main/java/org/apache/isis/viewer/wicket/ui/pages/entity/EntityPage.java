@@ -145,9 +145,10 @@ public class EntityPage extends PageAbstract {
 
             // if none, then fallback to invalidating entire cache
             // (this is the original LayoutMetadataFromJson behaviour)
-            if(!getDeploymentType().isProduction()) {
-                getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
-            }
+
+//            if(!getDeploymentType().isProduction()) {
+//                getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
+//            }
 
             // as a side-effect, this will update facets
             final Grid unused = facet.getGrid();

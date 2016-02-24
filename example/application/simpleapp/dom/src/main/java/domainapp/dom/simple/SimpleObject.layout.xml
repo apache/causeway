@@ -13,18 +13,17 @@
                     <bs3:row>
                         <bs3:col span="12">
                             <c:fieldSet name="Properties">
-                                <c:property id="name"/>
-                                <c:property id="versionSequence"/>
+                                <c:property id="name">
+                                    <c:action id="updateName" position="BELOW"/>
+                                </c:property>
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
-                <bs3:tab name="Misc">
+                <bs3:tab name="Metadata">
                     <bs3:row>
                         <bs3:col span="12">
-                            <c:fieldSet name="Metadata">
-                                <c:property id="versionSequence"/>
-                            </c:fieldSet>
+                            <c:fieldSet name="Metadata"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>

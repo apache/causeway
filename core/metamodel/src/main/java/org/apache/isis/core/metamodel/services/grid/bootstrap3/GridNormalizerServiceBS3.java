@@ -509,8 +509,21 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
     protected void addPropertiesTo(
             final FieldSet fieldSet,
             final List<String> propertyIds) {
+        final List<PropertyLayoutData> properties = fieldSet.getProperties();
+        final ImmutableList<String> existingIds = FluentIterable
+                .from(properties)
+                .transform(new Function<PropertyLayoutData, String>() {
+                    @Nullable
+                    @Override
+                    public String apply(@Nullable final PropertyLayoutData propertyLayoutData) {
+                        return propertyLayoutData.getId();
+                    }
+                })
+                .toList();
         for (final String propertyId : propertyIds) {
-            fieldSet.getProperties().add(new PropertyLayoutData(propertyId));
+            if(!existingIds.contains(propertyId)) {
+                properties.add(new PropertyLayoutData(propertyId));
+            }
         }
     }
 

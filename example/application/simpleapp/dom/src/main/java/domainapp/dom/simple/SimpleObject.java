@@ -21,7 +21,6 @@ package domainapp.dom.simple;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
@@ -31,6 +30,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -85,7 +85,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
             length = NAME_LENGTH
     )
     @Property(
-            //editing = Editing.DISABLED
+            editing = Editing.DISABLED
     )
     @PropertyLayout(
             namedEscaped = false
@@ -135,16 +135,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
-    /**
-     * version (derived property)
-     */
-    public java.sql.Timestamp getVersionSequence() {
-        return (java.sql.Timestamp) JDOHelper.getVersion(this);
-    }
-
-    public boolean hideVersionSequence() {
-        return getName().contains("ob");
-    }
 
     @Override
     public int compareTo(final SimpleObject other) {

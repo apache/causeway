@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 class SpecificationCacheDefault {
     
@@ -41,6 +42,7 @@ class SpecificationCacheDefault {
 
     public void cache(final String className, final ObjectSpecification spec) {
         specByClassName.put(className, spec);
+        recache(spec);
     }
     
 
@@ -60,7 +62,8 @@ class SpecificationCacheDefault {
     }
 
     /**
-     * Populated as a result of running {@link MetaModelValidator#validate() validation} after xxxallxxx most specs have been loaded. 
+     * Populated as a result of running {@link MetaModelValidator#validate(ValidationFailures)} validation} after
+     * xxxallxxx most specs have been loaded.
      */
     void setCacheBySpecId(Map<ObjectSpecId, ObjectSpecification> specById) {
         this.specById = Maps.newHashMap();

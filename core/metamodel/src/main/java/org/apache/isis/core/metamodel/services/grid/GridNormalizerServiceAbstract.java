@@ -21,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -638,20 +637,6 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
         final List<T> secondNotFirst = Lists.newArrayList(second);
         secondNotFirst.removeAll(first);
         return Tuple.of(firstNotSecond, secondNotFirst);
-    }
-
-
-    protected static String nextInSequenceFor(
-            final String key, final Map<String, int[]> seqByKey) {
-        synchronized (seqByKey) {
-            int[] holder = seqByKey.get(key);
-            if(holder == null) {
-                holder = new int[]{0};
-                seqByKey.put(key, holder);
-            }
-            holder[0]++;
-            return ""+holder[0];
-        }
     }
 
 
