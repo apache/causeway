@@ -17,25 +17,42 @@
 package org.apache.isis.applib.services.jaxb;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.SchemaOutputResolver;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has
  * {@link #createOutput(String, String) created} an output {@link StreamResult} containing the content of the schema.
  */
-class CatalogingSchemaOutputResolver extends SchemaOutputResolver
-{
+class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
+
+    private static final String SCHEMA_LOCATION_INCORRECT = "http://isis.apache.org/schema/common";
+    private static final String SCHEMA_LOCATION_CORRECT = "http://isis.apache.org/schema/common/common.xsd";
+
     private final JaxbService.IsisSchemas isisSchemas;
-    private List<String> namespaceUris = Lists.newArrayList();
+    private final List<String> namespaceUris = Lists.newArrayList();
 
     public CatalogingSchemaOutputResolver(final JaxbService.IsisSchemas isisSchemas) {
         this.isisSchemas = isisSchemas;
@@ -49,7 +66,59 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver
 
     public String getSchemaTextFor(final String namespaceUri) {
         final StreamResultWithWriter streamResult = schemaResultByNamespaceUri.get(namespaceUri);
-        return streamResult != null? streamResult.asString(): null;
+        if (streamResult == null) {
+            return null;
+        }
+        String xsd = streamResult.asString();
+
+        try {
+            final DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder parser = docBuildFactory.newDocumentBuilder();
+            final Document document = parser.parse(new InputSource(new StringReader(xsd)));
+
+            final Element el = document.getDocumentElement();
+            replaceCommonSchemaLocationIfAny(el);
+
+            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final StringWriter writer = new StringWriter();
+            transformer.transform(new DOMSource(document), new StreamResult(writer));
+            xsd = writer.toString();
+
+        } catch(Exception ex) {
+            // ignore
+        }
+
+        return xsd;
+    }
+
+    // replace <xs:import namespace="..." schemaLocation="http://isis.apache.org/schema/common"/>
+    // with    <xs:import namespace="..." schemaLocation="http://isis.apache.org/schema/common/common.xsd"/>
+    private static void replaceCommonSchemaLocationIfAny(final Node node) {
+        if(schemaLocationReplacedIn(node)) {
+            return;
+        }
+        final NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            final Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+                replaceCommonSchemaLocationIfAny(currentNode);
+            }
+        }
+    }
+
+    private static boolean schemaLocationReplacedIn(final Node node) {
+        if(node instanceof Element) {
+            final Element importEl = (Element) node;
+            final Attr schemaLocationAttr = importEl.getAttributeNode("schemaLocation");
+            if(schemaLocationAttr != null) {
+                final String value = schemaLocationAttr.getValue();
+                if(SCHEMA_LOCATION_INCORRECT.endsWith(value)) {
+                    schemaLocationAttr.setValue(SCHEMA_LOCATION_CORRECT);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
