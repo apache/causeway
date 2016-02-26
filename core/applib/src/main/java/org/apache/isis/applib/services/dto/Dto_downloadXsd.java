@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -67,6 +68,7 @@ public class Dto_downloadXsd {
     )
     @MemberOrder(sequence = "500.2")
     public Object $$(
+            @ParameterLayout(named = "File name")
             final String fileName,
             final JaxbService.IsisSchemas isisSchemas) {
 
