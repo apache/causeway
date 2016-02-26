@@ -385,7 +385,7 @@ public final class ObjectReflectorDefault
             // don't have an ObjectSpecId; hence the guard.
             if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
                 ObjectSpecId specId = spec.getSpecId();
-                if (getCache().getByObjectType(specId) != spec) {
+                if (getCache().getByObjectType(specId) == null) {
                     getCache().recache(spec);
                 }
             }

@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 class SpecificationCacheDefault {
     
     private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
-    private Map<ObjectSpecId, ObjectSpecification> specById;
+    private Map<ObjectSpecId, String> classNameBySpecId;
 
     public ObjectSpecification get(final String className) {
         return specByClassName.get(className);
@@ -58,16 +58,20 @@ class SpecificationCacheDefault {
         if (!isInitialized()) {
             throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
         }
-        return specById.get(objectSpecID);
+        final String className = classNameBySpecId.get(objectSpecID);
+        return className != null ? specByClassName.get(className) : null;
     }
 
     /**
      * Populated as a result of running {@link MetaModelValidator#validate(ValidationFailures)} validation} after
      * xxxallxxx most specs have been loaded.
      */
-    void setCacheBySpecId(Map<ObjectSpecId, ObjectSpecification> specById) {
-        this.specById = Maps.newHashMap();
-        this.specById.putAll(specById);
+    void setCacheBySpecId(final Map<ObjectSpecId, ObjectSpecification> specById) {
+        this.classNameBySpecId = Maps.newHashMap();
+        for (ObjectSpecId objectSpecId : specById.keySet()) {
+            final ObjectSpecification objectSpec = specById.get(objectSpecId);
+            this.classNameBySpecId.put(objectSpecId, objectSpec.getCorrespondingClass().getName());
+        }
     }
 
     public ObjectSpecification remove(String typeName) {
@@ -77,7 +81,7 @@ class SpecificationCacheDefault {
                 // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
                 // don't have an ObjectSpecId; hence the guard.
                 ObjectSpecId specId = removed.getSpecId();
-                specById.remove(specId);
+                classNameBySpecId.remove(specId);
             }
         }
         return removed;
@@ -92,11 +96,14 @@ class SpecificationCacheDefault {
             // just ignore.
             return;
         }
-        specById.put(spec.getSpecId(), spec);
+        if(!spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
+            return;
+        }
+        classNameBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass().getName());
     }
     
     boolean isInitialized() {
-        return specById != null;
+        return classNameBySpecId != null;
     }
 
 }
