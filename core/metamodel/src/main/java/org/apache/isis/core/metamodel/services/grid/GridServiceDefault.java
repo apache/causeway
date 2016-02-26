@@ -229,19 +229,20 @@ public class GridServiceDefault
     public Grid toGrid(final Class<?> domainClass, final Style style) {
         switch (style) {
         case NORMALIZED:
-            // obtain the already normalized grid, if available.
-            // (if there is none, then the facet will delegate back to this service to do the normalization,
-            // but then will cache it for any subsequent requests).
-            final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
-            final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-            return facet != null? facet.getGrid(): null;
+            return normalizedGrid(domainClass);
         case COMPLETE:
-            return complete(fromXml(domainClass));
+            return complete(normalizedGrid(domainClass));
         case MINIMAL:
-            return minimal(fromXml(domainClass));
+            return minimal(normalizedGrid(domainClass));
         default:
             throw new IllegalArgumentException("unsupported style");
         }
+    }
+
+    protected Grid normalizedGrid(final Class<?> domainClass) {
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
+        return facet != null? facet.getGrid(): null;
     }
 
     @Override

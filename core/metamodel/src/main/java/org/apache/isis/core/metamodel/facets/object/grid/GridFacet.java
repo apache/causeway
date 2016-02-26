@@ -20,10 +20,18 @@ package org.apache.isis.core.metamodel.facets.object.grid;
 
 
 import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.services.layout.GridNormalizerService;
+import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
+ * Obtain the current grid, derived either from a <code>.layout.xml</code> file, and normalized, or synthesized from
+ * existing layout metadata (annotations or <code>layout.json</code>).
+ *
+ * <p>
+ *     Most of the heavy lifting is done by delegating to the {@link GridService} and {@link GridNormalizerService}
+ *     services.
+ * </p>
  */
 public interface GridFacet extends Facet {
 
