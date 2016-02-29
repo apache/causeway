@@ -176,11 +176,11 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
     @Override
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        if(true) {
 
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
         grid.visit(new Grid.VisitorAdapter() {
+
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 final ObjectAction objectAction = objectSpec.getObjectAction(actionLayoutData.getId());
@@ -231,7 +231,6 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
                 setPluralIfAny(domainObjectLayoutData, objectSpec);
             }
         });
-        }
     }
 
     private static boolean isDoOp(final Facet facet) {

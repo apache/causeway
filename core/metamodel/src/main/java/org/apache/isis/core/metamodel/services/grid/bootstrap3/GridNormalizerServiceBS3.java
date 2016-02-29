@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -41,6 +41,7 @@ import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
@@ -52,7 +53,9 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.services.grid.GridNormalizerServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -163,9 +166,9 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 
-        final LinkedHashMap<String, PropertyLayoutData> propertyIds = bs3Grid.getAllPropertiesById();
-        final LinkedHashMap<String, CollectionLayoutData> collectionIds = bs3Grid.getAllCollectionsById();
-        final LinkedHashMap<String, ActionLayoutData> actionIds = bs3Grid.getAllActionsById();
+        final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById = bs3Grid.getAllPropertiesById();
+        final LinkedHashMap<String, CollectionLayoutData> collectionLayoutDataById = bs3Grid.getAllCollectionsById();
+        final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById = bs3Grid.getAllActionsById();
 
 
         // find all row and col ids
@@ -316,12 +319,12 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
         // add missing properties will be added to the first fieldset of the specified column
         final Tuple<List<String>> propertyIdTuple =
-                surplusAndMissing(propertyIds.keySet(),  oneToOneAssociationById.keySet());
+                surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
         final List<String> surplusPropertyIds = propertyIdTuple.first;
         final List<String> missingPropertyIds = propertyIdTuple.second;
 
         for (String surplusPropertyId : surplusPropertyIds) {
-            propertyIds.get(surplusPropertyId).setMetadataError("No such property");
+            propertyLayoutDataById.get(surplusPropertyId).setMetadataError("No such property");
         }
 
         // catalog which associations are bound to an existing field set
@@ -390,25 +393,26 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                 addPropertiesTo(fieldSet,
                         FluentIterable.from(associations)
                                       .transform(ObjectAssociation.Functions.toId())
-                                      .toList());
+                                      .toList(),
+                        propertyLayoutDataById);
             }
 
             if(!unboundPropertyIds.isEmpty()) {
                 final FieldSet fieldSet = fieldSetForUnreferencedPropertiesRef.get();
                 if(fieldSet != null) {
-                    addPropertiesTo(fieldSet, unboundPropertyIds);
+                    addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById);
                 }
             }
         }
 
         // any missing collections will be added as tabs to a new TabGroup in the specified column
         final Tuple<List<String>> collectionIdTuple =
-                surplusAndMissing(collectionIds.keySet(), oneToManyAssociationById.keySet());
+                surplusAndMissing(collectionLayoutDataById.keySet(), oneToManyAssociationById.keySet());
         final List<String> surplusCollectionIds = collectionIdTuple.first;
         final List<String> missingCollectionIds = collectionIdTuple.second;
 
         for (String surplusCollectionId : surplusCollectionIds) {
-            collectionIds.get(surplusCollectionId).setMetadataError("No such collection");
+            collectionLayoutDataById.get(surplusCollectionId).setMetadataError("No such collection");
         }
 
         if(!missingCollectionIds.isEmpty()) {
@@ -430,57 +434,100 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
             } else {
                 final BS3Col bs3Col = colForUnreferencedCollectionsRef.get();
                 if(bs3Col != null) {
-                    addCollectionsTo(bs3Col, sortedMissingCollectionIds);
+                    addCollectionsTo(bs3Col, sortedMissingCollectionIds, collectionLayoutDataById);
                 }
             }
         }
 
         // any missing actions will be added as actions in the specified column
         final Tuple<List<String>> actionIdTuple =
-                surplusAndMissing(actionIds.keySet(), objectActionById.keySet());
+                surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
         final List<String> surplusActionIds = actionIdTuple.first;
+        final List<String> possiblyMissingActionIds = actionIdTuple.second;
 
-        // ... the missing actions are those in the second tuple, excluding those bound via @MemberOrder#name
-        // to a property or collection.
-        final List<String> missingActionIds =
-                FluentIterable.from(actionIdTuple.second)
-                        .filter(new Predicate<String>() {
+        final List<String> associatedActionIds = Lists.newArrayList();
+
+        FluentIterable.from(possiblyMissingActionIds)
+                .forEach(
+                        new Consumer<String>() {
                             @Override
-                            public boolean apply(final String actionId) {
+                            public void accept(final String actionId) {
                                 final ObjectAction oa = objectActionById.get(actionId);
                                 final MemberOrderFacet memberOrderFacet = oa.getFacet(MemberOrderFacet.class);
                                 if(memberOrderFacet == null) {
-                                    return true;
+                                    return;
                                 }
                                 final String memberOrderName = memberOrderFacet.name();
                                 if (memberOrderName == null) {
-                                    return true;
+                                    return;
                                 }
                                 final String id = asId(memberOrderName);
+
                                 if (oneToOneAssociationById.containsKey(id)) {
-                                    return false;
+                                    associatedActionIds.add(actionId);
+
+                                    if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
+                                        // if binding not via annotation, then explicitly bind this
+                                        // action to the property
+                                        final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(id);
+                                        final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+
+                                        final ActionPositionFacet actionPositionFacet = oa.getFacet(ActionPositionFacet.class);
+                                        final ActionLayoutDataOwner owner;
+                                        final ActionLayout.Position position;
+                                        if(actionPositionFacet != null) {
+                                            position = actionPositionFacet.position();
+                                            owner = position == ActionLayout.Position.PANEL ||
+                                                    position == ActionLayout.Position.PANEL_DROPDOWN
+                                                        ? propertyLayoutData.getOwner()
+                                                        : propertyLayoutData;
+                                        } else {
+                                            position = ActionLayout.Position.BELOW;
+                                            owner = propertyLayoutData;
+                                        }
+                                        actionLayoutData.setPosition(position);
+                                        addActionTo(owner, actionLayoutData);
+                                    }
+
+                                    return;
                                 }
                                 if (oneToManyAssociationById.containsKey(id)) {
-                                    return false;
+                                    associatedActionIds.add(actionId);
+
+                                    if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
+                                        // if binding not via annotation, then explicitly bind this
+                                        // action to the property
+                                        final CollectionLayoutData collectionLayoutData = collectionLayoutDataById.get(id);
+                                        final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                                        addActionTo(collectionLayoutData, actionLayoutData);
+                                    }
+                                    return;
                                 }
                                 // if the @MemberOrder for the action references a field set (that has bound
                                 // associations), then don't mark it as missing, butinstead explicitly add it to the
                                 // list of actions of that fieldset.
                                 final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
                                 if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
+
+                                    associatedActionIds.add(actionId);
+
                                     final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+
                                     actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
-                                    fieldSetIds.get(id).getActions().add(actionLayoutData);
-                                    return false;
+                                    final FieldSet fieldSet = fieldSetIds.get(id);
+                                    addActionTo(fieldSet, actionLayoutData);
+                                    return;
                                 }
-                                // is missing after all.
-                                return true;
                             }
-                        })
-                        .toList();
+                        });
+
+        // ... the missing actions are those in the second tuple, excluding those associated (via @MemberOrder#name)
+        // to a property or collection.
+        final List<String> missingActionIds = Lists.newArrayList(possiblyMissingActionIds);
+        missingActionIds.removeAll(associatedActionIds);
 
         for (String surplusActionId : surplusActionIds) {
-            actionIds.get(surplusActionId).setMetadataError("No such action");
+            actionLayoutDataById.get(surplusActionId).setMetadataError("No such action");
         }
 
         if(!missingActionIds.isEmpty()) {
@@ -490,12 +537,20 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
             } else {
                 final FieldSet fieldSet = fieldSetForUnreferencedActionsRef.get();
                 if(fieldSet != null) {
-                    addActionsTo(fieldSet, missingActionIds);
+                    addActionsTo(fieldSet, missingActionIds, actionLayoutDataById);
                 }
             }
         }
 
         return true;
+    }
+
+    protected void addActionTo(final ActionLayoutDataOwner owner, final ActionLayoutData actionLayoutData) {
+        List<ActionLayoutData> actions = owner.getActions();
+        if(actions == null) {
+            owner.setActions(actions = Lists.newArrayList());
+        }
+        actions.add(actionLayoutData);
     }
 
     static String asId(final String str) {
@@ -508,10 +563,10 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
     protected void addPropertiesTo(
             final FieldSet fieldSet,
-            final List<String> propertyIds) {
-        final List<PropertyLayoutData> properties = fieldSet.getProperties();
+            final List<String> propertyIds,
+            final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById) {
         final ImmutableList<String> existingIds = FluentIterable
-                .from(properties)
+                .from(fieldSet.getProperties())
                 .transform(new Function<PropertyLayoutData, String>() {
                     @Nullable
                     @Override
@@ -522,13 +577,18 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                 .toList();
         for (final String propertyId : propertyIds) {
             if(!existingIds.contains(propertyId)) {
-                properties.add(new PropertyLayoutData(propertyId));
+                final PropertyLayoutData propertyLayoutData = new PropertyLayoutData(propertyId);
+                fieldSet.getProperties().add(propertyLayoutData);
+                propertyLayoutData.setOwner(fieldSet);
+                propertyLayoutDataById.put(propertyId, propertyLayoutData);
             }
         }
     }
 
-    protected void addActionsTo(final BS3Col bs3Col, final List<String> missingActionIds) {
-        for (String actionId : missingActionIds) {
+    protected void addActionsTo(
+            final BS3Col bs3Col,
+            final List<String> actionIds) {
+        for (String actionId : actionIds) {
             List<ActionLayoutData> actions = bs3Col.getActions();
             if(actions == null) {
                 actions = Lists.newArrayList();
@@ -538,20 +598,27 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
     }
 
-    protected void addActionsTo(final FieldSet fieldSet, final List<String> missingActionIds) {
+    protected void addActionsTo(
+            final FieldSet fieldSet,
+            final List<String> actionIds,
+            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
         List<ActionLayoutData> actions = fieldSet.getActions();
-        for (String actionId : missingActionIds) {
-            actions.add(new ActionLayoutData(actionId));
+        for (String actionId : actionIds) {
+            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+            actions.add(actionLayoutData);
+            actionLayoutDataById.put(actionId, actionLayoutData);
         }
     }
 
     protected void addCollectionsTo(
             final BS3Col tabRowCol,
-            final List<String> collectionIds) {
+            final List<String> collectionIds,
+            final LinkedHashMap<String, CollectionLayoutData> collectionLayoutDataById) {
         for (final String collectionId : collectionIds) {
-            final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
-            layoutMetadata.setDefaultView("table");
-            tabRowCol.getCollections().add(layoutMetadata);
+            final CollectionLayoutData collectionLayoutData = new CollectionLayoutData(collectionId);
+            collectionLayoutData.setDefaultView("table");
+            tabRowCol.getCollections().add(collectionLayoutData);
+            collectionLayoutDataById.put(collectionId, collectionLayoutData);
         }
     }
 

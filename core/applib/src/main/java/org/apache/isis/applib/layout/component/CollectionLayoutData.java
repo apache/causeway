@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
 
@@ -197,7 +198,7 @@ public class CollectionLayoutData
 
 
 
-    private List<ActionLayoutData> actions;
+    private List<ActionLayoutData> actions = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "action", required = false)
