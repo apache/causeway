@@ -95,6 +95,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -712,7 +713,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return Lists.newArrayList(
                 FluentIterable.from(allAssociations)
                         .filter(Filters.asPredicate(filter))
-                        .toSortedList(ObjectAssociation.Comparators.byMemberOrderSequence())
+                        .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
         );
     }
 

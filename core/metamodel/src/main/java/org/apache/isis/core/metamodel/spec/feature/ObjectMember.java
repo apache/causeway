@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +34,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 /**
  * Provides reflective access to an action or a field on a domain object.
@@ -183,6 +186,27 @@ public interface ObjectMember extends ObjectFeature {
         public static <T extends ObjectMember> HashMap<String, T> mapById(final List<T> members) {
             return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
         }
+    }
+
+    // //////////////////////////////////////////////////////
+    // Comparators
+    // //////////////////////////////////////////////////////
+
+    public static class Comparators {
+        public static Comparator<ObjectMember> byMemberOrderSequence() {
+            return new Comparator<ObjectMember>() {
+                private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
+                @Override
+                public int compare(final ObjectMember o1, final ObjectMember o2) {
+                    final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
+                    final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
+                    return o1Facet == null? +1:
+                            o2Facet == null? -1:
+                                    deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+                }
+            };
+        }
+
     }
 
 }

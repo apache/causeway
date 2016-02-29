@@ -410,6 +410,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     // //////////////////////////////////////////////////////
 
     public static class Comparators {
+        /**
+         * Use {@link ObjectMember.Comparators#byMemberOrderSequence()} instead.
+         */
+        @Deprecated
         public static Comparator<ObjectAssociation> byMemberOrderSequence() {
             return new Comparator<ObjectAssociation>() {
                 private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();

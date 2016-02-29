@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -423,7 +424,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                             return oneToManyAssociationById.get(collectionId);
                         }
                     })
-                    .toSortedList(ObjectAssociation.Comparators.byMemberOrderSequence())
+                    .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
 
             );
             final ImmutableList<String> sortedMissingCollectionIds = FluentIterable.from(sortedCollections)
@@ -447,7 +448,21 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
         final List<String> associatedActionIds = Lists.newArrayList();
 
-        FluentIterable.from(possiblyMissingActionIds)
+        List<ObjectAction> sortedPossiblyMissingActions = Lists.newArrayList(
+                FluentIterable.from(possiblyMissingActionIds)
+                        .transform(new Function<String, ObjectAction>() {
+                            @Nullable @Override public ObjectAction apply(@Nullable final String actionId) {
+                                return objectActionById.get(actionId);
+                            }
+                        })
+                        .toSortedList(ObjectMember.Comparators.byMemberOrderSequence()));
+
+        List<String> sortedPossiblyMissingActionIds =
+                FluentIterable.from(sortedPossiblyMissingActions)
+                .transform(ObjectMember.Functions.getId())
+                .toList();
+
+            FluentIterable.from(sortedPossiblyMissingActionIds)
                 .forEach(
                         new Consumer<String>() {
                             @Override
@@ -523,7 +538,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
         // ... the missing actions are those in the second tuple, excluding those associated (via @MemberOrder#name)
         // to a property or collection.
-        final List<String> missingActionIds = Lists.newArrayList(possiblyMissingActionIds);
+        final List<String> missingActionIds = Lists.newArrayList(sortedPossiblyMissingActionIds);
         missingActionIds.removeAll(associatedActionIds);
 
         for (String surplusActionId : surplusActionIds) {
@@ -533,7 +548,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         if(!missingActionIds.isEmpty()) {
             final BS3Col bs3Col = colForUnreferencedActionsRef.get();
             if(bs3Col != null) {
-                addActionsTo(bs3Col, missingActionIds);
+                addActionsTo(bs3Col, missingActionIds, actionLayoutDataById);
             } else {
                 final FieldSet fieldSet = fieldSetForUnreferencedActionsRef.get();
                 if(fieldSet != null) {
@@ -587,14 +602,18 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
     protected void addActionsTo(
             final BS3Col bs3Col,
-            final List<String> actionIds) {
+            final List<String> actionIds,
+            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
         for (String actionId : actionIds) {
             List<ActionLayoutData> actions = bs3Col.getActions();
             if(actions == null) {
                 actions = Lists.newArrayList();
                 bs3Col.setActions(actions);
             }
-            actions.add(new ActionLayoutData(actionId));
+            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+            actions.add(actionLayoutData);
+            actionLayoutDataById.put(actionId, actionLayoutData);
+            actionLayoutData.setOwner(bs3Col);
         }
     }
 
