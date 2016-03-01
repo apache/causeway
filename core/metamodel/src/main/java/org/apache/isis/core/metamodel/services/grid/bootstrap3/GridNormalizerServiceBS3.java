@@ -560,22 +560,6 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         return true;
     }
 
-    protected void addActionTo(final ActionLayoutDataOwner owner, final ActionLayoutData actionLayoutData) {
-        List<ActionLayoutData> actions = owner.getActions();
-        if(actions == null) {
-            owner.setActions(actions = Lists.newArrayList());
-        }
-        actions.add(actionLayoutData);
-    }
-
-    static String asId(final String str) {
-        if(Strings.isNullOrEmpty(str)) {
-            return str;
-        }
-        final char c = str.charAt(0);
-        return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
-    }
-
     protected void addPropertiesTo(
             final FieldSet fieldSet,
             final List<String> propertyIds,
@@ -597,35 +581,6 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                 propertyLayoutData.setOwner(fieldSet);
                 propertyLayoutDataById.put(propertyId, propertyLayoutData);
             }
-        }
-    }
-
-    protected void addActionsTo(
-            final BS3Col bs3Col,
-            final List<String> actionIds,
-            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
-        for (String actionId : actionIds) {
-            List<ActionLayoutData> actions = bs3Col.getActions();
-            if(actions == null) {
-                actions = Lists.newArrayList();
-                bs3Col.setActions(actions);
-            }
-            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-            actions.add(actionLayoutData);
-            actionLayoutDataById.put(actionId, actionLayoutData);
-            actionLayoutData.setOwner(bs3Col);
-        }
-    }
-
-    protected void addActionsTo(
-            final FieldSet fieldSet,
-            final List<String> actionIds,
-            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
-        List<ActionLayoutData> actions = fieldSet.getActions();
-        for (String actionId : actionIds) {
-            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-            actions.add(actionLayoutData);
-            actionLayoutDataById.put(actionId, actionLayoutData);
         }
     }
 
@@ -667,8 +622,50 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
     }
 
+    protected void addActionsTo(
+            final BS3Col bs3Col,
+            final List<String> actionIds,
+            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
+        for (String actionId : actionIds) {
+            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+            addActionTo(bs3Col, actionLayoutData);
+            actionLayoutDataById.put(actionId, actionLayoutData);
+        }
+    }
+
+    protected void addActionsTo(
+            final FieldSet fieldSet,
+            final List<String> actionIds,
+            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
+        for (String actionId : actionIds) {
+            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+            addActionTo(fieldSet, actionLayoutData);
+            actionLayoutDataById.put(actionId, actionLayoutData);
+        }
+    }
+
+    protected void addActionTo(
+            final ActionLayoutDataOwner owner,
+            final ActionLayoutData actionLayoutData) {
+        List<ActionLayoutData> actions = owner.getActions();
+        if(actions == null) {
+            owner.setActions(actions = Lists.newArrayList());
+        }
+        actions.add(actionLayoutData);
+        actionLayoutData.setOwner(owner);
+    }
+
     private static Boolean isSet(final Boolean flag) {
         return flag != null && flag;
     }
+
+    private static String asId(final String str) {
+        if(Strings.isNullOrEmpty(str)) {
+            return str;
+        }
+        final char c = str.charAt(0);
+        return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
+    }
+
 
 }
