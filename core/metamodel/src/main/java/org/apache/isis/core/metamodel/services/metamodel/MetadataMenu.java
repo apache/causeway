@@ -27,9 +27,11 @@ import java.util.zip.ZipOutputStream;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
+import javax.xml.bind.Marshaller;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableMap;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.IsisApplibModule;
@@ -46,9 +48,11 @@ import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY
@@ -99,9 +103,8 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
                     @Override
                     public boolean apply(final ObjectSpecification input) {
                         return  !input.isAbstract() &&
-                                !input.isService() &&
-                                !input.isValue() &&
-                                !input.isParentedOrFreeCollection();
+                                (input.containsDoOpFacet(JdoPersistenceCapableFacet.class) ||
+                                 input.containsDoOpFacet(ViewModelFacet.class));
                     }});
         try {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -112,7 +115,11 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
                 final Grid grid = gridService.toGrid(domainClass, style);
                 if(grid != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
-                    String xml = jaxbService.toXml(grid);
+                    final String xml = jaxbService.toXml(grid,
+                            ImmutableMap.<String,Object>of(
+                                    Marshaller.JAXB_SCHEMA_LOCATION,
+                                    gridService.tnsAndSchemaLocation(grid)
+                            ));
                     writer.write(xml);
                     writer.flush();
                     zos.closeEntry();
@@ -124,6 +131,10 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
         } catch (final IOException ex) {
             throw new FatalException("Unable to create zip of layouts", ex);
         }
+    }
+
+    public GridService.Style default0DownloadLayouts() {
+        return GridService.Style.NORMALIZED;
     }
 
     private static String zipEntryNameFor(final ObjectSpecification objectSpec) {
