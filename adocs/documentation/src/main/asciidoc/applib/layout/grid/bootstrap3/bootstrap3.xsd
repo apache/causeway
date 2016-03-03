@@ -1,5 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
-<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://isis.apache.org/applib/layout/component">
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://isis.apache.org/applib/layout/component" xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3" elementFormDefault="qualified" targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3" version="1.0">
 
     <xs:import namespace="http://isis.apache.org/applib/layout/component" schemaLocation="../../component"/>
 
@@ -13,8 +12,8 @@
 
     <xs:complexType name="grid">
         <xs:sequence>
-            <xs:element name="row" type="tns:row" maxOccurs="unbounded"/>
-            <xs:element name="metadataError" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element maxOccurs="unbounded" name="row" type="tns:row"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="metadataError" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="cssClass" type="xs:string"/>
     </xs:complexType>
@@ -23,19 +22,19 @@
         <xs:complexContent>
             <xs:extension base="tns:bs3ElementAbstract">
                 <xs:sequence>
-                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
                         <xs:element ref="tns:col"/>
                         <xs:element ref="tns:clearFixVisible"/>
                         <xs:element ref="tns:clearFixHidden"/>
                     </xs:choice>
-                    <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+                    <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
                 </xs:sequence>
                 <xs:attribute name="id" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="bs3ElementAbstract" abstract="true">
+    <xs:complexType abstract="true" name="bs3ElementAbstract">
         <xs:sequence/>
         <xs:attribute name="cssClass" type="xs:string"/>
     </xs:complexType>
@@ -44,13 +43,14 @@
         <xs:complexContent>
             <xs:extension base="tns:bs3RowContent">
                 <xs:sequence>
-                    <xs:element ref="ns1:domainObject" minOccurs="0"/>
-                    <xs:element ref="ns1:action" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="row" type="tns:row" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="tabGroup" type="tns:tabGroup" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element ref="ns1:fieldSet" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element ref="ns1:collection" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="sizeSpan" type="tns:sizeSpan"/>
+                    <xs:element minOccurs="0" ref="ns1:domainObject"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:action"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="row" type="tns:row"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="tabGroup" type="tns:tabGroup"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:fieldSet"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:collection"/>
+                    <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
                 </xs:sequence>
                 <xs:attribute name="id" type="xs:string"/>
                 <xs:attribute name="span" type="xs:int" use="required"/>
@@ -60,7 +60,7 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="bs3RowContent" abstract="true">
+    <xs:complexType abstract="true" name="bs3RowContent">
         <xs:complexContent>
             <xs:extension base="tns:bs3ElementAbstract">
                 <xs:sequence/>
@@ -69,12 +69,19 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="sizeSpan">
+        <xs:all/>
+        <xs:attribute name="offset" type="xs:boolean"/>
+        <xs:attribute name="size" type="tns:size" use="required"/>
+        <xs:attribute name="span" type="xs:int" use="required"/>
+    </xs:complexType>
+
     <xs:complexType name="tabGroup">
         <xs:complexContent>
             <xs:extension base="tns:bs3ElementAbstract">
                 <xs:sequence>
-                    <xs:element name="tab" type="tns:tab" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="tab" type="tns:tab"/>
+                    <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
                 </xs:sequence>
                 <xs:attribute name="unreferencedCollections" type="xs:boolean"/>
             </xs:extension>
@@ -85,7 +92,7 @@
         <xs:complexContent>
             <xs:extension base="tns:bs3ElementAbstract">
                 <xs:sequence>
-                    <xs:element name="row" type="tns:row" maxOccurs="unbounded"/>
+                    <xs:element maxOccurs="unbounded" name="row" type="tns:row"/>
                 </xs:sequence>
                 <xs:attribute name="name" type="xs:string" use="required"/>
             </xs:extension>
@@ -101,7 +108,7 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="bs3ClearFix" abstract="true">
+    <xs:complexType abstract="true" name="bs3ClearFix">
         <xs:complexContent>
             <xs:extension base="tns:bs3RowContent">
                 <xs:sequence/>

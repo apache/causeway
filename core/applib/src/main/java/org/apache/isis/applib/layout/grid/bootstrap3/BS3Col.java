@@ -56,6 +56,7 @@ import org.apache.isis.applib.layout.component.FieldSetOwner;
 @XmlType(
         name = "col"
         , propOrder = {
+            "sizeSpans",
             "domainObject",
             "actions",
             "rows",
@@ -155,6 +156,19 @@ public class BS3Col extends BS3RowContent
     }
 
 
+    private List<SizeSpan> sizeSpans = Lists.newArrayList();
+
+    // no wrapper
+    @XmlElement(name = "sizeSpan", required = false)
+    public List<SizeSpan> getSizeSpans() {
+        return sizeSpans;
+    }
+
+    public void setSizeSpans(final List<SizeSpan> sizeSpans) {
+        this.sizeSpans = sizeSpans;
+    }
+
+
 
     private List<ActionLayoutData> actions = Lists.newArrayList();
 
@@ -243,14 +257,17 @@ public class BS3Col extends BS3RowContent
 
 
     public String toCssClass() {
+        final StringBuilder buf = new StringBuilder();
         final Size size = getSize() != null? getSize(): Size.MD;
-        return "col-" + size.toCssClassFragment() + "-" + getSpan();
+        SizeSpan.with(size, getSpan()).appendCssClassFragment(buf);
+        for (SizeSpan sizeSpan : getSizeSpans()) {
+            sizeSpan.appendCssClassFragment(buf);
+        }
+        buf.append((getCssClass() != null? " " + getCssClass(): ""));
+        return buf.toString();
     }
 
     @Override public String toString() {
-        return "BS3Col{" +
-                "id='" + id + '\'' +
-                ", span=" + span +
-                '}';
+        return (id != null? "#" + id + " ": "") + toCssClass();
     }
 }

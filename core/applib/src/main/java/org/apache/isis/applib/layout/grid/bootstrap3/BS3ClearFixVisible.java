@@ -43,7 +43,11 @@ public class BS3ClearFixVisible extends BS3ClearFix {
     public enum CssDisplay {
         BLOCK,
         INLINE,
-        INLINE_BLOCK
+        INLINE_BLOCK;
+
+        public String toCssClassFragment() {
+            return name().toLowerCase().replace('_', '-');
+        }
     }
 
     private CssDisplay cssDisplay;
@@ -61,7 +65,9 @@ public class BS3ClearFixVisible extends BS3ClearFix {
 
     @Override
     public String toCssClass() {
-        return "clearfix visible-" + getSize().toCssClassFragment() + "-" + getCssClass().toLowerCase().replace('_', '-');
+        return "clearfix "
+                + "visible-" + getSize().toCssClassFragment() + "-" + getCssDisplay().toCssClassFragment() +
+                (getCssClass() != null? " " + getCssClass(): "");
     }
 
 }

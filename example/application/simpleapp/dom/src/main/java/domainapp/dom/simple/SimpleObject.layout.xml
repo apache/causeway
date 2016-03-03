@@ -3,7 +3,7 @@
 
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
-            <c:domainObject/>
+            <c:domainObject bookmarking="AS_ROOT"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
@@ -12,8 +12,9 @@
                 <bs3:tab name="General">
                     <bs3:row>
                         <bs3:col span="12">
-                            <c:fieldSet name="Properties">
-                                <c:property id="name">
+                            <c:fieldSet name="Name">
+                                <c:action id="delete"/>
+                                <c:property id="name" namedEscaped="true">
                                     <c:action id="updateName" position="BELOW"/>
                                 </c:property>
                             </c:fieldSet>

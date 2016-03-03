@@ -50,9 +50,9 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
@@ -612,7 +612,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
             final BS3Col tabRowCol = new BS3Col();
             tabRowCol.setSpan(12);
-            tabRowCol.setSize(BS3RowContent.Size.MD);
+            tabRowCol.setSize(Size.MD);
             tabRowCol.setOwner(tabRow);
             tabRow.getCols().add(tabRowCol);
 

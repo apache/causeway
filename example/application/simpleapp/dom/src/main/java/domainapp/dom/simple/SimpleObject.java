@@ -18,24 +18,14 @@
  */
 package domainapp.dom.simple;
 
-import java.util.List;
-
-import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -67,9 +57,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject
-@DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-)
 public class SimpleObject implements Comparable<SimpleObject> {
 
     public static final int NAME_LENGTH = 40;
@@ -79,16 +66,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return TranslatableString.tr("Object: {name}", "name", getName());
     }
 
+
     public static class NameDomainEvent extends PropertyDomainEvent<SimpleObject,String> {}
     @javax.jdo.annotations.Column(
             allowsNull="false",
             length = NAME_LENGTH
-    )
-    @Property(
-            editing = Editing.DISABLED
-    )
-    @PropertyLayout(
-            namedEscaped = false
     )
     private String name;
     public String getName() {
@@ -100,27 +82,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     public TranslatableString validateName(final String name) {
         return name != null && name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
-    }
-
-
-    public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {}
-    @Action(
-            domainEvent = UpdateNameDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-    )
-    @MemberOrder(name = "name", sequence = "1")
-    public SimpleObject updateName(
-            @Parameter(maxLength = NAME_LENGTH)
-            @ParameterLayout(named = "New name")
-            final String name) {
-        setName(name);
-        return this;
-    }
-    public String default0UpdateName() {
-        return getName();
-    }
-    public TranslatableString validateUpdateName(final String name) {
-        return name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
     }
 
 
@@ -143,30 +104,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
 
     @javax.inject.Inject
-    @SuppressWarnings("unused")
     DomainObjectContainer container;
-
-
-    public List<SimpleObject> getSimilarTo() {
-        return simpleObjects.findByName(getName().substring(0,1));
-    }
-
-    public boolean hideSimilarTo() {
-        return getName().contains("ob");
-    }
-
-    @CollectionLayout(
-            defaultView = "table"
-    )
-    public List<SimpleObject> getOthers() {
-        return simpleObjects.listAll();
-    }
-
-    public boolean hideOthers() {
-        return getName().contains("ob");
-    }
-
-    @Inject
-    SimpleObjects simpleObjects;
 
 }
