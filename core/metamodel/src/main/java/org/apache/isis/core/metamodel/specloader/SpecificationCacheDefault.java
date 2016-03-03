@@ -68,9 +68,12 @@ class SpecificationCacheDefault {
      */
     void setCacheBySpecId(final Map<ObjectSpecId, ObjectSpecification> specById) {
         this.classNameBySpecId = Maps.newHashMap();
+
         for (ObjectSpecId objectSpecId : specById.keySet()) {
             final ObjectSpecification objectSpec = specById.get(objectSpecId);
-            this.classNameBySpecId.put(objectSpecId, objectSpec.getCorrespondingClass().getName());
+            final String className = objectSpec.getCorrespondingClass().getName();
+            this.classNameBySpecId.put(objectSpecId, className);
+            this.specByClassName.put(className, objectSpec);
         }
     }
 
