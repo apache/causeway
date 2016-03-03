@@ -815,3 +815,9 @@ tr.headers th form input {
     margin-top: 5px;
 }
 
+
+.popover.confirmation .btn-group .btn {
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+}
