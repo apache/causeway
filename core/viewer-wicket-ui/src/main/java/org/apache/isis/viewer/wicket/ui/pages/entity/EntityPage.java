@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -130,29 +131,13 @@ public class EntityPage extends PageAbstract {
             throw new ObjectMember.AuthorizationException();
         }
 
-
-
-
-        //
-        // invalidate the cache so that can do dynamic reloading of layout metadata etc.
-        //
-        final GridFacet facet = entityModel.getTypeOfSpecification()
-                .getFacet(GridFacet.class);
+        final ObjectSpecification objectSpec = entityModel.getTypeOfSpecification();
+        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
         if(facet != null) {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-
-            // if none, then fallback to invalidating entire cache
-            // (this is the original LayoutMetadataFromJson behaviour)
-
-//            if(!getDeploymentType().isProduction()) {
-//                getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
-//            }
-
-            // as a side-effect, this will update facets
             final Grid unused = facet.getGrid();
-
         }
 
 

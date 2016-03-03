@@ -131,6 +131,11 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
         final List<ObjectAction> visibleActions =
             FluentIterable.from(actionLayoutDatas)
+                    .filter(new Predicate<ActionLayoutData>() {
+                        @Override public boolean apply(final ActionLayoutData actionLayoutData) {
+                            return actionLayoutData.getMetadataError() == null;
+                        }
+                    })
                     .transform(new Function<ActionLayoutData, ObjectAction>() {
                         @Nullable @Override public ObjectAction apply(@Nullable final ActionLayoutData actionLayoutData) {
                             return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
@@ -252,7 +257,14 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
 
         // collections
-        final List<CollectionLayoutData> collections = bs3Col.getCollections();
+        final List<CollectionLayoutData> collections =
+                FluentIterable.from(bs3Col.getCollections()).filter(
+                    new Predicate<CollectionLayoutData>() {
+                        @Override
+                        public boolean apply(final CollectionLayoutData collectionLayoutData) {
+                            return collectionLayoutData.getMetadataError() == null;
+                        }
+                    }).toList();
         if(!collections.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent collectionRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);

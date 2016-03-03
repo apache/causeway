@@ -26,6 +26,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.When;
@@ -184,7 +185,17 @@ public interface ObjectMember extends ObjectFeature {
         private Util(){}
 
         public static <T extends ObjectMember> HashMap<String, T> mapById(final List<T> members) {
-            return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
+
+            // fails if there are multiple members with the same id...
+            //            return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
+
+            final HashMap<String, T> memberById = Maps.newHashMap();
+            for (T member : members) {
+                final String id = Functions.getId().apply(member);
+                // if there are multiple members with same id, just disregard
+                memberById.put(id, member);
+            }
+            return memberById;
         }
     }
 

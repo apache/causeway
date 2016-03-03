@@ -97,9 +97,16 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         div.add(propertyRv);
 
         final ImmutableList<ObjectAssociation> visibleAssociations = FluentIterable.from(properties)
+                .filter(new Predicate<PropertyLayoutData>() {
+                    @Override
+                    public boolean apply(final PropertyLayoutData propertyLayoutData) {
+                        return propertyLayoutData.getMetadataError() == null;
+                    }
+                })
                 .transform(new Function<PropertyLayoutData, ObjectAssociation>() {
-                    @Override public ObjectAssociation apply(final PropertyLayoutData propertyLayoutData) {
-                        return adapter.getSpecification().getAssociation(propertyLayoutData.getId());
+                    @Override
+                    public ObjectAssociation apply(final PropertyLayoutData propertyLayoutData) {
+                        return  adapter.getSpecification().getAssociation(propertyLayoutData.getId());
                     }
                 })
                 .filter(new Predicate<ObjectAssociation>() {

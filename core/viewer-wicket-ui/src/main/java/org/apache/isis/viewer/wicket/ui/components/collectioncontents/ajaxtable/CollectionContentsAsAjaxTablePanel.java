@@ -34,11 +34,13 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -142,15 +144,30 @@ public class CollectionContentsAsAjaxTablePanel
 
 
 
-    private void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleParented, int maxTitleStandalone) {
-        int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
+    private void addTitleColumn(
+            final List<IColumn<ObjectAdapter,String>> columns,
+            final ObjectAdapterMemento parentAdapterMementoIfAny,
+            final int maxTitleParented,
+            final int maxTitleStandalone) {
+        final int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
         columns.add(new ObjectAdapterTitleColumn(parentAdapterMementoIfAny, maxTitleLength));
     }
 
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
         final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
 
-        final Where whereContext = 
+        // same code also appears in EntityPage.
+        // we need to do this here otherwise any tables will render the columns in the wrong order until at least
+        // one object of that type has been rendered via EntityPage.
+        final GridFacet gridFacet = typeOfSpec.getFacet(GridFacet.class);
+        if(gridFacet != null) {
+            // the facet should always exist, in fact
+            // just enough to ask for the metadata.
+            // This will cause the current ObjectSpec to be updated as a side effect.
+            final Grid unused = gridFacet.getGrid();
+        }
+
+        final Where whereContext =
                 getModel().isParented()
                     ? Where.PARENTED_TABLES
                     : Where.STANDALONE_TABLES;
