@@ -22,6 +22,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.
+ *
+ *
+ * <p>
+ *     It is rendered as a (eg) &lt;div class=&quot;clearfix visible-xs-block ...&quot;&gt;
+ * </p>
+ */
 @XmlRootElement(
         name = "clearFixVisible"
 )
