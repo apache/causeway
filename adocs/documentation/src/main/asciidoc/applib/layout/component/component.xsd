@@ -1,5 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
-<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/applib/layout/component" xmlns:tns="http://isis.apache.org/applib/layout/component" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://isis.apache.org/applib/layout/component" elementFormDefault="qualified" targetNamespace="http://isis.apache.org/applib/layout/component" version="1.0">
 
   <xs:element name="action" type="tns:action"/>
 
@@ -13,22 +12,23 @@
 
   <xs:complexType name="domainObject">
     <xs:sequence>
-      <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="plural" type="xs:string" minOccurs="0"/>
-      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="plural" type="xs:string"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="cssClassFa" type="xs:string"/>
     <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
   </xs:complexType>
 
   <xs:complexType name="action">
     <xs:sequence>
-      <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -42,9 +42,9 @@
 
   <xs:complexType name="fieldSet">
     <xs:sequence>
-      <xs:element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element ref="tns:property" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:property"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="id" type="xs:string"/>
@@ -54,10 +54,10 @@
 
   <xs:complexType name="property">
     <xs:sequence>
-      <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="hidden" type="tns:where"/>
@@ -71,11 +71,11 @@
 
   <xs:complexType name="collection">
     <xs:sequence>
-      <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
-      <xs:element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+      <xs:element minOccurs="0" name="named" type="xs:string"/>
+      <xs:element minOccurs="0" name="describedAs" type="xs:string"/>
+      <xs:element minOccurs="0" name="sortedBy" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:action"/>
+      <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="defaultView" type="xs:string"/>
