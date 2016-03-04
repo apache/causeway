@@ -1,17 +1,28 @@
 [[_ugfun_object-layout_dynamic]]
-= Dynamic Object Layout
+= Dynamic (JSON) Layout
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
 
-Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using a `.layout.json` file.  This section describes the dynamic approach, using the file.
+Metadata providing UI hints can be specified either xref:ugfun.adoc#_ugfun_object-layout_static[statically], using annotations, or dynamically, using either a xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[``layout.xml``] file or (as described here) a `.layout.json` file.
 
+
+[IMPORTANT]
+====
+(As of `1.12.0-SNAPSHOT`), the use of dynamic layouts through the `.layout.json` is DEPRECATED.
+
+The `.layout.json` file will be ignored if a `.layout.xml` file is present.  It is possible to download initial `.layout.xml` files - which will capture all the metadata originally in the `.layout.json` file - using the xref:rgsvc.adoc#_rgsvc_api_MetamodelService[`MetamodelService`] (exposed on the prototyping menu).
+
+The ``.layout.xml`` file also allows enables much more sophisticated custom layouts than those afforded by ``.layout.json``, and the layout files are easier to write due to the presence of an XSD schema file which ensures that the file is syntactically correct.
+====
 
 == JSON layout file
 
 The JSON layout file for class `Xxx` takes the name `Xxx.layout.json`, and resides in the same package as the class.
+
+
 The format of the file is:
 
 [source,javascript]

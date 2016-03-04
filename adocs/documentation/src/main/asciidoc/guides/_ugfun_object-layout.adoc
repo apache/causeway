@@ -11,6 +11,7 @@ In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pat
 This chapter describes how this is done both for domain objects -- statically or dynamically -- and for the application menu bar (containing domain service' actions).
 
 include::_ugfun_object-layout_static.adoc[leveloffset=+1]
+include::_ugfun_object-layout_dynamic_xml.adoc[leveloffset=+1]
 include::_ugfun_object-layout_dynamic.adoc[leveloffset=+1]
 include::_ugfun_object-layout_application-menu.adoc[leveloffset=+1]
 include::_ugfun_object-layout_static-vs-dynamic.adoc[leveloffset=+1]
