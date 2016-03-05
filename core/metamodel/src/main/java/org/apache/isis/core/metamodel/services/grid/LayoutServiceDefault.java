@@ -289,25 +289,22 @@ public class LayoutServiceDefault
 
     @Override
     public Grid toGrid(final Class<?> domainClass, final Style style) {
-        final Grid normalizedGrid = normalized(domainClass);
-        switch (style) {
-        case NORMALIZED:
-            return normalizedGrid;
-        case COMPLETE:
-            return complete(normalizedGrid);
-        case MINIMAL:
-            return minimal(normalizedGrid);
-        default:
-            throw new IllegalArgumentException("unsupported style");
+        if (style == Style.NORMALIZED) {
+            final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+            final GridFacet facet = objectSpec.getFacet(GridFacet.class);
+            return facet != null? facet.getGrid(): null;
         }
-    }
 
-    protected Grid normalized(final Class<?> domainClass) {
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
-        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-        return facet != null? facet.getGrid(): null;
+        // don't use the grid from the facet, because it will be modified subsequently.
+        final Grid grid = layoutService.normalizedFromXmlElseDefault(domainClass);
+        if (style == Style.COMPLETE) {
+            return complete(grid);
+        }
+        if (style == Style.MINIMAL) {
+            return minimal(grid);
+        }
+        throw new IllegalArgumentException("unsupported style");
     }
-
 
     ////////////////////////////////////////////////////////
 

@@ -131,7 +131,7 @@ public class GridImplementationServiceBS3 extends GridImplementationServiceAbstr
         return bs3Grid;
     }
 
-    void addFieldSetsToColumn(
+    static void addFieldSetsToColumn(
             final BS3Row propsRow,
             final int span,
             final List<String> memberGroupNames,
@@ -155,8 +155,11 @@ public class GridImplementationServiceBS3 extends GridImplementationServiceAbstr
         }
     }
 
+    // //////////////////////////////////////
 
-
+    /**
+     * Mandatory hook method defined in {@link GridImplementationServiceAbstract superclass}, called by {@link #normalize(Grid, Class)}.
+     */
     @Override
     protected boolean validateAndDerive(
             final Grid grid,

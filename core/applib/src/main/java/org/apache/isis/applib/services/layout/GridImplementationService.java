@@ -36,6 +36,10 @@ public interface GridImplementationService<G extends Grid> {
     @Programmatic
     String schemaLocation();
 
+    /**
+     * Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the
+     * layout.
+     */
     @Programmatic
     void normalize(G grid, Class<?> domainClass);
 
