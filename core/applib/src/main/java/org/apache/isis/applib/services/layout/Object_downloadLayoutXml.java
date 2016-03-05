@@ -56,12 +56,12 @@ public class Object_downloadLayoutXml {
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName,
-            final GridService.Style style) {
+            final LayoutService.Style style) {
         final Grid grid = getGrid(style);
         final String xml = jaxbService.toXml(grid,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
-                        gridService.tnsAndSchemaLocation(grid)
+                        grid.getTnsAndSchemaLocation()
                 ));
 
         return new Clob(Util.withSuffix(fileName, style.name().toLowerCase() + ".xml"), "text/xml", xml);
@@ -70,16 +70,16 @@ public class Object_downloadLayoutXml {
     public String default0$$() {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout");
     }
-    public GridService.Style default1$$() {
-        return GridService.Style.NORMALIZED;
+    public LayoutService.Style default1$$() {
+        return LayoutService.Style.NORMALIZED;
     }
 
-    protected Grid getGrid(final GridService.Style style) {
-        return gridService.toGrid(object, style);
+    protected Grid getGrid(final LayoutService.Style style) {
+        return layoutService.toGrid(object.getClass(), style);
     }
 
     @Inject
-    GridService gridService;
+    LayoutService layoutService;
 
     @Inject
     JaxbService jaxbService;

@@ -30,7 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.layout.GridNormalizerService;
+import org.apache.isis.applib.services.layout.GridImplementationService;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
@@ -42,7 +42,7 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridNormalizerServiceBS3;
+import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridImplementationServiceBS3;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -51,15 +51,16 @@ import static org.junit.Assert.assertThat;
 public class BS3GridTest {
 
     private JaxbService jaxbService;
-    private GridServiceDefault gridServiceDefault;
-    private GridNormalizerServiceBS3 gridNormalizerServiceBS3;
+    private LayoutServiceDefault layoutServiceDefault;
+    private GridImplementationServiceBS3 gridImplementationServiceBS3;
 
     @Before
     public void setUp() throws Exception {
         jaxbService = new JaxbService.Simple();
-        gridServiceDefault = new GridServiceDefault();
-        gridNormalizerServiceBS3 = new GridNormalizerServiceBS3();
-        gridServiceDefault.gridNormalizerServices = Arrays.<GridNormalizerService>asList(gridNormalizerServiceBS3);
+        layoutServiceDefault = new LayoutServiceDefault();
+        gridImplementationServiceBS3 = new GridImplementationServiceBS3();
+        layoutServiceDefault.gridImplementationServices = Arrays.<GridImplementationService>asList(
+                gridImplementationServiceBS3);
     }
 
     @After
@@ -137,7 +138,7 @@ public class BS3GridTest {
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bs3Grid);
+        final String schemaLocations = layoutServiceDefault.tnsAndSchemaLocation(bs3Grid);
         String xml = jaxbService.toXml(bs3Grid,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);

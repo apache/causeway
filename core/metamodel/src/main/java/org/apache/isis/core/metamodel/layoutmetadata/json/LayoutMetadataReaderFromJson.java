@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.services.layout.GridService;
+import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -415,8 +415,8 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, Serv
         }
 
         try {
-            final GridService gridService = getGridService();
-            if(gridService.exists(domainClass)) {
+            final LayoutService layoutService = getLayoutService();
+            if(layoutService.xmlExistsFor(domainClass)) {
                 blacklisted.add(domainClass);
                 return null;
             }
@@ -699,8 +699,8 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, Serv
 
 
 
-    private GridService getGridService() {
-        return servicesInjector.lookupService(GridService.class);
+    private LayoutService getLayoutService() {
+        return servicesInjector.lookupService(LayoutService.class);
     }
 
 

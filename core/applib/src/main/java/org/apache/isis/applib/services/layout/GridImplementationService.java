@@ -20,13 +20,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
 
 /**
- * Provides implementation of {@link Grid}.
- * @param <G>
+ * Provides an implementation of {@link Grid}.
  */
-public interface GridNormalizerService<G extends Grid> {
+public interface GridImplementationService<G extends Grid> {
 
     /**
-     * Which grid implementation is understood by this.
+     * Which grid (implementation) is defined by this service.
      */
     @Programmatic
     Class<? extends Grid> gridImplementation();

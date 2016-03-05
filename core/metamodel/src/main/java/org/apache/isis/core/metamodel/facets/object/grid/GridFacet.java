@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.grid;
 
 
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.services.layout.GridNormalizerService;
-import org.apache.isis.applib.services.layout.GridService;
+import org.apache.isis.applib.services.layout.GridImplementationService;
+import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * existing layout metadata (annotations or <code>layout.json</code>).
  *
  * <p>
- *     Most of the heavy lifting is done by delegating to the {@link GridService} and {@link GridNormalizerService}
+ *     Most of the heavy lifting is done by delegating to the {@link LayoutService} and {@link GridImplementationService}
  *     services.
  * </p>
  */

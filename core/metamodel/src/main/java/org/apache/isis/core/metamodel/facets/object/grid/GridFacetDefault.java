@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.services.layout.GridService;
+import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -43,22 +43,22 @@ public class GridFacetDefault
 
     public static GridFacet create(
             final FacetHolder facetHolder,
-            final GridService gridService,
+            final LayoutService layoutService,
             final DeploymentCategory deploymentCategory) {
-        return new GridFacetDefault(facetHolder, gridService, deploymentCategory);
+        return new GridFacetDefault(facetHolder, layoutService, deploymentCategory);
     }
 
     private final DeploymentCategory deploymentCategory;
-    private final GridService gridService;
+    private final LayoutService layoutService;
 
     private Grid grid;
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
-            final GridService gridService,
+            final LayoutService layoutService,
             final DeploymentCategory deploymentCategory) {
         super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.gridService = gridService;
+        this.layoutService = layoutService;
         this.deploymentCategory = deploymentCategory;
     }
 
@@ -67,11 +67,7 @@ public class GridFacetDefault
             return this.grid;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        Grid grid = gridService.fromXml(domainClass);
-        if(grid == null) {
-            grid = gridService.defaultGrid(domainClass);
-        }
-        this.grid = gridService.normalize(grid);
+        this.grid = layoutService.normalizedFromXmlElseDefault(domainClass);
         return this.grid;
     }
 

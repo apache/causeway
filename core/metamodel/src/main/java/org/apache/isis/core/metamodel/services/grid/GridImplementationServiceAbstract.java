@@ -52,7 +52,7 @@ import org.apache.isis.applib.layout.component.HasNamed;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.GridNormalizerService;
+import org.apache.isis.applib.services.layout.GridImplementationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -105,16 +105,16 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class GridNormalizerServiceAbstract<G extends Grid>
-        implements GridNormalizerService<G>, SpecificationLoaderAware {
+public abstract class GridImplementationServiceAbstract<G extends Grid>
+        implements GridImplementationService<G>, SpecificationLoaderAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridNormalizerServiceAbstract.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GridImplementationServiceAbstract.class);
 
     private final Class<G> gridImplementation;
     private final String tns;
     private final String schemaLocation;
 
-    public GridNormalizerServiceAbstract(
+    public GridImplementationServiceAbstract(
             final Class<G> gridImplementation,
             final String tns,
             final String schemaLocation) {

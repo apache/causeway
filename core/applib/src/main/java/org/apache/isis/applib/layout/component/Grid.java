@@ -21,13 +21,13 @@ package org.apache.isis.applib.layout.component;
 import java.util.LinkedHashMap;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.layout.GridService;
+import org.apache.isis.applib.services.layout.LayoutService;
 
 /**
  * All top-level page layout classes should implement this interface.
  *
  * <p>
- *     It is used by the {@link GridService} as a common based type for any layouts read in from XML.
+ *     It is used by the {@link LayoutService} as a common based type for any layouts read in from XML.
  * </p>
  */
 public interface Grid {
@@ -37,6 +37,12 @@ public interface Grid {
 
     @Programmatic
     void setDomainClass(final Class<?> domainClass);
+
+    @Programmatic
+    String getTnsAndSchemaLocation();
+
+    @Programmatic
+    void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
 
     @Programmatic
     boolean isNormalized();

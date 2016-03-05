@@ -16,41 +16,39 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.value.Blob;
 
-public interface GridService {
+public interface LayoutService {
 
     /**
-     * Whether any metadata exists for this domain class, and if so then whether it is valid or invalid.
+     * Whether any <code>.layout.xml</code> file exists for this domain class, and if so then whether it is
+     * valid or invalid.
      */
     @Programmatic
-    boolean exists(Class<?> domainClass);
+    boolean xmlExistsFor(Class<?> domainClass);
 
     /**
-     * Returns (raw unnormalized) metadata, eg per the <code>.layout.xml</code> file.
-     */
-    @Programmatic
-    Grid fromXml(Class<?> domainClass);
-
-    /**
-     * Normalize the grid with respect to the specified domain class.
+     * Returns a normalized grid for the domain class, either loaded from a
+     * <code>.layout.xml</code> file, else using a default specific to the
+     * grid service.
      *
      * <p>
-     *     This will (often) modify the grid graph in order to add in any unreferenced actions and so forth.
+     * Normalization generally means to add in any missing properties/collections/actions so that the
+     * in-memory grid can be rendered.
      * </p>
      */
-    Grid normalize(Grid grid);
+    @Programmatic
+    Grid normalizedFromXmlElseDefault(Class<?> domainClass);
 
+    @Programmatic
     Grid complete(Grid grid);
 
+    @Programmatic
     Grid minimal(Grid grid);
-
-    Grid defaultGrid(Class<?> domainClass);
 
     enum Style {
 
@@ -84,34 +82,16 @@ public interface GridService {
         MINIMAL
     }
 
-    /**
-     * Obtains the layout metadata, if any, for the (domain class of the) specified domain object.
-     *
-     * @param style - whether the returned grid should be complete, normalized, or as
-     *              minimal as possible.
-     */
-    @Programmatic Grid toGrid(Object domainObject, final Style style);
 
     /**
-     * Obtains the (normalized) layout metadata, if any, for the specified domain class.
+     * Obtains the grid for the specified domain class.
      *
-     * @param style - whether the returned grid should be complete (having been normalized), or should be as
-     *              minimal as possible.
-     */
-    @Programmatic Grid toGrid(Class<?> domainClass, final Style style);
-
-    String tnsAndSchemaLocation(final Grid grid);
-
-    /**
-     * For all of the available {@link GridNormalizerService}s available, return only the first one for any that
-     * are for the same grid implementation.
-     *
-     * <p>
-     *   This allows default implementations (eg for bootstrap3) to be overridden while also allowing for the more
-     *   general idea of multiple implementations.
-     * </p>
+     * @param style - how complete the information in the returned grid should be.
      */
     @Programmatic
-    List<GridNormalizerService<?>> gridNormalizerServices();
+    Grid toGrid(final Class<?> domainClass, final Style style);
+
+    @Programmatic
+    Blob downloadLayouts(final Style style);
 
 }
