@@ -23,7 +23,8 @@ public class Persistable_downloadJdoMetadata {
 }
 ----
 <1> provided as an action to any domain entity
-<2> actually this is '$$' in the code, a "special case" that means to use the derive the action name from the class name.
+<2> actually this is method is called '$$' in the code, a "special case" that means to use the derive the action name
+from the class name.
 
 This will return the XML text wrapped up in a xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 

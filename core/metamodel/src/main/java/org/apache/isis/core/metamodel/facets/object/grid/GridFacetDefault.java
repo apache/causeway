@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -43,22 +43,22 @@ public class GridFacetDefault
 
     public static GridFacet create(
             final FacetHolder facetHolder,
-            final LayoutService layoutService,
+            final GridService gridService,
             final DeploymentCategory deploymentCategory) {
-        return new GridFacetDefault(facetHolder, layoutService, deploymentCategory);
+        return new GridFacetDefault(facetHolder, gridService, deploymentCategory);
     }
 
     private final DeploymentCategory deploymentCategory;
-    private final LayoutService layoutService;
+    private final GridService gridService;
 
     private Grid grid;
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
-            final LayoutService layoutService,
+            final GridService gridService,
             final DeploymentCategory deploymentCategory) {
         super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.layoutService = layoutService;
+        this.gridService = gridService;
         this.deploymentCategory = deploymentCategory;
     }
 
@@ -67,8 +67,18 @@ public class GridFacetDefault
             return this.grid;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        this.grid = layoutService.normalizedFromXmlElseDefault(domainClass);
+        this.grid = load(domainClass);
+
         return this.grid;
+    }
+
+    private Grid load(final Class<?> domainClass) {
+        Grid grid = gridService.load(domainClass);
+        if(grid == null) {
+            grid = gridService.defaultGridFor(domainClass);
+        }
+        gridService.normalize(grid);
+        return grid;
     }
 
     private ObjectSpecification getSpecification() {

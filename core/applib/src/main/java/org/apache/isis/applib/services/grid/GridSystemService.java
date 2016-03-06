@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.layout;
+package org.apache.isis.applib.services.grid;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
@@ -22,7 +22,7 @@ import org.apache.isis.applib.layout.component.Grid;
 /**
  * Provides an implementation of {@link Grid}.
  */
-public interface GridImplementationService<G extends Grid> {
+public interface GridSystemService<G extends Grid> {
 
     /**
      * Which grid (implementation) is defined by this service.
@@ -35,6 +35,9 @@ public interface GridImplementationService<G extends Grid> {
 
     @Programmatic
     String schemaLocation();
+
+    @Programmatic
+    Grid defaultGrid(Class<?> domainClass);
 
     /**
      * Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the
@@ -49,6 +52,4 @@ public interface GridImplementationService<G extends Grid> {
     @Programmatic
     void minimal(G grid, Class<?> domainClass);
 
-    @Programmatic
-    Grid defaultGrid(Class<?> domainClass);
 }

@@ -1,0 +1,36 @@
+[[_rgsvc_spi_GridLoaderService]]
+= `GridLoaderService` (`1.12.0-SNAPSHOT`)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+The `GridLoaderService` provides the ability to load the XML layout (grid) for a domain class.
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface GridLoaderService {
+    boolean existsFor(Class<?> domainClass);    // <1>
+    Grid load(final Class<?> domainClass);      // <2>
+}
+----
+<1> whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
+<2> returns a new instance of a xref:rgcms.adoc#_rgcms_classes_layout_component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.  If none exists, will return null (and the calling xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] will use xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`] to obtain a default grid for the domain class).
+
+
+NOTE: TODO
+
+
+== Implementation
+
+NOTE: TODO
+
+
+== Related Services
+
+NOTE: TODO

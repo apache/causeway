@@ -191,6 +191,16 @@ SpecificationProvider`].
 |
 
 
+|xref:rgsvc.adoc#_rgsvc_api_LayoutService[`o.a.i.applib.` +
+`services.layout` +
+`LayoutService`]
+|(`1.12.0-SNAPSHOT`) Provides the ability to download dynamic layout XML files, in various styles.
+|`LayoutServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Functionality surfaced in the UI through related mixin and menu.
+
+
 |xref:rgsvc.adoc#_rgsvc_api_MementoService[`o.a.i.applib.` +
 `services.memento` +
 `MementoService`]
@@ -328,6 +338,7 @@ include::_rgsvc_api_GuiceBeanProvider.adoc[leveloffset=+1]
 include::_rgsvc_api_HomePageProviderService.adoc[leveloffset=+1]
 include::_rgsvc_api_IsisJdoSupport.adoc[leveloffset=+1]
 include::_rgsvc_api_JaxbService.adoc[leveloffset=+1]
+include::_rgsvc_api_LayoutService.adoc[leveloffset=+1]
 include::_rgsvc_api_MementoService.adoc[leveloffset=+1]
 include::_rgsvc_api_MetamodelService.adoc[leveloffset=+1]
 include::_rgsvc_api_QueryResultsCache.adoc[leveloffset=+1]

@@ -20,78 +20,61 @@ import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.value.Blob;
 
 public interface LayoutService {
-
-    /**
-     * Whether any <code>.layout.xml</code> file exists for this domain class, and if so then whether it is
-     * valid or invalid.
-     */
-    @Programmatic
-    boolean xmlExistsFor(Class<?> domainClass);
-
-    /**
-     * Returns a normalized grid for the domain class, either loaded from a
-     * <code>.layout.xml</code> file, else using a default specific to the
-     * grid service.
-     *
-     * <p>
-     * Normalization generally means to add in any missing properties/collections/actions so that the
-     * in-memory grid can be rendered.
-     * </p>
-     */
-    @Programmatic
-    Grid normalizedFromXmlElseDefault(Class<?> domainClass);
-
-    @Programmatic
-    Grid complete(Grid grid);
-
-    @Programmatic
-    Grid minimal(Grid grid);
 
     enum Style {
 
         /**
+         * The current layout for the domain class.
+         * <p/>
+         * <p>
+         * If a <code>layout.xml</code> exists, then the grid returned will correspond to that
+         * grid, having been {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.  If there is no <code>layout.xml</code> file, then the grid returned will be the
+         * {@link org.apache.isis.applib.services.grid.GridService#defaultGridFor(Class) default grid},
+         * also {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.
+         * </p>
+         */
+        CURRENT,
+        /**
          * As per {@link #NORMALIZED}, but also with all (non-null) facets for all
          * properties/collections/actions also included included in the grid.
-         *
+         * <p/>
          * <p>
-         *     The intention here is that any layout metadata annotations can be removed from the code.
+         * The intention here is that any layout metadata annotations can be removed from the code.
          * </p>
          */
         COMPLETE,
         /**
          * Default, whereby missing properties/collections/actions are added to regions,
          * and unused/empty regions are removed/trimmed.
-         *
+         * <p/>
          * <p>
-         *     It should be possible to remove any {@link MemberOrder} and {@link MemberGroupLayout} annotations but
-         *     any layout annotations would need to be retained.
+         * It should be possible to remove any {@link MemberOrder} and {@link MemberGroupLayout} annotations but
+         * any layout annotations would need to be retained.
          * </p>
          */
         NORMALIZED,
         /**
          * As per {@link #NORMALIZED}, but with no properties/collections/actions.
-         *
+         * <p/>
          * <p>
-         *     The intention here is for layout annotations that &quot;bind&quot; the properties/collections/actions
-         *     to the regions to be retained.
+         * The intention here is for layout annotations that &quot;bind&quot; the properties/collections/actions
+         * to the regions to be retained.
          * </p>
          */
         MINIMAL
     }
 
-
     /**
-     * Obtains the grid for the specified domain class.
-     *
-     * @param style - how complete the information in the returned grid should be.
+     * Obtains the serialized XML form of the layout (grid) for the specified domain class.
      */
     @Programmatic
-    Grid toGrid(final Class<?> domainClass, final Style style);
+    String toXml(Class<?> domainClass, Style style);
 
+    /**
+     * Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
+     */
     @Programmatic
-    Blob downloadLayouts(final Style style);
-
+    byte[] toZip(final Style style);
 }

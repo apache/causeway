@@ -123,6 +123,49 @@ a configured `EmailService`
 |Extensible using composite pattern if required
 
 
+|xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
+`services.fixturespec` +
+`FixtureScripts-` +
+`SpecificationProvider`]
+|Provides settings for xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
+|
+|
+
+
+|xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`o.a.i.applib.` +
+`services.grid` +
+`GridSystemService`]
+|(`1.12.0-SNAPSHOT`) Validates and normalizes the grid layout for a domain class (with respect to a particular grid
+system such as Bootstrap3), also providing a default grid (for those domain classes where there is no grid layout).
+|`GridSystemServiceBS3` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+|xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`o.a.i.applib.` +
+`services.grid` +
+`GridLoaderService`]
+|(`1.12.0-SNAPSHOT`) Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
+|`GridLoaderServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+|xref:rgsvc.adoc#_rgsvc_spi_GridService[`o.a.i.applib.` +
+`services.grid` +
+`GridService`]
+|(`1.12.0-SNAPSHOT`) A facade on top of both xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and
+xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`], thus being able to return normalized
+grids for any domain class.
+|`GridServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_LocaleProvider[`o.a.i.applib.` +
 `services.i18n` +
 `LocaleProvider`]
@@ -130,14 +173,6 @@ a configured `EmailService`
 |`LocaleProviderWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
-|
-
-|xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
-`services.fixturespec` +
-`FixtureScripts-` +
-`SpecificationProvider`]
-|Provides settings for xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
-|
 |
 
 |xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`o.a.i.applib.` +
@@ -302,6 +337,9 @@ include::_rgsvc_spi_ErrorReportingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_EventSerializer.adoc[leveloffset=+1]
 include::_rgsvc_spi_ExceptionRecognizer.adoc[leveloffset=+1]
 include::_rgsvc_spi_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
+include::_rgsvc_spi_GridSystemService.adoc[leveloffset=+1]
+include::_rgsvc_spi_GridLoaderService.adoc[leveloffset=+1]
+include::_rgsvc_spi_GridService.adoc[leveloffset=+1]
 include::_rgsvc_spi_LocaleProvider.adoc[leveloffset=+1]
 include::_rgsvc_spi_PublishingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_RepresentationService.adoc[leveloffset=+1]

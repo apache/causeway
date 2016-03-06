@@ -19,5 +19,7 @@ include::_rgcms_classes_spec.adoc[leveloffset=+1]
 include::_rgcms_classes_i18n.adoc[leveloffset=+1]
 include::_rgcms_classes_contributee.adoc[leveloffset=+1]
 include::_rgcms_classes_roles.adoc[leveloffset=+1]
+include::_rgcms_classes_mixins.adoc[leveloffset=+1]
+include::_rgcms_classes_grid.adoc[leveloffset=+1]
 
 

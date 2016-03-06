@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.facets.object.grid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,12 +39,12 @@ public class GridFacetFactory extends FacetFactoryAbstract implements ServicesIn
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final LayoutService layoutService =
-                servicesInjector.lookupService(LayoutService.class);
+        final GridService gridService =
+                servicesInjector.lookupService(GridService.class);
 
         FacetUtil.addFacet(
                 GridFacetDefault.create(facetHolder,
-                        layoutService, getDeploymentCategory()));
+                        gridService, getDeploymentCategory()));
     }
 
     private ServicesInjector servicesInjector;

@@ -73,6 +73,13 @@ further in this xref:ugfun.adoc#_ugfun_how-tos_replacing-default-service-impleme
 
 
 
+[[_rgsvc_api_LayoutService_related-mixins-and-menus]]
+== Related Menus
+
+The `TranslationServicePoMenu` menu exposes the `TranslationServicePo` service's `toPot()` method so that all
+translations can be downloaded as a single file.
+
+
 
 == Related Services
 

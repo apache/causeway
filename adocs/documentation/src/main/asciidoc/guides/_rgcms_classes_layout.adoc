@@ -1,0 +1,59 @@
+[[_rgcms_classes_layout]]
+= Layout (`1.12.0-SNAPSHOT`)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `org.apache.isis.applib.layout` package ...
+
+NOTE: TODO
+
+
+[[_rgcms_classes_layout_component]]
+== Component
+
+NOTE: TODO
+
+Consists of:
+
+* `Grid` +
++
+Top level container for a custom layout for a domain object.  `Grid` itself is an interface; it is the xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`] that defines a concrete implementation.  The framework itself provides one implementation, for bootstrap3; its concrete classes are discussed xref:rgcms.adoc#_rgcms_classes_layout_grid-bootstrap3[below].
+
+* `FieldSet` +
++
+A fieldset (previously also called a property group or member group) of a number of the domain object's properties
+(along with any associationed actions of those properties).
+
+* layout data classes, which correspond to the similarly named annotations:
+
+** `PropertyLayoutData` (corresponding to the xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] annotation)
+
+** `CollectionLayoutData` (corresponding to the xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`] annotation)
+
+** `ActionLayoutData` (corresponding to the xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`] annotation)
+
+** `DomainObjectLayoutData` (corresponding to the xref:rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`] annotation)
+
+
+
+[[_rgcms_classes_layout_grid-bootstrap3]]
+== Bootstrap3 Grid
+
+NOTE: TODO
+
+Consists of:
+
+* `Row`
+
+* `Col`
+
+* `TabGroup`
+
+* `Tab`
+
+
+There are also two close cousins of `Col`, namely `ClearFixVisible` and `ClearFixHidden`.
+
+

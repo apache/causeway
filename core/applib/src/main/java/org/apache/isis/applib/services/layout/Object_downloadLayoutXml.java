@@ -17,9 +17,6 @@
 package org.apache.isis.applib.services.layout;
 
 import javax.inject.Inject;
-import javax.xml.bind.Marshaller;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,7 +25,6 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
@@ -57,12 +53,7 @@ public class Object_downloadLayoutXml {
             @ParameterLayout(named = "File name")
             final String fileName,
             final LayoutService.Style style) {
-        final Grid grid = getGrid(style);
-        final String xml = jaxbService.toXml(grid,
-                ImmutableMap.<String,Object>of(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        grid.getTnsAndSchemaLocation()
-                ));
+        final String xml = layoutService.toXml(object.getClass(), style);
 
         return new Clob(Util.withSuffix(fileName, style.name().toLowerCase() + ".xml"), "text/xml", xml);
     }
@@ -72,10 +63,6 @@ public class Object_downloadLayoutXml {
     }
     public LayoutService.Style default1$$() {
         return LayoutService.Style.NORMALIZED;
-    }
-
-    protected Grid getGrid(final LayoutService.Style style) {
-        return layoutService.toGrid(object.getClass(), style);
     }
 
     @Inject

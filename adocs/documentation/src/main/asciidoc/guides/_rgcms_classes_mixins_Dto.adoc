@@ -29,7 +29,8 @@ public class Dto_downloadXml {
 }
 ----
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
-<2> actually this is '$$' in the code, a "special case" that means to use the derive the action name from the class name.
+<2> actually this method is called '$$' in the code, a "special case" that means to use the derive the action name
+from the class name.
 
 This will return the XML text wrapped up in a xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 

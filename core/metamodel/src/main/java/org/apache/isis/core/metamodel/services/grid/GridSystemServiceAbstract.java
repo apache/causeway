@@ -50,9 +50,9 @@ import org.apache.isis.applib.layout.component.HasDescribedAs;
 import org.apache.isis.applib.layout.component.HasHidden;
 import org.apache.isis.applib.layout.component.HasNamed;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.GridImplementationService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -107,16 +107,16 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class GridImplementationServiceAbstract<G extends Grid>
-        implements GridImplementationService<G>, SpecificationLoaderAware, DeploymentCategoryAware {
+public abstract class GridSystemServiceAbstract<G extends Grid>
+        implements GridSystemService<G>, SpecificationLoaderAware, DeploymentCategoryAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridImplementationServiceAbstract.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GridSystemServiceAbstract.class);
 
     private final Class<G> gridImplementation;
     private final String tns;
     private final String schemaLocation;
 
-    public GridImplementationServiceAbstract(
+    public GridSystemServiceAbstract(
             final Class<G> gridImplementation,
             final String tns,
             final String schemaLocation) {
@@ -156,20 +156,12 @@ public abstract class GridImplementationServiceAbstract<G extends Grid>
             // ignore any other grid implementations
             return;
         }
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
-
-        final Map<String, OneToOneAssociation> oneToOneAssociationById =
-                ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
-        final Map<String, OneToManyAssociation> oneToManyAssociationById =
-                ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
-        final Map<String, ObjectAction> objectActionById =
-                ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
 
         final boolean valid =
-                validateAndDerive(
-                    grid, oneToOneAssociationById, oneToManyAssociationById, objectActionById, objectSpec);
+                validateAndNormalize(
+                    grid, domainClass);
         if (valid) {
-            overwrite(grid, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
+            overwriteFacets(grid, domainClass);
             if(LOG.isDebugEnabled()) {
                 LOG.debug("Grid:\n\n" + jaxbService.toXml(grid) + "\n\n");
             }
@@ -188,12 +180,9 @@ public abstract class GridImplementationServiceAbstract<G extends Grid>
      * and actions) are in the grid metadata, typically by deriving this information from other existing metadata
      * (eg facets from annotations) or just by applying default rules.
      */
-    protected abstract boolean validateAndDerive(
+    protected abstract boolean validateAndNormalize(
             final Grid grid,
-            final Map<String, OneToOneAssociation> oneToOneAssociationById,
-            final Map<String, OneToManyAssociation> oneToManyAssociationById,
-            final Map<String, ObjectAction> objectActionById,
-            final ObjectSpecification objectSpec);
+            final Class<?> domainClass);
 
 
     /**
@@ -203,11 +192,20 @@ public abstract class GridImplementationServiceAbstract<G extends Grid>
      *     This code uses {@link FacetUtil#addOrReplaceFacet(Facet)} because the layout might be changed multiple times.
      * </p>
      */
-    protected void overwrite(
+    protected void overwriteFacets(
             final G fcGrid,
-            final Map<String, OneToOneAssociation> oneToOneAssociationById,
-            final Map<String, OneToManyAssociation> oneToManyAssociationById,
-            final Map<String, ObjectAction> objectActionById) {
+            final Class<?> domainClass) {
+
+
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+
+        final Map<String, OneToOneAssociation> oneToOneAssociationById =
+                ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
+        final Map<String, OneToManyAssociation> oneToManyAssociationById =
+                ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
+        final Map<String, ObjectAction> objectActionById =
+                ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
+
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
         fcGrid.visit(new Grid.VisitorAdapter() {

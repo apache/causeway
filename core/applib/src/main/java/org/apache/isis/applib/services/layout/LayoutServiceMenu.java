@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.services.layout;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisApplibModule;
@@ -42,6 +44,16 @@ public class LayoutServiceMenu {
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<LayoutServiceMenu> {
     }
 
+    private final MimeType mimeTypeApplicationZip;
+
+    public LayoutServiceMenu() {
+        try {
+            mimeTypeApplicationZip = new MimeType("application", "zip");
+        } catch (final MimeTypeParseException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public static class DownloadLayoutsDomainEvent extends ActionDomainEvent {
     }
 
@@ -56,7 +68,11 @@ public class LayoutServiceMenu {
     )
     @MemberOrder(sequence="500.400.1")
     public Blob downloadLayouts(final LayoutService.Style style) {
-        return layoutService.downloadLayouts(style);
+
+        final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
+
+        final byte[] zipBytes = layoutService.toZip(style);
+        return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
     }
 
     public LayoutService.Style default0DownloadLayouts() {

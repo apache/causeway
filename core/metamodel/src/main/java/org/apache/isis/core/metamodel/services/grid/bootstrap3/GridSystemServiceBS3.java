@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.services.grid.GridImplementationServiceAbstract;
+import org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -69,12 +69,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class GridImplementationServiceBS3 extends GridImplementationServiceAbstract<BS3Grid> {
+public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
-    public GridImplementationServiceBS3() {
+    public GridSystemServiceBS3() {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);
     }
 
@@ -158,15 +158,23 @@ public class GridImplementationServiceBS3 extends GridImplementationServiceAbstr
     // //////////////////////////////////////
 
     /**
-     * Mandatory hook method defined in {@link GridImplementationServiceAbstract superclass}, called by {@link #normalize(Grid, Class)}.
+     * Mandatory hook method defined in {@link GridSystemServiceAbstract superclass}, called by {@link #normalize(Grid, Class)}.
      */
     @Override
-    protected boolean validateAndDerive(
+    protected boolean validateAndNormalize(
             final Grid grid,
-            final Map<String, OneToOneAssociation> oneToOneAssociationById,
-            final Map<String, OneToManyAssociation> oneToManyAssociationById,
-            final Map<String, ObjectAction> objectActionById,
-            final ObjectSpecification objectSpec) {
+            final Class<?> domainClass) {
+
+
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+
+        final Map<String, OneToOneAssociation> oneToOneAssociationById =
+                ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
+        final Map<String, OneToManyAssociation> oneToManyAssociationById =
+                ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
+        final Map<String, ObjectAction> objectActionById =
+                ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
+
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 
