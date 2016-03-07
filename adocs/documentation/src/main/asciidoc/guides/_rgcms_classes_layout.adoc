@@ -5,21 +5,24 @@
 :_imagesdir: images/
 
 
-The `org.apache.isis.applib.layout` package ...
+The `org.apache.isis.applib.layout` package defines a number of classes that allow the layout of domain objects
+(entities and view models) to be customized.  These classes fall into two main categories:
 
-NOTE: TODO
+ * component classes, that capture the layout metadata for an object's properties, collections and actions.  These are broadly equivalent to the "layout" annotations (xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`], xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`], xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`] and xref:rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`]
+
+ * grid classes, that define a grid structure of rows, columns, tab groups and tabs, into which the components can be associated.
+
+The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:ugvw.adoc[Wicket viewer] components capable of rendering that grid system.  In principle it is
+also possible to extend the layout architecture for other grid systems.  The components are intended to be reusable across all grid systems.
+
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).  This ability to serialize to/from XML is used by the xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
+
 
 
 [[_rgcms_classes_layout_component]]
 == Component
 
-NOTE: TODO
-
-Consists of:
-
-* `Grid` +
-+
-Top level container for a custom layout for a domain object.  `Grid` itself is an interface; it is the xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`] that defines a concrete implementation.  The framework itself provides one implementation, for bootstrap3; its concrete classes are discussed xref:rgcms.adoc#_rgcms_classes_layout_grid-bootstrap3[below].
+The component classes reside in the `org.apache.isis.applib.layout.component` package, and consist of:
 
 * `FieldSet` +
 +
@@ -28,32 +31,62 @@ A fieldset (previously also called a property group or member group) of a number
 
 * layout data classes, which correspond to the similarly named annotations:
 
-** `PropertyLayoutData` (corresponding to the xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] annotation)
+** `PropertyLayoutData`, corresponding to the xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] annotation;
 
-** `CollectionLayoutData` (corresponding to the xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`] annotation)
+** `CollectionLayoutData`, corresponding to the xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`] annotation;
 
-** `ActionLayoutData` (corresponding to the xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`] annotation)
+** `ActionLayoutData`, corresponding to the xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`] annotation;
 
-** `DomainObjectLayoutData` (corresponding to the xref:rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`] annotation)
+** `DomainObjectLayoutData`, corresponding to the xref:rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`] annotation.
+
+In addition, the component package includes `Grid`, representing the top level container for a custom layout for a domain object.  `Grid` itself is merely an interface, but it also defines the visitor pattern to make it easy for validate and normalize the grid layouts.  The `GridAbstract` convenience superclass provides a partial implementation of this visitor pattern.
 
 
 
 [[_rgcms_classes_layout_grid-bootstrap3]]
 == Bootstrap3 Grid
 
-NOTE: TODO
+As noted above, the default bootstrap3 grid classes are modelled closely on link:http://getbootstrap.com[Bootstrap 3].
+Bootstrap's link:http://getbootstrap.com/css/#grid[grid system] divides the page width equally into 12 columns, and so
+each column spans 1 or more of these widths.  Thus, a column with a span of 12 is the full width, one with a span of 6 is half the width, one with a span of 4 is a third of the width, and so on.
 
-Consists of:
+When specifying the span of a column, Bootstrap also allows a size to be specified (`XS`, `SM`, `MD`, `LG`).  The size determines the rules for responsive design.  Apache Isis defaults to `MD` but this can be overridden.  It is also possible to specify multiple size/spans for a given column.
 
-* `Row`
+The grid classes provided by Apache Isis reside in the `org.apache.isis.applib.layout.grid.bootstrap3` package, and consist of:
 
-* `Col`
+* `BS3Grid` +
++
+Consists of a number of ``BS3Row``s.  +
++
+This class is the concrete implementation of `Grid` interface, discussed previously.  As such, it extends the `Grid.Visitor` to iterate over all of the ``Row``s of the grid.
 
-* `TabGroup`
+* `BS3Row` +
++
+A container of ``BS3Col``s.  This element is rendered as `<div class="row">`.
 
-* `Tab`
+* `BS3Col` +
++
+A container of almost everything else.  A column most commonly contains properties (grouped into ``FieldSet``s, described above) or collections (specified by ``CollectionLayoutData``, also above).  However, a `Col` might instead contain a ``BS3TabGroup`` (described below) in order that the object members is arranged into tabs.  +
++
+It is also possible for a ``Col`` to contain the object's title/icon (using ``DomainObjectLayoutData``) or indeed arbitrary actions (using ``ActionLayoutData`). +
++
+Finally, a ``BS3Col`` can also contain other ``BS3Row``s, allowing arbitrarily deep hierarchies of containers as required.
++
+This element is rendered as, for example, `<div class="col-md-4">` (for a size `MD`, span of 4).
 
+* `BS3TabGroup` +
++
+A container of ``BS3Tab``s.
 
-There are also two close cousins of `Col`, namely `ClearFixVisible` and `ClearFixHidden`.
+* `BS3Tab` +
++
+A container of ``BS3Row``s, which will in turn contain ``BS3Col``s and thence ultimately the object's members.
+
+There are also two close cousins of `Col`, namely `ClearFixVisible` and `ClearFixHidden`.  These map to Bootstrap's link:http://getbootstrap.com/css/#responsive-utilities[responsive utility class]es, and provide greater control for
+responsive designs.
+
+As you can probably guess, the `BS3Grid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
+
+All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.  The xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[`application.css`] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
 
 

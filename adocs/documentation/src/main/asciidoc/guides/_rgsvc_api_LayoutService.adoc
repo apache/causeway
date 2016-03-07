@@ -44,11 +44,11 @@ XML, and how much (if any) will be obtained elsewhere, typically from annotation
 `.layout.json` file if present).  The table below summarises the choices:
 
 .Table caption
-[cols="1a,1a,1a,1a", options="header"]
+[cols="<.>,^.>,^.>,^.>", options="header"]
 |===
 
 | Style
-| xref:rgant.adoc#_rgant_MemberGroupLayout[`@MemberGroupLayout`]
+|xref:rgant.adoc#_rgant_MemberGroupLayout[`@MemberGroupLayout`]
 | xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`]
 | xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`], xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`]
 

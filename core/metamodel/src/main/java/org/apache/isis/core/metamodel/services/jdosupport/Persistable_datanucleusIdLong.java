@@ -31,15 +31,15 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
 @Mixin
-public class Persistable_datanucleusId {
+public class Persistable_datanucleusIdLong {
 
     private final Persistable persistable;
 
-    public Persistable_datanucleusId(final Persistable persistable) {
+    public Persistable_datanucleusIdLong(final Persistable persistable) {
         this.persistable = persistable;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusId> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusIdLong> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

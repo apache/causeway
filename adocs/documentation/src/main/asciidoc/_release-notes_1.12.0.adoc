@@ -10,4 +10,7 @@ Apache Isis 1.12.0-SNAPSHOT is still in development.
 
 
 
+ISIS-993: layout XMLs.  Also mixins for Persistable_datanucleusId, Persistable_datanucleusVersionXxx.  Also possible to associate actions with fieldsets (previously called member groups or property groups) rather than simply properties _within_ those fieldsets; such actions will be rendered on the panel.
+
+
 

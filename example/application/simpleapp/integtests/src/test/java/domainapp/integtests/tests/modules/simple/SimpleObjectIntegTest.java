@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusId;
+import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong;
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
 import domainapp.dom.simple.SimpleObject;
@@ -118,7 +118,7 @@ public class SimpleObjectIntegTest extends DomainAppIntegTest {
         @Test
         public void shouldBePopulated() throws Exception {
             // when
-            final Long id = mixin(Persistable_datanucleusId.class, simpleObjectPojo).$$();
+            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObjectPojo).$$();
             // then
             assertThat(id).isGreaterThanOrEqualTo(0);
         }
