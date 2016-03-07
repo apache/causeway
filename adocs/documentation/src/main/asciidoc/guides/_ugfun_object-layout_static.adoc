@@ -5,9 +5,14 @@
 :_imagesdir: images/
 
 
-Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using either a `layout.xml` file (`1.12.0-SNAPSHOT`) or a `.layout.json` file.
+Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using either a xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] file (`1.12.0-SNAPSHOT`) or a xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`] file.
 
 This section describes the static approach, using annotations.
+
+[NOTE]
+====
+Tabs and tabgroups are only supported using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] files (`1.12.0-SNAPSHOT`); they are not supported by annotations.
+====
 
 
 

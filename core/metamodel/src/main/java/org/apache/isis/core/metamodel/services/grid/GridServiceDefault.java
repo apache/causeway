@@ -21,7 +21,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -34,9 +33,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.grid.GridSystemService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -135,22 +134,13 @@ public class GridServiceDefault implements GridService {
         final List<String> parts = Lists.newArrayList();
         parts.add(COMMON_TNS);
         parts.add(COMMON_SCHEMA_LOCATION);
-        FluentIterable.from(gridSystemServices)
-                .filter(new Predicate<GridSystemService>() {
-                    @Override
-                    public boolean apply(final GridSystemService gridSystemService) {
-                        final Class<? extends Grid> gridImpl = gridSystemService.gridImplementation();
-                        return gridImpl.isAssignableFrom(grid.getClass());
-                    }
-                })
-                .transform(new Function<GridSystemService, Void>() {
-                    @Nullable @Override
-                    public Void apply(final GridSystemService gridSystemService) {
-                        parts.add(gridSystemService.tns());
-                        parts.add(gridSystemService.schemaLocation());
-                        return null;
-                    }
-                });
+        for (GridSystemService gridSystemService : gridSystemServices) {
+            final Class<? extends Grid> gridImpl = gridSystemService.gridImplementation();
+            if(gridImpl.isAssignableFrom(grid.getClass())) {
+                parts.add(gridSystemService.tns());
+                parts.add(gridSystemService.schemaLocation());
+            }
+        }
         return Joiner.on(" ").join(parts);
     }
 

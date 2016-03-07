@@ -122,3 +122,30 @@ The fastest way to get started is to use the (non-ASF) link:http://github.com/is
 
 
 
+== Required updates to the dom project's pom.xml
+
+Any `.layout.json` files must be compiled and available in the classpath.  Ensure the following is defined in the dom project's `pom.xml`:
+
+[source.xml]
+----
+<resources>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+    </resource>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/java</directory>
+        <includes>
+            <include>**</include>
+        </includes>
+        <excludes>
+            <exclude>**/*.java</exclude>
+        </excludes>
+    </resource>
+</resources>
+----
+
+If using an Apache Isis xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
+
+

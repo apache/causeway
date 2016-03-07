@@ -128,13 +128,13 @@ _Using the (non-ASF) http://github.com/isisaddons/isis-module-excel[Isis addons'
 |===
 
 
-|Dynamic layouts in the Wicket viewer +
+|Dynamic (XML) layouts in the Wicket viewer (v1.12.0) +
 
 _How to layout properties and collections dynamically_ +
 
-Learn more link:./user-guide/rg.html#_rg-object-layout[here]
+Learn more link:./guides/ugfun.html#_ugfun_object-layout_dynamic_xml[here]
 
-|video::zmrg49WeEPc[youtube,width="420px",height="236px"]
+|video::MxewC5Pve5k[youtube,width="420px",height="236px"]
 
 
   
@@ -144,7 +144,6 @@ Learn more link:./user-guide/rg.html#_rg-object-layout[here]
 _How to customize the Wicket viewer, integrating the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 ] wicket extension._
 
 |video::9o5zAME8LrM[youtube,width="420px",height="315px"]
-
 
 
 

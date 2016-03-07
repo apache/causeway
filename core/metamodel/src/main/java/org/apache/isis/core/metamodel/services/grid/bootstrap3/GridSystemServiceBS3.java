@@ -530,7 +530,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                                     return;
                                 }
                                 // if the @MemberOrder for the action references a field set (that has bound
-                                // associations), then don't mark it as missing, butinstead explicitly add it to the
+                                // associations), then don't mark it as missing, but instead explicitly add it to the
                                 // list of actions of that fieldset.
                                 final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
                                 if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {

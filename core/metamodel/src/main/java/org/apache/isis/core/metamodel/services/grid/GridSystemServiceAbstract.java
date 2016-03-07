@@ -224,13 +224,19 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
                     return;
                 }
 
-                final String memberOrderName;
-                final int memberOrderSequence;
+                String memberOrderName = null;
+                int memberOrderSequence;
                 if(actionLayoutDataOwner instanceof FieldSet) {
                     final FieldSet fieldSet = (FieldSet) actionLayoutDataOwner;
                     final List<PropertyLayoutData> properties = fieldSet.getProperties();
-                    final PropertyLayoutData propertyLayoutData = properties.get(0); // any will do
-                    memberOrderName = propertyLayoutData.getId();
+                    for (PropertyLayoutData propertyLayoutData : properties) {
+                        final String propertyId = propertyLayoutData.getId();
+                        // any will do; choose the first one that we know is valid
+                        if(oneToOneAssociationById.containsKey(propertyId)) {
+                            memberOrderName = propertyLayoutData.getId();
+                            break;
+                        }
+                    }
                     memberOrderSequence = actionPropertyGroupSequence++;
                 } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
                     final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionLayoutDataOwner;
@@ -241,14 +247,13 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
                     memberOrderName = collectionLayoutData.getId();
                     memberOrderSequence = actionCollectionSequence++;
                 } else {
-                    // means' don't add: any existing metadata should be preserved
+                    // don't add: any existing metadata should be preserved
                     memberOrderName = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
                 if(memberOrderName != null) {
                     FacetUtil.addOrReplaceFacet(
-                            new MemberOrderFacetXml(memberOrderName, "" + memberOrderSequence, translationService,
-                                    objectAction));
+                            new MemberOrderFacetXml(memberOrderName, "" + memberOrderSequence, translationService, objectAction));
                 }
 
                 // fix up the action position if required
