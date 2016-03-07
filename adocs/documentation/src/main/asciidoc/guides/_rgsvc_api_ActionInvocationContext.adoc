@@ -9,7 +9,8 @@ The `ActionInvocationContext` domain service is a xref:rgant.adoc#_rgant-Request
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.  In particular, an object can determine if it is the last object to be called, and so can perform special processing, eg to return a summary calculated result.
 
-== API
+
+== API & Implementation
 
 The API defined by the service is:
 

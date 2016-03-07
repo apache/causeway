@@ -23,14 +23,27 @@ public interface GridLoaderService {
 <2> returns a new instance of a xref:rgcms.adoc#_rgcms_classes_layout_component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.  If none exists, will return null (and the calling xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] will use xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`] to obtain a default grid for the domain class).
 
 
-NOTE: TODO
-
 
 == Implementation
 
-NOTE: TODO
+The framework provides a default implementation of this service, namely `GridLoaderServiceDefault`.  This implementation
+loads the grid from its serialized representation as a `.layout.xml` file, loaded from the classpath.
+
+For example, the layout for a domain class `com.mycompany.myapp.Customer` would be loaded from `com/mycompany/myapp/Customer.layout.xml`.
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then the
+ default implementation of `GridLoaderService` is automatically registered and injected, and no further
+ configuration is required.
+
+To use an alternative implementation, use
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ugfun.adoc#_ugfun_how-tos_replacing-default-service-implementations["how to"] tip).
 
 
 == Related Services
 
-NOTE: TODO
+This service is used by xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`].
