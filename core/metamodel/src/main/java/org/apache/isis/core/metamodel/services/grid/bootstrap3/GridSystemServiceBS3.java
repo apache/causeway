@@ -17,12 +17,12 @@
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -401,7 +401,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                         .filter(Predicates.<OneToOneAssociation>notNull())
                 );
 
-                associations.sort(ObjectAssociation.Comparators.byMemberOrderSequence());
+                Collections.sort(associations, ObjectMember.Comparators.byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
                         FluentIterable.from(associations)
                                       .transform(ObjectAssociation.Functions.toId())
@@ -474,18 +474,18 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 .toList();
 
             FluentIterable.from(sortedPossiblyMissingActionIds)
-                .forEach(
-                        new Consumer<String>() {
-                            @Override
-                            public void accept(final String actionId) {
+                .transform(
+                        new Function<String, Void>() {
+                            @Nullable @Override
+                            public Void apply(@Nullable final String actionId) {
                                 final ObjectAction oa = objectActionById.get(actionId);
                                 final MemberOrderFacet memberOrderFacet = oa.getFacet(MemberOrderFacet.class);
                                 if(memberOrderFacet == null) {
-                                    return;
+                                    return null;
                                 }
                                 final String memberOrderName = memberOrderFacet.name();
                                 if (memberOrderName == null) {
-                                    return;
+                                    return null;
                                 }
                                 final String id = asId(memberOrderName);
 
@@ -515,7 +515,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                                         addActionTo(owner, actionLayoutData);
                                     }
 
-                                    return;
+                                    return null;
                                 }
                                 if (oneToManyAssociationById.containsKey(id)) {
                                     associatedActionIds.add(actionId);
@@ -527,7 +527,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                                         final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
                                         addActionTo(collectionLayoutData, actionLayoutData);
                                     }
-                                    return;
+                                    return null;
                                 }
                                 // if the @MemberOrder for the action references a field set (that has bound
                                 // associations), then don't mark it as missing, but instead explicitly add it to the
@@ -542,8 +542,9 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                                     actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
                                     final FieldSet fieldSet = fieldSetIds.get(id);
                                     addActionTo(fieldSet, actionLayoutData);
-                                    return;
+                                    return null;
                                 }
+                                return null;
                             }
                         });
 
