@@ -21,6 +21,8 @@
  */
 package domainapp.integtests.tests.modules.simple;
 
+import java.sql.Timestamp;
+
 import javax.inject.Inject;
 
 import org.junit.Before;
@@ -28,8 +30,9 @@ import org.junit.Test;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong;
+import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
 import domainapp.dom.simple.SimpleObject;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
@@ -67,24 +70,15 @@ public class SimpleObjectIntegTest extends DomainAppIntegTest {
             assertThat(name).isEqualTo(fs.NAMES.get(0));
         }
 
-        @Test
-        public void cannotBeUpdatedDirectly() throws Exception {
-
-            // expect
-            expectedExceptions.expect(DisabledException.class);
-
-            // when
-            simpleObjectWrapped.setName("new name");
-        }
     }
 
     public static class UpdateName extends SimpleObjectIntegTest {
 
         @Test
-        public void happyCase() throws Exception {
+        public void canBeUpdatedDirectly() throws Exception {
 
             // when
-            simpleObjectWrapped.updateName("new name");
+            simpleObjectWrapped.setName("new name");
 
             // then
             assertThat(simpleObjectWrapped.getName()).isEqualTo("new name");
@@ -98,7 +92,7 @@ public class SimpleObjectIntegTest extends DomainAppIntegTest {
             expectedExceptions.expectMessage("Exclamation mark is not allowed");
 
             // when
-            simpleObjectWrapped.updateName("new name!");
+            simpleObjectWrapped.setName("new name!");
         }
     }
 
@@ -121,4 +115,28 @@ public class SimpleObjectIntegTest extends DomainAppIntegTest {
             assertThat(title).isEqualTo("Object: " + name);
         }
     }
+
+    public static class DataNucleusId extends SimpleObjectIntegTest {
+
+        @Test
+        public void shouldBePopulated() throws Exception {
+            // when
+            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObjectPojo).${symbol_dollar}${symbol_dollar}();
+            // then
+            assertThat(id).isGreaterThanOrEqualTo(0);
+        }
+    }
+
+    public static class DataNucleusVersionTimestamp extends SimpleObjectIntegTest {
+
+        @Test
+        public void shouldBePopulated() throws Exception {
+            // when
+            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObjectPojo).${symbol_dollar}${symbol_dollar}();
+            // then
+            assertThat(timestamp).isNotNull();
+        }
+    }
+
+
 }

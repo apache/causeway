@@ -243,7 +243,7 @@ msgid "Result"
 msgstr "Resultado"
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureResult#className
+#: org.apache.isis.applib.fixturescripts.FixtureResult#name
 msgid "Result class"
 msgstr "Clase del resultado"
 
