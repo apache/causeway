@@ -6,143 +6,58 @@
 
 
 
+As noted in the xref:ugbtb.adoc#_ugbtb_view-models_use-cases[introduction], view models can also be defined using
+JAXB annotations.  The serialized form of these view models is therefore XML, which also enables these view models
+to act as DTOs.
 
-This section provides some recommended practices if using JAXB and `@XmlRootElement` to define domain models.  The
-examples are taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp].
-
-
-
-[[_ugbtb_view-models_jaxb_using-packages-to-version]]
-== Use packages to version DTOs
-
-The whole point of using DTOs (in Apache Isis, at least) is to define a formal contact between two interoperating but
-independent applications.  Since the only thing we can predicate about the future with any certainty is that it one or
-both of these applications will change, we should version DTOs from the get-go.
-
-With XML every element may be defined as belonging to a particular namespace; in JAXB this translates to Java packages.
-We therefore should place each DTO within its own package, and that package should include a version identifier.
-
-For example, the http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] defines this DTO (as a versioned
-representation of its underlying `ToDoItem` entity):
+The examples in this section uses the DTO for `ToDoItem`, taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp].  This DTO is defined as follows:
 
 [source,java]
 ----
-@XmlRootElement(name = "toDoItemDto")                               // <1>
+package todoapp.app.viewmodels.todoitem.v1;                         // <1>
+@XmlRootElement(name = "toDoItemDto")                               // <2>
 @XmlType(
-        propOrder = {                                               // <2>
-            "description",
-            "category",
-            "subcategory",
-            "cost"
+        propOrder = {                                               // <3>
+            "majorVersion", "minorVersion",
+            "description", "category", ...
+            "toDoItem", "similarItems"
         }
 )
 @DomainObjectLayout(
-        titleUiEvent = TitleUiEvent.Doop.class                      // <3>
+        titleUiEvent = TitleUiEvent.Doop.class                      // <4>
 )
-public class ToDoItemDto implements Dto {
-    @XmlElement(required = true)
-    @Getter @Setter                                                 // <4>
-    protected String description;
+public class ToDoItemV1_1 implements Dto {                          // <5>
+    @XmlElement(required = true, defaultValue = "1")                // <6>
+    public final String getMajorVersion() { return "1"; }
+    @XmlElement(required = true, defaultValue = "1")                // <7>
+    public String getMinorVersion() { return "1"; }
 
+    @XmlElement(required = true)                                    // <8>
+    @Getter @Setter
+    protected String description;
     @XmlElement(required = true)
     @Getter @Setter
     protected String category;
-
-    @Getter @Setter
-    protected String subcategory;
-
-    @Getter @Setter
-    protected BigDecimal cost;
-}
-----
-<1> identifies this class as a view model and defines the root element for JAXB serialization
-<2> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
-<3> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
-<4> optional; JAXB metadata can specify such attributes as required/optional
-
-
-For the package in which the DTO class resides, we define a corresponding namespace.  This goes in `package-info.java`:
-
-[source,java]
-----
-@javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://viewmodels.app.todoapp/todoitem/v1_0/todoitem.xsd", // <1>
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
-)
-package todoapp.app.viewmodels.todoitem.v1_0;                                   // <2>
-----
-<1> the namespace URI, used by the DTO residing in this package.  There is no requirement for this to correspond to a physical URL, but it should be unique (this
-usually implies the usage of a company domain name).
-<2> the package in which the DTO resides.
-
-Note how both the XML namespace and package are broadly equivalent to each other; in particular note that they both
-also include a version "v1_0".
-
-
-
-
-[[_ugbtb_view-models_jaxb_semantic-versioning]]
-== Semantic Versioning
-
-Versioning DTOs enables us to make changes without breaking existing consumers of the data.  We can distinguish two
-types of changes:
-
-* backwardly compatible changes
-* breaking changes.
-
-Following link:http://semver.org[semantic versioning] approach, we suggest using `v1_0`, `v1_1`, `v1_2` etc as the
-package version for a sequence of backwardly compatible changes, then bump up to `v2_0` for a breaking change.
-
-Backwardly compatible changes can generally (always?) be modelled using class inheritance.  Thus, `v1_1.ToDoItemDto`
-is a subclass of `v1_0.ToDoItemDto`.  This makes sense too: OO inheritance means "is-substitutable-for", so what is
-true in an OO context is true when processing XML documents.
-
-On the other hand, breaking changes probably (always?) imply that the next version of the DTO does not use inheritance.
-Thus `v2_0.ToDoItemDto` might share many of the same properties as the `v1_1.ToDoItemDto`, but any reuse would be
-copy-n-paste rather than through inheritance.
-
-To see this in practice, here's (the outline of) v1.1 of `ToDoItemDto`:
-
-[source,java]
-----
-package todoapp.app.viewmodels.todoitem.v1_1;
-...
-@XmlRootElement(name = "toDoItemDto")
-@XmlType(
-        propOrder = {
-                "toDoItem",
-                "similarItems"
-        }
-)
-public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto {
     ...
+
+    @Getter @Setter                                                 // <9>
+    protected ToDoItem toDoItem;
+    @XmlElementWrapper                                              // <10>
+    @XmlElement(name = "todoItem")
+    @Getter @Setter
+    protected List<ToDoItem> similarItems = Lists.newArrayList();
 }
 ----
-
-
-The corresponding `package-info.java` is similar to that for `v1_0`, though note how it also defines a namespace prefix
-for `v1_0`:
-
-[source,java]
-----
-@javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://viewmodels.app.todoapp/todoitem/v1_1/todoitem.xsd",         <!--1-->
-        xmlns = {
-                @javax.xml.bind.annotation.XmlNs(                                       <!--2-->
-                        namespaceURI = "http://isis.apache.org/schema/common",
-                        prefix = "common"
-                ),
-                @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://viewmodels.app.todoapp/todoitem/v1_0/todoitem.xsd",
-                        prefix = "todoitem-v1_0"
-                )
-        },
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
-)
-package todoapp.app.viewmodels.todoitem.v1_1;
-----
-<1> namespace URI for DTO in this class.
-<2> aliases for any other namespaces referenced.
+<1> package name encodes major version; see discussion on xref:ugbtb.adoc#_ugbtb_view-models_jaxb_versioning[versioning]
+<2> identifies this class as a view model and defines the root element for JAXB serialization
+<3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
+<4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
+<5> class name encodes (major and) minor version; see discussion on xref:ugbtb.adoc#_ugbtb_view-models_jaxb_versioning[versioning]
+<6> again, see discussion on xref:ugbtb.adoc#_ugbtb_view-models_jaxb_versioning[versioning]
+<7> again, see discussion on xref:ugbtb.adoc#_ugbtb_view-models_jaxb_versioning[versioning]
+<8> simple scalar properties
+<9> reference to a persistent entity; discussed xref:ugbtb.adoc#_ugbtb_view-models_jaxb_referencing-domain-entities[below]
+<10> reference to a collection of persistent entities; again discussed xref:ugbtb.adoc#_ugbtb_view-models_jaxb_referencing-domain-entities[below]
 
 
 
@@ -168,9 +83,9 @@ Thus, in our view model we can legitimately write:
 
 [source,java]
 ----
-package todoapp.app.viewmodels.todoitem.v1_1;
+package todoapp.app.viewmodels.todoitem.v1;
 ...
-public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto {
+public class ToDoItemV1_1 implements Dto {
     ...
     @Getter @Setter
     protected ToDoItem toDoItem;
@@ -188,24 +103,16 @@ public class ToDoItem ...  {
 ----
 
 
-
-[[_ugbtb_view-models_jaxb_collections]]
-== Collections
-
 It's also possible for a DTO to hold collections of objects.  These can be of any type, either simple properties, or
-references to other objects.
+references to other objects.  The only bit of boilerplate that is required is the `@XmlElementWrapper` annotation.  This instructs JAXB to create an XML element (based on the field name) to contain each of the elements.  (If this is omitted then the contents of the collection are at the same level as the properties; almost certainly not what is required).
 
-The only bit of boilerplate that is required is the `@XmlElementWrapper` annotation.  This instructs JAXB to create
-an XML element (based on the field name) to contain each of the elements.  (If this is omitted then the contents of
-the collection are at the same level as the properties; almost certainly not what is required).
-
-For example, the v1.1 of the `ToDoItemDto` could also contain:
+For example, the DTO also contains:
 
 [source,java]
 ----
-package todoapp.app.viewmodels.todoitem.v1_1;
+package todoapp.app.viewmodels.todoitem.v1;
 ...
-public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto {
+public class ToDoItemV1_1 implements Dto {
     ...
     @XmlElementWrapper
     @XmlElement(name = "todoItem")
@@ -220,21 +127,293 @@ children.  Be aware though that all of this state will become the DTO's memento,
 form, by way of the xref:rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`].
 
 There are limits to the lengths of URLs, however.  Therefore the DTO should not include state that can easily be
-derived from other information.  If the URL does exceed limits, then provide a custom implementation of `UrlEncodingService`
-to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow
+derived from other information.  If the URL does exceed limits, then provide a custom implementation of xref:rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow
 on the server).
 
 
 
 
 
+[[_ugbtb_view-models_jaxb_versioning]]
+== Versioning
+
+The whole point of using DTOs (in Apache Isis, at least) is to define a formal contact between two inter-operating but
+independent applications.  Since the only thing we can predicate about the future with any certainty is that it one or
+both of these applications will change, we should version DTOs from the get-go.  This allows us to make changes going forward without unnecessarily breaking existing consumers of the data.
+
+[NOTE]
+====
+There are several ways that versioning might be accomplished; we base our guidelines on this link:http://www.xfront.com/Versioning.pdf[article] taken from Roger Costello's blog, well worth a read.
+====
+
+We can distinguish two types of changes:
+
+* backwardly compatible changes
+* breaking changes.
+
+We can immediately say that the XSD namespace should change only when there is a major/breaking change, if following link:http://semver.org[semantic versioning] that means when we bump the major version number v1, v2, etc.
+
+XML namespaces correspond (when using JAXB) to Java packages.  We should therefore place our DTOs in a package that
+contains only the major number; this package will eventually contain a range of DTOs that are intended to be backwardly compatible with one another.  The package should also have a `package-info.java`; it is this that declares the XSD
+namespace:
+
+[source,java]
+----
+@javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://viewmodels.app.todoapp/todoitem/v1/Dto.xsd",        // <1>
+        xmlns = {
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://isis.apache.org/schema/common",
+                        prefix = "common"
+                )
+        },
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
+)
+package todoapp.app.viewmodels.todoitem.v1;                                     // <2>
+----
+<1> the namespace URI, used by the DTO residing in this package.
+<2> the package in which the DTO resides.  Note that this contains only the major version.
+
+Although there is no requirement for the namespace URI to correspond to a physical URL, it should be unique.  This usually means including a company domain name within the string.
+
+
+As noted above, this package will contain multiple DTO classes all with the same namespace; these represent a set of
+minor versions of the DTO, each subsequent one intended to be backwardly compatible with the previous.  Since these DTO
+classes will all be in the same package (as per the xref:ugbtb.adoc#_ugbtb_view-models_jaxb_using-packages-to-version[advice above]), the class should therefore include the minor version name:
+
+
+[source,java]
+----
+package todoapp.app.viewmodels.todoitem.v1;     // <1>
+...
+public class ToDoItemV1_1 implements Dto {      // <2>
+    ...
+}
+----
+<1> package contains the major version only
+<2> DTO class contains the (major and) minor version
+
+
+We also recommend that each DTO instance should also specify the version of the XSD schema that it is logically compatible
+with.  Probably most consumers will not persist the DTOs; they will be processed and then discarded.  However, it would
+be wrong to assume that is the case in all cases; some consumers might choose to persist the DTO (eg for replay at
+some later state).
+
+Thus:
+
+[source,java]
+----
+public class ToDoItemV1_1 implements Dto {
+    @XmlElement(required = true, defaultValue = "1")
+    public final String getMajorVersion() { return "1"; }   // <1>
+    @XmlElement(required = true, defaultValue = "1")
+    public String getMinorVersion() { return "1"; }         // <2>
+    ...
+}
+----
+<1> returns the major version (in sync with the package)
+<2> returns the minor version (in sync with the class name)
+
+These methods always return a hard-coded literal.  Any instances serialized from these classes will implicitly "declare"
+the (major and) minor version of the schema that they are compatible with.   If a consumer has a minimum version that
+it requires, it can therefore inspect the XML instance itself to determine if it is able to consume said XML.
+
+If a new (minor) version of a DTO is required, then we recommend copying-and-pasting the previous version, eg:
+
+[source,java]
+----
+public class ToDoItemV1_2 implements Dto {
+    @XmlElement(required = true, defaultValue = "1")
+    public final String getMajorVersion() { return "1"; }
+    @XmlElement(required = true, defaultValue = "2")
+    public String getMinorVersion() { return "2"; }
+    ...
+}
+----
+
+Obviously, only changes made must be backward compatible, eg new members must be optional.
+
+Alternatively, you might also consider simply editing the source file, ie renaming the class and bumping up the value
+returned by `getMinorVersion()`.
+
+We also _don't_ recommend using inheritance (ie `ToDoItemV1_2` should not inherit from `ToDoItemV1_1`; this creates unnecessary complexity downstream if generating XSDs and DTOs for the downstream consumer.
+
+
+[[_ugbtb_view-models_jaxb_generating-xsds-and-dtos]]
 == Generating XSDs and DTOs
 
-The xref:cgcon.adoc#_cgcon_isis-maven-plugin[Apache Isis maven plugin] provides the xref:cgcon.adoc#_cgcon_isis-maven-plugin_xsd[xsd] goal that allows the XSDs to be generated from any JAXB-annotated view models.
-These use the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to generate the schemas; using the
-standard `schemagen` command line will not correctly interpret any references to domain entities as OIDs.
+In the section xref:ugbtb.adoc#_ugbtb_view-models_jaxb_referencing-domain-entities[above] it was explained how a
+view model DTO can transparent reference any "backing" entities; these references are converted to internal object
+identifiers.
 
-The documentation for the `xsd` goal also explains how to generate DTO classes from the generated XSDs.  Note that these
-DTOs are not the same as the JAXB view models; they can be used outside of an Isis application, for example in a
-standalone subscriber running on an enterprise service bus such as Apache Camel.
+However, if the consumer of the XML is another Java process (eg running within an Apache Camel route), then you might
+be tempted/expect to be able to use the same DTO within that Java process.  After a little thought though you'll realize
+ that (duh!) of course you cannot; the consumer runs in a different process space, and will not have references to
+ those containing entities.
+
+There are therefore two options:
+
+* either choose not to have the view model DTO reference any persistent entities, and simply limit the DTO to simple
+scalars. +
++
+Such a DTO will then be usable in both the Apache Isis app (to generate the original XML) and in the consumer.  The
+xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`] can be used to obtain the object identifiers
+
+* alternatively, generate a different DTO for the consumer from the XSD of the view model DTO.
+
+The (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses the second approach; generating
+the XSD and consumer's DTO is mostly just boilerplate `pom.xml` file.  In the todoapp this can be found in the `todoapp-xsd` Maven module, whose `pom.xml` is structured as two profiles:
+
+[source,xml]
+----
+<project ... >
+    <artifactId>todoapp-xsd</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>todoapp-app</artifactId>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>isis-xsd</id>
+            <activation>
+                <property>
+                    <name>!skip.isis-xsd</name>
+                </property>
+            </activation>
+            ...
+        </profile>
+        <profile>
+            <id>xjc</id>
+            <activation>
+                <property>
+                    <name>!skip.xjc</name>
+                </property>
+            </activation>
+            ...
+        </profile>
+    </profiles>
+</project>
+----
+
+The `isis-xsd` profile generates the XSD using the xref:cgcon.adoc#_cgcon_isis-maven-plugin_xsd[`xsd` goal] of Isis' maven plugin:
+
+[source,xml]
+----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.isis.tool</groupId>
+            <artifactId>isis-maven-plugin</artifactId>
+            <version>${isis.version}</version>
+            <configuration>
+                <appManifest>todoapp.dom.ToDoAppDomManifest</appManifest>
+                <jaxbClasses>
+                    <jaxbClass>todoapp.app.viewmodels.todoitem.v1.ToDoItemV1_1</jaxbClass>
+                </jaxbClasses>
+                <separate>false</separate>
+                <commonSchemas>false</commonSchemas>
+            </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>todoapp-dom</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>16.0.1</version>
+                </dependency>
+            </dependencies>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>xsd</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.5.3</version>
+            <configuration>
+                <descriptor>src/assembly/dep.xml</descriptor>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>create-archive</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+----
+
+The `todoapp.dom.ToDoAppDomManifest` is a cut-down version of the app manifest that identifies only the `dom` domain
+services.
+
+The `xjc` profile, meanwhile, uses the `maven-jaxb2-plugin` (a wrapper around the `schemagen` JDK tool) to generate a
+DTO from the XSD generated by the preceding profile:
+
+[source,xml]
+----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <version>0.12.3</version>
+            <executions>
+                <execution>
+                    <id>xjc-generate</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                    <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <removeOldOutput>true</removeOldOutput>
+                <schemaDirectory>
+                    target/generated-resources/isis-xsd/viewmodels.app.todoapp
+                </schemaDirectory>
+                <schemaIncludes>
+                    <schemaInclude>todoitem/v1/Dto.xsd</schemaInclude>
+                </schemaIncludes>
+                <bindingDirectory>src/main/resources</bindingDirectory>
+                <bindingIncludes>
+                    <bindingInclude>binding.xml</bindingInclude>
+                </bindingIncludes>
+                <catalog>src/main/resources/catalog.xml</catalog>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.9.1</version>
+            <executions>
+                <execution>
+                    <id>add-source</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                    <sources>
+                        <source>target/generated-sources/xjc</source>
+                    </sources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+----
 

@@ -9,6 +9,7 @@ When developing an Apache Isis application you will most likely start off with t
 `Customer`, `Order`, `Product`, and so on.  For some applications this may well suffice.  However, if the application
 needs to integrate with other systems, or if the application needs to support reasonably complex business processes, then you may need to look beyond just domain entities.  This section explores these use cases.
 
+[[_ugbtb_view-models_use-cases_externally-managed-entities]]
 == Externally-managed entities
 
 Sometimes the entities that make up your application are persisted not in the local JDO/DataNucleus database
@@ -36,6 +37,7 @@ desirable in any case).
 ====
 
 
+[[_ugbtb_view-models_use-cases_in-memory-entities]]
 == In-memory entities
 
 As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose
@@ -45,6 +47,7 @@ A simple example might be read-only configuration data that is read from a confi
 definitions) but thereafter is presented in the UI just like any other entity.
 
 
+[[_ugbtb_view-models_use-cases_application-layer-view-models]]
 == Application-layer view models
 
 Domain entities (whether locally persisted using JDO/DataNucleus or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are
@@ -92,9 +95,10 @@ go).  Then, identify if there any view models that could be introduced which wou
 with the system (perhaps automating several related use cases together).
 ****
 
+[[_ugbtb_view-models_use-cases_dtos]]
 == DTOs
 
-DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carries data between processes".
+DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carry data between processes".
 
 If those two processes are parts of the same overall application (the same team builds and deploys both server and
 client) then there's generally no need to define a DTO; just access the entities using Apache Isis'
@@ -106,37 +110,51 @@ In such cases, exposing domain entities over xref:ugvro.adoc#[RestfulObjects] wo
 "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be
 easily changed by the producer.
 
-Instead, a view model can be defined to act as a DTO.  To put this formal contract onto a solid footing, this view
-model can simply be defined as a JAXB-annotated entity; this allows the consumer to obtain
-the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.  These XML
-representations can be surfaced by the xref:ugvro.adoc#[RestfulObjects viewer] (by implementing
-the xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]); the XSD can be obtained
-using the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`].  Using the formalism of XML also allows
-DTOs to be carefully and properly versioned using XML namespaces.
+To support this use case, a view model can be defined such that it can act as a DTO.  This is done by annotating the
+class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding
+XSD schema describing the structure of that XML.  A discussion of how that might be done using an ESB such as
+link:http://camel.apache.org[Apache Camel(TM)] follows xref:ugbtb.adoc#_ugbtb_view-models_use-cases_dtos_consumers[below].
+
+In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc#[Wicket viewer] just like any other.  In fact (as the xref:ugbtb.adoc#_ugbtb_view-models_programming-model[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
+
+
+It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
+The view model simply needs to implement the xref:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface; the
+framework has xref:rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.
+
+
+[[_ugbtb_view-models_use-cases_dtos_consumers]]
+=== DTO Consumers
+
+The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly,
+eg using the xref:ugvro.adoc#[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB
+such as Apache Camel.
+
+In the former case, the consumer requests the DTO by calling the REST API with the appropriate HTTP `Accept` header.
+An appropriate implementation of xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] can then be
+used to return the appropriate DTO (as XML).
+
+For the latter case, one design is simply for the application to instantiate the view model, then call the
+xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to obtain its corresponding XML.  This can then be published onto
+the ESB, for example using an http://activemq.apache.org[Apache ActiveMQ (TM)] queue.
+
+However, rather than try to push all the data that might be needed by any of these external systems in a single XML event
+ (which would require anticipating all the requirements, likely a hopeless task), a better design is to publish only
+ the fact that something of note has changed - ie, that an action on a domain object has been invoked - and then let the consumers call back to obtain other information if required.  This can once again be done by calling the REST API with
+ an appropriate HTTP `Accept` header.
 
 [TIP]
 ====
-If the view model DTO implements the xref:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface, then the framework
-will also provide the ability to download the XML or its XSD directly from the UI.
+This is an example of the link:https://leanpub.com/camel-design-patterns[VETRO pattern] (validate, enrich, transform, route, operate).  In our case we focus on the validation (to determine the nature of the inbound message, ie which action was
+invoked), and the enrich (callback to obtain a DTO with additional information required by the consumer).
 ====
 
-In case it's not clear, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc#[Wicket viewer] just like any other.  Indeed (as the xref:ugbtb.adoc#_ugbtb_view-models_programming-model[programming model] section below makes clear), these
-JAXB-annotated view models are in many regards the most powerful of all the view model alternatives.
+The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module provides an out-of-the-box solution of this design.  It provides an implementation of the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`],
+but which simply publishes instances of xref:rgcms.adoc#_rgcms_schema-aim[`ActionInvocationMemento`] to an ActiveMQ
+queue.  Camel (or similar) can then be hooked up to consume these events from this queue, and use a processor to
+parse the action memento to determine what has changed on the source system.  Thereafter, a subsequent Camel processor
+can then call back to the source - via the xref:ugvro.adoc[Restful Objects viewer] - to enrich the message with
+additional details using a DTO.
 
-
-== ESB Subscribers
-
-One important variation of the DTO use case concerns subscribers on an enterprise event bus such as
-link:http://camel.apache.org[Apache Camel(TM)] and similar.
-
-A xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] implementation (eg that provided by
-(non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module) can publish XML events
-onto a message queue, typically representing action invocations within the originating Isis application.  The ESB
-(Apache Camel) then dispatches this event to all interested subscribers.  These subscribers represent external systems
-in the enterprise, managed by other teams, and so act as the third-party consumers of the data.
-
-Rather than try to anticipate their requirements and push the data that these subscribers might need into the original
-XML event (a hopeless task), DTO objects can be defined to allow these consumers to call back to the publishing Isis
-application to obtain the data they need.
 
 
