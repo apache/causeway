@@ -64,7 +64,7 @@ public class Dto_downloadXsd {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-
+            cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "500.2")
     public Object $$(
