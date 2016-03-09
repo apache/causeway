@@ -83,6 +83,12 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.NamedFacetForDomainObjectXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.PluralFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -215,6 +221,17 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
             private int actionPropertyGroupSequence = 1;
             private int actionPropertySequence = 1;
             private int actionCollectionSequence = 1;
+
+            @Override
+            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+
+                FacetUtil.addOrReplaceFacet(BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                FacetUtil.addOrReplaceFacet(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                FacetUtil.addOrReplaceFacet(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                FacetUtil.addOrReplaceFacet(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                FacetUtil.addOrReplaceFacet(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                FacetUtil.addOrReplaceFacet(PluralFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+            }
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
