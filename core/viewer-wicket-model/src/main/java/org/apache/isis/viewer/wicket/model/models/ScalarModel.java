@@ -40,8 +40,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -768,7 +768,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     }
 
 
-    @Override
     public String getReasonInvalidIfAny() {
         final OneToOneAssociation property = getPropertyMemento().getProperty();
 
@@ -780,7 +779,12 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return validity.isAllowed() ? null : validity.getReason();
     }
 
-    public void applyValue(final ObjectAdapter adapter) {
+    /**
+     * Apply changes to the underlying adapter (possibly returning a new adapter).
+     *
+     * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     */
+    public ObjectAdapter applyValue(ObjectAdapter adapter) {
         final OneToOneAssociation property = getPropertyMemento().getProperty();
 
         //
@@ -796,21 +800,35 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         //
 
         //
-        // on the other hand, we mustn't attempt to apply changes for disabled properties...
-        // even if the property is persisted (it might be written to by an action), it is never updated by
-        // an edit.
+        // previously (prior to XML layouts and 'single property' edits) we also used to check if
+        // the property was disabled, using:
         //
-        // Fundamentally, then, any non-disabled property (whether persisted or not) should be updated in the
-        // Isis runtime.
+        // if(property.containsDoOpFacet(DisabledFacet.class)) {
+        //    // skip, as per comments above
+        //    return;
+        // }
         //
+        // However, this would seem to be wrong, because the presence of a DisabledFacet doesn't necessarily mean
+        // that the property is disabled (its disabledReason(...) might return null).
+        //
+        // In any case, the only code that calls this method already does the check, so think this is safe
+        // to just remove.
 
-        if(property.containsDoOpFacet(DisabledFacet.class)) {
-            // skip, as per comments above
-            return;
-        }
 
         final ObjectAdapter associate = getObject();
         property.set(adapter, associate, InteractionInitiatedBy.USER);
+
+        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        if(recreatableObjectFacet != null) {
+            final Object viewModel = adapter.getObject();
+            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
+            if(cloneable) {
+                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
+                adapter = getAdapterManager().adapterFor(newViewModel);
+            }
+        }
+
+        return adapter;
     }
 
 

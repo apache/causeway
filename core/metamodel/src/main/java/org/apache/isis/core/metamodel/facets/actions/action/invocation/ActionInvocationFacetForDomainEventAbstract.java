@@ -412,10 +412,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             }
             if (result == null) {
                 if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
-                    // if this was a void method on a ViewModel.Cloneable, then (to save boilerplate in the domain)
+                    // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
                     // automatically do the clone and return the clone instead.
-                    final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) targetAdapter.getObject();
-                    final Object clone = cloneable.clone();
+                    final ViewModelFacet facet = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                    final Object clone = facet.clone(targetAdapter.getObject());
                     final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
                     return InvocationResult.forActionThatReturned(clonedAdapter);
                 }
@@ -425,10 +425,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
 
             if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
-                // if the object returned is a ViewModel.Cloneable, then
+                // if the object returned is cloneable, then
                 // (to save boilerplate in the domain) automatically do the clone.
-                final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) result;
-                result = cloneable.clone();
+                final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                result = facet.clone(result);
                 resultAdapter = getAdapterManager().adapterFor(result);
             }
 

@@ -54,6 +54,19 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
         return encoded;
     }
 
+    @Override
+    public boolean isCloneable(Object pojo) {
+        return true;
+    }
+
+    @Override
+    public Object clone(Object pojo) {
+        final String xml = getJaxbService().toXml(pojo);
+        final Object cloned = getJaxbService().fromXml(pojo.getClass(), xml);
+        return cloned;
+    }
+
+
     private JaxbService getJaxbService() {
         return servicesInjector.lookupService(JaxbService.class);
     }

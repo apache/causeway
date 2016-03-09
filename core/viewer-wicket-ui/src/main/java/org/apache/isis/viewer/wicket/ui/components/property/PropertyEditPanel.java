@@ -213,13 +213,17 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
             ObjectAdapter adapter = getScalarModel().getParentObjectAdapterMemento()
                     .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK);
 
-            getScalarModel().applyValue(adapter);
+            final ObjectAdapter objectAdapter = getScalarModel().applyValue(adapter);
+            // (borrowed some code previously in EntityModel)
+            if(objectAdapter != adapter) {
+                getModel().getParentObjectAdapterMemento().setAdapter(adapter);
+            }
 
             // flush any queued changes, so concurrency or violation exceptions (if any)
             // will be thrown here
             getTransactionManager().flushTransaction();
 
-            final EntityPage entityPage = new EntityPage(adapter, null);
+            final EntityPage entityPage = new EntityPage(objectAdapter, null);
             setResponsePage(entityPage);
 
             return true;

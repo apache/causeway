@@ -29,7 +29,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -39,7 +38,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -485,42 +484,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return message;
     }
 
-    // //////////////////////////////////////////////////////////
-    // validation & apply
-    // //////////////////////////////////////////////////////////
-
-    public String getReasonInvalidIfAny() {
-        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-        final Consent validity = adapter.getSpecification().isValid(adapter, InteractionInitiatedBy.USER);
-        return validity.isAllowed() ? null : validity.getReason();
-    }
-
-    /**
-     * Apply changes to the underlying adapter (possibly returning a new adapter).
-     *
-     * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
-     */
-    public ObjectAdapter apply() {
-        ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
-            scalarModel.applyValue(adapter);
-        }
-
-        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(recreatableObjectFacet != null) {
-            final Object viewModel = adapter.getObject();
-            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
-            if(cloneable) {
-                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
-                adapter = getAdapterManager().adapterFor(newViewModel);
-            }
-        }
-
-        getObjectAdapterMemento().setAdapter(adapter);
-        toViewMode();
-
-        return adapter;
-    }
 
     // //////////////////////////////////////////////////////////
     // Pending
