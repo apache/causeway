@@ -22,6 +22,17 @@ import org.apache.isis.applib.layout.component.Grid;
 public interface GridLoaderService {
 
     /**
+     * Whether dynamic reloading of layouts is enabled.
+     */
+    @Programmatic
+    boolean supportsReloading();
+
+    /**
+     * To support metamodel invalidation/rebuilding of spec.
+     */
+    @Programmatic void remove(Class<?> domainClass);
+
+    /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      */
     @Programmatic

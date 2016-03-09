@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.grid.GridService;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -43,27 +42,23 @@ public class GridFacetDefault
 
     public static GridFacet create(
             final FacetHolder facetHolder,
-            final GridService gridService,
-            final DeploymentCategory deploymentCategory) {
-        return new GridFacetDefault(facetHolder, gridService, deploymentCategory);
+            final GridService gridService) {
+        return new GridFacetDefault(facetHolder, gridService);
     }
 
-    private final DeploymentCategory deploymentCategory;
     private final GridService gridService;
 
     private Grid grid;
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
-            final GridService gridService,
-            final DeploymentCategory deploymentCategory) {
+            final GridService gridService) {
         super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
         this.gridService = gridService;
-        this.deploymentCategory = deploymentCategory;
     }
 
     public Grid getGrid() {
-        if (deploymentCategory.isProduction() && this.grid != null) {
+        if (!gridService.supportsReloading() && this.grid != null) {
             return this.grid;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
@@ -84,6 +79,5 @@ public class GridFacetDefault
     private ObjectSpecification getSpecification() {
         return (ObjectSpecification) getFacetHolder();
     }
-
 
 }

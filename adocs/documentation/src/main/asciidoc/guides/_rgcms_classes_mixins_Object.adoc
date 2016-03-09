@@ -8,31 +8,67 @@
 (As of `1.12.0-SNAPSHOT`) the framework provides a single mixin that contributes to simply `java.lang.Object`.  It provides the ability to download the layout XML for any domain object (in practical terms: entities and view models).
 
 
-The `Object_downloadLayoutXml` mixin defines the following action:
+[[_rgcms_classes_mixins_Object_downloadLayoutXml]]
+== `downloadLayoutXml()`
+
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout XML] for the current domain object.  It has the following signature:
 
 [source,java]
 ----
-@Mixin
-public class Object_downloadLayoutXml {
-    public Object_downloadLayoutXml(final Object object) { ... }     // <1>
-    public String downloadLayoutXml(final String fileName) { ... }   // <2>
+public Object downloadLayoutXml(
+    @ParameterLayout(named = "File name")
+    final String fileName,
+    final LayoutService.Style style) {          // <1>
     ...
 }
 ----
-<1> provided as an action to all objects
-<2> actually this method is called '$$' in the code, a "special case" that means to use the derive the action name
-from the class name.
+<1> either current, complete, normalized or minimal.
+
+See the documentation on xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout XML] and also
+the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] for more information on these styles
 
 
-== Appearance in the UI
+=== Appearance in the UI
 
-This mixin property are all associated with the "Metadata" fieldset.
+This mixin actions are all associated with the "Metadata" fieldset.
 
 A number of other xref:rgcms.adoc#_rgcms_classes_mixins_Persistable[mixins] also contribute properties and actions to the "Metadata" fieldset.
 
 
 
-== Related Services
+=== Related Services
 
 This mixin calls xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] to obtain the layout XML.
+
+
+
+
+[[_rgcms_classes_mixins_Object_rebuildMetamodel]]
+== `rebuildMetamodel()`
+
+The `Object_rebuildMetamodel` mixin provides the ability to discard the current internal metamodel data (an instance
+of `ObjectSpecification`) for the domain class of the rendered object, and recreate from code and other sources (most
+notably, layout XML data).  It has the following signature:
+
+[source,java]
+----
+public void rebuildMetamodel() {
+    ...
+}
+----
+
+
+=== Appearance in the UI
+
+This mixin actions are all associated with the "Metadata" fieldset.
+
+A number of other xref:rgcms.adoc#_rgcms_classes_mixins_Persistable[mixins] also contribute properties and actions to
+the "Metadata" fieldset.
+
+
+
+=== Related Services
+
+This mixin calls xref:rgsvc.adoc#_rgsvc_api_MetaModelService[`MetaModelService`] and the
+xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] to invalidate their caches.
 

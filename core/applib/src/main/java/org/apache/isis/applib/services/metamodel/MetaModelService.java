@@ -43,4 +43,8 @@ public interface MetaModelService {
     String toObjectType(final Class<?> domainType);
 
 
+    @Programmatic
+    void rebuild(final Class<?> domainType);
+
+
 }

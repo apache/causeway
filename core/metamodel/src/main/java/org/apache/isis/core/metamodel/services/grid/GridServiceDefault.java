@@ -47,8 +47,17 @@ public class GridServiceDefault implements GridService {
     public static final String COMMON_TNS = "http://isis.apache.org/applib/layout/component";
     public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
 
-
     // //////////////////////////////////////
+
+    @Override
+    public boolean supportsReloading() {
+        return gridLoaderService.supportsReloading();
+    }
+
+    @Override
+    public void remove(final Class<?> domainClass) {
+        gridLoaderService.remove(domainClass);
+    }
 
     @Override
     @Programmatic

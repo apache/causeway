@@ -58,7 +58,7 @@ public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCa
     private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
 
     // cache (used only in prototyping mode)
-    private final Map<String, Grid> pageByXml = Maps.newHashMap();
+    private final Map<String, Grid> gridByXml = Maps.newHashMap();
 
     private List<Class<? extends Grid>> pageImplementations;
 
@@ -76,6 +76,23 @@ public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCa
                 .toList();
     }
 
+    @Override
+    public boolean supportsReloading() {
+        return !deploymentCategory.isProduction();
+    }
+
+    @Override
+    public void remove(final Class<?> domainClass) {
+        if(!supportsReloading()) {
+            return;
+        }
+        badXmlByClass.remove(domainClass);
+        final String xml = loadXml(domainClass);
+        if(xml == null) {
+            return;
+        }
+        gridByXml.remove(xml);
+    }
 
     @Override
     @Programmatic
@@ -87,24 +104,13 @@ public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCa
     @Override
     @Programmatic
     public Grid load(final Class<?> domainClass) {
-        final String resourceName = resourceNameFor(domainClass);
-        final String xml;
-        try {
-            xml = resourceContentOf(domainClass, resourceName);
-        } catch (IOException | IllegalArgumentException ex) {
-
-            if(LOG.isDebugEnabled()) {
-                final String message = String .format(
-                        "Failed to locate file %s (relative to %s.class); ex: %s)",
-                        resourceName, domainClass.getName(), ex.getMessage());
-
-                LOG.debug(message);
-            }
+        final String xml = loadXml(domainClass);
+        if(xml == null) {
             return null;
         }
 
-        if(!deploymentCategory.isProduction()) {
-            final Grid grid = pageByXml.get(xml);
+        if(supportsReloading()) {
+            final Grid grid = gridByXml.get(xml);
             if(grid != null) {
                 return grid;
             }
@@ -127,25 +133,43 @@ public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCa
 
             final Grid grid = (Grid) jaxbService.fromXml(context, xml);
             grid.setDomainClass(domainClass);
-            if(!deploymentCategory.isProduction()) {
-                pageByXml.put(xml, grid);
+            if(supportsReloading()) {
+                gridByXml.put(xml, grid);
             }
             return grid;
         } catch(Exception ex) {
 
-            if(!deploymentCategory.isProduction()) {
+            if(supportsReloading()) {
                 // save fact that this was bad XML, so that we don't log again if called next time
                 badXmlByClass.put(domainClass, xml);
             }
 
             // note that we don't blacklist if the file exists but couldn't be parsed;
             // the developer might fix so we will want to retry.
+            final String resourceName = resourceNameFor(domainClass);
             final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
-            if(deploymentCategory.isPrototyping()) {
+            if(supportsReloading()) {
                 container.warnUser(message);
             }
             LOG.warn(message);
 
+            return null;
+        }
+    }
+
+    private String loadXml(final Class<?> domainClass) {
+        final String resourceName = resourceNameFor(domainClass);
+        try {
+            return resourceContentOf(domainClass, resourceName);
+        } catch (IOException | IllegalArgumentException ex) {
+
+            if(LOG.isDebugEnabled()) {
+                final String message = String .format(
+                        "Failed to locate file %s (relative to %s.class); ex: %s)",
+                        resourceName, domainClass.getName(), ex.getMessage());
+
+                LOG.debug(message);
+            }
             return null;
         }
     }

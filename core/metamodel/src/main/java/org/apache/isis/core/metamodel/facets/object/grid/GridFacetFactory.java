@@ -39,12 +39,9 @@ public class GridFacetFactory extends FacetFactoryAbstract implements ServicesIn
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final GridService gridService =
-                servicesInjector.lookupService(GridService.class);
+        final GridService gridService = servicesInjector.lookupService(GridService.class);
 
-        FacetUtil.addFacet(
-                GridFacetDefault.create(facetHolder,
-                        gridService, getDeploymentCategory()));
+        FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService));
     }
 
     private ServicesInjector servicesInjector;
