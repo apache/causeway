@@ -10,6 +10,19 @@ As noted in the xref:ugbtb.adoc#_ugbtb_view-models_use-cases[introduction], view
 JAXB annotations.  The serialized form of these view models is therefore XML, which also enables these view models
 to act as DTOs.
 
+In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the
+xref:ugvw.adoc#[Wicket viewer] just like any other.  In fact, these JAXB-annotated view models are in many regards the
+most powerful of all the various ways of writing view models:
+
+* their entire state (collections as well as properties) is automatically managed from interaction to interaction. +
++
+In contrast, using xref:rgant.adoc#_rgant_ViewModel[`@ViewModel`] (or its
+xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] equivalent) will only manage the state of
+properties, but not collections.  And if using the xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`]
+interface, then the programmer must write all the state management (lots of boilerplate).
+
+* (as of `1.12.0-SNAPSHOT`), JAXB-annotated view models are editable.
+
 The examples in this section uses the DTO for `ToDoItem`, taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp].  This DTO is defined as follows:
 
 [source,java]
