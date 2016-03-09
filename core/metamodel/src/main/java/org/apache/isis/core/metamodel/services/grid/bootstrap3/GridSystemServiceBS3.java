@@ -473,80 +473,74 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 .transform(ObjectMember.Functions.getId())
                 .toList();
 
-            FluentIterable.from(sortedPossiblyMissingActionIds)
-                .transform(
-                        new Function<String, Void>() {
-                            @Nullable @Override
-                            public Void apply(@Nullable final String actionId) {
-                                final ObjectAction oa = objectActionById.get(actionId);
-                                final MemberOrderFacet memberOrderFacet = oa.getFacet(MemberOrderFacet.class);
-                                if(memberOrderFacet == null) {
-                                    return null;
-                                }
-                                final String memberOrderName = memberOrderFacet.name();
-                                if (memberOrderName == null) {
-                                    return null;
-                                }
-                                final String id = asId(memberOrderName);
+        for (String actionId : sortedPossiblyMissingActionIds) {
+            final ObjectAction oa = objectActionById.get(actionId);
+            final MemberOrderFacet memberOrderFacet = oa.getFacet(MemberOrderFacet.class);
+            if(memberOrderFacet == null) {
+                continue;
+            }
+            final String memberOrderName = memberOrderFacet.name();
+            if (memberOrderName == null) {
+                continue;
+            }
+            final String id = asId(memberOrderName);
 
-                                if (oneToOneAssociationById.containsKey(id)) {
-                                    associatedActionIds.add(actionId);
+            if (oneToOneAssociationById.containsKey(id)) {
+                associatedActionIds.add(actionId);
 
-                                    if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
-                                        // if binding not via annotation, then explicitly bind this
-                                        // action to the property
-                                        final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(id);
-                                        final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
+                    // if binding not via annotation, then explicitly bind this
+                    // action to the property
+                    final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(id);
+                    final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
 
-                                        final ActionPositionFacet actionPositionFacet = oa.getFacet(ActionPositionFacet.class);
-                                        final ActionLayoutDataOwner owner;
-                                        final ActionLayout.Position position;
-                                        if(actionPositionFacet != null) {
-                                            position = actionPositionFacet.position();
-                                            owner = position == ActionLayout.Position.PANEL ||
-                                                    position == ActionLayout.Position.PANEL_DROPDOWN
-                                                        ? propertyLayoutData.getOwner()
-                                                        : propertyLayoutData;
-                                        } else {
-                                            position = ActionLayout.Position.BELOW;
-                                            owner = propertyLayoutData;
-                                        }
-                                        actionLayoutData.setPosition(position);
-                                        addActionTo(owner, actionLayoutData);
-                                    }
+                    final ActionPositionFacet actionPositionFacet = oa.getFacet(ActionPositionFacet.class);
+                    final ActionLayoutDataOwner owner;
+                    final ActionLayout.Position position;
+                    if(actionPositionFacet != null) {
+                        position = actionPositionFacet.position();
+                        owner = position == ActionLayout.Position.PANEL ||
+                                position == ActionLayout.Position.PANEL_DROPDOWN
+                                ? propertyLayoutData.getOwner()
+                                : propertyLayoutData;
+                    } else {
+                        position = ActionLayout.Position.BELOW;
+                        owner = propertyLayoutData;
+                    }
+                    actionLayoutData.setPosition(position);
+                    addActionTo(owner, actionLayoutData);
+                }
 
-                                    return null;
-                                }
-                                if (oneToManyAssociationById.containsKey(id)) {
-                                    associatedActionIds.add(actionId);
+                continue;
+            }
+            if (oneToManyAssociationById.containsKey(id)) {
+                associatedActionIds.add(actionId);
 
-                                    if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
-                                        // if binding not via annotation, then explicitly bind this
-                                        // action to the property
-                                        final CollectionLayoutData collectionLayoutData = collectionLayoutDataById.get(id);
-                                        final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-                                        addActionTo(collectionLayoutData, actionLayoutData);
-                                    }
-                                    return null;
-                                }
-                                // if the @MemberOrder for the action references a field set (that has bound
-                                // associations), then don't mark it as missing, but instead explicitly add it to the
-                                // list of actions of that fieldset.
-                                final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
-                                if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
+                if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
+                    // if binding not via annotation, then explicitly bind this
+                    // action to the property
+                    final CollectionLayoutData collectionLayoutData = collectionLayoutDataById.get(id);
+                    final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                    addActionTo(collectionLayoutData, actionLayoutData);
+                }
+                continue;
+            }
+            // if the @MemberOrder for the action references a field set (that has bound
+            // associations), then don't mark it as missing, but instead explicitly add it to the
+            // list of actions of that fieldset.
+            final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
+            if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
 
-                                    associatedActionIds.add(actionId);
+                associatedActionIds.add(actionId);
 
-                                    final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
 
-                                    actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
-                                    final FieldSet fieldSet = fieldSetIds.get(id);
-                                    addActionTo(fieldSet, actionLayoutData);
-                                    return null;
-                                }
-                                return null;
-                            }
-                        });
+                actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                final FieldSet fieldSet = fieldSetIds.get(id);
+                addActionTo(fieldSet, actionLayoutData);
+                continue;
+            }
+        }
 
         // ... the missing actions are those in the second tuple, excluding those associated (via @MemberOrder#name)
         // to a property or collection.
