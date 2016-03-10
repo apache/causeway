@@ -331,24 +331,31 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     // special case for edit properties
                 } else {
 
-                    command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
-
-                    // the background service is used here merely as a means to capture an invocation memento
-                    final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
-                    if(backgroundService != null) {
-                        final Object targetObject = unwrap(targetAdapter);
-                        final Object[] args = CommandUtil.objectsFor(arguments);
-                        final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
-
-                        if(aim != null) {
-                            command.setMemento(aim.asMementoString());
-                        } else {
-                            throw new IsisException(
-                                    "Unable to build memento for action " +
-                                            owningAction.getIdentifier().toClassAndNameIdentityString());
-                        }
+                    if(command.getMemberIdentifier() == null) {
+                        // any contributed/mixin actions will fire after the main action
+                        // the guard here prevents them from trashing the command's memberIdentifier
+                        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
                     }
 
+                    if(command.getMemento() == null) {
+                        // similarly, guard here to deal with subsequent contributed/mixin actions.
+
+                        // the background service is used here merely as a means to capture an invocation memento
+                        final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
+                        if(backgroundService != null) {
+                            final Object targetObject = unwrap(targetAdapter);
+                            final Object[] args = CommandUtil.objectsFor(arguments);
+                            final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+
+                            if(aim != null) {
+                                command.setMemento(aim.asMementoString());
+                            } else {
+                                throw new IsisException(
+                                        "Unable to build memento for action " +
+                                                owningAction.getIdentifier().toClassAndNameIdentityString());
+                            }
+                        }
+                    }
                 }
 
                 // copy over the command execution 'context' (if available)
@@ -444,11 +451,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 }
             }
 
-            final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-            currentInvocation.set(
-                    publishedActionFacet != null
-                            ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
-                            : null);
+            if(currentInvocation.get() == null) {
+                final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+                if(publishedActionFacet != null) {
+                    currentInvocation.set(new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command));
+                }
+            }
 
             return InvocationResult.forActionThatReturned(resultAdapter);
 
