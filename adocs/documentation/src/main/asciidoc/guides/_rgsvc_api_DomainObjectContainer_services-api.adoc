@@ -5,16 +5,20 @@
 :_imagesdir: images/
 
 
-The services API allows your domain objects to programmatically inject services into arbitrary objects, as well as to look up services by type:
+The services API allows your domain objects to programmatically inject services into arbitrary objects, as well as to look up services by type.
+
+[NOTE]
+====
+(As of `1.12.0-SNAPSHOT`), some of these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`]; the corresponding methods in `DomainObjectContainer` are deprecated.
+====
+
+The methods are:
 
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
     <T> T injectServicesInto(final T domainObject);     // <1>
-    @Programmatic
     <T> T lookupService(Class<T> service);              // <2>
-    @Programmatic
     <T> Iterable<T> lookupServices(Class<T> service);   // <3>
     ...
 }

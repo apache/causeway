@@ -13,9 +13,7 @@ The API provided is:
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
     boolean isValid(Object domainObject);
-    @Programmatic
     String validate(Object domainObject);
     ...
 }

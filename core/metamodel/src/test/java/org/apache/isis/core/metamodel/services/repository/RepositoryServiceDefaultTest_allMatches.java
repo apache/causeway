@@ -17,70 +17,54 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services.container;
+package org.apache.isis.core.metamodel.services.repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-public class DomainObjectContainerDefaultTest_allMatches {
+public class RepositoryServiceDefaultTest_allMatches {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private DomainObjectContainerDefault container;
+    private RepositoryServiceDefault repositoryService;
 
     @Mock
-    private ConfigurationService mockConfigurationService;
-    @Mock
-    private ServicesInjector mockServicesInjector;
-
-    private boolean flushCalled;
+    private TransactionService mockTransactionService;
 
     @Before
     public void setUp() throws Exception {
-        container = new DomainObjectContainerDefault() {
-            @Override public boolean flush() {
-                flushCalled = true;
-                return true;
-            }
-
+        repositoryService = new RepositoryServiceDefault() {
             @Override <T> List<T> submitQuery(final Query<T> query) {
                 return null;
             }
-
-            {
-                setServicesInjector(mockServicesInjector);
-            }
         };
-        container.setConfigurationService(mockConfigurationService);
-        context.allowing(mockConfigurationService);
-        context.allowing(mockServicesInjector);
+        repositoryService.transactionService = mockTransactionService;
     }
 
     @Test
     public void whenAutoflush() throws Exception {
         // given
         Map map = new HashMap();
-        container.init(map);
+        repositoryService.init(map);
+        // expect
+        context.checking(new Expectations() {{
+            oneOf(mockTransactionService).flushTransaction();
+        }});
         // when
-        container.allMatches(null);
-        // then
-        assertThat(flushCalled, is(true));
+        repositoryService.allMatches(null);
     }
 
     @Test
@@ -89,11 +73,13 @@ public class DomainObjectContainerDefaultTest_allMatches {
         Map map = new HashMap() {{
             put("isis.services.container.disableAutoFlush", "true");
         }};
-        container.init(map);
+        repositoryService.init(map);
+        // expect
+        context.checking(new Expectations() {{
+            never(mockTransactionService).flushTransaction();
+        }});
         // when
-        container.allMatches(null);
-        // then
-        assertThat(flushCalled, is(false));
+        repositoryService.allMatches(null);
     }
 
     @Test
@@ -102,11 +88,13 @@ public class DomainObjectContainerDefaultTest_allMatches {
         Map map = new HashMap() {{
             put("isis.services.container.disableAutoFlush", "false");
         }};
-        container.init(map);
+        repositoryService.init(map);
+        // expect
+        context.checking(new Expectations() {{
+            oneOf(mockTransactionService).flushTransaction();
+        }});
         // when
-        container.allMatches(null);
-        // then
-        assertThat(flushCalled, is(true));
+        repositoryService.allMatches(null);
     }
 
 }

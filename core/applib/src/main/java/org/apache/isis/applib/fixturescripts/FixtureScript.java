@@ -44,6 +44,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -913,7 +914,15 @@ public abstract class FixtureScript
         return container.mixin(mixinClass, mixedIn);
     }
 
+    /**
+     * Convenience method
+     */
+    protected void nextTransaction() {
+        transactionService.nextTransaction();
+    }
+
     //endregion
+
 
     //region > helpers (local)
 
@@ -933,6 +942,9 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected WrapperFactory wrapperFactory;
+
+    @javax.inject.Inject
+    protected TransactionService transactionService;
 
 
     //endregion

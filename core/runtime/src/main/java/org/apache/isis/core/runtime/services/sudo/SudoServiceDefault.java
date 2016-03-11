@@ -17,31 +17,33 @@
  *  under the License.
  */
 
-    package org.apache.isis.core.runtime.services.sudo;
+package org.apache.isis.core.runtime.services.sudo;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.apache.isis.applib.DomainObjectContainer;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
 public class SudoServiceDefault implements SudoService {
 
-    private DomainObjectContainerDefault containerDefault;
+    private UserServiceDefault userServiceDefault;
 
     @Programmatic
     @PostConstruct
     public void init() {
-        if(container instanceof DomainObjectContainerDefault) {
-            containerDefault = (DomainObjectContainerDefault) container;
+        if(userService instanceof UserServiceDefault) {
+            userServiceDefault = (UserServiceDefault) userService;
         }
     }
 
@@ -50,10 +52,10 @@ public class SudoServiceDefault implements SudoService {
     public void sudo(final String user, final Runnable runnable) {
         ensureContainerOk();
         try {
-            containerDefault.overrideUser(user);
+            userServiceDefault.overrideUser(user);
             runnable.run();
         } finally {
-            containerDefault.resetOverrides();
+            userServiceDefault.resetOverrides();
         }
     }
 
@@ -62,12 +64,12 @@ public class SudoServiceDefault implements SudoService {
     public <T> T sudo(final String user, final Callable<T> callable) {
         ensureContainerOk();
         try {
-            containerDefault.overrideUser(user);
+            userServiceDefault.overrideUser(user);
             return callable.call();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            containerDefault.resetOverrides();
+            userServiceDefault.resetOverrides();
         }
     }
 
@@ -76,10 +78,10 @@ public class SudoServiceDefault implements SudoService {
     public void sudo(final String username, final List<String> roles, final Runnable runnable) {
         ensureContainerOk();
         try {
-            containerDefault.overrideUserAndRoles(username, roles);
+            userServiceDefault.overrideUserAndRoles(username, roles);
             runnable.run();
         } finally {
-            containerDefault.resetOverrides();
+            userServiceDefault.resetOverrides();
         }
     }
 
@@ -88,23 +90,23 @@ public class SudoServiceDefault implements SudoService {
     public <T> T sudo(final String username, final List<String> roles, final Callable<T> callable) {
         ensureContainerOk();
         try {
-            containerDefault.overrideUserAndRoles(username, roles);
+            userServiceDefault.overrideUserAndRoles(username, roles);
             return callable.call();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            containerDefault.resetOverrides();
+            userServiceDefault.resetOverrides();
         }
     }
 
     private void ensureContainerOk() {
-        if(containerDefault == null) {
+        if(userServiceDefault == null) {
             throw new IllegalStateException("DomainObjectContainer does not support the user being overridden");
         }
     }
 
 
     @Inject
-    private DomainObjectContainer container;
+    private UserService userService;
 
 }

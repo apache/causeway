@@ -138,6 +138,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
+
             @Override
             public void resolve(final Object parent, final Object field) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
@@ -145,6 +146,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
             @Override
             public void resolve(final Object parent) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public void beginTran() {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 

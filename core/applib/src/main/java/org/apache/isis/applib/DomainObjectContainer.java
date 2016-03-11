@@ -28,7 +28,9 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.user.UserService;
 
 /**
  * A domain service that acts as a framework's container for managing the 
@@ -59,7 +61,7 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > resolve, objectChanged
+    //region > resolve, objectChanged (DEPRECATED)
 
     /**
      * Re-initialises the fields of an object, using the
@@ -99,7 +101,7 @@ public interface DomainObjectContainer {
      *     that original functionality is performed automatically by the framework.
      * </p>
      *
-     * @deprecated
+     * @deprecated - is a no-op
      */
     @Programmatic
     @Deprecated
@@ -108,7 +110,7 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > flush, commit
+    //region > flush, commit (DEPRECATED)
 
     /**
      * Flush all changes to the object store.
@@ -117,9 +119,12 @@ public interface DomainObjectContainer {
      * Occasionally useful to ensure that newly persisted domain objects
      * are flushed to the database prior to a subsequent repository query. 
      * 
-     * @return  - is never used, always returns <tt>false</tt>. 
+     * @return  - is never used, always returns <tt>false</tt>.
+     *
+     * @deprecated - use {@link EntityService#flushTransaction()}.
      */
     @Programmatic
+    @Deprecated
     boolean flush();
 
     /**
@@ -141,36 +146,9 @@ public interface DomainObjectContainer {
     //region > new{Transient/Persistent}Instance
 
     /**
-     * Create a new instance of the specified class, but do not persist it.
-     *
-     * <p>
-     * It is recommended that the object be initially instantiated using
-     * this method, though the framework will also handle the case when 
-     * the object is simply <i>new()</i>ed up.  The benefits of using
-     * {@link #newTransientInstance(Class)} are:
-     * </p>
-     *
-     * <ul>
-     * <li>any services will be injected into the object immediately
-     *     (otherwise they will not be injected until the framework
-     *     becomes aware of the object, typically when it is 
-     *     {@link #persist(Object) persist}ed</li>
-     * <li>the default value for any properties (usually as specified by 
-     *     <tt>default<i>Xxx</i>()</tt> supporting methods) will not be
-     *     used</li>
-     * <li>the <tt>created()</tt> callback will not be called.
-     * </ul>
-     * 
-     * <p>
-     * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt> 
-     * supporting methods or the <tt>created()</tt> callback, then you can
-     * alternatively just <i>new()</i> up the object rather than call this
-     * method.
-     * </p>
-
-     *
-     * @see #newPersistentInstance(Class)
+    * @deprecated - use {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T newTransientInstance(final Class<T> ofType);
 
@@ -222,19 +200,35 @@ public interface DomainObjectContainer {
     @Deprecated
     <T> T newInstance(final Class<T> ofType, final Object object);
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.services.factory.FactoryService#mixin(Class, Object)} instead.
+     */
+    @Deprecated
     @Programmatic
     <T> T mixin( Class<T> mixinClass, Object mixedIn);
 
     //endregion
 
-    //region > injectServicesInto, lookupService, lookupServices
+    //region > injectServicesInto, lookupService, lookupServices (DEPRECATED)
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#injectServicesInto(Object)} instead.
+     */
+    @Deprecated
     @Programmatic
     <T> T injectServicesInto(final T domainObject);
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#lookupService(Class)} instead.
+     */
+    @Deprecated
     @Programmatic
     <T> T lookupService(Class<T> service);
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#lookupServices(Class)} instead.
+     */
+    @Deprecated
     @Programmatic
     <T> Iterable<T> lookupServices(Class<T> service);
 
@@ -274,175 +268,111 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > isPersistent, persist, remove
+    //region > isPersistent, persist, remove (DEPRECATED)
 
     /**
-     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine
-     * in the object store).
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#isPersistent(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     boolean isPersistent(Object domainObject);
 
     /**
-     * Persist the specified transient object.
-     * 
-     * <p>
-     * It is recommended that the object be initially instantiated using
-     * {@link #newTransientInstance(Class)}.  However, the framework will also
-     * handle the case when the object is simply <i>new()</i>ed up.  See
-     * {@link #newTransientInstance(Class)} for more information.
-     * 
-     * <p>
-     * Throws an exception if object is already persistent, or if the object
-     * is not yet known to the framework.
-     * 
-     * @see #newTransientInstance(Class)
-     * @see #isPersistent(Object)
-     * @see #persistIfNotAlready(Object)
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     void persist(Object domainObject);
 
     /**
-     * Persist the specified object (or do nothing if already persistent).
-     * 
-     * <p>
-     * It is recommended that the object be initially instantiated using
-     * {@link #newTransientInstance(Class)}.  However, the framework will also
-     * handle the case when the object is simply <i>new()</i>ed up.  See
-     * {@link #newTransientInstance(Class)} for more information.
-     *
-     * @see #newTransientInstance(Class)
-     * @see #isPersistent(Object)
-     * @see #persist(Object)
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     void persistIfNotAlready(Object domainObject);
 
     /**
-     * Removes (deletes) the persisted object.
-     * 
-     * @param persistentDomainObject
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#remove(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     void remove(Object persistentDomainObject);
 
     /**
-     * Removes (deletes) the domain object but only if is persistent.
-     * 
-     * @param domainObject
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#remove(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     void removeIfNotAlready(Object domainObject);
 
     //endregion
 
-    //region > info, warn, error
+    //region > info, warn, error (DEPRECATED)
 
     /**
-     * Make the specified message available to the user. Note this will probably
-     * be displayed in transitory fashion, so is only suitable for useful but
-     * optional information.
-     * 
-     * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
-     * @see #warnUser(String)
-     * @see #raiseError(String)
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#informUser(String)} instead.
      */
+    @Deprecated
     @Programmatic
     void informUser(String message);
 
     /**
-     * Make the specified message available to the user, translated (if possible) to user's locale.
-     *
-     * <p>
-     *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
-     *     locale of the current request (ie the current user's locale).
-     * </p>
-     *
-     * @see #informUser(java.lang.String)
-     * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
-     * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#informUser(TranslatableString, Class, String)} instead.
      */
+    @Deprecated
     @Programmatic
     String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
     /**
-     * Warn the user about a situation with the specified message. The container
-     * should guarantee to display this warning to the user, and will typically
-     * require acknowledgement.
-     * 
-     * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
-     * @see #raiseError(String)
-     * @see #informUser(String)
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#warnUser(String)} instead.
      */
+    @Deprecated
     @Programmatic
     void warnUser(String message);
 
     /**
-     * Warn the user about a situation with the specified message, translated (if possible) to user's locale.
-     *
-     * <p>
-     *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
-     *     locale of the current request (ie the current user's locale).
-     * </p>
-     *
-     * @see #warnUser(String)
-     * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
-     * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#warnUser(TranslatableString, Class, String)} instead.
      */
+    @Deprecated
     @Programmatic
     String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
     /**
-     * Notify the user of an application error with the specified message. Note
-     * this will probably be displayed in an alarming fashion, so is only
-     * suitable for errors. The user will typically be required to perform
-     * additional steps after the error (eg to inform the helpdesk).
-     *
-     * @see #warnUser(String)
-     * @see #informUser(String)
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#raiseError(String)} instead.
      */
+    @Deprecated
     @Programmatic
     void raiseError(String message);
 
     /**
-     * Notify the user of an application error with the specified message, translated (if possible) to user's locale.
-     *
-     * <p>
-     *     More precisely, the locale is as provided by the configured
-     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
-     *     locale of the current request (ie the current user's locale).
-     * </p>
-     *
-     * @see #raiseError(String)
-     * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
-     * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     * @deprecated - use {@link org.apache.isis.applib.services.message.MessageService#raiseError(TranslatableString, Class, String)} instead.
      */
+    @Deprecated
     @Programmatic
     String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
     //endregion
 
-    //region > properties
+    //region > properties (DEPRECATED)
 
     /**
-     * Get the configuration property with the specified name.
+     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getProperty(String)} instead.
      */
+    @Deprecated
     @Programmatic
     String getProperty(String name);
 
     /**
-     * Get the configuration property with the specified name and if it doesn't
-     * exist then return the specified default value.
+     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getProperty(String, String)} instead.
      */
+    @Deprecated
     @Programmatic
     String getProperty(String name, String defaultValue);
 
     /**
-     * Get the names of all the available properties.
+     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getPropertyNames()} instead.
      */
+    @Deprecated
     @Programmatic
     List<String> getPropertyNames();
 
@@ -451,69 +381,35 @@ public interface DomainObjectContainer {
     //region > security
 
     /**
-     * Get the details about the current user.
+     * @deprecated - use {@link UserService#getUser()} instead
      */
+    @Deprecated
     @Programmatic
     UserMemento getUser();
 
     //endregion
 
-    //region > allInstances, allMatches, firstMatch, uniqueMatch
+    //region > allInstances, allMatches, firstMatch, uniqueMatch (DEPRECATED)
 
     /**
-     * Returns all the instances of the specified type (including subtypes).
-     * If the optional range parameters are used, the dataset returned starts 
-     * from (0 based) index, and consists of only up to count items.
-     *
-     * <p>
-     * If there are no instances the list will be empty. This method creates a
-     * new {@link List} object each time it is called so the caller is free to
-     * use or modify the returned {@link List}, but the changes will not be
-     * reflected back to the repository.
-     * </p>
-     * 
-     * <p>
-     * This method should only be called where the number of instances is known
-     * to be relatively low, unless the optional range parameters (2 longs) are
-     * specified. The range parameters are "start" and "count".
-     * </p>
-     * 
-     * @param range 2 longs, specifying 0-based start and count.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allInstances(Class, long...)} instead
      */
+    @Deprecated
     @Programmatic
     public <T> List<T> allInstances(Class<T> ofType, long... range);
 
     /**
-     * Returns all the instances of the specified type (including subtypes) that
-     * the predicate object accepts. If the optional range parameters are used, the 
-     * dataset returned starts from (0 based) index, and consists of only up to 
-     * count items. 
-     * 
-     * <p>
-     * If there are no instances the list will be empty. This method creates a
-     * new {@link List} object each time it is called so the caller is free to
-     * use or modify the returned {@link List}, but the changes will not be
-     * reflected back to the repository.
-     * </p>
-     * 
-     * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
-     * this method is only really suitable for initial development/prototyping, or for classes with very few
-     * instances.  Use {@link #allMatches(Query)} for production code.
-     * </p>
-     *
-     * @see #allMatches(Class, Predicate, long...)
-     *
-     * @param range 2 longs, specifying 0-based start and count.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
     
     /**
      * @deprecated - use {@link #allMatches(Class, Predicate, long...)} or (better) {@link #allMatches(Query)} instead
      */
-    @Programmatic
     @Deprecated
+    @Programmatic
     <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
 
     /**
@@ -536,7 +432,10 @@ public interface DomainObjectContainer {
      * </p>
      *
      * @param range 2 longs, specifying 0-based start and count.
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)} instead.
      */
+    @Deprecated
     @Programmatic
     public <T> List<T> allMatches(Class<T> ofType, String title, long... range);
 
@@ -561,47 +460,34 @@ public interface DomainObjectContainer {
      * </p>
      *
      * @param range 2 longs, specifying 0-based start and count.
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Class, Predicate, long...)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> List<T> allMatches(Class<T> ofType, T pattern, long... range);
 
     /**
-     * Returns all the instances that match the given {@link Query}.
-     *
-     * <p>
-     * If there are no instances the list will be empty. This method creates a
-     * new {@link List} object each time it is called so the caller is free to
-     * use or modify the returned {@link List}, but the changes will not be
-     * reflected back to the repository.
-     * </p>
-     *
-     * <p>
-     *     This method is the recommended way of querying for multiple instances.
-     * </p>
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#allMatches(Query)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> List<T> allMatches(Query<T> query);
 
     // //////////////////////////////////////
 
     /**
-     * Returns the first instance of the specified type (including subtypes)
-     * that matches the supplied {@link Predicate}, or <tt>null</tt> if none.
-     * 
-     * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
-     * this method is only really suitable for initial development/prototyping, or for classes with very few
-     * instances.  Use {@link #firstMatch(Query)} for production code.
-     * </p>
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
     
     /**
-     * @deprecated - use {@link #firstMatch(Class, Predicate)}
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
      */
-    @Programmatic
     @Deprecated
+    @Programmatic
     <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
 
     /**
@@ -613,7 +499,10 @@ public interface DomainObjectContainer {
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T firstMatch(Class<T> ofType, String title);
 
@@ -626,44 +515,31 @@ public interface DomainObjectContainer {
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, Predicate)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T firstMatch(Class<T> ofType, T pattern);
 
     /**
-     * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
-     *
-     * <p>
-     *     This method is the recommended way of querying for an instance when one or more may match.  See also
-     *     {@link #uniqueMatch(Query)}.
-     * </p>
-     *
-     * @see #uniqueMatch(Query)
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Query)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T firstMatch(Query<T> query);
 
     // //////////////////////////////////////
 
     /**
-     * Find the only instance of the specified type (including subtypes) that
-     * has the specified title.
-     * 
-     * <p>
-     * If no instance is found then <tt>null</tt> will be return, while if there
-     * is more that one instances a run-time exception will be thrown.
-     * 
-     * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
-     * this method is only really suitable for initial development/prototyping, or for classes with very few
-     * instances.  Use {@link #uniqueMatch(Query)} for production code.
-     * </p>
+     * @deprecated  - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
-     * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
+     * @deprecated  - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
      */
     @Programmatic
     @Deprecated
@@ -682,7 +558,10 @@ public interface DomainObjectContainer {
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T uniqueMatch(Class<T> ofType, String title);
 
@@ -702,25 +581,17 @@ public interface DomainObjectContainer {
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Class, Predicate)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T uniqueMatch(Class<T> ofType, T pattern);
 
     /**
-     * Find the only instance that matches the provided query.
-     *
-     * <p>
-     * If no instance is found then null will be return, while if there is more
-     * that one instances a run-time exception will be thrown.
-     * </p>
-     *
-     * <p>
-     *     This method is the recommended way of querying for (precisely) one instance.  See also {@link #firstMatch(Query)}
-     *     for less strict querying.
-     * </p>
-     *
-     * @see #firstMatch(Query)
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#uniqueMatch(Query)} instead.
      */
+    @Deprecated
     @Programmatic
     <T> T uniqueMatch(Query<T> query);
 

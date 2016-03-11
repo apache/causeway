@@ -94,6 +94,20 @@ xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommand-Service`]
 depends on: +
 xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used
 
+
+|xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`o.a.i.applib.` +
+`services.config` +
+`ConfigurationService`]
+|(`1.12.0-SNAPSHOT`) Access configuration properties (eg from `isis.properties` file)
+|`ConfigurationService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
+
+
+
 |xref:rgsvc.adoc#_rgsvc_api_DeepLinkService[`o.a.i.applib` +
 `services.deeplink` +
 `DeepLinkService`]
@@ -136,6 +150,19 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 ``o.a.i.core`` +
 ``isis-core-objectstore-jdo-datanucleus``
 |
+
+
+|xref:rgsvc.adoc#_rgsvc_api_FactoryService[`o.a.i.applib.` +
+`services.factory` +
+`FactoryService`]
+|(`1.12.0-SNAPSHOT`) Methods to instantiate and initialize domain objects
+|`FactoryService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
+
 
 
 |xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`o.a.i.applib.` +
@@ -201,6 +228,7 @@ SpecificationProvider`].
 |Functionality surfaced in the UI through related mixin and menu.
 
 
+
 |xref:rgsvc.adoc#_rgsvc_api_MementoService[`o.a.i.applib.` +
 `services.memento` +
 `MementoService`]
@@ -209,6 +237,18 @@ SpecificationProvider`].
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
+
+
+|xref:rgsvc.adoc#_rgsvc_api_MessageService[`o.a.i.applib.` +
+`services.message` +
+`MessageService`]
+|(`1.12.0-SNAPSHOT`) Methods to inform or warn the user, or to raise errors.
+|`FactoryService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
 
 
 |xref:rgsvc.adoc#_rgsvc_api_MetaModelService[`o.a.i.applib.` +
@@ -232,6 +272,18 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
+|xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`o.a.i.applib.` +
+`services.repository` +
+`RepositoryService`]
+|(`1.12.0-SNAPSHOT`) Methods to help implement repositories: query for existing objects, persist new or delete existing objects
+|`RepositoryService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
+
+
 |xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`o.a.i.applib.` +
 `services.scratchpad` +
 `Scratchpad`]
@@ -240,6 +292,18 @@ SpecificationProvider`].
 ``o.a.i.core`` +
 ``isis-core-applib``
 |API is also a concrete class
+
+
+|xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`o.a.i.applib.` +
+`services.registry` +
+`ServiceRegistry`]
+|(`1.12.0-SNAPSHOT`) Methods to access and use other domain services.
+|`ServiceRegistry-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
 
 
 |xref:rgsvc.adoc#_rgsvc_api_SudoService[`o.a.i.applib.` +
@@ -260,6 +324,30 @@ SpecificationProvider`].
 ``o.a.i.core`` +
 ``isis-core-metamodel``
 |A `SwaggerServiceMenu` domain service is also provided which enables the swagger spec to be downloaded.  Apache Isis' xref:cgcon.adoc#_cgcon_isis-maven-plugin[Maven plugin] also provides a xref:cgcon.adoc#_cgcon_isis-maven-plugin_swagger[swagger goal] which allows the spec file(s) to be generated at build time (eg so that client-side stubs can then be generated in turn).
+
+
+|xref:rgsvc.adoc#_rgsvc_api_TransactionService[`o.a.i.applib.` +
+`services.xactn` +
+`TransactionService`]
+|(`1.12.0-SNAPSHOT`) Methods for managing transactions.
+|`TransactionService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
+
+|xref:rgsvc.adoc#_rgsvc_api_UserService[`o.a.i.applib.` +
+`services.xactn` +
+`UserService`]
+|(`1.12.0-SNAPSHOT`) Methods to access the currently-logged on user.
+|`UserService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
+
 
 
 |xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`o.a.i.applib.` +
@@ -329,10 +417,12 @@ include::_rgsvc_api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_api_BookmarkService.adoc[leveloffset=+1]
 include::_rgsvc_api_ClockService.adoc[leveloffset=+1]
 include::_rgsvc_api_CommandContext.adoc[leveloffset=+1]
+include::_rgsvc_api_ConfigurationService.adoc[leveloffset=+1]
 include::_rgsvc_api_DeepLinkService.adoc[leveloffset=+1]
 include::_rgsvc_api_DomainObjectContainer.adoc[leveloffset=+1]
 include::_rgsvc_api_EmailService.adoc[leveloffset=+1]
 include::_rgsvc_api_EventBusService.adoc[leveloffset=+1]
+include::_rgsvc_api_FactoryService.adoc[leveloffset=+1]
 include::_rgsvc_api_FixtureScriptsDefault.adoc[leveloffset=+1]
 include::_rgsvc_api_GuiceBeanProvider.adoc[leveloffset=+1]
 include::_rgsvc_api_HomePageProviderService.adoc[leveloffset=+1]
@@ -340,10 +430,15 @@ include::_rgsvc_api_IsisJdoSupport.adoc[leveloffset=+1]
 include::_rgsvc_api_JaxbService.adoc[leveloffset=+1]
 include::_rgsvc_api_LayoutService.adoc[leveloffset=+1]
 include::_rgsvc_api_MementoService.adoc[leveloffset=+1]
+include::_rgsvc_api_MessageService.adoc[leveloffset=+1]
 include::_rgsvc_api_MetamodelService.adoc[leveloffset=+1]
 include::_rgsvc_api_QueryResultsCache.adoc[leveloffset=+1]
+include::_rgsvc_api_RepositoryService.adoc[leveloffset=+1]
+include::_rgsvc_api_ServiceRegistry.adoc[leveloffset=+1]
 include::_rgsvc_api_Scratchpad.adoc[leveloffset=+1]
 include::_rgsvc_api_SudoService.adoc[leveloffset=+1]
+include::_rgsvc_api_TransactionService.adoc[leveloffset=+1]
+include::_rgsvc_api_UserService.adoc[leveloffset=+1]
 include::_rgsvc_api_SwaggerService.adoc[leveloffset=+1]
 include::_rgsvc_api_WrapperFactory.adoc[leveloffset=+1]
 include::_rgsvc_api_XmlSnapshotService.adoc[leveloffset=+1]

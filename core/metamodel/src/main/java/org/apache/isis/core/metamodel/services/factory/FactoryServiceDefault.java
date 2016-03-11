@@ -1,0 +1,111 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+package org.apache.isis.core.metamodel.services.factory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.inject.Inject;
+
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
+public class FactoryServiceDefault
+        implements FactoryService,
+            PersistenceSessionServiceAware, SpecificationLoaderAware {
+
+
+    @Programmatic
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T instantiate(final Class<T> ofClass) {
+        final ObjectSpecification spec = specificationLookup.loadSpecification(ofClass);
+        final ObjectAdapter adapter = doCreateTransientInstance(spec);
+        return (T) adapter.getObject();
+    }
+
+    /**
+     * Factored out as a potential hook method for subclasses.
+     */
+    protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
+        return persistenceSessionService.createTransientInstance(spec);
+    }
+
+
+
+    @Programmatic
+    @Override
+    public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(mixinClass);
+        final MixinFacet mixinFacet = objectSpec.getFacet(MixinFacet.class);
+        if(mixinFacet == null) {
+            throw new NonRecoverableException("Class '" + mixinClass.getName() + " is not a mixin");
+        }
+        if(!mixinFacet.isMixinFor(mixedIn.getClass())) {
+            throw new NonRecoverableException("Mixin class '" + mixinClass.getName() + " is not a mixin for supplied object '" + mixedIn + "'");
+        }
+        final Constructor<?>[] constructors = mixinClass.getConstructors();
+        for (Constructor<?> constructor : constructors) {
+            if(constructor.getParameterTypes().length == 1 &&
+                    constructor.getParameterTypes()[0].isAssignableFrom(mixedIn.getClass())) {
+                final Object mixin;
+                try {
+                    mixin = constructor.newInstance(mixedIn);
+                    return (T) serviceRegistry.injectServicesInto(mixin);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new NonRecoverableException(e);
+                }
+            }
+        }
+        // should never get here because of previous guards
+        throw new NonRecoverableException( String.format(
+                "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
+    }
+
+    @Inject
+    ServiceRegistry serviceRegistry;
+
+    private PersistenceSessionService persistenceSessionService;
+    @Override
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+
+        this.persistenceSessionService = persistenceSessionService;
+    }
+
+    private SpecificationLoader specificationLookup;
+    @Override
+    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
+        this.specificationLookup = specificationLookup;
+    }
+}

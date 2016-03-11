@@ -163,6 +163,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
+            public void beginTran() {
+                getTransactionManager().startTransaction();
+            }
+
+            @Override
             public boolean flush() {
                 return getTransactionManager().flushTransaction();
             }

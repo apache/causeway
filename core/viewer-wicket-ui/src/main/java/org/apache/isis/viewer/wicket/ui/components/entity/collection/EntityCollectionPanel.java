@@ -94,6 +94,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(getModel());
+        CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
+
         final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
         final ObjectAdapter objectAdapter = getModel().getObject();
         final Consent visibility = association.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);

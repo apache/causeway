@@ -1,24 +1,27 @@
-[[_rgsvc_api_DomainObjectContainer_properties-api]]
+[[_rgsvc_api_ConfigurationService]]
+= `ConfigurationService` (`1.12.0-SNAPSHOT`)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
+The `ConfigurationService` allows domain objects to read the configuration properties aggregated from the various xref:rgcfg.adoc#_rgcfg_configuration-files[configuration files].
 
-
-
-= Properties API
-
-The properties API allows domain objects to read the configuration properties aggregated from the various xref:rgcfg.adoc#_rgcfg_configuration-files[configuration files].
 
 [NOTE]
 ====
-(As of `1.12.0-SNAPSHOT`), these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`]; the corresponding methods in `DomainObjectContainer` are deprecated.
+The methods in this service replace similar methods (now deprecated) in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 ====
+
+
+== API and Usage
+
+The API of `ConfigurationService` is:
 
 [source,java]
 ----
-public interface DomainObjectContainer {
+public interface ConfigurationService {
+
     String getProperty(String name);                        // <1>
     String getProperty(String name, String defaultValue);   // <2>
     List<String> getPropertyNames();                        // <3>
@@ -37,14 +40,14 @@ public class TweetService {
     @Programmatic
     @PostConstruct
     public void init() {
-        this.oauthConsumerKey = container.getProperty("tweetservice.oauth.consumerKey");
-        this.oauthConsumerSecret = container.getProperty("tweetservice.oauth.consumerSecret");
-        this.oauthAccessToken = container.getProperty("tweetservice.oauth.accessToken");
-        this.oauthAccessTokenSecret = container.getProperty("tweetservice.oauth.accessTokenSecret");
+        this.oauthConsumerKey = configurationService.getProperty("tweetservice.oauth.consumerKey");
+        this.oauthConsumerSecret = configurationService.getProperty("tweetservice.oauth.consumerSecret");
+        this.oauthAccessToken = configurationService.getProperty("tweetservice.oauth.accessToken");
+        this.oauthAccessTokenSecret = configurationService.getProperty("tweetservice.oauth.accessTokenSecret");
     }
     ...
     @Inject
-    DomainObjectContainer container;
+    ConfigurationService configurationService;
 }
 ----
 
@@ -52,5 +55,28 @@ public class TweetService {
 ====
 If you _do_ have a domain service that needs to access properties, then note that an alternative is to define a xref:rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] method and pass in a `Map<String,String>` of properties.  The two techniques are almost identical; it's mostly a matter of taste.
 ====
+
+
+
+
+
+== Implementation
+
+The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.config.ConfigurationServiceDefault`).
+
+
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `ConfigurationService` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
+
+To use an alternative implementation, use
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ugfun.adoc#_ugfun_how-tos_replacing-default-service-implementations["how to"] tip).
+
 
 
