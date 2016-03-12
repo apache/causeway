@@ -56,45 +56,54 @@ public interface ActionInvocationFacet extends Facet {
         private final Command command;
         
         private final ObjectAdapter target;
-        private final IdentifiedHolder action;
+        private final ObjectAction action;
+        private final IdentifiedHolder identifiedHolder;
         private final List<ObjectAdapter> parameters;
         private final ObjectAdapter result;
 
         public CurrentInvocation(
                 final ObjectAdapter target,
-                final IdentifiedHolder action,
+                final ObjectAction objectAction,
+                final IdentifiedHolder identifiedHolder,
                 final ObjectAdapter[] parameters,
                 final ObjectAdapter result, 
                 final Command command) {
-            this(target, action, Arrays.asList(parameters), result, command);
+            this(target, objectAction, identifiedHolder, Arrays.asList(parameters), result, command);
         }
 
         public CurrentInvocation(
                 final ObjectAdapter target,
-                final IdentifiedHolder action,
+                final ObjectAction objectAction,
+                final IdentifiedHolder identifiedHolder,
                 final List<ObjectAdapter> parameters,
                 final ObjectAdapter result, 
                 final Command command) {
             this.target = target;
-            this.action = action;
+            this.action = objectAction;
+            this.identifiedHolder = identifiedHolder;
             this.parameters = parameters;
             this.result = result;
             this.command = command;
         }
 
         /**
-         * deprecated since part of {@link #getCommand()}
+         * Undeprecated ... isn't necessarily the same as Command because Command only ever wraps the outer-most action, whereas this could be for an action invoked via the WrapperFactory.
          */
-        @Deprecated
         public ObjectAdapter getTarget() {
             return target;
         }
-        /**
-         * deprecated since part of {@link #getCommand()}
-         */
-        @Deprecated
-        public IdentifiedHolder getAction() {
+
+        public ObjectAction getAction() {
             return action;
+        }
+
+        /**
+         * Undeprecated ... isn't necessarily the same as Command because Command only ever wraps the outer-most action, whereas this could be for an action invoked via the WrapperFactory.
+         *
+         * This is the FacetedMethod for the {@link #getAction()}.
+         */
+        public IdentifiedHolder getIdentifiedHolder() {
+            return identifiedHolder;
         }
 
         public List<ObjectAdapter> getParameters() {

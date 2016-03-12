@@ -87,6 +87,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
@@ -545,30 +546,42 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(currentInvocation == null) {
                 return;
             } 
-            IdentifiedHolder action = currentInvocation.getAction();
-            final PublishedActionFacet publishedActionFacet = action.getFacet(PublishedActionFacet.class);
+            ObjectAction currentAction = currentInvocation.getAction();
+            IdentifiedHolder currentInvocationHolder = currentInvocation.getIdentifiedHolder();
+
+            final PublishedActionFacet publishedActionFacet = currentInvocationHolder.getFacet(PublishedActionFacet.class);
             if(publishedActionFacet == null) {
                 return;
-            } 
+            }
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            
-            final RootOid adapterOid = (RootOid) currentInvocation.getTarget().getOid();
+
+            final ObjectAdapter targetAdapter = currentInvocation.getTarget();
+
+            final RootOid adapterOid = (RootOid) targetAdapter.getOid();
             final String oidStr = getOidMarshaller().marshal(adapterOid);
-            final Identifier actionIdentifier = action.getIdentifier();
+            final Identifier actionIdentifier = currentAction.getIdentifier();
             final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
-            
+
+            // TODO: clean up this code (think we should use Action rather than Command)
             final Command command = currentInvocation.getCommand();
-            final String targetClass = command.getTargetClass();
-            final String targetAction = command.getTargetAction();
-            final Bookmark target = command.getTarget();
-            final String memberIdentifier = command.getMemberIdentifier();
+            final String commandTargetClass = command.getTargetClass();
+            final String commandTargetAction = command.getTargetAction();
+            final Bookmark commandTarget = command.getTarget();
+            final String commandMemberIdentifier = command.getMemberIdentifier();
+
+            final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
+            final String actionTargetAction = CommandUtil.targetActionNameFor(currentAction);
+            final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
+            final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(currentAction);
+
             final List<String> parameterNames;
             final List<Class<?>> parameterTypes;
             final Class<?> returnType;
-            if(action instanceof FacetedMethod) {
+
+            if(currentInvocationHolder instanceof FacetedMethod) {
                 // should always be the case
 
-                final FacetedMethod facetedMethod = (FacetedMethod) action;
+                final FacetedMethod facetedMethod = (FacetedMethod) currentInvocationHolder;
                 returnType = facetedMethod.getType();
 
                 final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
@@ -580,7 +593,11 @@ public class IsisTransaction implements TransactionScopedComponent {
                 returnType = null;
             }
             
-            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title, targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
+            final EventMetadata metadata = newEventMetadata(
+                    EventType.ACTION_INVOCATION, currentUser, timestamp, title,
+                    actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier,
+                    // commandTargetClass, commandTargetAction, commandTarget, commandMemberIdentifier,
+                    parameterNames, parameterTypes, returnType);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once

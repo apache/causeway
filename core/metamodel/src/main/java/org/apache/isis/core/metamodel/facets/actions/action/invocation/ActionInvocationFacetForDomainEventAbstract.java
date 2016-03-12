@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
@@ -151,7 +150,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
+     * {@link ActionInvocationFacet#invoke(ObjectAction, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
      */
     public static class InvocationResult {
 
@@ -454,7 +453,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             if(currentInvocation.get() == null) {
                 final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
                 if(publishedActionFacet != null) {
-                    currentInvocation.set(new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command));
+                    currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
                 }
             }
 
