@@ -21,6 +21,7 @@ package org.apache.isis.core.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.google.common.collect.Sets;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.ObjectTitleEvent;
@@ -72,6 +74,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -623,6 +627,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
             final ObjectAdapter actionReturnNO =
                     objectAction.execute(targetAdapter, argAdapters, interactionInitiatedBy);
+
+            final IsisTransaction transaction = IsisContext.getTransactionManager().getTransaction();
+
+            final String currentUser = IsisContext.getAuthenticationSession().getUserName();
+            final Timestamp timestamp = Clock.getTimeAsJavaSqlTimestamp();
+
+            transaction.publishActionIfRequired(currentUser, timestamp);
 
             return ObjectAdapter.Util.unwrap(actionReturnNO);
         }

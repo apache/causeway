@@ -535,7 +535,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    protected void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
+    public void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
 
         if(publishingService == null) {
             return;
