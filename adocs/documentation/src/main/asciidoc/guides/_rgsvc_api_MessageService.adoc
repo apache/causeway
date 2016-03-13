@@ -45,7 +45,7 @@ For example:
 
 [source,java]
 ----
-public Order addItem(Product product, @ParameterLayout(named="Quantity) int quantity) {
+public Order addItem(Product product, @ParameterLayout(named="Quantity") int quantity) {
     if(productRepository.stockLevel(product) == 0) {
         messageService.warnUser(
             product.getDescription() + " out of stock; order fulfillment may be delayed");

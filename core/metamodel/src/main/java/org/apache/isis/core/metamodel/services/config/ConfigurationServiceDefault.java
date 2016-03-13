@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.services.config;
+package org.apache.isis.core.metamodel.services.config;
 
 import java.util.List;
 
