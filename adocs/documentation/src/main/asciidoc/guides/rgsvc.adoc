@@ -44,50 +44,14 @@ for Apache Isis and contribute back to the project)
 
 
 
-=== Domain Service "Categories"
-
-The domain services also group into various broad categories.  Many support functionality of the various layers of the
-system (presentation layer, application layer, core domain, persistence layer); others exist to allow the domain objects
-to integrate with other bounded contexts, or provide various metadata (eg for development-time tooling).  The diagram below shows these categories:
-
-image::{_imagesdir}reference-services/categories.png[width="800px",link="{_imagesdir}reference-services/categories.png"]
-
-
-A small number of domain services can be considered both API and SPI; a good example is the xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails,
-but is also used by the framework to support the xref:ugvw.adoc#_ugvw_features_user-registration[user registration] functionality supported by the xref:ugvw.adoc#[Wicket viewer].   The same is true of the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for xref:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] etc.
-
-For these hybrid services we have categorized the service as an "API" service.  This chapter therefore contains only the strictly SPI services.
-
-This guide is broken out into several chapters, one per category.
-
-
-
-=== Applib
-
-The vast majority of Apache Isis' domain services are defined in services' API are all defined in Apache Isis' applib (`o.a.i.core:isis-core-applib` module); this minimizes the coupling between your code and Apache Isis.  It also allows you to easily mock out these services in your unit tests.
-
-
-=== Using the services
-
-Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
-
-
-=== Overriding the services
-
-NOTE: TODO - use @DomainServiceLayout#menuOrder()  (though there are some which act as chain of responsibility; all implementations are considered).
-
-
-
-
-
+include::_rgsvc_intro.adoc[leveloffset=+1]
 include::_rgsvc_presentation-layer-spi.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-spi.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api.adoc[leveloffset=+1]
 include::_rgsvc_integration-api.adoc[leveloffset=+1]
 include::_rgsvc_metadata-api.adoc[leveloffset=+1]
-include::_rgsvc_testing-api.adoc[leveloffset=+1]
-include::_rgsvc_testing-spi.adoc[leveloffset=+1]
+include::_rgsvc_testing.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-spi.adoc[leveloffset=+1]
 include::_rgsvc_bootstrapping-spi.adoc[leveloffset=+1]
