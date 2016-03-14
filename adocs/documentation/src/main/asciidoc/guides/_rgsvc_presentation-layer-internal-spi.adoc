@@ -1,0 +1,66 @@
+[[_rgsvc_presentation-layer-internal-spi]]
+= Presentation Layer internal SPI
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+Domain service SPIs for the presentation layer influence how the Apache Isis viewers behave.  In addition to those defined in the applib, the framework also defines a small number of services that use classes that are internal to the framework.
+
+[WARNING]
+====
+We do not guarantee that link:http://semver.org[semantic versioning] will be honoured for these ASPIs.
+====
+
+
+The table below summarizes the presentation layer non-public SPIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+
+
+
+."Internal" SPI Services
+[cols="3,3,2,2a", options="header"]
+|===
+
+|SPI
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
+|Notes
+
+
+
+
+|xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`o.a.i.v.ro.` +
+`rendering.service.conneg.` +
+`ContentNegotiationService`]
+|Encodes the algorithm that delegates to any registered xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]s.
+|`ContentNegotiationService-` +
+`XRoDomainType` +
+``o.a.i.core`` +
+`isis-core-viewer-restfulobjects-rendering`
+|
+
+
+|xref:rgsvc.adoc#_rgsvc_spi_RepresentationService[`o.a.i.v.ro.` +
+`rendering.service.` +
+`RepresentationService`]
+|Generates the representations, delegating to any registered xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`ContentNegotiationService`]s.
+|`RepresentationService-` +
+`ForRestfulObjects` +
+``o.a.i.core`` +
+`isis-core-viewer-restfulobjects-rendering`
+|
+
+
+|===
+
+Key:
+
+* `o.a.i.v.ro` is an abbreviation for `org.apache.isis.viewer.restfulobjects`
+
+
+
+
+include::_rgsvc_spi_ContentNegotiationService.adoc[leveloffset=+1]
+include::_rgsvc_spi_RepresentationService.adoc[leveloffset=+1]

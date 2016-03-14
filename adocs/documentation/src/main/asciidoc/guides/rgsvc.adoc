@@ -46,6 +46,7 @@ for Apache Isis and contribute back to the project)
 
 include::_rgsvc_intro.adoc[leveloffset=+1]
 include::_rgsvc_presentation-layer-spi.adoc[leveloffset=+1]
+include::_rgsvc_presentation-layer-internal-spi.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-spi.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api.adoc[leveloffset=+1]

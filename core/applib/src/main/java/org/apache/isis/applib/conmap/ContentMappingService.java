@@ -16,26 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering.service.conmap;
+package org.apache.isis.applib.conmap;
 
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
-/**
- * @deprecated - replaced by simplified version, {@link org.apache.isis.applib.conmap.ContentMappingService}, in the applib.
- */
-@Deprecated
 public interface ContentMappingService {
 
     /**
-     * @deprecated - replaced by simplified version, {@link org.apache.isis.applib.conmap.ContentMappingService#map(Object, List)}, in the applib.
+     * Typically for mapping from a domain object to a DTO.
      */
-    @Deprecated
     @Programmatic
-    Object map(Object object, final List<MediaType> acceptableMediaTypes, final RepresentationType representationType);
+    Object map(Object object, final List<MediaType> acceptableMediaTypes);
 
 }

@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -140,15 +141,22 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     /**
-     * Delegates to any {@link ContentMappingService}s.
+     * Delegates to either the applib {@link org.apache.isis.applib.conmap.ContentMappingService}, else the
+     * original non-applib {@link ContentMappingService}.
      */
     protected Object map(
             final Object domainObject,
             final List<MediaType> acceptableMediaTypes,
             final RepresentationType representationType) {
 
-        final Iterable<ContentMappingService> contentMappingServices = container.lookupServices(ContentMappingService.class);
-        for (ContentMappingService contentMappingService : contentMappingServices) {
+        for (org.apache.isis.applib.conmap.ContentMappingService contentMappingService : contentMappingServices) {
+            Object mappedObject = contentMappingService.map(domainObject, acceptableMediaTypes);
+            if(mappedObject != null) {
+                return mappedObject;
+            }
+        }
+
+        for (ContentMappingService contentMappingService : legacyContentMappingServices) {
             Object mappedObject = contentMappingService.map(domainObject, acceptableMediaTypes, representationType);
             if(mappedObject != null) {
                 return mappedObject;
@@ -158,4 +166,9 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
+    @Inject
+    List<org.apache.isis.applib.conmap.ContentMappingService> contentMappingServices;
+
+    @Inject
+    List<ContentMappingService> legacyContentMappingServices;
 }

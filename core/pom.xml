@@ -178,6 +178,7 @@
 
         <javax-mail.version>1.4.7</javax-mail.version>
 
+        <jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
     </properties>
 
     <scm>
@@ -1876,6 +1877,11 @@ ${license.additional-notes}
                 <version>${geronimo-jcdi_1.0_spec.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+                <version>${jboss-jaxrs-api_2.0_spec.version}</version>
+            </dependency>
 
 
             <!-- javax APIs -->

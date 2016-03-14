@@ -21,6 +21,17 @@ The table below summarizes the presentation layer SPIs defined by Apache Isis.  
 |Notes
 
 
+|xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`o.a.i.applb.` +
+`services.conmap` +
+`ContentMappingService`]
+|(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
+|
+|(Added in `1.12.0-SNAPSHOT`) Replaces (and simplifies) the earlier `ContentMappingService` that defined an SPI using classes internal to the framework. +
++
+No default implementation.
+
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_EmailNotificationService[`o.a.i.applib.` +
 `services.userreg` +
 `EmailNotificationService`]
@@ -158,76 +169,12 @@ Key:
 
 
 
-There are also a number of presentation layer SPIs that use "internal" classes.  Semver is not guaranteed for these SPIs.
+There are also a number of presentation layer SPIs that use internal classes.  These can be found in the xref:rgsvc.adoc#_rgsvc_presentation-layer-internal-spi[next chapter].
 
-
-."Internal" SPI Services
-[cols="3,3,2,2a", options="header"]
-|===
-
-|SPI
-|Maven Module +
-Impl'n (g: a:)
-|Implementation
-|Notes
-
-
-|xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`o.a.i.v.ro.` +
-`rendering.service.conneg.` +
-`ContentMappingService`]
-|(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
-|
-|No default implementation.
-
-
-
-|xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`o.a.i.v.ro.` +
-`rendering.service.conneg.` +
-`ContentNegotiationService`]
-|Encodes the algorithm that delegates to any registered xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]s.
-|`ContentNegotiationService-` +
-`XRoDomainType` +
-``o.a.i.core`` +
-`isis-core-viewer-restfulobjects-rendering`
-|
-
-
-|xref:rgsvc.adoc#_rgsvc_spi_RepresentationService[`o.a.i.v.ro.` +
-`rendering.service.` +
-`RepresentationService`]
-|Generates the representations, delegating to any registered xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`ContentNegotiationService`]s.
-|`RepresentationService-` +
-`ForRestfulObjects` +
-``o.a.i.core`` +
-`isis-core-viewer-restfulobjects-rendering`
-|
-
-
-|===
-
-Key:
-
-* `o.a.i.v.ro` is an abbreviation for `org.apache.isis.viewer.restfulobjects`
-
-
-
-
-
-
-
-
-There are also some "internal" SPI services whose definitions depend on the internals of the framework (rather than the applib).
-
-[WARNING]
-====
-We do not guarantee that link:http://semver.org[semantic versioning] will be honoured for these APIs.
-====
 
 
 
 include::_rgsvc_spi_ContentMappingService.adoc[leveloffset=+1]
-include::_rgsvc_spi_ContentNegotiationService.adoc[leveloffset=+1]
-
 include::_rgsvc_spi_EmailNotificationService.adoc[leveloffset=+1]
 include::_rgsvc_spi_ErrorReportingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_ExceptionRecognizer.adoc[leveloffset=+1]
@@ -235,15 +182,10 @@ include::_rgsvc_spi_GridSystemService.adoc[leveloffset=+1]
 include::_rgsvc_spi_GridLoaderService.adoc[leveloffset=+1]
 include::_rgsvc_spi_GridService.adoc[leveloffset=+1]
 include::_rgsvc_spi_LocaleProvider.adoc[leveloffset=+1]
-
-include::_rgsvc_spi_RepresentationService.adoc[leveloffset=+1]
-
 include::_rgsvc_spi_RoutingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationsResolver.adoc[leveloffset=+1]
 include::_rgsvc_spi_UrlEncodingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_UserProfileService.adoc[leveloffset=+1]
-
-
 
 

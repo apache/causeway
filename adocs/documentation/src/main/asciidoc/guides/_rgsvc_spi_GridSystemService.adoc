@@ -11,9 +11,18 @@ of domain objects.  In particular this means being able to return a "normalized"
 domain object members into the various regions of the grid) and in providing a default grid if there is no other
 metadata available.
 
-In theory there can be multiple implementations of this service, one per concrete subclass of the applib `Grid` class.  Each concrete implementation requires Wicket viewer components capable of interpreting the grid layout.
-
 The framework provides a single such grid implementation, namely for Bootstrap3.
+
+[NOTE]
+====
+Unlike most other domain services, the framework will check _all_ available implementations of `GridSystemService` to
+obtain available grid systems, rather than merely the first implementation found; in other words it uses the
+chain-of-responsibility pattern.  Services are called in the order defined by
+xref:rgant.adoc#_rgant_DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+
+Note though that each concrete implementation must also provide corresponding Wicket viewer components capable of
+interpreting the grid layout.
+====
 
 
 == SPI
