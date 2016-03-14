@@ -1,4 +1,4 @@
-[[_rgsvc]]
+[[_rgsvc_intro]]
 = Introduction
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -7,7 +7,7 @@
 
 
 
-
+[[_rgsvc_intro_types-of-domain-services]]
 == Types of Domain Service
 
 The domain services also group into various broad categories.  Many support functionality of the various layers of the
@@ -25,11 +25,18 @@ For these hybrid services we have categorized the service as an "API" service.  
 This rest of this guide is broken out into several chapters, one for each of the various types/categories of domain service.
 
 
-== Applib
 
-The vast majority of Apache Isis' domain services are defined in services' API are all defined in Apache Isis' applib (`o.a.i.core:isis-core-applib` module); this minimizes the coupling between your code and Apache Isis.  It also allows you to easily mock out these services in your unit tests.
+[[_rgsvc_intro_public-api]]
+== Public API
+
+The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-core-applib`
+module) as stable, public classes.  Importantly, this also minimizes the coupling between your code and Apache Isis,
+allowing you to easily mock out these services in your unit tests.
 
 
+
+
+[[_rgsvc_intro_using-the-services]]
 == Using the services
 
 Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
@@ -68,6 +75,9 @@ xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`]'s ``injectServices
 xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s ``injectServicesInto(...)`` method).
 
 
+
+
+[[_rgsvc_intro_overriding-the-services]]
 == Overriding the services
 
 The framework provides default implementations for many of the domain services.  This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.

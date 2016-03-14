@@ -20,6 +20,18 @@ The table below summarizes the metadata APIs defined by Apache Isis.  It also li
 |Notes
 
 
+|xref:rgsvc.adoc#_rgsvc_api_ApplicationFeatureRepository[`o.a.i.applib.` +
+`services.appfeat` +
+`ApplicationFeatureRepository`]
+|(`1.12.0-SNAPSHOT`) Provides access to string representations of the features (package, class, class members) of the
+domain classes within the metamodel.
+|`ApplicationFeatureDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|(not visible in UI)
+
+
+
 |xref:rgsvc.adoc#_rgsvc_api_LayoutService[`o.a.i.applib.` +
 `services.layout` +
 `LayoutService`]
@@ -39,7 +51,7 @@ The table below summarizes the metadata APIs defined by Apache Isis.  It also li
 |`MetaModelServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|
+|(not visible in UI)
 
 
 |xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`o.a.i.applib.` +
@@ -70,6 +82,7 @@ The table below summarizes the metadata APIs defined by Apache Isis.  It also li
 
 
 
+include::_rgsvc_api_ApplicationFeatureRepository.adoc[leveloffset=+1]
 include::_rgsvc_api_LayoutService.adoc[leveloffset=+1]
 include::_rgsvc_api_MetamodelService.adoc[leveloffset=+1]
 include::_rgsvc_api_ServiceRegistry.adoc[leveloffset=+1]
