@@ -562,13 +562,6 @@ public class IsisTransaction implements TransactionScopedComponent {
             final Identifier actionIdentifier = currentAction.getIdentifier();
             final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
 
-            // TODO: clean up this code (think we should use Action rather than Command)
-            final Command command = currentInvocation.getCommand();
-            final String commandTargetClass = command.getTargetClass();
-            final String commandTargetAction = command.getTargetAction();
-            final Bookmark commandTarget = command.getTarget();
-            final String commandMemberIdentifier = command.getMemberIdentifier();
-
             final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
             final String actionTargetAction = CommandUtil.targetActionNameFor(currentAction);
             final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
