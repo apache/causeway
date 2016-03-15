@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.layout.grid.bootstrap3;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
@@ -28,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
         name = "sizeSpan"
         , propOrder = {}
 )
-public class SizeSpan {
+public class SizeSpan implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
