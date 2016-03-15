@@ -152,6 +152,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -162,6 +163,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 

@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember {
+public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember2 {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
@@ -155,6 +155,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -165,6 +166,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
@@ -173,4 +175,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         return facetHolder;
     }
 
+    @Override
+    public ObjectSpecification getMixinType() {
+        return getSpecificationLoader().loadSpecification(mixinType);
+    }
 }
