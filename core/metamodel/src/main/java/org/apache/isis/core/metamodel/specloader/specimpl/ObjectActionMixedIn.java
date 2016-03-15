@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
+public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember2 {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
@@ -255,6 +255,10 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public Identifier getIdentifier() {
         return identifier;
     }
-    
 
+    @Override
+    public ObjectSpecification getMixinType() {
+        return getSpecificationLoader().loadSpecification(mixinType);
+
+    }
 }

@@ -37,7 +37,7 @@ import org.apache.isis.applib.value.Clob;
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500.800"
+        menuOrder = "500.600"
 )
 public class SwaggerServiceMenu {
 
@@ -54,7 +54,7 @@ public class SwaggerServiceMenu {
     @ActionLayout(
             cssClassFa = "fa-download"
     )
-    @MemberOrder(sequence="500.800.1")
+    @MemberOrder(sequence="500.600.1")
     public Clob downloadSwaggerSpec(
             @ParameterLayout(named = "Filename")
             final String fileNamePrefix,

@@ -51,7 +51,7 @@ domain classes within the metamodel.
 |`MetaModelServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|(not visible in UI)
+|Functionality surfaced in the UI through related menu.
 
 
 |xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`o.a.i.applib.` +

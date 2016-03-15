@@ -55,7 +55,7 @@ public class Persistable_downloadJdoMetadata {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "800.1")
+    @MemberOrder(name = "Metadata", sequence = "710.1")
     public Clob $$(
             @ParameterLayout(named = ".jdo file name")
             final String fileName) throws JAXBException, IOException {
