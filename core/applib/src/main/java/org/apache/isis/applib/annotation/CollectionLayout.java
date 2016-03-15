@@ -123,7 +123,10 @@ public @interface CollectionLayout {
      * <p>
      * There is some similarity between this concept and that of eager-loading as supported by some object stores.
      * </p>
+     * 
+     * @deprecated - use {@link #defaultView()} set to &quot;table&quot; instead.
      */
+    @Deprecated
     RenderType render() default RenderType.LAZILY;
 
 
