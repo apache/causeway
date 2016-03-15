@@ -46,6 +46,12 @@ public interface RepositoryService {
      */
     String KEY_DISABLE_AUTOFLUSH = "isis.services.container.disableAutoFlush";
 
+    /**
+     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)}; provided as a
+     * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
+     */
+    @Programmatic
+    <T> T instantiate(final Class<T> ofType);
 
     /**
      * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine

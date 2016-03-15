@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -64,6 +65,13 @@ public class RepositoryServiceDefault
 
     // //////////////////////////////////////
 
+    @Programmatic
+    @Override
+    public <T> T instantiate(final Class<T> domainClass) {
+        return factoryService.instantiate(domainClass);
+    }
+
+    // //////////////////////////////////////
 
     @Programmatic
     @Override
@@ -222,6 +230,9 @@ public class RepositoryServiceDefault
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
 
+
+    @javax.inject.Inject
+    FactoryService factoryService;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

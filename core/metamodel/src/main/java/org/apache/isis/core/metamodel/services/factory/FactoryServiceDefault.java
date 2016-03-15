@@ -49,8 +49,8 @@ public class FactoryServiceDefault
     @Programmatic
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T instantiate(final Class<T> ofClass) {
-        final ObjectSpecification spec = specificationLookup.loadSpecification(ofClass);
+    public <T> T instantiate(final Class<T> domainClass) {
+        final ObjectSpecification spec = specificationLookup.loadSpecification(domainClass);
         final ObjectAdapter adapter = doCreateTransientInstance(spec);
         return (T) adapter.getObject();
     }

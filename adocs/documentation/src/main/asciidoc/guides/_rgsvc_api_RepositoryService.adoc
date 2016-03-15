@@ -26,33 +26,38 @@ The API of `RepositoryService` is:
 ----
 public interface RepositoryService {
 
-    boolean isPersistent(Object domainObject);                                              // <1>
-    void persist(Object domainObject);                                                      // <2>
-    void remove(Object persistentDomainObject);                                             // <3>
+    <T> T instantiate(final Class<T> ofType);                                               // <1>
 
-    <T> List<T> allInstances(Class<T> ofType, long... range);                               // <4>
+    boolean isPersistent(Object domainObject);                                              // <2>
+    void persist(Object domainObject);                                                      // <3>
+    void remove(Object persistentDomainObject);                                             // <4>
 
-    <T> List<T> allMatches(Query<T> query);                                                 // <5>
-    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <6>
+    <T> List<T> allInstances(Class<T> ofType, long... range);                               // <5>
 
-    <T> T uniqueMatch(Query<T> query);                                                      // <7>
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);                 // <8>
+    <T> List<T> allMatches(Query<T> query);                                                 // <6>
+    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <7>
 
-    <T> T firstMatch(Query<T> query);                                                       // <9>
-    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);                  // <10>
+    <T> T uniqueMatch(Query<T> query);                                                      // <8>
+    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);                 // <9>
+
+    <T> T firstMatch(Query<T> query);                                                       // <10>
+    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);                  // <11>
 
 }
 ----
-<1> test whether a particular domain object is persistent or not
-<2> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
-<3> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
-<4> return all persisted instances of specified type.  Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.  The optional varargs parameters are for paging control; more on this below.
-<5> all persistence instances matching the specified `Query`.  Query itself is an Isis abstraction on top of JDO/DataNucleus' Query API.  *This is the primary API used for querying*
-<6> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
-<7> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned, while if there is more that one instances a run-time exception will be thrown.  Generally this method is preferred for looking up an object by its (primary or alternate) key.
-<8> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
-<9> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.  No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
-<10> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
+<1> create a new non-persisted domain entity.  This is identical to
+xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s `instantiate(...)` method, but is provided in the
+``RepositoryService``'s API too because instantiating and persisting objects are often done together.
+<2> test whether a particular domain object is persistent or not
+<3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
+<4> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
+<5> return all persisted instances of specified type.  Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.  The optional varargs parameters are for paging control; more on this below.
+<6> all persistence instances matching the specified `Query`.  Query itself is an Isis abstraction on top of JDO/DataNucleus' Query API.  *This is the primary API used for querying*
+<7> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
+<8> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned, while if there is more that one instances a run-time exception will be thrown.  Generally this method is preferred for looking up an object by its (primary or alternate) key.
+<9> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
+<10> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.  No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
+<11> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
 
 
 The `uniqueMatch(...)` methods are the recommended way of querying for (precisely) one instance.  The `firstMatch(...)` methods are for less strict querying.

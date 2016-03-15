@@ -18,12 +18,12 @@
  */
 package domainapp.app.services.homepage;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY // trick to suppress the actions from the top-level menu
@@ -37,7 +37,7 @@ public class HomePageService {
     )
     @HomePage
     public HomePageViewModel homePage() {
-        return container.injectServicesInto(new HomePageViewModel());
+        return serviceRegistry.injectServicesInto(new HomePageViewModel());
     }
 
     //endregion
@@ -45,7 +45,7 @@ public class HomePageService {
     //region > injected services
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    ServiceRegistry serviceRegistry;
 
     //endregion
 }

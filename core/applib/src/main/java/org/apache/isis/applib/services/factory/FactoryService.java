@@ -53,7 +53,7 @@ public interface FactoryService {
      * </p>
      */
     @Programmatic
-    <T> T instantiate(final Class<T> ofType);
+    <T> T instantiate(final Class<T> domainClass);
 
 
     @Programmatic
