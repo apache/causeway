@@ -36,7 +36,6 @@ import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCo
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -82,11 +81,13 @@ public class CollectionContentsMultipleViewsPanel
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
 
-        final CollectionSelectorPanel selectorDropdownPanelIfAny = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
-        final String selected = selectorDropdownPanelIfAny != null
-                ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-                : CollectionContentsHiddenPanelFactory.NAME;
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+
+        final CollectionSelectorPanel selectorDropdownPanelIfAny = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
+        final String selected;
+        selected = selectorDropdownPanelIfAny != null
+                ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
+                : componentFactories.get(0).getName();
 
         // create all, hide the one not selected
         int i = 0;
