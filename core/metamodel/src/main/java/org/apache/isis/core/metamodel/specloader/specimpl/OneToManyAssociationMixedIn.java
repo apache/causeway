@@ -19,6 +19,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
@@ -118,7 +119,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         // adjust name if necessary
         final String name = getName();
 
-        if(Objects.equal(name, DEFAULT_MEMBER_NAME)) {
+        if(Strings.isNullOrEmpty(name) || Objects.equal(name, DEFAULT_MEMBER_NAME)) {
             String memberName = ObjectActionMixedIn.determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
