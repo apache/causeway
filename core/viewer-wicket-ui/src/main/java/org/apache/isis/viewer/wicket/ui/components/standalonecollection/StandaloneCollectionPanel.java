@@ -94,9 +94,9 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
-            final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
+            final String selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
+            ComponentFactory selectedComponentFactory = selectorHelper.find(selected);
 
-            ComponentFactory selectedComponentFactory = componentFactories.get(selected);
             componentFactoryModel.setObject(selectedComponentFactory);
 
             this.setOutputMarkupId(true);

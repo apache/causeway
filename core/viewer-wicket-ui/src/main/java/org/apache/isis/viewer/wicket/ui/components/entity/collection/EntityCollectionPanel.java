@@ -62,7 +62,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
-    private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
+    private final ScopedSessionAttribute<String> selectedItemSessionAttribute;
 
     final WebMarkupContainer div;
 
@@ -93,6 +93,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     private WebMarkupContainer buildGui() {
         final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
+
         final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(getModel());
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
 
@@ -111,6 +112,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
             }
 
             final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
+            div.addOrReplace(collectionPanel);
+
 
             Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
             final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
@@ -140,9 +143,9 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
                 final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
-                final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
+                final String selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
 
-                ComponentFactory selectedComponentFactory = componentFactories.get(selected);
+                ComponentFactory selectedComponentFactory = selectorHelper.find(selected);
                 componentFactoryModel.setObject(selectedComponentFactory);
 
                 this.setOutputMarkupId(true);
@@ -150,10 +153,10 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
                 collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
             }
-            div.addOrReplace(collectionPanel);
         }
         return div;
     }
+
 
     private boolean visible = false;
     @Override

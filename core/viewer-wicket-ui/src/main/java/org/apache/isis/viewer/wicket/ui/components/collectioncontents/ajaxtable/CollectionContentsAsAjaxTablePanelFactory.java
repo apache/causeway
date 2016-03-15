@@ -37,7 +37,7 @@ public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryA
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "table";
+    public static final String NAME = "table";
 
     public CollectionContentsAsAjaxTablePanelFactory() {
         super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsAjaxTablePanel.class);

@@ -36,6 +36,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCo
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -66,7 +67,7 @@ public class CollectionContentsMultipleViewsPanel
             final EntityCollectionModel model) {
         super(id, model);
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
-        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), model.<Integer>getSessionAttribute(EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM));
+        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), model.<String>getSessionAttribute(EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM));
     }
 
     /**
@@ -82,19 +83,24 @@ public class CollectionContentsMultipleViewsPanel
         final EntityCollectionModel model = getModel();
 
         final CollectionSelectorPanel selectorDropdownPanelIfAny = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
-        final int selected = selectorDropdownPanelIfAny != null
+        final String selected = selectorDropdownPanelIfAny != null
                 ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-                : 0;
+                : CollectionContentsHiddenPanelFactory.NAME;
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         // create all, hide the one not selected
         int i = 0;
+        int selectedIdx = 0;
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         final EntityCollectionModel emptyModel = model.asDummy();
         for (ComponentFactory componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
-            Component underlyingView = componentFactory.createComponent(underlyingId,i==selected? model: emptyModel);
+            final boolean isSelected = selected.equals(componentFactory.getName());
+            final Component underlyingView = componentFactory.createComponent(underlyingId, isSelected ? model : emptyModel);
+            if(isSelected) {
+                selectedIdx = i;
+            }
             underlyingViews[i++] = underlyingView;
             this.addOrReplace(underlyingView);
         }
@@ -111,7 +117,7 @@ public class CollectionContentsMultipleViewsPanel
         for(i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             Component component = underlyingViews[i];
             if(component != null) {
-                if(i != selected) {
+                if(i != selectedIdx) {
                     component.add(new CssClassAppender(INVISIBLE_CLASS));
                 } else {
                     selectedComponent = component;
@@ -139,15 +145,9 @@ public class CollectionContentsMultipleViewsPanel
         }
         String viewStr = uiHintContainer.getHint(selectorDropdownPanel, UIHINT_VIEW);
 
-        List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
         if(viewStr != null) {
             try {
-                int view = Integer.parseInt(viewStr);
-                if(view >= 0 && view < componentFactories.size()) {
-                    underlyingViewNum = view;
-                }
-
+                underlyingViewNum = selectorHelper.lookup(viewStr);
 
                 final EntityCollectionModel dummyModel = getModel().asDummy();
                 for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
@@ -161,7 +161,6 @@ public class CollectionContentsMultipleViewsPanel
                 }
 
                 this.selectedComponent = underlyingViews[underlyingViewNum];
-
 
                 final AjaxRequestTarget target = uiHintEvent.getTarget();
                 if(target != null) {

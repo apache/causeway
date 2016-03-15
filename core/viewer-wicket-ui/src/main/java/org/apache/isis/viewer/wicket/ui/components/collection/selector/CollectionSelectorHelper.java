@@ -30,19 +30,20 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 
 public class CollectionSelectorHelper implements Serializable {
 
@@ -53,24 +54,24 @@ public class CollectionSelectorHelper implements Serializable {
     private final EntityCollectionModel model;
 
     private final List<ComponentFactory> componentFactories;
-    private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
+    private final ScopedSessionAttribute<String> selectedItemSessionAttribute;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry) {
-        this(model, componentFactoryRegistry, ScopedSessionAttribute.<Integer>noop());
+        this(model, componentFactoryRegistry, ScopedSessionAttribute.<String>noop());
     }
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry,
-            final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
+            final ScopedSessionAttribute<String> selectedItemSessionAttribute) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
         this.selectedItemSessionAttribute =
                 selectedItemSessionAttribute != null
                         ? selectedItemSessionAttribute
-                        : ScopedSessionAttribute.<Integer>noop();
+                        : ScopedSessionAttribute.<String>noop();
         model.putSessionAttribute(selectedItemSessionAttribute);
     }
 
@@ -89,27 +90,20 @@ public class CollectionSelectorHelper implements Serializable {
         return componentFactories;
     }
 
-    public int honourViewHintElseDefault(final Component component) {
+    public String honourViewHintElseDefault(final Component component) {
         // honour hints ...
         final UiHintContainer hintContainer = getUiHintContainer(component);
         if (hintContainer != null) {
             String viewStr = hintContainer.getHint(component, UIHINT_EVENT_VIEW_KEY);
             if (viewStr != null) {
-                try {
-                    int view = Integer.parseInt(viewStr);
-                    if (view >= 0 && view < componentFactories.size()) {
-                        return view;
-                    }
-                } catch (NumberFormatException ex) {
-                    // ignore
-                }
+                return viewStr;
             }
         }
 
         // ... else default
-        int initialFactory = determineInitialFactory();
+        String initialFactory = determineInitialFactory();
         if (hintContainer != null) {
-            hintContainer.setHint(component, UIHINT_EVENT_VIEW_KEY, "" + initialFactory);
+            hintContainer.setHint(component, UIHINT_EVENT_VIEW_KEY, initialFactory);
             // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
         }
         return initialFactory;
@@ -118,44 +112,44 @@ public class CollectionSelectorHelper implements Serializable {
     //region > helpers
 
     /**
-     * return the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory unresolved panel} if present and not eager loading;
+     * return the index of {@link CollectionContentsHiddenPanelFactory unresolved panel} if present and not eager loading;
      * else the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
      * otherwise first factory.
      */
-    private int determineInitialFactory() {
+    private String determineInitialFactory() {
 
         // try to load from session, if can
-        final Integer sessionAttribute = selectedItemSessionAttribute.get();
+        final String sessionAttribute = selectedItemSessionAttribute.get();
         if(sessionAttribute != null) {
             return sessionAttribute;
+        }
+
+        // else grid layout hint
+        final CollectionLayoutData layoutData = this.model.getLayoutData();
+        if(layoutData != null) {
+            final String defaultView = layoutData.getDefaultView();
+            if(defaultView != null) {
+                return defaultView;
+            }
         }
 
         // else @CollectionLayout#defaultView attribute
         if (hasDefaultViewFacet(model)) {
             DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
-            for (int i = 0; i < componentFactories.size(); i++) {
-                final String componentName = componentFactories.get(i).getName();
+            for (ComponentFactory componentFactory : componentFactories) {
+                final String componentName = componentFactory.getName();
                 final String viewName = defaultViewFacet.value();
                 if (componentName.equalsIgnoreCase(viewName)) {
-                    return i;
+                    return componentName;
                 }
             }
         }
 
-        // else @CollectionLayout#renderEagerly
-        if (!hasRenderEagerlyFacet(model)) {
-            for (int i = 0; i < componentFactories.size(); i++) {
-                if (componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
-                    return i;
-                }
-            }
-        }
+        // else honour @CollectionLayout#renderEagerly
+        return hasRenderEagerlyFacet(model)
+                ? CollectionContentsAsAjaxTablePanelFactory.NAME
+                : CollectionContentsHiddenPanelFactory.NAME;
 
-        int ajaxTableIdx = findAjaxTable(componentFactories);
-        if (ajaxTableIdx >= 0) {
-            return ajaxTableIdx;
-        }
-        return 0;
     }
 
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
@@ -222,6 +216,31 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         return entityCollectionModel;
+    }
+
+    public ComponentFactory find(final String selected) {
+        for (ComponentFactory componentFactory : componentFactories) {
+            if(selected.equals(componentFactory.getName())) {
+                return componentFactory;
+            }
+        }
+        if(CollectionContentsHiddenPanelFactory.NAME.equals(selected)) {
+            throw new IllegalStateException(String.format(
+                    "Could not locate '%s' (as the fallback collection panel)",
+                    CollectionContentsHiddenPanelFactory.NAME));
+        }
+        return find(CollectionContentsHiddenPanelFactory.NAME); // fallback
+    }
+
+    public int lookup(final String view) {
+        int i=0;
+        for (ComponentFactory componentFactory : componentFactories) {
+            if(view.equals(componentFactory.getName())) {
+                return i;
+            }
+            i++;
+        }
+        return 0;
     }
 
     //endregion

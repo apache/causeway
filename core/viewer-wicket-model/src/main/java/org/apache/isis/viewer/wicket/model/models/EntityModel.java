@@ -35,10 +35,8 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -446,25 +444,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return this;
     }
 
-    public boolean isEntityDetailsVisible() {
-        return entityDetailsVisible;
-    }
 
-    public void toggleDetails() {
-        entityDetailsVisible = !entityDetailsVisible;
-    }
-
-    private Hint hint;
-
-    private Hint getHint() {
-        return hint;
-    }
-    private void setHint(Hint hint) {
-        this.hint = hint;
-    }
-
-    
-    
 
     
     // //////////////////////////////////////////////////////////

@@ -27,11 +27,11 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link EntityCollectionModel collection of entity}s so that they can be only
  * lazily resolved.
  */
-public class CollectionContentsAsUnresolvedPanel extends PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsHiddenPanel extends PanelAbstract<EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionContentsAsUnresolvedPanel(final String id, final EntityCollectionModel model) {
+    public CollectionContentsHiddenPanel(final String id, final EntityCollectionModel model) {
         super(id, model);
         buildGui();
     }

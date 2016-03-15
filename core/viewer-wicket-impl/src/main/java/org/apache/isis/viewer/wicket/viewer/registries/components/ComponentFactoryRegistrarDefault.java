@@ -37,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFac
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
@@ -111,7 +111,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
      */
     protected void addComponentFactoriesActingAsSelectors(final ComponentFactoryList componentFactories) {
         addLinksSelectorFactories(componentFactories);
-        componentFactories.add(new CollectionContentsAsUnresolvedPanelFactory()); // to prevent eager loading
+        componentFactories.add(new CollectionContentsHiddenPanelFactory()); // to prevent eager loading
     }
 
     protected void addLinksSelectorFactories(final ComponentFactoryList componentFactories) {

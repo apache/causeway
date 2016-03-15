@@ -31,16 +31,16 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
- * {@link ComponentFactory} for {@link CollectionContentsAsUnresolvedPanel}.
+ * {@link ComponentFactory} for {@link CollectionContentsHiddenPanel}.
  */
-public class CollectionContentsAsUnresolvedPanelFactory extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
+public class CollectionContentsHiddenPanelFactory extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "show...";
+    public static final String NAME = "hidden";
 
-    public CollectionContentsAsUnresolvedPanelFactory() {
-        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsAsUnresolvedPanel.class);
+    public CollectionContentsHiddenPanelFactory() {
+        super(ComponentType.COLLECTION_CONTENTS, NAME, CollectionContentsHiddenPanel.class);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CollectionContentsAsUnresolvedPanelFactory extends ComponentFactory
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsAsUnresolvedPanel(id, collectionModel);
+        return new CollectionContentsHiddenPanel(id, collectionModel);
     }
 
     @Override

@@ -58,15 +58,6 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
     private Label label;
 
-    public CollectionPanel(final String id, final EntityModel entityModel, OneToManyAssociation otma) {
-        this(id, newEntityCollectionModel(entityModel, otma), entityModel, otma);
-    }
-
-    private static EntityCollectionModel newEntityCollectionModel(final EntityModel entityModel, OneToManyAssociation otma) {
-        EntityCollectionModel collectionModel = EntityCollectionModel.createParented(entityModel, otma);
-        return collectionModel;
-    }
-
     public CollectionPanel(
             final String id,
             final EntityCollectionModel collectionModel) {

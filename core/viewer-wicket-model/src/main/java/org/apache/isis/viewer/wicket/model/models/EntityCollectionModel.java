@@ -198,7 +198,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         final List<ObjectAdapterMemento> mementoList = 
                 Lists.newArrayList(Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
 
-        
         final ObjectSpecification elementSpec;
         if(!Iterables.isEmpty(pojos)) {
             // dynamically determine the spec of the elements
@@ -253,9 +252,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     /**
      * Factory.
      */
-    public static EntityCollectionModel createParented(final EntityModel model, final OneToManyAssociation collection) {
-        return new EntityCollectionModel(model, collection);
-    }
     public static EntityCollectionModel createParented(final EntityModel modelWithCollectionLayoutMetadata) {
         return new EntityCollectionModel(modelWithCollectionLayoutMetadata);
     }
@@ -280,6 +276,10 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      */
     private ObjectAdapterMemento parentObjectAdapterMemento;
 
+    /**
+     * Populated only if {@link Type#PARENTED}.
+     */
+    private final CollectionLayoutData collectionLayoutData;
     /**
      * Populated only if {@link Type#PARENTED}.
      */
@@ -308,13 +308,13 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         this.mementoList = mementoList;
         this.pageSize = pageSize;
         this.toggledMementosList = Lists.newArrayList();
+        this.collectionLayoutData = null;
     }
 
-    private EntityCollectionModel(final EntityModel model, final OneToManyAssociation collection) {
-        this(model.getObjectAdapterMemento(), collection);
-    }
-
-    private EntityCollectionModel(final ObjectAdapterMemento parentAdapterMemento, final OneToManyAssociation collection) {
+    private EntityCollectionModel(
+            final ObjectAdapterMemento parentAdapterMemento,
+            final OneToManyAssociation collection,
+            final CollectionLayoutData collectionLayoutData) {
         this.type = Type.PARENTED;
         this.typeOf = forName(collection.getSpecification());
         this.parentObjectAdapterMemento = parentAdapterMemento;
@@ -322,6 +322,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
         final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
         this.sortedBy = sortedByFacet != null?sortedByFacet.value(): null;
+        this.collectionLayoutData = collectionLayoutData;
     }
     
     private EntityCollectionModel(final EntityModel entityModel) {
@@ -329,7 +330,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
     private EntityCollectionModel(final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {
-        this(parentObjectAdapterMemento, collectionFor(parentObjectAdapterMemento, collectionLayoutData));
+        this(parentObjectAdapterMemento, collectionFor(parentObjectAdapterMemento, collectionLayoutData), collectionLayoutData);
     }
 
     private static OneToManyAssociation collectionFor(
@@ -382,6 +383,12 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return this.type.getCount(this);
     }
 
+    /**
+     * Populated only if {@link Type#PARENTED}.
+     */
+    public CollectionLayoutData getLayoutData() {
+        return collectionLayoutData;
+    }
 
     @Override
     protected List<ObjectAdapter> load() {
@@ -474,7 +481,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return sessionAttributeByName.get(attributionName);
     }
 
-    public void putSessionAttribute(final ScopedSessionAttribute<Integer> sessionAttribute) {
+    public void putSessionAttribute(final ScopedSessionAttribute<String> sessionAttribute) {
         if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
             return;
         }

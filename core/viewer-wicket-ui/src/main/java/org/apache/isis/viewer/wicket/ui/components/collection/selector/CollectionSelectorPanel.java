@@ -67,20 +67,20 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
     private final CollectionSelectorHelper selectorHelper;
-    private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
+    private final ScopedSessionAttribute<String> selectedItemSessionAttribute;
 
     private ComponentFactory selectedComponentFactory;
 
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model) {
-        this(id, model, ScopedSessionAttribute.<Integer>noop());
+        this(id, model, ScopedSessionAttribute.<String>noop());
     }
 
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model,
-            final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
+            final ScopedSessionAttribute<String> selectedItemSessionAttribute) {
         super(id, model);
         this.selectedItemSessionAttribute = selectedItemSessionAttribute;
 
@@ -100,7 +100,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
 
     private void addDropdown() {
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-        final int selected = selectorHelper.honourViewHintElseDefault(this);
+        final String selected = selectorHelper.honourViewHintElseDefault(this);
 
         // selector
         if (componentFactories.size() <= 1) {
@@ -108,7 +108,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
         } else {
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
-            this.selectedComponentFactory = componentFactories.get(selected);
+            this.selectedComponentFactory = selectorHelper.find(selected);
             componentFactoryModel.setObject(this.selectedComponentFactory);
 
             final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
@@ -133,18 +133,16 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
                 @Override
                 protected void populateItem(ListItem<ComponentFactory> item) {
 
-                    final int underlyingViewNum = item.getIndex();
-
                     final ComponentFactory componentFactory = item.getModelObject();
                     final AbstractLink link = new AjaxLink<Void>(ID_VIEW_LINK) {
                         private static final long serialVersionUID = 1L;
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
-                            linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
+                            linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
 
                             linksSelectorPanel.selectedComponentFactory = componentFactory;
-                            selectedItemSessionAttribute.set(underlyingViewNum);
+                            selectedItemSessionAttribute.set(componentFactory.getName());
                             target.add(linksSelectorPanel, views);
                         }
 
@@ -214,12 +212,12 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     }
 
 
-    protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
+    protected void setViewHintAndBroadcast(String viewName, AjaxRequestTarget target) {
         final UiHintContainer uiHintContainer = getUiHintContainer(getModel().isParented()? EntityModel.class: EntityCollectionModel.class);
         if(uiHintContainer == null) {
             return;
         }
-        uiHintContainer.setHint(CollectionSelectorPanel.this, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, ""+viewNum);
+        uiHintContainer.setHint(CollectionSelectorPanel.this, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName);
         send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 }
