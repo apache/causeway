@@ -144,7 +144,7 @@ It is also possible to query using DataNucleus' type-safe query API.  For more d
 
 == Implementation
 
-The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.repository.RepositoryServiceDefault`).
+The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.repository.RepositoryServiceDefault`).
 
 
 

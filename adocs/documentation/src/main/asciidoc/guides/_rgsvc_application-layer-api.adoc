@@ -77,6 +77,18 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 |Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
+|xref:rgsvc.adoc#_rgsvc_api_SessionManagementService[`o.a.i.applib.` +
+`services.sessmgmt` +
+`SessionManagementService`]
+|(`1.12.0-SNAPSHOT`) Methods for batching long-running work (eg data migration) into multiple sessions.
+|`SessionManagementService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
+
 |xref:rgsvc.adoc#_rgsvc_api_TransactionService[`o.a.i.applib.` +
 `services.xactn` +
 `TransactionService`]
@@ -115,5 +127,6 @@ include::_rgsvc_api_ActionInvocationContext.adoc[leveloffset=+1]
 include::_rgsvc_api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_api_CommandContext.adoc[leveloffset=+1]
 include::_rgsvc_api_MessageService.adoc[leveloffset=+1]
+include::_rgsvc_api_SessionManagementService.adoc[leveloffset=+1]
 include::_rgsvc_api_TransactionService.adoc[leveloffset=+1]
 include::_rgsvc_api_WrapperFactory.adoc[leveloffset=+1]
