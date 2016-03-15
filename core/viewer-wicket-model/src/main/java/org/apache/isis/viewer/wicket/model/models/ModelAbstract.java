@@ -19,26 +19,18 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
  * Isis' dependencies.
  */
-public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implements UiHintContainer {
+public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,84 +41,6 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
         super(t);
     }
 
-
-    // //////////////////////////////////////////////////////////
-    // Hint support
-    // //////////////////////////////////////////////////////////
-
-    private final Map<String,ScopedSessionAttribute> sessionAttributeByName = Maps.newHashMap();
-
-    /**
-     * provides a mechanism to retrieve hints (identified by an attribute name) from the session.
-     */
-    public <T extends Serializable> ScopedSessionAttribute<T> getSessionAttribute(final String attributionName) {
-        return sessionAttributeByName.get(attributionName);
-    }
-
-    public void putSessionAttribute(final ScopedSessionAttribute<String> sessionAttribute) {
-        if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
-            return;
-        }
-        this.sessionAttributeByName.put(sessionAttribute.getAttributeName(), sessionAttribute);
-    }
-
-    public void clearSelectedItemSessionAttribute(final String attributeName) {
-        this.sessionAttributeByName.remove(attributeName);
-    }
-
-
-    private final Map<String, String> hints = Maps.newTreeMap();
-
-    public String getHint(final Component component, final String key) {
-        if(component == null) {
-            return null;
-        }
-        String hintKey = hintPathFor(component) + "-" + key;
-        final ScopedSessionAttribute<String> sessionAttribute = getSessionAttribute(key);
-        if(sessionAttribute != null) {
-            final String sessionHint = sessionAttribute.get();
-            if(sessionHint != null) {
-                return sessionHint;
-            }
-        }
-        return hints.get(hintKey);
-    }
-
-    @Override
-    public void setHint(Component component, String key, String value) {
-        if(component == null) {
-            return;
-        }
-        final String scopeKey = hintPathFor(component);
-        String hintKey = scopeKey + "-" + key;
-        if(value != null) {
-            hints.put(hintKey, value);
-        } else {
-            hints.remove(hintKey);
-        }
-        doSetHint(scopeKey, key, value);
-    }
-
-    /**
-     * Optional hook, eg to also store the hint in the session.
-     */
-    protected void doSetHint(final String scopeKey, final String attribute, final String value) {
-
-    }
-
-    @Override
-    public void clearHint(Component component, String key) {
-        setHint(component, key, null);
-    }
-
-    private static String hintPathFor(Component component)
-    {
-        return Util.hintPathFor(component);
-    }
-
-    protected Map<String, String> getHints() {
-        return hints;
-    }
 
     // //////////////////////////////////////////////////////////////
     // Dependencies

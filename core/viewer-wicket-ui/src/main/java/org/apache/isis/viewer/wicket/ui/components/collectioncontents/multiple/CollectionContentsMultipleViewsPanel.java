@@ -30,6 +30,8 @@ import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
@@ -65,8 +67,18 @@ public class CollectionContentsMultipleViewsPanel
             final String id,
             final EntityCollectionModel model) {
         super(id, model);
+
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
-        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), model.<String>getSessionAttribute(EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM));
+        final EntityModel entityModel = model.getEntityModel();
+
+        final ScopedSessionAttribute<String> selectedItemSessionAttribute =
+                entityModel != null
+                        ? entityModel.<String>getSessionAttribute(
+                                EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM)
+                        : null;
+
+        selectorHelper = new CollectionSelectorHelper(
+                model, getComponentFactoryRegistry(), selectedItemSessionAttribute);
     }
 
     /**

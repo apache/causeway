@@ -29,6 +29,8 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.Component;
+
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -49,11 +51,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -64,12 +66,14 @@ import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
  * the collection are stored as {@link ObjectAdapterMemento}s.
  */
-public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> implements LinksProvider {
+public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> implements LinksProvider,
+        UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
     private static final int PAGE_SIZE_DEFAULT_FOR_PARENTED = 12;
     private static final int PAGE_SIZE_DEFAULT_FOR_STANDALONE = 25;
+
 
     public enum Type {
         /**
@@ -114,7 +118,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         PARENTED {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-                final ObjectAdapter adapter = entityCollectionModel.parentObjectAdapterMemento.getObjectAdapter(
+                final ObjectAdapter adapter = entityCollectionModel.getParentObjectAdapterMemento().getObjectAdapter(
                         ConcurrencyChecking.NO_CHECK);
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection();
                 final ObjectAdapter collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
@@ -272,12 +276,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     /**
      * Populated only if {@link Type#PARENTED}.
      */
-    private ObjectAdapterMemento parentObjectAdapterMemento;
+    private final EntityModel entityModel;
 
-    /**
-     * Populated only if {@link Type#PARENTED}.
-     */
-    private final CollectionLayoutData collectionLayoutData;
+
     /**
      * Populated only if {@link Type#PARENTED}.
      */
@@ -302,34 +303,24 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     private EntityCollectionModel(final Class<?> typeOf, final List<ObjectAdapterMemento> mementoList, final int pageSize) {
         this.type = Type.STANDALONE;
+        this.entityModel = null;
         this.typeOf = typeOf;
         this.mementoList = mementoList;
         this.pageSize = pageSize;
         this.toggledMementosList = Lists.newArrayList();
-        this.collectionLayoutData = null;
     }
 
-    private EntityCollectionModel(
-            final ObjectAdapterMemento parentAdapterMemento,
-            final OneToManyAssociation collection,
-            final CollectionLayoutData collectionLayoutData) {
+    private EntityCollectionModel(final EntityModel entityModel) {
+        this.entityModel = entityModel;
+        final OneToManyAssociation collection = collectionFor(entityModel.getObjectAdapterMemento(), getLayoutData());
         this.type = Type.PARENTED;
         this.typeOf = forName(collection.getSpecification());
-        this.parentObjectAdapterMemento = parentAdapterMemento;
         this.collectionMemento = new CollectionMemento(collection);
         this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
         final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
-        this.sortedBy = sortedByFacet != null?sortedByFacet.value(): null;
-        this.collectionLayoutData = collectionLayoutData;
+        this.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
     }
     
-    private EntityCollectionModel(final EntityModel entityModel) {
-        this(entityModel.getObjectAdapterMemento(), (CollectionLayoutData) entityModel.getLayoutMetadata());
-    }
-
-    private EntityCollectionModel(final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {
-        this(parentObjectAdapterMemento, collectionFor(parentObjectAdapterMemento, collectionLayoutData), collectionLayoutData);
-    }
 
     private static OneToManyAssociation collectionFor(
             final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {
@@ -385,7 +376,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      * Populated only if {@link Type#PARENTED}.
      */
     public CollectionLayoutData getLayoutData() {
-        return collectionLayoutData;
+        return (CollectionLayoutData) entityModel.getLayoutMetadata();
     }
 
     @Override
@@ -418,8 +409,15 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     /**
      * Populated only if {@link Type#PARENTED}.
      */
+    public EntityModel getEntityModel() {
+        return entityModel;
+    }
+
+    /**
+     * Populated only if {@link Type#PARENTED}.
+     */
     public ObjectAdapterMemento getParentObjectAdapterMemento() {
-        return parentObjectAdapterMemento;
+        return entityModel != null? entityModel.getObjectAdapterMemento(): null;
     }
 
     /**
@@ -471,17 +469,28 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public static final String SESSION_ATTRIBUTE_SELECTED_ITEM = "selectedItem";
 
 
+    @Override
+    public String getHint(final Component component, final String attributeName) {
+        if(getEntityModel() == null) {
+            return null;
+        }
+        return getEntityModel().getHint(component, attributeName);
+    }
 
     @Override
-    protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
-        if(isParented()) {
-            // same logic as in EntityModel's similar override
-            ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
-            if(scopedSessionAttribute == null) {
-                scopedSessionAttribute = ScopedSessionAttribute.create(parentObjectAdapterMemento, scopeKey, attributeName);
-            }
-            scopedSessionAttribute.set(value);
+    public void setHint(final Component component, final String attributeName, final String attributeValue) {
+        if(getEntityModel() == null) {
+            return;
         }
+        getEntityModel().setHint(component, attributeName, attributeValue);
+    }
+
+    @Override
+    public void clearHint(final Component component, final String attributeName) {
+        if(getEntityModel() == null) {
+            return;
+        }
+        getEntityModel().clearHint(component, attributeName);
     }
 
 

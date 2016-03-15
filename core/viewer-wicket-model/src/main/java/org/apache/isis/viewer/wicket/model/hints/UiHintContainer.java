@@ -23,11 +23,11 @@ import org.apache.wicket.util.string.Strings;
 
 public interface UiHintContainer {
 
-    String getHint(Component component, String key);
+    String getHint(Component component, String attributeName);
     
-    void setHint(Component component, String key, String value);
+    void setHint(Component component, String attributeName, String attributeValue);
 
-    void clearHint(Component component, String key);
+    void clearHint(Component component, String attributeName);
 
     public static class Util {
         private Util(){}

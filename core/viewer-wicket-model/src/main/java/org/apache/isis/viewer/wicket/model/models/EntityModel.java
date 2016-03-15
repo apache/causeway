@@ -25,6 +25,7 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -43,6 +44,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -55,7 +57,7 @@ import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -258,6 +260,86 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
                 }
             }
         }
+    }
+
+
+    // //////////////////////////////////////////////////////////
+    // Hint support
+    // //////////////////////////////////////////////////////////
+
+    private final Map<String,ScopedSessionAttribute> sessionAttributeByName = Maps.newHashMap();
+
+    /**
+     * provides a mechanism to retrieve hints (identified by an attribute name) from the session.
+     */
+    public <T extends Serializable> ScopedSessionAttribute<T> getSessionAttribute(final String attributionName) {
+        return sessionAttributeByName.get(attributionName);
+    }
+
+    public void putSessionAttribute(final ScopedSessionAttribute<String> sessionAttribute) {
+        if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
+            return;
+        }
+        this.sessionAttributeByName.put(sessionAttribute.getAttributeName(), sessionAttribute);
+    }
+
+    public void clearSelectedItemSessionAttribute(final String attributeName) {
+        this.sessionAttributeByName.remove(attributeName);
+    }
+
+
+    private final Map<String, String> hints = Maps.newTreeMap();
+
+    @Override
+    public String getHint(final Component component, final String attributeName) {
+        if(component == null) {
+            return null;
+        }
+        String hintKey = hintPathFor(component) + "-" + attributeName;
+        final ScopedSessionAttribute<String> sessionAttribute = getSessionAttribute(attributeName);
+        if(sessionAttribute != null) {
+            final String sessionHint = sessionAttribute.get();
+            if(sessionHint != null) {
+                return sessionHint;
+            }
+        }
+        return hints.get(hintKey);
+    }
+
+    @Override
+    public void setHint(Component component, String attributeName, String attributeValue) {
+        if(component == null) {
+            return;
+        }
+        final String scopeKey = hintPathFor(component);
+        String hintKey = scopeKey + "-" + attributeName;
+        if(attributeValue != null) {
+            hints.put(hintKey, attributeValue);
+        } else {
+            hints.remove(hintKey);
+        }
+
+        //
+
+        ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
+        if(scopedSessionAttribute == null) {
+            scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
+        }
+        scopedSessionAttribute.set(attributeValue);
+    }
+
+    @Override
+    public void clearHint(Component component, String attributeName) {
+        setHint(component, attributeName, null);
+    }
+
+    private static String hintPathFor(Component component)
+    {
+        return Util.hintPathFor(component);
+    }
+
+    protected Map<String, String> getHints() {
+        return hints;
     }
 
 
@@ -570,14 +652,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
 
-    @Override
-    protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
-        ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
-        if(scopedSessionAttribute == null) {
-            scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
-        }
-        scopedSessionAttribute.set(value);
-    }
 
 
 

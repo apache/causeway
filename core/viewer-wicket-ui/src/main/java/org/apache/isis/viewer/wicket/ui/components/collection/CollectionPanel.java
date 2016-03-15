@@ -49,7 +49,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionSelectorProvider {
 
-
     private static final long serialVersionUID = 1L;
 
     private static final String ID_FEEDBACK = "feedback";
@@ -61,21 +60,18 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     public CollectionPanel(
             final String id,
             final EntityCollectionModel collectionModel) {
-        this(id, collectionModel, new EntityModel(collectionModel.getParentObjectAdapterMemento()), collectionModel.getCollectionMemento().getCollection());
-    }
-
-    CollectionPanel(
-            final String id,
-            final EntityCollectionModel collectionModel,
-            final EntityModel entityModel,
-            final OneToManyAssociation otma) {
         super(id, collectionModel);
 
         final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
 
-        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentType());
+        final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection();
+        final EntityModel entityModel = collectionModel.getEntityModel();
 
-        entityActionLinks.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
+        final List<ObjectAction> associatedActions =
+                EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentType());
+
+        entityActionLinks.addAll(
+                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
 
         collectionModel.addEntityActions(entityActionLinks);
     }

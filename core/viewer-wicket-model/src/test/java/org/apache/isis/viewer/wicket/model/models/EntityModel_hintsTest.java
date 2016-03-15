@@ -31,12 +31,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class ModelAbstractTest {
+public class EntityModel_hintsTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    ModelAbstract<String> target;
+    EntityModel target;
 
     MarkupContainer mockParent;
     Component mockComponent1;
@@ -44,12 +44,7 @@ public class ModelAbstractTest {
 
     @Before
     public void setUp() throws Exception {
-        target = new ModelAbstract<String>("foo"){
-            @Override
-            protected String load() {
-                return null;
-            }
-        };
+        target = new EntityModel();
 
         mockParent = context.mock(MarkupContainer.class, "parent");
         mockComponent1 = context.mock(Component.class, "component1");
@@ -74,7 +69,7 @@ public class ModelAbstractTest {
         mockComponent2.setParent(mockParent);
     }
 
-    public static class Hints extends ModelAbstractTest {
+    public static class Hints extends EntityModel_hintsTest {
 
         @Test
         public void empty() throws Exception {
