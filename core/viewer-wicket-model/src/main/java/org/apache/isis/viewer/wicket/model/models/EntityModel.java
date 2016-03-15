@@ -572,7 +572,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     @Override
     protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
-        ScopedSessionAttribute scopedSessionAttribute = scopedSessionAttributeByName.get(attributeName);
+        ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
         if(scopedSessionAttribute == null) {
             scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
         }

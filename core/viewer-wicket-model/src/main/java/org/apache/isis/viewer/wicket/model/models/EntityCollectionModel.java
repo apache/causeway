@@ -23,13 +23,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -472,32 +470,13 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     public static final String SESSION_ATTRIBUTE_SELECTED_ITEM = "selectedItem";
 
-    private final Map<String,ScopedSessionAttribute> sessionAttributeByName = Maps.newHashMap();
-
-    /**
-     * provides a mechanism to retrieve hints (identified by an attribute name) from the session.
-     */
-    public <T extends Serializable> ScopedSessionAttribute<T> getSessionAttribute(final String attributionName) {
-        return sessionAttributeByName.get(attributionName);
-    }
-
-    public void putSessionAttribute(final ScopedSessionAttribute<String> sessionAttribute) {
-        if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
-            return;
-        }
-        this.sessionAttributeByName.put(sessionAttribute.getAttributeName(), sessionAttribute);
-    }
-
-    public void clearSelectedItemSessionAttribute(final String attributeName) {
-        this.sessionAttributeByName.remove(attributeName);
-    }
 
 
     @Override
     protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
         if(isParented()) {
             // same logic as in EntityModel's similar override
-            ScopedSessionAttribute scopedSessionAttribute = scopedSessionAttributeByName.get(attributeName);
+            ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
             if(scopedSessionAttribute == null) {
                 scopedSessionAttribute = ScopedSessionAttribute.create(parentObjectAdapterMemento, scopeKey, attributeName);
             }

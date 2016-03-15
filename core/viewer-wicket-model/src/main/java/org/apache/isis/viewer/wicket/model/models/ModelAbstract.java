@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -53,7 +54,27 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
     // Hint support
     // //////////////////////////////////////////////////////////
 
-    protected final Map<String, ScopedSessionAttribute> scopedSessionAttributeByName = Maps.newHashMap();
+    private final Map<String,ScopedSessionAttribute> sessionAttributeByName = Maps.newHashMap();
+
+    /**
+     * provides a mechanism to retrieve hints (identified by an attribute name) from the session.
+     */
+    public <T extends Serializable> ScopedSessionAttribute<T> getSessionAttribute(final String attributionName) {
+        return sessionAttributeByName.get(attributionName);
+    }
+
+    public void putSessionAttribute(final ScopedSessionAttribute<String> sessionAttribute) {
+        if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
+            return;
+        }
+        this.sessionAttributeByName.put(sessionAttribute.getAttributeName(), sessionAttribute);
+    }
+
+    public void clearSelectedItemSessionAttribute(final String attributeName) {
+        this.sessionAttributeByName.remove(attributeName);
+    }
+
+
     private final Map<String, String> hints = Maps.newTreeMap();
 
     public String getHint(final Component component, final String key) {
@@ -61,9 +82,9 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
             return null;
         }
         String hintKey = hintPathFor(component) + "-" + key;
-        final ScopedSessionAttribute<String> scopedSessionAttribute = scopedSessionAttributeByName.get(hintKey);
-        if(scopedSessionAttribute != null) {
-            final String sessionHint = scopedSessionAttribute.get();
+        final ScopedSessionAttribute<String> sessionAttribute = getSessionAttribute(key);
+        if(sessionAttribute != null) {
+            final String sessionHint = sessionAttribute.get();
             if(sessionHint != null) {
                 return sessionHint;
             }
