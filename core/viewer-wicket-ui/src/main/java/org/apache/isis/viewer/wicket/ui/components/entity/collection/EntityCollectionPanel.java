@@ -69,9 +69,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemSessionAttribute = ScopedSessionAttribute.create(
-                entityModel, this,  EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
-
+        selectedItemSessionAttribute = entityModel.createScopedSessionAttribute(this,
+                                            EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
         div = buildGui();
     }
 

@@ -87,6 +87,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return pageParameters;
     }
 
+    public <T extends Serializable> ScopedSessionAttribute<T> createScopedSessionAttribute(
+            final Component component,
+            final String sessionAttributeSelectedItem) {
+        return ScopedSessionAttribute.create(this, component,  sessionAttributeSelectedItem);
+    }
+
     public enum RenderingHint {
         REGULAR,
         PROPERTY_COLUMN,
@@ -295,7 +301,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         if(component == null) {
             return null;
         }
-        String hintKey = hintPathFor(component) + "-" + attributeName;
+        String hintKey = UiHintContainer.Util.hintPathFor(component) + "-" + attributeName;
         final ScopedSessionAttribute<String> sessionAttribute = getSessionAttribute(attributeName);
         if(sessionAttribute != null) {
             final String sessionHint = sessionAttribute.get();
@@ -311,7 +317,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         if(component == null) {
             return;
         }
-        final String scopeKey = hintPathFor(component);
+        final String scopeKey = UiHintContainer.Util.hintPathFor(component);
         String hintKey = scopeKey + "-" + attributeName;
         if(attributeValue != null) {
             hints.put(hintKey, attributeValue);
@@ -323,7 +329,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
         ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
         if(scopedSessionAttribute == null) {
-            scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
+            scopedSessionAttribute =  ScopedSessionAttribute.create(this, scopeKey, attributeName);
         }
         scopedSessionAttribute.set(attributeValue);
     }
@@ -331,11 +337,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public void clearHint(Component component, String attributeName) {
         setHint(component, attributeName, null);
-    }
-
-    private static String hintPathFor(Component component)
-    {
-        return Util.hintPathFor(component);
     }
 
     protected Map<String, String> getHints() {

@@ -31,44 +31,36 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
- * Scoped by both {@link EntityModel object} and also the {@link Component component's path} (if view metadata is in use)
+ * Scoped by both {@link EntityModel object} and also the {@link Component component's path} (if provided)
  * or simply a string constructed by some other mechanism ("legacy").
  */
 public class ScopedSessionAttribute<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Scoped by component.
+     */
     public static <T extends Serializable> ScopedSessionAttribute<T> create(
             final EntityModel entityModel,
             final Component component,
             final String attributeName) {
         final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-        return create(objectAdapterMemento, component, attributeName);
-    }
-
-    public static <T extends Serializable> ScopedSessionAttribute<T> create(
-            final ObjectAdapterMemento objectAdapterMemento,
-            final Component scopeComponent,
-            final String attributeName) {
-        if (scopeComponent == null) {
+        if (component == null) {
             return noop();
         }
-        final String oidStr = asStr(objectAdapterMemento);
-        return new ScopedSessionAttribute<T>(oidStr, null, scopeComponent, attributeName);
+        final String oidStr1 = asStr(objectAdapterMemento);
+        return new ScopedSessionAttribute<T>(oidStr1, null, component, attributeName);
     }
 
+    /**
+     * "Legacy" - scoped simply by a scopeKey.
+     */
     public static <T extends Serializable> ScopedSessionAttribute<T> create(
             final EntityModel entityModel,
             final String scopeKey,
             final String attributeName) {
         final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-        return create(objectAdapterMemento, scopeKey, attributeName);
-    }
-
-    public static <T extends Serializable> ScopedSessionAttribute<T> create(
-            final ObjectAdapterMemento objectAdapterMemento,
-            final String scopeKey,
-            final String attributeName) {
         if (objectAdapterMemento == null) {
             return noop();
         }
@@ -106,9 +98,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
         if (scopeKey != null) {
             return scopeKey;
         }
-        else {
-            return UiHintContainer.Util.hintPathFor(component);
-        }
+        return UiHintContainer.Util.hintPathFor(component);
     }
 
     public String getAttributeName() {

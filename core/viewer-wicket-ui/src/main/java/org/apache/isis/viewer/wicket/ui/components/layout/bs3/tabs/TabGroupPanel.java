@@ -77,7 +77,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
     public TabGroupPanel(String id, final EntityModel entityModel) {
         super(id, tabsFor(entityModel));
 
-        this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, this, SESSION_ATTR_SELECTED_TAB);
+        this.selectedTabInSession =  entityModel.createScopedSessionAttribute(this, SESSION_ATTR_SELECTED_TAB);
     }
 
     @Override
