@@ -15,7 +15,7 @@ It is also possible to download an initial `.layout.xml` - capturing any existin
 
 [NOTE]
 ====
-It is also possible to describe dynamic layouts using a `.layout.json` file, as discussed xref:ugfun.adoc#_ugfun_object-layout_dynamic[here].  As of `1.12.0-SNAPSHOT` the `.layout.json` file should be considered as deprecated: the ``.layout.xml`` file also allows enables much more sophisticated custom layouts than those afforded by ``.layout.json``.
+It is also possible to describe dynamic layouts using a `.layout.json` file, as discussed xref:ugfun.adoc#_ugfun_object-layout_dynamic[here].  As of `1.12.0-SNAPSHOT` the `.layout.json` file should be considered as deprecated: the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
 ====
 
 == Grids vs Components
@@ -199,6 +199,109 @@ The purpose of these attributes is to indicate where in the layout any unreferen
 
 
 The framework ensures that in any given grid exactly one region is specified for each of the three `unreferenced...` attributes.  If the grid fails this validation, then a warning message will be displayed, and the invalid XML logged.  The layout XML will then be ignored.
+
+
+
+== More advanced features
+
+This section decribes a number of more features useful in more complex layouts.
+
+
+=== Multiple references to a feature
+
+One feature worth being aware of is that it is possible to render a single feature more than once.
+
+For example, the dashboard home page for the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] shows
+the "not yet complete" collection of todo items twice, once as a table and also as a calendar:
+
+image::{_imagesdir}ugfun/_ugfun_object-layout_dynamic_xml/ToDoAppDashboard.png[width="940px",link="{_imagesdir}ugfun/_ugfun_object-layout_dynamic_xml/ToDoAppDashboard.png"]
+
+
+This is accomplished using the following (slightly abbreviated) layout:
+
+[source,xml]
+----
+<grid ...>
+    <row>
+        <col span="2" unreferencedActions="true">
+            ...
+        </col>
+        <col span="5" unreferencedCollections="true" cssClass="custom-padding-top-20">
+            <ns2:collection id="notYetComplete" defaultView="calendar"/>                <!--1-->
+        </col>
+        <col span="5" cssClass="custom-padding-top-20">
+            <ns2:collection id="notYetComplete" defaultView="table" paged="5"/>         <!--2-->
+            <ns2:collection id="complete" defaultView="table"/>
+        </col>
+        <col span="0">
+            <ns2:fieldSet name="General" id="general" unreferencedProperties="true"/>
+        </col>
+    </row>
+</grid>
+----
+<1> render the collection in "calendar" view
+<2> also render the collection in "table" view
+
+In the middle column the `notYetComplete` collection is rendered in "calendar" view, while in the right-most column
+it is rendered in "table" view.
+
+
+It is also possible to reference object properties and actions more than once.  This might be useful for a complex
+domain object with multiple tabs; certain properties or actions might appear on a summary tab (that shows the
+most commonly used info), but also on detail tabs.
+
+=== Custom CSS
+
+The ToDoApp's dashboard (above) also shows how custom CSS styles can be associated with specific regions of the layout:
+
+[source,xml]
+----
+<grid ...>
+    <row>
+        <col span="2" unreferencedActions="true">
+            <ns2:domainObject/>
+            <row>
+                <col span="12" cssClass="custom-width-100">                             <!--1-->
+                    <ns2:action id="exportToWordDoc"/>
+                </col>
+            </row>
+            ...
+        </col>
+        <col span="5" unreferencedCollections="true" cssClass="custom-padding-top-20">  <!--2-->
+            ...
+        </col>
+        <col span="5" cssClass="custom-padding-top-20">                                 <!--3-->
+            ...
+        </col>
+    </row>
+</grid>
+----
+<1> Render the column with the `custom-width-100` CSS class.
+<2> Render the column with the `custom-padding-top-20` CSS class.
+<3> Ditto
+
+For example the `custom-width-100` style is used to "stretch" the button for the `exportToWordDoc` action in the
+left-most column.  This is accomplished with the following CSS in `application.css`:
+
+[source,css]
+----
+.custom-width-100 ul,
+.custom-width-100 ul li,
+.custom-width-100 ul li a.btn {
+    width: 100%;
+}
+----
+
+Similarly, the middle and right columns are rendered using the `custom-padding-top-20` CSS class.  This shifts them down
+from the top of the page slightly, using the following CSS:
+
+[source,css]
+----
+.custom-padding-top-20 {
+    padding-top: 20px;
+}
+----
+
 
 
 
