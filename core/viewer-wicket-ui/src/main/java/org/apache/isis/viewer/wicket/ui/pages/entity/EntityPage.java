@@ -25,7 +25,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
@@ -147,13 +146,8 @@ public class EntityPage extends PageAbstract {
         }
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
-        entityPageContainer.add(new CssClassAppender(new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                ObjectAdapter adapter = entityModel.getObject();
-                return adapter.getObject().getClass().getSimpleName();
-            }
-        }));
+        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
+        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
         themeDiv.addOrReplace(entityPageContainer);
 
         addChildComponents(entityPageContainer, model);

@@ -95,6 +95,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
         final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(getModel());
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
+        CssClassAppender.appendCssClassTo(div, entityCollectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
 
         final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
         final ObjectAdapter objectAdapter = getModel().getObject();
