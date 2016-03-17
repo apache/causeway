@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.model.util.ComponentKey;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -67,20 +67,20 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
     private final CollectionSelectorHelper selectorHelper;
-    private final ScopedSessionAttribute<String> selectedItemSessionAttribute;
+    private final ComponentKey<String> selectedItemSessionAttribute;
 
     private ComponentFactory selectedComponentFactory;
 
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model) {
-        this(id, model, ScopedSessionAttribute.<String>noop());
+        this(id, model, ComponentKey.<String>noop());
     }
 
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model,
-            final ScopedSessionAttribute<String> selectedItemSessionAttribute) {
+            final ComponentKey<String> selectedItemSessionAttribute) {
         super(id, model);
         this.selectedItemSessionAttribute = selectedItemSessionAttribute;
 

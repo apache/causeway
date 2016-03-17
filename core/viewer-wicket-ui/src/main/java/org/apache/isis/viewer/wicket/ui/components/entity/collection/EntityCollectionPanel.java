@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.model.util.ComponentKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
@@ -62,7 +62,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
-    private final ScopedSessionAttribute<String> selectedItemSessionAttribute;
+    private final ComponentKey<String> selectedItemSessionAttribute;
 
     final WebMarkupContainer div;
 

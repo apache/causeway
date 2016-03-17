@@ -33,7 +33,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.model.util.ComponentKey;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
@@ -44,7 +44,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
 
     // the view metadata
-    private final ScopedSessionAttribute<Integer> selectedTabInSession;
+    private final ComponentKey<Integer> selectedTabInSession;
 
     private static List<ITab> tabsFor(final EntityModel entityModel) {
         final List<ITab> tabs = Lists.newArrayList();

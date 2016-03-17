@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.model.util.ComponentKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -54,24 +54,24 @@ public class CollectionSelectorHelper implements Serializable {
     private final EntityCollectionModel model;
 
     private final List<ComponentFactory> componentFactories;
-    private final ScopedSessionAttribute<String> selectedItemSessionAttribute;
+    private final ComponentKey<String> selectedItemSessionAttribute;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry) {
-        this(model, componentFactoryRegistry, ScopedSessionAttribute.<String>noop());
+        this(model, componentFactoryRegistry, ComponentKey.<String>noop());
     }
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry,
-            final ScopedSessionAttribute<String> selectedItemSessionAttribute) {
+            final ComponentKey<String> selectedItemSessionAttribute) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
         this.selectedItemSessionAttribute =
                 selectedItemSessionAttribute != null
                         ? selectedItemSessionAttribute
-                        : ScopedSessionAttribute.<String>noop();
+                        : ComponentKey.<String>noop();
         model.getEntityModel().putSessionAttribute(selectedItemSessionAttribute);
     }
 

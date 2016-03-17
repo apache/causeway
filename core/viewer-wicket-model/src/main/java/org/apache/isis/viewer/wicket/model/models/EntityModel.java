@@ -20,9 +20,11 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
@@ -30,7 +32,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -41,14 +42,15 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.model.util.ComponentKey;
+import org.apache.isis.viewer.wicket.model.util.Store;
+import org.apache.isis.viewer.wicket.model.util.StoreUsingSession;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -77,7 +79,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
         if (persistent) {
             final String oidStr = adapter.getOid().enStringNoVersion(getOidMarshaller());
-
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -87,10 +88,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return pageParameters;
     }
 
-    public <T extends Serializable> ScopedSessionAttribute<T> createScopedSessionAttribute(
-            final Component component,
-            final String sessionAttributeSelectedItem) {
-        return ScopedSessionAttribute.create(this, component,  sessionAttributeSelectedItem);
+    public <T extends Serializable> ComponentKey<T> createScopedSessionAttribute(
+                                                                    final Component component,
+                                                                    final String sessionAttributeSelectedItem) {
+        return ComponentKey.create(component, sessionAttributeSelectedItem, getHintStore());
     }
 
     public enum RenderingHint {
@@ -125,7 +126,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     }
 
 	public enum Mode {
-        VIEW, EDIT;
+        VIEW,EDIT
     }
 
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
@@ -137,16 +138,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     private final PendingModel pendingModel;
 
     /**
-     * Toggled by 'entityDetailsButton'.
-     */
-    private boolean entityDetailsVisible;
-
-    /**
      * {@link ConcurrencyException}, if any, that might have occurred previously
      */
     private ConcurrencyException concurrencyException;
 
-    private final HintPageParameterSerializer hintPageParameterSerializer = new HintPageParameterSerializerDirect();
+    private final HintPageParameterSerializer hintPageParameterSerializer;
+    private final List<ComponentKey> componentKeys = Lists.newArrayList();
 
     // //////////////////////////////////////////////////////////
     // constructors
@@ -158,8 +155,9 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     public EntityModel(final PageParameters pageParameters) {
         this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
-        hintPageParameterSerializer.pageParametersToHints(pageParameters, getHints());
+        componentKeys.addAll(hintPageParameterSerializer.pageParametersToHints(pageParameters));
     }
+
     public EntityModel(final ObjectAdapter adapter) {
         this(ObjectAdapterMemento.createOrNull(adapter));
         setObject(adapter);
@@ -169,10 +167,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         this(adapterMemento, Maps.<PropertyMemento, ScalarModel>newHashMap());
     }
 
-    public EntityModel(final ObjectAdapterMemento adapterMemento, final Map<PropertyMemento, ScalarModel> propertyScalarModels) {
+    public EntityModel(
+            final ObjectAdapterMemento adapterMemento,
+            final Map<PropertyMemento, ScalarModel> propertyScalarModels) {
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels;
+        this.hintPageParameterSerializer = new HintPageParameterSerializerDirect(this);
     }
 
     public static String oidStr(final PageParameters pageParameters) {
@@ -192,7 +193,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
-        hintPageParameterSerializer.hintsToPageParameters(getHints(), pageParameters);
+        hintPageParameterSerializer.hintsToPageParameters(pageParameters, this.componentKeys);
         return pageParameters;
     }
 
@@ -201,146 +202,95 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     }
 
     static interface HintPageParameterSerializer {
-        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters);
-        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints);
+        public void hintsToPageParameters(PageParameters pageParameters, final List<ComponentKey> componentKeys);
+        public List<ComponentKey> pageParametersToHints(final PageParameters pageParameters);
     }
     
     static class HintPageParameterSerializerDirect implements HintPageParameterSerializer, Serializable {
 
         private static final long serialVersionUID = 1L;
+        private static final String PREFIX = "hint-";
 
-        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters) {
-            Set<String> hintKeys = hints.keySet();
-            for (String key : hintKeys) {
-                String value = hints.get(key);
-                pageParameters.add("hint-" + key, value);
+        private final EntityModel entityModel;
+
+        public HintPageParameterSerializerDirect(final EntityModel entityModel) {
+            this.entityModel = entityModel;
+        }
+
+        public void hintsToPageParameters(
+                final PageParameters pageParameters, final List<ComponentKey> componentKeys) {
+            for (ComponentKey componentKey : componentKeys) {
+                componentKey.hintTo(pageParameters, PREFIX);
             }
         }
 
         @Override
-        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
+        public List<ComponentKey> pageParametersToHints(
+                final PageParameters pageParameters) {
             Set<String> namedKeys = pageParameters.getNamedKeys();
+            List<ComponentKey> newComponentKeys = Lists.newArrayList();
             for (String namedKey : namedKeys) {
-                if(namedKey.startsWith("hint-")) {
+                if(namedKey.startsWith(PREFIX)) {
                     String value = pageParameters.get(namedKey).toString(null);
                     String key = namedKey.substring(5);
-                    hints.put(key, value); // may replace
+                    final ComponentKey<Serializable> componentKey = ComponentKey.create(key, entityModel.getHintStore());
+                    newComponentKeys.add(componentKey);
+                    componentKey.set(value);
                 }
             }
-        }
-    }
-    
-    static class HintPageParameterSerializerUsingViewModelSupport implements HintPageParameterSerializer, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters) {
-            if(hints.isEmpty()) {
-                return;
-            }
-            MementoServiceDefault vms = new MementoServiceDefault();
-            Memento memento = vms.create();
-            Set<String> hintKeys = hints.keySet();
-            for (String key : hintKeys) {
-                String safeKey = key.replace(':', '_');
-                Serializable value = hints.get(key);
-                memento.set(safeKey, value);
-            }
-            String serializedHints = memento.asString();
-            PageParameterNames.ANCHOR.addStringTo(pageParameters, serializedHints);
-        }
-
-        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
-            String hintsStr = PageParameterNames.ANCHOR.getStringFrom(pageParameters);
-            if(hintsStr != null) {
-                try {
-                    Memento memento = new MementoServiceDefault().parse(hintsStr);
-                    Set<String> keys = memento.keySet();
-                    for (String safeKey : keys) {
-                        String value = memento.get(safeKey, String.class);
-                        String key = safeKey.replace('_', ':');
-                        hints.put(key, value);
-                    }
-                } catch(RuntimeException ex) {
-                    // fail gracefully, ie ignore.
-                    System.err.println(ex);
-                }
-            }
+            return newComponentKeys;
         }
     }
 
+    private Store getHintStore() {
+        return new StoreUsingSession(this);
+    }
 
     // //////////////////////////////////////////////////////////
     // Hint support
     // //////////////////////////////////////////////////////////
 
-    private final Map<String,ScopedSessionAttribute> sessionAttributeByName = Maps.newHashMap();
 
-    /**
-     * provides a mechanism to retrieve hints (identified by an attribute name) from the session.
-     */
-    public <T extends Serializable> ScopedSessionAttribute<T> getSessionAttribute(final String attributionName) {
-        return sessionAttributeByName.get(attributionName);
-    }
+    public <T extends Serializable> ComponentKey<T> componentKeyFor(
+            final Component component,
+            final String key) {
 
-    public void putSessionAttribute(final ScopedSessionAttribute<String> sessionAttribute) {
-        if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
-            return;
-        }
-        this.sessionAttributeByName.put(sessionAttribute.getAttributeName(), sessionAttribute);
-    }
-
-    public void clearSelectedItemSessionAttribute(final String attributeName) {
-        this.sessionAttributeByName.remove(attributeName);
-    }
-
-
-    private final Map<String, String> hints = Maps.newTreeMap();
-
-    @Override
-    public String getHint(final Component component, final String attributeName) {
-        if(component == null) {
-            return null;
-        }
-        String hintKey = UiHintContainer.Util.hintPathFor(component) + "-" + attributeName;
-        final ScopedSessionAttribute<String> sessionAttribute = getSessionAttribute(attributeName);
-        if(sessionAttribute != null) {
-            final String sessionHint = sessionAttribute.get();
-            if(sessionHint != null) {
-                return sessionHint;
+        for (ComponentKey componentKey : componentKeys) {
+            if(componentKey.matches(component, key)) {
+                return componentKey;
             }
         }
-        return hints.get(hintKey);
+        ComponentKey componentKey =  ComponentKey.create(component, key, getHintStore());
+        componentKeys.add(componentKey);
+        return componentKey;
+    }
+
+    public void putSessionAttribute(final ComponentKey<String> componentKey) {
+        if(componentKey == null || componentKey.getKeyName() == null) {
+            return;
+        }
+        this.componentKeys.add(componentKey);
+    }
+
+
+    @Override
+    public String getHint(final Component component, final String keyName) {
+        final ComponentKey<String> sessionAttribute = componentKeyFor(component, keyName);
+        if(sessionAttribute != null) {
+            return sessionAttribute.get();
+        }
+        return null;
     }
 
     @Override
-    public void setHint(Component component, String attributeName, String attributeValue) {
-        if(component == null) {
-            return;
-        }
-        final String scopeKey = UiHintContainer.Util.hintPathFor(component);
-        String hintKey = scopeKey + "-" + attributeName;
-        if(attributeValue != null) {
-            hints.put(hintKey, attributeValue);
-        } else {
-            hints.remove(hintKey);
-        }
-
-        //
-
-        ScopedSessionAttribute scopedSessionAttribute = getSessionAttribute(attributeName);
-        if(scopedSessionAttribute == null) {
-            scopedSessionAttribute =  ScopedSessionAttribute.create(this, scopeKey, attributeName);
-        }
-        scopedSessionAttribute.set(attributeValue);
+    public void setHint(Component component, String keyName, String hintValue) {
+        ComponentKey componentKey = componentKeyFor(component, keyName);
+        componentKey.set(hintValue);
     }
 
     @Override
     public void clearHint(Component component, String attributeName) {
         setHint(component, attributeName, null);
-    }
-
-    protected Map<String, String> getHints() {
-        return hints;
     }
 
 
