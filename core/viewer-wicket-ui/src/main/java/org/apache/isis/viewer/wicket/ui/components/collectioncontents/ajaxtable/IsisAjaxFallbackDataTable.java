@@ -53,6 +53,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     private final ISortableDataProvider<T, S> dataProvider;
 
     private IsisAjaxFallbackHeadersToolbar<S> headersToolbar;
+    private IsisAjaxNavigationToolbar navigationToolbar;
 
     public IsisAjaxFallbackDataTable(final String id, final List<? extends IColumn<T, S>> columns,
         final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
@@ -73,7 +74,10 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     private void buildGui() {
         headersToolbar = new IsisAjaxFallbackHeadersToolbar<>(this, this.dataProvider);
         addTopToolbar(headersToolbar);
-        addBottomToolbar(new IsisAjaxNavigationToolbar(this));
+
+        navigationToolbar = new IsisAjaxNavigationToolbar(this);
+        addBottomToolbar(navigationToolbar);
+
         addBottomToolbar(new NoRecordsToolbar(this));
     }
     
@@ -161,8 +165,9 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
             return;
         }
         
-        headersToolbar.honourSortOrderHints();
-        
+        headersToolbar.honourSortOrderHints(uiHintContainer);
+        navigationToolbar.honourSortOrderHints(uiHintContainer);
+
         honourPageNumberHint(uiHintContainer);
     }
 

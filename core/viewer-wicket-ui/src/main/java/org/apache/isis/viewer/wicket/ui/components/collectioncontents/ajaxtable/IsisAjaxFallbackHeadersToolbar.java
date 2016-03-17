@@ -21,8 +21,8 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 
 /**
@@ -68,11 +68,7 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
     
     // //////////////////////////////////////
 
-    void honourSortOrderHints() {
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        } 
+    void honourSortOrderHints(final UiHintContainer uiHintContainer) {
         for (SortOrder sortOrder : SortOrder.values()) {
             String property = uiHintContainer.getHint(table, sortOrder.name());
             if(property != null) {
@@ -81,10 +77,6 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
                 stateLocator.getSortState().setPropertySortOrder(propertyS, sortOrder);
             }
         }
-    }
-
-    private EntityModel getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
     }
 
 }
