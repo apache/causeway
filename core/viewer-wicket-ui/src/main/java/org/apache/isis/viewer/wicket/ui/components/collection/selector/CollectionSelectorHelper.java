@@ -69,10 +69,11 @@ public class CollectionSelectorHelper implements Serializable {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
         this.selectedItemSessionAttribute =
-                selectedItemSessionAttribute != null
-                        ? selectedItemSessionAttribute
-                        : ComponentKey.<String>noop();
-        model.getEntityModel().putSessionAttribute(selectedItemSessionAttribute);
+                selectedItemSessionAttribute != null ? selectedItemSessionAttribute : ComponentKey.<String>noop();
+        final EntityModel entityModel = model.getEntityModel();
+        if(entityModel != null) {
+            entityModel.putSessionAttribute(this.selectedItemSessionAttribute);
+        }
     }
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
@@ -146,7 +147,7 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         // else honour @CollectionLayout#renderEagerly
-        return hasRenderEagerlyFacet(model)
+        return hasRenderEagerlyFacet(model) || model.isStandalone()
                 ? CollectionContentsAsAjaxTablePanelFactory.NAME
                 : CollectionContentsHiddenPanelFactory.NAME;
 
@@ -219,17 +220,32 @@ public class CollectionSelectorHelper implements Serializable {
     }
 
     public ComponentFactory find(final String selected) {
+        ComponentFactory componentFactory = doFind(selected);
+        if (componentFactory != null) {
+            return componentFactory;
+        }
+
+        final EntityCollectionModel entityCollectionModel = model;
+            final String fallback;
+        fallback = entityCollectionModel.isParented()
+                ? CollectionContentsHiddenPanelFactory.NAME
+                : CollectionContentsAsAjaxTablePanelFactory.NAME;
+        componentFactory = doFind(fallback);
+        if(componentFactory == null) {
+            throw new IllegalStateException(String.format(
+                    "Could not locate '%s' (as the fallback collection panel)",
+                    fallback));
+        }
+        return componentFactory;
+    }
+
+    private ComponentFactory doFind(final String selected) {
         for (ComponentFactory componentFactory : componentFactories) {
             if(selected.equals(componentFactory.getName())) {
                 return componentFactory;
             }
         }
-        if(CollectionContentsHiddenPanelFactory.NAME.equals(selected)) {
-            throw new IllegalStateException(String.format(
-                    "Could not locate '%s' (as the fallback collection panel)",
-                    CollectionContentsHiddenPanelFactory.NAME));
-        }
-        return find(CollectionContentsHiddenPanelFactory.NAME); // fallback
+        return null;
     }
 
     public int lookup(final String view) {

@@ -94,11 +94,14 @@ public class CollectionContentsMultipleViewsPanel
 
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
-        final CollectionSelectorPanel selectorDropdownPanelIfAny = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
+        final CollectionSelectorPanel selectorDropdownPanelIfAny =
+                CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
         final String selected;
-        selected = selectorDropdownPanelIfAny != null
-                ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-                : componentFactories.get(0).getName();
+        if (selectorDropdownPanelIfAny != null) {
+            selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny);
+        } else {
+            selected = componentFactories.get(0).getName();
+        }
 
         // create all, hide the one not selected
         int i = 0;
@@ -146,42 +149,48 @@ public class CollectionContentsMultipleViewsPanel
         if(uiHintEvent == null) {
             return;
         }
-        final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
-
-        int underlyingViewNum = 0;
         final CollectionSelectorPanel selectorDropdownPanel = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
         if(selectorDropdownPanel == null) {
             // not expected, because this event shouldn't be called.
             // but no harm in simply returning...
             return;
         }
-        String viewStr = uiHintContainer.getHint(selectorDropdownPanel, UIHINT_VIEW);
 
-        if(viewStr != null) {
-            try {
-                underlyingViewNum = selectorHelper.lookup(viewStr);
+        // try to obtain hint directly from hint container (EntityModel)
+        String viewStr = null;
+        final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
+        if(uiHintContainer != null) {
+            viewStr = uiHintContainer.getHint(selectorDropdownPanel, UIHINT_VIEW);
+        }
 
-                final EntityCollectionModel dummyModel = getModel().asDummy();
-                for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
-                    final Component component = underlyingViews[i];
-                    if(component == null) {
-                        continue;
-                    }
-                    final boolean isSelected = i == underlyingViewNum;
-                    applyCssVisibility(component, isSelected);
-                    component.setDefaultModel(isSelected? getModel(): dummyModel);
-                }
+        // failing that, directly from the UiHintEvent itself (for standalone collections, which have no hint container)
+        if(viewStr == null) {
+            viewStr = uiHintEvent.hintFor(selectorDropdownPanel, UIHINT_VIEW);
+        }
 
-                this.selectedComponent = underlyingViews[underlyingViewNum];
+        // give up
+        if (viewStr == null) {
+            return;
+        }
 
-                final AjaxRequestTarget target = uiHintEvent.getTarget();
-                if(target != null) {
-                    target.add(this, selectorDropdownPanel);
-                }
+        int underlyingViewNum = selectorHelper.lookup(viewStr);
 
-            } catch(NumberFormatException ex) {
-                // ignore
+        final EntityCollectionModel dummyModel = getModel().asDummy();
+        for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
+            final Component component = underlyingViews[i];
+            if(component == null) {
+                continue;
             }
+            final boolean isSelected = i == underlyingViewNum;
+            applyCssVisibility(component, isSelected);
+            component.setDefaultModel(isSelected? getModel(): dummyModel);
+        }
+
+        this.selectedComponent = underlyingViews[underlyingViewNum];
+
+        final AjaxRequestTarget target = uiHintEvent.getTarget();
+        if(target != null) {
+            target.add(this, selectorDropdownPanel);
         }
     }
 

@@ -160,8 +160,8 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
                     Label viewItemIcon = new Label(ID_VIEW_ITEM_ICON, "");
                     link.add(viewItemIcon);
 
-                    boolean isEnabled = componentFactory != CollectionSelectorPanel.this.selectedComponentFactory;
-                    if (!isEnabled) {
+                    final boolean selected = componentFactory == CollectionSelectorPanel.this.selectedComponentFactory;
+                    if (selected) {
                         viewButtonTitle.setDefaultModel(title);
                         IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
                         viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
@@ -213,12 +213,16 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
 
 
     protected void setViewHintAndBroadcast(String viewName, AjaxRequestTarget target) {
-        final UiHintContainer uiHintContainer = getUiHintContainer(getModel().isParented()? EntityModel.class: EntityCollectionModel.class);
-        if(uiHintContainer == null) {
-            return;
+        final CollectionSelectorPanel component = CollectionSelectorPanel.this;
+        final IsisUiHintEvent hintEvent;
+        if(getModel().isParented()) {
+            final UiHintContainer uiHintContainer = getUiHintContainer(EntityModel.class);
+            uiHintContainer.setHint(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName);
+            hintEvent = new IsisUiHintEvent(uiHintContainer, target);
+        } else {
+            hintEvent = new IsisUiHintEvent(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
         }
-        uiHintContainer.setHint(CollectionSelectorPanel.this, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName);
-        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
+        send(getPage(), Broadcast.EXACT, hintEvent);
     }
 }
 

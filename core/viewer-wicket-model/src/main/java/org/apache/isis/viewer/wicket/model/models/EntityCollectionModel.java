@@ -376,7 +376,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      * Populated only if {@link Type#PARENTED}.
      */
     public CollectionLayoutData getLayoutData() {
-        return (CollectionLayoutData) entityModel.getLayoutMetadata();
+        return entityModel != null
+                ? (CollectionLayoutData) entityModel.getLayoutMetadata()
+                : null;
     }
 
     @Override
