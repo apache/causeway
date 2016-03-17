@@ -19,7 +19,7 @@ These customizations should generally be added to xref:rgcfg.adoc#_rgcfg_applica
 
 
 
-== Targeting individual members
+== Individual members
 
 For example, the `ToDoItem` object of the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) has a `notes` property. The HTML for this will be something like:
 
@@ -58,7 +58,7 @@ You can use a similar approach for collections and actions.
 
 
 
-== Targeting members through a custom CSS style
+== Custom CSS styles
 
 The above technique works well if you know the class member to target, but you might instead want to apply a custom style to a set of members. For this, you can use the `@CssClass`.
 
@@ -104,4 +104,151 @@ Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you 
 ----
 
 
+
+
+[[_ugvw_customisation_tweaking-css-classes_columns-in-tables]]
+== Table columns (`1.12.0-SNAPSHOT`)
+
+Sometimes you may want to apply styling to specific columns of tables.  For example, you might want to adjust width so that
+for certain properties have more (or less) room than they otherwise would; or you might want to hide the column
+completely.  This also applies to the initial icon/title column.
+
+There is also the issue of scoping:
+
+* You may wish the style to apply globally: that is, dependent on the type of entity being rendered in the table,
+irrespective of the page on which it is shown.
+
+* Alternativel, you may wish to target the CSS for a table as rendered either as a parented collection (owned by some
+other entity) or rendered as a standarlone collection (the result of invoking an action).
+
+In each of these cases the Wicket viewer adds CSS classes either to containing ``div``s or to the ``<th>`` and ``<td>``
+ elements of the table itself so that it can custom styles can be appropriately targetted.
+
+
+
+[[_ugvw_customisation_tweaking-css-classes_columns-in-tables_globally]]
+=== Applying styles globally
+
+Every rendered collection containing a domain class will be wrapped in a `<div>` that lists that domain class (in CSS safe
+form).  For example:
+
+[source,xml]
+----
+<div class="entityCollection com-mycompany-myapp-Customer">
+    ...
+    <table>
+        <tr>
+            <th class="title-column">...</th>
+            <th class="firstName">...</th>
+            <th class="lastName">...</th>
+            ...
+        </tr>
+        <tr>
+            <td class="title-column">...</td>
+            <td class="firstName">...</td>
+            <td class="lastName">...</td>
+            ...
+        </tr>
+        ...
+    </table>
+    ...
+</div>
+----
+
+Using this, the `lastName` property could be targeted using:
+
+[source,css]
+----
+.com-mycompany-myapp-Customer th.lastName {
+    width: 30%;
+}
+----
+
+
+=== Parented collections
+
+
+Parented collections will be wrapped in ``<div>``s that identify both the entity type and also the collection Id.
+For example:
+
+[source,xml]
+----
+<div class="entityPage com-mycompany-myapp-Customer">       <!--1-->
+    ...
+    <div class="orders">                                    <!--2-->
+        <table>
+            <tr>
+                <th class="title-column">...</th>
+                <th class="productRef">...</th>
+                <th class="quantity">...</th>
+                ...
+            </tr>
+            <tr>
+                <td class="title-column">...</td>
+                <td class="productRef">...</td>
+                <td class="quantity">...</td>
+                ...
+            </tr>
+            ...
+        </table>
+        ...
+    </div>
+    ...
+</div>
+----
+<1> the parent class identifier
+<2> the collection identifier. This element's class also has the entity type within the collection (as xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
+
+Using this, the `productRef` property could be targeted using:
+
+[source,css]
+----
+.com-mycompany-myapp-Customer orders td.productRef {
+    font-style: italic;
+}
+----
+
+
+
+=== Standalone collections
+
+Standalone collections will be wrapped in a ``<div>`` that identifies the action invoked.  For example:
+
+[source,xml]
+----
+<div class="standaloneCollectionPage">
+    <div class="com-mycompany-myapp-Customer_mostRecentOrders ...">     <!--1-->
+        ...
+        <div class="orders">
+            <table>
+                <tr>
+                    <th class="title-column">...</th>
+                    <th class="productRef">...</th>
+                    <th class="quantity">...</th>
+                    ...
+                </tr>
+                <tr>
+                    <td class="title-column">...</td>
+                    <td class="productRef">...</td>
+                    <td class="quantity">...</td>
+                    ...
+                </tr>
+                ...
+            </table>
+            ...
+        </div>
+        ...
+    </div>
+</div>
+----
+<1> action identifier.  This element's class also identifies the entity type within the collection (as xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
+
+Using this, the `quantity` property could be targeted using:
+
+[source,css]
+----
+.com-mycompany-myapp-Customer_mostRecentOrders td.quantity {
+    font-weight: bold;
+}
+----
 
