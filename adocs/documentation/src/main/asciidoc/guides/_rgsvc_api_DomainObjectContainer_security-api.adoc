@@ -8,11 +8,6 @@
 
 The security API allows the domain object to obtain the identity of the user interacting with said object.
 
-[NOTE]
-====
-(As of `1.12.0-SNAPSHOT`), these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`]; the corresponding methods in `DomainObjectContainer` are deprecated.
-====
-
 [source,java]
 ----
 public interface DomainObjectContainer {

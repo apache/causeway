@@ -8,11 +8,6 @@
 
 The `DomainObjectContainer` allows domain objects to raise information, warning or error messages.  These messages can either be simple strings, or can be translated.
 
-[NOTE]
-====
-(As of `1.12.0-SNAPSHOT`), these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`]; the corresponding methods in `DomainObjectContainer` are deprecated.
-====
-
 [source,java]
 ----
 public interface DomainObjectContainer {

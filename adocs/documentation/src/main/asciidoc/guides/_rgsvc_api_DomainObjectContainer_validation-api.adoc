@@ -5,8 +5,16 @@
 :_imagesdir: images/
 
 
+The intent of this API is to provide a mechanism where an object can programmatically check the state any class
+invariants.  Specifically, this means the validating the current state of all properties, as well as any object-level
+validation defined by xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`].
 
-The validation API allows a domain object to programmatically validate itself or any other domain object.  Specifically, this means the validating the current state of all properties, as well as any object-level validation defined by xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`].
+[WARNING]
+====
+As of `1.12.0-SNAPSHOT` these methods have been deprecated; this feature should be considered experimental and
+your mileage may vary.
+====
+
 
 The API provided is:
 
@@ -19,6 +27,3 @@ public interface DomainObjectContainer {
 }
 ----
 
-If an object is changed by editing its properties, then (using the xref:ugvw.adoc#[Wicket viewer] at least) Apache Isis will check that the state of the object is valid.  There is currently however no equivalent guarantee for actions.
-
-The intent of this API was (originally at least) to provide a fallback whereby actions could at least be able to perform this validation programmatically (eg in their own xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] methods.  However, this feature should be considered experimental; your mileage may vary.

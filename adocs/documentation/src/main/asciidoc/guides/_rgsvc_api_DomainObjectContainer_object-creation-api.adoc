@@ -8,11 +8,6 @@
 
 The object creation APIs are used to instantiate new domain objects or view models.
 
-[NOTE]
-====
-(As of `1.12.0-SNAPSHOT`), some of these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]; the corresponding methods in `DomainObjectContainer` are deprecated.
-====
-
 [source,java]
 ----
 public interface DomainObjectContainer {

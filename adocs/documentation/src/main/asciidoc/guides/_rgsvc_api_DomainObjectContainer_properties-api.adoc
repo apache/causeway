@@ -6,15 +6,9 @@
 
 
 
-
 = Properties API
 
 The properties API allows domain objects to read the configuration properties aggregated from the various xref:rgcfg.adoc#_rgcfg_configuration-files[configuration files].
-
-[NOTE]
-====
-(As of `1.12.0-SNAPSHOT`), these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`]; the corresponding methods in `DomainObjectContainer` are deprecated.
-====
 
 [source,java]
 ----

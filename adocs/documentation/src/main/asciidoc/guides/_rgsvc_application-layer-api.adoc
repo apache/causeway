@@ -88,6 +88,17 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 |
 
 
+|xref:rgsvc.adoc#_rgsvc_api_TitleService[`o.a.i.applib.` +
+`services.title` +
+`TitleService`]
+|(`1.12.0-SNAPSHOT`) Methods to programmatically obtain the title or icon of a domain object.
+|`TitleService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+
+
 
 |xref:rgsvc.adoc#_rgsvc_api_TransactionService[`o.a.i.applib.` +
 `services.xactn` +
@@ -128,5 +139,6 @@ include::_rgsvc_api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_api_CommandContext.adoc[leveloffset=+1]
 include::_rgsvc_api_MessageService.adoc[leveloffset=+1]
 include::_rgsvc_api_SessionManagementService.adoc[leveloffset=+1]
+include::_rgsvc_api_TitleService.adoc[leveloffset=+1]
 include::_rgsvc_api_TransactionService.adoc[leveloffset=+1]
 include::_rgsvc_api_WrapperFactory.adoc[leveloffset=+1]

@@ -9,12 +9,6 @@
 
 The persistence API is used to persist newly created objects (as per xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`#newTransientInstance(...)`], above and to delete (remove) objects that are persistent.
 
-[NOTE]
-====
-(As of `1.12.0-SNAPSHOT`), the majority of these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] or xref:rgsvc.adoc#_rgsvc_api_TransactionService[`TransactionService`]; the corresponding methods in `DomainObjectContainer` are therefore deprecated.
-====
-
-
 Note that there is no API for updating existing objects; the framework (or rather, JDO/DataNucleus) performs object dirty tracking and so any objects that are modified in the course of a request will be automatically updated).
 
 

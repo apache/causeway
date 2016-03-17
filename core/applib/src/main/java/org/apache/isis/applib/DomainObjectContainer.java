@@ -28,8 +28,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 
 /**
@@ -44,7 +44,10 @@ public interface DomainObjectContainer {
     /**
      * Return the title of the object, as rendered in the UI by the 
      * Isis viewers.
+     *
+     * @deprecated - use {@link TitleService#titleOf(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     String titleOf(Object domainObject);
 
@@ -55,7 +58,10 @@ public interface DomainObjectContainer {
     /**
      * Return the icon name of the object, as rendered in the UI by the
      * Isis viewers.
+     *
+     * @deprecated - use {@link TitleService#iconNameOf(Object)} instead.
      */
+    @Deprecated
     @Programmatic
     String iconNameOf(Object domainObject);
 

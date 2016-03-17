@@ -53,7 +53,7 @@ repositoryService.persist(cust);
 
 == Implementation
 
-The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.factory.FactoryServiceDefault`).
+The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.factory.FactoryServiceDefault`).
 
 
 

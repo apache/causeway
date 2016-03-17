@@ -7,27 +7,36 @@
 
 The `DomainObjectContainer` service provides a set of general purpose functionality for domain objects to call.  Principal amongst these are a generic APIs for querying objects and creating and persisting objects.  In addition, the service provides access to security context (the "current user"), allows information and warning messages to be raised, and various other miscellaneous functions.
 
+
 [NOTE]
 ====
-Compared to other services provided by Apache Isis, the `DomainObjectContainer` provides by far the most number of methods, addressing several quite distinct responsibilities.  This is a historical accident: in early versions of Apache Isis the `DomainObjectContainer` was the one and only domain service provided by the framework.
-
-In the future we may deprecate this service and break out its responsibilities into a number of small services.  However, given how important this service was in days past, we are unlikely to delete it as a service even once it has been deprecated.
+(As of `1.12.0-SNAPSHOT`), the methods in this service have been moved out into a number of more fine-grained services: xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`], xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`], xref:rgsvc.adoc#_rgsvc_api_TitleService[`TitleService`], xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`], xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`].
 ====
+
+
+
+
+== APIs
 
 The sections below discuss the functions provided by the service, broken out into categories.
 
 
-include::_rgsvc_api_DomainObjectContainer_object-creation-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_generic-repository-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_object-persistence-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_messages-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_security-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_presentation-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_validation-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_properties-api.adoc[leveloffset=+1]
-include::_rgsvc_api_DomainObjectContainer_services-api.adoc[leveloffset=+1]
+include::_rgsvc_api_DomainObjectContainer_object-creation-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_generic-repository-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_object-persistence-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_messages-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_security-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_presentation-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_properties-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_services-api.adoc[leveloffset=+2]
+include::_rgsvc_api_DomainObjectContainer_validation-api.adoc[leveloffset=+2]
 
 
+
+
+== Implementation
+
+The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.container.DomainObjectContainerDefault`).
 
 
 
@@ -37,4 +46,6 @@ Assuming that the `configuration-and-annotation` services installer is configure
 `AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
+
+
 

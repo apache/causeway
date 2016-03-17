@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
@@ -60,8 +61,6 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
@@ -73,22 +72,17 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
         implements DomainObjectContainer,
-        PersistenceSessionServiceAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
-        LocalizationProviderAware, ExceptionRecognizer {
+        PersistenceSessionServiceAware, SpecificationLoaderAware,
+        AuthenticationSessionProviderAware, AdapterManagerAware, ExceptionRecognizer {
 
 
     //region > titleOf
 
+    @Deprecated
     @Programmatic
     @Override
     public String titleOf(final Object domainObject) {
-        final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
-        final boolean destroyed = objectAdapter.isDestroyed();
-        if(!destroyed) {
-            return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
-        } else {
-            return "[DELETED]";
-        }
+        return titleService.titleOf(domainObject);
     }
 
     //endregion
@@ -98,8 +92,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public String iconNameOf(final Object domainObject) {
-        final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
-        return objectAdapter.getSpecification().getIconName(objectAdapter);
+        return titleService.iconNameOf(domainObject);
     }
 
     //endregion
@@ -674,8 +667,6 @@ public class DomainObjectContainerDefault
     private SpecificationLoader specificationLoader;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
-    private LocalizationProvider localizationProvider;
-
 
 
     protected SpecificationLoader getSpecificationLoader() {
@@ -718,11 +709,6 @@ public class DomainObjectContainerDefault
         this.persistenceSessionService = persistenceSessionService;
     }
 
-    @Override
-    public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
-        this.localizationProvider = localizationProvider;
-    }
-
 
 
     //endregion
@@ -746,6 +732,9 @@ public class DomainObjectContainerDefault
 
     @javax.inject.Inject
     TransactionService transactionService;
+
+    @javax.inject.Inject
+    TitleService titleService;
 
     @javax.inject.Inject
     UserService userService;

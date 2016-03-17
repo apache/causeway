@@ -8,11 +8,6 @@
 
 The repository API acts as an abstraction over the JDO/DataNucleus objectstore.  You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
 
-[NOTE]
-====
-(As of `1.12.0-SNAPSHOT`), the majority of these methods have been moved to the xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] or xref:rgsvc.adoc#_rgsvc_api_TransactionService[`TransactionService`]; the corresponding methods in `DomainObjectContainer` are therefore deprecated.
-====
-
 As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service.
 
 
