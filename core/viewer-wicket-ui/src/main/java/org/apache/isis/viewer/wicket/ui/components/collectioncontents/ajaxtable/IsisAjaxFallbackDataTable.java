@@ -160,18 +160,16 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     }
 
     public void honourHints() {
+        headersToolbar.honourSortOrderHints();
+        navigationToolbar.honourSortOrderHints();
+        honourPageNumberHint();
+    }
+
+    private void honourPageNumberHint() {
         UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;
         }
-        
-        headersToolbar.honourSortOrderHints(uiHintContainer);
-        navigationToolbar.honourSortOrderHints(uiHintContainer);
-
-        honourPageNumberHint(uiHintContainer);
-    }
-
-    private void honourPageNumberHint(final UiHintContainer uiHintContainer) {
         final String pageNumberStr = uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER);
         if(pageNumberStr != null) {
             try {
@@ -212,7 +210,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
-    private EntityModel getUiHintContainer() {
+    private UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
     }
 

@@ -19,10 +19,12 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
+import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -46,7 +48,9 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 showAllItemsOn(table);
-                getUiHintContainer().setHint(table, HINT_KEY_SHOW_ALL, "true");
+                final UiHintContainer hintContainer = getUiHintContainer();
+                hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
+                send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(hintContainer, target));
                 target.add(table);
             }
         });
@@ -57,7 +61,12 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
         return new IsisAjaxPagingNavigator(navigatorId, table);
     }
 
-    void honourSortOrderHints(final UiHintContainer uiHintContainer) {
+    void honourSortOrderHints() {
+        UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+
         final DataTable<?, ?> table = getTable();
         final String showAll = uiHintContainer.getHint(table, HINT_KEY_SHOW_ALL);
         if(showAll != null) {
@@ -69,7 +78,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
         table.setItemsPerPage(Long.MAX_VALUE);
     }
 
-    private EntityModel getUiHintContainer() {
+    private UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
     }
 
