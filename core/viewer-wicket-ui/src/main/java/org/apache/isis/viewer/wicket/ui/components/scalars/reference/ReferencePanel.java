@@ -175,7 +175,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         });
 
         if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
+            scalarName.add(new CssClassAppender("mandatory"));
         }
         return labelIfRegular;
     }
