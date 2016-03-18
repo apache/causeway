@@ -24,15 +24,13 @@ package domainapp.dom.simple;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @javax.jdo.annotations.PersistenceCapable(
@@ -95,7 +93,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
             semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
     )
     public void delete() {
-        container.removeIfNotAlready(this);
+        repositoryService.remove(this);
     }
 
 
@@ -107,6 +105,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
 
     @javax.inject.Inject
-    DomainObjectContainer container;
+    RepositoryService repositoryService;
 
 }

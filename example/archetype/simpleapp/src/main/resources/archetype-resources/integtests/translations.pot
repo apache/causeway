@@ -1,0 +1,442 @@
+
+
+##############################################################################
+#
+# .pot file
+#
+# Translate this file to each required language and place in WEB-INF, eg:
+#
+#     /WEB-INF/translations-en_US.po
+#     /WEB-INF/translations-en.po
+#     /WEB-INF/translations-fr_FR.po
+#     /WEB-INF/translations-fr.po
+#     /WEB-INF/translations.po
+#
+# If the app uses TranslatableString (eg for internationalized validation
+# messages), or if the app calls the TranslationService directly, then ensure
+# that all text to be translated has been captured by running a full
+# integration test suite that exercises all relevant behaviour
+#
+##############################################################################
+
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-03-17 18:27:02+\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel(java.lang.String)
+msgid ".csv file name"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#$$(java.lang.String)
+msgid ".jdo file name"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
+msgid ".pot file name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#ACTION
+msgid "Action"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.IsisSystem
+msgid "Are you sure?"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.IsisSystem
+msgid "Cancel"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType$2#CLASS
+msgid "Class"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
+msgid "Clear translation cache"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#COLLECTION
+msgid "Collection"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#COMPLETE
+msgid "Complete"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.system.IsisSystem
+msgid "Confirm"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#create()
+msgid "Create"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#CURRENT
+msgid "Current"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#delete()
+msgid "Delete"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#discoverable
+msgid "Discoverable"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#DOMAIN_OBJECTS
+msgid "Domain Objects"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#downloadJdoMetadata()
+msgid "Download Jdo Metadata"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#downloadLayoutXml()
+#: domainapp.dom.simple.SimpleObject#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.FixtureResult#downloadLayoutXml()
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature#downloadLayoutXml()
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId#downloadLayoutXml()
+msgid "Download Layout Xml"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu#downloadLayouts()
+msgid "Download Layouts (XML)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu#downloadMetaModel()
+msgid "Download Meta Model (CSV)"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSpec()
+msgid "Download Swagger Spec"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
+msgid "Download Translations"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#name
+msgid "Exclamation mark is not allowed"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.dto.Dto_downloadXml#$$(java.lang.String)
+#: org.apache.isis.applib.services.dto.Dto_downloadXsd#$$(java.lang.String,org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas)
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml#$$(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)
+msgid "File name"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#downloadSwaggerSpec(java.lang.String,org.apache.isis.applib.services.swagger.SwaggerService$Visibility,org.apache.isis.applib.services.swagger.SwaggerService$Format)
+msgid "Filename"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#findByName()
+msgid "Find By Name"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#fixtureScriptClassName
+msgid "Fixture script"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#friendlyName
+msgid "Friendly Name"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageService#homePage()
+msgid "Home Page"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#datanucleusIdLong()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#$$()
+msgid "Id"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#IDEMPOTENT
+msgid "Idempotent"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#IDEMPOTENT_ARE_YOU_SURE
+msgid "Idempotent Are You Sure"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#IGNORE
+msgid "Ignore"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.jaxb.JaxbService$IsisSchemas#INCLUDE
+msgid "Include"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Format#JSON
+msgid "Json"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#listAll()
+msgid "List All"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#localName
+msgid "Local Name"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#lookup()
+#: org.apache.isis.applib.services.bookmark.BookmarkHolderActionContributions#lookup()
+msgid "Lookup"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType$3#MEMBER
+msgid "Member"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.Object_downloadLayoutXml
+#: org.apache.isis.applib.services.layout.Object_rebuildMetamodel
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
+msgid "Metadata"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#MINIMAL
+msgid "Minimal"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#name
+#: domainapp.dom.simple.SimpleObjects#create(java.lang.String)
+#: domainapp.dom.simple.SimpleObjects#findByName(java.lang.String)
+msgid "Name"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory#newApplicationFeature()
+msgid "New Application Feature"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#NON_IDEMPOTENT
+msgid "Non Idempotent"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE
+msgid "Non Idempotent Are You Sure"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.layout.LayoutService$Style#NORMALIZED
+msgid "Normalized"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()
+msgid "Object"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#title()
+msgid "Object: {name}"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#objects
+msgid "Objects"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#OTHER
+msgid "Other"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType$1#PACKAGE
+msgid "Package"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+msgid "Parameters"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId#parentClassId
+msgid "Parent Class Id"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE
+msgid "Private"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PRIVATE_WITH_PROTOTYPING
+msgid "Private With Prototyping"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#PROPERTY
+msgid "Property"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault
+#: org.apache.isis.applib.services.layout.LayoutServiceMenu
+#: org.apache.isis.applib.services.metamodel.MetaModelServicesMenu
+#: org.apache.isis.applib.services.swagger.SwaggerServiceMenu
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
+msgid "Prototyping"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Visibility#PUBLIC
+msgid "Public"
+msgstr ""
+
+
+#: domainapp.app.services.homepage.HomePageViewModel#rebuildMetamodel()
+#: domainapp.dom.simple.SimpleObject#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.FixtureResult#rebuildMetamodel()
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature#rebuildMetamodel()
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId#rebuildMetamodel()
+msgid "Rebuild Metamodel"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#recreateObjectsAndReturnFirst()
+msgid "Recreate Objects And Return First"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#object
+msgid "Result"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#className
+msgid "Result class"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureResult#key
+msgid "Result key"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript()
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript()
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete()
+msgid "Run Fixture Script"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#SAFE
+msgid "Safe"
+msgstr ""
+
+
+#: org.apache.isis.applib.annotation.SemanticsOf#SAFE_AND_REQUEST_CACHEABLE
+msgid "Safe And Request Cacheable"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript
+msgid "Script"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+#: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
+msgid "Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObjects#title()
+msgid "Simple Objects"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
+msgid "Switch To Reading Translations"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToWritingTranslations()
+msgid "Switch To Writing Translations"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#type
+#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId#type
+msgid "Type"
+msgstr ""
+
+
+#: domainapp.dom.simple.SimpleObject#datanucleusVersionLong()
+#: domainapp.dom.simple.SimpleObject#datanucleusVersionTimestamp()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#$$()
+#: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#$$()
+msgid "Version"
+msgstr ""
+
+
+#: org.apache.isis.applib.services.swagger.SwaggerService$Format#YAML
+msgid "Yaml"
+msgstr ""
+
+
+
+
+
+##############################################################################
+# end of .pot file
+##############################################################################
+

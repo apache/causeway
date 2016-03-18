@@ -19,36 +19,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.app.services.homepage;
+package domainapp.app.services.prototyping;
 
-import org.apache.isis.applib.annotation.Action;
+import java.util.List;
+
+import com.google.common.eventbus.Subscribe;
+
+import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.layout.Object_downloadLayoutXml;
+import org.apache.isis.applib.services.layout.Object_rebuildMetamodel;
+
+import domainapp.app.services.homepage.HomePageViewModel;
 
 @DomainService(
-        nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY // trick to suppress the actions from the top-level menu
+        nature = NatureOfService.DOMAIN
 )
-public class HomePageService {
+public class HideMixinsForHomePage extends AbstractSubscriber{
 
-    //region > homePage (action)
-
-    @Action(
-            semantics = SemanticsOf.SAFE
-    )
-    @HomePage
-    public HomePageViewModel homePage() {
-        return serviceRegistry.injectServicesInto(new HomePageViewModel());
+    @Subscribe
+    public void on(Object_rebuildMetamodel.ActionDomainEvent ev) {
+        final List<Object> arguments = ev.getArguments();
+        if(arguments.get(0) instanceof HomePageViewModel) {
+            ev.hide();
+        }
     }
 
-    //endregion
-
-    //region > injected services
-
-    @javax.inject.Inject
-    ServiceRegistry serviceRegistry;
-
-    //endregion
+    @Subscribe
+    public void on(Object_downloadLayoutXml.ActionDomainEvent ev) {
+        final List<Object> arguments = ev.getArguments();
+        if(arguments.get(0) instanceof HomePageViewModel) {
+            ev.hide();
+        }
+    }
 }
