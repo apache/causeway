@@ -131,6 +131,6 @@ public class ToDoItem {
 == isis-maven-plugin
 
 The way that the Isis Maven plugin is configured has changed slightly; check out its
-xref:cgcon.adoc#_cgcon_isis-maven-plugin[documentation] for full details.
+xref:rgmvn.adoc[documentation] for full details.
 
 

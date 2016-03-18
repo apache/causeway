@@ -1,4 +1,4 @@
-[[_cgcon_isis-maven-plugin_validate]]
+[[_rgmvn_validate]]
 = `validate` goal
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../../
@@ -32,7 +32,7 @@ different configuration; see the final section for differences.
 
 == `dom` submodule
 
-Update the `pom.xml` (in your project's `dom` module):
+Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:rgmvn.adoc#_rgmvn_intro_app-manifest[minimal AppManifest]:
 
 [source,xml]
 ----
@@ -80,7 +80,7 @@ Update the `pom.xml` (in your project's `dom` module):
 ----
 <1> the profile is active by default, though can be disabled using `-Dskip.isis-validate`
 <2> set to `1.10.0` (or any later version)
-<3> the manifest discussed previously; adjust as required
+<3> the manifest discussed xref:rgmvn.adoc#_rgmvn_intro_app-manifest[previously]; adjust as required
 <4> the `dom` module for the project; adjust as required
 <5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie the goal will be called when `mvn test` is run).
 
@@ -180,7 +180,7 @@ public class DomainAppDomManifest implements AppManifest {
 
 == 1.9.0 version
 
-The `1.9.0` version of the plugin requires slightly different configuratoin.  Rather than using an `AppManifest`, instead the configuration directory containing `isis.properties` is specified:
+The `1.9.0` version of the plugin requires slightly different configuration.  Rather than using an `AppManifest`, instead the configuration directory containing `isis.properties` is specified:
 
 [source,xml]
 ----

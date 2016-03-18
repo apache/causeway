@@ -171,7 +171,7 @@ The app itself is configured to run using shiro security, as configured in the `
 
 Once you are familiar with the generated app, you'll want to start modifying it.  Check out our the link:.guides/ug.html[Users' Guide], which has how-tos and a complete reference guide (as well as some background concepts and discussion of more advanced techniques).
 
-If you use IntelliJ or Eclipse, you'll also want to set up your IDE; this is also described in the link:cgcon.adoc#_cgcon_ide[Contributors' Guide].
+If you use IntelliJ or Eclipse, you'll also want to set up your IDE; this is also described in the link:cgcon.adoc#_cgcon_ide[Developers' Guide].
 
 
 == App Structure

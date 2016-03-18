@@ -310,7 +310,7 @@ the XSD and consumer's DTO is mostly just boilerplate `pom.xml` file.  In the to
 </project>
 ----
 
-The `isis-xsd` profile generates the XSD using the xref:cgcon.adoc#_cgcon_isis-maven-plugin_xsd[`xsd` goal] of Isis' maven plugin:
+The `isis-xsd` profile generates the XSD using the xref:rgmvn.adoc#_rgmvn_xsd[`xsd` goal] of Isis' maven plugin:
 
 [source,xml]
 ----

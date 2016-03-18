@@ -73,13 +73,14 @@ pass:[<br/>]
 * *link:./guides/rgsvc.html[Domain Services^]*
 * link:./guides/rgcfg.html[Configuration Properties^]
 * link:./guides/rgcms.html[Classes, Methods and Schema^]
+* link:./guides/rgmvn.html[Apache Isis Maven plugin^]
 
 
 
 
 |*"Supporting" Guides:*
 
-* *link:./guides/cgcon.html[Contributors' Guide^]*
+* *link:./guides/cgcon.html[Developers' Guide^]*
 ** Setting up link:./guides/cgcon.html#_cgcon_ide_intellij[IntelliJ^] or link:./guides/cgcon.html#_cgcon_ide_eclipse[Eclipse^]
 ** link:./guides/cgcon.html#_cgcon_contributing[Contributing patches^] (pull requests)
 

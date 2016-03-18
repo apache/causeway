@@ -143,7 +143,7 @@ You can also take the built WAR file and deploy it into a standalone servlet con
 
 === From within the IDE
 
-Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:cgcon.adoc#_cgcon_ide[Contributors' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:cgcon.adoc#_cgcon_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
