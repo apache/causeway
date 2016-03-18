@@ -39,8 +39,8 @@ The reference guides are:
 * xref:rgcms.adoc#[Classes, Methods and Schema]
 * xref:rgmvn.adoc#[Apache Isis Maven plugin]
 
-In addition, there is a xref:cgcon.adoc#[Developers' Guide] (that describes how to set up a development environment
-for Apache Isis and contribute back to the project), and a xref:cgcon.adoc#[Committers' Guide] (that describes release
+In addition, there is a xref:dg.adoc#[Developers' Guide] (that describes how to set up a development environment
+for Apache Isis and contribute back to the project), and a xref:cgcom.adoc#[Committers' Guide] (that describes release
 procedures and related practices).
 
 

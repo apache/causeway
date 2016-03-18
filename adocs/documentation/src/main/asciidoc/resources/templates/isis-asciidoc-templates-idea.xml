@@ -290,7 +290,7 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adcgcon" value="xref:cgcon.adoc#$bookmark$[$DisplayText$]" description="x-ref to contributors guide" toReformat="false" toShortenFQNames="true">
+  <template name="addg" value="xref:cgcon.adoc#$bookmark$[$DisplayText$]" description="x-ref to developers' guide" toReformat="false" toShortenFQNames="true">
     <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="DisplayText" expression="" defaultValue="Contributors guide" alwaysStopAt="true" />
     <context>

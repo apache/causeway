@@ -46,7 +46,7 @@ The reference guides are:
 
 The remaining guides are:
 
-* xref:cgcon.adoc#[Developers' Guide] (how to set up a development environment
+* xref:dg.adoc#[Developers' Guide] (how to set up a development environment
 for Apache Isis and contribute back to the project)
 * xref:cgcom.adoc#[Committers' Guide] (release procedures and related practices)
 

@@ -143,7 +143,7 @@ You can also take the built WAR file and deploy it into a standalone servlet con
 
 === From within the IDE
 
-Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:cgcon.adoc#_cgcon_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
@@ -262,7 +262,7 @@ To log in, use `sven/pass`.
 
 Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main link:../documentation.html[documentation] page first).
 
-If you use Eclipse or IntelliJ IDEA, do also install the xref:cgcon.adoc#_cgcon_ide-templates[IDE templates]; these will help you follow the Apache Isis naming conventions.
+If you use Eclipse or IntelliJ IDEA, do also install the xref:dg.adoc#_dg_ide-templates[IDE templates]; these will help you follow the Apache Isis naming conventions.
 
 
 

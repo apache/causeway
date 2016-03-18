@@ -64,7 +64,7 @@ _How to import an Apache Isis maven-based application into Eclipse and configure
 
 NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
 
-Learn more link:./guides/cgcon.html#_cgcon_ide_eclipse[here]
+Learn more link:./guides/dg.html#_dg_ide_eclipse[here]
 
 |video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
 
@@ -74,7 +74,7 @@ Learn more link:./guides/cgcon.html#_cgcon_ide_eclipse[here]
 
 _How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
 
-Learn more link:./guides/cgcon.html#_cgcon_ide_intellij[here]
+Learn more link:./guides/dg.html#_dg_ide_intellij[here]
 
 |video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
 
