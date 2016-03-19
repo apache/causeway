@@ -45,6 +45,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     // the view metadata
     private final ComponentHintKey<Integer> selectedTabInSession;
+    private final EntityModel entityModel;
 
     private static List<ITab> tabsFor(final EntityModel entityModel) {
         final List<ITab> tabs = Lists.newArrayList();
@@ -76,6 +77,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     public TabGroupPanel(String id, final EntityModel entityModel) {
         super(id, tabsFor(entityModel));
+        this.entityModel = entityModel;
 
         this.selectedTabInSession =  entityModel.createComponentKey(this, SESSION_ATTR_SELECTED_TAB);
     }
@@ -88,13 +90,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     @Override
     public TabbedPanel setSelectedTab(final int index) {
-        selectedTabInSession.set(index);
+        selectedTabInSession.set(entityModel.getObjectAdapterMemento().asBookmark(), index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel) {
-        final Integer tabIndex = selectedTabInSession.get();
+        final Integer tabIndex = selectedTabInSession.get(entityModel.getObjectAdapterMemento().asBookmark());
         if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
             if (tabIndex < numTabs) {

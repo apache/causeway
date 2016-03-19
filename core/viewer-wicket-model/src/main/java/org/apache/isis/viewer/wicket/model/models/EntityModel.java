@@ -32,6 +32,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -49,8 +51,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.isis.viewer.wicket.model.util.Store;
-import org.apache.isis.viewer.wicket.model.util.StoreUsingSession;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -173,7 +173,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels;
-        this.hintPageParameterSerializer = new HintPageParameterSerializerDirect(this);
+        this.hintPageParameterSerializer = new HintPageParameterSerializer(this);
     }
 
     public static String oidStr(final PageParameters pageParameters) {
@@ -201,49 +201,47 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return createPageParameters(getObject());
     }
 
-    static interface HintPageParameterSerializer {
-        public void hintsToPageParameters(PageParameters pageParameters, final List<ComponentHintKey> componentHintKeys);
-        public List<ComponentHintKey> pageParametersToHints(final PageParameters pageParameters);
-    }
-    
-    static class HintPageParameterSerializerDirect implements HintPageParameterSerializer, Serializable {
+    static class HintPageParameterSerializer implements Serializable {
 
         private static final long serialVersionUID = 1L;
         private static final String PREFIX = "hint-";
 
         private final EntityModel entityModel;
 
-        public HintPageParameterSerializerDirect(final EntityModel entityModel) {
+        public HintPageParameterSerializer(final EntityModel entityModel) {
             this.entityModel = entityModel;
         }
 
         public void hintsToPageParameters(
                 final PageParameters pageParameters, final List<ComponentHintKey> componentHintKeys) {
             for (ComponentHintKey componentHintKey : componentHintKeys) {
-                componentHintKey.hintTo(pageParameters, PREFIX);
+                final Bookmark bookmark= entityModel.getObjectAdapterMemento().asBookmark();
+                componentHintKey.hintTo(bookmark, pageParameters, PREFIX);
             }
         }
 
-        @Override
-        public List<ComponentHintKey> pageParametersToHints(
-                final PageParameters pageParameters) {
+        public List<ComponentHintKey> pageParametersToHints(final PageParameters pageParameters) {
+            final HintStore hintStore = getHintStore();
             Set<String> namedKeys = pageParameters.getNamedKeys();
             List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
             for (String namedKey : namedKeys) {
                 if(namedKey.startsWith(PREFIX)) {
                     String value = pageParameters.get(namedKey).toString(null);
                     String key = namedKey.substring(5);
-                    final ComponentHintKey<Serializable> componentHintKey = ComponentHintKey.create(key, entityModel.getHintStore());
+                    final ComponentHintKey<Serializable> componentHintKey = ComponentHintKey.create(key,
+                            hintStore);
                     newComponentHintKeys.add(componentHintKey);
-                    componentHintKey.set(value);
+                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asBookmark();
+                    componentHintKey.set(bookmark, value);
                 }
             }
             return newComponentHintKeys;
         }
-    }
 
-    private Store getHintStore() {
-        return new StoreUsingSession(this);
+        protected HintStore getHintStore() {
+            return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+        }
+
     }
 
     // //////////////////////////////////////////////////////////
@@ -275,9 +273,9 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     @Override
     public String getHint(final Component component, final String keyName) {
-        final ComponentHintKey<String> sessionAttribute = componentKeyFor(component, keyName);
-        if(sessionAttribute != null) {
-            return sessionAttribute.get();
+        final ComponentHintKey<String> componentHintKey = componentKeyFor(component, keyName);
+        if(componentHintKey != null) {
+            return componentHintKey.get(getObjectAdapterMemento().asBookmark());
         }
         return null;
     }
@@ -285,7 +283,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
         ComponentHintKey componentHintKey = componentKeyFor(component, keyName);
-        componentHintKey.set(hintValue);
+        componentHintKey.set(this.getObjectAdapterMemento().asBookmark(), hintValue);
     }
 
     @Override
@@ -654,7 +652,9 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return IsisContext.getSpecificationLoader();
     }
 
-
+    protected HintStore getHintStore() {
+        return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+    }
 
 
 

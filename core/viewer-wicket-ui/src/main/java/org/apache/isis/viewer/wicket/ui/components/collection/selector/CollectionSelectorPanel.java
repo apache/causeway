@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -67,7 +68,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
     private final CollectionSelectorHelper selectorHelper;
-    private final ComponentHintKey<String> selectedItemSessionAttribute;
+    private final ComponentHintKey<String> componentHintKey;
 
     private ComponentFactory selectedComponentFactory;
 
@@ -80,12 +81,12 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model,
-            final ComponentHintKey<String> selectedItemSessionAttribute) {
+            final ComponentHintKey<String> componentHintKey) {
         super(id, model);
-        this.selectedItemSessionAttribute = selectedItemSessionAttribute;
+        this.componentHintKey = componentHintKey;
 
         selectorHelper = new CollectionSelectorHelper(
-                model, getComponentFactoryRegistry(), selectedItemSessionAttribute);
+                model, getComponentFactoryRegistry(), componentHintKey);
     }
 
     /**
@@ -142,8 +143,16 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
                             linksSelectorPanel.setViewHintAndBroadcast(componentFactory.getName(), target);
 
                             linksSelectorPanel.selectedComponentFactory = componentFactory;
-                            selectedItemSessionAttribute.set(componentFactory.getName());
+                            componentHintKey.set(domainObjectBookmarkIfAny(), componentFactory.getName());
                             target.add(linksSelectorPanel, views);
+                        }
+
+                        Bookmark domainObjectBookmarkIfAny() {
+                            final EntityCollectionModel entityCollectionModel = CollectionSelectorPanel.this.getModel();
+                            final EntityModel entityModel = entityCollectionModel.getEntityModel();
+                            return entityModel != null
+                                    ? entityModel.getObjectAdapterMemento().asBookmark()
+                                    : null;
                         }
 
                         @Override

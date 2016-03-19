@@ -23,6 +23,8 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 /**
@@ -35,30 +37,30 @@ public class ComponentHintKey<T extends Serializable> implements Serializable {
     public static <T extends Serializable> ComponentHintKey<T> create(
             final Component path,
             final String key,
-            final Store store) {
-        return new ComponentHintKey<T>(path, key, null, store);
+            final HintStore hintStore) {
+        return new ComponentHintKey<T>(path, key, null, hintStore);
     }
 
     public static <T extends Serializable> ComponentHintKey<T> create(
             final String fullKey,
-            final Store store) {
-        return new ComponentHintKey<T>(null, null, fullKey, store);
+            final HintStore hintStore) {
+        return new ComponentHintKey<T>(null, null, fullKey, hintStore);
     }
 
     private final Component component;
     private final String keyName;
     private final String fullKey;
-    private final Store store;
+    private final HintStore hintStore;
 
     private ComponentHintKey(
             final Component component,
             final String keyName,
             final String fullKey,
-            final Store store) {
+            final HintStore hintStore) {
         this.component = component;
         this.keyName = keyName;
         this.fullKey = fullKey;
-        this.store = store;
+        this.hintStore = hintStore;
     }
 
     public String getKey() {
@@ -81,29 +83,41 @@ public class ComponentHintKey<T extends Serializable> implements Serializable {
         return keyOfProvided.equals(key);
     }
 
-    public void set(T t) {
+    public void set(final Bookmark bookmark, T t) {
+        if(bookmark == null) {
+            return;
+        }
         if(t != null) {
-            getStore().set(getKey(), t);
+            getHintStore().set(bookmark, getKey(), t);
         } else {
-            remove();
+            remove(bookmark);
         }
     }
 
-    public T get() {
-        return (T) getStore().get(getKey());
+    public T get(final Bookmark bookmark) {
+        if(bookmark == null) {
+            return null;
+        }
+        return (T) getHintStore().get(bookmark, getKey());
     }
 
-    protected Store getStore() {
-        return store;
+    protected HintStore getHintStore() {
+        return hintStore;
     }
 
-    public void remove() {
+    public void remove(final Bookmark bookmark) {
+        if(bookmark == null) {
+            return;
+        }
         final String key = getKey();
-        getStore().remove(key);
+        getHintStore().remove(bookmark, key);
     }
 
-    public void hintTo(final PageParameters pageParameters, final String prefix) {
-        String value = (String) get();
+    public void hintTo(
+            final Bookmark bookmark,
+            final PageParameters pageParameters,
+            final String prefix) {
+        String value = (String) get(bookmark);
         final String prefixedKey = prefix + getKey();
         if(value == null) {
             return;
@@ -120,18 +134,21 @@ public class ComponentHintKey<T extends Serializable> implements Serializable {
             }
 
             @Override
-            public void set(final T serializable) {
+            public void set(final Bookmark bookmark, final T serializable) {
             }
 
             @Override
-            public T get() {
+            public T get(final Bookmark bookmark) {
                 return null;
             }
 
             @Override
-            public void remove() {
+            public void remove(final Bookmark bookmark) {
             }
         };
     }
+
+
+
 
 }

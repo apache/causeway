@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.applib.services.hint;
 
 import java.io.Serializable;
 
-public interface Store extends Serializable {
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
-    Serializable get(String name);
+public interface HintStore extends Serializable {
 
-    void remove(String name);
+    Serializable get(final Bookmark bookmark, String name);
 
-    void set(String name, Serializable value);
+    void remove(final Bookmark bookmark, String name);
+
+    void set(final Bookmark bookmark, String name, Serializable value);
 }

@@ -31,6 +31,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -54,7 +55,7 @@ public class CollectionSelectorHelper implements Serializable {
     private final EntityCollectionModel model;
 
     private final List<ComponentFactory> componentFactories;
-    private final ComponentHintKey<String> selectedItemSessionAttribute;
+    private final ComponentHintKey<String> componentHintKey;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
@@ -65,14 +66,14 @@ public class CollectionSelectorHelper implements Serializable {
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry,
-            final ComponentHintKey<String> selectedItemSessionAttribute) {
+            final ComponentHintKey<String> componentHintKey) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
-        this.selectedItemSessionAttribute =
-                selectedItemSessionAttribute != null ? selectedItemSessionAttribute : ComponentHintKey.<String>noop();
+        this.componentHintKey =
+                componentHintKey != null ? componentHintKey : ComponentHintKey.<String>noop();
         final EntityModel entityModel = model.getEntityModel();
         if(entityModel != null) {
-            entityModel.putSessionAttribute(this.selectedItemSessionAttribute);
+            entityModel.putSessionAttribute(this.componentHintKey);
         }
     }
 
@@ -120,7 +121,8 @@ public class CollectionSelectorHelper implements Serializable {
     private String determineInitialFactory() {
 
         // try to load from session, if can
-        final String sessionAttribute = selectedItemSessionAttribute.get();
+        final Bookmark bookmark = domainObjectBookmarkIfAny();
+        final String sessionAttribute = componentHintKey.get(bookmark);
         if(sessionAttribute != null) {
             return sessionAttribute;
         }
@@ -151,6 +153,13 @@ public class CollectionSelectorHelper implements Serializable {
                 ? CollectionContentsAsAjaxTablePanelFactory.NAME
                 : CollectionContentsHiddenPanelFactory.NAME;
 
+    }
+
+    private Bookmark domainObjectBookmarkIfAny() {
+        final EntityModel entityModel = this.model.getEntityModel();
+        return entityModel != null
+                ? entityModel.getObjectAdapterMemento().asBookmark()
+                : null;
     }
 
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
