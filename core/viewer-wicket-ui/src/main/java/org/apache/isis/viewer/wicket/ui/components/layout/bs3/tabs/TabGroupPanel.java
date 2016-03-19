@@ -44,7 +44,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
 
     // the view metadata
-    private final ComponentHintKey<Integer> selectedTabInSession;
+    private final ComponentHintKey selectedTabHintKey;
     private final EntityModel entityModel;
 
     private static List<ITab> tabsFor(final EntityModel entityModel) {
@@ -79,7 +79,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
         super(id, tabsFor(entityModel));
         this.entityModel = entityModel;
 
-        this.selectedTabInSession =  entityModel.createComponentKey(this, SESSION_ATTR_SELECTED_TAB);
+        this.selectedTabHintKey = ComponentHintKey.create(this, SESSION_ATTR_SELECTED_TAB);
     }
 
     @Override
@@ -90,19 +90,28 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     @Override
     public TabbedPanel setSelectedTab(final int index) {
-        selectedTabInSession.set(entityModel.getObjectAdapterMemento().asBookmark(), index);
+        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asBookmark(), ""+index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel) {
-        final Integer tabIndex = selectedTabInSession.get(entityModel.getObjectAdapterMemento().asBookmark());
+        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asBookmark());
+        final Integer tabIndex = parse(selectedTabStr);
         if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
             if (tabIndex < numTabs) {
                 // to support dynamic reloading; the data in the session might not be compatible with current layout.
                 ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
             }
+        }
+    }
+
+    private Integer parse(final String selectedTabStr) {
+        try {
+            return Integer.parseInt(selectedTabStr);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 

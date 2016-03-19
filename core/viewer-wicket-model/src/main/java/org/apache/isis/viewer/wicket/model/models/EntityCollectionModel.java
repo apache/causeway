@@ -468,7 +468,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     // //////////////////////////////////////
 
-    public static final String SESSION_ATTRIBUTE_SELECTED_ITEM = "selectedItem";
+    public static final String HINT_KEY_SELECTED_ITEM = "selectedItem";
 
     /**
      * Just delegates to the {@link #getEntityModel() entity model} (if parented, else no-op).

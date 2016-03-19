@@ -68,7 +68,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
     private final CollectionSelectorHelper selectorHelper;
-    private final ComponentHintKey<String> componentHintKey;
+    private final ComponentHintKey componentHintKey;
 
     private ComponentFactory selectedComponentFactory;
 
@@ -81,7 +81,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
     public CollectionSelectorPanel(
             final String id,
             final EntityCollectionModel model,
-            final ComponentHintKey<String> componentHintKey) {
+            final ComponentHintKey componentHintKey) {
         super(id, model);
         this.componentHintKey = componentHintKey;
 

@@ -62,15 +62,14 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
-    private final ComponentHintKey<String> selectedItemSessionAttribute;
+    private final ComponentHintKey selectedItemHintKey;
 
     final WebMarkupContainer div;
 
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemSessionAttribute = entityModel.createComponentKey(this,
-                                            EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
+        selectedItemHintKey = ComponentHintKey.create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
         div = buildGui();
     }
 
@@ -130,7 +129,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
             final CollectionSelectorHelper selectorHelper =
                     new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(),
-                            selectedItemSessionAttribute);
+                            selectedItemHintKey);
 
             final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
@@ -139,7 +138,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
             } else {
                 CollectionSelectorPanel selectorDropdownPanel =
                         new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
-                                entityCollectionModel, selectedItemSessionAttribute);
+                                entityCollectionModel, selectedItemHintKey);
 
                 final Model<ComponentFactory> componentFactoryModel = new Model<>();
 

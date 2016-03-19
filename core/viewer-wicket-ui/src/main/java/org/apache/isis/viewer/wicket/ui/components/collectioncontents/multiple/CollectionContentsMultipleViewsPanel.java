@@ -71,9 +71,9 @@ public class CollectionContentsMultipleViewsPanel
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
         final EntityModel entityModel = model.getEntityModel();
 
-        final ComponentHintKey<String> selectedItemSessionAttribute =
+        final ComponentHintKey selectedItemSessionAttribute =
                 entityModel != null
-                        ? entityModel.<String>componentKeyFor(this, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM)
+                        ? ComponentHintKey.<String>create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM)
                         : null;
 
         selectorHelper = new CollectionSelectorHelper(

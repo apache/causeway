@@ -19,14 +19,20 @@
 package org.apache.isis.applib.services.hint;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 public interface HintStore extends Serializable {
 
-    Serializable get(final Bookmark bookmark, String name);
+    String get(final Bookmark bookmark, String hintKey);
 
-    void remove(final Bookmark bookmark, String name);
+    void set(final Bookmark bookmark, String hintKey, String value);
 
-    void set(final Bookmark bookmark, String name, Serializable value);
+    void remove(final Bookmark bookmark, String hintKey);
+
+    void removeAll(Bookmark bookmark);
+
+    Set<String> findHintKeys(Bookmark bookmark);
+
 }

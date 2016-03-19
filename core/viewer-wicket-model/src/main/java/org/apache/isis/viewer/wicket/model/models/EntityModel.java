@@ -88,12 +88,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return pageParameters;
     }
 
-    public <T extends Serializable> ComponentHintKey<T> createComponentKey(
-                                                                    final Component component,
-                                                                    final String sessionAttributeSelectedItem) {
-        return ComponentHintKey.create(component, sessionAttributeSelectedItem, getHintStore());
-    }
-
     public enum RenderingHint {
         REGULAR,
         PROPERTY_COLUMN,
@@ -143,7 +137,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     private ConcurrencyException concurrencyException;
 
     private final HintPageParameterSerializer hintPageParameterSerializer;
-    private final List<ComponentHintKey> componentHintKeys = Lists.newArrayList();
 
     // //////////////////////////////////////////////////////////
     // constructors
@@ -155,7 +148,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     public EntityModel(final PageParameters pageParameters) {
         this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
-        componentHintKeys.addAll(hintPageParameterSerializer.pageParametersToHints(pageParameters));
+        hintPageParameterSerializer.updateHintStore(pageParameters);
+
     }
 
     public EntityModel(final ObjectAdapter adapter) {
@@ -193,7 +187,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
-        hintPageParameterSerializer.hintsToPageParameters(pageParameters, this.componentHintKeys);
+        hintPageParameterSerializer.hintStoreToPageParameters(pageParameters);
         return pageParameters;
     }
 
@@ -212,35 +206,40 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             this.entityModel = entityModel;
         }
 
-        public void hintsToPageParameters(
-                final PageParameters pageParameters, final List<ComponentHintKey> componentHintKeys) {
-            for (ComponentHintKey componentHintKey : componentHintKeys) {
-                final Bookmark bookmark= entityModel.getObjectAdapterMemento().asBookmark();
-                componentHintKey.hintTo(bookmark, pageParameters, PREFIX);
+        public void hintStoreToPageParameters(
+                final PageParameters pageParameters) {
+            final HintStore hintStore = getHintStore();
+            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asBookmark();
+            Set<String> hintKeys = hintStore.findHintKeys(bookmark);
+            for (String hintKey : hintKeys) {
+                ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
             }
         }
 
-        public List<ComponentHintKey> pageParametersToHints(final PageParameters pageParameters) {
-            final HintStore hintStore = getHintStore();
+        public void updateHintStore(
+                final PageParameters pageParameters) {
             Set<String> namedKeys = pageParameters.getNamedKeys();
+            if(namedKeys.contains("no-hints")) {
+                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asBookmark());
+                return;
+            }
             List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
             for (String namedKey : namedKeys) {
                 if(namedKey.startsWith(PREFIX)) {
                     String value = pageParameters.get(namedKey).toString(null);
                     String key = namedKey.substring(5);
-                    final ComponentHintKey<Serializable> componentHintKey = ComponentHintKey.create(key,
-                            hintStore);
+                    final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
                     newComponentHintKeys.add(componentHintKey);
                     final Bookmark bookmark = entityModel.getObjectAdapterMemento().asBookmark();
                     componentHintKey.set(bookmark, value);
                 }
             }
-            return newComponentHintKeys;
         }
 
         protected HintStore getHintStore() {
             return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
         }
+
 
     }
 
@@ -248,32 +247,9 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     // Hint support
     // //////////////////////////////////////////////////////////
 
-
-    public <T extends Serializable> ComponentHintKey<T> componentKeyFor(
-            final Component component,
-            final String key) {
-
-        for (ComponentHintKey componentHintKey : componentHintKeys) {
-            if(componentHintKey.matches(component, key)) {
-                return componentHintKey;
-            }
-        }
-        ComponentHintKey componentHintKey =  ComponentHintKey.create(component, key, getHintStore());
-        componentHintKeys.add(componentHintKey);
-        return componentHintKey;
-    }
-
-    public void putSessionAttribute(final ComponentHintKey<String> componentHintKey) {
-        if(componentHintKey == null || componentHintKey.getKeyName() == null) {
-            return;
-        }
-        this.componentHintKeys.add(componentHintKey);
-    }
-
-
     @Override
     public String getHint(final Component component, final String keyName) {
-        final ComponentHintKey<String> componentHintKey = componentKeyFor(component, keyName);
+        final ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
         if(componentHintKey != null) {
             return componentHintKey.get(getObjectAdapterMemento().asBookmark());
         }
@@ -282,7 +258,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
-        ComponentHintKey componentHintKey = componentKeyFor(component, keyName);
+        ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
         componentHintKey.set(this.getObjectAdapterMemento().asBookmark(), hintValue);
     }
 
@@ -651,11 +627,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-
-    protected HintStore getHintStore() {
-        return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
-    }
-
 
 
 }

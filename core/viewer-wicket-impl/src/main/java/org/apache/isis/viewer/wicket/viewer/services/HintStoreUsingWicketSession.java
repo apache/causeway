@@ -18,7 +18,11 @@
  */
     package org.apache.isis.viewer.wicket.viewer.services;
 
-import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Maps;
 
 import org.apache.wicket.Session;
 import org.slf4j.Logger;
@@ -37,43 +41,65 @@ public class HintStoreUsingWicketSession implements HintStore {
     private static final Logger LOG = LoggerFactory.getLogger(HintStoreUsingWicketSession.class);
 
     @Override
-    public Serializable get(final Bookmark bookmark, final String key) {
-        final String hintKey = getOidAndKey(bookmark, key);
-        final Serializable value = Session.get().getAttribute(hintKey);
+    public String get(final Bookmark bookmark, final String key) {
+        final Map<String, String> hintsForBookmark = hintsFor(bookmark);
+        final String value = hintsForBookmark.get(key);
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("GET %s returns %s", hintKey, value));
+            LOG.debug(String.format("GET %s / %s returns %s", bookmark.toString(), key, value));
         }
 
         return value;
     }
 
     @Override
-    public void set(final Bookmark bookmark, final String key, final Serializable value) {
-        final String hintKey = getOidAndKey(bookmark, key);
+    public void set(final Bookmark bookmark, final String key, final String value) {
+        final Map<String, String> hintsForBookmark = hintsFor(bookmark);
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("SET %s to %s", hintKey, value));
+            LOG.debug(String.format("SET %s / %s to %s", bookmark.toString(), key, value));
         }
 
-        Session.get().setAttribute(hintKey, value);
-
+        hintsForBookmark.put(key, value);
     }
 
     @Override
     public void remove(final Bookmark bookmark, final String key) {
-        final String hintKey = getOidAndKey(bookmark, key);
+        final Map<String, String> hintsForBookmark = hintsFor(bookmark);
 
         if(LOG.isDebugEnabled()) {
-            LOG.debug(String.format("REMOVE %s", hintKey));
+            LOG.debug(String.format("REMOVE %s / %s", bookmark.toString(), key));
         }
 
-        Session.get().removeAttribute(hintKey);
+        hintsForBookmark.remove(key);
     }
 
-    private String getOidAndKey(final Bookmark bookmark, final String key) {
+    @Override
+    public Set<String> findHintKeys(final Bookmark bookmark) {
+        final Map<String, String> hintsForBookmark = hintsFor(bookmark);
+        return hintsForBookmark.keySet();
+    }
 
-        return bookmark.toString() + ":" + key;
+    @Override
+    public void removeAll(final Bookmark bookmark) {
+        final String sessionAttribute = sessionAttributeFor(bookmark);
+        Session.get().removeAttribute(sessionAttribute);
+    }
+
+
+    protected Map<String, String> hintsFor(final Bookmark bookmark) {
+        final String sessionAttribute = sessionAttributeFor(bookmark);
+        LinkedHashMap<String, String> hints =
+                (LinkedHashMap<String, String>) Session.get().getAttribute(sessionAttribute);
+        if(hints == null) {
+            hints = Maps.newLinkedHashMap();
+            Session.get().setAttribute(sessionAttribute, hints);
+        }
+        return hints;
+    }
+
+    protected String sessionAttributeFor(final Bookmark bookmark) {
+        return "hint-" + bookmark.toString();
     }
 
 }

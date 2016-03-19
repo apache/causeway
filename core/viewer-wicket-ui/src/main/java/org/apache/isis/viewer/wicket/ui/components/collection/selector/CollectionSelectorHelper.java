@@ -55,7 +55,7 @@ public class CollectionSelectorHelper implements Serializable {
     private final EntityCollectionModel model;
 
     private final List<ComponentFactory> componentFactories;
-    private final ComponentHintKey<String> componentHintKey;
+    private final ComponentHintKey componentHintKey;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
@@ -66,15 +66,10 @@ public class CollectionSelectorHelper implements Serializable {
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry,
-            final ComponentHintKey<String> componentHintKey) {
+            final ComponentHintKey componentHintKey) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
-        this.componentHintKey =
-                componentHintKey != null ? componentHintKey : ComponentHintKey.<String>noop();
-        final EntityModel entityModel = model.getEntityModel();
-        if(entityModel != null) {
-            entityModel.putSessionAttribute(this.componentHintKey);
-        }
+        this.componentHintKey = componentHintKey != null ? componentHintKey : ComponentHintKey.<String>noop();
     }
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {

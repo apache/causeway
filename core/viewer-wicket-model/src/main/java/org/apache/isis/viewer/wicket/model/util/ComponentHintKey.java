@@ -25,42 +25,36 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 /**
  * Scoped by the {@link Component component's path}.
  */
-public class ComponentHintKey<T extends Serializable> implements Serializable {
+public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static <T extends Serializable> ComponentHintKey<T> create(
-            final Component path,
-            final String key,
-            final HintStore hintStore) {
-        return new ComponentHintKey<T>(path, key, null, hintStore);
+    public static ComponentHintKey create( final Component path, final String key) {
+        return new ComponentHintKey(path, key, null);
     }
 
-    public static <T extends Serializable> ComponentHintKey<T> create(
-            final String fullKey,
-            final HintStore hintStore) {
-        return new ComponentHintKey<T>(null, null, fullKey, hintStore);
+    public static ComponentHintKey create(
+            final String fullKey) {
+        return new ComponentHintKey(null, null, fullKey);
     }
 
     private final Component component;
     private final String keyName;
     private final String fullKey;
-    private final HintStore hintStore;
 
     private ComponentHintKey(
             final Component component,
             final String keyName,
-            final String fullKey,
-            final HintStore hintStore) {
+            final String fullKey) {
         this.component = component;
         this.keyName = keyName;
         this.fullKey = fullKey;
-        this.hintStore = hintStore;
     }
 
     public String getKey() {
@@ -73,37 +67,30 @@ public class ComponentHintKey<T extends Serializable> implements Serializable {
         return UiHintContainer.Util.hintPathFor(component) + "-" + keyName;
     }
 
-    public String getKeyName() {
-        return keyName;
-    }
-
     public boolean matches(final Component component, final String keyName) {
         final String key = getKey();
         final String keyOfProvided = keyFor(component, keyName);
         return keyOfProvided.equals(key);
     }
 
-    public void set(final Bookmark bookmark, T t) {
+    public void set(final Bookmark bookmark, String value) {
         if(bookmark == null) {
             return;
         }
-        if(t != null) {
-            getHintStore().set(bookmark, getKey(), t);
+        if(value != null) {
+            getHintStore().set(bookmark, getKey(), value);
         } else {
             remove(bookmark);
         }
     }
 
-    public T get(final Bookmark bookmark) {
+    public String get(final Bookmark bookmark) {
         if(bookmark == null) {
             return null;
         }
-        return (T) getHintStore().get(bookmark, getKey());
+        return getHintStore().get(bookmark, getKey());
     }
 
-    protected HintStore getHintStore() {
-        return hintStore;
-    }
 
     public void remove(final Bookmark bookmark) {
         if(bookmark == null) {
@@ -117,28 +104,28 @@ public class ComponentHintKey<T extends Serializable> implements Serializable {
             final Bookmark bookmark,
             final PageParameters pageParameters,
             final String prefix) {
-        String value = (String) get(bookmark);
-        final String prefixedKey = prefix + getKey();
+        Serializable value = get(bookmark);
         if(value == null) {
             return;
         }
+        final String prefixedKey = prefix + getKey();
         pageParameters.add(prefixedKey, value);
     }
 
 
-    public static <T extends Serializable> ComponentHintKey<T> noop() {
-        return new ComponentHintKey<T>(null, null, null, null) {
+    public static ComponentHintKey noop() {
+        return new ComponentHintKey(null, null, null) {
             @Override
             public String getKey() {
                 return null;
             }
 
             @Override
-            public void set(final Bookmark bookmark, final T serializable) {
+            public void set(final Bookmark bookmark, final String value) {
             }
 
             @Override
-            public T get(final Bookmark bookmark) {
+            public String get(final Bookmark bookmark) {
                 return null;
             }
 
@@ -148,7 +135,8 @@ public class ComponentHintKey<T extends Serializable> implements Serializable {
         };
     }
 
-
-
+    protected HintStore getHintStore() {
+        return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+    }
 
 }

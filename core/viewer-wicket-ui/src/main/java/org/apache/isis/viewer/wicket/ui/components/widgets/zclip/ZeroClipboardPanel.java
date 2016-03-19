@@ -16,8 +16,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.zclip;
 
-import de.agilecoders.wicket.jquery.util.Strings2;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -28,7 +26,10 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -38,6 +39,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+
+import de.agilecoders.wicket.jquery.util.Strings2;
 
 public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
 
@@ -96,7 +99,10 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
                         if(subscribingLink instanceof BookmarkablePageLink) {
                             final BookmarkablePageLink<?> link = (BookmarkablePageLink<?>) subscribingLink;
                             final Class pageClass = link.getPageClass();
-                            final PageParameters pageParameters = link.getPageParameters();
+
+                            final EntityModel entityModel = ZeroClipboardPanel.this.getModel();
+                            final PageParameters pageParameters = entityModel.getPageParameters();
+
                             final CharSequence urlFor = link.urlFor(pageClass, pageParameters);
                             return getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlFor));
                         } else {
@@ -174,4 +180,9 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
         final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
         return pcra.getPageClassRegistry();
     }
+
+    protected HintStore getHintStore() {
+        return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+    }
+
 }
