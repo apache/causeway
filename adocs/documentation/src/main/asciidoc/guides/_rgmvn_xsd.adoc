@@ -11,7 +11,7 @@ generate XSD schemas from any JAXB-annotated xref:ugbtb.adoc#_ugbtb_view-models[
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
 tool, because it uses the framework's support (via
-xref:rgant.adoc#_rgant-XmlJavaValueType[`@XmlJavaValueType`]) to translate any references to domain
+xref:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`]) to translate any references to domain
 objects into ``OidDto``s (as defined by the Apache Isis xref:rgcms.adoc#_rgcms_schema-common[common schema]).
 
 The `xsd` goal defines the following properties:
