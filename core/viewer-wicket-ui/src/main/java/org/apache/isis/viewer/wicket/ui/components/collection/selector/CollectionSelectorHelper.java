@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ComponentKey;
+import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -54,22 +54,22 @@ public class CollectionSelectorHelper implements Serializable {
     private final EntityCollectionModel model;
 
     private final List<ComponentFactory> componentFactories;
-    private final ComponentKey<String> selectedItemSessionAttribute;
+    private final ComponentHintKey<String> selectedItemSessionAttribute;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry) {
-        this(model, componentFactoryRegistry, ComponentKey.<String>noop());
+        this(model, componentFactoryRegistry, ComponentHintKey.<String>noop());
     }
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry,
-            final ComponentKey<String> selectedItemSessionAttribute) {
+            final ComponentHintKey<String> selectedItemSessionAttribute) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
         this.selectedItemSessionAttribute =
-                selectedItemSessionAttribute != null ? selectedItemSessionAttribute : ComponentKey.<String>noop();
+                selectedItemSessionAttribute != null ? selectedItemSessionAttribute : ComponentHintKey.<String>noop();
         final EntityModel entityModel = model.getEntityModel();
         if(entityModel != null) {
             entityModel.putSessionAttribute(this.selectedItemSessionAttribute);

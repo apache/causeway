@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ComponentKey;
+import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
@@ -71,7 +71,7 @@ public class CollectionContentsMultipleViewsPanel
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
         final EntityModel entityModel = model.getEntityModel();
 
-        final ComponentKey<String> selectedItemSessionAttribute =
+        final ComponentHintKey<String> selectedItemSessionAttribute =
                 entityModel != null
                         ? entityModel.<String>componentKeyFor(this, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM)
                         : null;

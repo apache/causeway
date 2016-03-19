@@ -28,21 +28,21 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 /**
  * Scoped by the {@link Component component's path}.
  */
-public class ComponentKey<T extends Serializable> implements Serializable {
+public class ComponentHintKey<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static <T extends Serializable> ComponentKey<T> create(
+    public static <T extends Serializable> ComponentHintKey<T> create(
             final Component path,
             final String key,
             final Store store) {
-        return new ComponentKey<T>(path, key, null, store);
+        return new ComponentHintKey<T>(path, key, null, store);
     }
 
-    public static <T extends Serializable> ComponentKey<T> create(
+    public static <T extends Serializable> ComponentHintKey<T> create(
             final String fullKey,
             final Store store) {
-        return new ComponentKey<T>(null, null, fullKey, store);
+        return new ComponentHintKey<T>(null, null, fullKey, store);
     }
 
     private final Component component;
@@ -50,7 +50,7 @@ public class ComponentKey<T extends Serializable> implements Serializable {
     private final String fullKey;
     private final Store store;
 
-    private ComponentKey(
+    private ComponentHintKey(
             final Component component,
             final String keyName,
             final String fullKey,
@@ -112,8 +112,8 @@ public class ComponentKey<T extends Serializable> implements Serializable {
     }
 
 
-    public static <T extends Serializable> ComponentKey<T> noop() {
-        return new ComponentKey<T>(null, null, null, null) {
+    public static <T extends Serializable> ComponentHintKey<T> noop() {
+        return new ComponentHintKey<T>(null, null, null, null) {
             @Override
             public String getKey() {
                 return null;
