@@ -18,21 +18,26 @@
  */
 package org.apache.isis.applib.services.hint;
 
-import java.io.Serializable;
 import java.util.Set;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-public interface HintStore extends Serializable {
+public interface HintStore {
 
+    @Programmatic
     String get(final Bookmark bookmark, String hintKey);
 
+    @Programmatic
     void set(final Bookmark bookmark, String hintKey, String value);
 
+    @Programmatic
     void remove(final Bookmark bookmark, String hintKey);
 
+    @Programmatic
     void removeAll(Bookmark bookmark);
 
+    @Programmatic
     Set<String> findHintKeys(Bookmark bookmark);
 
 }

@@ -97,6 +97,16 @@ grids for any domain class.
 |
 
 
+|xref:rgsvc.adoc#_rgsvc_spi_HintStore[`o.a.i.applib.` +
+`services.hint` +
+`HintStore`]
+|(`1.12.0-SNAPSHOT`) Stores UI hints on a per-object basis. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
+|`HintStoreUsingWicketSession` +
+``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_LocaleProvider[`o.a.i.applib.` +
 `services.i18n` +
 `LocaleProvider`]
@@ -105,6 +115,7 @@ grids for any domain class.
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
 |
+
 
 |xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`o.a.i.applib.` +
 `services.routing` +
@@ -181,6 +192,7 @@ include::_rgsvc_spi_ExceptionRecognizer.adoc[leveloffset=+1]
 include::_rgsvc_spi_GridSystemService.adoc[leveloffset=+1]
 include::_rgsvc_spi_GridLoaderService.adoc[leveloffset=+1]
 include::_rgsvc_spi_GridService.adoc[leveloffset=+1]
+include::_rgsvc_spi_HintStore.adoc[leveloffset=+1]
 include::_rgsvc_spi_LocaleProvider.adoc[leveloffset=+1]
 include::_rgsvc_spi_RoutingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationService.adoc[leveloffset=+1]

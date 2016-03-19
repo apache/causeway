@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-    package org.apache.isis.viewer.wicket.viewer.services;
+package org.apache.isis.viewer.wicket.viewer.services;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
