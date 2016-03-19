@@ -24,7 +24,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNav
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -50,7 +50,6 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 showAllItemsOn(table);
                 final UiHintContainer hintContainer = getUiHintContainer();
                 hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
-                send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(hintContainer, target));
                 target.add(table);
             }
         });

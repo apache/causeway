@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -157,13 +157,6 @@ public class EntityPage extends PageAbstract {
         addBreadcrumb(entityModel);
 
         addBookmarkedPages(entityPageContainer);
-
-
-        // TODO mgrigorov: Zero Clipboard has been moved to EntityIconAndTitlePanel where the entity model is available.
-        // Is this still needed for something else ?!
-        //
-        // ensure the copy link holds this page.
-        send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }
 
     private void addBreadcrumb(final EntityModel entityModel) {

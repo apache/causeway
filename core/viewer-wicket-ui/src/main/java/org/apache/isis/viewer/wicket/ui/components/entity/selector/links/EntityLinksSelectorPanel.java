@@ -42,7 +42,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -322,7 +322,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
             return;
         }
         uiHintContainer.setHint(this, UIHINT_VIEW, ""+viewNum);
-        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     /**

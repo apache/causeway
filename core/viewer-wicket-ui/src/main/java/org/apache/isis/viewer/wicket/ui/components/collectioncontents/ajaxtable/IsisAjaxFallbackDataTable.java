@@ -39,7 +39,7 @@ import org.apache.wicket.util.lang.Generics;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -192,7 +192,6 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
             return;
         } 
         uiHintContainer.setHint(this, IsisAjaxFallbackDataTable.UIHINT_PAGE_NUMBER, ""+getCurrentPage());
-        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     public void setSortOrderHintAndBroadcast(SortOrder order, String property, AjaxRequestTarget target) {
@@ -207,7 +206,6 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         }
         // .. then set this one
         uiHintContainer.setHint(this, order.name(), property);
-        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     private UiHintContainer getUiHintContainer() {

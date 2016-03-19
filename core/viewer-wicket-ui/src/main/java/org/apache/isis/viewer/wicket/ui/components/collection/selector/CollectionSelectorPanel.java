@@ -36,8 +36,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -223,15 +222,9 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
 
     protected void setViewHintAndBroadcast(String viewName, AjaxRequestTarget target) {
         final CollectionSelectorPanel component = CollectionSelectorPanel.this;
-        final IsisUiHintEvent hintEvent;
-        if(getModel().isParented()) {
-            final UiHintContainer uiHintContainer = getUiHintContainer(EntityModel.class);
-            uiHintContainer.setHint(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName);
-            hintEvent = new IsisUiHintEvent(uiHintContainer, target);
-        } else {
-            hintEvent = new IsisUiHintEvent(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
-        }
-        send(getPage(), Broadcast.EXACT, hintEvent);
+        final IsisSelectorEvent selectorEvent =
+                new IsisSelectorEvent(component, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
+        send(getPage(), Broadcast.EXACT, selectorEvent);
     }
 }
 

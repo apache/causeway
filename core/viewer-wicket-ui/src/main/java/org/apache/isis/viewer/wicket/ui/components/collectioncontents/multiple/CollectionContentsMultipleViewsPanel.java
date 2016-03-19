@@ -27,8 +27,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -145,8 +144,8 @@ public class CollectionContentsMultipleViewsPanel
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
 
-        final IsisUiHintEvent uiHintEvent = IsisEnvelopeEvent.openLetter(event, IsisUiHintEvent.class);
-        if(uiHintEvent == null) {
+        final IsisSelectorEvent selectorEvent = IsisEnvelopeEvent.openLetter(event, IsisSelectorEvent.class);
+        if(selectorEvent == null) {
             return;
         }
         final CollectionSelectorPanel selectorDropdownPanel = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
@@ -156,24 +155,12 @@ public class CollectionContentsMultipleViewsPanel
             return;
         }
 
-        // try to obtain hint directly from hint container (EntityModel)
-        String viewStr = null;
-        final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
-        if(uiHintContainer != null) {
-            viewStr = uiHintContainer.getHint(selectorDropdownPanel, UIHINT_VIEW);
-        }
-
-        // failing that, directly from the UiHintEvent itself (for standalone collections, which have no hint container)
-        if(viewStr == null) {
-            viewStr = uiHintEvent.hintFor(selectorDropdownPanel, UIHINT_VIEW);
-        }
-
-        // give up
-        if (viewStr == null) {
+        String selectedView = selectorEvent.hintFor(selectorDropdownPanel, UIHINT_VIEW);
+        if (selectedView == null) {
             return;
         }
 
-        int underlyingViewNum = selectorHelper.lookup(viewStr);
+        int underlyingViewNum = selectorHelper.lookup(selectedView);
 
         final EntityCollectionModel dummyModel = getModel().asDummy();
         for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
@@ -188,7 +175,7 @@ public class CollectionContentsMultipleViewsPanel
 
         this.selectedComponent = underlyingViews[underlyingViewNum];
 
-        final AjaxRequestTarget target = uiHintEvent.getTarget();
+        final AjaxRequestTarget target = selectorEvent.getTarget();
         if(target != null) {
             target.add(this, selectorDropdownPanel);
         }

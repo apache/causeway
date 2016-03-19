@@ -19,43 +19,21 @@ package org.apache.isis.viewer.wicket.model.hints;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-/**
- *
- */
-public class IsisUiHintEvent extends IsisEventLetterAbstract {
+public class IsisSelectorEvent extends IsisEventLetterAbstract {
     
-    private final UiHintContainer uiHintContainer;
     private final Component component;
     private final String hintKey;
     private final String hintValue;
 
-    public IsisUiHintEvent(UiHintContainer uiHintContainer, AjaxRequestTarget target) {
-        this(uiHintContainer, null, null, null, target);
-    }
-
-    public IsisUiHintEvent(
-            final Component component,
-            final String hintKey,
-            final String hintValue,
-            final AjaxRequestTarget target) {
-        this(null, component, hintKey, hintValue, target);
-    }
-
-    public IsisUiHintEvent(
-            final UiHintContainer uiHintContainer,
+    public IsisSelectorEvent(
             final Component component,
             final String hintKey,
             final String hintValue,
             final AjaxRequestTarget target) {
         super(target);
-        this.uiHintContainer = uiHintContainer;
         this.component = component;
         this.hintKey = hintKey;
         this.hintValue = hintValue;
-    }
-
-    public UiHintContainer getUiHintContainer() {
-        return uiHintContainer;
     }
 
     public String hintFor(Component component, String hintKey) {
