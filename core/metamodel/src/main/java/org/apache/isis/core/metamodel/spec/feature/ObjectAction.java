@@ -17,6 +17,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -183,6 +184,7 @@ public interface ObjectAction extends ObjectMember {
     ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
+
 
     // //////////////////////////////////////////////////////
     // Utils

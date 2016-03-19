@@ -41,17 +41,17 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
  */
 public interface ActionInvocationFacet extends Facet {
 
-    public ObjectAdapter invoke(
+    ObjectAdapter invoke(
             ObjectAction owningAction,
             ObjectAdapter targetAdapter,
             ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    public ObjectSpecification getReturnType();
+    ObjectSpecification getReturnType();
 
-    public ObjectSpecification getOnType();
+    ObjectSpecification getOnType();
 
-    public static class CurrentInvocation {
+    class CurrentInvocation {
 
         private final Command command;
         
@@ -127,8 +127,7 @@ public interface ActionInvocationFacet extends Facet {
      * TODO...
      * @deprecated - should instead use the {@link CommandContext} request.
      */
-    @Deprecated
-    public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<>();
+    @Deprecated ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<>();
 
 
 }

@@ -274,6 +274,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
                     settings.setMinimumInputLength(minLength);
                     settings.setPlaceholder(getModel().getName());
                 }
+                if(hasObjectAutoComplete()) {
+                    final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+                    final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+                    final Settings settings = select2Field.getSettings();
+                    final int minLength = autoCompleteFacet.getMinLength();
+                    settings.setMinimumInputLength(minLength);
+                }
                 entityLink.addOrReplace(select2Field);
             } else {
                 //
