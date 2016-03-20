@@ -71,7 +71,7 @@ map domain objects to view models/DTOs.
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
 `AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
-implementation of `ActionInvocationContext` class is automatically registered (it is annotated with `@DomainService`)
+implementation of `AcceptHeaderService` class is automatically registered (it is annotated with `@DomainService`)
 so no further configuration is required.
 
 To use an alternative implementation, use
