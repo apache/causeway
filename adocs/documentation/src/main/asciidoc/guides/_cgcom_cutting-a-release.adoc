@@ -418,22 +418,33 @@ for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
 ----
 
 
-Finally, double check that the app is running satisfactorily:
+Finally, double check that the app
 
-* first, as self-hosted webconsole (browse to http://localhost:8080[http://localhost:8080]): +
+* builds:
 +
 [source,bash]
 ----
-mvn clean install && \
-mvn antrun:run -P self-host
+mvn clean install
 ----
 
-* then using mvn jetty plugin (browse to http://localhost:8080[http://localhost:8080]): +
+* can be run from an IDE
+** mainClass=`org.apache.isis.WebServer`
+** args=`-m domainapp.app.DomainAppAppManifestWithFixtures`
+
+* can be run using the mvn jetty plugin:
 +
 [source,bash]
 ----
-cd webapp
+pushd webapp
 mvn jetty:run
+popd
+----
+
+* can be deployed as a WAR
++
+[source,bash]
+----
+cp webapps/target/simpleapp.war $CATALINA_HOME/webapps/ROOT.war
 ----
 
 Check the about page and confirm built against non-SNAPSHOT versions of the Apache Isis jars.
@@ -516,7 +527,6 @@ Build the newly generated app and test:
 ----
 cd myapp
 mvn clean install
-mvn antrun:run -P self-host    # runs as standalone app using webconsole
 cd webapp
 mvn jetty:run                  # runs as mvn jetty plugin
 ----

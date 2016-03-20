@@ -99,29 +99,7 @@ The `simpleapp` archetype generates a single WAR file, configured to run both th
 
 Once you've built the app, you can run the WAR in a variety of ways. 
 
-The recommended approach when getting started is to run the self-hosting version of the WAR, allowing Apache Isis to run as a standalone app; for example:
-
-[source,bash]
-----
-java -jar webapp/target/myapp-webapp-1.0-SNAPSHOT-jetty-console.jar
-----
-
-
-
-This can also be accomplished using an embedded Ant target provided in the build script:
-
-
-[source,bash]
-----
-mvn -P self-host antrun:run
-----
-
-
-    
-The first is to simply deploying the generated WAR (`webapp/target/myapp-webapp-1.0-SNAPSHOT.war`) to a servlet container.
-
-
-Alternatively, you could run the WAR in a Maven-hosted Jetty instance, though you need to `cd` into the `webapp` module:
+First, you could run the WAR in a Maven-hosted Jetty instance:
 
 [source,bash]
 ----
@@ -129,32 +107,11 @@ cd webapp
 mvn jetty:run -D jetty.port=9090
 ----
 
-
 In the above, we've passed in a property to indicate a different port from the default port (8080).
 
-Note that if you use `mvn jetty:run`, then the context path changes; check the console output (eg [http://localhost:9090/myapp-webapp](http://localhost:9090/myapp-webapp)).
+Second, you could also run the app by deploying the generated WAR (`webapp/target/myapp-webapp-1.0-SNAPSHOT.war`) to a standalone servlet container such as [Tomcat](http://tomcat.apache.org).
 
-Finally, you can also run the app by deploying to a standalone servlet container such as [Tomcat](http://tomcat.apache.org).
-
-
-
-
-=== With Fixtures
-
-It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory
-testing.  This is done by specifying a _fixture script_ on the command line:
-
-
-[source,bash]
-----
-java -jar webapp/target/myapp-webapp-1.0-SNAPSHOT-jetty-console.jar \
-     --initParam isis.persistor.datanucleus.install-fixtures=true  \
-     --initParam isis.fixtures=fixture.simple.SimpleObjectsFixture
-----
-
-    
-where (in the above example) `fixture.simple.SimpleObjectsFixture` is the fully qualified class name of the fixture 
-script to be run.
+Alternatively, you can run the app from within an IDE, using the main class is `org.apache.isis.WebServer`.  The classpath should be that of the `myapp-webapp` submodule.  The `WebServer` takes a number of parameters, most useful being `--appManifest` (or `-m`), which allows the app manifest to be specified.
 
 
 
