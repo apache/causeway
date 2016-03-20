@@ -164,14 +164,6 @@
             <artifactId>isis-core-security</artifactId>
         </dependency>
 
-        <!-- to run using WebServer (optional) -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webserver</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-servlet_3.0_spec</artifactId>
@@ -224,28 +216,6 @@
 
     <profiles>
         <profile>
-            <id>self-host</id>
-            <build>
-                <plugins>
-                    <!-- 
-                    mvn -P self-host antrun:run
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <configuration>
-                            <tasks>
-                                <exec executable="java" failonerror="true">
-                                    <arg value="-jar" />
-                                    <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.jar" />
-                                </exec>
-                            </tasks>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>intellij</id>
             <activation>
                 <property>
@@ -254,72 +224,10 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-servlet_3.0_spec</artifactId>
-                    <!--
-                    Use 'compile' so can run o.a.i.WebServer from within IntelliJ;
-                    can rely on servlet container to ignore this in war file
-                    -->
-                    <scope>compile</scope>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-core-webserver</artifactId>
                 </dependency>
             </dependencies>
-        </profile>
-        <profile>
-            <id>jrebel</id>
-            <properties>
-                <!-- as used in the rebel.xml in the dom project -->
-                <target.dir>target</target.dir>
-                <isis-jrebel-plugin.packagePrefix>dom.simple,org.apache.isis.objectstore.jdo.applib</isis-jrebel-plugin.packagePrefix>
-                <isis-jrebel-plugin.loggingLevel>warn</isis-jrebel-plugin.loggingLevel>
-            </properties>
-            <build>
-                <plugins>
-                    <!--
-                    mvn -P jrebel antrun:run \
-                        -Djrebel.jar="C:/Users/Dan/.IdeaIC13/config/plugins/jr-ide-idea/lib/jrebel/jrebel.jar" \
-                        -Disis_jrebel_plugin.jar="C:/github/danhaywood/isis-jrebel-plugin/target/danhaywood-isis-jrebel-plugin-1.0.0-SNAPSHOT.jar"
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <configuration>
-                            <target>
-                                <property name="compile_classpath" refid="maven.compile.classpath"/>
-                                <property name="runtime_classpath" refid="maven.runtime.classpath"/>
-                                <property name="test_classpath" refid="maven.test.classpath"/>
-                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
-
-                                <echo message=""/>
-                                <echo message=""/>
-                                <echo message="jrebel.jar             = ${jrebel.jar}"/>
-                                <echo message="isis_jrebel_plugin.jar = ${isis_jrebel_plugin.jar}"/>
-                                <echo message="target.dir             = ${target.dir}"/>
-                                <echo message=""/>
-                                <echo message=""/>
-
-                                <exec executable="java" failonerror="true">
-                                    <arg value="-javaagent:${jrebel.jar}"/>
-                                    <arg value="-Drebel.log=false"/>
-                                    <arg value="-Drebel.check_class_hash=true"/>
-                                    <arg value="-Drebel.packages_exclude=org.apache.isis"/>
-
-                                    <!-- as used in the rebel.xml in the dom project -->
-                                    <arg value="-Dproject.root=${project.basedir}/.."/>
-                                    <arg value="-Dtarget.dir=${target.dir}"/>
-
-                                    <arg value="-Drebel.plugins=${isis_jrebel_plugin.jar}"/>
-                                    <arg value="-Disis-jrebel-plugin.packagePrefix=${isis-jrebel-plugin.packagePrefix}"/>
-                                    <arg value="-Disis-jrebel-plugin.loggingLevel=${isis-jrebel-plugin.loggingLevel}"/>
-                                    <arg value="-XX:MaxPermSize=128m"/>
-                                    <arg value="-classpath"/>
-                                    <arg value="${runtime_classpath}"/>
-                                    <arg value="org.apache.isis.WebServer"/>
-                                </exec>
-                            </target>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 
