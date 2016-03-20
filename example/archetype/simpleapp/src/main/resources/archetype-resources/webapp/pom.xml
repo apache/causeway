@@ -39,24 +39,6 @@
                 <artifactId>jetty-maven-plugin</artifactId>
             </plugin>
 
-            <!-- mvn package -->
-            <plugin>
-                <groupId>org.simplericity.jettyconsole</groupId>
-                <artifactId>jetty-console-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>createconsole</goal>
-                        </goals>
-                        <configuration>
-                            <backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</backgroundImage>
-                            <destinationFile>${project.build.directory}/${project.build.finalName}-jetty-console.jar</destinationFile>
-                        </configuration>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -214,28 +196,6 @@
     </dependencies>
 
     <profiles>
-        <profile>
-            <id>self-host</id>
-            <build>
-                <plugins>
-                    <!-- 
-                    mvn -P self-host antrun:run
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <configuration>
-                            <tasks>
-                                <exec executable="java" failonerror="true">
-                                    <arg value="-jar" />
-                                    <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.jar" />
-                                </exec>
-                            </tasks>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>intellij</id>
             <activation>

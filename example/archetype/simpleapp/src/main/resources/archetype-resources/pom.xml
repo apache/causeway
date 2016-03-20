@@ -205,12 +205,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- http://simplericity.com/2009/11/10/1257880778509.html -->
-                <plugin>
-                    <groupId>org.simplericity.jettyconsole</groupId>
-                    <artifactId>jetty-console-maven-plugin</artifactId>
-                    <version>1.56</version>
-                </plugin>
 
                 <!-- Apache Release Audit Tool -->
                 <plugin>
