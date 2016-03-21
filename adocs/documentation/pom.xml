@@ -99,188 +99,46 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>${asciidoctor.maven.plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.asciidoctor</groupId>
+                            <artifactId>asciidoctorj-pdf</artifactId>
+                            <version>${asciidoctorj.pdf.version}</version>
+                        </dependency>
+                        <!-- Comment this section to use the default jruby artifact provided by the plugin -->
+                        <dependency>
+                            <groupId>org.jruby</groupId>
+                            <artifactId>jruby-complete</artifactId>
+                            <version>${jruby.version}</version>
+                        </dependency>
+                        <!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin -->
+                        <dependency>
+                            <groupId>org.asciidoctor</groupId>
+                            <artifactId>asciidoctorj</artifactId>
+                            <version>${asciidoctorj.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+                        <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+                        <!-- Attributes common to all output formats -->
+                        <attributes>
+                            <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                            <!--
+                            in essence unsets the imagesdir attribute (the mojo hardcodes it to "images").
+                            Has unfortunate side-effect of preventing docs from overriding with own value
+                            (but any other value seems to be incompatible with github's built-in rendering anyway)
+                            -->
+                            <imagesdir/>
+                        </attributes>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>${asciidoctor.maven.plugin.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctorj-pdf</artifactId>
-                        <version>${asciidoctorj.pdf.version}</version>
-                    </dependency>
-                    <!-- Comment this section to use the default jruby artifact provided by the plugin -->
-                    <dependency>
-                        <groupId>org.jruby</groupId>
-                        <artifactId>jruby-complete</artifactId>
-                        <version>${jruby.version}</version>
-                    </dependency>
-                    <!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin -->
-                    <dependency>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctorj</artifactId>
-                        <version>${asciidoctorj.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <sourceDirectory>src/main/asciidoc</sourceDirectory>
-                    <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
-                    <!-- Attributes common to all output formats -->
-                    <attributes>
-                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
-                        <!--
-                        in essence unsets the imagesdir attribute (the mojo hardcodes it to "images").
-                        Has unfortunate side-effect of preventing docs from overriding with own value
-                        (but any other value seems to be incompatible with github's built-in rendering anyway)
-                        -->
-                        <imagesdir/>
-                    </attributes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>output-html</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <configuration>
-                            <!-- The gem-maven-plugin appends the scope (e.g., provided) to the gemPath defined in the plugin configuration -->
-                            <gemPath>${project.build.directory}/gems-provided</gemPath>
-                            <!--
-                                        <requires>
-                                            <require>asciidoctor-diagram</require>
-                                        </requires>
-                            -->
-
-                            <sourceHighlighter>coderay</sourceHighlighter>
-                            <backend>html5</backend>
-                            <templateDir>../template</templateDir>
-                            <eruby>erb</eruby>
-                            <preserveDirectories>true</preserveDirectories>
-                            <relativeBaseDir>true</relativeBaseDir>
-                            <attributes>
-                                <toc>right</toc>
-                                <icons>font</icons>
-                            </attributes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-pdf-doc</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <configuration>
-                            <backend>pdf</backend>
-                            <!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay'
-                            source highlighting -->
-                            <sourceHighlighter>rouge</sourceHighlighter>
-                            <preserveDirectories>true</preserveDirectories>
-                            <relativeBaseDir>true</relativeBaseDir>
-                            <attributes>
-                                <icons>font</icons>
-                                <pagenums/>
-                                <toc/>
-                                <idprefix/>
-                                <idseparator>-</idseparator>
-                            </attributes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <id>package</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <echo message=""/>
-                                <echo message=""/>
-
-                                <echo message=""/>
-                                <echo message="deleting everything in ${isis-site.dir}"/>
-                                <echo message=""/>
-                                <delete includeemptydirs="true">
-                                    <fileset dir="${isis-site.dir}" includes="**/*"/>
-                                </delete>
-
-                                <echo message=""/>
-                                <echo message=""/>
-                                <echo message="copying from ${redirects.dir} to ${isis-site.dir}"/>
-                                <echo message=""/>
-                                <copy todir="${isis-site.dir}">
-                                    <fileset dir="${redirects.dir}"/>
-                                </copy>
-
-                                <echo message=""/>
-                                <echo message=""/>
-                                <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
-                                <echo message=""/>
-                                <copy todir="${isis-site.dir}" overwrite="true" force="true">
-                                    <fileset dir="${build.dir}"/>
-                                </copy>
-
-                                <echo message=""/>
-                                <echo message=""/>
-                                <echo message="converting CRLF to LF for all .html under ${isis-site.dir}"/>
-                                <echo message=""/>
-                                <fixcrlf srcdir="${isis-site.dir}"
-                                         includes="**/*.html"
-                                         eol="lf"
-                                         eof="remove"
-                                         fixlast="true"/>
-
-                                <echo message=""/>
-                                <echo message=""/>
-                                <echo message="git add all content"/>
-                                <echo message=""/>
-                                <exec executable="git" dir="${isis-site.dir}">
-                                    <arg value="add"/>
-                                    <arg value="--all"/>
-                                    <arg value="."/>
-                                </exec>
-                                <echo message=""/>
-
-
-                                <echo message=""/>
-                                <echo message=""/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>install</id>
-                        <phase>install</phase>
-                        <configuration>
-                            <target>
-                                <echo message=""/>
-                                <echo message=""/>
-                                <echo message="git commit -m '${message}' "/>
-                                <echo message=""/>
-                                <exec executable="git" dir="${isis-site.dir}">
-                                    <arg value="commit"/>
-                                    <arg value="-m"/>
-                                    <arg value="${message}"/>
-                                </exec>
-                                <echo message=""/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
 
     <dependencies>
@@ -298,5 +156,197 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>html</id>
+            <activation>
+                <property>
+                    <name>!skip.html</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>output-html</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- The gem-maven-plugin appends the scope (e.g., provided) to the gemPath defined in the plugin configuration -->
+                                    <gemPath>${project.build.directory}/gems-provided</gemPath>
+                                    <!--
+                                                <requires>
+                                                    <require>asciidoctor-diagram</require>
+                                                </requires>
+                                    -->
+
+                                    <sourceHighlighter>coderay</sourceHighlighter>
+                                    <backend>html5</backend>
+                                    <templateDir>../template</templateDir>
+                                    <eruby>erb</eruby>
+                                    <preserveDirectories>true</preserveDirectories>
+                                    <relativeBaseDir>true</relativeBaseDir>
+                                    <attributes>
+                                        <toc>right</toc>
+                                        <icons>font</icons>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>pdf</id>
+            <activation>
+                <property>
+                    <name>!skip.pdf</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-pdf-doc</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>pdf</backend>
+                                    <!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay'
+                                    source highlighting -->
+                                    <sourceHighlighter>rouge</sourceHighlighter>
+                                    <preserveDirectories>true</preserveDirectories>
+                                    <relativeBaseDir>true</relativeBaseDir>
+                                    <attributes>
+                                        <icons>font</icons>
+                                        <pagenums/>
+                                        <toc/>
+                                        <idprefix/>
+                                        <idseparator>-</idseparator>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <profile>
+            <id>copy</id>
+            <activation>
+                <property>
+                    <name>!skip.copy</name>
+                </property>
+            </activation>
+            <properties>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <echo message=""/>
+                                        <echo message=""/>
+
+                                        <echo message=""/>
+                                        <echo message="deleting everything in ${isis-site.dir}"/>
+                                        <echo message=""/>
+                                        <delete includeemptydirs="true">
+                                            <fileset dir="${isis-site.dir}" includes="**/*"/>
+                                        </delete>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying from ${redirects.dir} to ${isis-site.dir}"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site.dir}">
+                                            <fileset dir="${redirects.dir}"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site.dir}" overwrite="true" force="true">
+                                            <fileset dir="${build.dir}"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="converting CRLF to LF for all .html under ${isis-site.dir}"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.html"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="git add all content"/>
+                                        <echo message=""/>
+                                        <exec executable="git" dir="${isis-site.dir}">
+                                            <arg value="add"/>
+                                            <arg value="--all"/>
+                                            <arg value="."/>
+                                        </exec>
+                                        <echo message=""/>
+
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>install</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="git commit -m '${message}' "/>
+                                        <echo message=""/>
+                                        <exec executable="git" dir="${isis-site.dir}">
+                                            <arg value="commit"/>
+                                            <arg value="-m"/>
+                                            <arg value="${message}"/>
+                                        </exec>
+                                        <echo message=""/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
