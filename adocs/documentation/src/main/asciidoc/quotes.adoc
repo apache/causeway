@@ -157,7 +157,20 @@ pass:[</p></div>]
 
 pass:[<br/><br/>]
 pass:[<div class="extended-quote-first"><p>]
-Apache Isis is one of the best tools for hackathons.  Given a 2 day hackathon challenge I have the perfect framework to create my prototype helping me to focus on business logic.
+Apache Isis is an easy to learn, efficient and productive RAD platform. Further I can say it is evolving to be
+"the best RAD platform" without any exaggerations. The help from the community is simply wonderful.
+pass:[</p></div>]
+
+pass:[<div class="extended-quote-attribution"><p>]
+-- Theekshana Dilshan, Computer Science and Engineering, University of Moratuwa, Sri Lanka.
+pass:[</p></div>]
+
+
+
+pass:[<br/><br/>]
+pass:[<div class="extended-quote-first"><p>]
+Apache Isis is one of the best tools for hackathons.  Given a 2 day hackathon challenge I have the perfect framework
+to create my prototype helping me to focus on business logic.
 pass:[</p></div>]
 
 pass:[<div class="extended-quote-attribution"><p>]

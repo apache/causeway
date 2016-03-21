@@ -123,20 +123,6 @@
                             <version>${asciidoctorj.version}</version>
                         </dependency>
                     </dependencies>
-                    <configuration>
-                        <sourceDirectory>src/main/asciidoc</sourceDirectory>
-                        <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
-                        <!-- Attributes common to all output formats -->
-                        <attributes>
-                            <sourcedir>${project.build.sourceDirectory}</sourcedir>
-                            <!--
-                            in essence unsets the imagesdir attribute (the mojo hardcodes it to "images").
-                            Has unfortunate side-effect of preventing docs from overriding with own value
-                            (but any other value seems to be incompatible with github's built-in rendering anyway)
-                            -->
-                            <imagesdir/>
-                        </attributes>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -179,21 +165,24 @@
                                     <goal>process-asciidoc</goal>
                                 </goals>
                                 <configuration>
+                                    <backend>html5</backend>
+
+                                    <sourceDirectory>src/main/asciidoc</sourceDirectory>
+                                    <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+
                                     <!-- The gem-maven-plugin appends the scope (e.g., provided) to the gemPath defined in the plugin configuration -->
                                     <gemPath>${project.build.directory}/gems-provided</gemPath>
-                                    <!--
-                                                <requires>
-                                                    <require>asciidoctor-diagram</require>
-                                                </requires>
-                                    -->
 
                                     <sourceHighlighter>coderay</sourceHighlighter>
-                                    <backend>html5</backend>
                                     <templateDir>../template</templateDir>
                                     <eruby>erb</eruby>
                                     <preserveDirectories>true</preserveDirectories>
                                     <relativeBaseDir>true</relativeBaseDir>
+
                                     <attributes>
+                                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                                        <imagesdir/>
+
                                         <toc>right</toc>
                                         <icons>font</icons>
                                     </attributes>
@@ -225,18 +214,26 @@
                                 </goals>
                                 <configuration>
                                     <backend>pdf</backend>
-                                    <!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay'
-                                    source highlighting -->
+
+                                    <sourceDirectory>src/main/asciidoc/guides</sourceDirectory>
+                                    <outputDirectory>${project.reporting.outputDirectory}/guides</outputDirectory>
+
                                     <sourceHighlighter>rouge</sourceHighlighter>
                                     <preserveDirectories>true</preserveDirectories>
                                     <relativeBaseDir>true</relativeBaseDir>
+                                    <doctype>book</doctype>
+
                                     <attributes>
+                                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                                        <imagesdir/>
+
                                         <icons>font</icons>
                                         <pagenums/>
                                         <toc/>
                                         <idprefix/>
                                         <idseparator>-</idseparator>
                                     </attributes>
+
                                 </configuration>
                             </execution>
                         </executions>
@@ -244,7 +241,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
         <profile>
             <id>copy</id>
             <activation>
@@ -265,8 +262,6 @@
                                     <target>
                                         <echo message=""/>
                                         <echo message=""/>
-
-                                        <echo message=""/>
                                         <echo message="deleting everything in ${isis-site.dir}"/>
                                         <echo message=""/>
                                         <delete includeemptydirs="true">
@@ -286,23 +281,7 @@
                                         <echo message="copying from ${build.dir} to ${isis-site.dir} (ignoring PDFs)"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site.dir}" overwrite="true" force="true">
-                                            <fileset dir="${build.dir}" excludes="**/*.pdf"/>
-                                        </copy>
-
-                                        <echo message=""/>
-                                        <echo message=""/>
-                                        <echo message="copying from ${build.dir}/resouces/*.pdf to ${isis-site.dir}/resources"/>
-                                        <echo message=""/>
-                                        <copy todir="${isis-site.dir}/resources" overwrite="true" force="true">
-                                            <fileset dir="${build.dir}/resources" includes="**/*.pdf"/>
-                                        </copy>
-
-                                        <echo message=""/>
-                                        <echo message=""/>
-                                        <echo message="copying PDFs from ${build.dir}/guides to ${isis-site.dir}/guides"/>
-                                        <echo message=""/>
-                                        <copy todir="${isis-site.dir}/guides" overwrite="true" force="true">
-                                            <fileset dir="${build.dir}/guides" includes="**/*.pdf"/>
+                                            <fileset dir="${build.dir}"/>
                                         </copy>
 
                                         <echo message=""/>
@@ -340,8 +319,8 @@
                         <version>1.8</version>
                         <executions>
                             <execution>
-                                <id>package</id>
-                                <phase>package</phase>
+                                <id>install</id>
+                                <phase>install</phase>
                                 <configuration>
                                     <target>
                                         <echo message=""/>
@@ -353,22 +332,7 @@
                                             <arg value="--all"/>
                                             <arg value="."/>
                                         </exec>
-                                        <echo message=""/>
 
-
-                                        <echo message=""/>
-                                        <echo message=""/>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>install</id>
-                                <phase>install</phase>
-                                <configuration>
-                                    <target>
                                         <echo message=""/>
                                         <echo message=""/>
                                         <echo message="git commit -m '${message}' "/>
