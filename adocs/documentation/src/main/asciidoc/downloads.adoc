@@ -15,7 +15,7 @@ Apache Isis&trade; software is a framework for rapidly developing domain-driven 
 
 == Getting Started
 
-If you just want to get going quickly, we suggest using our Maven archetype.  For more information, see link:./simpleapp-archetype.html[here].
+If you just want to get going quickly, we suggest using our Maven archetype.  For more information, see xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype][here].
 
 
 

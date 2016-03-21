@@ -95,7 +95,7 @@ Confirm that the versions of the Isis artifacts now cached in your local reposit
 
 ==== Verifying binary artifacts
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the link:../intro/getting-started/simpleapp-archetype.html[simpleapp archetype] and running the resultant app.
+You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype1] and running the resultant app.
 
 Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
 
