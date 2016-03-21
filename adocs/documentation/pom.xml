@@ -52,6 +52,7 @@
         <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
 
         <build.dir>${project.basedir}/target/site</build.dir>
+
         <isis-site.dir>${project.basedir}/../../../isis-site/content</isis-site.dir>
         <redirects.dir>${project.basedir}/../redirects/content</redirects.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
@@ -251,9 +252,6 @@
                     <name>!skip.copy</name>
                 </property>
             </activation>
-            <properties>
-            </properties>
-
             <build>
                 <plugins>
                     <plugin>
@@ -285,10 +283,26 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
+                                        <echo message="copying from ${build.dir} to ${isis-site.dir} (ignoring PDFs)"/>
                                         <echo message=""/>
                                         <copy todir="${isis-site.dir}" overwrite="true" force="true">
-                                            <fileset dir="${build.dir}"/>
+                                            <fileset dir="${build.dir}" excludes="**/*.pdf"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying from ${build.dir}/resouces/*.pdf to ${isis-site.dir}/resources"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site.dir}/resources" overwrite="true" force="true">
+                                            <fileset dir="${build.dir}/resources" includes="**/*.pdf"/>
+                                        </copy>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="copying PDFs from ${build.dir}/guides to ${isis-site.dir}/guides"/>
+                                        <echo message=""/>
+                                        <copy todir="${isis-site.dir}/guides" overwrite="true" force="true">
+                                            <fileset dir="${build.dir}/guides" includes="**/*.pdf"/>
                                         </copy>
 
                                         <echo message=""/>
@@ -300,7 +314,36 @@
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="true"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
+        <profile>
+            <id>commit</id>
+            <activation>
+                <property>
+                    <name>!skip.commit</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
                                         <echo message=""/>
                                         <echo message=""/>
                                         <echo message="git add all content"/>
@@ -347,6 +390,7 @@
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 
 </project>
