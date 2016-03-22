@@ -23,6 +23,7 @@ import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -69,6 +70,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @javax.jdo.annotations.Column(
             allowsNull="false",
             length = NAME_LENGTH
+    )
+    @Property(
+        domainEvent = NameDomainEvent.class
     )
     private String name;
     public String getName() {
