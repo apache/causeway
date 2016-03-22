@@ -24,6 +24,7 @@ import org.apache.isis.applib.events.ActionArgumentEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
@@ -31,23 +32,31 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
-public class ActionArgumentContext extends ValidityContext<ActionArgumentEvent> implements ProposedHolder {
+public class ActionArgumentContext extends ValidityContext<ActionArgumentEvent> implements ProposedHolder, ActionInteractionContext {
 
+    private final ObjectAction objectAction;
     private final ObjectAdapter[] args;
     private final int position;
     private final ObjectAdapter proposed;
 
     public ActionArgumentContext(
             final ObjectAdapter targetAdapter,
+            final ObjectAction objectAction,
             final Identifier id,
             final ObjectAdapter[] args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, targetAdapter, id, interactionInitiatedBy);
+        this.objectAction = objectAction;
 
         this.args = args;
         this.position = position;
         this.proposed = args[position];
+    }
+
+    @Override
+    public ObjectAction getObjectAction() {
+        return objectAction;
     }
 
     public ObjectAdapter[] getArgs() {

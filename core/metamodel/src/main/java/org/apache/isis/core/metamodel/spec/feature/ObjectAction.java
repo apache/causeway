@@ -17,7 +17,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -97,9 +96,12 @@ public interface ObjectAction extends ObjectMember {
     /**
      * Invokes the action's method on the target object given the specified set
      * of parameters, checking the visibility, usability and validity first.
+     *
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ObjectAdapter executeWithRuleChecking(
             final ObjectAdapter target,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) throws AuthorizationException;
@@ -107,9 +109,12 @@ public interface ObjectAction extends ObjectMember {
     /**
      * Invokes the action's method on the target object given the specified set
      * of parameters.
+     *
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ObjectAdapter execute(
             ObjectAdapter target,
+            ObjectAdapter mixedInAdapter,
             ObjectAdapter[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 

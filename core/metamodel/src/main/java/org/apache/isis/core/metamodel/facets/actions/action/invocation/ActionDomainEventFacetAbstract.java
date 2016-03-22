@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.util.Map;
+
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
@@ -34,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -41,6 +43,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public abstract class ActionDomainEventFacetAbstract
         extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
@@ -75,12 +78,12 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
                         eventType(), null,
-                        getIdentified(), ic.getTarget(), argumentAdapters,
+                        actionFrom(ic), getIdentified(),
+                        ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
                         null,
                         null);
         if (event != null && event.isHidden()) {
@@ -95,12 +98,12 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         eventType(), null,
-                        getIdentified(), ic.getTarget(), argumentAdapters,
+                        actionFrom(ic), getIdentified(),
+                        ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
                         null,
                         null);
         if (event != null && event.isDisabled()) {
@@ -112,6 +115,14 @@ public abstract class ActionDomainEventFacetAbstract
 
         }
         return null;
+    }
+
+    private static ObjectAction actionFrom(final InteractionContext<?> ic) {
+        if(!(ic instanceof ActionInteractionContext)) {
+            throw new IllegalStateException(
+                    "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
+        }
+        return ((ActionInteractionContext) ic).getObjectAction();
     }
 
     private static ObjectAdapter[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
@@ -130,7 +141,8 @@ public abstract class ActionDomainEventFacetAbstract
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,
                         eventType(), null,
-                        getIdentified(), ic.getTarget(), aic.getArgs(),
+                        actionFrom(ic), getIdentified(),
+                        ic.getTarget(), ic.getMixedIn(), aic.getArgs(),
                         null,
                         null);
         if (event != null && event.isInvalid()) {

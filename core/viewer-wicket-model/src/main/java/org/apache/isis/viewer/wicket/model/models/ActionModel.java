@@ -463,9 +463,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAdapter[] arguments = getArgumentsAsArray();
         final ObjectAction action = getActionMemento().getAction();
 
+        // if this action is a mixin, then it will fill in the details automatically.
+        final ObjectAdapter mixedInAdapter = null;
         final ObjectAdapter resultAdapter =
                 action.executeWithRuleChecking(
-                        targetAdapter, arguments,
+                        targetAdapter, mixedInAdapter, arguments,
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 

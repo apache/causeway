@@ -371,8 +371,11 @@ public class DomainResourceHelper {
         final List<ObjectAdapter> argAdapters = argHelper.parseAndValidateArguments(arguments);
 
         // invoke
-        final ObjectAdapter[] argArray2 = argAdapters.toArray(new ObjectAdapter[0]);
-        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray2, InteractionInitiatedBy.USER);
+        final ObjectAdapter mixedInAdapter = null; // action will automatically fill in if a mixin
+        final ObjectAdapter[] argAdapterArr = argAdapters.toArray(new ObjectAdapter[argAdapters.size()]);
+        final ObjectAdapter returnedAdapter = action.execute(
+                objectAdapter,  mixedInAdapter, argAdapterArr,
+                InteractionInitiatedBy.USER);
 
         final ObjectAndActionInvocation objectAndActionInvocation =
                 new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter, selfLink);
@@ -386,10 +389,6 @@ public class DomainResourceHelper {
     // //////////////////////////////////////
     // dependencies (from context)
     // //////////////////////////////////////
-
-    private PersistenceSession getPersistenceSession() {
-        return resourceContext.getPersistenceSession();
-    }
 
     private ServicesInjector getServicesInjector() {
         return resourceContext.getServicesInjector();

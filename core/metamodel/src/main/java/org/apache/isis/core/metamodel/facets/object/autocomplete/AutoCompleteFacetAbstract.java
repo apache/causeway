@@ -104,7 +104,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         
         final ObjectAdapter repositoryAdapter = adapterManager.getAdapterFor(repository);
         final ObjectAdapter searchAdapter = adapterManager.adapterFor(search);
-        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, new ObjectAdapter[] { searchAdapter},
+        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, null, new ObjectAdapter[] { searchAdapter},
                 interactionInitiatedBy);
         // check a collection was returned
         if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {

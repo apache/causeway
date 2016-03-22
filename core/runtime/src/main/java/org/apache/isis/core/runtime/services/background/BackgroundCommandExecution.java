@@ -112,8 +112,15 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     }
 
                     final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
+
+                    // TODO: background commands won't work for mixin actions...
+                    // ... we obtain the target from the bookmark service (above), which will
+                    // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
+                    // and also capture the mixinType within the aim memento.
+                    final ObjectAdapter mixedInAdapter = null;
+
                     final ObjectAdapter resultAdapter = objectAction.execute(
-                            targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                            targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
                     if(resultAdapter != null) {
                         Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                         command.setResult(resultBookmark);

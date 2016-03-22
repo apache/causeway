@@ -24,6 +24,7 @@ import org.apache.isis.applib.events.ActionInvocationEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
@@ -31,17 +32,25 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionInvocationEvent}.
  */
-public class ActionInvocationContext extends ValidityContext<ActionInvocationEvent> {
+public class ActionInvocationContext extends ValidityContext<ActionInvocationEvent> implements ActionInteractionContext {
 
+    private final ObjectAction objectAction;
     private final ObjectAdapter[] args;
 
     public ActionInvocationContext(
             final ObjectAdapter targetAdapter,
+            final ObjectAction objectAction,
             final Identifier id,
             final ObjectAdapter[] args,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
+        this.objectAction = objectAction;
         this.args = args;
+    }
+
+    @Override
+    public ObjectAction getObjectAction() {
+        return objectAction;
     }
 
     public ObjectAdapter[] getArgs() {

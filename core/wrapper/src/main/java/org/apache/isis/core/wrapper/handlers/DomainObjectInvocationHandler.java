@@ -625,8 +625,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode().shouldExecute()) {
             final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-            final ObjectAdapter actionReturnNO =
-                    objectAction.execute(targetAdapter, argAdapters, interactionInitiatedBy);
+            final ObjectAdapter mixedInAdapter = null; // mixin action will automatically fill in.
+            final ObjectAdapter returnedAdapter =
+                    objectAction.execute(
+                            targetAdapter, mixedInAdapter, argAdapters,
+                            interactionInitiatedBy);
 
             final IsisTransaction transaction = IsisContext.getTransactionManager().getTransaction();
 
@@ -635,7 +638,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             transaction.publishActionIfRequired(currentUser, timestamp);
 
-            return ObjectAdapter.Util.unwrap(actionReturnNO);
+            return ObjectAdapter.Util.unwrap(returnedAdapter);
         }
 
         return null;

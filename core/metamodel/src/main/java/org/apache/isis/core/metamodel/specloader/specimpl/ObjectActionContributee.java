@@ -196,6 +196,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     @Override
     public ObjectAdapter execute(
             final ObjectAdapter contributee,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -242,7 +243,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             }
         }
         
-        return serviceAction.execute(getServiceAdapter(), argsPlusContributee(contributee, arguments),
+        return serviceAction.execute(getServiceAdapter(), mixedInAdapter, argsPlusContributee(contributee, arguments),
                 interactionInitiatedBy);
     }
 

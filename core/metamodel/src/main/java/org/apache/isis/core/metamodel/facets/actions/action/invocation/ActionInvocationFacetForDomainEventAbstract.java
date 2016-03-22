@@ -150,7 +150,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link ActionInvocationFacet#invoke(ObjectAction, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
+     * {@link ActionInvocationFacet#invoke(ObjectAction, ObjectAdapter, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
      */
     public static class InvocationResult {
 
@@ -190,6 +190,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     public ObjectAdapter invoke(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -201,7 +202,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.EXECUTING,
                         eventType, null,
-                        owningAction, targetAdapter, arguments,
+                        owningAction, owningAction, targetAdapter, mixedInAdapter, arguments,
                         command,
                         null);
 
@@ -216,7 +217,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             domainEventHelper.postEventForAction(
                     AbstractDomainEvent.Phase.EXECUTED,
                     eventType, verify(event),
-                    owningAction, targetAdapter, arguments,
+                    owningAction, owningAction, targetAdapter, mixedInAdapter, arguments,
                     command,
                     invocationResultAdapter);
         }

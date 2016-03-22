@@ -54,12 +54,13 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
     public ObjectAdapter invoke(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturn<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
-                return underlyingFacet.invoke(owningAction, targetAdapter, argumentAdapters,
+                return underlyingFacet.invoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
                         interactionInitiatedBy);
             }
         });

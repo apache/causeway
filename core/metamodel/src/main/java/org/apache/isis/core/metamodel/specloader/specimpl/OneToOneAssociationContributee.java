@@ -102,7 +102,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
 
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceAction.execute(getServiceAdapter(), new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
+        return serviceAction.execute(getServiceAdapter(), null, new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
     }
 
     @Override

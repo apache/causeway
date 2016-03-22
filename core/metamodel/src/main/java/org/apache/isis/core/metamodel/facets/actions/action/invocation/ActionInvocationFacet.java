@@ -44,6 +44,7 @@ public interface ActionInvocationFacet extends Facet {
     ObjectAdapter invoke(
             ObjectAction owningAction,
             ObjectAdapter targetAdapter,
+            ObjectAdapter mixedInAdapter,  // null for regular or contributed (not mixin) actions
             ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy);
 

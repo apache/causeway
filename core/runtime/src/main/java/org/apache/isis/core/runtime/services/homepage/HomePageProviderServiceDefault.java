@@ -87,10 +87,14 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
             return  null;
         }
 
+        final ObjectAdapter mixedInAdapter = null;
+        final ObjectAdapter[] parameters = {};
+
         final ObjectAdapter objectAdapter = objectAction.executeWithRuleChecking(
-                serviceAdapter, new ObjectAdapter[] {},
+                serviceAdapter, mixedInAdapter, parameters,
                 InteractionInitiatedBy.USER,
                 WHERE_FOR_ACTION_INVOCATION);
+
         return objectAdapter != null ? objectAdapter.getObject(): null;
     }
 
