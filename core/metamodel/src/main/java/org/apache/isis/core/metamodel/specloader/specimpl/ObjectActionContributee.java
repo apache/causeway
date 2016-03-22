@@ -22,9 +22,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
@@ -221,7 +218,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                     bulkInteractionContext.getInvokedAs() == null) {
 
                 bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                actionInvocationContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
+                bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
             }
 
 
