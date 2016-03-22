@@ -53,71 +53,14 @@
                   </executions>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <warName>simpleapp</warName>
-                    <archive>
-                        <manifest>
-                            <addClasspath>false</addClasspath>
-                        </manifest>
-                        <manifestEntries>
-                            <Build-Time>${maven.build.timestamp}</Build-Time>
-                            <Build-Host>${agent.name}</Build-Host>
-                            <Build-User>${user.name}</Build-User>
-                            <Build-Maven>Maven ${maven.version}</Build-Maven>
-                            <Build-Java>${java.version}</Build-Java>
-                            <Build-OS>${os.name}</Build-OS>
-                            <Build-Label>${project.version}</Build-Label>
-                        </manifestEntries>
-                    </archive>
-                    <packagingExcludes>WEB-INF/lib/isis-core-webserver*.jar,
-                        WEB-INF/lib/javax.servlet-api-*.jar,
-                        WEB-INF/lib/javax.websocket-api-*.jar,
-                        WEB-INF/lib/jetty-all-*.jar</packagingExcludes>
-                </configuration>
-            </plugin>
-
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>build-helper-maven-plugin</artifactId>
-                                        <versionRange>[1.5,)</versionRange>
-                                        <goals>
-                                            <goal>maven-version</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <dependencies>
-    
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>${rootArtifactId}-app</artifactId>
         </dependency>
-        
-        <!-- other isis components -->
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-impl</artifactId>
@@ -130,19 +73,9 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security-shiro</artifactId>
         </dependency>
-
-        <!-- isis core -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
-        </dependency>
-
-        <!-- to run using WebServer (optional) -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webserver</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -150,52 +83,118 @@
             <artifactId>geronimo-servlet_3.0_spec</artifactId>
         </dependency>
 
-        <!-- 
-          JDBC drivers 
-          (for jdo objectstore)
-          -->
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-        </dependency>
-
-        <!-- 
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.1-901.jdbc4</version>
-        </dependency>
-         -->
-
-        <!-- 
-        mvn install:install-file -Dfile=sqljdbc4.jar \
-                                 -DgroupId=com.microsoft.sqlserver \
-                                 -DartifactId=jdbc \
-                                 -Dversion=4.0 \
-                                 -Dpackaging=jar
-         -->
-         <!-- 
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>sqljdbc4</artifactId>
-            <version>4.0</version>
-        </dependency>
-          -->
-
-        <dependency>
-          <groupId>org.lazyluke</groupId>
-          <artifactId>log4jdbc-remix</artifactId>
-          <exclusions>
-            <exclusion>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-api</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>package-war</id>
+            <activation>
+                <property>
+                    <name>!skip.package-war</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <warName>simpleapp</warName>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>false</addClasspath>
+                                </manifest>
+                                <manifestEntries>
+                                    <Build-Time>${maven.build.timestamp}</Build-Time>
+                                    <Build-Host>${agent.name}</Build-Host>
+                                    <Build-User>${user.name}</Build-User>
+                                    <Build-Maven>Maven ${maven.version}</Build-Maven>
+                                    <Build-Java>${java.version}</Build-Java>
+                                    <Build-OS>${os.name}</Build-OS>
+                                    <Build-Label>${project.version}</Build-Label>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>jdbc-hsqldb</id>
+            <activation>
+                <property>
+                    <name>!skip.jdbc-hsqldb</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jdbc-logging</id>
+            <activation>
+                <property>
+                    <name>!skip.jdbc-logging</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.lazyluke</groupId>
+                    <artifactId>log4jdbc-remix</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-api</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+        <!--
+        <profile>
+            <id>jdbc-postgres</id>
+            <activation>
+                <property>
+                    <name>!skip.jdbc-postgres</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>9.1-901.jdbc4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        -->
+        <!--
+        <profile>
+            <id>jdbc-mssql</id>
+            <activation>
+                <property>
+                    <name>!skip.jdbc-mssql</name>
+                </property>
+            </activation>
+
+            mvn install:install-file -Dfile=sqljdbc4.jar \
+                                     -DgroupId=com.microsoft.sqlserver \
+                                     -DartifactId=jdbc \
+                                     -Dversion=4.0 \
+                                     -Dpackaging=jar
+
+            <dependencies>
+               <dependency>
+                   <groupId>com.microsoft.sqlserver</groupId>
+                   <artifactId>sqljdbc4</artifactId>
+                   <version>4.0</version>
+               </dependency>
+            </dependencies>
+        </profile>
+        -->
+
         <profile>
             <id>intellij</id>
             <activation>
@@ -205,71 +204,48 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-servlet_3.0_spec</artifactId>
-                    <!--
-                    Use 'compile' so can run o.a.i.WebServer from within IntelliJ;
-                    can rely on servlet container to ignore this in war file
-                    -->
-                    <scope>compile</scope>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-core-webserver</artifactId>
                 </dependency>
             </dependencies>
         </profile>
         <profile>
-            <id>jrebel</id>
-            <properties>
-                <!-- as used in the rebel.xml in the dom project -->
-                <target.dir>target</target.dir>
-                <isis-jrebel-plugin.packagePrefix>dom.simple,org.apache.isis.objectstore.jdo.applib</isis-jrebel-plugin.packagePrefix>
-                <isis-jrebel-plugin.loggingLevel>warn</isis-jrebel-plugin.loggingLevel>
-            </properties>
+            <id>eclipse-m2e</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
             <build>
-                <plugins>
-                    <!--
-                    mvn -P jrebel antrun:run \
-                        -Djrebel.jar="C:/Users/Dan/.IdeaIC13/config/plugins/jr-ide-idea/lib/jrebel/jrebel.jar" \
-                        -Disis_jrebel_plugin.jar="C:/github/danhaywood/isis-jrebel-plugin/target/danhaywood-isis-jrebel-plugin-1.0.0-SNAPSHOT.jar"
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <configuration>
-                            <target>
-                                <property name="compile_classpath" refid="maven.compile.classpath" />
-                                <property name="runtime_classpath" refid="maven.runtime.classpath" />
-                                <property name="test_classpath" refid="maven.test.classpath" />
-                                <property name="plugin_classpath" refid="maven.plugin.classpath" />
-
-                                <echo message="" />
-                                <echo message="" />
-                                <echo message="jrebel.jar             = ${jrebel.jar}" />
-                                <echo message="isis_jrebel_plugin.jar = ${isis_jrebel_plugin.jar}" />
-                                <echo message="target.dir             = ${target.dir}" />
-                                <echo message="" />
-                                <echo message="" />
-
-                                <exec executable="java" failonerror="true">
-                                    <arg value="-javaagent:${jrebel.jar}" />
-                                    <arg value="-Drebel.log=false" />
-                                    <arg value="-Drebel.check_class_hash=true" />
-                                    <arg value="-Drebel.packages_exclude=org.apache.isis" />
-
-                                    <!-- as used in the rebel.xml in the dom project -->
-                                    <arg value="-Dproject.root=${project.basedir}/.." />
-                                    <arg value="-Dtarget.dir=${target.dir}" />
-
-                                    <arg value="-Drebel.plugins=${isis_jrebel_plugin.jar}" />
-                                    <arg value="-Disis-jrebel-plugin.packagePrefix=${isis-jrebel-plugin.packagePrefix}" />
-                                    <arg value="-Disis-jrebel-plugin.loggingLevel=${isis-jrebel-plugin.loggingLevel}" />
-                                    <arg value="-XX:MaxPermSize=128m" />
-                                    <arg value="-classpath" />
-                                    <arg value="${runtime_classpath}" />
-                                    <arg value="org.apache.isis.WebServer" />
-                                </exec>
-                            </target>
-                        </configuration>
-                    </plugin>
-                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                        <plugin>
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <version>1.0.0</version>
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.codehaus.mojo</groupId>
+                                                <artifactId>build-helper-maven-plugin</artifactId>
+                                                <versionRange>[1.5,)</versionRange>
+                                                <goals>
+                                                    <goal>maven-version</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore></ignore>
+                                            </action>
+                                        </pluginExecution>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>
