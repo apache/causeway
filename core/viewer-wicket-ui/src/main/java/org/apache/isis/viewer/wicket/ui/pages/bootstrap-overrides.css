@@ -822,3 +822,8 @@ tr.headers th form input {
     margin: 5px;
     padding: 5px;
 }
+
+.entityHeaderPanel .entityActions ul.additionalLinkList li.additionalLinkItem {
+    padding-top: 3px;
+    padding-bottom: 7px;
+}

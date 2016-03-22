@@ -32,9 +32,7 @@
                         <bs3:col span="12">
                             <c:fieldSet name="Name">
                                 <c:action id="delete"/>
-                                <c:property id="name" namedEscaped="true">
-                                    <c:action id="updateName" position="BELOW"/>
-                                </c:property>
+                                <c:property id="name" namedEscaped="true"/>
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>

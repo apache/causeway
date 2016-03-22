@@ -25,6 +25,8 @@
                 <bs3:col span="12" unreferencedActions="true">
                     <domainObject/>
                     <action id="clearHints" hidden="EVERYWHERE"/>
+                    <action id="downloadLayoutXml" hidden="EVERYWHERE"/>
+                    <action id="rebuildMetamodel" hidden="EVERYWHERE"/>
                 </bs3:col>
             </bs3:row>
         </bs3:col>
@@ -35,6 +37,9 @@
                 </bs3:col>
             </bs3:row>
         </bs3:col>
+    </bs3:row>
+    <bs3:row>
+
     </bs3:row>
     <bs3:row>
         <bs3:col span="0">
