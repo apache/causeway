@@ -43,7 +43,7 @@ class SoapEndpoint {
 
             String endpointAddress = getSpec().getEndpointAddress();
             if (endpointAddress == null) {
-                endpointAddress = String.format("http://localhost:%d/%s", port++, getSpec().getEndpointClass().getName().replace(".", "/"));
+                endpointAddress = String.format("http://localhost:%d/%s", port, getSpec().getEndpointClass().getName().replace(".", "/"));
                 getSpec().setEndpointAddress(endpointAddress);
             }
             Endpoint.publish(endpointAddress, getImplementor());
