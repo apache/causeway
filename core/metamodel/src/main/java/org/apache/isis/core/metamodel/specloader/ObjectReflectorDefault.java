@@ -310,11 +310,6 @@ public final class ObjectReflectorDefault
 
 
     @Override
-    public void invalidateCacheFor(Object domainObject) {
-        invalidateCache(domainObject.getClass());
-    }
-
-    @Override
     public void invalidateCache(final Class<?> cls) {
         
         if(!getCache().isInitialized()) {
