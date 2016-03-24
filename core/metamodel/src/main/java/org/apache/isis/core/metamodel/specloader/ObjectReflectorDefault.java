@@ -133,8 +133,6 @@ public final class ObjectReflectorDefault
 
     private final ServicesInjectorSpi servicesInjector;
 
-    private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
-
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private final List<LayoutMetadataReader> layoutMetadataReaders;
