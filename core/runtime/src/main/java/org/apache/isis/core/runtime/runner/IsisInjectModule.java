@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.runner;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
@@ -41,8 +38,6 @@ public class IsisInjectModule extends AbstractModule {
     private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
     private final IsisConfigurationBuilder isisConfigurationBuilder;
-
-    private final List<String> viewerNames = Lists.newArrayList();
 
     private static InstallerLookup defaultInstallerLookup() {
         return new InstallerLookup();
@@ -102,13 +97,6 @@ public class IsisInjectModule extends AbstractModule {
         configBuilder.injectInto(installerLookup);
         installerLookup.init();
         return installerLookup;
-    }
-
-    /**
-     * Adjustment (as per GOOS book)
-     */
-    public void addViewerNames(final List<String> viewerNames) {
-        this.viewerNames.addAll(viewerNames);
     }
 
     @Override
