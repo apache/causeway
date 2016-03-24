@@ -392,10 +392,6 @@ public class IsisSessionFilter implements Filter {
         return IsisContext.getTransactionManager();
     }
 
-    private AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
-    }
-
     private IsisSession openSession(final AuthenticationSession authSession) {
         return IsisContext.openSession(authSession);
     }
