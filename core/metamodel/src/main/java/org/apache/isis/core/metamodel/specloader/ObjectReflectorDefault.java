@@ -72,7 +72,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -120,7 +119,6 @@ public final class ObjectReflectorDefault
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final DeploymentCategory deploymentCategory;
-    private final IsisConfiguration configuration;
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
@@ -173,7 +171,6 @@ public final class ObjectReflectorDefault
         ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
 
         this.deploymentCategory = deploymentCategory;
-        this.configuration = configuration;
         this.servicesInjector = servicesInjector;
 
         this.programmingModel = programmingModel;
