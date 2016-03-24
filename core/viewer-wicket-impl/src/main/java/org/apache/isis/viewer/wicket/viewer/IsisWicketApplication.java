@@ -27,15 +27,12 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import com.google.common.base.Function;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
@@ -60,6 +57,7 @@ import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -196,9 +194,8 @@ public class IsisWicketApplication
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
-    @SuppressWarnings("unused")
     @Inject
-    private IsisSystem system;
+    private IsisSystem isisSystem;
 
 
     private boolean determiningDeploymentType;
@@ -291,29 +288,32 @@ public class IsisWicketApplication
 
             @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
-            
-        } catch(RuntimeException ex) {
-            List<MetaModelInvalidException> mmies = locateMetaModelInvalidExceptions(ex);
-            if(!mmies.isEmpty()) {
-                final MetaModelInvalidException mmie = mmies.get(0);
-                log("");
-                logBanner();
-                log("");
-                validationErrors.addAll(mmie.getValidationErrors());
-                for (String validationError : validationErrors) {
-                    logError(validationError);
-                }
-                log("");
-                log("Please inspect the above messages and correct your domain model.");
-                log("");
-                logBanner();
-                log("");
-            } else {
-                // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
-                LOG.error("Failed to initialize", ex);
-                throw ex;
+
+            final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+            if(mmie != null) {
+                this.validationErrors.addAll(mmie.getValidationErrors());
+                log(this.validationErrors);
             }
+
+        } catch(RuntimeException ex) {
+            // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
+            LOG.error("Failed to initialize", ex);
+            throw ex;
         }
+    }
+
+    private void log(final List<String> validationErrors) {
+        log("");
+        logBanner();
+        log("");
+        for (String validationError : validationErrors) {
+            logError(validationError);
+        }
+        log("");
+        log("Please inspect the above messages and correct your domain model.");
+        log("");
+        logBanner();
+        log("");
     }
 
     private void configureWicketSelect2() {
@@ -609,11 +609,6 @@ public class IsisWicketApplication
 
     // //////////////////////////////////////
 
-    protected List<MetaModelInvalidException> locateMetaModelInvalidExceptions(RuntimeException ex) {
-        return Lists.newArrayList(
-                Iterables.filter(Throwables.getCausalChain(ex), MetaModelInvalidException.class));
-    }
-
     /**
      * The validation errors, if any, that occurred on {@link #init() startup}.
      */
@@ -678,8 +673,8 @@ public class IsisWicketApplication
     @Override
     protected void onDestroy() {
         try {
-            if (system != null) {
-                system.shutdown();
+            if (isisSystem != null) {
+                isisSystem.shutdown();
             }
             IsisContext.shutdown();
             super.onDestroy();

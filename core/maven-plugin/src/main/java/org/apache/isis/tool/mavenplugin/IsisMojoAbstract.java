@@ -64,18 +64,15 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         try {
             isisSystem.init();
 
-        } catch(RuntimeException ex) {
-            ;
-            // ignore
+            try {
+                doExecute(context, isisSystem);
+            } catch (IOException e) {
+                ;
+                // ignore
+            }
+
         } finally {
             isisSystem.shutdown();
-        }
-
-        try {
-            doExecute(context, isisSystem);
-        } catch (IOException e) {
-            ;
-            // ignore
         }
 
     }

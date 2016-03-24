@@ -137,6 +137,8 @@ public class IsisInjectModule extends AbstractModule {
             final IsisSystemFactory systemFactory,
             final AppManifest appManifestIfAny) {
         final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
+        // as a side-effect, if the metamodel turns out to be invalid, then
+        // this will push the MetaModelInvalidException into IsisContext.
         system.init();
         return system;
     }

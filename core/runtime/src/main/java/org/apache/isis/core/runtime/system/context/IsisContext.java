@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
@@ -68,6 +69,11 @@ public class IsisContext implements DebuggableWithTitle {
 
     private static IsisConfiguration configuration;
 
+    /**
+     * Populated only if the metamodel was found to be invalid
+     */
+    private static MetaModelInvalidException metamodelInvalidException;
+
     // ///////////////////////////////////////////////////////////
     // Singleton & Constructor, shutdown
     // ///////////////////////////////////////////////////////////
@@ -92,6 +98,15 @@ public class IsisContext implements DebuggableWithTitle {
     public static void testReset() {
         singleton = null;
     }
+
+
+    public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
+        return IsisContext.metamodelInvalidException;
+    }
+    public static void setMetaModelInvalidException(final MetaModelInvalidException metaModelInvalid) {
+        IsisContext.metamodelInvalidException = metaModelInvalid;
+    }
+
 
     protected static enum SessionClosePolicy {
         /**

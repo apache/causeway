@@ -145,9 +145,18 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+
+        List<String> validationErrors = IsisWicketApplication.get().getValidationErrors();
+        if(!validationErrors.isEmpty()) {
+            final MmvErrorPage mmvErrorPage = new MmvErrorPage(Model.ofList(validationErrors));
+            return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
+        }
+
         PageProvider errorPageProvider = errorPageProviderFor(ex);
         // avoid infinite redirect loops
-        RedirectPolicy redirectPolicy = ex instanceof PageExpiredException? RedirectPolicy.NEVER_REDIRECT: RedirectPolicy.ALWAYS_REDIRECT;
+        RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
+                ? RedirectPolicy.NEVER_REDIRECT
+                : RedirectPolicy.ALWAYS_REDIRECT;
         return errorPageProvider != null 
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
                 : null;

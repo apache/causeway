@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
@@ -42,7 +43,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -306,6 +307,8 @@ public class IsisSessionFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
+        ensureMetamodelIsValid();
+
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
@@ -356,6 +359,20 @@ public class IsisSessionFilter implements Filter {
         }
 
     }
+
+
+    private static void ensureMetamodelIsValid() {
+        final MetaModelInvalidException ex = IsisContext.getMetaModelInvalidExceptionIfAny();
+        if(ex != null) {
+            final Set<String> validationErrors = ex.getValidationErrors();
+            final StringBuilder buf = new StringBuilder();
+            for (String validationError : validationErrors) {
+                buf.append(validationError).append("\n");
+            }
+            throw new IllegalStateException("Metamodel validation errors: \n" + buf.toString());
+        }
+    }
+
 
     protected boolean requestIsPassThru(final HttpServletRequest httpServletRequest) {
         return passThru != null && httpServletRequest.getRequestURI().startsWith(passThru);

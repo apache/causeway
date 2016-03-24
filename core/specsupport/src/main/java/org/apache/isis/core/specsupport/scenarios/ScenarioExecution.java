@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
+import static org.junit.Assert.fail;
 
 /**
  * Represents the currently executing scenario, allowing information to be shared 
@@ -72,7 +73,7 @@ public abstract class ScenarioExecution {
     public static ScenarioExecution current() {
         final ScenarioExecution execution = current.get();
         if(execution == null) {
-            throw new IllegalStateException("Scenario has not yet been instantiated");
+            fail();
         } 
         return execution;
     }

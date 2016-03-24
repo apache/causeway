@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -197,20 +198,35 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
             specificationLoader.init(runtimeContext);
 
-            authenticationManager.init();
-            authorizationManager.init();
+            try {
+                // validate here after all entities have been registered in the persistence session factory
+                specificationLoader.validateAndAssert();
 
-            persistenceSessionFactory.init();
 
-            // validate here after all entities have been registered in the persistence session factory
-            specificationLoader.validateAndAssert();
+                //
+                // remaining functionality only done if metamodel is valid.
+                //
+                authenticationManager.init();
+                authorizationManager.init();
 
-            // store simply so can do postConstruct when shutdown
-            this.serviceInitializer = initializeServices();
+                persistenceSessionFactory.init();
 
-            installFixturesIfRequired();
+                // do postConstruct.  We store the initializer to do preDestroy on shutdown
+                this.serviceInitializer = initializeServices();
 
-            translateServicesAndEnumConstants();
+                installFixturesIfRequired();
+
+                translateServicesAndEnumConstants();
+
+            } catch (final MetaModelInvalidException ex) {
+                // no need to use a higher level, such as error(...); the calling code will expose any metamodel
+                // validation errors in their own particular way.
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("Meta model invalid", ex);
+                }
+                IsisContext.setMetaModelInvalidException(ex);
+            }
+
 
         } catch (final IsisSystemException ex) {
             LOG.error("failed to initialise", ex);
@@ -344,25 +360,28 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
      */
     private void shutdownServices(final ServiceInitializer serviceInitializer) {
 
+        // may not be set if the metamodel validation failed during initialization
+        if (serviceInitializer == null) {
+            return;
+        }
+
         // call @PostDestroy (in a session)
-        if(serviceInitializer != null) {
-            IsisContext.openSession(new InitialisationSession());
+        IsisContext.openSession(new InitialisationSession());
+        try {
+            getTransactionManager().startTransaction();
             try {
-                getTransactionManager().startTransaction();
-                try {
 
-                    serviceInitializer.preDestroy();
+                serviceInitializer.preDestroy();
 
-                } catch (RuntimeException ex) {
-                    getTransactionManager().getTransaction().setAbortCause(
-                            new IsisTransactionManagerException(ex));
-                } finally {
-                    // will commit or abort
-                    getTransactionManager().endTransaction();
-                }
+            } catch (RuntimeException ex) {
+                getTransactionManager().getTransaction().setAbortCause(
+                        new IsisTransactionManagerException(ex));
             } finally {
-                IsisContext.closeSession();
+                // will commit or abort
+                getTransactionManager().endTransaction();
             }
+        } finally {
+            IsisContext.closeSession();
         }
     }
 
@@ -377,6 +396,12 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
      */
     public IsisConfiguration getConfiguration() {
         return isisComponentProvider.getConfiguration();
+    }
+    //endregion
+
+    // region > metaModel validity
+    public boolean isMetaModelValid() {
+        return IsisContext.getMetaModelInvalidExceptionIfAny() == null;
     }
     //endregion
 
