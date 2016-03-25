@@ -17,7 +17,7 @@ An object's title can be constructed in various ways, but the most flexible is t
 public String title() { ... }
 ----
 
-Note that Apache Isis' xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] extends this so that titles can also be internationalized.
+Note that Apache Isis' xref:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that titles can also be internationalized.
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
 
@@ -42,7 +42,7 @@ public String title() {
 ----
 <1> simple xref:rgcms.adoc#_rgcms_classes_utility_TitleBuffer[tility class] to help construct the title string
 <2> imperative conditional logic
-<3> using the xref:rgsvc.adoc#_rgsvc-api_WrapperFactory[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
+<3> using the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
 <4> ... but ignore if not
 
 As the example above shows, the implementation can be as complex as you like.

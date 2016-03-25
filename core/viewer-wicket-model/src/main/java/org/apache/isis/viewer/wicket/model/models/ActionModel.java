@@ -48,6 +48,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
@@ -59,6 +60,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -262,7 +264,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
     private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
-    private ActionExecutor executor;
 
 
     private ActionModel(final PageParameters pageParameters) {
@@ -325,7 +326,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
 
-        this.executor = actionModel.executor;
+        this.executingPanel = actionModel.executingPanel;
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
@@ -467,6 +468,17 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
                         targetAdapter, arguments,
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
+
+        final List<RoutingService> routingServices = getServicesInjector().lookupServices(RoutingService.class);
+        final Object result = resultAdapter != null ? resultAdapter.getObject() : null;
+        for (RoutingService routingService : routingServices) {
+            final boolean canRoute = routingService.canRoute(result);
+            if(canRoute) {
+                final Object routeTo = routingService.route(result);
+                return routeTo != null? getPersistenceSession().adapterFor(routeTo): null;
+            }
+        }
+
         return resultAdapter;
     }
 
@@ -496,14 +508,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             arguments[i] = scalarModel.getObject();
         }
         return arguments;
-    }
-    
-    public ActionExecutor getExecutor() {
-        return executor;
-    }
-
-    public void setExecutor(final ActionExecutor executor) {
-        this.executor = executor;
     }
 
     public void reset() {
@@ -653,6 +657,24 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     //////////////////////////////////////////////////
+
+    private ExecutingPanel executingPanel;
+
+    /**
+     * A hint passed from one Wicket UI component to another.
+     *
+     * Mot actually used by the model itself.
+     */
+    public ExecutingPanel getExecutingPanel() {
+        return executingPanel;
+    }
+
+    public void setExecutingPanel(final ExecutingPanel executingPanel) {
+        this.executingPanel = executingPanel;
+    }
+
+
+    //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
     
@@ -662,6 +684,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     public ActionModel copy() {
         return new ActionModel(this);
+    }
+
+    protected ServicesInjectorSpi getServicesInjector() {
+        return getPersistenceSession().getServicesInjector();
     }
 
 

@@ -17,9 +17,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -184,6 +184,7 @@ public interface ObjectAction extends ObjectMember {
     ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
+
 
     // //////////////////////////////////////////////////////
     // Utils
@@ -452,9 +453,9 @@ public interface ObjectAction extends ObjectMember {
 
             final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
             final List<String> associationNames = Lists.transform(associations,
-                    Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
+                    com.google.common.base.Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
             final List<String> associationIds = Lists.transform(associations,
-                    Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
+                    com.google.common.base.Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
 
             return new Filter<ObjectAction>() {
 

@@ -25,29 +25,19 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 
 public final class ObjectSpecifications {
 
     private ObjectSpecifications() {
     }
 
-    public enum MemberGroupLayoutHint {
-        LEFT,
-        MIDDLE,
-        RIGHT;
+    public static List<String> orderByMemberGroups(
+            final ObjectSpecification objSpec,
+            final Set<String> groupNamesToOrder,
+            final Hint hint) {
 
-        public int from(ColumnSpans columnSpans) {
-            if(this == LEFT) return columnSpans.getLeft();
-            if(this == MIDDLE) return columnSpans.getMiddle();
-            if(this == RIGHT) return columnSpans.getRight();
-            return 0;
-        }
-    }
-
-    public static List<String> orderByMemberGroups(ObjectSpecification objSpec, Set<String> groupNamesToOrder, MemberGroupLayoutHint memberGroupLayoutHint) {
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
         
@@ -56,10 +46,10 @@ public final class ObjectSpecifications {
             return leftColumnGroupNames;
         }
         
-        if(memberGroupLayoutHint == MemberGroupLayoutHint.MIDDLE) {
+        if(hint == Hint.MIDDLE) {
             return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
-        if(memberGroupLayoutHint == MemberGroupLayoutHint.RIGHT) {
+        if(hint == Hint.RIGHT) {
             return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
         }
         

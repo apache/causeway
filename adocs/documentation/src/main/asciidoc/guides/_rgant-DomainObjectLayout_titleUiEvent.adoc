@@ -1,5 +1,5 @@
 [[_rgant-DomainObjectLayout_titleUiEvent]]
-= titleUiEvent() (`1.11.0-SNAPSHOT`)
+= titleUiEvent()
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -10,15 +10,15 @@ This is as an alternative to implementing xref:rgcms.adoc#_rgcms_methods_reserve
 using the xref:rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.  (If either
 `title()` or `@Title` are present, then they will take precedence).
 
-Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] and can
+Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and can
 use obtain a reference to the domain object from the event.  From this they can, if they wish, specify a title for
 the domain object using the event's API.
 
 [NOTE]
 ====
 The feature was originally introduced so that xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
-xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view model]s could be kept as minimal as possible, just defining the data.
-UI events allow subscribers to provide UI hints, while xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[mixin]s can be used to provide the behaviour.
+xref:ugbtb.adoc#_ugbtb_view-models[view model]s could be kept as minimal as possible, just defining the data.
+UI events allow subscribers to provide UI hints, while xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin]s can be used to provide the behaviour.
 ====
 
 By default the event raised is `TitleUiEvent.Default`. For example:
@@ -56,7 +56,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 == Subscribers
 
 Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] has been appropriately configured)
+or (if the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] has been appropriately configured)
 using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -115,6 +115,6 @@ thn no event will be posted.
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically either
-by calling the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] API directly, or as a result
-of calling the xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`]'s
+by calling the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] API directly, or as a result
+of calling the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s
 `titleOf(...)` method.

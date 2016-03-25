@@ -27,8 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface AutoCompleteFacet extends Facet {
 
-    public List<ObjectAdapter> execute(
+    List<ObjectAdapter> execute(
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy);
 
+    int getMinLength();
 }

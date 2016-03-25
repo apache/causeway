@@ -69,6 +69,11 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         return label;
     }
 
+    @Override
+    public String getCssClass() {
+        final String cssClass = super.getCssClass();
+        return (cssClass != null ? (cssClass + " ") : "") + propertyExpression;
+    }
 
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {

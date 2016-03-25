@@ -1,0 +1,33 @@
+[[_ugbtb_other-techniques_transactions-and-errors]]
+= Transactions and Errors
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+In Apache Isis, every action invocation (in fact, every interaction) is automatically wrapped in a transaction, and any repository query automatically does a flush.
+
+What that means is that there's no need to explicitly start or commit transactions in Apache Isis; this will be done for you. Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[IsisJdoSupport] domain service, then you are likely to confuse Isis and get a stack trace for your trouble.
+
+
+
+
+== Aborting Transactions
+
+If you want to abort Apache Isis' transaction, this can be done by throwing `RecoverableException` (or any subclass, eg `ApplicationException`). The transaction will be aborted, and the exception message will be displayed to the user.
+
+If you throw any other exception (ie not a subclass of `RecoverableException`), then the users will see an error page (if Wicket viewer) or a 500 (if Restful Objects viewer).
+
+
+
+
+
+== Raise message/errors to users
+
+NOTE: TODO - xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_messages-api[`DomainObjectContainer`]
+
+
+
+== Exception Recognizers
+
+NOTE: TODO - xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`] service
+

@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.layoutmetadata;
 
 public interface LayoutMetadataReader2 extends LayoutMetadataReader {
 
-    public static class Support {
+    class Support {
 
         public static Support entitiesOnly() {
             return new Support(false,false,false,false,false,false,false);

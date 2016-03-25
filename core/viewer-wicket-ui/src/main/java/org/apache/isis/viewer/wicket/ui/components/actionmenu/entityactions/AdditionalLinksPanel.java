@@ -120,7 +120,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (linkAndLabel.getParameters().isNoParameters()) {
+                if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getDisabledReasonIfAny() == null) {
                     addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
 

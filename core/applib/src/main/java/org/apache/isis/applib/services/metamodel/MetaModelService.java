@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -42,5 +44,18 @@ public interface MetaModelService {
     @Programmatic
     String toObjectType(final Class<?> domainType);
 
+
+    @Programmatic
+    void rebuild(final Class<?> domainType);
+
+    /**
+     * Returns a list of representations of each of member of each domain class.
+     *
+     * <p>
+     *     Used by {@link MetaModelServicesMenu} to return a downloadable CSV.
+     * </p>
+     */
+    @Programmatic
+    List<DomainMember> export();
 
 }

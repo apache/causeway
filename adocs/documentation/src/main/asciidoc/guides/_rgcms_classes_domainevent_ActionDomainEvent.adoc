@@ -15,6 +15,6 @@ The class has a number of responsibilities (in addition to those it inherits):
 
 * provide selected metadata about the action parameters from the metamodel (names, types)
 
-* link back to the xref:rgsvc.adoc#_rgsvc-api_CommandContext[`CommandContext`] service's `Command` object
+* link back to the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service's `Command` object
 
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.

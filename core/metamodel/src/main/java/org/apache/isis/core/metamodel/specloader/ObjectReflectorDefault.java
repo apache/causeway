@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -70,7 +72,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -118,7 +119,6 @@ public final class ObjectReflectorDefault
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final DeploymentCategory deploymentCategory;
-    private final IsisConfiguration configuration;
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
@@ -130,8 +130,6 @@ public final class ObjectReflectorDefault
     private final FacetDecoratorSet facetDecoratorSet;
 
     private final ServicesInjectorSpi servicesInjector;
-
-    private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
@@ -173,7 +171,6 @@ public final class ObjectReflectorDefault
         ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
 
         this.deploymentCategory = deploymentCategory;
-        this.configuration = configuration;
         this.servicesInjector = servicesInjector;
 
         this.programmingModel = programmingModel;
@@ -243,6 +240,9 @@ public final class ObjectReflectorDefault
 
         // wire subcomponents into each other
         this.runtimeContext.injectInto(facetProcessor);
+        for (final LayoutMetadataReader layoutMetadataReader : layoutMetadataReaders) {
+            this.runtimeContext.injectInto(layoutMetadataReader);
+        }
 
         // initialize subcomponents
         facetDecoratorSet.init();
@@ -256,9 +256,15 @@ public final class ObjectReflectorDefault
 
     private void loadSpecificationsForServices() {
         for (final Class<?> serviceClass : getServiceClasses()) {
-            internalLoadSpecification(serviceClass);
+            final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
+            if(domainService != null) {
+                if(domainService.nature() == NatureOfService.VIEW || domainService.nature() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+                    internalLoadSpecification(serviceClass, domainService.nature());
+                }
+            }
         }
     }
+
 
     private void loadSpecificationsForMixins() {
         final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
@@ -297,11 +303,6 @@ public final class ObjectReflectorDefault
         facetDecoratorSet.shutdown();
     }
 
-
-    @Override
-    public void invalidateCacheFor(Object domainObject) {
-        invalidateCache(domainObject.getClass());
-    }
 
     @Override
     public void invalidateCache(final Class<?> cls) {
@@ -383,11 +384,16 @@ public final class ObjectReflectorDefault
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        final Class<?> substitutedType = classSubstitutor.getClass(type);
-        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType) : null;
+        return internalLoadSpecification(type, null);
     }
 
-    private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type) {
+    private ObjectSpecification internalLoadSpecification(final Class<?> type, final NatureOfService nature) {
+        final Class<?> substitutedType = classSubstitutor.getClass(type);
+        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType, nature) : null;
+    }
+
+
+    private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type, final NatureOfService nature) {
         Assert.assertNotNull(type);
         final String typeName = type.getName();
 
@@ -398,6 +404,9 @@ public final class ObjectReflectorDefault
                 return spec;
             }
             final ObjectSpecification specification = createSpecification(type);
+            if(nature != null) {
+                specification.markAsService();
+            }
             if (specification == null) {
                 throw new IsisException("Failed to create specification for class " + typeName);
             }
@@ -515,6 +524,7 @@ public final class ObjectReflectorDefault
         facetDecoratorSet.decorate(specSpi);
         specSpi.updateFromFacetValues();
         specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+
     }
 
     @Override

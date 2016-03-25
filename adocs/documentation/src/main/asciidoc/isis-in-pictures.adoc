@@ -11,7 +11,7 @@ pass:[<br/><br/><br/>]
 
 On this page we want to show you what a modern Apache Isis application looks like.
 
-The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
+The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/master/dom/src/main/java/todoapp/dom/todoitem[here].
 
 The todoapp also integrates with a number of other http://www.isisaddons.org[Isis Addons] modules.  Because we expect that most apps will end up using one or more of these addons, we've chosen to include screenshots of those too.
 
@@ -77,7 +77,7 @@ Note that some of the properties are read-only even in edit mode; individual pro
 
 === Actions
 
-The other way to modify an entity is to an invoke an action. In the screenshot below the `ToDoItem`'s category and subcategory can be updated together using an action:
+The other way to modify an entity is to an invoke an action. In the screenshot below the ``ToDoItem``'s category and subcategory can be updated together using an action:
 
 image::{_imagesdir}/isis-in-pictures/060-invoke-action.png[width="800px",link="{_imagesdir}/isis-in-pictures/060-invoke-action.png"]
 
@@ -89,24 +89,26 @@ In general though, all actions are associated with some object, and are (at leas
 
 
 
-=== Contributions
+=== Mixins
 
-As an alternative to placing actions (business logic) on a domain object, it can instead be placed on an (application-scoped, stateless) domain service. When an object is rendered by Apache Isis, it will automatically render all "contributed" behaviour; rather like traits or aspect-oriented mix-ins.
+As an alternative to placing actions (business logic) on a domain object, it can instead be placed inside a mixin object.  When an object is rendered by Apache Isis, the mixin "contributes" its behaviour to the domain object (similar to aspect-oriented traits).
 
-In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) and also the "similar to" collection are all contributed:
+In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) the "similar to" collection and the two "as DTO" actions are all contributed by mixins:
 
 image::{_imagesdir}/isis-in-pictures/065-contributions.png[width="800px",link="{_imagesdir}/isis-in-pictures/065-contributions.png"]
 
-
-Contributions are defined by the signature of the actions on the contributing service. The code snippet below shows how this works for the "export as xml" action:
-
-image::{_imagesdir}/isis-in-pictures/067-contributed-action.png[width="800px",link="{_imagesdir}/isis-in-pictures/067-contributed-action.png"]
 
 
 
 
 
 == Extensible Views
+
+[NOTE]
+====
+The remaining screenshots on this page are for v1.10.0 of the framework, which precedes the more recent support
+for tabbed views introduced in 1.12.0-SNAPSHOT.
+====
 
 The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible. For example, when a collection of objects is rendered, this is just one of several views, as shown in the selector drop-down:
 

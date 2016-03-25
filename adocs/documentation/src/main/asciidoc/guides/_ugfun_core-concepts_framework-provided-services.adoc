@@ -12,43 +12,43 @@ Some framework domain services are SPI: they exist primarily so that the applica
 
 General purpose:
 
-* xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`]
-* xref:rgsvc.adoc#_rgsvc-api_ClockService[`ClockService`]
-* xref:rgsvc.adoc#_rgsvc-api_IsisJdoSupport[`IsisJdoSupport`]
-* xref:rgsvc.adoc#_rgsvc-api_WrapperFactory[`WrapperFactory`]
-* xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`]
-* xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]
+* xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]
+* xref:rgsvc.adoc#_rgsvc_api_ClockService[`ClockService`]
+* xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`]
+* xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`]
+* xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`]
+* xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]
 
 Commands/Background/Auditing:
 
-* xref:rgsvc.adoc#_rgsvc-api_CommandContext[`CommandContext`] (SPI)
-* xref:rgsvc.adoc#_rgsvc-spi_CommandService[`CommandService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc-spi_AuditingService[`AuditingService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc-api_BackgroundService[`BackgroundService`]
-* xref:rgsvc.adoc#_rgsvc-spi_BackgroundCommandService[`BackgroundCommandService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc-spi_PublishingService[`PublishingService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`]
+* xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] (SPI)
 
 Information Sharing:
 
-* xref:rgsvc.adoc#_rgsvc-api_Scratchpad[`Scratchpad`]
-* xref:rgsvc.adoc#_rgsvc-api_ActionInvocationContext[`ActionInvocationContext`]
-* xref:rgsvc.adoc#_rgsvc-api_QueryResultsCache[`QueryResultsCache`]
+* xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`]
+* xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`]
+* xref:rgsvc.adoc#_rgsvc_api_QueryResultsCache[`QueryResultsCache`]
 
 
 UserManagement:
 
-* xref:rgsvc.adoc#_rgsvc-spi_UserProfileService[`UserProfileService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc-spi_UserRegistrationService[`UserRegistrationService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc-spi_EmailNotificationService[`EmailNotificationService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_spi_UserProfileService[`UserProfileService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc_spi_EmailNotificationService[`EmailNotificationService`] (SPI)
 
 
 Bookmarks and Mementos:
 
-* xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`BookmarkService`]
-* xref:rgsvc.adoc#_rgsvc-api_MementoService[`MementoService`]
-* xref:rgsvc.adoc#_rgsvc-api_DeepLinkService[`DeepLinkService`]
-* xref:rgsvc.adoc#_rgsvc-api_XmlSnapshotService[`XmlSnapshotService`]
+* xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`]
+* xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`]
+* xref:rgsvc.adoc#_rgsvc_api_DeepLinkService[`DeepLinkService`]
+* xref:rgsvc.adoc#_rgsvc_api_XmlSnapshotService[`XmlSnapshotService`]
 
 
-A full list of services can be found in the xref:rgsvc.adoc#_rgsvc-api[Domain Services (API)]  and xref:rgsvc.adoc#_rgsvc-spi[Domain Services (SPI)] chapters of the reference guide.
+A full list of services can be found in the xref:rgsvc.adoc#_rgsvc[Domain Services] reference guide.
 

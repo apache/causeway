@@ -33,6 +33,26 @@ public final class FacetUtil {
     private FacetUtil() {
     }
 
+    public static void addOrReplaceFacet(final Facet facet) {
+        if (facet == null) {
+            return;
+        }
+        final FacetHolder facetHolder = facet.getFacetHolder();
+        final List<Facet> facets = facetHolder.getFacets(new Filter<Facet>() {
+            @Override
+            public boolean accept(final Facet each) {
+                return facet.facetType() == each.facetType() && facet.getClass() == each.getClass();
+            }
+        });
+        if(facets.size() == 1) {
+            final Facet existingFacet = facets.get(0);
+            final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
+            facetHolder.removeFacet(existingFacet);
+            facet.setUnderlyingFacet(underlyingFacet);
+        }
+        facetHolder.addFacet(facet);
+    }
+
     /**
      * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
      * holder}.
@@ -145,11 +165,15 @@ public final class FacetUtil {
     }
 
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
+        final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
+        for (Class<? extends Facet> facetType : facetTypes) {
+            final Facet facet = source.getFacet(facetType);
+
+        }
         List<Facet> facets = source.getFacets(org.apache.isis.applib.filter.Filters.<Facet>any());
         for (Facet facet : facets) {
             target.addFacet(facet);
         }
     }
-
 
 }

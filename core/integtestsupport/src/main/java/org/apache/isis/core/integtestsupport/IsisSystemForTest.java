@@ -21,12 +21,12 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
@@ -66,6 +67,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
+
+import static org.junit.Assert.fail;
 
 /**
  * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.
@@ -272,7 +275,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         public IsisSystemForTest build() {
-            final IsisSystemForTest isisSystem =
+            final IsisSystemForTest isisSystemForTest =
                     new IsisSystemForTest(
                             appManifestIfAny,
                             configuration,
@@ -281,24 +284,20 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                             authenticationRequest,
                             listeners);
             if(level != null) {
-                isisSystem.setLevel(level);
+                isisSystemForTest.setLevel(level);
             }
 
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public synchronized void run() {
                     try {
-                        if (isisSystem != null) {
-                            isisSystem.tearDownSystem();
-                        }
+                        isisSystemForTest.tearDownSystem();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     try {
-                        if (isisSystem != null) {
-                            isisSystem.shutdown();
-                        }
+                        isisSystemForTest.shutdown();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -310,7 +309,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                 }
             });
 
-            return isisSystem;
+            return isisSystemForTest;
         }
 
 
@@ -380,11 +379,17 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     private void setUpSystem(FireListeners fireListeners) throws Exception {
 
+        // exit as quickly as possible for this case... (will already have been logged)
+        if(IsisContext.getMetaModelInvalidExceptionIfAny() != null) {
+            fail("Metamodel invalid");
+            return;
+        }
+
         boolean firstTime = isisSystem == null;
         if(fireListeners.shouldFire()) {
             fireInitAndPreSetupSystem(firstTime);
         }
-        
+
         if(firstTime) {
             IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
             isisLoggingConfigurer.configureLogging(".", new String[] {});
@@ -401,18 +406,33 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
             isisSystem = new IsisSystem(componentProvider);
 
-
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
 
             isisSystem.init();
             IsisContext.closeSession();
+
+            // if the IsisSystem does not initialize properly, then - as a side effect - the resulting
+            // MetaModelInvalidException will be pushed onto the IsisContext (as a static field).
+            final MetaModelInvalidException ex = IsisContext.getMetaModelInvalidExceptionIfAny();
+            if (ex != null) {
+
+                // for subsequent tests; the attempt to bootstrap the framework will leave
+                // the IsisContext singleton as set.
+                IsisContext.testReset();
+
+                final Set<String> validationErrors = ex.getValidationErrors();
+                final StringBuilder buf = new StringBuilder();
+                for (String validationError : validationErrors) {
+                    buf.append(validationError).append("\n");
+                }
+                fail("Metamodel is invalid: \n" + buf.toString());
+            }
         }
 
-        final AuthenticationManager authenticationManager = isisSystem.getSessionFactory().getAuthenticationManager();
-        authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
-        setContainer(getContainer());
+        final AuthenticationManager authenticationManager = IsisContext.getAuthenticationManager();
+        authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         openSession();
 
@@ -421,7 +441,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             firePostSetupSystem(firstTime);
         }
     }
-
 
     private void wireAndInstallFixtures() {
         FixturesInstaller fixturesInstaller = componentProvider.provideFixturesInstaller();
@@ -437,7 +456,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     public DomainObjectContainer getContainer() {
-        for (Object service : isisSystem.getSessionFactory().getServices()) {
+        for (Object service : IsisContext.getSessionFactory().getServices()) {
             if(service instanceof DomainObjectContainer) {
                 return (DomainObjectContainer) service;
             }
@@ -456,14 +475,18 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(fireListeners.shouldFire()) {
             firePreTeardownSystem();
         }
-        IsisContext.closeSession();
+        if(IsisContext.exists() && IsisContext.inSession()) {
+            IsisContext.closeSession();
+        }
         if(fireListeners.shouldFire()) {
             firePostTeardownSystem();
         }
     }
 
     private void shutdown() {
-        isisSystem.shutdown();
+        if(IsisContext.exists() && isisSystem != null) {
+            isisSystem.shutdown();
+        }
     }
 
     public void bounceSystem() throws Exception {
@@ -662,10 +685,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                 // nothing to do
                 break;
             case MUST_ABORT:
-                Assert.fail("Transaction is in state of '" + state + "'");
+                fail("Transaction is in state of '" + state + "'");
                 break;
             default:
-                Assert.fail("Unknown transaction state '" + state + "'");
+                fail("Unknown transaction state '" + state + "'");
         }
         
     }
@@ -689,7 +712,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
         if(transaction == null) {
-            Assert.fail("No transaction exists");
+            fail("No transaction exists");
             return;
         }
 
@@ -702,13 +725,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             case ABORTED:
                 break;
             case IN_PROGRESS:
-                Assert.fail("Transaction is still in state of '" + state + "'");
+                fail("Transaction is still in state of '" + state + "'");
                 break;
             case MUST_ABORT:
-                Assert.fail("Transaction is still in state of '" + state + "'");
+                fail("Transaction is still in state of '" + state + "'");
                 break;
             default:
-                Assert.fail("Unknown transaction state '" + state + "'");
+                fail("Unknown transaction state '" + state + "'");
         }
     }
 
@@ -722,7 +745,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
         if(transaction == null) {
-            Assert.fail("No transaction exists");
+            fail("No transaction exists");
             return;
         } 
         final State state = transaction.getState();
@@ -730,13 +753,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             case COMMITTED:
             case ABORTED:
             case MUST_ABORT:
-                Assert.fail("Transaction is in state of '" + state + "'");
+                fail("Transaction is in state of '" + state + "'");
                 break;
             case IN_PROGRESS:
                 transactionManager.endTransaction();
                 break;
             default:
-                Assert.fail("Unknown transaction state '" + state + "'");
+                fail("Unknown transaction state '" + state + "'");
         }
     }
 
@@ -750,7 +773,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
         if(transaction == null) {
-            Assert.fail("No transaction exists");
+            fail("No transaction exists");
             return;
         } 
         final State state = transaction.getState();
@@ -758,14 +781,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             case ABORTED:
                 break;
             case COMMITTED:
-                Assert.fail("Transaction is in state of '" + state + "'");
+                fail("Transaction is in state of '" + state + "'");
                 break;
             case MUST_ABORT:
             case IN_PROGRESS:
                 transactionManager.abortTransaction();
                 break;
             default:
-                Assert.fail("Unknown transaction state '" + state + "'");
+                fail("Unknown transaction state '" + state + "'");
         }
     }
 

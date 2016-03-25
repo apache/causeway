@@ -16,15 +16,13 @@
  */
 package org.apache.isis.applib.services.dto;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -39,7 +37,7 @@ public class Dto_downloadXml {
         this.dto = dto;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
@@ -50,7 +48,9 @@ public class Dto_downloadXml {
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "500.1")
-    public Object $$(final String fileName) throws JAXBException, IOException {
+    public Object $$(
+            @ParameterLayout(named = "File name")
+            final String fileName) {
 
         final String xml = jaxbService.toXml(dto);
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);

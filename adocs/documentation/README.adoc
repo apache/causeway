@@ -140,5 +140,5 @@ usage: monitor.rb [options]
 
 == Publish procedure
 
-Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].  See the link:http://isis.apache.org/guides/cg.html#_cg_asciidoc[committers' guide] (including a longer version of this page) for details.
+Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].  See the link:http://isis.apache.org/guides/cgcom.html#_cg_asciidoc[committers' guide] (including a longer version of this page) for details.
 

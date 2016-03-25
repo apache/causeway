@@ -21,10 +21,34 @@ This table summarises all releases of Apache Isis to date.
 | Improves
 | Bugs
 
+| xref:r1.12.0[1.12.0]
+|
+|
+| `1.12.0-SNAPSHOT` is still in development
+|
+|
+|
+
+| xref:r1.11.1[1.11.1]
+| 17-jan-2016
+| * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12334640[1.11.1]
+| Re-release under Java 1.7 (using toolchains plugin).
+| 0
+| 0
+| 1
+
+| xref:r1.11.0[1.11.0]
+| 02-jan-2016
+| * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333974[1.11.0]
+| More flexible REST API, view models using JAXB.
+| 9
+| 19
+| 12
+
 | xref:r1.10.0[1.10.0]
 | 10-nov-2015
 | * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333354[1.10.0]
-| Combined release notes for core and simpleapp-archetype.
+| New domain services, multi-tenancy support and mixins.
 | 7
 | 18
 | 12
@@ -32,7 +56,7 @@ This table summarises all releases of Apache Isis to date.
 | xref:r1.9.0[1.9.0]
 | 1-sep-2015
 | * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12332806[1.9.0]
-| Combined release notes for core and simpleapp-archetype.
+| AppManifest, Restful Objects representations and other "under-the-cover" improvements.
 | 18
 | 50
 | 25
@@ -202,6 +226,9 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_1.12.0.adoc[leveloffset=+1]
+include::_release-notes_1.11.1.adoc[leveloffset=+1]
+include::_release-notes_1.11.0.adoc[leveloffset=+1]
 include::_release-notes_1.10.0.adoc[leveloffset=+1]
 include::_release-notes_1.9.0.adoc[leveloffset=+1]
 include::_release-notes_1.8.0.adoc[leveloffset=+1]

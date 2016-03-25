@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
@@ -42,7 +43,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -89,6 +90,11 @@ public class IsisSessionFilter implements Filter {
     public static final String WHEN_NO_SESSION_KEY = "whenNoSession";
 
     /**
+     * Which URLs to ignore (eg <code>/restful/swagger</code> so that swagger specs can be accessed from the swagger-ui)
+     */
+    public static final String PASS_THRU_KEY = "passThru";
+
+    /**
      * Init parameter key to read the restricted list of paths (if
      * {@link #WHEN_NO_SESSION_KEY} is for {@link WhenNoSession#RESTRICTED}).
      * 
@@ -130,6 +136,8 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
+    private String passThru;
+
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
         httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
     }
@@ -148,9 +156,22 @@ public class IsisSessionFilter implements Filter {
                 httpResponse.sendError(401);
             }
         },
+        AUTO("auto") {
+            @Override
+            public void handle(final IsisSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+                if(fromWebBrowser(httpRequest)) {
+                    httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Apache Isis\"");
+                }
+                httpResponse.sendError(401);
+            }
+
+            private boolean fromWebBrowser(final HttpServletRequest httpRequest) {
+                String accept = httpRequest.getHeader("Accept");
+                return accept.contains("text/html");
+            }
+        },
         /**
-         * the destination servlet is expected to know that there will be no
-         * open context
+         * the destination servlet is expected to know that there will be no open session, and handle the case appropriately
          */
         CONTINUE("continue") {
             @Override
@@ -159,8 +180,7 @@ public class IsisSessionFilter implements Filter {
             }
         },
         /**
-         * Allow access to a restricted list of URLs (else redirect to the first
-         * of that list of URLs)
+         * Allow access to a restricted list of URLs (else redirect to the first of that list of URLs)
          */
         RESTRICTED("restricted") {
             @Override
@@ -207,6 +227,7 @@ public class IsisSessionFilter implements Filter {
     public void init(final FilterConfig config) throws ServletException {
         authSessionStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
         lookupWhenNoSession(config);
+        lookupPassThru(config);
         lookupRedirectToOnException(config);
         lookupIgnoreExtensions(config);
     }
@@ -251,6 +272,12 @@ public class IsisSessionFilter implements Filter {
 
     }
 
+    private void lookupPassThru(final FilterConfig config) {
+
+        this.passThru = config.getInitParameter(PASS_THRU_KEY);
+
+    }
+
     private void lookupRedirectToOnException(final FilterConfig config) {
         redirectToOnException = config.getInitParameter(REDIRECT_TO_ON_EXCEPTION_KEY);
     }
@@ -280,6 +307,8 @@ public class IsisSessionFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
+        ensureMetamodelIsValid();
+
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
@@ -293,6 +322,11 @@ public class IsisSessionFilter implements Filter {
 
             if (requestIsIgnoreExtension(this, httpServletRequest) ||
                 ResourceCachingFilter.isCachedResource(httpServletRequest)) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            if(requestIsPassThru(httpServletRequest)) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -326,6 +360,24 @@ public class IsisSessionFilter implements Filter {
 
     }
 
+
+    private static void ensureMetamodelIsValid() {
+        final MetaModelInvalidException ex = IsisContext.getMetaModelInvalidExceptionIfAny();
+        if(ex != null) {
+            final Set<String> validationErrors = ex.getValidationErrors();
+            final StringBuilder buf = new StringBuilder();
+            for (String validationError : validationErrors) {
+                buf.append(validationError).append("\n");
+            }
+            throw new IllegalStateException("Metamodel validation errors: \n" + buf.toString());
+        }
+    }
+
+
+    protected boolean requestIsPassThru(final HttpServletRequest httpServletRequest) {
+        return passThru != null && httpServletRequest.getRequestURI().startsWith(passThru);
+    }
+
     private boolean requestIsIgnoreExtension(final IsisSessionFilter filter, final HttpServletRequest httpRequest) {
         final String servletPath = httpRequest.getServletPath();
         for (final Pattern extension : filter.ignoreExtensions) {
@@ -338,10 +390,6 @@ public class IsisSessionFilter implements Filter {
 
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
-    }
-
-    private AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
     }
 
     private IsisSession openSession(final AuthenticationSession authSession) {

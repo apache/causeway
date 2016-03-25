@@ -23,7 +23,7 @@ image::{_imagesdir}how-tos/domain-services/hexagonal-architecture-addons.png[wid
 
 The (non-ASF) link:http://isisaddons.org[Isis Addons] are a good source of domain services, providing SPI implementations of the common cross-cutting concerns, and also a number of APIs for domain objects to invoke (eg tags, excel, settings).  Of course, you can also write your own domain services as well, for example to interface with some external CMS system, say.
 
-The Apache Isis framework also provides numerous in-built domain services.  These are catalogued in the reference guide, see xref:rgsvc.adoc#_rgsvc-api[here] and xref:rgsvc.adoc#_rgsvc-spi[here].
+The Apache Isis framework also provides numerous in-built domain services.  These are catalogued in the xref:rgsvc.adoc[domain services] reference guide.
 
 
 
@@ -173,7 +173,7 @@ public OrderContributions {
 <3> Only actions with a single argument can be contributed as associations
 
 More information about contributions can be found xref:ugfun.adoc#_ugfun_how-tos_contributed-members[here].  More information
-about using contributions and mixins to keep your domain application decoupled can be found xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_contributions[here] and xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[here].
+about using contributions and mixins to keep your domain application decoupled can be found xref:ugbtb.adoc#_ugbtb_decoupling_contributions[here] and xref:ugbtb.adoc#_ugbtb_decoupling_mixins[here].
 
 
 === Event Subscribers
@@ -233,7 +233,7 @@ public class MyService extends AbstractService {
 }
 ----
 
-The framework provides a number of request-scoped services, include a scratchpad service, query results caching, and support for co-ordinating bulk actions.  See xref:rgsvc.adoc#_rgsvc-api[here] and xref:rgsvc.adoc#_rgsvc-spi[here] for further details.
+The framework provides a number of request-scoped services, include a xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service query results caching through the xref:rgsvc.adoc#_rgsvc_api_QueryResultsCache[`QueryResultsCache`], and support for co-ordinating bulk actions through the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] service.  See the xref:rgsvc.adoc[domain services] reference guide for further details.
 
 
 
@@ -284,8 +284,7 @@ isis.services = employee.Employees,\
 
 This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
 
-Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rgsvc.adoc#_rgsvc-api[here] and _rgsvc-spi[here] for further details.
-
+Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rgsvc.adoc[domain services] reference guide for further details.
 
 
 

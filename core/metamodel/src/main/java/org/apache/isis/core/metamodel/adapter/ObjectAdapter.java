@@ -336,18 +336,22 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
                 return false;
             }
             if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { return true; }
+            return isVisibleForUser(adapter);
+        }
+
+        private static boolean isVisibleForUser(final ObjectAdapter adapter) {
+            final VisibilityContext<?> context = createVisibleInteractionContextForUser(adapter);
             final ObjectSpecification objectSpecification = adapter.getSpecification();
-            final VisibilityContext<?> context = createVisibleInteractionContext(adapter,
-                    interactionInitiatedBy);
-            InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
+            final InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
             return visibleResult.isNotVetoing();
         }
 
-        private static VisibilityContext<?> createVisibleInteractionContext(
-                final ObjectAdapter objectAdapter,
-                final InteractionInitiatedBy interactionInitiatedBy) {
+        private static VisibilityContext<?> createVisibleInteractionContextForUser(
+                final ObjectAdapter objectAdapter) {
             return new ObjectVisibilityContext(
-                    objectAdapter, objectAdapter.getSpecification().getIdentifier(), interactionInitiatedBy,
+                    objectAdapter,
+                    objectAdapter.getSpecification().getIdentifier(),
+                    InteractionInitiatedBy.USER,
                     Where.OBJECT_FORMS);
         }
     }

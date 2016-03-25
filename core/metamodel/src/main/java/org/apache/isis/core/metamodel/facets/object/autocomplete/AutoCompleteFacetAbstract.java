@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +32,10 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -40,6 +44,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
+
 
     public static Class<? extends Facet> type() {
         return AutoCompleteFacet.class;
@@ -53,6 +58,11 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
+
+    /**
+     * lazily populated
+     */
+    private Integer minLength;
 
     /**
      * cached once searched for
@@ -118,10 +128,49 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         }
     }
 
+    @Override
+    public int getMinLength() {
+        if(minLength == null) {
+            final Method method = findMethod();
+            minLength = MinLengthUtil.determineMinLength(method);
+        }
+        return minLength;
+    }
+
+    private Method findMethod() {
+        if(!cachedRepositoryAction) {
+            cacheRepositoryAction();
+        }
+
+        final ActionInvocationFacet invocationFacet = repositoryAction.getFacet(ActionInvocationFacet.class);
+        if(invocationFacet instanceof ImperativeFacet) {
+            return findMethod((ImperativeFacet) invocationFacet);
+        }
+        final Facet underlyingFacet = invocationFacet.getUnderlyingFacet();
+        if(underlyingFacet instanceof ImperativeFacet) {
+            return findMethod((ImperativeFacet) underlyingFacet);
+        }
+        return null;
+    }
+
+    private Method findMethod(final ImperativeFacet invocationFacet) {
+        final ImperativeFacet facet = invocationFacet;
+        final List<Method> methods = facet.getMethods();
+        for (Method method : methods) {
+            final ImperativeFacet.Intent intent = facet.getIntent(method);
+            if(intent == ImperativeFacet.Intent.EXECUTE) {
+                return method;
+            }
+        }
+        return null;
+    }
+
     private void cacheRepositoryAction() {
         try {
             final ObjectSpecification repositorySpec = specificationLoader.loadSpecification(repositoryClass);
-            final List<ObjectAction> objectActions = repositorySpec.getObjectActions(ActionType.USER, Contributed.EXCLUDED, ObjectAction.Filters.withId(actionName));
+            final List<ObjectAction> objectActions =
+                    repositorySpec.getObjectActions(
+                            ActionType.USER, Contributed.EXCLUDED, ObjectAction.Filters.withId(actionName));
 
             repositoryAction = objectActions.size() == 1? objectActions.get(0): null;
         } finally {

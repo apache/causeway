@@ -1,0 +1,50 @@
+[[_rgsvc_api_FixtureScriptsDefault]]
+= `FixtureScriptsDefault`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+The `FixtureScriptsDefault` service provides the ability to execute xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts] .
+
+The service extends from the xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], and is only instantiated by the framework if there no custom implementation of `FixtureScripts` has been otherwise provided; in other words it is a fallback.
+
+If this service is instantiated (as a fallback) then it uses the xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] to obtain a `FixtureScriptsSpecification`.  This configures this service, telling it which package to search for `FixtureScript` classes, how to execute those classes, and hints that influence the UI.
+
+[TIP]
+====
+We recommend using xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] rather than subclassing xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`].
+====
+
+
+
+== API & Implementation
+
+The API for the service is:
+
+[source,java]
+----
+public class FixtureScriptsDefault ... {
+    @Programmatic
+    public List<FixtureResult> runFixtureScript(
+        FixtureScript fixtureScript,
+        String parameters) { ... }
+}
+----
+
+... in other words the same as xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] superclass that it inherits from.
+
+
+== Configuration
+
+As noted in the introduction, this service is only instantiated if there is no other implementation of `FixtureScripts` available on the classpath.
+
+If an instance of `FixtureScriptsSpecificationProvider` is available on the classpath, then the service will be visible in the UI (assuming xref:rgcfg.adoc#_rgcfg_deployment-types[prototype mode]).  Otherwise the service will be available only to be injected and invoked programmatically.
+
+
+
+
+== Related Services
+
+The service interacts with xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`].

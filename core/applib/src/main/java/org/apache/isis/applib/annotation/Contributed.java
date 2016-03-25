@@ -19,9 +19,14 @@
 
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The means by which a domain service action will be contributed to a domain object.
  */
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+)
 public enum Contributed {
     /**
      * Default: contributed as both an action and also (if takes a single argument and has safe semantics) as an association

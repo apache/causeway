@@ -47,7 +47,7 @@ public class CollectionContentsMultipleViewsPanelFactory extends ComponentFactor
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsMultipleViewsPanel(id, collectionModel, this);
+        return new CollectionContentsMultipleViewsPanel(id, collectionModel);
     }
 
 }

@@ -25,26 +25,22 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -130,18 +126,19 @@ public class EntityPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!isVisible(objectAdapter)) {
+        if(!ObjectAdapter.Util.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
             throw new ObjectMember.AuthorizationException();
         }
 
-
-        // the next bit is a work-around for JRebel integration...
-        // ... even though the IsisJRebelPlugin calls invalidateCache, it seems that there is 
-        // some caching elsewhere in the Wicket viewer meaning that stale metadata is referenced.
-        // doing an additional call here seems to be sufficient, though not exactly sure why... :-(
-        if(!getDeploymentType().isProduction()) {
-            getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
+        final ObjectSpecification objectSpec = entityModel.getTypeOfSpecification();
+        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
+        if(facet != null) {
+            // the facet should always exist, in fact
+            // just enough to ask for the metadata.
+            // This will cause the current ObjectSpec to be updated as a side effect.
+            final Grid unused = facet.getGrid();
         }
+
 
         if(titleString == null) {
             final String titleStr = objectAdapter.titleString(null);
@@ -149,13 +146,8 @@ public class EntityPage extends PageAbstract {
         }
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
-        entityPageContainer.add(new CssClassAppender(new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                ObjectAdapter adapter = entityModel.getObject();
-                return adapter.getObject().getClass().getSimpleName();
-            }
-        }));
+        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
+        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
         themeDiv.addOrReplace(entityPageContainer);
 
         addChildComponents(entityPageContainer, model);
@@ -165,31 +157,7 @@ public class EntityPage extends PageAbstract {
         addBreadcrumb(entityModel);
 
         addBookmarkedPages(entityPageContainer);
-
-
-        // TODO mgrigorov: Zero Clipboard has been moved to EntityIconAndTitlePanel where the entity model is available.
-        // Is this still needed for something else ?!
-        //
-        // ensure the copy link holds this page.
-        send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }
-
-    private boolean isVisible(final ObjectAdapter input) {
-        final InteractionResult visibleResult =
-                InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input
-        ));
-        return visibleResult.isNotVetoing();
-    }
-
-    private VisibilityContext<?> createVisibleInteractionContext(
-            final ObjectAdapter objectAdapter) {
-        final Identifier identifier = objectAdapter.getSpecification().getIdentifier();
-        return new ObjectVisibilityContext(
-                objectAdapter, identifier, InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
-    }
-
-
 
     private void addBreadcrumb(final EntityModel entityModel) {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();

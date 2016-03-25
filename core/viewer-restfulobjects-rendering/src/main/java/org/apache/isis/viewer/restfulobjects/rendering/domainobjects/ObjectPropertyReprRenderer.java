@@ -219,7 +219,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 
             // REVIEW: check that it works for ToDoItem$Category, though...
-            final ObjectSpecification choiceSpec = objectAdapter.getSpecification();
+            final ObjectSpecification choiceSpec = choiceAdapter.getSpecification();
             list.add(DomainObjectReprRenderer.valueOrRef(rendererContext, choiceAdapter, choiceSpec));
         }
         return list;

@@ -116,9 +116,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     }
 
     @Override
-    public void invalidateCacheFor(Object domainObject) {
-    }
-    @Override
     public void invalidateCache(Class<?> domainClass) {
     }
 

@@ -19,13 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.selector.links;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -40,10 +40,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -56,6 +56,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+
 /**
  * Provides a list of links for selecting other views that support
  * {@link ComponentType#ENTITY} with a backing {@link EntityModel}.
@@ -67,7 +69,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
  *     rendered by this component 'collapses' to just show that underlying view.
  * </p>
  */
-public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
+public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
 
 
     private static final long serialVersionUID = 1L;
@@ -95,14 +97,19 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
     protected Component selectedComponent;
 
 
-    public EntityLinksSelectorPanel(final String id, final EntityModel model, final ComponentFactory factory) {
+    public EntityLinksSelectorPanel(
+            final String id,
+            final EntityModel model,
+            final ComponentFactory factory) {
         super(id, model);
         this.underlyingIdPrefix = ComponentType.ENTITY.toString();
         this.componentType = factory.getComponentType();
     }
 
 
-    protected int determineInitialFactory(List<ComponentFactory> componentFactories, IModel<?> model) {
+    protected int determineInitialFactory(
+            final List<ComponentFactory> componentFactories,
+            final IModel<?> model) {
         return 0;
     }
 
@@ -315,7 +322,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
             return;
         }
         uiHintContainer.setHint(this, UIHINT_VIEW, ""+viewNum);
-        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     /**

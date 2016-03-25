@@ -1,0 +1,47 @@
+[[_rgsvc_api_DomainObjectContainer_presentation-api]]
+= Presentation API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+A responsibility of every domain object is to return a title.  This can be done declaratively using the xref:rgant.adoc#_rgant-Title[`@Title`] annotation on property/ies, or it can be done imperatively by writing a xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method.
+
+It's quite common for titles to be built up of the titles of other objects.  If using building up the title using `@Title` then Apache Isis will automatically use the title of the objects referenced by the annotated properties.  We also need programmatic access to these titles if going the imperative route.
+
+Similarly, it often makes sense if xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_messages-api[raising messages] to use the title of an object in a message rather (than a some other property of the object), because this is how end-users will be used to identifying the object.
+
+The API defined by `DomainObjectContainer` is simply:
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    String titleOf(Object domainObject);                // <1>
+    String iconNameOf(Object domainObject);             // <2>
+    ...
+}
+----
+<1> return the title of the object, as rendered in the UI by the Apache Isis viewers.
+<2> return the icon name of the object, as rendered in the UI by the Apache Isis viewers.
+
+
+By way of example, here's some code from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] showing the use of the API in an message:
+
+[source,java]
+----
+    public List<ToDoItem> delete() {
+        final String title = container.titleOf(this);   // <1>
+        ...
+        container.removeIfNotAlready(this);
+        container.informUser(
+                TranslatableString.tr(
+                    "Deleted {title}", "title", title), // <2>
+                    this.getClass(), "delete");
+        ...
+    }
+
+----
+<1> the title is obtained first, because we're not allowed to reference object after it's been deleted
+<2> use the title in an i18n `TranslatableString`

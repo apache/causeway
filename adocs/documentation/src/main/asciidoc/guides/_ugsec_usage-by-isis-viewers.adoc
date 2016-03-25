@@ -49,14 +49,14 @@ Similarly, for those object members that _are_ visible, the viewer also checks i
 
 === User-registration
 
-As well as providing a sign-in screen, the Wicket viewer also provides the ability for xref:_user_registration[users to self-register].  By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.  These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:ugbtb.adoc#_ugbtb_more-advanced_headless-access[Headless access] in order to actually do their stuff.
+As well as providing a sign-in screen, the Wicket viewer also provides the ability for xref:_user_registration[users to self-register].  By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.  These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:ugbtb.adoc#_ugbtb_headless-access[Headless access] in order to actually do their stuff.
 
 [TIP]
 ====
 The sign-in verification page to render is pluggable; see xref:ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
 ====
 
-User registration is only available if the xref:rgsvc.adoc#_rgsvc-spi_UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
+User registration is only available if the xref:rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
 Because Shiro realms are pluggable, the Apache Isis framework does not provide default implementations of this service.  However, if you are using the http://github.com/isisaddons/isis-module-security[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
 
@@ -113,14 +113,18 @@ The strategy is configured in `web.xml`; for example:
     </init-param>
     <init-param>
         <param-name>whenNoSession</param-name>
-        <param-value>basicAuthChallenge</param-value>           <!--2-->
+        <param-value>auto</param-value>                         <!--2-->
+    </init-param>
+    <init-param>
+        <param-name>passThru</param-name>
+        <param-value>/restful/swagger</param-value>             <!--3-->
     </init-param>
 </filter>
 ----
 <1> configure basic auth strategy
-<2> what to do if no session was found; we indicate to issue a 401 basic authentication challenge
+<2> what to do if no session was found; we use `auto` so as to issue a 401 status code with basic authentication challenge if the request originated from a web browser.  (Prior to `1.11.0` this parameter was set either to `basicAuthChallenge` (which works when requested from web browser) or to `unauthorized` (which works when requested from a suitably coded custom Javascript app).
+<3> which paths are allowed to be accessed directly, without a session.  The `/restful/swagger` path provides access to the SwaggerResource that dynamically generates swagger spec files from the Apache Isis metamodel.
 
-The `IsisSessionFilter` has a further plugin point if no session was found (that is, if `AuthenticationSessionStrategy#lookupValid()` returns null), which is how to respond.  The value "basicAuthChallenge" means to return a 401, which is what triggers the web browser to pop-up the basic HTTP challenge dialog box.
 
 The above filter must then be chained before the servlet that actually handles the REST requests:
 

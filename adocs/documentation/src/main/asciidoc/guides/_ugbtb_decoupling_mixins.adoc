@@ -1,0 +1,191 @@
+[[_ugbtb_decoupling_mixins]]
+= Mixins
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+A mixin object allows one class to contribute behaviour - actions, (derived) properties and
+(derived) collections - to another domain object, either a domain entity or view model.
+
+Some programming languages use the term "trait" instead of mixin, and some languages (such as AspectJ) define their own
+syntax for defining such constructs.  In Apache Isis a mixin is very similar to a domain service, however it also
+defines a single 1-arg constructor that defines the type of the domain objects that it contributes to.
+
+Why do this?  The main reason is to allow the app to be decoupled, so that it doesn't degrade into the proverbial
+link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].  Mixins (and contributions) allow dependency
+to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+
+
+
+== Example
+
+This is probably best explained by way of an example.  Suppose we have the `Customer` domain object which implements
+a `DocumentHolder` interface:
+
+[source,java]
+----
+public class Customer implements DocumentHolder {
+    ...
+}
+----
+
+
+We could then imagine a mixin that would contribute behaviour to list, add and remove the ``Document``s for this holder:
+
+[source,java]
+----
+@Mixin                                                          // <1>
+public class DocumentHolder_documents {
+    private final DocumentHolder holder;
+    public DocumentHolder_documents(DocumentHolder holder) {    // <2>
+        this.holder = holder;
+    }
+    @Action(semantics=SemanticsOf.SAFE)
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
+    @CollectionLayout(render = RenderType.EAGERLY)
+    public List<Document> documents() {
+        ...                                                     // <3>
+    }
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public DocumentHolder add(Document document) {
+        ...                                                     // <4>
+    }
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public DocumentHolder remove(Document document) {
+        ...                                                     // <5>
+    }
+}
+----
+<1> alternatively can use `@DomainObject(nature=Nature.MIXIN)`
+<2> constructor indicates the type that is contributed to
+<3> implementation could, for example, use the (non-ASF)
+http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module.
+<4> implementation would probably delegate to an injected repository to (ultimately) insert data into some table
+<5> implementation would probably delegate to an injected repository to (ultimately) delete data from some table
+
+The above example also omits any supporting methods, eg `hideXxx()`, `disableXxx()`, `validateXxx()`, etc.
+
+In the user interface the "documents" collection, the "add" and the "delete" actions will appear to be part of
+`Customer`.  In essence the framework constructs a composite UI from the parts of multiple objects.
+
+
+[TIP]
+====
+The (non-ASF) http://github.com/incodehq/incode-module-note[Incode note] and
+http://github.com/incodehq/incode-module-commchannel[Incode commchannel] modules are real-world examples that use this
+technique throughout.
+====
+
+
+
+== Contributing a single member
+
+The mixin can contribute as much or as little behaviour as makes sense.  For example, in the example above it might be
+that ``Document``s are created through some other mechanism (eg scanned) and are never deleted.  In that case, the
+mixin might be simply:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolder_documents {
+    ..
+    public List<Document> documents() { ... }
+    ...
+}
+----
+
+
+For the case where there is only a single member being contributed, the special name "__" (that is, two underscores)
+can be used instead.  In this case, the contributee member's name will be inferred from the mixin's class name.  If the
+class name itself contains an underscore, then the last part of the class name will be used.
+
+Thus, for a mixin whose class name is `DocumentHolder_documents`, the effective member name is `documents`.  We could
+therefore rewrite the mixin as:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolder_documents {
+    ..
+    public List<Document> __() { ... }
+    ...
+}
+----
+
+The benefit of this is marginal unless there are supporting methods, in which case the removal of boilerplate is welcome:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolder_documents {
+    ..
+    public List<Document> __() { ... }
+    public boolean hide__() { ... }
+    public String disable__() { ... }
+    ...
+}
+----
+
+
+== Programmatic usage
+
+When a domain object is rendered, the framework will automatically instantiate all required mixins and delegate to them
+dynamically.  If writing integration tests or fixtures, or (sometimes) just regular domain logic, then you may need to
+instantiate mixins directly.
+
+For this you can use the
+xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)`
+method.  For example:
+
+[source,java]
+----
+DocumentHolder_documents mixin = container.mixin(DocumentHolder_documents.class, customer);
+----
+
+The xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
+xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience
+method.
+
+
+
+== Other reasons to use mixins
+
+In the introduction to this topic we mentioned that mixins are most useful for ensuring that the domain app remains
+decoupled.  This applies to the case where the contributee (eg `Customer`, being mixed into) is in one module, while
+the contributor mixin (`DocumentHolder_documents`) is in some other module.  The `customer` module knows about the
+`document` module, but not vice versa.
+
+However, you might also want to consider moving behaviour out of entities even within the same module, perhaps even
+within the same Java package.  And the reason for this is to support hot-reloading of Java classes, so that you can
+modify and recompile your application without having to restart it.  This can provide substantial productivity gains.
+
+The Hotspot JVM has limited support for hot reloading; generally you can change method implementations but you cannot
+introduce new methods.  However, the link:https://dcevm.github.io/[DCEVM] open source project will patch the JVM to
+support much more complete hot reloading support.  There are also, of course, commercial products such as JRebel.
+
+The main snag in all this is the DataNucleus enhancer... any change to entities is going to require the entity to be
+re-enhanced, and the JDO metamodel recreated, which usually "stuffs things up".  So hot-reloading of an app whose
+fundamental structure is changing is likely to remain a no-no.
+
+However, chances are that the structure of your domain objects (the data) will change much less rapidly than
+the behaviour of those domain objects.  Thus, it's the behaviour that you're most likely wanting to change while the
+app is still running.  If you move that behaviour out into mixins (or
+xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services]), then these can be reloaded happily.
+(When running in prototype mode), Apache Isis will automatically recreate the portion of the metamodel for any domain
+object as it is rendered.
+
+
+
+== Related reading
+
+Mixins are an implementation of the link:http://www.artima.com/articles/dci_vision.html[DCI architecture] architecture, as formulated and described by link:https://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug] and link:https://en.wikipedia.org/wiki/Jim_Coplien[Jim Coplien].  Reenskaug was the inventor of the MVC pattern (and also the external
+examiner for Richard Pawson's PhD thesis), while Coplien has a long history in object-orientation, C++ and patterns.
+
+DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where
+behaviour is bound to objects dynamically rather than statically in some context or other.  The `@Mixin`
+pattern is Apache Isis' straightforward take on the same basic concept.
+
+You might also wish to check out link:http://zest.apache.org[Apache Zest] (formerly Qi4J), which implements a much more
+general purpose implementation of the same concepts.
+

@@ -27,14 +27,21 @@
             <div class="valueChoicesSelect2Panel scalarNameAndValueComponentType">
                 <div class="form-group" wicket:id="scalarIfRegular">
                     <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
-                    <div class="scalarValueWrapper">
-                        <div class="choicesPlaceholder">
-                            <select wicket:id="scalarValue" class="choices form-control input-sm select2-remote" style="width: 99.8%;"></select>
+
+                    <span class="scalarValueWrapper">
+                        <div class="scalarPlaceholder">
+                            <span class="scalarValueInput">
+                                <span class="editing">
+                                    <select wicket:id="scalarValue" class="choices input-sm select2-remote" style="width: 99.8%;"></select>
+                                    <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+                                </span>
+                            </span>
+                            <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight"></span>
                         </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
-                    </div>
-                    <span wicket:id="associatedActionLinksRight"></span>
+                    </span>
+                    <div class="clearfix"></div>
                 </div>
                 <span wicket:id="scalarIfCompact"></span>
             </div>

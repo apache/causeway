@@ -18,12 +18,17 @@
  */
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The positioning of a label for a property or action parameter.
  *
  * @see org.apache.isis.applib.annotation.PropertyLayout
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+)
 public enum LabelPosition {
     DEFAULT,
     LEFT,

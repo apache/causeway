@@ -70,6 +70,12 @@ public class IsisMojoXsd extends IsisMojoAbstract {
     @Parameter(required = false, readonly = false, property = "separate", defaultValue = "false")
     private boolean separate;
 
+    /**
+     * Whether to also generate the isis common schema(s).
+     */
+    @Parameter(required = false, readonly = false, property = "commonSchemas", defaultValue = "false")
+    private boolean commonSchemas;
+
     @Override
     protected void doExecute(
             final ContextForMojo context, final IsisSystem system)
@@ -102,7 +108,9 @@ public class IsisMojoXsd extends IsisMojoAbstract {
 
         final Object instance = InstanceUtil.createInstance(dtoClassName);
         final Map<String, String> schemaByNamespace =
-                jaxbService.toXsd(instance, JaxbService.IsisSchemas.INCLUDE);
+                jaxbService.toXsd(
+                        instance,
+                        commonSchemas ? JaxbService.IsisSchemas.INCLUDE: JaxbService.IsisSchemas.IGNORE);
 
         final File schemaDir = separate? new File(outputDir, dtoClassName): outputDir;
 

@@ -1,0 +1,162 @@
+[[_rgsvc_api_WrapperFactory]]
+= `WrapperFactory`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.  If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by te callee are honoured.
+
+For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.  Said another way: interactions are performed "as if" they are through the viewer.
+
+[NOTE]
+====
+For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:ugtst.adoc#_ugtst_integ-test-support_wrapper-factory[here]
+====
+
+This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@MaxLength` or `@Regex`.
+
+This capability is frequently used within xref:ugtst.adoc#_ugtst_integ-test-support[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
+
+
+
+
+== API
+
+The API provided by the service is:
+
+[source,java]
+----
+public interface WrapperFactory {
+    @Programmatic
+    <T> T wrap(T domainObject);                             // <1>
+    @Programmatic
+    <T> T unwrap(T possibleWrappedDomainObject);            // <2>
+    @Programmatic
+    <T> boolean isWrapper(T possibleWrappedDomainObject);   // <3>
+
+    public static enum ExecutionMode {                      // <4>
+        EXECUTE(true,true),
+        SKIP_RULES(false, true),                            // <5>
+        NO_EXECUTE(true, false);                            // <6>
+    }
+    @Programmatic
+    <T> T wrap(T domainObject, ExecutionMode mode);         // <7>
+    @Programmatic
+    <T> T wrapNoExecute(T domainObject);                    // <8>
+    @Programmatic
+    <T> T wrapSkipRules(T domainObject);                    // <9>
+    ...
+ }
+----
+<1> wraps the underlying domain object.  If it is already wrapped, returns the object back unchanged.
+<2> Obtains the underlying domain object, if wrapped.  If the object is not wrapped, returns back unchanged.
+<3> whether the supplied object has been wrapped.
+<4> enumerates how the wrapper interacts with the underlying domain object.
+<5> validate all business rules and then execute.
+<6> skip all business rules and then execute (including creating xref:rgant.adoc#_rgant-Action_command[command]s and firing pre- and post-execute xref:rgant.adoc#_rgant-Action_domainEvent[domain event]s).
+<7> validate all business rules (including those from xref:rgant.adoc#_rgant-Action_domainEvent[domain event]s) but do not execute.
+<8> convenience method to invoke `wrap(...)` with `ExecuteMode#NO_EXECUTE` (make this feature more discoverable)
+<9> convenience method to invoke `wrap(...)` with `ExecuteMode#SKIP_RULES` (make this feature more discoverable)
+
+
+
+The service works by returning a "wrapper" around a supplied domain object (a link:http://www.javassist.org[javassist] proxy), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced. The wrapper can be interacted with as follows:
+
+* a `get...()` method for properties or collections
+* a `set...()` method for properties
+* an `addTo...()` or `removeFrom...()` method for collections
+* any action
+
+Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it. For example, if a property is annotated with `@Hidden` then a `HiddenException` will be thrown. Similarly if an action has a `validateXxx()` method and the supplied arguments are invalid then an `InvalidException` will be thrown.
+
+In addition, the following methods may also be called:
+
+* the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and `toString()` methods
+* any xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] methods
+
+An exception will be thrown if any other methods are thrown.
+
+
+
+
+
+== Usage
+
+The caller will typically obtain the target object (eg from some repository) and then use the injected `WrapperFactory` to wrap it before interacting with it.
+
+For example:
+
+[source,java]
+----
+public class CustomerAgent {
+    @Action
+    public void refundOrder(final Order order) {
+        final Order wrappedOrder = wrapperFactory.wrap(order);
+        try {
+            wrappedOrder.refund();
+        } catch(InteractionException ex) {          // <1>
+            container.raiseError(ex.getMessage());  // <2>
+            return;
+        }
+    }
+    ...
+    @Inject
+    WrapperFactory wrapperFactory;
+    @Inject
+    DomainObjectContainer container;
+}
+----
+<1> if any constraints on the `Order`'s `refund()` action would be violated, then ...
+<2> ... these will be trapped and raised to the user as a warning.
+
+[NOTE]
+====
+It ought to be possible to implement an xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.  This recognizer service would recognize the `InteractionException` and convert to a suitable message.
+
+At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…
+====
+
+
+
+
+== Listener API
+
+The `WrapperFactory` also provides a listener API to allow other services to listen in on interactions.
+
+[source,java]
+----
+public interface WrapperFactory {
+    ...
+    @Programmatic
+    List<InteractionListener> getListeners();                               // <1>
+    @Programmatic
+    public boolean addInteractionListener(InteractionListener listener);    // <2>
+    @Programmatic
+    public boolean removeInteractionListener(InteractionListener listener); // <3>
+    @Programmatic
+    public void notifyListeners(InteractionEvent ev);                       // <4>
+}
+----
+<1> all ``InteractionListener``s that have been registered.
+<2> registers an `InteractionListener`, to be notified of interactions on all wrappers.  The listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
+<3> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
+<4> used by the framework itself
+
+The original intent of this API was to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.  No such feature has yet been implemented however.  Also, the capabilities have by and large been superceded by Apache Isis' support for domain events.  We may therefore deprecate this API in the future.
+
+
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
+
+To use an alternative implementation, use
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).

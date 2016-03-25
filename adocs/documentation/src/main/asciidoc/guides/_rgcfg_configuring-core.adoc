@@ -21,7 +21,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 (default value)
 |Description
 
-|`isis.object.` +
+|`isis.objects.` +
 `editing`
 |`true`,`false` +
 (`true`)
@@ -67,8 +67,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `createdLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
@@ -76,8 +75,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `loadedLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
@@ -85,8 +83,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `persistingLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
@@ -94,8 +91,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `persistedLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
@@ -103,8 +99,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `removingLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
@@ -112,8 +107,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `updatingLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
@@ -121,32 +115,28 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `updatedLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`cssClassUiEvent.postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`iconUiEvent.postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`titleUiEvent.postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
@@ -261,21 +251,21 @@ If no configuration property is available, then the defaults is determined by th
 `email.tls.enabled`
 |`true`,`false` +
 (`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  +
+|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  +
+|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -283,14 +273,14 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 | `isis.service.` +
 `email.sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  *Mandatory*.  +
+|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  *Mandatory*.  +
+|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -299,13 +289,13 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `eventbus.implementation` +
 | `guava`, `axon`, +
 FQCN (`_guava_`)
-|which implementation to use by the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] as the underlying event bus.
+|which implementation to use by the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
 `eventbus.allowLateRegistration` +
 |`true`,`false` +
 (`false`)
-|whether a domain service can register with the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] after any events have posted. +
+|whether a domain service can register with the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
 
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
 
@@ -355,7 +345,7 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
 
-See xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] to learn more about the translation service.
+See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
 
 |`isis.viewers.` +
 `paged.parented`
@@ -408,7 +398,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the Wicket viewer, and by the xref:rgsvc.adoc#_rgsvc-api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is _not_ "skip rules").  However the Restful Objects viewer does _not_ currently support filtering.
+Filtering is supported by the Wicket viewer, and by the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is _not_ "skip rules").  However the Restful Objects viewer does _not_ currently support filtering.
 
 [NOTE]
 ====

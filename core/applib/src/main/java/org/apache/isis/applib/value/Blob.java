@@ -26,8 +26,7 @@ import java.io.Serializable;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import com.google.common.io.ByteStreams;
-import com.google.common.io.OutputSupplier;
+import com.google.common.io.ByteSource;
 
 public final class Blob implements NamedWithMimeType, Serializable {
 
@@ -91,12 +90,7 @@ public final class Blob implements NamedWithMimeType, Serializable {
     }
     
     public void writeBytesTo(final OutputStream os) throws IOException {
-        ByteStreams.write(bytes, new OutputSupplier<OutputStream>() {
-            @Override
-            public OutputStream getOutput() throws IOException {
-                return os;
-            }
-        });
+        ByteSource.wrap(bytes).copyTo(os);
     }
 
     @Override

@@ -218,7 +218,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                     bulkInteractionContext.getInvokedAs() == null) {
 
                 bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                actionInvocationContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
+                bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
             }
 
 

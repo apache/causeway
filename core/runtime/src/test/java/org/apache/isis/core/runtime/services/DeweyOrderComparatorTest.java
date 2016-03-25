@@ -26,6 +26,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
+
 import static org.hamcrest.CoreMatchers.is;
 
 public class DeweyOrderComparatorTest {

@@ -119,7 +119,9 @@ public class TranslationServicePo implements TranslationService {
         if (!getMode().isWrite()) {
             return null;
         }
-        return  ((PoWriter)po).toPot();
+        StringBuilder buf = new StringBuilder();
+        ((PoWriter)po).toPot(buf);
+        return buf.toString();
     }
 
 

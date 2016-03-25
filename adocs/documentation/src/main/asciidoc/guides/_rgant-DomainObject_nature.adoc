@@ -44,7 +44,7 @@ The identity of an inmemory entity is determined solely by the state of entity's
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 
-Equivalent to annotating with xref:rgant.adoc#_rgant-Mixin[`@Mixin`].  For further discussion on using mixins, see xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[mixins] in the user guide.
+Equivalent to annotating with xref:rgant.adoc#_rgant-Mixin[`@Mixin`].  For further discussion on using mixins, see xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins] in the user guide.
 
 
 * `VIEW_MODEL` +

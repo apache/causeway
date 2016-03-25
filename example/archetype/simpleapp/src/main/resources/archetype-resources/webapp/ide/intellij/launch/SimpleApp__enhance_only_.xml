@@ -2,7 +2,7 @@
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
 <component name="ProjectRunConfigurationManager">
-s  <configuration default="false" name="SimpleApp (enhance only)" type="Application" factoryName="Application">
+  <configuration default="false" name="SimpleApp (enhance only)" type="Application" factoryName="Application">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
     <option name="MAIN_CLASS_NAME" value="org.apache.isis.Dummy" />
     <option name="VM_PARAMETERS" value="" />

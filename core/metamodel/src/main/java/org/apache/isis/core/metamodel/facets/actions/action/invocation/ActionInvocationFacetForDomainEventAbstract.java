@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
@@ -52,6 +51,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -150,7 +150,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
+     * {@link ActionInvocationFacet#invoke(ObjectAction, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
      */
     public static class InvocationResult {
 
@@ -195,9 +195,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
-
-        final AuthenticationSession session = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
 
         // ... post the executing event
         final ActionDomainEvent<?> event =
@@ -333,24 +330,31 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     // special case for edit properties
                 } else {
 
-                    command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
-
-                    // the background service is used here merely as a means to capture an invocation memento
-                    final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
-                    if(backgroundService != null) {
-                        final Object targetObject = unwrap(targetAdapter);
-                        final Object[] args = CommandUtil.objectsFor(arguments);
-                        final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
-
-                        if(aim != null) {
-                            command.setMemento(aim.asMementoString());
-                        } else {
-                            throw new IsisException(
-                                    "Unable to build memento for action " +
-                                            owningAction.getIdentifier().toClassAndNameIdentityString());
-                        }
+                    if(command.getMemberIdentifier() == null) {
+                        // any contributed/mixin actions will fire after the main action
+                        // the guard here prevents them from trashing the command's memberIdentifier
+                        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
                     }
 
+                    if(command.getMemento() == null) {
+                        // similarly, guard here to deal with subsequent contributed/mixin actions.
+
+                        // the background service is used here merely as a means to capture an invocation memento
+                        final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
+                        if(backgroundService != null) {
+                            final Object targetObject = unwrap(targetAdapter);
+                            final Object[] args = CommandUtil.objectsFor(arguments);
+                            final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+
+                            if(aim != null) {
+                                command.setMemento(aim.asMementoString());
+                            } else {
+                                throw new IsisException(
+                                        "Unable to build memento for action " +
+                                                owningAction.getIdentifier().toClassAndNameIdentityString());
+                            }
+                        }
+                    }
                 }
 
                 // copy over the command execution 'context' (if available)
@@ -397,12 +401,14 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             Object result;
             if(cacheable) {
                 final QueryResultsCache queryResultsCache = getServicesInjector().lookupService(QueryResultsCache.class);
+                final Object[] targetPojoPlusExecutionParameters = ArrayExtensions
+                        .appendT(executionParameters, targetPojo);
                 result = queryResultsCache.execute(new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
                         return method.invoke(targetPojo, executionParameters);
                     }
-                }, targetPojo.getClass(), method.getName(), executionParameters);
+                }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
             } else {
                 result = method.invoke(targetPojo, executionParameters);
             }
@@ -412,10 +418,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             }
             if (result == null) {
                 if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
-                    // if this was a void method on a ViewModel.Cloneable, then (to save boilerplate in the domain)
+                    // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
                     // automatically do the clone and return the clone instead.
-                    final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) targetAdapter.getObject();
-                    final Object clone = cloneable.clone();
+                    final ViewModelFacet facet = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                    final Object clone = facet.clone(targetAdapter.getObject());
                     final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
                     return InvocationResult.forActionThatReturned(clonedAdapter);
                 }
@@ -425,10 +431,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
 
             if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
-                // if the object returned is a ViewModel.Cloneable, then
+                // if the object returned is cloneable, then
                 // (to save boilerplate in the domain) automatically do the clone.
-                final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) result;
-                result = cloneable.clone();
+                final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                result = facet.clone(result);
                 resultAdapter = getAdapterManager().adapterFor(result);
             }
 
@@ -444,11 +450,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 }
             }
 
-            final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-            currentInvocation.set(
-                    publishedActionFacet != null
-                            ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
-                            : null);
+            if(currentInvocation.get() == null) {
+                final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+                if(publishedActionFacet != null) {
+                    currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
+                }
+            }
 
             return InvocationResult.forActionThatReturned(resultAdapter);
 

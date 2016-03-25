@@ -106,7 +106,7 @@ public class PublishingServiceWithDefaultPayloadFactories {
         final ObjectAdapter result = currentInvocation.getResult();
         final List<ObjectAdapter> parameters = currentInvocation.getParameters();
         final EventPayload payload = payloadFactoryToUse.payloadFor(
-                currentInvocation.getAction().getIdentifier(),
+                currentInvocation.getIdentifiedHolder().getIdentifier(),
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(target)), 
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)), 
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(result)));

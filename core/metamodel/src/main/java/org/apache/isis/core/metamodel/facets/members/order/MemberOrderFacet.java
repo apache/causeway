@@ -56,5 +56,9 @@ public interface MemberOrderFacet extends MultipleValueFacet {
      */
     public String sequence();
 
+    /**
+     * The untranslated name of this member order (to associate back to <code>MemberOrderLayout</code>).
+     */
+    public String untranslatedName();
 
 }

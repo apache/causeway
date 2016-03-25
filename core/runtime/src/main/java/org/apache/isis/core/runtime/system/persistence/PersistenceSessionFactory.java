@@ -19,15 +19,10 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.jdo.PersistenceManagerFactory;
-
-import com.google.common.collect.Maps;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -115,24 +110,26 @@ public class PersistenceSessionFactory
         if(connectionFactoryName != null) {
             String connectionFactory2Name = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
             String transactionType = props.get("javax.jdo.option.TransactionType");
+            // extended logging
             if(transactionType == null) {
-                LOG.info("found non-JTA JNDI datasource (" + connectionFactoryName + ")");
+                LOG.info("found config properties to use non-JTA JNDI datasource (" + connectionFactoryName + ")");
                 if(connectionFactory2Name != null) {
-                    LOG.warn("found non-JTA JNDI datasource (" + connectionFactoryName + "); second '-nontx' JNDI datasource configured but will not be used (" + connectionFactory2Name +")");
+                    LOG.warn("found config properties to use non-JTA JNDI datasource (" + connectionFactoryName + "); second '-nontx' JNDI datasource also configured but will not be used (" + connectionFactory2Name +")");
                 }
-            } else
-                LOG.info("found JTA JNDI datasource (" + connectionFactoryName + ")");
+            } else {
+                LOG.info("found config properties to use JTA JNDI datasource (" + connectionFactoryName + ")");
+            }
             if(connectionFactory2Name == null) {
                 // JDO/DN itself will (probably) throw an exception
-                LOG.error("found JTA JNDI datasource (" + connectionFactoryName + ") but second '-nontx' JNDI datasource *not* found");
+                LOG.error("found config properties to use JTA JNDI datasource (" + connectionFactoryName + ") but config properties for second '-nontx' JNDI datasource were *not* found");
             } else {
-                LOG.info("... and second '-nontx' JNDI datasource found; " + connectionFactory2Name);
+                LOG.info("... and config properties for second '-nontx' JNDI datasource also found; " + connectionFactory2Name);
             }
             // nothing further to do
             return;
         } else {
             // use JDBC connection properties; put if not present
-            LOG.info("did *not* find JNDI datasource; will use JDBC");
+            LOG.info("did *not* find config properties to use JNDI datasource; will use JDBC");
 
             putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
             putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");

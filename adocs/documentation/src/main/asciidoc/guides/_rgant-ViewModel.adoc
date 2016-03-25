@@ -35,7 +35,7 @@ Note that there is a `DomainObjectContainer#newViewModelInstance(.)`; this is fo
 
 The view model's memento will be derived from the value of the view model object's properties. Any xref:rgant.adoc#_rgant-Property_notPersisted[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`] properties. Properties that are merely xref:rgant.adoc#_rgant-Property_hidden[hidden] _are_ included in the memento.
 
-Only properties supported by the configured xref:rgsvc.adoc#_rgsvc-api_MementoService[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
+Only properties supported by the configured xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
 
 (As of 1.8.0) there are some limitations:
 * view models cannot hold collections other view models (simple properties _are_ supported, though)

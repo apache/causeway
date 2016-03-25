@@ -78,8 +78,10 @@ public interface PersistenceSessionService extends AdapterManager {
 
 
     // ///////////////////////////////////////////
-    // flush, commit
+    // beginTran, flush, commit
     // ///////////////////////////////////////////
+
+    void beginTran();
 
     /**
      * Provided by <tt>TransactionManager</tt> when used by framework.

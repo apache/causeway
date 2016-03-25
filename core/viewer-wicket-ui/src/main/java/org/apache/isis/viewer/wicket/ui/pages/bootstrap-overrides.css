@@ -365,6 +365,7 @@ div.entityHeaderPanel .iconAndTitle{
 
 div.entityHeaderPanel .iconAndTitleLabel {
     float: left;
+    margin-bottom: 10px;
 }
 
 div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
@@ -466,9 +467,12 @@ span .fa {
 
 ul.additionalLinkList,
 div.additionalLinkList {
+    margin-right: -10px;
     padding-bottom: 10px;
 }
 
+.collections div.additionalLinkList,
+.collections ul.additionalLinkList,
 .standaloneCollectionPanel div.additionalLinkList,
 .standaloneCollectionPanel ul.additionalLinkList,
 .entityCollectionsPanel div.additionalLinkList,
@@ -484,6 +488,8 @@ div.additionalLinkList {
 
 
 
+.col .additionalLinks,
+.col .additionalLinksAndSelectorDropDown,
 .entityPropertiesPanel .additionalLinks,
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
     margin-top: -4px;
@@ -528,13 +534,14 @@ div.label-left label.control-label {
     text-align: left;
 }
 
+.propertyEditForm .label-left label.control-label,
 .actionParametersForm .label-left label.control-label {
     padding-left: 10px;
 }
 
 div.label-top label.control-label {
-    padding-left: 10px;
-    padding-bottom: 4px;
+    /*padding-left: 10px;*/
+    /*padding-bottom: 4px;*/
 }
 
 div.label-none label.control-label {
@@ -547,7 +554,7 @@ div.label-left .scalarValueWrapper {
 }
 
 div.label-left.actions-right .scalarValueWrapper {
-    width: 62%;
+    /*width: 62%;*/
 }
 
 .actions-right .additionalLinkListDropDown {
@@ -558,10 +565,10 @@ div.label-left.actions-right .scalarValueWrapper {
 
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
-    width: 99.5%;
+    /*width: 99.5%;*/
     display: block;
-    padding-left: 8px;
-    padding-right: 20px;
+    /*padding-left: 8px;*/
+    /*padding-right: 20px;*/
 }
 
 .modal-body div.label-top .scalarValueWrapper,
@@ -602,7 +609,8 @@ div.label-right .scalarValueWrapper .control-label{
 /* Labels on the left/top/none END */
 
 
-.form-horizontal.actionParametersForm .form-group {
+.form-horizontal.actionParametersForm .form-group,
+.form-horizontal.propertyEditForm .form-group {
     margin-left: -5px;
 }
 
@@ -656,6 +664,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     font-style: italic;
 }
 
+.propertyEditForm .buttons,
 .actionParametersForm .buttons {
     padding-top: 20px;
 }
@@ -672,12 +681,17 @@ div.referencePanel.scalarNameAndValueComponentType {
 }
 
 .additionalLinks.pull-right {
-    margin-right: 5px;
+    /*margin-right: 5px;*/
 }
 
 .additionalLinks.pull-right div {
     display: inline-block;
-    margin-left: 5px;
+    /*margin-left: 5px;*/
+}
+
+.additionalLinks.pull-right div .additionalLinkListDropDown {
+    margin-left: 10px;
+    margin-right: 0px;
 }
 
 
@@ -724,4 +738,92 @@ tr.headers th form input {
 
 #aboutLink {
     padding-right: 30px;
+}
+
+/*
+.entityTabbed > .row > .leftColumn,
+.entityTabbed > .row > .rightColumn {
+    margin-top: 41px;
+}
+*/
+
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+.tabGroups > .row {
+    padding-bottom: 10px;
+}
+
+.tabbable {
+    padding-bottom: 10px;
+}
+
+.additionalLinkListDropDown ul.dropdown-menu li.additionalLinkItem {
+    width: 100%;
+}
+.additionalLinkListDropDown ul.dropdown-menu {
+    padding-top: 0%;
+    padding-bottom: 0%;
+}
+
+/* cheap and nasty; ought really to suppress in Java code ... */
+.propertyEditForm .additionalLinkList {
+    display: none;
+}
+
+.choicesScalarValue {
+    width: 95%;
+    display: inline-block;
+}
+
+.associatedActionLinksRight .additionalLinkListDropDown {
+    padding-right: 11px;
+}
+
+.editing .edit {
+    padding-top: 2px;
+    float: right;
+    margin-bottom: 10px;
+}
+
+.actions-right .scalarPlaceholder .scalarValueInput {
+    width: 90%;
+    float: left;
+}
+
+.actions-right .additionalLinkListInline {
+    margin-top: -22px;
+}
+
+.booleanPanel .actions-right .additionalLinkListInline {
+    margin-top: 0px;
+}
+
+.valueChoicesSelect2Panel .actions-right .additionalLinkListInline,
+.stringPanel .actions-right .additionalLinkListInline,
+.referencePanel .actions-right .additionalLinkListInline,
+.isisBlobPanel .actions-right .additionalLinkListInline {
+    margin-top: 5px;
+}
+
+
+.popover.confirmation .btn-group .btn {
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+}
+
+.entityHeaderPanel .entityActions ul.additionalLinkList li.additionalLinkItem {
+    padding-top: 3px;
+    padding-bottom: 7px;
 }

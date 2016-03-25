@@ -20,7 +20,6 @@ package domainapp.dom.simple;
 
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,14 +27,21 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
-@DomainService(repositoryFor = SimpleObject.class)
-@DomainServiceLayout(menuOrder = "10")
+@DomainService(
+        nature = NatureOfService.VIEW,
+        repositoryFor = SimpleObject.class
+)
+@DomainServiceLayout(
+        menuOrder = "10"
+)
 public class SimpleObjects {
 
     //region > title
@@ -53,7 +59,7 @@ public class SimpleObjects {
     )
     @MemberOrder(sequence = "1")
     public List<SimpleObject> listAll() {
-        return container.allInstances(SimpleObject.class);
+        return repositoryService.allInstances(SimpleObject.class);
     }
     //endregion
 
@@ -69,7 +75,7 @@ public class SimpleObjects {
             @ParameterLayout(named="Name")
             final String name
     ) {
-        return container.allMatches(
+        return repositoryService.allMatches(
                 new QueryDefault<>(
                         SimpleObject.class,
                         "findByName",
@@ -90,9 +96,9 @@ public class SimpleObjects {
     @MemberOrder(sequence = "3")
     public SimpleObject create(
             final @ParameterLayout(named="Name") String name) {
-        final SimpleObject obj = container.newTransientInstance(SimpleObject.class);
+        final SimpleObject obj = repositoryService.instantiate(SimpleObject.class);
         obj.setName(name);
-        container.persistIfNotAlready(obj);
+        repositoryService.persist(obj);
         return obj;
     }
 
@@ -100,8 +106,8 @@ public class SimpleObjects {
 
     //region > injected services
 
-    @javax.inject.Inject 
-    DomainObjectContainer container;
+    @javax.inject.Inject
+    RepositoryService repositoryService;
 
     //endregion
 }

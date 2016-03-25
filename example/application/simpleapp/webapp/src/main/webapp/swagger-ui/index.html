@@ -1,4 +1,22 @@
 <!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
 <html>
 <head>
     <meta charset="UTF-8">
@@ -71,21 +89,39 @@
       });
 
       function addApiKeyAuthorization(){
+        /*
         var key = encodeURIComponent($('#input_apiKey')[0].value);
         if(key && key.trim() != "") {
             var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
             window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
             log("added key " + key);
         }
+        */
+        var username = document.getElementById("input_user").value;
+        var password = document.getElementById("input_pass").value;
+        if(username && username.trim() != "" && password && password.trim() != "") {
+          var auth = "Basic " + btoa(username + ":" + password);
+          var swaggerUi = window.swaggerUi;
+          window.swaggerUi.api.clientAuthorizations.add("key", new SwaggerClient.ApiKeyAuthorization("Authorization", auth, "header"));
+        } else {
+          window.swaggerUi.api.clientAuthorizations.remove("key");
+        }
       }
 
-      $('#input_apiKey').change(addApiKeyAuthorization);
-
       // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
+        /*
+      $('#input_apiKey').change(addApiKeyAuthorization);
+      */
+
       /*
         var apiKey = "myApiKeyXXXX123456789";
         $('#input_apiKey').val(apiKey);
       */
+      $('#input_user').val("sven");
+      $('#input_pass').val("pass");
+
+
+
 
       window.swaggerUi.load();
 
@@ -104,7 +140,9 @@
         <a id="logo" href="http://swagger.io">swagger</a>
         <form id='api_selector'>
             <div class='input'>
-                <select id="input_baseUrl" name="baseUrl">
+                <div class='input'><input placeholder="user" id="input_user" name="user" type="text" size="10"/></div>
+                <div class='input'><input placeholder="pass" id="input_pass" name="pass" type="password" size="10"/></div>
+                <select id="input_baseUrl" name="baseUrl" style="height: 26px;">
                     <option id="private" label="private" value="/restful/swagger/private"/>
                     <option id="public" label="public" value="/restful/swagger/public"/>
                     <option id="prototyping" label="prototyping" value="/restful/swagger/prototyping"/>
@@ -113,6 +151,7 @@
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>Reload</a></div>
         </form>
+
     </div>
 </div>
 

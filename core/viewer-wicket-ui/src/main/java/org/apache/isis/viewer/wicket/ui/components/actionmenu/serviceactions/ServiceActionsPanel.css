@@ -237,6 +237,11 @@
     margin-right: 10px;
 }
 
+
+.pull-right .additionalLinkListDropDown {
+    margin-left: 0px;
+}
+
 .additionalLinkList li {
     float:left;
     margin-right:10px;

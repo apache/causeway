@@ -31,8 +31,6 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetForCollectionLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetOnCollectionFromLayoutProperties;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;

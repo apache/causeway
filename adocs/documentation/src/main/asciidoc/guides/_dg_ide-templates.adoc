@@ -1,0 +1,95 @@
+[[_dg_ide-templates]]
+= Code and File Templates
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ../
+:_imagesdir: images/
+:toc: right
+
+
+
+We provide parameterized templates, for both IntelliJ and Eclipse, to help you write your domain applications.
+
+On IntelliJ we provide both file templates (`File > Settings > Editor > File and Code Templates`) and also live templates (`File > Settings > Editor > Live Templates`).  The former are used to create new classes or files (eg a new domain entity), while the latter are intended to modify an existing file (eg create a new property or add a `toString()` method etc).
+
+On Eclipse we provide only the latter sort of template (Windows > Preferences > Java > Editor > Templates).
+
+There are templates for writing Apache Isis domain objects, for writing unit tests (JUnit and JMock), and also for writing Asciidoc documentation (see also the xref:dg.adoc#_dg_asciidoc-templates[appendix]).
+
+
+== Download
+
+The following table lists the templates available to download:
+
+[cols="2a,2a,1a,2a,2a", options="header"]
+|===
+
+
+|Purpose
+|IntelliJ +
+file template
+|Prefix
+|IntelliJ +
+live template
+|Eclipse +
+template
+
+|Domain Objects
+|link:../resources/templates/intellij-settings-file-templates-for-apache-isis.jar[Download]
+|`is`
+|link:../resources/templates/isis-templates-idea.xml[Download]
+|link:../resources/templates/isis-templates.xml[Download]
+
+|JUnit tests
+|(none)
+|`ju`
+|link:../resources/templates/junit4-templates-idea.xml[Download]
+|link:../resources/templates/junit4-templates.xml[Download]
+
+
+|JMock tests
+|(none)
+|`jm`
+|link:../resources/templates/jmock2-templates-idea.xml[Download]
+|link:../resources/templates/jmock2-templates.xml[Download]
+
+|Asciidoc
+|(none)
+|`ad`
+|link:../resources/templates/isis-asciidoc-templates-idea.xml[Download]
+|(none)
+
+|===
+
+
+The most commonly used domain objects (live) templates are also listed on the link:../cheat-sheet.html[Apache Isis cheat sheet].
+
+
+
+== Installation
+
+=== IntelliJ
+
+To install in the live templates IntelliJ (Community edition 15), copy to the relevant `config/templates` directory, eg:
+
+* Windows `<User home>\.IdeaIC15\config\templates`
+* Linux `~/.IdeaIC14/config/templates`
+* Mac OS `~/Library/Preferences/IdeaIC15/templates`
+
+If using the Ultimate edition, the directory is `.IntelliJIdea15` rather than `IdeaIC15`.
+
+
+To install the file templates, use `File > Import Settings`.
+
+
+=== Eclipse
+
+To install in Eclipse, go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
+
+
+
+== Usage
+
+For the live templates, enter the prefix in the editor (`is`, `ju`, `jm`) and the IDE will list all available templates
+in that category.
+
+For the file templates (IntelliJ only), these are available from `File > New`.

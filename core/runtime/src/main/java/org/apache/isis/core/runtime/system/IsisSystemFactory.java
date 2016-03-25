@@ -29,6 +29,8 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
  */
 public interface IsisSystemFactory extends ApplicationScopedComponent {
 
-    IsisSystem createSystem(final DeploymentType deploymentType, @Nullable final AppManifest appManifestIfAny);
+    IsisSystem createSystem(
+            final DeploymentType deploymentType,
+            @Nullable final AppManifest appManifestIfAny);
 
 }

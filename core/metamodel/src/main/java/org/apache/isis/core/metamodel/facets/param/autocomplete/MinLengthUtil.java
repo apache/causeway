@@ -32,6 +32,10 @@ public final class MinLengthUtil {
      * supplied method.
      */
     public static int determineMinLength(final Method method) {
+        if(method == null) {
+            return MIN_LENGTH_DEFAULT;
+        }
+
         final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         if(parameterAnnotations.length == 1) {
             final Annotation[] searchArgAnnotations = parameterAnnotations[0];

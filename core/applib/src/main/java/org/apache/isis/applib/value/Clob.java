@@ -26,8 +26,7 @@ import java.io.Writer;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import com.google.common.io.CharStreams;
-import com.google.common.io.OutputSupplier;
+import com.google.common.io.CharSource;
 
 public final class Clob implements NamedWithMimeType, Serializable {
 
@@ -93,12 +92,7 @@ public final class Clob implements NamedWithMimeType, Serializable {
     }
     
     public void writeCharsTo(final Writer wr) throws IOException {
-        CharStreams.write(chars, new OutputSupplier<Writer>() {
-            @Override
-            public Writer getOutput() throws IOException {
-                return wr;
-            }
-        });
+        CharSource.wrap(chars).copyTo(wr);
     }
 
     @Override

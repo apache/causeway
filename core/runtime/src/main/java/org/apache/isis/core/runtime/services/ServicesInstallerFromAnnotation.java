@@ -26,7 +26,6 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 import javax.annotation.PreDestroy;
-import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -38,10 +37,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +44,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.not;

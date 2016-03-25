@@ -26,39 +26,7 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import com.google.common.base.Function;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import org.wicketstuff.select2.ApplicationSettings;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.SharedResources;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponseDecorator;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.cycle.IRequestCycleListener;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
-import org.apache.wicket.util.time.Duration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.ftlines.wicketsource.WicketSource;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -99,7 +67,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.viewer.guice.GuiceComponentInjector;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
@@ -108,6 +75,38 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
+import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.SharedResources;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.guice.GuiceComponentInjector;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponseDecorator;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.settings.RequestCycleSettings;
+import org.apache.wicket.util.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.wicketstuff.select2.ApplicationSettings;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
@@ -116,7 +115,6 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import net.ftlines.wicketsource.WicketSource;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -154,6 +152,8 @@ public class IsisWicketApplication
     private static final boolean STRIP_WICKET_TAGS_DEFAULT = true;
     private static final String AJAX_DEBUG_MODE_KEY = "isis.viewer.wicket.ajaxDebugMode";
     private static final boolean AJAX_DEBUG_MODE_DEFAULT = false;
+    private static final String WICKET_SOURCE_PLUGIN_KEY = "isis.viewer.wicket.wicketSourcePlugin";
+    private static final boolean WICKET_SOURCE_PLUGIN_DEFAULT = false;
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
@@ -194,9 +194,8 @@ public class IsisWicketApplication
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
-    @SuppressWarnings("unused")
     @Inject
-    private IsisSystem system;
+    private IsisSystem isisSystem;
 
 
     private boolean determiningDeploymentType;
@@ -246,7 +245,7 @@ public class IsisWicketApplication
 
             configureLogging(isisConfigDir);
     
-            getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
+            getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
 
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
@@ -279,7 +278,7 @@ public class IsisWicketApplication
 
             filterJavascriptContributions();
 
-            configureWicketSourcePlugin();
+            configureWicketSourcePluginIfNecessary(configuration);
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
@@ -289,29 +288,32 @@ public class IsisWicketApplication
 
             @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
-            
-        } catch(RuntimeException ex) {
-            List<MetaModelInvalidException> mmies = locateMetaModelInvalidExceptions(ex);
-            if(!mmies.isEmpty()) {
-                final MetaModelInvalidException mmie = mmies.get(0);
-                log("");
-                logBanner();
-                log("");
-                validationErrors.addAll(mmie.getValidationErrors());
-                for (String validationError : validationErrors) {
-                    logError(validationError);
-                }
-                log("");
-                log("Please inspect the above messages and correct your domain model.");
-                log("");
-                logBanner();
-                log("");
-            } else {
-                // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
-                LOG.error("Failed to initialize", ex);
-                throw ex;
+
+            final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+            if(mmie != null) {
+                this.validationErrors.addAll(mmie.getValidationErrors());
+                log(this.validationErrors);
             }
+
+        } catch(RuntimeException ex) {
+            // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
+            LOG.error("Failed to initialize", ex);
+            throw ex;
         }
+    }
+
+    private void log(final List<String> validationErrors) {
+        log("");
+        logBanner();
+        log("");
+        for (String validationError : validationErrors) {
+            logError(validationError);
+        }
+        log("");
+        log("Please inspect the above messages and correct your domain model.");
+        log("");
+        logBanner();
+        log("");
     }
 
     private void configureWicketSelect2() {
@@ -320,7 +322,13 @@ public class IsisWicketApplication
         select2Settings.setJavaScriptReference(new Select2JsReference());
     }
 
-    private void configureWicketSourcePlugin() {
+    protected void configureWicketSourcePluginIfNecessary(final IsisConfiguration configuration) {
+        if(isWicketSourcePluginEnabled(configuration)) {
+            configureWicketSourcePlugin();
+        }
+    }
+
+    protected void configureWicketSourcePlugin() {
         if(!deploymentType.isProduction()) {
             WicketSource.configure(this);
         }
@@ -462,7 +470,9 @@ public class IsisWicketApplication
         // also support loading from init parameters (specifically, to support simplericity's jetty-console)
         isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            LOG.info("priming configurations for " + isisConfigurationBuilderPrimer);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
+            }
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
         }
     }
@@ -598,11 +608,6 @@ public class IsisWicketApplication
 
     // //////////////////////////////////////
 
-    protected List<MetaModelInvalidException> locateMetaModelInvalidExceptions(RuntimeException ex) {
-        return Lists.newArrayList(
-                Iterables.filter(Throwables.getCausalChain(ex), MetaModelInvalidException.class));
-    }
-
     /**
      * The validation errors, if any, that occurred on {@link #init() startup}.
      */
@@ -647,8 +652,19 @@ public class IsisWicketApplication
      * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
      */
     private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
-        final boolean debugMode = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
-        return debugMode;
+        final boolean debugModeEnabled = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
+        return debugModeEnabled;
+    }
+
+    /**
+     * Whether the Wicket source plugin should be enabled, as specified by configuration settings.
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
+     */
+    private boolean isWicketSourcePluginEnabled(IsisConfiguration configuration) {
+        final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
+        return pluginEnabled;
     }
 
     // //////////////////////////////////////
@@ -656,8 +672,8 @@ public class IsisWicketApplication
     @Override
     protected void onDestroy() {
         try {
-            if (system != null) {
-                system.shutdown();
+            if (isisSystem != null) {
+                isisSystem.shutdown();
             }
             IsisContext.shutdown();
             super.onDestroy();

@@ -29,6 +29,7 @@ import java.util.Set;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -64,6 +65,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -93,6 +95,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -708,7 +711,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
         final List<ObjectAssociation> allAssociations = getAssociations(contributed);
         return Lists.newArrayList(
-                Iterables.filter(allAssociations, Filters.asPredicate(filter)));
+                FluentIterable.from(allAssociations)
+                        .filter(Filters.asPredicate(filter))
+                        .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
+        );
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -741,8 +747,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-                if (containsDoOpFacet(MixinFacet.class)) {
+                if (containsDoOpFacet(MixinFacet.class) || containsDoOpFacet(DomainServiceFacet.class)) {
                     // don't contribute to mixins themselves!
+                    // don't contribute to services either (nb: can't use isService(), not necessarily setup)
                 } else {
                     actions.addAll(createContributeeActions());
                     actions.addAll(createMixedInActions());

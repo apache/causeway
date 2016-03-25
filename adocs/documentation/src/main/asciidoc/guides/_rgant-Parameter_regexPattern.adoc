@@ -13,7 +13,7 @@ There are three attributes related to enforcing regular expressions:
 * The `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those
 that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
 
-* The related `regexPatternReplacement()` attribute (as of `1.11.0-SNAPSHOT`) specifies the error message to show if
+* The related `regexPatternReplacement()` attribute specifies the error message to show if
 the provided argument does not match the regex pattern.
 
 For example:
@@ -33,5 +33,5 @@ public class Customer {
     }
 )
 ----
-<1> unused prior to `1.11.0-SNAPSHOT`. Note that there is currently no i18n support for this phrase.
+<1> Note that there is currently no i18n support for this phrase.
 

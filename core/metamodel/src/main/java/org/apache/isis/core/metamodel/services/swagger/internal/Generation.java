@@ -24,8 +24,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -39,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -123,9 +131,10 @@ class Generation {
     void appendServicePathsAndDefinitions() {
         // take copy to avoid concurrent modification exception
         final Collection<ObjectSpecification> allSpecs = Lists.newArrayList(specificationLoader.allSpecifications());
-        for (final ObjectSpecification serviceSpec :  allSpecs) {
 
-            final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
+        for (final ObjectSpecification objectSpec :  allSpecs) {
+
+            final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet == null) {
                 continue;
             }
@@ -139,16 +148,37 @@ class Generation {
                 continue;
             }
 
-            final List<ObjectAction> serviceActions = Util.actionsOf(serviceSpec, visibility, classExcluder);
+            final List<ObjectAction> serviceActions = Util.actionsOf(objectSpec, visibility, classExcluder);
             if(serviceActions.isEmpty()) {
                 continue;
             }
-            appendServicePath(serviceSpec);
+            appendServicePath(objectSpec);
 
             for (final ObjectAction serviceAction : serviceActions) {
-                appendServiceActionInvokePath(serviceSpec, serviceAction);
+                appendServiceActionInvokePath(objectSpec, serviceAction);
             }
         }
+    }
+
+    @SuppressWarnings("unused")
+    private void debugTraverseAllSpecs(final Collection<ObjectSpecification> allSpecs) {
+        for (final ObjectSpecification objectSpec :  allSpecs) {
+            objectSpec.getAssociations(Contributed.INCLUDED);
+            objectSpec.getObjectActions(Contributed.INCLUDED);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
+        final ImmutableList<String> specs = FluentIterable.from(allSpecs)
+                .transform(new Function<ObjectSpecification, String>() {
+                    @Nullable @Override public String apply(@Nullable final ObjectSpecification objectSpecification) {
+                        return objectSpecification.getCorrespondingClass().getName();
+                    }
+                })
+                .toSortedList(Ordering.natural());
+        final String all = Joiner.on(",").join(specs);
+        System.out.println(all);
     }
 
     void appendObjectPathsAndDefinitions() {

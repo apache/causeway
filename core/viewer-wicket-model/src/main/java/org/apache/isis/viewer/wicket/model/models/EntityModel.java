@@ -20,37 +20,37 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -59,10 +59,9 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiHintContainer {
 
     private static final long serialVersionUID = 1L;
-    
 
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
@@ -80,7 +79,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
         if (persistent) {
             final String oidStr = adapter.getOid().enStringNoVersion(getOidMarshaller());
-
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -89,7 +87,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
         return pageParameters;
     }
-
 
     public enum RenderingHint {
         REGULAR,
@@ -123,47 +120,54 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 	public enum Mode {
-        VIEW, EDIT;
+        VIEW,EDIT
     }
 
+    private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
     private ObjectAdapterMemento adapterMemento;
+    private ObjectAdapterMemento contextAdapterIfAny;
+
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
-    private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
-    private MemberGroupLayoutHint memberGroupLayoutHint;
-
-    /**
-     * Toggled by 'entityDetailsButton'.
-     */
-    private boolean entityDetailsVisible;
+    private final PendingModel pendingModel;
 
     /**
      * {@link ConcurrencyException}, if any, that might have occurred previously
      */
     private ConcurrencyException concurrencyException;
 
-    private final HintPageParameterSerializer hintPageParameterSerializer = new HintPageParameterSerializerDirect();
+    private final HintPageParameterSerializer hintPageParameterSerializer;
 
     // //////////////////////////////////////////////////////////
     // constructors
     // //////////////////////////////////////////////////////////
 
     public EntityModel() {
-        pendingModel = new PendingModel(this);
+        this((ObjectAdapterMemento)null);
     }
 
     public EntityModel(final PageParameters pageParameters) {
         this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
-        hintPageParameterSerializer.pageParametersToHints(pageParameters, getHints());
+        hintPageParameterSerializer.updateHintStore(pageParameters);
+
     }
+
     public EntityModel(final ObjectAdapter adapter) {
         this(ObjectAdapterMemento.createOrNull(adapter));
         setObject(adapter);
     }
 
     public EntityModel(final ObjectAdapterMemento adapterMemento) {
+        this(adapterMemento, Maps.<PropertyMemento, ScalarModel>newHashMap());
+    }
+
+    public EntityModel(
+            final ObjectAdapterMemento adapterMemento,
+            final Map<PropertyMemento, ScalarModel> propertyScalarModels) {
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
+        this.propertyScalarModels = propertyScalarModels;
+        this.hintPageParameterSerializer = new HintPageParameterSerializer(this);
     }
 
     public static String oidStr(final PageParameters pageParameters) {
@@ -183,7 +187,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
-        hintPageParameterSerializer.hintsToPageParameters(getHints(), pageParameters);
+        hintPageParameterSerializer.hintStoreToPageParameters(pageParameters);
         return pageParameters;
     }
 
@@ -191,72 +195,76 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return createPageParameters(getObject());
     }
 
-    static interface HintPageParameterSerializer {
-        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters);
-        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints);
-    }
-    
-    static class HintPageParameterSerializerDirect implements HintPageParameterSerializer, Serializable {
+    static class HintPageParameterSerializer implements Serializable {
 
         private static final long serialVersionUID = 1L;
+        private static final String PREFIX = "hint-";
 
-        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters) {
-            Set<String> hintKeys = hints.keySet();
-            for (String key : hintKeys) {
-                String value = hints.get(key);
-                pageParameters.add("hint-" + key, value);
+        private final EntityModel entityModel;
+
+        public HintPageParameterSerializer(final EntityModel entityModel) {
+            this.entityModel = entityModel;
+        }
+
+        public void hintStoreToPageParameters(
+                final PageParameters pageParameters) {
+            final HintStore hintStore = getHintStore();
+            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asBookmark();
+            Set<String> hintKeys = hintStore.findHintKeys(bookmark);
+            for (String hintKey : hintKeys) {
+                ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
             }
         }
 
-        @Override
-        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
+        public void updateHintStore(
+                final PageParameters pageParameters) {
             Set<String> namedKeys = pageParameters.getNamedKeys();
-            for (String namedKey : namedKeys) {
-                if(namedKey.startsWith("hint-")) {
-                    String value = pageParameters.get(namedKey).toString(null);
-                    String key = namedKey.substring(5);
-                    hints.put(key, value); // may replace
-                }
-            }
-        }
-    }
-    
-    static class HintPageParameterSerializerUsingViewModelSupport implements HintPageParameterSerializer, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters) {
-            if(hints.isEmpty()) {
+            if(namedKeys.contains("no-hints")) {
+                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asBookmark());
                 return;
             }
-            MementoServiceDefault vms = new MementoServiceDefault();
-            Memento memento = vms.create();
-            Set<String> hintKeys = hints.keySet();
-            for (String key : hintKeys) {
-                String safeKey = key.replace(':', '_');
-                Serializable value = hints.get(key);
-                memento.set(safeKey, value);
-            }
-            String serializedHints = memento.asString();
-            PageParameterNames.ANCHOR.addStringTo(pageParameters, serializedHints);
-        }
-
-        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
-            String hintsStr = PageParameterNames.ANCHOR.getStringFrom(pageParameters);
-            if(hintsStr != null) {
-                try {
-                    Memento memento = new MementoServiceDefault().parse(hintsStr);
-                    Set<String> keys = memento.keySet();
-                    for (String safeKey : keys) {
-                        String value = memento.get(safeKey, String.class);
-                        String key = safeKey.replace('_', ':');
-                        hints.put(key, value);
-                    }
-                } catch(RuntimeException ex) {
-                    // fail gracefully, ie ignore.
-                    System.err.println(ex);
+            List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
+            for (String namedKey : namedKeys) {
+                if(namedKey.startsWith(PREFIX)) {
+                    String value = pageParameters.get(namedKey).toString(null);
+                    String key = namedKey.substring(5);
+                    final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
+                    newComponentHintKeys.add(componentHintKey);
+                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asBookmark();
+                    componentHintKey.set(bookmark, value);
                 }
             }
         }
+
+        protected HintStore getHintStore() {
+            return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+        }
+
+
+    }
+
+    // //////////////////////////////////////////////////////////
+    // Hint support
+    // //////////////////////////////////////////////////////////
+
+    @Override
+    public String getHint(final Component component, final String keyName) {
+        final ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
+        if(componentHintKey != null) {
+            return componentHintKey.get(getObjectAdapterMemento().asBookmark());
+        }
+        return null;
+    }
+
+    @Override
+    public void setHint(Component component, String keyName, String hintValue) {
+        ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
+        componentHintKey.set(this.getObjectAdapterMemento().asBookmark(), hintValue);
+    }
+
+    @Override
+    public void clearHint(Component component, String attributeName) {
+        setHint(component, attributeName, null);
     }
 
 
@@ -443,23 +451,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return this;
     }
 
-    public boolean isEntityDetailsVisible() {
-        return entityDetailsVisible;
-    }
 
-    public void toggleDetails() {
-        entityDetailsVisible = !entityDetailsVisible;
-    }
-
-    public MemberGroupLayoutHint getMemberGroupLayoutHint() {
-        return memberGroupLayoutHint;
-    }
-    public void setMemberGroupLayoutHint(MemberGroupLayoutHint memberGroupLayoutHint) {
-        this.memberGroupLayoutHint = memberGroupLayoutHint;
-    }
-
-    
-    
 
     
     // //////////////////////////////////////////////////////////
@@ -477,72 +469,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         final String message = concurrencyException.getMessage();
         concurrencyException = null;
         return message;
-    }
-
-    // //////////////////////////////////////////////////////////
-    // validation & apply
-    // //////////////////////////////////////////////////////////
-
-    public String getReasonInvalidIfAny() {
-        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-        final Consent validity = adapter.getSpecification().isValid(adapter, InteractionInitiatedBy.USER);
-        return validity.isAllowed() ? null : validity.getReason();
-    }
-
-    /**
-     * Apply changes to the underlying adapter (possibly returning a new adapter).
-     *
-     * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
-     */
-    public ObjectAdapter apply() {
-        ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-        for (final ScalarModel scalarModel : propertyScalarModels.values()) {
-            final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
-
-            //
-            // previously there was a guard here to only apply changes provided:
-            //
-            // property.containsDoOpFacet(NotPersistedFacet.class) == null
-            //
-            // however, that logic is wrong; although a property may not be directly
-            // persisted so far as JDO is concerned, it may be indirectly persisted
-            // as the result of business logic in the setter.
-            //
-            // for example, see ExampleTaggableEntity (in isisaddons-module-tags).
-            //
-
-            //
-            // on the other hand, we mustn't attempt to apply changes for disabled properties...
-            // even if the property is persisted (it might be written to by an action), it is never updated by
-            // an edit.
-            //
-            // Fundamentally, then, any non-disabled property (whether persisted or not) should be updated in the
-            // Isis runtime.
-            //
-
-            if(property.containsDoOpFacet(DisabledFacet.class)) {
-                // skip, as per comments above
-                continue;
-            }
-
-            final ObjectAdapter associate = scalarModel.getObject();
-            property.set(adapter, associate, InteractionInitiatedBy.USER);
-        }
-
-        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(recreatableObjectFacet != null) {
-            final Object viewModel = adapter.getObject();
-            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
-            if(cloneable) {
-                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
-                adapter = getAdapterManager().adapterFor(newViewModel);
-            }
-        }
-
-        getObjectAdapterMemento().setAdapter(adapter);
-        toViewMode();
-
-        return adapter;
     }
 
 
@@ -608,8 +534,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
     }
     
-    private final PendingModel pendingModel;
-    private ObjectAdapterMemento contextAdapterIfAny;
 
     public ObjectAdapter getPendingElseCurrentAdapter() {
         return pendingModel.getPendingElseCurrentAdapter();
@@ -633,9 +557,33 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     // //////////////////////////////////////////////////////////
+    // tab and column metadata (if any)
+    // //////////////////////////////////////////////////////////
+
+    private Object layoutMetadata;
+
+    public Object getLayoutMetadata() {
+        return layoutMetadata;
+    }
+
+    /**
+     * Returns a new copy that SHARES the property scalar models (for edit form).
+     */
+    public EntityModel cloneWithLayoutMetadata(final Object layoutMetadata) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.layoutMetadata = layoutMetadata;
+        return entityModel;
+    }
+
+
+
+
+
+
+    // //////////////////////////////////////////////////////////
     // equals, hashCode
     // //////////////////////////////////////////////////////////
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -679,9 +627,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-
-
-
 
 
 }

@@ -8,6 +8,7 @@ For help and support, join the http://isis.apache.org/support.html[mailing lists
 
 
 
+
 == Core Features
 
 Isis automatically generates the UI from the domain classes. The following screenshots are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example], which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here]. 
@@ -62,15 +63,15 @@ There are no limitations on what an action can do; it might just update a single
 
 In general though, all actions are associated with some object, and are (at least initially) also implemented by that object: good old-fashioned encapsulation. We sometimes use the term "behaviourally complete" for such domain objects.
 
-=== Contributions
+=== Mixins
 
-As an alternative to placing actions (business logic) on a domain object, it can instead be placed on an (application-scoped, stateless) domain service. When an object is rendered by Apache Isis, it will automatically render all "contributed" behaviour; rather like traits or aspect-oriented mix-ins).
+As an alternative to placing actions (business logic) on a domain object, it can instead be placed inside a mixin object.  When an object is rendered by Apache Isis, the mixin "contributes" its behaviour to the domain object (similar to aspect-oriented traits).
 
-In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) and also the "similar to" collection are all contributed:
+In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) the "similar to" collection and the two "as DTO" actions are all contributed by mixins:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/065-contributions.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/065-contributions.png"]
 
-Contributions are defined by the signature of the actions on the contributing service. The code snippet below shows how this works for the "export as xml" action:
+The code snippet below shows how this works for the "as DTO v1.0" action:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/067-contributed-action.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/067-contributed-action.png"]
 

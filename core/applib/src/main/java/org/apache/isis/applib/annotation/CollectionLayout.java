@@ -103,7 +103,7 @@ public @interface CollectionLayout {
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
      */
-    public int paged() default -1;
+    int paged() default -1;
 
 
     // //////////////////////////////////////
@@ -123,8 +123,11 @@ public @interface CollectionLayout {
      * <p>
      * There is some similarity between this concept and that of eager-loading as supported by some object stores.
      * </p>
+     * 
+     * @deprecated - use {@link #defaultView()} set to &quot;table&quot; instead.
      */
-    public RenderType render() default RenderType.LAZILY;
+    @Deprecated
+    RenderType render() default RenderType.LAZILY;
 
 
     // //////////////////////////////////////

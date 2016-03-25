@@ -30,8 +30,6 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
     void init(final RuntimeContext runtimeContext);
     void shutdown();
 
-    void invalidateCacheFor(Object domainObject);
-    
     void invalidateCache(Class<?> domainClass);
     
     boolean isInitialized();

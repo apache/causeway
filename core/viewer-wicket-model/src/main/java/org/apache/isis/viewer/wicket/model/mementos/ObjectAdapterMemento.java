@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.common.base.Function;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -64,7 +65,9 @@ public class ObjectAdapterMemento implements Serializable {
         return new ObjectAdapterMemento(rootOid);
     }
 
-
+    public Bookmark asBookmark() {
+        return bookmark;
+    }
 
     enum Type {
         /**
@@ -215,6 +218,14 @@ public class ObjectAdapterMemento implements Serializable {
     private String persistentOidStr;
 
     /**
+     * The current value, if {@link Type#PERSISTENT}.
+     *
+     * <p>
+     * Will be <tt>null</tt> otherwise.
+     */
+    private Bookmark bookmark;
+
+    /**
      * The current value, if {@link Type#TRANSIENT}.
      * 
      * <p>
@@ -225,6 +236,7 @@ public class ObjectAdapterMemento implements Serializable {
     private ObjectAdapterMemento(final RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, Oid.Matchers.isPersistent());
         this.persistentOidStr = rootOid.enString(getOidMarshaller());
+        this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
     }
@@ -258,6 +270,7 @@ public class ObjectAdapterMemento implements Serializable {
         } 
         
         persistentOidStr = oid.enString(getOidMarshaller());
+        bookmark = oid.asBookmark();
         type = Type.PERSISTENT;
     }
 

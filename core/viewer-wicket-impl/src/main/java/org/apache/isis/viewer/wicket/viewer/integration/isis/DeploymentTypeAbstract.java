@@ -20,18 +20,12 @@
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.runtime.system.ContextCategory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
-/**
- * Simple adapter for Isis' {@link DeploymentType} class, specifying that the
- * {@link ContextCategory#THREADLOCAL} is used as the
- * {@link ContextCategory}.
- */
 public abstract class DeploymentTypeAbstract extends DeploymentType {
 
     public DeploymentTypeAbstract(final String name, final DeploymentCategory category) {
-        super(name, category, ContextCategory.THREADLOCAL);
+        super(name, category);
     }
 
 }

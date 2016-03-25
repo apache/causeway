@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -764,6 +765,90 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 return ScalarModel.this;
             }
         };
+    }
+
+
+    public String getReasonInvalidIfAny() {
+        final OneToOneAssociation property = getPropertyMemento().getProperty();
+
+        final ObjectAdapter adapter = getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
+
+        final ObjectAdapter associate = getObject();
+
+        final Consent validity = property.isAssociationValid(adapter, associate, InteractionInitiatedBy.USER);
+        return validity.isAllowed() ? null : validity.getReason();
+    }
+
+    /**
+     * Apply changes to the underlying adapter (possibly returning a new adapter).
+     *
+     * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     */
+    public ObjectAdapter applyValue(ObjectAdapter adapter) {
+        final OneToOneAssociation property = getPropertyMemento().getProperty();
+
+        //
+        // previously there was a guard here to only apply changes provided:
+        //
+        // property.containsDoOpFacet(NotPersistedFacet.class) == null
+        //
+        // however, that logic is wrong; although a property may not be directly
+        // persisted so far as JDO is concerned, it may be indirectly persisted
+        // as the result of business logic in the setter.
+        //
+        // for example, see ExampleTaggableEntity (in isisaddons-module-tags).
+        //
+
+        //
+        // previously (prior to XML layouts and 'single property' edits) we also used to check if
+        // the property was disabled, using:
+        //
+        // if(property.containsDoOpFacet(DisabledFacet.class)) {
+        //    // skip, as per comments above
+        //    return;
+        // }
+        //
+        // However, this would seem to be wrong, because the presence of a DisabledFacet doesn't necessarily mean
+        // that the property is disabled (its disabledReason(...) might return null).
+        //
+        // In any case, the only code that calls this method already does the check, so think this is safe
+        // to just remove.
+
+
+        final ObjectAdapter associate = getObject();
+        property.set(adapter, associate, InteractionInitiatedBy.USER);
+
+        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        if(recreatableObjectFacet != null) {
+            final Object viewModel = adapter.getObject();
+            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
+            if(cloneable) {
+                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
+                adapter = getAdapterManager().adapterFor(newViewModel);
+            }
+        }
+
+        return adapter;
+    }
+
+
+
+
+    // //////////////////////////////////////
+
+
+    private ExecutingPanel executingPanel;
+
+    /**
+     * A hint passed from one Wicket UI component to another.
+     *
+     * Mot actually used by the model itself.
+     */
+    public ExecutingPanel getExecutingPanel() {
+        return executingPanel;
+    }
+    public void setExecutingPanel(final ExecutingPanel executingPanel) {
+        this.executingPanel = executingPanel;
     }
 
 

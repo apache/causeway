@@ -45,43 +45,50 @@
     
     <profiles>
         <profile>
-            <id>default</id>
+            <id>core</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+	        <property>
+		    <name>!skip.core</name>
+		</property>
             </activation>
             <modules>
                 <module>core</module>
+            </modules>
+        </profile>
 
+        <profile>
+            <id>app</id>
+            <activation>
+	        <property>
+		    <name>!skip.app</name>
+		</property>
+            </activation>
+            <modules>
                 <module>example/application/simpleapp</module>
-                <module>example/archetype/simpleapp</module>
-            </modules>
-        </profile>
-        
-        <profile>
-            <id>sonar</id>
-            <modules>
-                <module>core</module>
             </modules>
         </profile>
 
         <profile>
-            <id>core</id>
+            <id>arch</id>
+            <activation>
+	        <property>
+		    <name>!skip.arch</name>
+		</property>
+            </activation>
             <modules>
-                <module>core</module>
+                <module>example/archetype/simpleapp</module>
             </modules>
         </profile>
 
         <profile>
             <id>docs</id>
+            <activation>
+	        <property>
+		    <name>docs</name>
+		</property>
+            </activation>
             <modules>
                 <module>adocs/documentation</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>examples</id>
-            <modules>
-                <module>example/application/simpleapp</module>
             </modules>
         </profile>
     </profiles>
