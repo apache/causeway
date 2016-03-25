@@ -20,10 +20,16 @@
 package org.apache.isis.core.metamodel.services.config;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.config.ConfigurationProperty;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -32,6 +38,24 @@ public class ConfigurationServiceDefault
         implements org.apache.isis.applib.services.config.ConfigurationService,
                    org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware {
 
+
+    private Map<String, String> properties;
+
+    @Programmatic
+    @PostConstruct
+    public void init(final Map<String,String> properties) {
+        this.properties = properties;
+    }
+
+    @Programmatic
+    public Set<ConfigurationProperty> allProperties() {
+        final Set<ConfigurationProperty> kv = new TreeSet<>();
+        for (Map.Entry<String, String> propertyPair : properties.entrySet()) {
+            kv.add(new ConfigurationProperty(propertyPair.getKey(),propertyPair.getValue()));
+
+        }
+        return kv;
+    }
 
     @Programmatic
     @Override

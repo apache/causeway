@@ -25,11 +25,14 @@ public interface ConfigurationService {
     String getProperty(String name);                        // <1>
     String getProperty(String name, String defaultValue);   // <2>
     List<String> getPropertyNames();                        // <3>
+    Set<ConfigurationProperty> allProperties();             // <4>
+
 }
 ----
 <1> Return the configuration property with the specified name; else return null.
 <2> Return the configuration property with the specified name; if it doesn't exist then return the specified default value.
 <3> Return the names of all the available properties.
+<4> Returns all properties, each as an instance of the `ConfigurationProperty` view model.
 
 For example, here's a fictitious service that might wrap link:http://twitter4j.org/en/configuration.html[Twitter4J]. say:
 
@@ -80,3 +83,6 @@ in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to thi
 
 
 
+== Related services
+
+The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface.

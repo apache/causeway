@@ -19,12 +19,10 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
-import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -49,7 +47,9 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             public void onClick(AjaxRequestTarget target) {
                 showAllItemsOn(table);
                 final UiHintContainer hintContainer = getUiHintContainer();
-                hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
+                if(hintContainer != null) {
+                    hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
+                }
                 target.add(table);
             }
         });

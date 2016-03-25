@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.config;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -41,7 +42,13 @@ public interface ConfigurationService {
     /**
      * Get the names of all the available properties.
      */
-    @Programmatic List<String> getPropertyNames();
+    @Programmatic
+    List<String> getPropertyNames();
 
+    /**
+     * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
+     */
+    @Programmatic
+    Set<ConfigurationProperty> allProperties();
 
 }

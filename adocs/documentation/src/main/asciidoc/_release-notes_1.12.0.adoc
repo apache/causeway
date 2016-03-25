@@ -42,6 +42,7 @@ Apache Isis 1.12.0-SNAPSHOT is currently being voted on for release; expectation
 
 === New Feature
 
+* link:https://issues.apache.org/jira/browse/ISIS-1351[ISIS-1351] - Extend ConfigurationService to list all configuration properties in the UI
 * link:https://issues.apache.org/jira/browse/ISIS-1326[ISIS-1326] - Add a link to a "quotes" page on the main website.
 * link:https://issues.apache.org/jira/browse/ISIS-1325[ISIS-1325] - New SessionManagementService
 * link:https://issues.apache.org/jira/browse/ISIS-1317[ISIS-1317] - Allow single domain object class to be invalidated through a mixin.
@@ -78,6 +79,12 @@ Apache Isis 1.12.0-SNAPSHOT is currently being voted on for release; expectation
 
 === Bug
 
+* link:https://issues.apache.org/jira/browse/ISIS-1348[ISIS-1348] - Bug with SoapEndpointPublishingRule when multiple endpoints.
+* link:https://issues.apache.org/jira/browse/ISIS-1347[ISIS-1347] - Missing annotation in SimpleObject
+* link:https://issues.apache.org/jira/browse/ISIS-1346[ISIS-1346] - ActionInvocationContext isn't populated properly
+* link:https://issues.apache.org/jira/browse/ISIS-1342[ISIS-1342] - The metamodel validation error page doesn't reliably render itself if there are errors.
+* link:https://issues.apache.org/jira/browse/ISIS-1341[ISIS-1341] - Restful Objects viewer should perform a flush transaction before generating representations.
+* link:https://issues.apache.org/jira/browse/ISIS-1340[ISIS-1340] - Rebuild metamodel mixin action isn't working reliably
 * link:https://issues.apache.org/jira/browse/ISIS-1328[ISIS-1328] - Bookmark hints are not being honoured
 * link:https://issues.apache.org/jira/browse/ISIS-1319[ISIS-1319] - Input dialog for action label for mandatory parameter not shown when the parameter is an view model
 * link:https://issues.apache.org/jira/browse/ISIS-1318[ISIS-1318] - contributed actions/mixins breaks publishing; also flush any pending actions to be published as the result of doing a wrapped action via the WrapperFactory

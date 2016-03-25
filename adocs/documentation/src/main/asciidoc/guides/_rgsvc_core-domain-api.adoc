@@ -41,7 +41,9 @@ The table below summarizes the core/domain APIs defined by Apache Isis.  It also
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
-|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface. +
++
+Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 |xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`o.a.i.applib` +
