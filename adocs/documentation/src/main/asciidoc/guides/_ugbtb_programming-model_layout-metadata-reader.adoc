@@ -7,9 +7,19 @@
 
 The metadata for domain objects is obtained both xref:ugfun.adoc#_ugfun_object-layout_static[statically] and xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamically].
 
+
 The default implementation for reading dynamic layout metadata is `org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson`, which is responsible for reading from the `Xxx.layout.json` files on the classpath (for each domain entity `Xxx`).
 
 You can also implement your own metadata readers and plug them into Apache Isis.  These could read from a different file format, or they could, even, read data dynamically from a URL or database.  (Indeed, one could imagine an implementation whereby users could share layouts, all stored in some central repository).
+
+[WARNING]
+====
+(As of `1.12.0-SNAPSHOT`), the use of dynamic layouts through the `.layout.json` - and therefore also the `LayoutMetadataReader` - is DEPRECATED.  Instead, the xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts] using ``.layout.xml`` enables much more sophisticated custom layouts than those afforded by ``.layout.json``.
+
+By default, custom XML layouts are read from the classpath.  This behaviour can be customized by providing an
+alternative implementation of the xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`].
+====
+
 
 
 

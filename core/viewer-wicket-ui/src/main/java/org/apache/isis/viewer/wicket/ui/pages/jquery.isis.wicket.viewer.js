@@ -138,6 +138,17 @@ $(function() {
             $('.copyLink').css({visibility: 'hidden'});
         }
     );
+
+/*
+    $('.editing .editable').parent().hover(function () {
+        var inputEl = $(this).find("> .editable")
+        $(inputEl).css({cursor: 'pointer'})
+    },function () {
+        var inputEl = $(this).find("> .editable")
+        $(inputEl).css({cursor: 'auto'})
+    });
+*/
+
 });
 
 /**

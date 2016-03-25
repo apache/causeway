@@ -32,7 +32,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.10.0</isis.version>
+        <isis.version>1.12.0-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -184,32 +184,13 @@
                 <plugin>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.3.2.v20150730</version>
+                    <version>9.3.5.v20151012</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
                     <version>2.2</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.7</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <!-- http://simplericity.com/2009/11/10/1257880778509.html -->
-                <plugin>
-                    <groupId>org.simplericity.jettyconsole</groupId>
-                    <artifactId>jetty-console-maven-plugin</artifactId>
-                    <version>1.56</version>
                 </plugin>
 
                 <!-- Apache Release Audit Tool -->

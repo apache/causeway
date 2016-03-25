@@ -18,12 +18,12 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
@@ -32,12 +32,19 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -48,8 +55,6 @@ public class MetaModelServiceDefault implements MetaModelService, SpecificationL
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
 
 
-
-    //region > fromObjectType, toObjectType
     @Programmatic
     public Class<?> fromObjectType(final String objectType) {
         if(objectType == null) {
@@ -70,15 +75,96 @@ public class MetaModelServiceDefault implements MetaModelService, SpecificationL
         final ObjectSpecId objectSpecId = objectSpecIdFacet.value();
         return objectSpecId.asString();
     }
-    //endregion
 
-    //region > injected dependencies
+    @Override
+    public void rebuild(final Class<?> domainType) {
+        specificationLookup.invalidateCache(domainType);
+        gridService.remove(domainType);
+        final ObjectSpecification objectSpecification = specificationLookup.loadSpecification(domainType);
+        // ensure the spec is fully rebuilt
+        objectSpecification.getObjectActions(Contributed.INCLUDED);
+        objectSpecification.getAssociations(Contributed.INCLUDED);
+    }
+
+    // //////////////////////////////////////
+
+
+
+    @Programmatic
+    public List<DomainMember> export() {
+
+        final Collection<ObjectSpecification> specifications = specificationLookup.allSpecifications();
+
+        final List<DomainMember> rows = Lists.newArrayList();
+        for (final ObjectSpecification spec : specifications) {
+            if (exclude(spec)) {
+                continue;
+            }
+            final List<ObjectAssociation> properties = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
+            for (final ObjectAssociation property : properties) {
+                final OneToOneAssociation otoa = (OneToOneAssociation) property;
+                if (exclude(otoa)) {
+                    continue;
+                }
+                rows.add(new DomainMemberDefault(spec, otoa));
+            }
+            final List<ObjectAssociation> associations = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+            for (final ObjectAssociation collection : associations) {
+                final OneToManyAssociation otma = (OneToManyAssociation) collection;
+                if (exclude(otma)) {
+                    continue;
+                }
+                rows.add(new DomainMemberDefault(spec, otma));
+            }
+            final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
+            for (final ObjectAction action : actions) {
+                if (exclude(action)) {
+                    continue;
+                }
+                rows.add(new DomainMemberDefault(spec, action));
+            }
+        }
+
+        Collections.sort(rows);
+
+        return rows;
+    }
+
+
+
+    protected boolean exclude(final OneToOneAssociation property) {
+        return false;
+    }
+
+    protected boolean exclude(final OneToManyAssociation collection) {
+        return false;
+    }
+
+    protected boolean exclude(final ObjectAction action) {
+        return false;
+    }
+
+    protected boolean exclude(final ObjectSpecification spec) {
+        return isBuiltIn(spec) || spec.isAbstract();
+    }
+
+    protected boolean isBuiltIn(final ObjectSpecification spec) {
+        final String className = spec.getFullIdentifier();
+        return className.startsWith("java") || className.startsWith("org.joda");
+    }
+
+
+
+
+    // //////////////////////////////////////
+
     private SpecificationLoader specificationLookup;
 
     @Override
     public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
-    //endregion
 
+    @Inject
+    GridService gridService;
 }

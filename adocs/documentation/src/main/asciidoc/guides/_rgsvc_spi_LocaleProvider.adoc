@@ -50,13 +50,13 @@ Currently there is no equivalent implementation for the xref:ugvro.adoc#[Restful
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), __and__ that the
 xref:ugvw.adoc#[Wicket viewer] is being used, then an implementation of `LocaleProvider` is
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-further in this xref:ugfun.adoc#_ugfun_how-tos_replacing-default-service-implementations["how to"] tip).
+in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

@@ -11,19 +11,14 @@ The `DomainObjectContainer` allows domain objects to raise information, warning 
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
+
     void informUser(String message);                                                            // <1>
-    @Programmatic
     String informUser(TranslatableString message, Class<?> contextClass, String contextMethod); // <2>
 
-    @Programmatic
     void warnUser(String message);                                                              // <3>
-    @Programmatic
     String warnUser(TranslatableString message, Class<?> contextClass, String contextMethod);   // <4>
 
-    @Programmatic
     void raiseError(String message);                                                            // <5>
-    @Programmatic
     String raiseError(TranslatableString message, Class<?> contextClass, String contextMethod); // <6>
     ...
 }
@@ -40,7 +35,7 @@ For example:
 
 [source,java]
 ----
-public Order addItem(Product product, @ParameterLayout(named="Quantity) int quantity) {
+public Order addItem(Product product, @ParameterLayout(named="Quantity") int quantity) {
     if(productRepository.stockLevel(product) == 0) {
         container.warnUser(
             product.getDescription() + " out of stock; order fulfillment may be delayed");

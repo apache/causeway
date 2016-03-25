@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.11.0-SNAPSHOT</version>
+    <version>1.12.0-SNAPSHOT</version>
     
     <packaging>pom</packaging>
 
@@ -85,65 +85,83 @@
 
         <!-- Datanucleus Objectstore -->
         <jdo-api.version>3.1</jdo-api.version>
-        <datanucleus-core.version>4.1.2</datanucleus-core.version>
-        <datanucleus-api-jdo.version>4.1.0-release</datanucleus-api-jdo.version>
-        <datanucleus-jdo-query.version>4.0.4</datanucleus-jdo-query.version>
-        <datanucleus-rdbms.version>4.1.2</datanucleus-rdbms.version>
+
+        <datanucleus-core.version>4.1.7</datanucleus-core.version>
+        <datanucleus-api-jdo.version>4.1.1</datanucleus-api-jdo.version>
+        <datanucleus-jdo-query.version>4.0.5</datanucleus-jdo-query.version>
+        <datanucleus-rdbms.version>4.1.9</datanucleus-rdbms.version>
 
         <datanucleus-jodatime.version>4.1.0-release</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
+	<!--
+	    ISIS-1288: seen integration tests to fail;
+	    domain object date holding 1-Aug-2015 after xactn retrieved as 31-Jul-2015
+
+        https://github.com/datanucleus/datanucleus-jodatime/commit/b85795a1bf5f92909a95d2c8f8822bba2ba38b5f
+
+        <datanucleus-jodatime.version>4.1.1</datanucleus-jodatime.version>
+	-->
+        <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
 
         <shiro.version>1.2.3</shiro.version>
 
-        <slf4j.version>1.7.10</slf4j.version>
+        <slf4j.version>1.7.13</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
 
-        <joda-time.version>2.3</joda-time.version>
-        <guava.version>16.0.1</guava.version>
+        <joda-time.version>2.9.1</joda-time.version>
+        <guava.version>19.0.20150826</guava.version>
 
         <hamcrest.version>1.3</hamcrest.version>
 
-        <objenesis.version>1.4</objenesis.version>
-        <javassist.version>3.19.0-GA</javassist.version>
-        <reflections.version>0.9.9</reflections.version>
+        <objenesis.version>2.2</objenesis.version>
+        <javassist.version>3.20.0-GA</javassist.version>
+        <reflections.version>0.9.10</reflections.version>
 
-        <commons-logging.version>1.1.2</commons-logging.version>
-        <commons-cli.version>1.2</commons-cli.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <commons-cli.version>1.3.1</commons-cli.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
-        <commons-codec.version>1.9</commons-codec.version>
+        <commons-codec.version>1.10</commons-codec.version>
+        <commons-email.version>1.4</commons-email.version>
+        <com-sun-mail.version>1.5.2</com-sun-mail.version>
 
-        <jackson.version>2.5.0</jackson.version>
-        <gson.version>2.3.1</gson.version>
+        <axon-core.version>2.4</axon-core.version>
+
+        <jackson.version>2.6.4</jackson.version>
+        <gson.version>2.5</gson.version>
+        <swagger-core.version>1.5.5</swagger-core.version>
+        <swagger-ui.version>2.1.3</swagger-ui.version>
+        <webjars-servlet-2.x.version>1.4</webjars-servlet-2.x.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
+        <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
         <hsqldb.version>2.3.1</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <resteasy-jaxrs.version>3.0.11.Final</resteasy-jaxrs.version>
+        <resteasy-jaxrs.version>3.0.14.Final</resteasy-jaxrs.version>
 
-        <jetty.version>9.2.11.v20150529</jetty.version>
+        <jetty.version>9.3.6.v20151106</jetty.version>
 
         <wicket.version>7.2.0</wicket.version>
-        <wicketstuff.version>7.1.0</wicketstuff.version>
+        <wicketstuff.version>7.2.0</wicketstuff.version>
 
         <wicket-webjars.version>0.5.3</wicket-webjars.version>
-        <wicket-bootstrap.version>0.10.4</wicket-bootstrap.version>
+        <wicket-bootstrap.version>0.10.6</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
         <select2.version>4.0.0-2</select2.version>
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
-        <guice.version>3.0</guice.version>
-        <picocontainer.version>2.14.3</picocontainer.version>
+        <guice.version>4.0</guice.version>
+        <picocontainer.version>2.15</picocontainer.version>
 
         <dom4j.version>1.6.1</dom4j.version>
         <jdom.version>2.0.2</jdom.version>
-        <xstream.version>1.4.7</xstream.version>
+        <xstream.version>1.4.8</xstream.version>
         <htmlparser.version>2.1</htmlparser.version>
 
         <junit.version>4.12</junit.version>
+        <!-- 2.8.1 depends on cglib-nodep 3.1 whereas axonframework depends on 2.2.2 -->
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
-        <cucumber.version>1.1.5</cucumber.version>
+        <cucumber.version>1.2.4</cucumber.version>
 
         <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version>
         <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version>
@@ -154,7 +172,12 @@
         <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version>
         <geronimo-atinject_1.0_spec.version>1.0</geronimo-atinject_1.0_spec.version>
         <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version>
+
         <validation-api.version>1.1.0.Final</validation-api.version>
+
+        <javax-mail.version>1.4.7</javax-mail.version>
+
+        <jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
     </properties>
 
     <scm>
@@ -332,6 +355,14 @@
 
     <repositories>
         <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
             <id>Apache Repository</id>
             <url>https://repository.apache.org/</url>
             <snapshots>
@@ -479,6 +510,7 @@
                             <licenseFamilyName>MIT  </licenseFamilyName>
                             <notes />
                             <patterns>
+                              <pattern>The MIT License (MIT)</pattern>
                               <pattern>Dual licensed under the MIT</pattern>
                             </patterns>
                           </license>
@@ -660,8 +692,10 @@
                     <version>2.9.1</version>
                     <inherited>true</inherited>
                     <configuration>
-                        <!-- as per http://stackoverflow.com/a/16743137/56880 -->
+                        <!-- as per http://stackoverflow.com/a/16743137/56880; only if using java 8 to build -->
+<!--
                         <additionalparam>-Xdoclint:none</additionalparam>
+-->
                         <debug>true</debug>
                         <minmemory>128m</minmemory>      
                         <maxmemory>1024m</maxmemory>
@@ -856,8 +890,8 @@
 
                 <!-- Runtime: jetty -->
                 <plugin>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>maven-jetty-plugin</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
                     <version>${jetty.version}</version>
                     <configuration>
                         <webAppConfig>
@@ -937,13 +971,14 @@
             </plugins>
         </pluginManagement>
 
+
+
         <!-- build plugins; apply to all inheriting modules. Note that some 
             plugins also come from the "super-POM" for the default bindings. For example, 
             in the 'default' lifecycle, the resources, compiler, surefire, jar, install 
             and deploy plugins are automatically included because they provide the default 
             bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -1036,13 +1071,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1051,14 +1086,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1067,14 +1102,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-schema</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-schema</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1083,7 +1118,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-log4j</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1092,14 +1127,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1108,40 +1143,40 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-wrapper</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
 
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
 
             <!-- specsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-specsupport</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
 
             <!-- integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
@@ -1149,36 +1184,36 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1187,12 +1222,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
 
             
@@ -1200,41 +1235,41 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-applib</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-model</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-model</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-impl</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket-impl</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -1244,7 +1279,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>1.11.0-SNAPSHOT</version>
+                <version>1.12.0-SNAPSHOT</version>
             </dependency>
 
             <!-- JodaTime -->
@@ -1743,6 +1778,7 @@ ${license.additional-notes}
                 <groupId>org.eclipse.jetty.aggregate</groupId>
                 <artifactId>jetty-all</artifactId>
                 <version>${jetty.version}</version>
+                <classifier>uber</classifier>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.jetty.orbit</groupId>
@@ -1844,6 +1880,12 @@ ${license.additional-notes}
                 <version>${geronimo-jcdi_1.0_spec.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+                <version>${jboss-jaxrs-api_2.0_spec.version}</version>
+            </dependency>
+
 
             <!-- javax APIs -->
             <dependency>
@@ -1884,7 +1926,30 @@ ${license.additional-notes}
                 <artifactId>datanucleus-jodatime</artifactId>
                 <version>${datanucleus-jodatime.version}</version>
             </dependency>
- 
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-core</artifactId>
+                <version>${swagger-core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>swagger-ui</artifactId>
+                <version>${swagger-ui.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>webjars-servlet-2.x</artifactId>
+                <version>${webjars-servlet-2.x.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -1923,6 +1988,60 @@ ${license.additional-notes}
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>jdk7</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-toolchains-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>toolchain</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <toolchains>
+                                <jdk>
+                                    <version>1.7</version>
+                                    <vendor>oracle</vendor>
+                                </jdk>
+                            </toolchains>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>apache-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-toolchains-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>toolchain</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <toolchains>
+                                <jdk>
+                                    <version>1.7</version>
+                                    <vendor>oracle</vendor>
+                                </jdk>
+                            </toolchains>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>m2e</id>
             <activation>

@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -190,6 +191,7 @@ public class DomainResourceHelper {
 
     private final RepresentationServiceContextAdapter representationServiceContext;
     private final RepresentationService representationService;
+    private final TransactionService transactionService;
 
     public DomainResourceHelper(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
         this(resourceContext, objectAdapter, new DomainObjectLinkTo());
@@ -209,6 +211,7 @@ public class DomainResourceHelper {
                      .with(this.objectAdapter);
 
         representationService = lookupService(RepresentationService.class);
+        transactionService = lookupService(TransactionService.class);
     }
 
     private final ResourceContext resourceContext;
@@ -224,6 +227,7 @@ public class DomainResourceHelper {
      * render a representation of the object.
      */
     public Response objectRepresentation() {
+        transactionService.flushTransaction();
         return representationService
                 .objectRepresentation(representationServiceContext, objectAdapter);
     }
@@ -236,6 +240,7 @@ public class DomainResourceHelper {
      */
     @Deprecated
     public Response objectRepresentation(final RepresentationService.Intent intent) {
+        transactionService.flushTransaction();
         return representationService
                 .objectRepresentation(representationServiceContext, objectAdapter, intent);
     }
@@ -253,6 +258,7 @@ public class DomainResourceHelper {
 
         final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectAdapterAccessHelper.Intent.ACCESS);
 
+        transactionService.flushTransaction();
         return representationService.propertyDetails(representationServiceContext, new ObjectAndProperty2(objectAdapter, property, memberMode), memberMode);
     }
 
@@ -270,6 +276,7 @@ public class DomainResourceHelper {
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, ObjectAdapterAccessHelper.Intent.ACCESS);
 
+        transactionService.flushTransaction();
         return representationService.collectionDetails(representationServiceContext, new ObjectAndCollection2(objectAdapter, collection, memberMode), memberMode);
     }
 
@@ -285,6 +292,7 @@ public class DomainResourceHelper {
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.ACCESS);
 
+        transactionService.flushTransaction();
         return representationService.actionPrompt(representationServiceContext, new ObjectAndAction(objectAdapter, action));
     }
 
@@ -370,6 +378,7 @@ public class DomainResourceHelper {
                 new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter, selfLink);
 
         // response
+        transactionService.flushTransaction();
         return representationService.actionResult(representationServiceContext, objectAndActionInvocation, selfLink);
     }
 

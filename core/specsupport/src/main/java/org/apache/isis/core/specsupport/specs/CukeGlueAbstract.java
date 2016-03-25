@@ -16,9 +16,6 @@
  */
 package org.apache.isis.core.specsupport.specs;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -29,10 +26,6 @@ import com.google.common.collect.Lists;
 import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
-import org.junit.Assert;
-
-import cucumber.api.DataTable;
-import cucumber.api.java.Before;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -40,6 +33,10 @@ import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionForUnit;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 
+import cucumber.api.java.Before;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * Base class for Cucumber-JVM step definitions.
@@ -58,7 +55,8 @@ public abstract class CukeGlueAbstract {
      */
     protected ScenarioExecution scenarioExecution() {
         if(ScenarioExecution.current() == null) {
-            throw new IllegalStateException("The scenario execution has not been set up; call #before(ScenarioExecutionScope) first");
+            fail();
+            return null;
         }
         return ScenarioExecution.current();
     }
@@ -74,8 +72,11 @@ public abstract class CukeGlueAbstract {
      * then {@link ScenarioExecution#beginTran() starts a new one}.
      */
     protected void nextTransaction() {
-        scenarioExecution().endTran(true);
-        scenarioExecution().beginTran();
+        final ScenarioExecution scenarioExecution = scenarioExecution();
+        if(scenarioExecution != null) {
+            scenarioExecution.endTran(true);
+            scenarioExecution.beginTran();
+        }
     }
     
 
@@ -205,7 +206,7 @@ public abstract class CukeGlueAbstract {
             }
         }
         if(buf.length() != 0) {
-            Assert.fail("\n" + buf.toString());
+            fail("\n" + buf.toString());
         }
     }
 

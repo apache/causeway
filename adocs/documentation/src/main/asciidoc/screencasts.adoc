@@ -35,6 +35,17 @@ _nb: the todoapp was previously called the 'quickstart' app_
 |video::2leQwavWxeg[youtube,width="420px",height="210px"]
       
 
+|Dynamic XML layouts (v.1.12.0-SNAPSHOT) +
+
+_Describing how the layout of domain objects can be customized using the Bootstrap 3 grid system._
+
+Learn more link:./guides/ugfun.html#_ugfun_object-layout_dynamic_xml[here]
+
+|video::MxewC5Pve5k[youtube,width="420px",height="280px"]
+
+
+
+
 |===
 
 
@@ -53,7 +64,7 @@ _How to import an Apache Isis maven-based application into Eclipse and configure
 
 NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
 
-Learn more link:./guides/cg.html#_cg_ide_eclipse[here]
+Learn more link:./guides/dg.html#_dg_ide_eclipse[here]
 
 |video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
 
@@ -63,7 +74,7 @@ Learn more link:./guides/cg.html#_cg_ide_eclipse[here]
 
 _How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
 
-Learn more link:./guides/cg.html#_cg_ide_intellij[here]
+Learn more link:./guides/dg.html#_dg_ide_intellij[here]
 
 |video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
 
@@ -82,7 +93,7 @@ Learn more link:./guides/cg.html#_cg_ide_intellij[here]
 
 |Commands and Auditing (v1.6.0) +
 
-_Configuring the command and auditing add-on modules for the link:./simpleapp-archetype.html[simpleapp]._ +
+_Configuring the command and auditing add-on modules for the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
 
 Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-command[command] and http://github.com/isisaddons/isis-module-audit[audit] modules
 
@@ -91,7 +102,7 @@ Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-modul
 
 |Security (v1.6.0) +
 
-_Configuring the security add-on module for for the link:./simpleapp-archetype.html[simpleapp]._ +
+_Configuring the security add-on module for for the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
 
 Learn more at the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module
 
@@ -128,13 +139,13 @@ _Using the (non-ASF) http://github.com/isisaddons/isis-module-excel[Isis addons'
 |===
 
 
-|Dynamic layouts in the Wicket viewer +
+|Dynamic (XML) layouts in the Wicket viewer (v1.12.0) +
 
 _How to layout properties and collections dynamically_ +
 
-Learn more link:./user-guide/rg.html#_rg-object-layout[here]
+Learn more link:./guides/ugfun.html#_ugfun_object-layout_dynamic_xml[here]
 
-|video::zmrg49WeEPc[youtube,width="420px",height="236px"]
+|video::MxewC5Pve5k[youtube,width="420px",height="236px"]
 
 
   
@@ -144,7 +155,6 @@ Learn more link:./user-guide/rg.html#_rg-object-layout[here]
 _How to customize the Wicket viewer, integrating the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 ] wicket extension._
 
 |video::9o5zAME8LrM[youtube,width="420px",height="315px"]
-
 
 
 

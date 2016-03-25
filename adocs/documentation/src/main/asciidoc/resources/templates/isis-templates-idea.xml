@@ -1,0 +1,522 @@
+<templateSet group="Apache Isis">
+  <template name="isa" value="@org.apache.isis.applib.annotation.Action()&#10;public $ReturnType$ $actionName$(final $ParameterType$ $parameterType$) {&#10;    return $END$null; // TODO: business logic here&#10;}&#10;" description="Apache Isis Action" toReformat="true" toShortenFQNames="true">
+    <variable name="actionName" expression="&quot;actionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ParameterType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="parameterType" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="ReturnType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-p-auto" value="public java.util.Collection&lt;$ParameterType$&gt; autoComplete$ParameterNum$$ActionName$(final String search) {&#10;    return $END$com.google.common.collect.Lists.newArrayList(); // TODO: return list of choices for argument N&#10;}" description="Apache Isis Action parameter auto-complete" toReformat="true" toShortenFQNames="true">
+    <variable name="ParameterNum" expression="&quot;Num&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ParameterType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-p-cho" value="public java.util.List&lt;$ParameterType$&gt; choices$ParameterNum$$ActionName$() {&#10;    return $END$com.google.common.collect.Lists.newArrayList(); // TODO: return list of choices for argument N&#10;}" description="Apache Isis Action parameter choices" toReformat="true" toShortenFQNames="true">
+    <variable name="ParameterNum" expression="&quot;Num&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ParameterType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-p-def" value="public $ParameterType$ default$ParameterNum$$ActionName$() {&#10;    return $END$null; // TODO: return default for argument N&#10;}" description="Apache Isis Action parameter defaults" toReformat="true" toShortenFQNames="true">
+    <variable name="ParameterNum" expression="&quot;Num&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ParameterType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-p-val" value="public String validate$ParamNum$$ActionName$(final $ParameterType$ $parameterType$) {&#10;    return $END$null; // TODO: return reason why action argument are invalid, null if ok&#10;}" description="Apache Isis Action parameter validation" toReformat="true" toShortenFQNames="true">
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ParameterType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <variable name="parameterType" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-dis" value="public String disable$ActionName$() {&#10;    return $END$null; // TODO: return reason why action disabled, null if enabled&#10;}" description="Apache Isis Action disablement" toReformat="true" toShortenFQNames="true">
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-event" value="public static class $ActionName$DomainEvent extends ActionDomainEvent{}&#10;@org.apache.isis.applib.annotation.Action(&#10;        domainEvent = $ActionName$DomainEvent.class&#10;)&#10;public $ReturnType$ $actionName$(final $ParameterType$ $parameterType$) {&#10;    return $END$null; // TODO: business logic here&#10;}&#10;" description="Apache Isis Action (with domain event)" toReformat="true" toShortenFQNames="true">
+    <variable name="actionName" expression="&quot;actionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ActionName" expression="capitalize(actionName)" defaultValue="" alwaysStopAt="false" />
+    <variable name="ParameterType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="parameterType" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="ReturnType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-event-decl" value="public static class $ActionName$DomainEvent extends ActionDomainEvent{}&#10;@org.apache.isis.applib.annotation.Action(&#10;        domainEvent = $ActionName$DomainEvent.class&#10;)&#10;" description="Apache Isis Action (domain event declaration only)" toReformat="true" toShortenFQNames="true">
+    <variable name="ActionName" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-hid" value="public boolean hide$ActionName$() {&#10;    return $END$false; // TODO: return true if action is hidden, false if visible&#10;}" description="Apache Isis Action visibility" toReformat="true" toShortenFQNames="true">
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isa-val" value="public String validate$ActionName$(final $ParameterType$ $parameterType$) {&#10;    return $END$null; // TODO: return reason why action arguments are invalid, null if ok&#10;}" description="Apache Isis Action validation" toReformat="true" toShortenFQNames="true">
+    <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ParameterType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <variable name="parameterType" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-dis" value="public String disable$CollectionName$() {&#10;    return $END$null; // TODO: return reason why collection read-only, null if editable&#10;}" description="Apache Isis Collection disablement" toReformat="true" toShortenFQNames="true">
+    <variable name="CollectionName" expression="&quot;CollectionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-hid" value="public boolean hide$CollectionName$() {&#10;    return $END$false; // TODO: return true if hidden, false otherwise&#10;}" description="Apache Isis Collection visibility" toReformat="true" toShortenFQNames="false">
+    <variable name="CollectionName" expression="&quot;CollectionName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-jdo-1m-b-fk" value="@org.apache.isis.applib.annotation.Collection()&#10;@javax.jdo.annotations.Persistent(mappedBy=&quot;$elementNameInChild$&quot;, dependentElement=&quot;$trueOrFalse$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private java.util.SortedSet&lt;$ElementType$&gt; $collectionName$ = new java.util.TreeSet&lt;$ElementType$&gt;();&#10;" description="Apache Isis Collection (JDO, 1:m parent bidirectional to foreign key)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="collectionName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="elementNameInChild" expression="decapitalize(EntityName)" defaultValue="" alwaysStopAt="false" />
+    <variable name="trueOrFalse" expression="&quot;trueOrFalse&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-jdo-1m-b-jt" value="@org.apache.isis.applib.annotation.Collection()&#10;@javax.jdo.annotations.Persistent(mappedBy=&quot;$elementNameInChild$&quot;, dependentElement=&quot;$trueOrFalse$&quot;)&#10;@javax.jdo.annotations.Join&#10;@lombok.Getter @lombok.Setter&#10;private java.util.SortedSet&lt;$ElementType$&gt; $collectionName$ = new java.util.TreeSet&lt;$ElementType$&gt;();&#10;" description="Apache Isis Collection (JDO, 1:m parent bidirectional to join table)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="collectionName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="elementNameInChild" expression="decapitalize(EntityName)" defaultValue="" alwaysStopAt="false" />
+    <variable name="trueOrFalse" expression="&quot;trueOrFalse&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-jdo-1m-u-fk" value="@org.apache.isis.applib.annotation.Collection()&#10;@javax.jdo.annotations.Element(column=&quot;$ColumnName$&quot;, dependent=&quot;$trueOrFalse$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private java.util.SortedSet&lt;$ElementType$&gt; $collectionName$ = new java.util.TreeSet&lt;$ElementType$&gt;();&#10;" description="Apache Isis JDO Collection (1:m parent unidirectional)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="collectionName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="ColumnName" expression="&quot;ColumnName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="trueOrFalse" expression="&quot;trueOrFalse&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-jdo-1m-u-jt" value="@org.apache.isis.applib.annotation.Collection()&#10;@javax.jdo.annotations.Join&#10;@javax.jdo.annotations.Element(dependent=&quot;$trueOrFalse$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private java.util.SortedSet&lt;$ElementType$&gt; $collectionName$ = new java.util.TreeSet&lt;$ElementType$&gt;();&#10;" description="Apache Isis Collection (JDO, 1:m parent unidirectional to join table)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="collectionName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="trueOrFalse" expression="&quot;trueOrFalse&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-jdo-mn-ub-c" value="@org.apache.isis.applib.annotation.Collection()&#10;@javax.jdo.annotations.Persistent(mappedBy=&quot;$ChildCollectionNameInParent$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private java.util.SortedSet&lt;$ElementType$&gt; $collectionName$ = new java.util.TreeSet&lt;$ElementType$&gt;(); &#10;" description="Apache Isis Collection (JDO, m:n child)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="collectionName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="ChildCollectionNameInParent" expression="&quot;ChildCollectionNameInParent&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-jdo-mn-ub-p" value="@org.apache.isis.applib.annotation.Collection()&#10;@javax.jdo.annotations.Persistent(table=&quot;$TableName$&quot;) &#10;@javax.jdo.annotations.Join(column=&quot;$ThisEntityFieldName$&quot;) &#10;@javax.jdo.annotations.Element(column=&quot;$RelatedEntityFieldName$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private java.util.SortedSet&lt;$ElementType$&gt; $collectionName$ = new java.util.TreeSet&lt;$ElementType$&gt;();&#10;" description="Apache Isis Collection (JDO, m:n parent)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="collectionName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="TableName" expression="&quot;TableName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="ThisEntityFieldName" expression="&quot;ThisEntityFieldName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="RelatedEntityFieldName" expression="&quot;RelatedEntityFieldName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isds-subscriber-on" value="@com.google.common.eventbus.Subscribe&#10;public void on(final $EventType$ ev) {&#10;    // TODO&#10;}&#10;" description="Apache Isis Domain Service Subscriber &quot;on&quot; event" toReformat="false" toShortenFQNames="true">
+    <variable name="EventType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="isjaxb-package.info" value="@javax.xml.bind.annotation.XmlSchema(&#10;        namespace = &quot;http://$namespaceBase$/$namespaceSuffix$/v$versionMajor$_$versionMinor$/$namespaceSuffix$.xsd&quot;,&#10;        xmlns = {&#10;                @javax.xml.bind.annotation.XmlNs(&#10;                        namespaceURI = &quot;http://isis.apache.org/schema/common&quot;,&#10;                        prefix = &quot;common&quot;&#10;                ),&#10;        },&#10;        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED&#10;)" toReformat="false" toShortenFQNames="true">
+    <variable name="namespaceBase" expression="        groovyScript(&quot;def str = _1; def list = str.split(\&quot;\\\\.\&quot;); def revlist = list.reverse(); def ret = revlist.iterator().join(\&quot;.\&quot;); return ret&quot;, currentPackage())" defaultValue="" alwaysStopAt="true" />
+    <variable name="namespaceSuffix" expression="groovyScript(&quot;def str = _1; def list = str.split(\&quot;\\\\.\&quot;); def revlist = list.reverse(); def ret = revlist[0]; return ret&quot;, currentPackage())" defaultValue="" alwaysStopAt="true" />
+    <variable name="versionMajor" expression="" defaultValue="1" alwaysStopAt="true" />
+    <variable name="versionMinor" expression="" defaultValue="0" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="isinject" value="@javax.inject.Inject&#10;$ServiceType$ $serviceType$;&#10;" description="Apache Isis Injected Dependency Service" toReformat="true" toShortenFQNames="true">
+    <variable name="ServiceType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <variable name="serviceType" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isid" value="//region &gt; title, icon etc&#10;public String title() {&#10;    final org.apache.isis.applib.util.TitleBuffer buf = new org.apache.isis.applib.util.TitleBuffer();&#10;    $END$// TODO: append to org.apache.isis.applib.util.TitleBuffer, typically value properties&#10;    return buf.toString();&#10;}&#10;public String iconName() {&#10;    return null; // TODO: return icon name (suffix)&#10;}&#10;public String cssClass() {&#10;    return null; // TODO: return CSS class name&#10;}&#10;//endregion" description="Apache Isis Identification region" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isnew" value="$Type$ $type$ = $container$.newTransientInstance($Type$.class);&#10;$END$// TODO: set up any properties&#10;&#10;$container$.persist($type$);&#10;" description="Apache Isis Commonly used method (factory for persistent)" toReformat="true" toShortenFQNames="true">
+    <variable name="Type" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <variable name="type" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="container" expression="&quot;container&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_STATEMENT" value="true" />
+      <option name="JAVA_EXPRESSION" value="false" />
+      <option name="JAVA_DECLARATION" value="false" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-jdo" value="@org.apache.isis.applib.annotation.Property()&#10;@javax.jdo.annotations.Column(allowsNull=&quot;$trueOrFalse$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private $PropertyType$ $propertyName$;&#10;" description="Apache Isis Property (JDO)" toReformat="true" toShortenFQNames="false">
+    <variable name="PropertyType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="propertyName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="trueOrFalse" expression="" defaultValue="false" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-auto" value="public java.util.Collection&lt;$PropertyType$&gt; autoComplete$PropertyName$(final String search) {&#10;    return $END$com.google.common.collect.Lists.newArrayList(); // TODO: return list of choices for property&#10;}" description="Apache Isis Property auto-complete" toReformat="true" toShortenFQNames="true">
+    <variable name="PropertyName" expression="&quot;PropertyName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="PropertyType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-cho" value="public java.util.Collection&lt;$PropertyType$&gt; choices$PropertyName$() {&#10;    return $END$com.google.common.collect.Lists.newArrayList(); // TODO: return list of choices for property&#10;}" description="Apache Isis Property choices" toReformat="true" toShortenFQNames="true">
+    <variable name="PropertyName" expression="&quot;PropertyName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="PropertyType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-def" value="public $PropertyType$ default$PropertyName$() {&#10;    return $END$null; // TODO: return default for property when first created&#10;}" description="Apache Isis Property default" toReformat="true" toShortenFQNames="true">
+    <variable name="PropertyName" expression="&quot;PropertyName&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="PropertyType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-dis" value="public String disable$PropertyName$() {&#10;    return $END$null; // TODO: return reason why property is disabled, null if editable&#10;}" description="Apache Isis Property disablement" toReformat="true" toShortenFQNames="true">
+    <variable name="PropertyName" expression="&quot;PropertyName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-hid" value="public boolean hide$PropertyName$() {&#10;  return $END$false; // TODO: return true if hidden, false if visible&#10; }" description="Apache Isis Property visibility" toReformat="true" toShortenFQNames="true">
+    <variable name="PropertyName" expression="&quot;PropertyName&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-val" value="public String validate$PropertyName$(final $PropertyType$ $propertyName$) {&#10;  if ($propertyName$ == null) return null;&#10;  return $END$null; // TODO: return reason why proposed value is invalid, null if valid&#10; }" description="Apache Isis Property validation" toReformat="true" toShortenFQNames="true">
+    <variable name="PropertyName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="PropertyType" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <variable name="propertyName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isobj-events" value="//region &gt; domain events&#10;public static abstract class PropertyDomainEvent&lt;T&gt;&#10;        extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent&lt;$EntityName$,T&gt; {&#10;}&#10;public static abstract class CollectionDomainEvent&lt;T&gt;&#10;        extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent&lt;$EntityName$,T&gt; {&#10;}&#10;public static abstract class ActionDomainEvent&#10;        extends org.apache.isis.applib.services.eventbus.ActionDomainEvent&lt;$EntityName$&gt; {&#10;}&#10;//endregion&#10;" description="Apache Isis Object: abstract domain events declarations" toReformat="true" toShortenFQNames="true">
+    <variable name="EntityName" expression="className()" defaultValue="" alwaysStopAt="false" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isobj-region" value="//region &gt; $Region$ &#10;$END$ &#10;//endregion" description="Apache Isis Region" toReformat="true" toShortenFQNames="true">
+    <variable name="Region" expression="&quot;Region&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isobj-standard" value="//region &gt; compareTo, toString&#10;@Override&#10;public int compareTo(final $EntityName$ other) {&#10;    return org.apache.isis.applib.util.ObjectContracts.compare(this, other, &quot;$property$&quot;);&#10;}&#10;@Override&#10;public String toString() {&#10;    return org.apache.isis.applib.util.ObjectContracts.toString(this, &quot;$property$&quot;);&#10;}&#10;//endregion&#10;" description="Apache Isis Object: standard methods (compareTo, toString)" toReformat="true" toShortenFQNames="true">
+    <variable name="EntityName" expression="className()" defaultValue="" alwaysStopAt="false" />
+    <variable name="property" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isobj-validate" value="public String validate() {&#10;    $END$// TODO: return reason why object is in invalid state (and so cannot be saved/updated), or null if ok&#10;}" description="Apache Isis Object: validate method" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-jdo-11c" value="@javax.jdo.annotations.Column(allowsNull=&quot;$trueOrFalse$&quot;)&#10;@javax.jdo.annotations.Persistent(mappedBy=&quot;$fieldOnChild$&quot;)&#10;@lombok.Getter @lombok.Setter&#10;private $PropertyType$ $propertyName$;&#10;" description="Apache Isis Property (JDO, 1:1 bidirectional parent to foreign key)" toReformat="true" toShortenFQNames="false">
+    <variable name="PropertyType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="propertyName" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />
+    <variable name="fieldOnChild" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="trueOrFalse" expression="" defaultValue="false" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isc-event-decl" value="public static class $CollectionName$DomainEvent extends CollectionDomainEvent&lt;$ElementType$&gt;{}&#10;@org.apache.isis.applib.annotation.Collection(&#10;        domainEvent = $CollectionName$DomainEvent.class&#10;)&#10;" description="Apache Isis Collection (domain event declaration only)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="CollectionName" expression="capitalize(collectionName)" defaultValue="" alwaysStopAt="false" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="isp-event-decl" value="public static class $PropertyName$DomainEvent extends PropertyDomainEvent&lt;$ElementType$&gt;{}&#10;@org.apache.isis.applib.annotation.Property(&#10;        domainEvent = $PropertyName$DomainEvent.class&#10;)&#10;" description="Apache Isis Property (domain event declaration only)" toReformat="true" toShortenFQNames="true">
+    <variable name="ElementType" expression="classNameComplete()" defaultValue="" alwaysStopAt="true" />
+    <variable name="PropertyName" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+</templateSet>

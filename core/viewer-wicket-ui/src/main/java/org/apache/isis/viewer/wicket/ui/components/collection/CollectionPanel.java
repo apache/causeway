@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -40,12 +41,13 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionSelectorProvider {
-
 
     private static final long serialVersionUID = 1L;
 
@@ -55,33 +57,21 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
     private Label label;
 
-    public CollectionPanel(final String id, final EntityModel entityModel, OneToManyAssociation otma) {
-        this(id, newEntityCollectionModel(entityModel, otma), entityModel, otma);
-    }
-
-    private static EntityCollectionModel newEntityCollectionModel(final EntityModel entityModel, OneToManyAssociation otma) {
-        EntityCollectionModel collectionModel = EntityCollectionModel.createParented(entityModel, otma);
-        return collectionModel;
-    }
-
-    CollectionPanel(
+    public CollectionPanel(
             final String id,
             final EntityCollectionModel collectionModel) {
-        this(id, collectionModel, new EntityModel(collectionModel.getParentObjectAdapterMemento()), collectionModel.getCollectionMemento().getCollection());
-    }
-
-    CollectionPanel(
-            final String id,
-            final EntityCollectionModel collectionModel,
-            final EntityModel entityModel,
-            final OneToManyAssociation otma) {
         super(id, collectionModel);
 
         final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
 
-        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentType());
+        final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection();
+        final EntityModel entityModel = collectionModel.getEntityModel();
 
-        entityActionLinks.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
+        final List<ObjectAction> associatedActions =
+                EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentType());
+
+        entityActionLinks.addAll(
+                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
 
         collectionModel.addEntityActions(entityActionLinks);
     }

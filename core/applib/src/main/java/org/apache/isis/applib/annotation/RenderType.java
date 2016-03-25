@@ -18,6 +18,15 @@
  */
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlType;
+
+/**
+ * @deprecated - use {@link CollectionLayout#defaultView()} set to &quot;table&quot; instead.
+ */
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+)
+@Deprecated
 public enum RenderType {
     EAGERLY,
     LAZILY;

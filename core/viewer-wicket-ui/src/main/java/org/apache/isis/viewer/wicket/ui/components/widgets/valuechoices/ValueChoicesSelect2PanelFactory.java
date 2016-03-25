@@ -25,6 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanel;
 
 public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
 
@@ -47,7 +48,11 @@ public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         final ScalarModel scalarModel = (ScalarModel) model;
-        return new ValueChoicesSelect2Panel(id, scalarModel);
+        if(scalarModel.isViewMode()) {
+            return new StringPanel(id, scalarModel);
+        } else {
+            return new ValueChoicesSelect2Panel(id, scalarModel);
+        }
     }
 
 }

@@ -18,12 +18,13 @@ The API defined by `DomainObjectContainer` is simply:
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
     String titleOf(Object domainObject);                // <1>
+    String iconNameOf(Object domainObject);             // <2>
     ...
 }
 ----
 <1> return the title of the object, as rendered in the UI by the Apache Isis viewers.
+<2> return the icon name of the object, as rendered in the UI by the Apache Isis viewers.
 
 
 By way of example, here's some code from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] showing the use of the API in an message:

@@ -7,7 +7,9 @@
 
 The quickest way to get started with Apache Isis is to run the simple archetype.  This will generate a very simple one-class domain model, called `SimpleObject`, with a single property `name`.
 
-There is also a corresponding `SimpleObjectRepository` domain service.  From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
+There is also a corresponding `SimpleObjects` domain service which acts as a repository for `SimpleObject` entity.  From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
+
+Finally, the domain service also includes a `HomePageViewModel` which acts as a home page for the app.
 
 
 
@@ -22,7 +24,7 @@ To build the app from the latest stable release, then run the following command:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.10.0 \
+    -D archetypeVersion=1.11.1 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -47,7 +49,7 @@ The process is almost identical to that for stable releases, however the `archet
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.11.0-SNAPSHOT \
+    -D archetypeVersion=1.12.0-SNAPSHOT \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -92,38 +94,15 @@ The `simpleapp` archetype generates a single WAR file, configured to run both th
 Once you've built the app, you can run the WAR in a variety of ways.
 
 
-=== Self-hosted
-
-The easiest way to run the app, at least while getting started, is to run the self-hosting version of the WAR.  With this style the app runs up its own internal instance of Jetty web server.
-
-For example:
-
-
-[source,bash]
-----
-java -jar webapp/target/myapp-webapp-1.0-SNAPSHOT-jetty-console.jar
-----
-
-
-This can also be accomplished using an embedded Ant target provided in the build script:
-
-[source,bash]
-----
-mvn -P self-host antrun:run
-----
-
-
 === Using mvn Jetty plugin
 
-Alternatively, you could run the WAR in a Maven-hosted Jetty instance, though you need to `cd` into the `webapp` module:
+First, you could run the WAR in a Maven-hosted Jetty instance, though you need to `cd` into the `webapp` module:
 
 [source,bash]
 ----
 cd webapp
 mvn jetty:run
 ----
-
-If you use `mvn jetty:run`, then the context path changes; check the console output (eg link:http://localhost:8080/myapp-webapp [http://localhost:8080/myapp-webapp]).
 
 
 You can also provide a system property to change the port:
@@ -143,7 +122,7 @@ You can also take the built WAR file and deploy it into a standalone servlet con
 
 === From within the IDE
 
-Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:cg.adoc#_cg_ide[Contributors' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
@@ -155,25 +134,22 @@ image::{_imagesdir}getting-started/simpleapp-webapp.png[width="600px",link="{_im
 
 It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
 
-If running the self-hosted console, you can specify the fixtures using the `--initParam` flag:
-
-[source,bash]
-----
-java -jar webapp/target/myapp-webapp-1.0-SNAPSHOT-jetty-console.jar \
-     --initParam isis.persistor.datanucleus.install-fixtures=true  \
-     --initParam isis.fixtures=domainapp.fixture.scenarios.RecreateSimpleObjects
-----
-
-where (in the above example) `domainapp.fixture.scenarios.RecreateSimpleObjects` is the fully qualified class name of the fixture
-script to be run.
-
-If you are running the app from an IDE, then you can specify the fixture script using the `--fixture` flag:
+If you are running the app from an IDE, then you can specify the fixture script using the `--fixture` flag.  The archetype provides the `domainapp.fixture.scenarios.RecreateSimpleObjects` fixture script, for example:
 
 image::{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png"]
+
+Alternatively, you can run with a different xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] using the `--appManifest` (or `-m`) flag.  The archetype provides
+`domainapp.app.DomainAppAppManifestWithFixtures` which specifies the aforementioned `RecreateSimpleObjects` fixture.
 
 
 
 == Using the App
+
+[NOTE]
+====
+These screenshots are for v1.10.0.
+====
+
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ugvw.adoc#[Wicket viewer] or the xref:ugvro.adoc#[Restful Objects viewer]:
 
@@ -262,7 +238,7 @@ To log in, use `sven/pass`.
 
 Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main link:../documentation.html[documentation] page first).
 
-If you use Eclipse or IntelliJ IDEA, do also install the xref:cg.adoc#_cg_ide-templates[IDE templates]; these will help you follow the Apache Isis naming conventions.
+If you use Eclipse or IntelliJ IDEA, do also install the xref:dg.adoc#_dg_ide-templates[IDE templates]; these will help you follow the Apache Isis naming conventions.
 
 
 

@@ -176,6 +176,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             sortCacheAndUpdateActions(actions);
         }
 
+
+
         if(isNotIntrospected()) {
             facetedMethodsBuilder.introspectClassPostProcessing(metadataProperties);    
         }
@@ -262,19 +264,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return isService;
     }
 
-    /**
-     * TODO: should ensure that service has at least one user action; fix when
-     * specification knows of its hidden methods.
-     * 
-     * <pre>
-     * if (objectActions != null &amp;&amp; objectActions.length == 0) {
-     *     throw new ObjectSpecificationException(&quot;Service object &quot; + getFullName() + &quot; should have at least one user action&quot;);
-     * }
-     * </pre>
-     */
     @Override
     public void markAsService() {
-        ensureServiceHasNoAssociations();
         isService = true;
     }
 

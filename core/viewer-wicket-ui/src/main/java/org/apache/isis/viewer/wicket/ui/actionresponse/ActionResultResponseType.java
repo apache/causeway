@@ -19,12 +19,15 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
+
 import com.google.common.collect.Lists;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -136,10 +139,23 @@ public enum ActionResultResponseType {
         return IsisContext.getPersistenceSession().adapterFor(pojo);
     }
 
-    private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
+    private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, final ConcurrencyException exIfAny) {
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-        final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
+        final EntityPage entityPage =
+
+                // disabling concurrency checking after the layout XML (grid) feature
+                // was throwing an exception when rebuild grid after invoking action
+                // not certain why that would be the case, but think it should be
+                // safe to simply disable while recreating the page to re-render back to user.
+                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                    new Callable<EntityPage>() {
+                        @Override public EntityPage call() throws Exception {
+                            return new EntityPage(actualAdapter, exIfAny);
+                        }
+                    }
+            );
+
         return ActionResultResponse.toPage(entityPage);
     }
 

@@ -43,23 +43,18 @@
 
     <supplement>
         <project>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>1.1</version>
-            <name>Java Transaction API (JTA)</name>
-            <organization>
-                <name>Oracle Corp</name>
-                <url>http://www.oracle.com/</url>
-            </organization>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0.20150826</version>
             <licenses>
                 <license>
-                    <name>Common Development and Distribution License (CDDL) v1.0</name>
-                    <url>https://glassfish.java.net/public/CDDLv1.0.html</url>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
                 </license>
             </licenses>
         </project>
     </supplement>
-  
+
     <supplement>
         <project>
           <groupId>javax.transaction</groupId>

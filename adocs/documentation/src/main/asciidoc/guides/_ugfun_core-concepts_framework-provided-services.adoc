@@ -50,5 +50,5 @@ Bookmarks and Mementos:
 * xref:rgsvc.adoc#_rgsvc_api_XmlSnapshotService[`XmlSnapshotService`]
 
 
-A full list of services can be found in the xref:rgsvc.adoc#_rgsvc_api[Domain Services (API)]  and xref:rgsvc.adoc#_rgsvc_spi[Domain Services (SPI)] chapters of the reference guide.
+A full list of services can be found in the xref:rgsvc.adoc#_rgsvc[Domain Services] reference guide.
 

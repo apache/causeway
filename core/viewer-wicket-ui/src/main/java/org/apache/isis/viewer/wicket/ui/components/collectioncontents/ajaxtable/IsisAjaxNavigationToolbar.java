@@ -23,25 +23,33 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNav
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_SHOW_ALL = "showAll";
+    private static final String HINT_KEY_SHOW_ALL = "showAll";
+
     public IsisAjaxNavigationToolbar(final DataTable<?, ?> table) {
         super(table);
-
         addShowAllButton(table);
     }
 
     private void addShowAllButton(final DataTable<?, ?> table) {
         table.setOutputMarkupId(true);
 
-        ((MarkupContainer)get("span")).add(new AjaxLink("showAll") {
+        ((MarkupContainer)get("span")).add(new AjaxLink(ID_SHOW_ALL) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                table.setItemsPerPage(Long.MAX_VALUE);
+                showAllItemsOn(table);
+                final UiHintContainer hintContainer = getUiHintContainer();
+                if(hintContainer != null) {
+                    hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
+                }
                 target.add(table);
             }
         });
@@ -51,5 +59,26 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     protected PagingNavigator newPagingNavigator(String navigatorId, DataTable<?, ?> table) {
         return new IsisAjaxPagingNavigator(navigatorId, table);
     }
-    
+
+    void honourSortOrderHints() {
+        UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+
+        final DataTable<?, ?> table = getTable();
+        final String showAll = uiHintContainer.getHint(table, HINT_KEY_SHOW_ALL);
+        if(showAll != null) {
+            showAllItemsOn(table);
+        }
+    }
+
+    private void showAllItemsOn(final DataTable<?, ?> table) {
+        table.setItemsPerPage(Long.MAX_VALUE);
+    }
+
+    private UiHintContainer getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
+    }
+
 }

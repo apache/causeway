@@ -126,7 +126,7 @@ s     */
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
      */
-    public int paged() default -1;
+    int paged() default -1;
 
 
     // //////////////////////////////////////

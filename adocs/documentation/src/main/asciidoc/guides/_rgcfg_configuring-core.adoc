@@ -21,7 +21,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 (default value)
 |Description
 
-|`isis.object.` +
+|`isis.objects.` +
 `editing`
 |`true`,`false` +
 (`true`)
@@ -67,8 +67,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `createdLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
@@ -76,8 +75,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `loadedLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
@@ -85,8 +83,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `persistingLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
@@ -94,8 +91,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `persistedLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
@@ -103,8 +99,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `removingLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
@@ -112,8 +107,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `updatingLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
@@ -121,32 +115,28 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
 `updatedLifecycleEvent.` +
-`postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`cssClassUiEvent.postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`iconUiEvent.postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`titleUiEvent.postForDefault` +
-(`1.11.0-SNAPSHOT`)
+`titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).

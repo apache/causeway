@@ -11,7 +11,6 @@ The security API allows the domain object to obtain the identity of the user int
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
     UserMemento getUser();
     ...
 }

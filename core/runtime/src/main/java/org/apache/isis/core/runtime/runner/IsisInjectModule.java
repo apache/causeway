@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.runner;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
@@ -41,8 +38,6 @@ public class IsisInjectModule extends AbstractModule {
     private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
     private final IsisConfigurationBuilder isisConfigurationBuilder;
-
-    private final List<String> viewerNames = Lists.newArrayList();
 
     private static InstallerLookup defaultInstallerLookup() {
         return new InstallerLookup();
@@ -104,13 +99,6 @@ public class IsisInjectModule extends AbstractModule {
         return installerLookup;
     }
 
-    /**
-     * Adjustment (as per GOOS book)
-     */
-    public void addViewerNames(final List<String> viewerNames) {
-        this.viewerNames.addAll(viewerNames);
-    }
-
     @Override
     protected void configure() {
         requireBinding(DeploymentType.class);
@@ -137,6 +125,8 @@ public class IsisInjectModule extends AbstractModule {
             final IsisSystemFactory systemFactory,
             final AppManifest appManifestIfAny) {
         final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
+        // as a side-effect, if the metamodel turns out to be invalid, then
+        // this will push the MetaModelInvalidException into IsisContext.
         system.init();
         return system;
     }

@@ -20,15 +20,17 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple;
 
 import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
+
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
+import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
@@ -44,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
  * view for a backing {@link EntityCollectionModel}.
  */
 public class CollectionContentsMultipleViewsPanel
-        extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant,  CollectionCountProvider {
+        extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,28 +55,28 @@ public class CollectionContentsMultipleViewsPanel
 
     private static final String UIHINT_VIEW = "view";
 
-    private final ComponentFactory ignoreFactory;
-
-    private final ComponentType componentType;
     private final String underlyingIdPrefix;
     private final CollectionSelectorHelper selectorHelper;
 
-    private ComponentFactory selectedComponentFactory;
     private Component selectedComponent;
 
     private Component[] underlyingViews;
-    private CollectionSelectorPanel selectorDropdownPanel;
 
     public CollectionContentsMultipleViewsPanel(
             final String id,
-            final EntityCollectionModel model,
-            final ComponentFactory ignoreFactory) {
+            final EntityCollectionModel model) {
         super(id, model);
-        this.ignoreFactory = ignoreFactory;
-        this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
-        this.componentType = ignoreFactory.getComponentType();
-        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry());
 
+        this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
+        final EntityModel entityModel = model.getEntityModel();
+
+        final ComponentHintKey selectedItemSessionAttribute =
+                entityModel != null
+                        ? ComponentHintKey.<String>create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM)
+                        : null;
+
+        selectorHelper = new CollectionSelectorHelper(
+                model, getComponentFactoryRegistry(), selectedItemSessionAttribute);
     }
 
     /**
@@ -89,20 +91,30 @@ public class CollectionContentsMultipleViewsPanel
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
 
-        final CollectionSelectorPanel selectorDropdownPanelIfAny = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
-        final int selected = selectorDropdownPanelIfAny != null
-                ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-                : 0;
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+
+        final CollectionSelectorPanel selectorDropdownPanelIfAny =
+                CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
+        final String selected;
+        if (selectorDropdownPanelIfAny != null) {
+            selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny);
+        } else {
+            selected = componentFactories.get(0).getName();
+        }
 
         // create all, hide the one not selected
         int i = 0;
+        int selectedIdx = 0;
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         final EntityCollectionModel emptyModel = model.asDummy();
         for (ComponentFactory componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
-            Component underlyingView = componentFactory.createComponent(underlyingId,i==selected? model: emptyModel);
+            final boolean isSelected = selected.equals(componentFactory.getName());
+            final Component underlyingView = componentFactory.createComponent(underlyingId, isSelected ? model : emptyModel);
+            if(isSelected) {
+                selectedIdx = i;
+            }
             underlyingViews[i++] = underlyingView;
             this.addOrReplace(underlyingView);
         }
@@ -119,7 +131,7 @@ public class CollectionContentsMultipleViewsPanel
         for(i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             Component component = underlyingViews[i];
             if(component != null) {
-                if(i != selected) {
+                if(i != selectedIdx) {
                     component.add(new CssClassAppender(INVISIBLE_CLASS));
                 } else {
                     selectedComponent = component;
@@ -132,54 +144,40 @@ public class CollectionContentsMultipleViewsPanel
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
 
-        final IsisUiHintEvent uiHintEvent = IsisEnvelopeEvent.openLetter(event, IsisUiHintEvent.class);
-        if(uiHintEvent == null) {
+        final IsisSelectorEvent selectorEvent = IsisEnvelopeEvent.openLetter(event, IsisSelectorEvent.class);
+        if(selectorEvent == null) {
             return;
         }
-        final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
-
-        int underlyingViewNum = 0;
         final CollectionSelectorPanel selectorDropdownPanel = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
         if(selectorDropdownPanel == null) {
             // not expected, because this event shouldn't be called.
             // but no harm in simply returning...
             return;
         }
-        String viewStr = uiHintContainer.getHint(selectorDropdownPanel, UIHINT_VIEW);
 
-        List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+        String selectedView = selectorEvent.hintFor(selectorDropdownPanel, UIHINT_VIEW);
+        if (selectedView == null) {
+            return;
+        }
 
-        if(viewStr != null) {
-            try {
-                int view = Integer.parseInt(viewStr);
-                if(view >= 0 && view < componentFactories.size()) {
-                    underlyingViewNum = view;
-                }
+        int underlyingViewNum = selectorHelper.lookup(selectedView);
 
-
-                final EntityCollectionModel dummyModel = getModel().asDummy();
-                for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
-                    final Component component = underlyingViews[i];
-                    if(component == null) {
-                        continue;
-                    }
-                    final boolean isSelected = i == underlyingViewNum;
-                    applyCssVisibility(component, isSelected);
-                    component.setDefaultModel(isSelected? getModel(): dummyModel);
-                }
-
-                this.selectedComponentFactory = ignoreFactory;
-                this.selectedComponent = underlyingViews[underlyingViewNum];
-
-
-                final AjaxRequestTarget target = uiHintEvent.getTarget();
-                if(target != null) {
-                    target.add(this, selectorDropdownPanel);
-                }
-
-            } catch(NumberFormatException ex) {
-                // ignore
+        final EntityCollectionModel dummyModel = getModel().asDummy();
+        for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
+            final Component component = underlyingViews[i];
+            if(component == null) {
+                continue;
             }
+            final boolean isSelected = i == underlyingViewNum;
+            applyCssVisibility(component, isSelected);
+            component.setDefaultModel(isSelected? getModel(): dummyModel);
+        }
+
+        this.selectedComponent = underlyingViews[underlyingViewNum];
+
+        final AjaxRequestTarget target = selectorEvent.getTarget();
+        if(target != null) {
+            target.add(this, selectorDropdownPanel);
         }
     }
 

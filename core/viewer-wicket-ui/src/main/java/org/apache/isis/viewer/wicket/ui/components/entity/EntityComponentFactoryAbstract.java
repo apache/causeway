@@ -65,7 +65,19 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
         final boolean isObject = specification.isNotCollection();
         final boolean isValue = specification.containsFacet(ValueFacet.class);
-        return appliesIf(isObject && !isValue);
+        boolean b = isObject && !isValue;
+        if (!b) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+
+        return doAppliesTo(entityModel);
+    }
+
+    /**
+     * optional hook.
+     */
+    protected ApplicationAdvice doAppliesTo(final EntityModel entityModel) {
+        return ApplicationAdvice.APPLIES;
     }
 
 }

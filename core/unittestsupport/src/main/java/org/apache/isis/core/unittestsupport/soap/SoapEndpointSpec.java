@@ -16,11 +16,10 @@
  */
 package org.apache.isis.core.unittestsupport.soap;
 
-import java.util.function.Supplier;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
+import com.google.common.base.Supplier;
 
 public class SoapEndpointSpec {
 

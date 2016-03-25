@@ -130,7 +130,10 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         LOG.info("server started");
     }
 
-    private Injector createGuiceInjector(final IsisConfigurationBuilder isisConfigurationBuilder, final DeploymentType deploymentType, final InstallerLookup installerLookup) {
+    private Injector createGuiceInjector(
+            final IsisConfigurationBuilder isisConfigurationBuilder,
+            final DeploymentType deploymentType,
+            final InstallerLookup installerLookup) {
         final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
@@ -161,8 +164,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      * If no setting is found, defaults to {@link WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
     private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        String deploymentTypeStr = null;
-        deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
+        String deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
         }
@@ -175,17 +177,16 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         return DeploymentType.lookup(deploymentTypeStr);
     }
 
-    private void addConfigurationResourcesForDeploymentType(final IsisConfigurationBuilder configurationLoader, final DeploymentType deploymentType) {
-        final String type = deploymentType.name().toLowerCase();
-        configurationLoader.addConfigurationResource(type + ".properties", NotFoundPolicy.CONTINUE);
+    private static void addConfigurationResourcesForDeploymentType(
+            final IsisConfigurationBuilder configurationLoader,
+            final DeploymentType deploymentType) {
+        final String resourceName = deploymentType.name().toLowerCase() + ".properties";
+        configurationLoader.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE);
     }
 
-    private void addConfigurationResourcesForWebApps(final IsisConfigurationBuilder configurationLoader) {
-        for (final String config : (new String[] { "web.properties", "war.properties" })) {
-            if (config != null) {
-                configurationLoader.addConfigurationResource(config, NotFoundPolicy.CONTINUE);
-            }
-        }
+    private static void addConfigurationResourcesForWebApps(final IsisConfigurationBuilder configurationLoader) {
+        configurationLoader.addConfigurationResource("web.properties", NotFoundPolicy.CONTINUE);
+        configurationLoader.addConfigurationResource("war.properties", NotFoundPolicy.CONTINUE);
     }
 
     // /////////////////////////////////////////////////////

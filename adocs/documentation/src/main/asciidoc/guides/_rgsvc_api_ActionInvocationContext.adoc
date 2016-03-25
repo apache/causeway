@@ -9,7 +9,8 @@ The `ActionInvocationContext` domain service is a xref:rgant.adoc#_rgant-Request
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.  In particular, an object can determine if it is the last object to be called, and so can perform special processing, eg to return a summary calculated result.
 
-== API
+
+== API & Implementation
 
 The API defined by the service is:
 
@@ -39,7 +40,7 @@ For actions that are void or that return null, Apache Isis will return to the li
 
 One idiom is for the domain objects to also use the xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service to share information, for example to aggregate values. The `ActionInvocationContext#isLast()` method can then be used to determine if all the information has been gathered, and then do something with it (eg derive variance across a range of values, render a graph etc).
 
-More prosaically, the `ActoinInvocationContext` can be used to ensure that the action behaves appropriately depending on how it has been invoked (on a single object and/or a collection) whether it is called in bulk mode or regular mode. Here's a snippet of code from the bulk action in the Isis addon example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
+More prosaically, the `ActionInvocationContext` can be used to ensure that the action behaves appropriately depending on how it has been invoked (on a single object and/or a collection) whether it is called in bulk mode or regular mode. Here's a snippet of code from the bulk action in the Isis addon example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
 
 [source,java]
 ----
@@ -48,12 +49,12 @@ public class ToDoItem ... {
     public ToDoItem completed() {
         setComplete(true);
         ...
-        return actionInteractionContext.getInvokedOn() == InvokedOn.OBJECT
+        return actionInvocationContext.getInvokedOn() == InvokedOn.OBJECT
                 ? this  // <1>
                 : null; // <2>
     }
     @Inject
-    ActionInteractionContext actionInteractionContext;
+    ActionInvocationContext actionInvocationContext;
 }
 ----
 <1> if invoked as a regular action, return this object;
@@ -71,7 +72,7 @@ so no further configuration is required.
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-further in this xref:ugfun.adoc#_ugfun_how-tos_replacing-default-service-implementations["how to"] tip).
+in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

@@ -20,13 +20,18 @@
 package org.apache.isis.viewer.wicket.viewer.settings;
 
 import java.util.List;
-import org.apache.wicket.Application;
-import org.apache.wicket.Localizer;
-import org.apache.wicket.resource.loader.*;
-import org.apache.wicket.settings.ResourceSettings;
-import org.apache.wicket.util.lang.Generics;
 
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.LocalizerForIsis;
+import org.apache.wicket.Application;
+import org.apache.wicket.Localizer;
+import org.apache.wicket.resource.loader.ClassStringResourceLoader;
+import org.apache.wicket.resource.loader.ComponentStringResourceLoader;
+import org.apache.wicket.resource.loader.IStringResourceLoader;
+import org.apache.wicket.resource.loader.InitializerStringResourceLoader;
+import org.apache.wicket.resource.loader.PackageStringResourceLoader;
+import org.apache.wicket.resource.loader.ValidatorStringResourceLoader;
+import org.apache.wicket.settings.ResourceSettings;
+import org.apache.wicket.util.lang.Generics;
 
 public class IsisResourceSettings extends ResourceSettings {
 

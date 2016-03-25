@@ -40,7 +40,6 @@ import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -115,7 +114,7 @@ public class FacetedMethodsBuilder {
         }
     }
 
-    private final FacetHolder spec;
+    private final ObjectSpecificationAbstract spec;
 
     private final Class<?> introspectedClass;
     private final List<Method> methods;
@@ -189,8 +188,8 @@ public class FacetedMethodsBuilder {
 
 
     public Properties introspectClass() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting " + getClassName() + ": class-level details");
+        if (LOG.isInfoEnabled()) {
+            LOG.info("introspecting " + getClassName() + ": class-level details");
         }
 
         // process facets at object level

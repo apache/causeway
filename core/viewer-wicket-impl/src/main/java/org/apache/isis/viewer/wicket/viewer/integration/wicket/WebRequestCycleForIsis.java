@@ -145,9 +145,18 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+
+        List<String> validationErrors = IsisWicketApplication.get().getValidationErrors();
+        if(!validationErrors.isEmpty()) {
+            final MmvErrorPage mmvErrorPage = new MmvErrorPage(Model.ofList(validationErrors));
+            return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
+        }
+
         PageProvider errorPageProvider = errorPageProviderFor(ex);
         // avoid infinite redirect loops
-        RedirectPolicy redirectPolicy = ex instanceof PageExpiredException? RedirectPolicy.NEVER_REDIRECT: RedirectPolicy.ALWAYS_REDIRECT;
+        RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
+                ? RedirectPolicy.NEVER_REDIRECT
+                : RedirectPolicy.ALWAYS_REDIRECT;
         return errorPageProvider != null 
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
                 : null;
@@ -179,7 +188,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 return new MmvErrorPage(Model.ofList(validationErrors));
             }
             // not sure whether this can ever happen now...
-            LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception");
+            LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception", ex);
         }
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
@@ -206,7 +215,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         try {
             Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
             signInPage = constructor.newInstance(parameters, exceptionModel);
-        } catch (Exception _) {
+        } catch (Exception ex) {
             try {
                 IPageFactory pageFactory = Application.get().getPageFactory();
                 signInPage = pageFactory.newPage(signInPageClass, parameters);

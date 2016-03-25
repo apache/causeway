@@ -1,0 +1,71 @@
+[[_cgcom_pmc-notes]]
+= Appendix: PMC
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ../
+:_imagesdir: images/
+:toc: right
+
+
+Every ASF project has a Project Management Committee, or PMC.  This committee is ultimately responsible for the long-term management of the framework.  More information about PMCs can be found link:http://www.apache.org/dev/pmc.html[here]
+
+In Apache Isis, every committer is a member of the PMC.
+
+This page contains some general notes on maintenance activities required by PMC members.
+
+
+
+== Accessing `people.apache.org`
+
+Must be accessed via ssh.
+
+eg:
+
+[source,bash]
+----
+ssh danhaywood@people.apache.org
+----
+
+and when prompted, provide passphrase for private key... though I've forgotten what I did to set this up in the first place, though :-(
+
+
+
+
+== LDAP Access (UNIX groups)
+
+Whenever we get a new committer, the ASF LDAP entries must be maintained to grant access to our repos and various other 'karma'.
+
+Log onto `people.apache.org`, then use:
+
+[source]
+----
+list_unix_group.pl isis
+----
+
+to list committers
+
+[source]
+----
+list_committee.pl isis
+----
+
+to list the PMC committee members (in Apache Isis, every committer should be on the PMC committee)
+
+To change membership of either the committers or the PMC, use:
+
+[source]
+----
+modify_unix_group.pl isis --add joebloggs
+modify_unix_group.pl isis --remove joebloggs
+----
+
+and
+
+[source]
+----
+modify_committee.pl gump --add joebloggs
+modify_committee.pl gump --remove joebloggs
+----
+
+respectively.
+
+Further details are in http://www.apache.org/dev/pmc.html#SVNaccess[these ASF docs]. (They talk about SVN access, but really it is LDAP access).

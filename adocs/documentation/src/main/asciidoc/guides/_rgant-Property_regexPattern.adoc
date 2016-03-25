@@ -6,14 +6,14 @@
 
 
 
-There are three attributes (as of `1.11.0-SNAPSHOT`, two in earlier releases) related to enforcing regular expressions:
+There are three attributes related to enforcing regular expressions:
 
 * The `regexPattern()` attribute validates the contents of any string property with respect to a regular expression pattern. It is ignored if applied to properties of any other type. This attribute can also be specified for xref:rgant.adoc#_rgant-Parameter_regexPattern[parameters].
 
 * The `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those
 that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
 
-* The related `regexPatternReplacement()` attribute (as of `1.11.0-SNAPSHOT`) specifies the error message to show if
+* The related `regexPatternReplacement()` attribute specifies the error message to show if
 the provided argument does not match the regex pattern.
 
 For example:
@@ -29,7 +29,7 @@ public class Customer {
     public String getEmail() { ... }
 }
 ----
-<1> new in `1.11.0-SNAPSHOT`. Note that there is currently no i18n support for this phrase.
+<1> Note that there is currently no i18n support for this phrase.
 
 
 

@@ -385,7 +385,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private ActionPromptModalWindow actionPromptModalWindow;
 
     public ActionPrompt getActionPrompt() {
-        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+        return actionPromptModalWindow;
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {

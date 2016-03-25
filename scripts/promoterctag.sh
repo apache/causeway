@@ -7,4 +7,4 @@
 #
 git tag -d $1-$2
 git push origin :refs/tags/$1-$2
-git push origin refs/tags/$1:refs/tags/$1
+git push origin refs/tags/$1:refs/tags/rel/$1

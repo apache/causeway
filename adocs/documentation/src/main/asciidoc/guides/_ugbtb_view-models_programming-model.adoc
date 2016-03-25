@@ -69,7 +69,7 @@ public class ExcelUploadManager implements ViewModel {
 |Implement xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.  The memento is as defined by the
 interface's methods: the programmer has full control (but also full responsibility) for the string memento.
 
-|DTO (`1.11.0-SNAPSHOT`)
+|DTO
 |
 [source,java]
 ----

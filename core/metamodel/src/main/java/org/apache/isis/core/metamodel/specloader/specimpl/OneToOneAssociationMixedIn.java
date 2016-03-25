@@ -19,6 +19,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
@@ -40,7 +41,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember {
+public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember2 {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
@@ -94,12 +95,10 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         //
         FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
 
-
-
         // adjust name if necessary
         final String name = getName();
 
-        if(Objects.equal(name, DEFAULT_MEMBER_NAME)) {
+        if(Strings.isNullOrEmpty(name) || Objects.equal(name, DEFAULT_MEMBER_NAME)) {
             String memberName = ObjectActionMixedIn.determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
@@ -155,6 +154,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -165,6 +165,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
@@ -173,4 +174,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         return facetHolder;
     }
 
+    @Override
+    public ObjectSpecification getMixinType() {
+        return getSpecificationLoader().loadSpecification(mixinType);
+    }
 }

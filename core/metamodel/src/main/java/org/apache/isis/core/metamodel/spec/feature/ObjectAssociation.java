@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +36,15 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -346,11 +353,18 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return new Filter<ObjectAssociation>() {
                 @Override
                 public boolean accept(final ObjectAssociation association) {
-                    final HiddenFacet facet = association.getFacet(HiddenFacet.class);
-                    if(facet == null) {
-                        return true;
+                    final List<Facet> facets = association.getFacets(new Filter<Facet>() {
+                        @Override public boolean accept(final Facet facet) {
+                            return facet instanceof WhenAndWhereValueFacet && facet instanceof HiddenFacet;
+                        }
+                    });
+                    for (Facet facet : facets) {
+                        final WhenAndWhereValueFacet wawF = (WhenAndWhereValueFacet) facet;
+                        if (wawF.where().includes(context) && wawF.when() == When.ALWAYS) {
+                            return false;
+                        }
                     }
-                    return !(facet.where().includes(context) && facet.when() == When.ALWAYS);
+                    return true;
                 }
             };
         }
@@ -392,6 +406,31 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     }
 
     // //////////////////////////////////////////////////////
+    // Comparators
+    // //////////////////////////////////////////////////////
+
+    public static class Comparators {
+        /**
+         * Use {@link ObjectMember.Comparators#byMemberOrderSequence()} instead.
+         */
+        @Deprecated
+        public static Comparator<ObjectAssociation> byMemberOrderSequence() {
+            return new Comparator<ObjectAssociation>() {
+                private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
+                @Override
+                public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
+                    final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
+                    final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
+                    return o1Facet == null? +1:
+                            o2Facet == null? -1:
+                                    deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+                }
+            };
+        }
+
+    }
+
+    // //////////////////////////////////////////////////////
     // Util
     // //////////////////////////////////////////////////////
 
@@ -403,6 +442,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
             for(ObjectAssociation association: associations) {
                 addAssociationIntoGroup(associationsByGroup, association);
+            }
+            for (Map.Entry<String, List<ObjectAssociation>> objectAssociations : associationsByGroup.entrySet()) {
+                Collections.sort(objectAssociations.getValue(), new MemberOrderComparator(true));
             }
             return associationsByGroup;
         }
@@ -418,7 +460,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                     return;
                 }
             }
-            getFrom(associationsByGroup, "General").add(association);
+            getFrom(associationsByGroup, MemberGroupLayoutFacet.DEFAULT_GROUP).add(association);
         }
 
         private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {

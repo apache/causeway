@@ -43,6 +43,7 @@ import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -78,15 +79,17 @@ import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.PropertyLayoutFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.TypicalLengthFacetRepr;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
+public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, ServicesInjectorAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(LayoutMetadataReaderFromJson.class);
 
@@ -411,6 +414,17 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
             return null;
         }
 
+        try {
+            final GridService gridService = getGridService();
+            if(gridService.existsFor(domainClass)) {
+                blacklisted.add(domainClass);
+                return null;
+            }
+        } catch (IllegalArgumentException ex) {
+            // ignore
+        }
+
+
         final String resourceName = domainClass.getSimpleName() + ".layout.json";
         try {
             content = ClassExtensions.resourceContentOf(domainClass, resourceName);
@@ -462,13 +476,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
         ColumnRepr columnRepr;
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getLeft());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.LEFT, columnRepr, actionIdsForAssociations);
+        updateColumnMemberGroups(objectSpec, Hint.LEFT, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getMiddle());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.MIDDLE, columnRepr, actionIdsForAssociations);
+        updateColumnMemberGroups(objectSpec, Hint.MIDDLE, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getRight());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.RIGHT, columnRepr, actionIdsForAssociations);
+        updateColumnMemberGroups(objectSpec, Hint.RIGHT, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getCollections());
         updateCollectionColumnRepr(objectSpec, columnRepr, actionIdsForAssociations);
@@ -479,7 +493,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
         return gson.toJson(metadata);
     }
 
-    private static void updateColumnMemberGroups(final ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, final ColumnRepr columnRepr, final Set<String> actionIdsForAssociations) {
+    private static void updateColumnMemberGroups(final ObjectSpecification objectSpec, final Hint hint, final ColumnRepr columnRepr, final Set<String> actionIdsForAssociations) {
         final List<ObjectAssociation> objectAssociations = propertiesOf(objectSpec);
         final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(objectAssociations
         );
@@ -681,6 +695,20 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
     @Override
     public String toString() {
         return getClass().getName();
+    }
+
+
+
+    private GridService getGridService() {
+        return servicesInjector.lookupService(GridService.class);
+    }
+
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
 }

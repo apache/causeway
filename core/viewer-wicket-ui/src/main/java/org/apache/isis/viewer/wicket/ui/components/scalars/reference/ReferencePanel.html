@@ -28,22 +28,25 @@
                 <div class="form-group" wicket:id="scalarIfRegular">
                     <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
                     <span class="scalarValueWrapper">
-                        <span class="entityLink">
-                            <div class="entityLinkSelect2Panel entityLinkComponentType">
-                                <div class="wrapper">
-                                    <span class="autoCompletePlaceholder">
-                                        <span wicket:id="entityLink">link or drop down</span>
-                                        <span wicket:id="entityIconAndTitle">[icon and title]</span>
+                        <div class="scalarPlaceholder entityLinkSelect2Panel entityLinkComponentType">
+                            <span class="entityLink wrapper">
+                                <span class="scalarValueInput">
+                                    <span class="editing">
+                                        <span class="autoCompletePlaceholder">
+                                            <span wicket:id="entityLink">link or drop down</span>
+                                            <span wicket:id="entityIconAndTitle">[icon and title]</span>
+                                        </span>
+                                        <span wicket:id="entityTitleIfNull">(none)</span>
+                                        <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
                                     </span>
-                                    <span class="clearfix"></span>
-                                </div>
-                                <span wicket:id="entityTitleIfNull">(none)</span>
-                            </div>
-                        </span>
+                                </span>
+                            </span>
+                            <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight"></span>
+                        </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
-                    <span wicket:id="associatedActionLinksRight"></span>
+                    <div class="clearfix"/>
                 </div>
                 <div wicket:id="scalarIfCompact" class="scalarIfCompact">
                     <div class="scalarValue">

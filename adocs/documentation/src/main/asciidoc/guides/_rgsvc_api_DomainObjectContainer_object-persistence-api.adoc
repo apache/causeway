@@ -7,31 +7,25 @@
 
 
 
-
 The persistence API is used to persist newly created objects (as per xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`#newTransientInstance(...)`], above and to delete (remove) objects that are persistent.
 
 Note that there is no API for updating existing objects; the framework (or rather, JDO/DataNucleus) performs object dirty tracking and so any objects that are modified in the course of a request will be automatically updated).
 
 
+
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
+
     boolean isPersistent(Object domainObject);          // <1>
-    @Programmatic
     boolean isViewModel(Object domainObject);           // <2>
 
-    @Programmatic
     void persist(Object domainObject);                  // <3>
-    @Programmatic
     void persistIfNotAlready(Object domainObject);      // <4>
 
-    @Programmatic
     void remove(Object persistentDomainObject);         // <5>
-    @Programmatic
     void removeIfNotAlready(Object domainObject);       // <6>
 
-    @Programmatic
     boolean flush();                                    // <7>
     ...
 }

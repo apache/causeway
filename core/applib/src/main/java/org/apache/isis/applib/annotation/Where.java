@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlType;
+
 import org.apache.isis.applib.util.Enums;
 
 /**
@@ -38,6 +40,9 @@ import org.apache.isis.applib.util.Enums;
  * This enum is also used internally within the framework.  When rendering an element,
  * the framework developer should only use those values that represent concrete locations.  
  */
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+)
 public enum Where {
     /**
      * The member should be disabled/hidden everywhere.

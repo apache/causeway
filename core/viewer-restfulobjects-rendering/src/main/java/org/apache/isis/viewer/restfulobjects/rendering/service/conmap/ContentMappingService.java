@@ -25,11 +25,16 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
+/**
+ * @deprecated - replaced by simplified version, {@link org.apache.isis.applib.conmap.ContentMappingService}, in the applib.
+ */
+@Deprecated
 public interface ContentMappingService {
 
     /**
-     * Typically for mapping from a domain object to a DTO.
+     * @deprecated - replaced by simplified version, {@link org.apache.isis.applib.conmap.ContentMappingService#map(Object, List)}, in the applib.
      */
+    @Deprecated
     @Programmatic
     Object map(Object object, final List<MediaType> acceptableMediaTypes, final RepresentationType representationType);
 

@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>1.11.0-SNAPSHOT</version>
+        <version>1.12.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>simpleapp-integtests</artifactId>
@@ -89,6 +89,56 @@
 
     <profiles>
         <profile>
+            <id>isis-swagger</id>
+            <activation>
+                <property>
+                    <name>!skip.isis-swagger</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.isis.tool</groupId>
+                        <artifactId>isis-maven-plugin</artifactId>
+                        <version>${isis.version}</version>
+                        <configuration>
+                            <appManifest>domainapp.app.DomainAppAppManifest</appManifest>
+                            <visibilities>
+                                <visibility>PUBLIC</visibility>
+                                <visibility>PRIVATE</visibility>
+                            </visibilities>
+                            <format>JSON</format>
+                            <fileNamePrefix>swagger</fileNamePrefix>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                            <!--
+                            ... workaround to avoid conflict with plexus-default
+                                (not sure why exclusions in the isis-maven-plugin aren't sufficient, though ...
+                            -->
+                            <dependency>
+                                <groupId>com.google.guava</groupId>
+                                <artifactId>guava</artifactId>
+                                <version>16.0.1</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>swagger</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <!--
             enhanced cucumber reporting per http://www.masterthought.net/section/cucumber-reporting
             -->
@@ -109,9 +159,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <testFailureIgnore>true</testFailureIgnore>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>net.masterthought</groupId>

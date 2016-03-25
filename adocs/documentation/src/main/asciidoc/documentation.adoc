@@ -26,29 +26,29 @@ pass:[<br/>]
 
 | *What is Apache Isis?*
 
-* *link:./isis-in-pictures.html[What is Apache Isis?] ... in pictures*
-* link:./powered-by.html[Powered by Apache Isis]
-* link:./how-isis-works.html[How Apache Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
-* link:./common-use-cases.html[Common Use Cases]
+* *link:./isis-in-pictures.html[What is Apache Isis?^] ... in pictures*
+* link:./powered-by.html[Powered by Apache Isis^]
+* link:./how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
+* link:./common-use-cases.html[Common Use Cases^]
 
 
 |*Learning More*
 
-* link:./screencasts.html[Screencasts] image:{_imagesdir}tv_show-25.png[width="25px" link="screencasts.html"]
-* link:./guides/tg.html[Tutorials]
-* link:http://www.javadoc.io/doc/org.apache.isis.core/isis-core-applib/1.10.0[Javadoc (for Applib)] (not ASF)
+* link:./screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="screencasts.html"]
+* link:./guides/tg.html[Tutorials^]
+* link:http://www.javadoc.io/doc/org.apache.isis.core/isis-core-applib/1.11.0[Javadoc (for Applib)^] (not ASF)
 
 
 
 |*Resources:*
 
-* *link:./cheat-sheet.html[Cheat Sheet]*
-* link:./icons.html[Icons]
+* *link:./cheat-sheet.html[Cheat Sheet^]*
+* link:./icons.html[Icons^]
 
 *3rd-party add-ons (not ASF)*
 
-* http://isisaddons.org[Isis addons]
-* http://catalog.incode.org[Incode Catalog]
+* http://isisaddons.org[Isis addons^]
+* http://catalog.incode.org[Incode Catalog^]
 
 
 |===
@@ -59,33 +59,34 @@ pass:[<br/>]
 
 |*User Guides:*
 
-* *link:./guides/ugfun.html[Fundamentals^]*
-* link:./guides/ugvw.html[Wicket Viewer^]
-* link:./guides/ugvro.html[Restful Objects Viewer^]
-* link:./guides/ugsec.html[Security^]
-* *link:./guides/ugtst.html[Testing^]*
-* link:./guides/ugbtb.html[Beyond the Basics^]
+* *link:./guides/ugfun.html[Fundamentals^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugfun.pdf"]
+* link:./guides/ugvw.html[Wicket Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvw.pdf"]
+* link:./guides/ugvro.html[Restful Objects Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvro.pdf"]
+* link:./guides/ugsec.html[Security^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugsec.pdf"]
+* *link:./guides/ugtst.html[Testing^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugtst.pdf"]
+* link:./guides/ugbtb.html[Beyond the Basics^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugbtb.pdf"]
 
 
 |*Reference Guides:*
 
-* *link:./guides/rgant.html[Annotations^]*
-* *link:./guides/rgsvc.html[Domain Services^]*
-* link:./guides/rgcfg.html[Configuration Properties^]
-* link:./guides/rgcms.html[Classes, Methods and Schema^]
+* *link:./guides/rgant.html[Annotations^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgant.pdf"]
+* *link:./guides/rgsvc.html[Domain Services^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgsvc.pdf"]
+* link:./guides/rgcfg.html[Configuration Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg.pdf"]
+* link:./guides/rgcms.html[Classes, Methods and Schema^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcms.pdf"]
+* link:./guides/rgmvn.html[Apache Isis Maven plugin^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgmvn.pdf"]
 
 
 
 
-|*Contributors' Guide*
+|*"Supporting" Guides:*
 
-* *link:./guides/cg.html[Contributors' Guide^]*
+* *link:./guides/dg.html[Developers' Guide^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/dg.pdf"]
+** Setting up link:./guides/dg.html#_dg_ide_intellij[IntelliJ^] or link:./guides/dg.html#_dg_ide_eclipse[Eclipse^]
+** link:./guides/dg.html#_dg_contributing[Contributing patches^] (pull requests)
 
-including:
-
-* Setting up link:./guides/cg.html#_cg_ide_intellij[IntelliJ] or link:./guides/cg.html#_cg_ide_eclipse[Eclipse]
-* link:./guides/cg.html#_cg_contributing[Contributing patches] (pull requests)
-* link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release] ; link:./guides/cg.html#_cg_committers_verifying-releases[Verifying a release]
+* link:./guides/cgcom.html[Committers' Guide^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/cgcom.pdf"]
+** link:./guides/cgcom.html#_cgcom_cutting-a-release[Cutting a release^]
+** link:./guides/cgcom.html#_cgcom_verifying-releases[Verifying a release^]
 
 
 
@@ -97,46 +98,40 @@ including:
 [cols="1a,1a,1a",frame="none"]
 |===
 
-|*Example Apps (not ASF):*
+|*Releases:*
 
-* http://github.com/estatio/estatio[Estatio]
-* http://github.com/isisaddons/isis-app-todoapp[TodoApp]
-* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.10.0])
-* http://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
-* http://github.com/isisaddons/isis-app-quickstart[Quickstart]
+* link:release-notes.html[Release Notes^]
+* link:migration-notes.html[Migration Notes^]
 
-tools (not ASF):
+*Get involved!*
 
-* http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
-
-
-
-
+* Our *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board^]* maps out the JIRA issues we are looking to tackle in the next few releases
 
 
 
 |*Going Deeper:*
 
-* link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
-* link:./books.html[Books]
-* link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
+* link:./articles-and-presentations.html[Articles, Conferences, Podcasts^]
+* link:./books.html[Books^]
+* link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis^] (Pawson)
 //* link:./downloadable-presentations.html[Downloadable Presentations]
 
 
 
-|*Releases:*
+|*Example Apps (not ASF):*
 
-* link:release-notes.html[Release Notes]
-* link:migration-notes.html[Migration Notes]
+* http://github.com/estatio/estatio[Estatio^]
+* http://github.com/isisaddons/isis-app-todoapp[TodoApp^]
+* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink^] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.10.0])
+* http://github.com/isisaddons/isis-app-neoapp[Neo4J Example^]
+* http://github.com/isisaddons/isis-app-quickstart[Quickstart^]
 
-*Get involved!*
+tools (not ASF):
 
-* Our link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[*Kanban board*] maps out the JIRA issues we are looking to tackle in the next few releases
+* http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^]
 
 |====
 
 
 --
-
-
 

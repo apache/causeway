@@ -17,6 +17,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
+import java.util.concurrent.Callable;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -27,6 +29,7 @@ import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -70,8 +73,15 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 else {
                     final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
                     final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
-                    ActionPromptHeaderPanel titlePanel = new ActionPromptHeaderPanel(actionPrompt.getTitleId(),
-                            actionModel);
+                    final ActionPromptHeaderPanel titlePanel =
+                            PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                            new Callable<ActionPromptHeaderPanel>() {
+                                @Override
+                                public ActionPromptHeaderPanel call() throws Exception {
+                                    final String titleId = actionPrompt.getTitleId();
+                                    return new ActionPromptHeaderPanel(titleId, actionModel);
+                                }
+                            });
                     final ActionPanel actionPanel =
                             (ActionPanel) getComponentFactoryRegistry().createComponent(
                                     ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);

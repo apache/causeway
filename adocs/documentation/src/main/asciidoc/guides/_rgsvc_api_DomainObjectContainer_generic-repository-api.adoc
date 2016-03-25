@@ -14,15 +14,10 @@ As an alternative, you could also use link:http://www.datanucleus.org/products/a
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
     public <T> List<T> allInstances(Class<T> ofType, long... range);                        // <1>
-    @Programmatic
     <T> List<T> allMatches(Query<T> query);                                                 // <2>
-    @Programmatic
     <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <3>
-    @Programmatic
     <T> List<T> allMatches(Class<T> ofType, String title, long... range);                   // <4>
-    @Programmatic
     <T> List<T> allMatches(Class<T> ofType, T pattern, long... range);                      // <5>
     ...
 }

@@ -27,41 +27,20 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Whether running on client or server side etc.
- * 
- * <p>
- * Previously this was an <tt>enum</tt>, but it is now a regular class. The
- * change has been made to provide more flexibility in setting up the
- * <tt>IsisContext</tt> lookup.
- * 
- * <p>
- * To use this capability:
- * <ul>
- * <li>Write your new implementation of <tt>IsisContext</tt>, along with a
- * static factory method (cf
- * <tt>IsisContextStatic#createInstance(IsisSessionFactory)</tt>)
- * <li>Create a new subclass of {@link ContextCategory} (also now a regular
- * class rather than an <tt>enum</tt>); this is where your code goes to
- * instantiate your <tt>IsisContext</tt> implementation</li>
- * <li>Create a new subclass of {@link DeploymentType}, passing in the custom
- * {@link ContextCategory} in its constructor</li>
- * <li>In your bootstrap code, instantiate your new {@link DeploymentType}
- * subclass</li>
- * <li>When you run your app, don't forget to specify your custom
- * {@link DeploymentType}, eg using the <tt>--type</tt> command line arg</li>
- * </ul>
  */
 public class DeploymentType extends DeploymentCategoryProviderAbstract {
 
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 
-    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION, ContextCategory.THREADLOCAL);
-    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.THREADLOCAL);
-    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.THREADLOCAL);
-    public static DeploymentType UNIT_TESTING = new DeploymentType("UNIT_TESTING", DeploymentCategory.PRODUCTION, ContextCategory.STATIC_RELAXED);
+    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION);
+    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING);
+    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
+    public static DeploymentType UNIT_TESTING = new DeploymentType("UNIT_TESTING", DeploymentCategory.PRODUCTION);
 
     /**
      * Look up {@link DeploymentType} by their {@link #name()}.
@@ -84,12 +63,10 @@ public class DeploymentType extends DeploymentCategoryProviderAbstract {
 
     private final String name;
     private final DeploymentCategory deploymentCategory;
-    private final ContextCategory contextCategory;
 
     public DeploymentType(
-            final String name, final DeploymentCategory category, final ContextCategory contextCategory) {
+            final String name, final DeploymentCategory category) {
         this.deploymentCategory = category;
-        this.contextCategory = contextCategory;
         this.name = name;
         deploymentTypes.add(this);
     }
@@ -100,7 +77,6 @@ public class DeploymentType extends DeploymentCategoryProviderAbstract {
             @Override
             public void debugData(final DebugBuilder debug) {
                 debug.appendln("Category", deploymentCategory);
-                debug.appendln("Context", contextCategory);
                 debug.appendln();
                 debug.appendln("Name", friendlyName());
                 debug.appendln("Should monitor", shouldMonitor());
@@ -114,7 +90,7 @@ public class DeploymentType extends DeploymentCategoryProviderAbstract {
     }
 
     public void initContext(final IsisSessionFactory sessionFactory) {
-        contextCategory.initContext(sessionFactory);
+        IsisContext.createInstance(sessionFactory);
     }
 
     public boolean shouldMonitor() {

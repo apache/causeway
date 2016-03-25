@@ -16,7 +16,7 @@ Later chapters discuss how to xref:ugbtb.adoc#_ugbtb_deployment[deploy] your app
 
 === Other Guides
 
-Apache Isis documentation is broken out into a number of user and reference guides.
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
 
 The user guides available are:
 
@@ -33,8 +33,13 @@ The reference guides are:
 * xref:rgsvc.adoc#[Domain Services]
 * xref:rgcfg.adoc#[Configuration Properties]
 * xref:rgcms.adoc#[Classes, Methods and Schema]
+* xref:rgmvn.adoc#[Apache Isis Maven plugin]
 
-In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
+The remaining guides are:
+
+* xref:dg.adoc#[Developers' Guide] (how to set up a development environment
+for Apache Isis and contribute back to the project)
+* xref:cgcom.adoc#[Committers' Guide] (release procedures and related practices)
 
 
 include::_ugbtb_view-models.adoc[leveloffset=+1]

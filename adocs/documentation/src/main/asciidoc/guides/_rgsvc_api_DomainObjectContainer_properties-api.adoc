@@ -6,7 +6,6 @@
 
 
 
-
 = Properties API
 
 The properties API allows domain objects to read the configuration properties aggregated from the various xref:rgcfg.adoc#_rgcfg_configuration-files[configuration files].
@@ -14,11 +13,8 @@ The properties API allows domain objects to read the configuration properties ag
 [source,java]
 ----
 public interface DomainObjectContainer {
-    @Programmatic
     String getProperty(String name);                        // <1>
-    @Programmatic
     String getProperty(String name, String defaultValue);   // <2>
-    @Programmatic
     List<String> getPropertyNames();                        // <3>
 }
 ----

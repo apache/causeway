@@ -175,7 +175,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         });
 
         if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
+            scalarName.add(new CssClassAppender("mandatory"));
         }
         return labelIfRegular;
     }
@@ -273,6 +273,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
                     final int minLength = getModel().getAutoCompleteMinLength();
                     settings.setMinimumInputLength(minLength);
                     settings.setPlaceholder(getModel().getName());
+                }
+                if(hasObjectAutoComplete()) {
+                    final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+                    final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+                    final Settings settings = select2Field.getSettings();
+                    final int minLength = autoCompleteFacet.getMinLength();
+                    settings.setMinimumInputLength(minLength);
                 }
                 entityLink.addOrReplace(select2Field);
             } else {

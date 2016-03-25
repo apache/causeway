@@ -39,7 +39,7 @@ class PublishedEndpoints {
                 // instantiate and publish,automatically assigning an address to any that don't specify one
                 soapEndpoint = new SoapEndpoint(soapEndpointSpec);
                 soapEndpointByType.put(endpointClass, soapEndpoint);
-                port = soapEndpoint.publish(port);
+                port = soapEndpoint.publish(port) + 1;
             }
         }
     }

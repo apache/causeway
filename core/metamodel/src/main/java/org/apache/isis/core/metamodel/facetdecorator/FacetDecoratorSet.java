@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facetdecorator;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -81,10 +80,6 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
         }
     }
 
-    public Set<FacetDecorator> getFacetDecorators() {
-        return Collections.unmodifiableSet(facetDecoratorSet);
-    }
-
     public boolean isEmpty() {
         return facetDecoratorByFacetType.isEmpty();
     }
@@ -114,10 +109,12 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
         if (isEmpty()) {
             return;
         }
-        final Class<? extends Facet>[] facetTypes = holder.getFacetTypes();
+        final Set<Class<? extends Facet>> facetTypes = facetDecoratorByFacetType.keySet();
         for (final Class<? extends Facet> facetType : facetTypes) {
             final Facet facet = holder.getFacet(facetType);
-            decorateFacet(facet, holder);
+            if(facet != null) {
+                decorateFacet(facet, holder);
+            }
         }
     }
 

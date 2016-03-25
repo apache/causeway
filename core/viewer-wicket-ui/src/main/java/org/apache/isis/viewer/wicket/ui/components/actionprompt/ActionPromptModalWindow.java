@@ -18,25 +18,12 @@ package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
 
 public class ActionPromptModalWindow extends ModalDialog<Void> {
 
     private static final long serialVersionUID = 1L;
-
-    public static ActionPromptModalWindow getActionPromptModalWindowIfEnabled(ActionPromptModalWindow modalWindow) {
-        return !isActionPromptModalDialogDisabled() ? modalWindow : null;
-    }
-
-    public static boolean isActionPromptModalDialogDisabled() {
-        return getConfiguration().getBoolean("isis.viewer.wicket.disableModalDialogs", false);
-    }
-
-    private static IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
 
     public static ActionPromptModalWindow newModalWindow(String id) {
         return new ActionPromptModalWindow(id);

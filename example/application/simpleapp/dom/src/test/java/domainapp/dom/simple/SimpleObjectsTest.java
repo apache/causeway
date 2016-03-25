@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -39,14 +39,14 @@ public class SimpleObjectsTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    DomainObjectContainer mockContainer;
+    RepositoryService mockRepositoryService;
     
     SimpleObjects simpleObjects;
 
     @Before
     public void setUp() throws Exception {
         simpleObjects = new SimpleObjects();
-        simpleObjects.container = mockContainer;
+        simpleObjects.repositoryService = mockRepositoryService;
     }
 
     public static class Create extends SimpleObjectsTest {
@@ -60,11 +60,11 @@ public class SimpleObjectsTest {
             final Sequence seq = context.sequence("create");
             context.checking(new Expectations() {
                 {
-                    oneOf(mockContainer).newTransientInstance(SimpleObject.class);
+                    oneOf(mockRepositoryService).instantiate(SimpleObject.class);
                     inSequence(seq);
                     will(returnValue(simpleObject));
 
-                    oneOf(mockContainer).persistIfNotAlready(simpleObject);
+                    oneOf(mockRepositoryService).persist(simpleObject);
                     inSequence(seq);
                 }
             });
@@ -89,7 +89,7 @@ public class SimpleObjectsTest {
 
             context.checking(new Expectations() {
                 {
-                    oneOf(mockContainer).allInstances(SimpleObject.class);
+                    oneOf(mockRepositoryService).allInstances(SimpleObject.class);
                     will(returnValue(all));
                 }
             });
