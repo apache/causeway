@@ -25,7 +25,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.12.0
+[RESULT] [VOTE] Apache Isis Core release 1.13.0
 ----
 
 using the body (alter last line as appropriate):
@@ -53,8 +53,8 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag.sh isis-1.12.0 RC1
-sh scripts/promoterctag.sh simpleapp-archetype-1.12.0 RC1
+sh scripts/promoterctag.sh isis-1.13.0 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-1.13.0 RC1
 ----
 
 This script pushes the tag under `refs/tags/rel`.  As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs),
@@ -159,7 +159,7 @@ popd
 
 [source,bash]
 ----
-sh upd.sh 1.11.0 1.12.0
+sh upd.sh 1.12.0 1.13.0
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -192,7 +192,7 @@ From the root directory, generate the release notes for the current release, in 
 
 [source,bash]
 ----
-sh scripts/jira-release-notes.sh ISIS 1.12.0 > /tmp/1
+sh scripts/jira-release-notes.sh ISIS 1.13.0 > /tmp/1
 ----
 
 
@@ -257,14 +257,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,bash]
 ----
-[ANN] Apache Isis version 1.12.0 Released
+[ANN] Apache Isis version 1.13.0 Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis v1.12.0.
+The Apache Isis team is pleased to announce the release of Apache Isis v1.13.0.
 
 New features in this release include:
 * ...
@@ -278,8 +278,8 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes.html#r1.12.0
-[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.11.0-to-1.12.0
+[1] http://isis.apache.org/release-notes.html#r1.13.0
+[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.12.0-to-1.13.0
 [3] http://search.maven.org
 [4] http://isis.apache.org/downloads.html
 ----
@@ -303,13 +303,13 @@ Because we release from a branch, the changes made in the branch (changes to `po
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-1.12.0-RC1                  # merge branch onto master
-git branch -d release-1.12.0-RC1              # branch no longer needed
-git push origin --delete release-1.12.0-RC1   # remote branch no longer needed
+git merge release-1.13.0-RC1                  # merge branch onto master
+git branch -d release-1.13.0-RC1              # branch no longer needed
+git push origin --delete release-1.13.0-RC1   # remote branch no longer needed
 ----
 
 
-Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.12.0-SNAPSHOT`)
+Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.13.0-SNAPSHOT`)
 
 
 
@@ -413,7 +413,7 @@ Using this https://gist.github.com/danhaywood/ff17946ee05652402cfb[gist] to invo
 +
 [source,bash]
 ----
-sh forsub.sh sh bumpver_isis.sh 1.12.0
+sh forsub.sh sh bumpver_isis.sh 1.13.0
 ----
 
 * update the README for each repository
@@ -426,13 +426,13 @@ sh forsub.sh sh bumpver_isis.sh 1.12.0
 +
 [source,bash]
 ----
-sh forsub.sh sh release.sh "1.12.0" "1.13.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+sh forsub.sh sh release.sh "1.13.0" "1.14.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * update its dependency on Apache Isis to reference the next SNAPSHOT version: +
 +
 [source,bash]
 ----
-sh forsub.sh sh bumpver_isis.sh "1.13.0-SNAPSHOT"
+sh forsub.sh sh bumpver_isis.sh "1.14.0-SNAPSHOT"
 ----
 

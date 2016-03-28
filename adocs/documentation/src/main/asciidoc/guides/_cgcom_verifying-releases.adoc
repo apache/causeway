@@ -285,7 +285,7 @@ mvn archetype:generate  \
     -D version=1.0-SNAPSHOT \
     -B \
     -o \
-    -D archetypeVersion=1.12.0   # adjust version as necessary
+    -D archetypeVersion=1.13.0   # adjust version as necessary
 
 cd myapp
 mvn clean install -o
