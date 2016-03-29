@@ -59,5 +59,6 @@ in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to thi
 
 == Related Services
 
-The xref:ugvw.adoc[Wicket viewer] provides a "clear hints" mixin action that is for use by end-users of the application
-to clear any UI hints that have accumulated for a domain object.
+The xref:ugvw.adoc[Wicket viewer] exposes the xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"]
+mixin action that is for use by end-users of the application to clear any UI hints that have accumulated for a
+domain object.
