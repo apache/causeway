@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.property;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Throwables;
 
@@ -223,7 +224,20 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
             // will be thrown here
             getTransactionManager().flushTransaction();
 
-            final EntityPage entityPage = new EntityPage(objectAdapter, null);
+
+            // disabling concurrency checking after the layout XML (grid) feature
+            // was throwing an exception when rebuild grid after invoking edit prompt.
+            // not certain why that would be the case, but (following similar code for action prompt)
+            // think it should be safe to simply disable while recreating the page to re-render back to user.
+            final EntityPage entityPage =
+                    AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                    new Callable<EntityPage>() {
+                        @Override public EntityPage call() throws Exception {
+                            return new EntityPage(objectAdapter, null);
+                        }
+                    }
+            );
+
             setResponsePage(entityPage);
 
             return true;
