@@ -65,12 +65,11 @@ public class Customer {
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by
 JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the (in `1.12.0-SNAPSHOT`)
-xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s ``instantiate()`` method (or the deprecated
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s ``newTransientInstance()`` method)
-will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s
+``instantiate()`` method (or the deprecated xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s
+``newTransientInstance()`` method) will automatically inject the services.
 
-Alternatively the object can be instantiated simply using `new`, then services injected using (`1.12.0-SNAPSHOT)
+Alternatively the object can be instantiated simply using `new`, then services injected using
 xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`]'s ``injectServicesInto(...)`` method (or the deprecated
 xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s ``injectServicesInto(...)`` method).
 
@@ -86,7 +85,8 @@ The trick is to use the xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@D
 
 [NOTE]
 ====
-For a small number of domain services, all implementations are used (following the chain-of-responsibility pattern), not just the first one.  The services in question are: xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`], xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`] (`1.12.0-SNAPSHOT`), and xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`].
+For a small number of domain services, all implementations are used (following the chain-of-responsibility pattern), not just the first one.  The services in question are: xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`], xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`], and
+xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`].
 ====
 
 For example, suppose you wanted to provide your own implementation of xref:rgsvc.adoc#_rgsvc_api_LocaleProvider[`LocaleProvider`].  Here's how:

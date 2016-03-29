@@ -11,7 +11,7 @@ Metadata providing UI hints can be specified either xref:ugfun.adoc#_ugfun_objec
 
 [IMPORTANT]
 ====
-(As of `1.12.0-SNAPSHOT`), the use of dynamic layouts through the `.layout.json` is DEPRECATED.  Instead, use the
+The use of dynamic layouts through the `.layout.json` is DEPRECATED.  Instead, use the
 ``.layout.xml`` file, which enables much more sophisticated custom layouts than those provided by ``.layout.json``.
 
 It is possible to download initial `.layout.xml` files - which will capture all the metadata originally in the `.layout.json` file - using the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).

@@ -27,9 +27,8 @@ public interface MetaModelService {
 ----
 <1> reverse lookup of a domain class' object type
 <2> lookup of a domain class' object type
-<3> (`1.12.0-SNAPSHOT`) invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified
-    domain type.
-<4> (`1.12.0-SNAPSHOT`) returns a list of representations of each of member of each domain class.
+<3> invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified domain type.
+<4> returns a list of representations of each of member of each domain class.
 
 
 == Implementation
@@ -51,5 +50,5 @@ in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to thi
 
 == Related Services
 
-The `MetaModelServiceMenu` (`1.12.0-SNAPSHOT`) provides a method to download all domain members as a CSV.  Internally
+The `MetaModelServiceMenu` provides a method to download all domain members as a CSV.  Internally
 this calls `MetaModelService#export()`.

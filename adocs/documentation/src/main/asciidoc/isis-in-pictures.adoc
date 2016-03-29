@@ -107,7 +107,7 @@ image::{_imagesdir}/isis-in-pictures/065-contributions.png[width="800px",link="{
 [NOTE]
 ====
 The remaining screenshots on this page are for v1.10.0 of the framework, which precedes the more recent support
-for tabbed views introduced in 1.12.0-SNAPSHOT.
+for tabbed views introduced in v1.12.0.
 ====
 
 The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible. For example, when a collection of objects is rendered, this is just one of several views, as shown in the selector drop-down:

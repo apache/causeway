@@ -50,7 +50,7 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 |`isis.viewer.wicket.` +
 `disableModalDialogs`
 | `true`,`false` (`_false_`)
-|(`1.12.0-SNAPSHOT`), no longer supported.
+|No longer supported.
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInParentedTables`
@@ -105,7 +105,7 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 |`isis.viewer.wicket.` +
 `wicketSourcePlugin`
 | `true`,`false` (`_false_`)
-| (`1.12.0-SNAPSHOT`) whether the Wicketsource plugin should be enabled; by default it is not enabled.
+| Whether the Wicketsource plugin should be enabled; by default it is not enabled.
 
 Prior to `1.12.0` this was enabled by default for prototyping (not production).  However it can significantly
 slow down rendering, hence the introduction of this configuration setting.

@@ -47,7 +47,7 @@ The table below summarizes the persistence layer APIs defined by Apache Isis.  I
 |xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`o.a.i.applib.` +
 `services.repository` +
 `RepositoryService`]
-|(`1.12.0-SNAPSHOT`) Methods to help implement repositories: query for existing objects, persist new or delete existing objects
+|Methods to help implement repositories: query for existing objects, persist new or delete existing objects
 |`RepositoryService-` +
 ``Default`` +
 ``o.a.i.core`` +

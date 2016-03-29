@@ -10,7 +10,7 @@ The `DomainObjectContainer` service provides a set of general purpose functional
 
 [NOTE]
 ====
-(As of `1.12.0-SNAPSHOT`), the methods in this service have been moved out into a number of more fine-grained services: xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`], xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`], xref:rgsvc.adoc#_rgsvc_api_TitleService[`TitleService`], xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`], xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`].
+(Almost all of) the methods in this service have been moved out into a number of more fine-grained services: xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`], xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`], xref:rgsvc.adoc#_rgsvc_api_TitleService[`TitleService`], xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`], xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`].
 ====
 
 

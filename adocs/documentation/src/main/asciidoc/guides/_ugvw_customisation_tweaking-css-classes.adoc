@@ -107,7 +107,7 @@ Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you 
 
 
 [[_ugvw_customisation_tweaking-css-classes_columns-in-tables]]
-== Table columns (`1.12.0-SNAPSHOT`)
+== Table columns
 
 Sometimes you may want to apply styling to specific columns of tables.  For example, you might want to adjust width so that
 for certain properties have more (or less) room than they otherwise would; or you might want to hide the column

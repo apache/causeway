@@ -36,7 +36,7 @@ The table below summarizes the core/domain APIs defined by Apache Isis.  It also
 |xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`o.a.i.applib.` +
 `services.config` +
 `ConfigurationService`]
-|(`1.12.0-SNAPSHOT`) Access configuration properties (eg from `isis.properties` file)
+|Access configuration properties (eg from `isis.properties` file)
 |`ConfigurationService-` +
 ``Default`` +
 ``o.a.i.core`` +
@@ -72,7 +72,7 @@ Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainOb
 |xref:rgsvc.adoc#_rgsvc_api_FactoryService[`o.a.i.applib.` +
 `services.factory` +
 `FactoryService`]
-|(`1.12.0-SNAPSHOT`) Methods to instantiate and initialize domain objects
+|Methods to instantiate and initialize domain objects
 |`FactoryService-` +
 ``Default`` +
 ``o.a.i.core`` +
@@ -97,7 +97,7 @@ Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainOb
 |xref:rgsvc.adoc#_rgsvc_api_UserService[`o.a.i.applib.` +
 `services.xactn` +
 `UserService`]
-|(`1.12.0-SNAPSHOT`) Methods to access the currently-logged on user.
+|Methods to access the currently-logged on user.
 |`UserService-` +
 ``Default`` +
 ``o.a.i.core`` +

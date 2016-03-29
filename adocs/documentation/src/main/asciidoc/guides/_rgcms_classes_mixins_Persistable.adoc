@@ -28,7 +28,7 @@ public Clob downloadJdoMetadata(                    // <1>
 
 === Appearance in the UI
 
-(As of `1.12.0-SNAPSHOT`), this mixin action is associated with the "Metadata" fieldset, and will appear as a panel drop-down action.
+This mixin action is associated with the "Metadata" fieldset, and will appear as a panel drop-down action.
 
 These mixin properties are all associated with the "Metadata" fieldset.  The xref:rgcms.adoc#_rgcms_classes_mixins_Object[Object mixin] also contribute an action to the "Metadata" fieldset.
 
@@ -39,7 +39,7 @@ a reference to the JDO `PersistenceManagerFactory`.
 
 
 [[_rgcms_classes_mixins_Persistable_datanucleusXxx]]
-== `datanucleusXxx` (`1.12.0-SNAPSHOT`)
+== `datanucleusXxx`
 
 The framework provides a number of mixins that expose the datanucleus Id and version of a persistable domain entity.  Several implementations are provided to support different datatypes:
 

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using either a xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] file (`1.12.0-SNAPSHOT`) or a xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`] file.
+Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using either a xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] file or a xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`] file.
 
 This section describes the static approach, using annotations.
 
@@ -22,7 +22,9 @@ The xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`]  annotation is used to sp
 
 The annotation defines two attributes, xref:rgant.adoc#_rgant_MemberOrder_name[`name()`] and xref:rgant.adoc#_rgant_MemberOrder_sequence[`sequence()`].  Their usage depends on the member type:
 
-* for properties, the `name()` is used to group properties together into a member group (also called a property group or (in `1.12.0-SNAPSHOT`) a fieldset.  The `sequence()` then orders properties within these groups. If no `name()` is specified then the property is placed in a fallback "General" group, called "General". +
+* for properties, the `name()` is used to group properties together into a member group (also called a property group
+or a fieldset.  The `sequence()` then orders properties within these groups. If no `name()` is specified then the
+property is placed in a fallback "General" group, called "General". +
 +
 The name of these member groups/fieldsets are then referenced by xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`].
 
@@ -107,7 +109,7 @@ The property groups/fieldsets in this case are those that are inferred from the 
 
 [TIP]
 ====
-It is also possible to combine `@MemberOrder` with dynamic layouts, either using xref:ugfun.adoc#_ugfun_object-layout_xml[XML] (`1.12.0-SNAPSHOT`) or xref:ugfun.adoc#_ugfun_object-layout_dynamic[JSON].  The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.  The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
+It is also possible to combine `@MemberOrder` with dynamic layouts, either using xref:ugfun.adoc#_ugfun_object-layout_xml[XML] or xref:ugfun.adoc#_ugfun_object-layout_dynamic[JSON].  The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.  The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
 
 When dynamic layouts are used this way, the xref:rgant.adoc#_rgant_MemberGroupLayout[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] annotation (and the other layout annotations, xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] and xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`]) are all still honoured.
 ====

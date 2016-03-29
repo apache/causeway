@@ -11,8 +11,7 @@ validation defined by xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate
 
 [WARNING]
 ====
-As of `1.12.0-SNAPSHOT` these methods have been deprecated; this feature should be considered experimental and
-your mileage may vary.
+These methods have been deprecated; this feature should be considered experimental and your mileage may vary.
 ====
 
 

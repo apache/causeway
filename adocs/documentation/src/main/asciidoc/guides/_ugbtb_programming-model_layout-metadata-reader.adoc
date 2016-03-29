@@ -14,7 +14,7 @@ You can also implement your own metadata readers and plug them into Apache Isis.
 
 [WARNING]
 ====
-(As of `1.12.0-SNAPSHOT`), the use of dynamic layouts through the `.layout.json` - and therefore also the `LayoutMetadataReader` - is DEPRECATED.  Instead, the xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts] using ``.layout.xml`` enables much more sophisticated custom layouts than those afforded by ``.layout.json``.
+The use of dynamic layouts through the `.layout.json` - and therefore also the `LayoutMetadataReader` - is DEPRECATED.  Instead, the xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts] using ``.layout.xml`` enables much more sophisticated custom layouts than those afforded by ``.layout.json``.
 
 By default, custom XML layouts are read from the classpath.  This behaviour can be customized by providing an
 alternative implementation of the xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`].

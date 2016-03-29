@@ -21,7 +21,7 @@ xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] equivalent)
 properties, but not collections.  And if using the xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`]
 interface, then the programmer must write all the state management (lots of boilerplate).
 
-* (as of `1.12.0-SNAPSHOT`), JAXB-annotated view models are editable.
+* JAXB-annotated view models are editable.
 
 The examples in this section uses the DTO for `ToDoItem`, taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp].  This DTO is defined as follows:
 

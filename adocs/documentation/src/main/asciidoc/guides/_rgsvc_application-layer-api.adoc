@@ -69,7 +69,7 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 |xref:rgsvc.adoc#_rgsvc_api_MessageService[`o.a.i.applib.` +
 `services.message` +
 `MessageService`]
-|(`1.12.0-SNAPSHOT`) Methods to inform or warn the user, or to raise errors.
+|Methods to inform or warn the user, or to raise errors.
 |`FactoryService-` +
 ``Default`` +
 ``o.a.i.core`` +
@@ -80,7 +80,7 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 |xref:rgsvc.adoc#_rgsvc_api_SessionManagementService[`o.a.i.applib.` +
 `services.sessmgmt` +
 `SessionManagementService`]
-|(`1.12.0-SNAPSHOT`) Methods for batching long-running work (eg data migration) into multiple sessions.
+|Methods for batching long-running work (eg data migration) into multiple sessions.
 |`SessionManagementService-` +
 ``Default`` +
 ``o.a.i.core`` +
@@ -91,7 +91,7 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 |xref:rgsvc.adoc#_rgsvc_api_TitleService[`o.a.i.applib.` +
 `services.title` +
 `TitleService`]
-|(`1.12.0-SNAPSHOT`) Methods to programmatically obtain the title or icon of a domain object.
+|Methods to programmatically obtain the title or icon of a domain object.
 |`TitleService-` +
 ``Default`` +
 ``o.a.i.core`` +
@@ -103,7 +103,7 @@ xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Comm
 |xref:rgsvc.adoc#_rgsvc_api_TransactionService[`o.a.i.applib.` +
 `services.xactn` +
 `TransactionService`]
-|(`1.12.0-SNAPSHOT`) Methods for managing transactions.
+|Methods for managing transactions.
 |`TransactionService-` +
 ``Default`` +
 ``o.a.i.core`` +

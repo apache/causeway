@@ -26,7 +26,8 @@ The table below summarizes the presentation layer SPIs defined by Apache Isis.  
 `ContentMappingService`]
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
 |
-|(Added in `1.12.0-SNAPSHOT`) Replaces (and simplifies) the earlier `ContentMappingService` that defined an SPI using classes internal to the framework. +
+|Replaces (and simplifies) the earlier `ContentMappingService` that defined an SPI using classes internal to the
+framework. +
 +
 No default implementation.
 
@@ -67,7 +68,7 @@ a configured `EmailService`
 |xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`o.a.i.applib.` +
 `services.grid` +
 `GridSystemService`]
-|(`1.12.0-SNAPSHOT`) Validates and normalizes the grid layout for a domain class (with respect to a particular grid
+|Validates and normalizes the grid layout for a domain class (with respect to a particular grid
 system such as Bootstrap3), also providing a default grid (for those domain classes where there is no grid layout).
 |`GridSystemServiceBS3` +
 ``o.a.i.core`` +
@@ -78,7 +79,7 @@ system such as Bootstrap3), also providing a default grid (for those domain clas
 |xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`o.a.i.applib.` +
 `services.grid` +
 `GridLoaderService`]
-|(`1.12.0-SNAPSHOT`) Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
+|Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
 |`GridLoaderServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
@@ -88,7 +89,7 @@ system such as Bootstrap3), also providing a default grid (for those domain clas
 |xref:rgsvc.adoc#_rgsvc_spi_GridService[`o.a.i.applib.` +
 `services.grid` +
 `GridService`]
-|(`1.12.0-SNAPSHOT`) A facade on top of both xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and
+|A facade on top of both xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and
 xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`], thus being able to return normalized
 grids for any domain class.
 |`GridServiceDefault` +
@@ -100,7 +101,7 @@ grids for any domain class.
 |xref:rgsvc.adoc#_rgsvc_spi_HintStore[`o.a.i.applib.` +
 `services.hint` +
 `HintStore`]
-|(`1.12.0-SNAPSHOT`) Stores UI hints on a per-object basis. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
+|Stores UI hints on a per-object basis. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
 |`HintStoreUsingWicketSession` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
