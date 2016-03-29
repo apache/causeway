@@ -1,6 +1,6 @@
-export ISISREL=1.12.0
-export ISISDEV=1.13.0-SNAPSHOT
-export JIRA=ISIS-1287
+export ISISREL=1.13.0
+export ISISDEV=1.14.0-SNAPSHOT
+export JIRA=ISIS-1335
 
 export ISISTMP=/c/tmp   # or as required
 export ISISPAR=$ISISREL
