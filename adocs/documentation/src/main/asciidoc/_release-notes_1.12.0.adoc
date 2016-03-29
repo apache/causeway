@@ -15,7 +15,7 @@ As a result of this change, the support for editing objects has been modified; r
 page into edit mode, instead each property is edited individually.  The current implementation of this is using a prompt dialog (very
 similar to the action prompt dialogs; in a future release we hope to support "in-place" edits instead.
 
-Another notable change in this release include various new domain services.  Some of these are in supoprt of the dynamic layouts
+Another notable change in this release include various new domain services.  Some of these are in support of the dynamic layouts
 functionality, others including new access into Apache Isis' metamodel.  (Some of these new services were originally part of the (non-ASF)
 link:http://isisaddons.org[Isis Addons]). In addition, the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]
 service has been deprecated, replaced by a number of fine-grained services

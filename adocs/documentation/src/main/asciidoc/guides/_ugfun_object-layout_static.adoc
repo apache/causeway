@@ -11,7 +11,7 @@ This section describes the static approach, using annotations.
 
 [NOTE]
 ====
-Tabs and tabgroups are only supported using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] files (`1.12.0-SNAPSHOT`); they are not supported by annotations.
+Tabs and tabgroups are only supported using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] files; they are not supported by annotations.
 ====
 
 

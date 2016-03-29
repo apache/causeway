@@ -309,7 +309,7 @@ git push origin --delete release-1.13.0-RC1   # remote branch no longer needed
 ----
 
 
-Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.13.0-SNAPSHOT`)
+Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.14.0-SNAPSHOT`)
 
 
 
