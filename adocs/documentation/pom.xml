@@ -286,10 +286,86 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="converting CRLF to LF for all .html under ${isis-site.dir}"/>
+                                        <echo message="converting CRLF to LF for all text files under ${isis-site.dir}"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .html files"/>
                                         <echo message=""/>
                                         <fixcrlf srcdir="${isis-site.dir}"
                                                  includes="**/*.html"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .xml files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.xml"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+
+                                        <echo message=""/>
+                                        <echo message="... .xsd files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.xsd"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .css files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.css"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .svg files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.svg"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .less files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.less"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .scss files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.scss"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .js files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.js"
+                                                 eol="lf"
+                                                 eof="remove"
+                                                 fixlast="true"/>
+
+                                        <echo message=""/>
+                                        <echo message="... .sh files"/>
+                                        <echo message=""/>
+                                        <fixcrlf srcdir="${isis-site.dir}"
+                                                 includes="**/*.sh"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="true"/>
