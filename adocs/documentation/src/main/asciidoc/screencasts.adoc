@@ -16,6 +16,7 @@ We've prepared some screencasts to help you see what Apache Isis has to offer.
 The following were recorded using Apache Isis v1.12.0.  While they follow on from each other, you should be able to watch them in any order; the typical duration is 3 minutes.  Or, you can watch them all through this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
 
 
+=== Archetype, IDE, layouts
 
 
 [cols="2a,2a"]
@@ -49,6 +50,15 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |video::KCJ1ZPPB3pA[youtube,width="560px",height="315px"]
 
 
+|===
+
+
+
+=== Fixture scripts, rules, tests
+
+[cols="2a,2a"]
+|===
+
 
 |Using xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] to initialize the database, eg while prototyping and for demos +
 (v1.12.0)
@@ -78,6 +88,16 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
+
+|===
+
+
+
+=== Swagger UI, Maven plugin
+
+[cols="2a,2a"]
+|===
+
 |Using the Swagger UI to access the xref:ugvro.adoc#[REST API] automatically exposed for domain services, entities, and/or view models +
 (v1.12.0)
 
@@ -91,11 +111,30 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |video::yOh3WphhR1E[youtube,width="560px",height="315px"]
 
 
+|===
+
+
+=== App Manifest
+
+[cols="2a,2a"]
+|===
+
 
 |How the framework uses the xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] is used to bootstrap the application +
 (v1.12.0)
 
 |video::1sNiR3Y84c0[youtube,width="560px",height="315px"]
+
+
+
+
+|===
+
+
+=== Actions
+
+[cols="2a,2a"]
+|===
 
 
 
@@ -113,6 +152,16 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
+
+|===
+
+
+=== Titles and icons, UI event subscribers
+
+[cols="2a,2a"]
+|===
+
+
 |Using the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`], xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI. +
 (v1.12.0)
 
@@ -127,11 +176,29 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
+|===
+
+
+=== Derived collections
+
+[cols="2a,2a"]
+|===
+
+
 |How to implement a derived collection on a domain object. +
 (v1.12.0)
 
 |video::ckT8Lt20SE4[youtube,width="560px",height="315px"]
 
+
+
+|===
+
+
+=== More on fixture scripts
+
+[cols="2a,2a"]
+|===
 
 |Extending a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] to more easily demonstrate new functionality. +
 (v1.12.0)
@@ -140,11 +207,29 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
+|===
+
+
+=== Page size of collections
+
+[cols="2a,2a"]
+|===
+
+
 |Using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts] to specify the page size for a domain object's collection. +
 (v1.12.0)
 
 |video::39Hpd7C4Kvo[youtube,width="560px",height="315px"]
 
+
+
+|===
+
+
+=== Hints and end-user features
+
+[cols="2a,2a"]
+|===
 
 |Demonstrates how Apache Isis' xref:ugvw.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
  application can clear these UI hints using the (framework-provided) xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action. +
@@ -164,6 +249,16 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 |video::a0QQLT_16To[youtube,width="560px",height="315px"]
 
+
+
+
+|===
+
+
+=== Decoupling using mixins and subscribers
+
+[cols="2a,2a"]
+|===
 
 
 |Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin] (useful for decoupling).  +
@@ -195,18 +290,42 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
+|===
+
+
+=== Titles using the @Title annotation
+
+[cols="2a,2a"]
+|===
+
 |Using the xref:rgant.adoc#_rgant_Title[`@Title`] annotation (instead of the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another..  +
 (v1.12.0)
 
 |video::qj4bMkQRBUY[youtube,width="560px",height="315px"]
 
 
+|===
+
+
+=== Integration testing of mixins
+
+[cols="2a,2a"]
+|===
 
 |How to write an xref:ugtst.adoc#_ugtst_integ-test-support[integration test] for an xref:rgant.adoc#_rgant_Mixin[mixin]. +
 (v1.12.0)
 
 |video::yi52Gbd3lmY[youtube,width="560px",height="315px"]
 
+
+
+|===
+
+
+=== Removing boilerplate
+
+[cols="2a,2a"]
+|===
 
 
 |Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from your domain objects (getters and setters). +
@@ -220,6 +339,8 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 (v1.12.0)
 
 |video::AXuxULuRtm0[youtube,width="560px",height="315px"]
+
+|===
 
 
 
