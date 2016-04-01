@@ -9,10 +9,227 @@
 
 pass:[<br/><br/>]
 
-We've prepared some screencasts to help you quickly see what Apache Isis has to offer.
+We've prepared some screencasts to help you see what Apache Isis has to offer.
+
+== v1.12.0 Screencasts
+
+The following were recorded using Apache Isis v1.12.0.  While they follow on from each other, you should be able to watch them in any order; the typical duration is 3 minutes.  Or, you can watch them all through this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
 
 
-== Getting Started
+
+
+[cols="2a,2a"]
+|===
+
+|Generating an app using the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp Maven archetype] +
+(v1.12.0)
+
+|video::OTNHR5EdAs8[youtube,width="560px",height="315px"]
+
+
+
+
+|Importing the generated app into an xref:dg.adoc#_dg_ide[IDE] +
+(v1.12.0)
+
+|video::6GPtec5Hu5Q[youtube,width="560px",height="315px"]
+
+
+
+|Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:ugbtb.adoc#_ugbtb_view-models[view model] and `SimpleObjects` domain service (repository). +
+(v1.12.0)
+
+|video::xVTjtiJM8XM[youtube,width="560px",height="315px"]
+
+
+
+|Using the optional `Xxx.layout.xml` file to provide xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system. +
+(v1.12.0)
+
+|video::KCJ1ZPPB3pA[youtube,width="560px",height="315px"]
+
+
+
+|Using xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] to initialize the database, eg while prototyping and for demos +
+(v1.12.0)
+
+|video::pH02g0l2GKY[youtube,width="560px",height="315px"]
+
+
+
+|Implementing xref:ugfun.adoc#_ugfun_how-tos_business-rules[business rules]for domain object members, using supporting methods ("see it, use it, do it") +
+(v1.12.0)
+
+|video::dXtmxmYxa30[youtube,width="560px",height="315px"]
+
+
+
+|Writing xref:ugtst.adoc#_ugtst_unit-test-support[unit tests] for a domain object responsibility  +
+(v1.12.0)
+
+|video::imHfxQGUgV8[youtube,width="560px",height="315px"]
+
+
+
+|Writing end-to-end xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] for a domain object responsibility  +
+(v1.12.0)
+
+|video::-lAt4UWiBjE[youtube,width="560px",height="315px"]
+
+
+
+|Using the Swagger UI to access the xref:ugvro.adoc#[REST API] automatically exposed for domain services, entities, and/or view models +
+(v1.12.0)
+
+|video::lkZxRSS0Zwg[youtube,width="560px",height="315px"]
+
+
+
+|Using the xref:rgmvn.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime). +
+(v1.12.0)
+
+|video::yOh3WphhR1E[youtube,width="560px",height="315px"]
+
+
+
+|How the framework uses the xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] is used to bootstrap the application +
+(v1.12.0)
+
+|video::1sNiR3Y84c0[youtube,width="560px",height="315px"]
+
+
+
+|Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] annotations or using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts]. +
+(v1.12.0)
+
+|video::dfRZeYqzMtI[youtube,width="560px",height="315px"]
+
+
+
+|Invoking (no-arg) action on multiple objects at once (using xref:rgant.adoc#_rgant_Action_invokeOn[`@Action#invokeOn()`], and using the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience. +
+(v1.12.0)
+
+|video::0naoVsWppuQ[youtube,width="560px",height="315px"]
+
+
+
+|Using the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`], xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI. +
+(v1.12.0)
+
+|video::CwM430UH5WE[youtube,width="560px",height="315px"]
+
+
+
+|Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`IconUiEvent`] as per the xref:rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation +
+(v1.12.0)
+
+|video::7ToRKBOeemM[youtube,width="560px",height="315px"]
+
+
+
+|How to implement a derived collection on a domain object. +
+(v1.12.0)
+
+|video::ckT8Lt20SE4[youtube,width="560px",height="315px"]
+
+
+|Extending a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] to more easily demonstrate new functionality. +
+(v1.12.0)
+
+|video::l_oZymgb65I[youtube,width="560px",height="315px"]
+
+
+
+|Using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts] to specify the page size for a domain object's collection. +
+(v1.12.0)
+
+|video::39Hpd7C4Kvo[youtube,width="560px",height="315px"]
+
+
+|Demonstrates how Apache Isis' xref:ugvw.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
+ application can clear these UI hints using the (framework-provided) xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action. +
+(v1.12.0)
+
+|video::0d713-V4vrg[youtube,width="560px",height="315px"]
+
+
+|Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:ugvw.adoc[Wicket viewer]. +
+(v1.12.0)
+
+|video::Kqch-XNlBMA[youtube,width="560px",height="315px"]
+
+
+|Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ugvw.adoc[Wicket viewer], and how the developer can ensure that xref:rgant.adoc#_rgant_DomainObjectLayout_bookmarking[domain objects] and (xref:rgant.adoc#_rgant_Action_semantics[query-only]) xref:rgant.adoc#_rgant_ActionLayout_bookmarking[actions] can be bookmarked. +
+(v1.12.0)
+
+|video::a0QQLT_16To[youtube,width="560px",height="315px"]
+
+
+
+|Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin] (useful for decoupling).  +
+(v1.12.0)
+
+|video::Wn5215K7_Jg[youtube,width="560px",height="315px"]
+
+
+
+|Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin]. +
+(v1.12.0)
+
+|video::m633OEBpWqQ[youtube,width="560px",height="315px"]
+
+
+
+|Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:ugbtb.adoc#_ugbtb_decoupling_event-bus[decouple] and abstract business rules ( xref:rgcms.adoc#_rgcms_methods_prefixes_validate[validation]). +
+(v1.12.0)
+
+|video::-AQJb9GtIqI[youtube,width="560px",height="315px"]
+
+
+
+|Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to hide functionality, in this
+  case the xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework. +
+(v1.12.0)
+
+|video::6GjLW0hlrm4[youtube,width="560px",height="315px"]
+
+
+
+|Using the xref:rgant.adoc#_rgant_Title[`@Title`] annotation (instead of the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another..  +
+(v1.12.0)
+
+|video::qj4bMkQRBUY[youtube,width="560px",height="315px"]
+
+
+
+|How to write an xref:ugtst.adoc#_ugtst_integ-test-support[integration test] for an xref:rgant.adoc#_rgant_Mixin[mixin]. +
+(v1.12.0)
+
+|video::yi52Gbd3lmY[youtube,width="560px",height="315px"]
+
+
+
+|Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from your domain objects (getters and setters). +
+(v1.12.0)
+
+|video::SLJPBruFMKY[youtube,width="560px",height="315px"]
+
+
+
+|Using the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] module to remove boilerplate from your domain object (xref:rgant.adoc#_rgant_ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters). +
+(v1.12.0)
+
+|video::AXuxULuRtm0[youtube,width="560px",height="315px"]
+
+
+
+
+== Older screencasts
+
+The remaining screencasts refer to earlier versions of the framework.  We've kept them here for reference/interest.
+
+
+=== Getting Started
 
 [cols="2a,2a"]
 |===
@@ -35,14 +252,6 @@ _nb: the todoapp was previously called the 'quickstart' app_
 |video::2leQwavWxeg[youtube,width="420px",height="210px"]
       
 
-|Dynamic XML layouts (v.1.12.0) +
-
-_Describing how the layout of domain objects can be customized using the Bootstrap 3 grid system._
-
-Learn more link:./guides/ugfun.html#_ugfun_object-layout_dynamic_xml[here]
-
-|video::MxewC5Pve5k[youtube,width="420px",height="280px"]
-
 
 
 
@@ -51,7 +260,7 @@ Learn more link:./guides/ugfun.html#_ugfun_object-layout_dynamic_xml[here]
 
 
 
-== Development Environment
+=== Development Environment
 
 [cols="2a,2a"]
 |===
@@ -85,7 +294,7 @@ Learn more link:./guides/dg.html#_dg_ide_intellij[here]
 
 
 
-== Isis Add-on Modules
+=== Isis Add-on Modules
 
 [cols="2a,2a"]
 |===
@@ -133,23 +342,13 @@ _Using the (non-ASF) http://github.com/isisaddons/isis-module-excel[Isis addons'
 
 
 
-== Wicket Viewer and Isis Add-ons
+=== Wicket Viewer and Isis Add-ons
 
 [cols="2a,2a"]
 |===
 
 
-|Dynamic (XML) layouts in the Wicket viewer (v1.12.0) +
 
-_How to layout properties and collections dynamically_ +
-
-Learn more link:./guides/ugfun.html#_ugfun_object-layout_dynamic_xml[here]
-
-|video::MxewC5Pve5k[youtube,width="420px",height="236px"]
-
-
-  
-  
 |Customizing the Wicket viewer +
 
 _How to customize the Wicket viewer, integrating the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 ] wicket extension._
@@ -163,7 +362,7 @@ _How to customize the Wicket viewer, integrating the (non-ASF) http://github.com
 
 
 
-== Restful Objects Viewer
+=== Restful Objects Viewer
 
 [cols="2a,2a"]
 |===
@@ -189,7 +388,7 @@ _Posting to the "Objects of Type" resource"_
   
 
   
-== JRebel Integration
+=== JRebel Integration
 
 _Develop your app without having to redeploy using link:http://zeroturnaround.com/software/jrebel/[JRebel] and an link:https://github.com/danhaywood/isis-jrebel-plugin[Isis plugin] for JRebel._
 
