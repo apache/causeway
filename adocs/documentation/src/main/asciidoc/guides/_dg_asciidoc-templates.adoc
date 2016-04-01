@@ -131,10 +131,26 @@ pass:[<pre>xref:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]</pre>]
 
 
 
+|`adrgant`
+|pass:[<pre>xref:rgant.adoc#xxx[ttt\]</pre>]
+
+a hyperlink to a bookmark within the reference guide for annotations, where:
+
+* `xxx` is the bookmark
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:rgant.adoc#_rgant_aaa_main[Core annotations\]</pre>]
+
+|xref:rgant.adoc#_rgant_aaa_main[Core annotations]
+
+
+
 |`adrgcfg`
 |pass:[<pre>xref:rgcfg.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to a bookmark within configuration properties guide, where:
+a hyperlink to a bookmark within the reference guide for configuration properties guide, where:
 
 * `xxx` is the bookmark
 * `ttt` is the text to display as the hyperlink
@@ -147,12 +163,13 @@ pass:[<pre>xref:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core\]</pre>]
 
 
 
-|`adrgcs`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_xxx[`xxx`\]</pre>]
+|`adrgcms`
+|pass:[<pre>xref:rgcms.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to the "man page" for a superclass, where:
+a hyperlink to a bookmark within the reference guide for classes, methods and schema, where:
 
-* `xxx` is the superclass (eg `AbstractDomainService`)
+* `xxx` is the bookmark
+* `ttt` is the text to display as the hyperlink
 
 for example:
 
@@ -162,71 +179,42 @@ pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService
 
 
 
-|`adrgcu`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_utility_xxx[`xxx`\]</pre>]
+|`adrgsvc`
+|pass:[<pre>xref:rgsvc.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to the "man page" for a utility class, where:
+a hyperlink to a bookmark within the reference guide for domain services, where:
 
-* `xxx` is the utility class (eg `TitleBuffer`)
-
-for example:
-
-pass:[<pre>xref:rgcms.adoc#_rgcms_classes_utility_TitleBuffer[`TitleBuffer`\]</pre>]
-
-|xref:rgcms.adoc#_rgcms_classes_utility_TitleBuffer[`TitleBuffer`]
-
-
-
-|`adrgcv`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_value-types_xxx[`xxx`\]</pre>]
-
-
-a hyperlink to the "man page" for an applib value class, where:
-
-* `xxx` is the utility class (eg `Blob`)
+* `xxx` is the bookmark
+* `ttt` is the text to display as the hyperlink
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`\]</pre>]
+pass:[<pre>xref:rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
-
-
-
-|`adrgmp`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_methods_prefixes_xxx[`xxx...()`\]</pre>]
-
-a hyperlink to the "man page" for a prefixed method, where:
-
-* `xxx` is the method prefix (eg `disable...()`)
-
-for example:
-
-pass:[<pre>xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`\]</pre>]
-
-|xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
+|xref:xref:rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
 
 
 
-|`adrgmr`
-|pass:[<pre></pre>]
+|`adrgmvn`
+|pass:[<pre>xref:rgmvn.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to the "man page" for a reserved method, where:
+a hyperlink to a bookmark within the reference guide for the maven plugin, where:
 
-* `xxx` is the method prefix (eg `title()`)
+* `xxx` is the bookmark
+* `ttt` is the text to display as the hyperlink
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`\]</pre>]
+pass:[<pre>xref:rgmvn.adoc#_rgmvn_validate[validate goal\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+|xref:rgmvn.adoc#_rgmvn_validate[validate goal]
 
 
 
 |`adrgna`
 |pass:[<pre>xref:rgant.adoc#_rgant-xxx[`@xxx`]</pre>]
 
-a hyperlink to the "man page" for an annotation, where:
+a hyperlink to the "man page" for an annotation within the reference guide for annotations, where:
 
 * `xxx` is the annotation type (eg `@Action`)
 
@@ -241,7 +229,7 @@ pass:[<pre>xref:rgant.adoc#_rgant-Action[`@Action`\]</pre>]
 |`adrgnt`
 |pass:[<pre>xref:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]</pre>]
 
-a hyperlink to the "man page" for the specific attribute (field) of an annotation, where:
+a hyperlink to the "man page" for the specific attribute (field) of an annotation within the reference guide for annotations, where:
 
 * `xxx` is the annotation type (eg `@Action`)
 * `ttt` is the attribute (eg `@semantics`)
@@ -257,7 +245,7 @@ pass:[<pre>xref:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`\]</pre>
 |`adrgsa`
 |pass:[<pre></pre>]
 
-a hyperlink to the "man page" for an (API) domain service, where:
+a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
 
 * `xxx` is the domain service (eg `DomainObjectContainer`)
 
@@ -272,7 +260,7 @@ pass:[<pre>xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContain
 |`adrgss`
 |pass:[<pre></pre>]
 
-a hyperlink to the "man page" for an (SPI) domain service, where:
+a hyperlink to the "man page" for an (SPI) domain service within the reference guide for domain services, where:
 
 * `xxx` is the domain service (eg `ContentMappingService`)
 
@@ -332,7 +320,6 @@ pass:[<pre>xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification\]</pre>]
 
 
 
-
 |`adugsec`
 |pass:[<pre>xref:ugsec.adoc#xxx[ttt\]</pre>]
 
@@ -377,14 +364,6 @@ pass:[<pre>xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[External
 
 |xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
 
-
-
-|`adugsimpleapp`
-|pass:[<pre>xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype\]</pre>]
-
-A hyperlink to the `simpleapp` archetype in the "getting started" chapter.
-
-|xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
 
 
 

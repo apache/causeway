@@ -72,7 +72,7 @@ The most commonly used domain objects (live) templates are also listed on the li
 To install in the live templates IntelliJ (Community edition 15), copy to the relevant `config/templates` directory, eg:
 
 * Windows `<User home>\.IdeaIC15\config\templates`
-* Linux `~/.IdeaIC14/config/templates`
+* Linux `~/.IdeaIC15/config/templates`
 * Mac OS `~/Library/Preferences/IdeaIC15/templates`
 
 If using the Ultimate edition, the directory is `.IntelliJIdea15` rather than `IdeaIC15`.
