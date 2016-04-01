@@ -9,14 +9,15 @@
 
 pass:[<br/><br/>]
 
-We've prepared some screencasts to help you see what Apache Isis has to offer.
+We've prepared a number of screencasts to help you see what Apache Isis has to offer; the following were recorded using Apache Isis v1.12.0.
 
-== v1.12.0 Screencasts
+While these each follow on from each other, you should be able to watch them in any order; the typical duration is 3 minutes.  Or, you can watch them all through this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
 
-The following were recorded using Apache Isis v1.12.0.  While they follow on from each other, you should be able to watch them in any order; the typical duration is 3 minutes.  Or, you can watch them all through this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
+You can also find some earlier screencasts (for older versions of the framework) link:./screencasts-older.html[here].
 
 
-=== Archetype, IDE, layouts
+
+== Archetype, IDE, layouts
 
 
 [cols="2a,2a"]
@@ -54,7 +55,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
-=== Fixture scripts, rules, tests
+== Fixture scripts, rules, tests
 
 [cols="2a,2a"]
 |===
@@ -93,7 +94,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 
 
-=== Swagger UI, Maven plugin
+== Swagger UI, Maven plugin
 
 [cols="2a,2a"]
 |===
@@ -114,7 +115,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== App Manifest
+== App Manifest
 
 [cols="2a,2a"]
 |===
@@ -131,7 +132,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Actions
+== Actions
 
 [cols="2a,2a"]
 |===
@@ -156,7 +157,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Titles and icons, UI event subscribers
+== Titles and icons, UI event subscribers
 
 [cols="2a,2a"]
 |===
@@ -179,7 +180,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Derived collections
+== Derived collections
 
 [cols="2a,2a"]
 |===
@@ -195,7 +196,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== More on fixture scripts
+== More on fixture scripts
 
 [cols="2a,2a"]
 |===
@@ -210,7 +211,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Page size of collections
+== Page size of collections
 
 [cols="2a,2a"]
 |===
@@ -226,7 +227,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Hints and end-user features
+== Hints and end-user features
 
 [cols="2a,2a"]
 |===
@@ -255,7 +256,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Decoupling using mixins and subscribers
+== Decoupling (mixins & subscribers)
 
 [cols="2a,2a"]
 |===
@@ -293,7 +294,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Titles using the @Title annotation
+== Titles using the @Title annotation
 
 [cols="2a,2a"]
 |===
@@ -307,7 +308,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Integration testing of mixins
+== Integration testing of mixins
 
 [cols="2a,2a"]
 |===
@@ -322,7 +323,7 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 |===
 
 
-=== Removing boilerplate
+== Removing boilerplate
 
 [cols="2a,2a"]
 |===
@@ -347,188 +348,5 @@ The following were recorded using Apache Isis v1.12.0.  While they follow on fro
 
 == Older screencasts
 
-The remaining screencasts refer to earlier versions of the framework.  We've kept them here for reference/interest.
-
-
-=== Getting Started
-
-[cols="2a,2a"]
-|===
-
-|How it works (v1.1.0)+
-
-_How Apache Isis builds a webapp from the underlying domain object model_
-
-_This screencast is for Apache Isis v1.1.0 (ie very out of date)_
-
-|video::ludOLyi6VyY[youtube,width="420px",height="315px"]
-
- 
-|Todo app walkthrough (v.1.4.0) +
-
-_A run-through of the main features of the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]_ +
-
-_nb: the todoapp was previously called the 'quickstart' app_
-
-|video::2leQwavWxeg[youtube,width="420px",height="210px"]
-      
-
-
-
-
-|===
-
-
-
-
-=== Development Environment
-
-[cols="2a,2a"]
-|===
-
-
-
-|Setting up Eclipse +
-
-_How to import an Apache Isis maven-based application into Eclipse and configure to use with the JDO Objectstore_ +
-
-NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
-
-Learn more link:./guides/dg.html#_dg_ide_eclipse[here]
-
-|video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
-
-
-
-|Setting up IntelliJ +
-
-_How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
-
-Learn more link:./guides/dg.html#_dg_ide_intellij[here]
-
-|video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
-
-
-
-|===
-
-
-
-
-=== Isis Add-on Modules
-
-[cols="2a,2a"]
-|===
-
-
-|Commands and Auditing (v1.6.0) +
-
-_Configuring the command and auditing add-on modules for the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
-
-Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-command[command] and http://github.com/isisaddons/isis-module-audit[audit] modules
-
-|video::g01tK58MxJ8[youtube,width="420px",height="236px"]
-
-
-|Security (v1.6.0) +
-
-_Configuring the security add-on module for for the xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
-
-Learn more at the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module
-
-|video::bj8735nBRR4[youtube,width="420px",height="236px"]
-
-
-
-|Commands, Auditing, Publishing (v1.5.0) +
-
-_A run-through of the command (profiling) service, auditing service, publishing service.  Also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation._ +
-
-Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[audit] and (non-ASF) http://github.com/isisaddons/isis-module-publishing[publishing] modules.
-
-|video::tqXUZkPB3EI[youtube,width="420px",height="210px"]
-
-
-
-|Bulk updates in Apache Isis (v1.5.0) +
-
-_Using the (non-ASF) http://github.com/isisaddons/isis-module-excel[Isis addons' excel] module and view models to perform bulk updates)._
-    
-|video::8SsRDhCUuRc[youtube,width="420px",height="315px"]
-
-
-
-|===
-
-
-
-
-=== Wicket Viewer and Isis Add-ons
-
-[cols="2a,2a"]
-|===
-
-
-
-|Customizing the Wicket viewer +
-
-_How to customize the Wicket viewer, integrating the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 ] wicket extension._
-
-|video::9o5zAME8LrM[youtube,width="420px",height="315px"]
-
-
-
-|===
-
-
-
-
-=== Restful Objects Viewer
-
-[cols="2a,2a"]
-|===
-
-|Using Chrome Tools +
-
-_Using Chrome plugins to invoke an action through the REST API_
-
-|video::_-TOvVYWCHc[youtube,width="420px",height="236px"]
-
-
-|Creating objects using the REST API
-
-_Posting to the "Objects of Type" resource"_
-
-|video::VmvhACyA2ZI[youtube,width="420px",height="236px"]
-
-
-
-|===
-
-
-  
-
-  
-=== JRebel Integration
-
-_Develop your app without having to redeploy using link:http://zeroturnaround.com/software/jrebel/[JRebel] and an link:https://github.com/danhaywood/isis-jrebel-plugin[Isis plugin] for JRebel._
-
-[cols="2a,2a"]
-|===
-
-|Maven and JRebel
-|video::jpYNZ343gi4[youtube,width="420px",height="236px"]
-
-
-|Eclipse and JRebel
-|video::uPfRXllQV1o[youtube,width="420px",height="236px"]
-
-
-|IntelliJ and JRebel
-|video::fb5VbU-VY8I[youtube,width="420px",height="236px"]
-
-
-|===
-
-  
+Older screencasts can be found link:./screencasts-older.html[here].
 
