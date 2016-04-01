@@ -90,7 +90,7 @@ function jira_by_type () {
 
     echo
     echo
-    echo "=== $type"
+    echo "== $type"
     echo
 
     total=${#keys[*]}
@@ -168,7 +168,7 @@ echo
 echo
 echo
 echo "[[r$version]]"
-echo "== $version"
+echo "= $version"
 echo 
 echo "NOTE: TODO - add description"
 echo 

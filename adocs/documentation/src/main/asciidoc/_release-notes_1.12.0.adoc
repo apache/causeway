@@ -30,7 +30,7 @@ corresponding domain event.
 
 
 
-=== New Feature
+== New Feature
 
 * link:https://issues.apache.org/jira/browse/ISIS-1351[ISIS-1351] - Extend xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`] to list all configuration properties in the UI
 * link:https://issues.apache.org/jira/browse/ISIS-1325[ISIS-1325] - New xref:rgsvc.adoc#_rgsvc_api_SessionManagementService[`SessionManagementService`]
@@ -41,7 +41,7 @@ corresponding domain event.
 * link:https://issues.apache.org/jira/browse/ISIS-784[ISIS-784] - Change Wicket viewer to get rid of edit mode, instead allow individual fields to be edited by clicking on them (similar to the way that JIRA works).
 
 
-=== Improvement
+== Improvement
 
 * link:https://issues.apache.org/jira/browse/ISIS-1333[ISIS-1333] - Remove self-host profile from the archetype
 * link:https://issues.apache.org/jira/browse/ISIS-1332[ISIS-1332] - Factor out a xref:rgsvc.adoc#_rgsvc_spi_HintStore[`HintStore`] service, so that this is pluggable.
@@ -66,7 +66,7 @@ corresponding domain event.
 * link:https://issues.apache.org/jira/browse/ISIS-806[ISIS-806] - In Wicket viewer, shouldn't be possible to invoke an action if editing a form.
 
 
-=== Bug
+== Bug
 
 * link:https://issues.apache.org/jira/browse/ISIS-1348[ISIS-1348] - Bug with xref:ugtst.adoc#_ugtst_unit-test-support_soap-fake-server-junit-rule[SoapEndpointPublishingRule] when multiple endpoints.
 * link:https://issues.apache.org/jira/browse/ISIS-1347[ISIS-1347] - Missing annotation in SimpleObject
@@ -91,11 +91,11 @@ corresponding domain event.
 * link:https://issues.apache.org/jira/browse/ISIS-687[ISIS-687] - @AutoComplete annotation on repository does not seem to honour @MinLength
 
 
-=== Dependency upgrade
+== Dependency upgrade
 
 * link:https://issues.apache.org/jira/browse/ISIS-1288[ISIS-1288] - Update (minor) dependencies
 
 
-=== Task
+== Task
 
 * link:https://issues.apache.org/jira/browse/ISIS-1287[ISIS-1287] - Release activities for v1.12.0
