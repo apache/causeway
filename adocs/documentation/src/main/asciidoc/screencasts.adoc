@@ -344,6 +344,44 @@ You can also find some earlier screencasts (for older versions of the framework)
 |===
 
 
+== Action validation
+
+[cols="2a,2a"]
+|===
+
+
+|How to validate action parameters using a supporting xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validateNXxx()`] method. +
+(v1.12.0)
+
+|video::ORoEYlg6XFM[youtube,width="560px",height="315px"]
+
+
+
+|How to validate action parameters using the xref:rgant.adoc#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface..  +
+(v1.12.0)
+
+|video::1Vlzob89pYI[youtube,width="560px",height="315px"]
+
+|===
+
+
+
+== Instantiating/Initializing Objects
+
+[cols="2a,2a"]
+|===
+
+
+|How to instantiate/initialize objects using xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] and/or xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]. +
+(v1.12.0)
+
+|video::fYJjXAepWAs[youtube,width="560px",height="315px"]
+
+
+
+|===
+
+
 
 
 == Older screencasts
