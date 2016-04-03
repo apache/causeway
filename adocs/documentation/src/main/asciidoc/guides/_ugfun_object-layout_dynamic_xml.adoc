@@ -33,9 +33,8 @@ More information about these classes can be found in xref:rgcms.adoc#_rgcms_clas
 
 == Screencast
 
-The following screencast describes the feature:
+This link:https://www.youtube.com/watch?v=MxewC5Pve5k[screencast] describes the feature.
 
-video::MxewC5Pve5k[youtube,width="800px",height="534px"]
 
 
 

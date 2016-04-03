@@ -26,9 +26,8 @@ Assuming that the `CommandService` supports persistent `Command`s, the associate
 == Screencast
 
 
-The screencast provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
-video::tqXUZkPB3EI[youtube,width="640px",height="360px"]
 
 [NOTE]
 ====

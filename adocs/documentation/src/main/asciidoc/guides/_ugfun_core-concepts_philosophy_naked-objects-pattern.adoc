@@ -47,10 +47,8 @@ include::_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-
 
 == What this means in practice
 
-The screencast below shows what all of this means in practice, showing the relationship between a running app and the actual code underneath.
+This link:https://www.youtube.com/watch?v=ludOLyi6VyY[screencast] shows what all of this means in practice, showing the relationship between a running app and the actual code underneath.
 
-.How Apache Isis builds a webapp from the underlying domain object model…
-video::ludOLyi6VyY[youtube,width="640px",height="472px"]
 
 [NOTE]
 ====

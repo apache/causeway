@@ -44,9 +44,8 @@ Accept: application/json;profile="urn:org.apache.isis/v1"
 Not every resource supports this header, but the most commonly accessed ones do.  In each case the server will set the
 `Content-Type` header so that the client knows how to process the representation.
 
-The screencast below demonstrates the feature.
+The link:https://www.youtube.com/watch?v=HMSqapQDY_4[screencast] demonstrates the feature.
 
-video::HMSqapQDY_4[youtube,width="853px",height="480px"]
 
 
 The sections below explain in a little more detail what is returned when this profile is activated.

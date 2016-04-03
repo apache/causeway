@@ -18,11 +18,8 @@ Persistent `Command`s support several use cases:
 
 
 
-The screencast below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+This link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
-
-
-video::tqXUZkPB3EI[youtube,width="560px",height="315px"]
 
 [NOTE]
 ====

@@ -596,7 +596,7 @@ embeds image from specified URL, where:
 
 == YouTube (screencasts)
 
-Embedded youtube screencasts
+Embedded youtube screencasts.  (Don't use these in guides, as they cannot be rendered as PDF).
 
 [cols="1,4a,2a", options="header"]
 |===

@@ -15,9 +15,8 @@ This section provides a few hints-and-tips to help you on your way.
 
 == Using Chrome Tools
 
-The screencast below shows how to explore the Restful API using Chrome plugins/extensions, and how we use them to write end-2-end (TCK) tests for the Restful Objects viewer.
+This link:https://www.youtube.com/watch?v=_-TOvVYWCHc[screencast] shows how to explore the Restful API using Chrome plugins/extensions, and how we use them to write end-2-end (TCK) tests for the Restful Objects viewer.
 
-video::_-TOvVYWCHc[youtube,width="840px",height="472px"]
 
 
 
