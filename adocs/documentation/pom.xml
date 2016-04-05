@@ -53,8 +53,8 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-        <isis-site.dir>${project.basedir}/../../../isis-site/content</isis-site.dir>
-        <redirects.dir>${project.basedir}/../redirects/content</redirects.dir>
+        <isis-site.dir>../../../isis-site/content</isis-site.dir>
+        <redirects.dir>../redirects/content</redirects.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
@@ -420,39 +420,43 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.8</version>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.0</version>
                         <executions>
                             <execution>
                                 <id>install</id>
                                 <phase>install</phase>
-                                <configuration>
-                                    <target>
-                                        <echo message=""/>
-                                        <echo message=""/>
-                                        <echo message="git add all content"/>
-                                        <echo message=""/>
-                                        <exec executable="git" dir="${isis-site.dir}">
-                                            <arg value="add"/>
-                                            <arg value="--all"/>
-                                            <arg value="."/>
-                                        </exec>
-
-                                        <echo message=""/>
-                                        <echo message=""/>
-                                        <echo message="git commit -m '${message}' "/>
-                                        <echo message=""/>
-                                        <exec executable="git" dir="${isis-site.dir}">
-                                            <arg value="commit"/>
-                                            <arg value="-m"/>
-                                            <arg value="${message}"/>
-                                        </exec>
-                                        <echo message=""/>
-                                    </target>
-                                </configuration>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>execute</goal>
                                 </goals>
+                                <configuration>
+                                    <source>
+                                        def siteDir = new File("${isis-site.dir}", "..")
+
+                                        "git add content --all".execute(null, siteDir).in.text
+                                        "git reset content/guides".execute(null, siteDir).in.text
+
+                                        def gitStatusOutput = "git status --porcelain".execute(null, siteDir).in.text
+
+                                        def lines = gitStatusOutput.readLines()
+                                        lines.each{ line ->
+                                            def file=line.drop(3)
+                                            if(file.endsWith(".html")) {
+                                                def pdfFile = file.replaceAll(".html",".pdf")
+                                                println file
+                                                "git add $file".execute(null, siteDir).in.text
+                                                println pdfFile
+                                                "git add $pdfFile".execute(null, siteDir).in.text
+                                            }
+                                        }
+
+                                        "git commit -m '${message}'".execute(null, siteDir).in.text
+                                        "git reset --hard".execute(null, siteDir).in.text
+
+                                        return null
+                                    </source>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

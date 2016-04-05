@@ -377,6 +377,85 @@ You can also find some earlier screencasts (for older versions of the framework)
 
 |video::fYJjXAepWAs[youtube,width="560px",height="315px"]
 
+|===
+
+
+
+== Property and parameter choices
+
+[cols="2a,2a"]
+|===
+
+
+|How to provide a set of xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when editing a property. +
+(v1.12.0)
+
+|video::cQ06PoMNDPw[youtube,width="560px",height="315px"]
+
+
+|How to provide a set of xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when invoking an action. +
+(v1.12.0)
+
+|video::afEnYKljBQs[youtube,width="560px",height="315px"]
+
+
+|How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] supporting methods as a source for default values within a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script]. +
+(v1.12.0)
+
+|video::fKo6aTPK-gk[youtube,width="560px",height="315px"]
+
+
+|How to use an enum for choices (drop down list) for both a property or an action parameter. +
+(v1.12.0)
+
+|video::ZWOzmwCJVzA[youtube,width="560px",height="315px"]
+
+
+
+|===
+
+
+
+== Hiding columns
+
+[cols="2a,2a"]
+|===
+
+
+|How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rgant.adoc#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`]) . +
+(v1.12.0)
+
+|video::1SCyBlMM2Bo[youtube,width="560px",height="315px"]
+
+
+|How to hide properties as columns in tables, using CSS. +
+(v1.12.0)
+
+|video::H11yby1Xkbc[youtube,width="560px",height="315px"]
+
+
+
+|===
+
+
+
+== Fixture scripts defaults / fake data
+
+[cols="2a,2a"]
+|===
+
+
+|Using the xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller. +
+(v1.12.0)
+
+|video::NKaR7ZedI8E[youtube,width="560px",height="315px"]
+
+
+
+|Using the (non-ASF) http://github.com/isisaddons/isis-module-fakedata[Isis addons' fakedata] module's `FakeDataService` to provide fake (random) names within a fixture script. +
+(v1.12.0)
+
+|video::-jMiD9n1L5U[youtube,width="560px",height="315px"]
 
 
 |===
