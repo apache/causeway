@@ -444,15 +444,16 @@
                                             def file=line.drop(3)
                                             if(file.endsWith(".html")) {
                                                 def pdfFile = file.replaceAll(".html",".pdf")
-                                                println file
                                                 "git add $file".execute(null, siteDir).in.text
-                                                println pdfFile
                                                 "git add $pdfFile".execute(null, siteDir).in.text
                                             }
                                         }
 
-                                        "git commit -m '${message}'".execute(null, siteDir).in.text
-                                        "git reset --hard".execute(null, siteDir).in.text
+                                        // doesn't seem to do anything :-(
+                                        "git commit --message '${message}'".execute(null, siteDir).text
+
+                                        // and so, commenting this out.
+                                        // println "git reset --hard".execute(null, siteDir).in.text
 
                                         return null
                                     </source>
