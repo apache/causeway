@@ -17,6 +17,12 @@ You can also find some earlier screencasts (for older versions of the framework)
 
 
 
+== Playlist
+
+To watch all of the v1.12.0 screencasts in order, use this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
+
+
+
 == Archetype, IDE, layouts
 
 
@@ -456,6 +462,67 @@ You can also find some earlier screencasts (for older versions of the framework)
 (v1.12.0)
 
 |video::-jMiD9n1L5U[youtube,width="560px",height="315px"]
+
+
+|===
+
+
+
+== BigDecimals
+
+[cols="2a,2a"]
+|===
+
+
+|Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:ugvw.adoc[Wicket viewer]. +
+(v1.12.0)
+
+|video::esujf_DFeWA[youtube,width="560px",height="315px"]
+
+
+
+|How to use the xref:rgant.adoc#_rgant_Digits[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.  +
+(v1.12.0)
+
+|video::n9Oy0m2bplw[youtube,width="560px",height="315px"]
+
+
+
+
+|===
+
+
+
+== Action parameters
+
+[cols="2a,2a"]
+|===
+
+
+|How to use the supporting xref:rgcms.adoc#_rgcms_methods_prefixes_default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters. +
+(v1.12.0)
+
+|video::Rt4JoV4ssVY[youtube,width="560px",height="315px"]
+
+
+
+|How to use xref:rgant.adoc#_rgant_DomainObject_bounded[`@DomainObject#bounded()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types. +
+(v1.12.0)
+
+|video::qAJDGxztWIQ[youtube,width="560px",height="315px"]
+
+
+
+|How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models). +
+(v1.12.0)
+
+|video::0ro_YhXOpJU[youtube,width="560px",height="315px"]
+
+
+|How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models). +
+(v1.12.0)
+
+|video::K36IJQ_hDfs[youtube,width="560px",height="315px"]
 
 
 |===
