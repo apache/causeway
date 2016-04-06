@@ -449,15 +449,49 @@
                                             }
                                         }
 
-                                        // doesn't seem to do anything :-(
-                                        "git commit --message '${message}'".execute(null, siteDir).text
-
-                                        // and so, commenting this out.
-                                        // println "git reset --hard".execute(null, siteDir).in.text
+                                        // the commit doesn't seem to do anything; so instead using antrun plugin below to complete.
+                                        // "git commit --message '${message}'".execute(null, siteDir).text
+                                        // "git reset --hard".execute(null, siteDir).in.text
 
                                         return null
                                     </source>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>install</id>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="git commit -m '${message}' "/>
+                                        <echo message=""/>
+                                        <exec executable="git" dir="${isis-site.dir}">
+                                            <arg value="commit"/>
+                                            <arg value="-m"/>
+                                            <arg value="${message}"/>
+                                        </exec>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="git reset --hard"/>
+                                        <echo message=""/>
+                                        <exec executable="git" dir="${isis-site.dir}">
+                                            <arg value="reset"/>
+                                            <arg value="--hard"/>
+                                        </exec>
+                                        <echo message=""/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
