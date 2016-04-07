@@ -529,6 +529,62 @@ To watch all of the v1.12.0 screencasts in order, use this link:https://www.yout
 
 
 
+== Excel, Calendars, Maps
+
+Using the (non-ASF) link:http://isisaddons.org[Isis Addons] wicket UI extensions to render (collections of) domain objects on a
+calendar, on a map, or downloadable within an Excel spreadsheet.
+
+
+[cols="2a,2a"]
+|===
+
+
+|Configuring an Apache Isis app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) http://github.com/isisaddons/isis-wicket-excel[Isis addons' excel] wicket extension. +
+(v1.12.0)
+
+|video::SoREp-8MQz0[youtube,width="560px",height="315px"]
+
+
+
+|Configuring an Apache Isis app to allow tables of domain objects with date information to be rendered on a full-page
+calendar, using the (non-ASF) http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2] wicket
+extension. +
+(v1.12.0)
+
+|video::bqjLx8gMOEw[youtube,width="560px",height="315px"]
+
+
+
+|Using the xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`] annotation to exclude methods from a domain object
+(eg implementing methods of an interface as defined by the (non-ASF)
+http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2 ] wicket extension) that would
+otherwise be part of the Apache Isis metamodel (and thus show up in the UI). +
+(v1.12.0)
+
+|video::0YoFa44Xr6M[youtube,width="560px",height="315px"]
+
+
+
+|Configuring an Apache Isis app to allow tables of domain objects with location information to be rendered on map,
+ using the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3] wicket
+ extension. +
+(v1.12.0)
+
+|video::mIwptdeZ67Q[youtube,width="560px",height="315px"]
+
+
+
+|Using derived properties to persist value types (such as gmap3's Location value type) as regular primitive datatypes. +
+(v1.12.0)
+
+|video::3n_70HJ23uY[youtube,width="560px",height="315px"]
+
+
+
+|===
+
+
+
 
 == Older screencasts
 
