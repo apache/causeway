@@ -23,7 +23,7 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>1.12.0-SNAPSHOT</version>
+    <version>1.13.0-SNAPSHOT</version>
 
     <name>Simple App</name>
 
@@ -34,11 +34,11 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.12.0</isis.version>
+        <isis.version>1.13.0-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <assertj-core.version>2.0.0</assertj-core.version>
+        <assertj-core.version>2.4.0</assertj-core.version>
     </properties>
 
     <repositories>
