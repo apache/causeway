@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
@@ -33,7 +34,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         final String identifier = oidDto.getObjectIdentifier();
         final Bookmark bookmark = new Bookmark(objectType, identifier);
 
-        return bookmarkService.lookup(bookmark);
+        return bookmarkService.lookup(bookmark, BookmarkService2.FieldResetPolicy.DONT_RESET);
     }
 
     @Override
@@ -63,5 +64,5 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
     }
 
     @Inject
-    BookmarkService bookmarkService;
+    BookmarkService2 bookmarkService;
 }

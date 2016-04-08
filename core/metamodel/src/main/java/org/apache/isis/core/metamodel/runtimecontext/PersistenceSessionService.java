@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -70,7 +71,7 @@ public interface PersistenceSessionService extends AdapterManager {
      * Called by <tt>BookmarkServicesDefault</tt>.
      * @return
      */
-    Object lookup(Bookmark bookmark);
+    Object lookup(Bookmark bookmark, final BookmarkService2.FieldResetPolicy fieldResetPolicy);
 
     Bookmark bookmarkFor(Object domainObject);
 

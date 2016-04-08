@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.persistence.container;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -48,13 +49,17 @@ public class DomainObjectContainerResolve {
     public DomainObjectContainerResolve() {
     }
 
-    public Object lookup(final Bookmark bookmark) {
+    public Object lookup(final Bookmark bookmark, final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
         RootOid oid = RootOid.create(bookmark);
         final ObjectAdapter adapter = adapterFor(oid);
         if(adapter == null) {
             return null;
         }
-        getPersistenceSession().refreshRootInTransaction(adapter);
+        if(fieldResetPolicy == BookmarkService2.FieldResetPolicy.RESET) {
+            getPersistenceSession().refreshRootInTransaction(adapter);
+        } else {
+            getPersistenceSession().loadObjectInTransaction(oid);
+        }
         return adapter.getObject();
     }
 

@@ -258,7 +258,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
             } else {
-                LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
+                LOG.info("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
             }
         }
     }

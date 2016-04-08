@@ -24,8 +24,8 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 
 |xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`o.a.i.applib.` +
 `services.bookmark` +
-`BookmarkService`]
-|Convert object reference to a serializable "bookmark", and vice versa
+`BookmarkService2`]
+|Convert object reference to a serializable "bookmark", and vice versa.
 |`BookmarkServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``

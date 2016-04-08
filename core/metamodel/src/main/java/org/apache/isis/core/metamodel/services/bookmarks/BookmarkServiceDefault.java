@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
@@ -42,32 +42,49 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class BookmarkServiceDefault implements BookmarkService, ConfigurationServiceAware,
+public class BookmarkServiceDefault implements BookmarkService2, ConfigurationServiceAware,
         PersistenceSessionServiceAware {
+
     private PersistenceSessionService persistenceSessionService;
 
     // //////////////////////////////////////
 
     @Programmatic
     @Override
-    public Object lookup(final BookmarkHolder bookmarkHolder) {
+    public Object lookup(
+            final BookmarkHolder bookmarkHolder,
+            final FieldResetPolicy fieldResetPolicy) {
         Bookmark bookmark = bookmarkHolder.bookmark();
-        return bookmark != null? lookup(bookmark): null;
+        return bookmark != null? lookup(bookmark, fieldResetPolicy): null;
+    }
+
+    @Programmatic
+    @Override
+    public Object lookup(final BookmarkHolder bookmarkHolder) {
+        return lookup(bookmarkHolder, FieldResetPolicy.RESET);
     }
 
     // //////////////////////////////////////
 
     @Programmatic
     @Override
-    public Object lookup(final Bookmark bookmark) {
+    public Object lookup(
+            final Bookmark bookmark,
+            final FieldResetPolicy fieldResetPolicy) {
         if(bookmark == null) {
             return null;
         }
         try {
-            return persistenceSessionService.lookup(bookmark);
+            return persistenceSessionService.lookup(bookmark, fieldResetPolicy);
         } catch(ObjectNotFoundException ex) {
             return null;
         }
+    }
+
+    @Programmatic
+    @Override
+    public Object lookup(final Bookmark bookmark) {
+        return lookup(bookmark, FieldResetPolicy.RESET);
     }
 
     // //////////////////////////////////////
@@ -75,8 +92,18 @@ public class BookmarkServiceDefault implements BookmarkService, ConfigurationSer
     @SuppressWarnings("unchecked")
     @Programmatic
     @Override
+    public <T> T lookup(
+            final Bookmark bookmark,
+            final FieldResetPolicy fieldResetPolicy,
+            Class<T> cls) {
+        return (T) lookup(bookmark, fieldResetPolicy);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Programmatic
+    @Override
     public <T> T lookup(final Bookmark bookmark, Class<T> cls) {
-        return (T) lookup(bookmark);
+        return (T) lookup(bookmark, FieldResetPolicy.RESET, cls);
     }
 
     // //////////////////////////////////////

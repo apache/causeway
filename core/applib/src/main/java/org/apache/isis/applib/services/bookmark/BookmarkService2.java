@@ -29,33 +29,24 @@ import org.apache.isis.applib.annotation.Programmatic;
  * automatically registered and available for use; no configuration is required.
  * </p>
  */
-public interface BookmarkService {
+public interface BookmarkService2 extends BookmarkService {
+
+    enum FieldResetPolicy {
+        RESET,
+        DONT_RESET
+    }
+
+    @Programmatic
+    Object lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy fieldResetPolicy);
+
+    @Programmatic
+    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
 
     /**
-     * @deprecated - use {@link BookmarkService2#lookup(BookmarkHolder, BookmarkService2.FieldResetPolicy)} instead.
+     * As {@link #lookup(Bookmark, FieldResetPolicy)}, but downcasting to the specified type.
      */
-    @Deprecated
     @Programmatic
-    Object lookup(BookmarkHolder bookmarkHolder);
+    <T> T lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy, Class<T> cls);
 
-    /**
-     * @deprecated - use {@link BookmarkService2#lookup(Bookmark, BookmarkService2.FieldResetPolicy)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    Object lookup(Bookmark bookmark);
 
-    /**
-     * @deprecated - use {@link BookmarkService2#lookup(Bookmark, BookmarkService2.FieldResetPolicy, Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> T lookup(Bookmark bookmark, Class<T> cls);
-
-    @Programmatic
-    Bookmark bookmarkFor(Object domainObject);
-
-    @Programmatic
-    Bookmark bookmarkFor(Class<?> cls, String identifier);
-    
 }

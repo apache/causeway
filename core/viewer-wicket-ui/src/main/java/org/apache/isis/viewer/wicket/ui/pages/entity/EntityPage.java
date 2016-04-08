@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.pages.entity;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -180,8 +178,15 @@ public class EntityPage extends PageAbstract {
      */
     @Override
     protected void onBeforeRender() {
-        this.model.load(ConcurrencyChecking.NO_CHECK);
-        super.onBeforeRender();
+        ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        EntityPage.this.model.load(ConcurrencyChecking.NO_CHECK);
+                        EntityPage.super.onBeforeRender();
+                    }
+                }
+        );
     }
 
     private DeploymentType getDeploymentType() {
