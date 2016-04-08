@@ -580,6 +580,44 @@ otherwise be part of the Apache Isis metamodel (and thus show up in the UI). +
 |video::3n_70HJ23uY[youtube,width="560px",height="315px"]
 
 
+|===
+
+
+
+== View Models
+
+
+[cols="2a,2a"]
+|===
+
+
+|How to write a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], holding references to two domain objects.+
+(v1.12.0)
+
+|video::puG-pzxRSd0[youtube,width="560px",height="315px"]
+
+
+
+|Updating the title, icon and layout of a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model].+
+(v1.12.0)
+
+|video::tdBkmA2CCZY[youtube,width="560px",height="315px"]
+
+
+
+|How to expose information from underlying domain entities referenced by a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model] using derived properties.+
+(v1.12.0)
+
+|video::TKF0FB_od00[youtube,width="560px",height="315px"]
+
+
+
+|Adding an action to a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], and adjusting the layout using custom CSS.+
+(v1.12.0)
+
+|video::TMMeVhRNi8A[youtube,width="560px",height="315px"]
+
+
 
 |===
 
