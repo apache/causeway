@@ -41,6 +41,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -1592,7 +1593,7 @@ public class PersistenceSession implements
                             final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
                         } else {
-                            LOG.warn("concurrency conflict detected but suppressed, on " + recreatedOid + " (" + otherVersion + ")");
+                            LOG.info("concurrency conflict detected but suppressed, on " + recreatedOid + " (" + otherVersion + ")");
                         }
                     }
                 }
@@ -2090,7 +2091,7 @@ public class PersistenceSession implements
                     getCurrentTransaction().setAbortCause(abortCause);
 
                 } else {
-                    LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion
+                    LOG.info("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion
                             + ")");
                 }
             }
@@ -2309,8 +2310,10 @@ public class PersistenceSession implements
 
 
     @Override
-    public Object lookup(Bookmark bookmark) {
-        return new DomainObjectContainerResolve().lookup(bookmark);
+    public Object lookup(
+            final Bookmark bookmark,
+            final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
+        return new DomainObjectContainerResolve().lookup(bookmark, fieldResetPolicy);
     }
 
     @Override

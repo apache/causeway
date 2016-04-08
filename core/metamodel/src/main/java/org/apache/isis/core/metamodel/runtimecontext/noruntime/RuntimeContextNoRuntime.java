@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
@@ -124,7 +125,9 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public Object lookup(Bookmark bookmark) {
+            public Object lookup(
+                    final Bookmark bookmark,
+                    final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 

@@ -25,6 +25,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
@@ -137,8 +138,10 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public Object lookup(Bookmark bookmark) {
-                return new DomainObjectContainerResolve().lookup(bookmark);
+            public Object lookup(
+                    final Bookmark bookmark,
+                    final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
+                return new DomainObjectContainerResolve().lookup(bookmark, fieldResetPolicy);
             }
 
 
