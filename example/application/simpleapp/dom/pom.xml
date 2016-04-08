@@ -183,7 +183,7 @@
                             <dependency>
                                 <groupId>com.google.guava</groupId>
                                 <artifactId>guava</artifactId>
-                                <version>19.0.20150826</version>
+                                <version>19.0</version>
                             </dependency>
                             <dependency>
                                 <groupId>org.hsqldb</groupId>
