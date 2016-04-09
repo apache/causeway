@@ -46,17 +46,19 @@ We use environment variables to parameterize as many of the steps as possible.  
 [source,bash]
 ----
 cd core
-export ISISTMP=/c/tmp              # <1>
+export ISISTMP=/c/tmp                               # <1>
 export ISISDEV=1.14.0-SNAPSHOT
 export ISISREL=1.13.0
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISJIRA=ISIS-9999          # <2>
+export ISISJIRA=ISIS-9999                           # <2>
+export CATALINA_HOME=/c/java/apache-tomcat-8.0.30   # <3>
 
 env | grep ISIS | sort
 ----
 <1> adjust by platform
 <2> set to an "umbrella" ticket for all release activities.  (One should exist already, xref:cgcom.adoc#_cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
+<3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
 
 Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for re-releasing following an xref:cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] releases.
 
@@ -444,7 +446,7 @@ popd
 +
 [source,bash]
 ----
-cp webapps/target/simpleapp.war $CATALINA_HOME/webapps/ROOT.war
+cp webapp/target/simpleapp.war $CATALINA_HOME/webapps/ROOT.war
 ----
 
 Check the about page and confirm built against non-SNAPSHOT versions of the Apache Isis jars.

@@ -169,7 +169,7 @@ You also need to know that ASF's publishing script work from the 'asf-site' bran
 git checkout asf-site
 ----
 
-=== Publishing
+=== Publishing (full build)
 
 Back in the `adocs/documentation` directory of the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo, run:
 
@@ -195,6 +195,8 @@ sh publish.sh "ISIS-nnnn: a custom commit message"
 
 Behind the scenes this just calls `mvn clean install -Dmessage=...`.
 
+It's also possible to omit the message, in which case `publish.sh` will reuse the most recent commit message from the main `isis.git` repo.
+
 Pushing the commits (in the `isis-site.git` directory, of course) will publishing the changes:
 
 [source,bash]
@@ -203,3 +205,17 @@ git push
 ----
 
 Double check at http://isis.apache.org[isis.apache.org].
+
+
+
+
+=== Publishing (partial build)
+
+If none of the guides have been changed, and if you have run the full rebuild recently, then you can skip the generation of PDFs using:
+
+[source,bash]
+----
+mvn install -Dskip.pdf -D"ISIS-nnnn: a custom commit message"
+----
+
+The `clean` goal *must not* be included though (else all the guides will disappear from the site content).
