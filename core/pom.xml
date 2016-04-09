@@ -108,7 +108,7 @@
         <log4j.version>1.2.17</log4j.version>
 
         <joda-time.version>2.9.1</joda-time.version>
-        <guava.version>19.0.20150826</guava.version>
+        <guava.version>19.0</guava.version>
 
         <hamcrest.version>1.3</hamcrest.version>
 

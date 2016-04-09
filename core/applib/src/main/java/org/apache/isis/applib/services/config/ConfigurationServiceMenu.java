@@ -36,8 +36,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
         nature = NatureOfService.VIEW_MENU_ONLY
 )
 @DomainServiceLayout(
-        named = "Prototyping",
-        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+        menuBar = DomainServiceLayout.MenuBar.TERTIARY,
         menuOrder = "500.900"
 )
 public class ConfigurationServiceMenu {
@@ -57,7 +56,7 @@ public class ConfigurationServiceMenu {
             cssClassFa = "fa-wrench"
     )
     @MemberOrder(sequence = "500.900.1")
-    public Set<ConfigurationProperty> allConfigurationProperties(){
+    public Set<ConfigurationProperty> configuration(){
         return configurationService.allProperties();
     }
 

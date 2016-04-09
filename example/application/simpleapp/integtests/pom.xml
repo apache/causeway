@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>1.12.0-SNAPSHOT</version>
+        <version>1.13.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>simpleapp-integtests</artifactId>
@@ -123,7 +123,7 @@
                             <dependency>
                                 <groupId>com.google.guava</groupId>
                                 <artifactId>guava</artifactId>
-                                <version>16.0.1</version>
+                                <version>19.0</version>
                             </dependency>
                         </dependencies>
                         <executions>
