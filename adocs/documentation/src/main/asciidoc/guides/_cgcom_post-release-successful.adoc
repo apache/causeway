@@ -418,9 +418,13 @@ sh forsub.sh sh bumpver_isis.sh 1.13.0
 
 * update the README for each repository
 
-** in the "How to Configure/Use" section, the version referenced in the `pom.xml`, and for the -SNAPSHOT
-** the "Change Log" section
-** the "Release to Maven Central" section at the end
+** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
+
+*** replace 1.13.0-SNAPSHOT with 1.14.0-SNAPSHOT
+*** replace 1.12.0          with 1.13.0
+*** replace 1.11.0          with 1.12.0
+
+** update the "Change Log" section
 
 * release to mvn central (contains a sanity check before hand that everything compiles): +
 +
