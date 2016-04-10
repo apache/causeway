@@ -101,8 +101,17 @@ public class RepositoryServiceDefault
         persistenceSessionService.makePersistent(adapter);
     }
 
-    @Override
     @Programmatic
+    @Override
+    public void persistIfNotAlready(final Object object) {
+        if (isPersistent(object)) {
+            return;
+        }
+        persist(object);
+    }
+
+    @Programmatic
+    @Override
     public void remove(final Object domainObject) {
         removeIfNotAlready(domainObject);
     }

@@ -61,19 +61,44 @@ public interface RepositoryService {
     boolean isPersistent(Object domainObject);
 
     /**
-     * Persist the specified object (or do nothing if already persistent).
-     *
+     * Persist the specified transient object.
+     * 
      * <p>
      * It is recommended that the object be initially instantiated using
-     * {@link org.apache.isis.applib.DomainObjectContainer#newTransientInstance(Class)}.  However, the framework will also
-     * handle the case when the object is simply <i>new()</i>ed up.
+     * {@link #newTransientInstance(Class)}.  However, the framework will also
+     * handle the case when the object is simply <i>new()</i>ed up.  See
+     * {@link #newTransientInstance(Class)} for more information.
+     * 
+     * <p>
+     * Throws an exception if object is already persistent, or if the object
+     * is not yet known to the framework.
+     * 
+     * @param domainObject
+     * 
+     * @see #newTransientInstance(Class)
+     * @see #isPersistent(Object)
+     * @see #persistIfNotAlready(Object)
+     */
+    @Programmatic
+    void persist(Object domainObject);
+    
+    /**
+     * Persist the specified object (or do nothing if already persistent).
+     * 
+     * <p>
+     * It is recommended that the object be initially instantiated using
+     * {@link #newTransientInstance(Class)}.  However, the framework will also
+     * handle the case when the object is simply <i>new()</i>ed up.  See
+     * {@link #newTransientInstance(Class)} for more information.
      *
-     * @see org.apache.isis.applib.DomainObjectContainer#newTransientInstance(Class)
+     * @param domainObject
+     * 
+     * @see #newTransientInstance(Class)
      * @see #isPersistent(Object)
      * @see #persist(Object)
      */
     @Programmatic
-    void persist(Object domainObject);
+    void persistIfNotAlready(Object domainObject);
 
     /**
      * Deletes the domain object but only if is persistent.

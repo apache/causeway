@@ -291,7 +291,7 @@ public interface DomainObjectContainer {
     void persist(Object domainObject);
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persistIfNotAlready(Object)} instead.
      */
     @Deprecated
     @Programmatic
