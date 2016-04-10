@@ -18,34 +18,37 @@
  */
 package org.apache.isis.viewer.wicket.viewer.imagecache;
 
-import images.Images;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
+
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
+import images.Images;
+
 /**
- * Caches images loaded up the <tt>images</tt> package (using the {@link Images}
+ * Caches images loaded either from the same package as the specified object, or from the <tt>images</tt> package (using the {@link Images} otherwise.
  * class).
  * 
  * <p>
- * Searches for a fixed set of suffixes: {@link #IMAGE_SUFFICES}.
+ * Searches for a fixed set of suffixes: <code>png, gif, jpeg, jpg, svg</code>.
  */
 @Singleton
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     private static final long serialVersionUID = 1L;
     
-    private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
+    private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg", ".svg");
     private static final String FALLBACK_IMAGE = "Default.png";
 
     private final Map<ImageResourceCacheKey, ResourceReference> resourceReferenceByKey = Maps.newConcurrentMap();

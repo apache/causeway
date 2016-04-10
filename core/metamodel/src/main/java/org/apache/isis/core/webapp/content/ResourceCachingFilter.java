@@ -56,15 +56,7 @@ import javax.servlet.http.HttpServletResponse;
  * ...
  * &lt;filter-mapping>
  *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.js&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.css&lt;/url-pattern>
- * &lt;/filter-mapping>
- * &lt;filter-mapping>
- *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
- *   &lt;url-pattern>*.jpg&lt;/url-pattern>
  * &lt;/filter-mapping>
  * &lt;filter-mapping>
  *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
@@ -72,7 +64,31 @@ import javax.servlet.http.HttpServletResponse;
  * &lt;/filter-mapping>
  * &lt;filter-mapping>
  *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;url-pattern>*.jpg&lt;/url-pattern>
+ * &lt;/filter-mapping>
+ * &lt;filter-mapping>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;url-pattern>*.jpeg&lt;/url-pattern>
+ * &lt;/filter-mapping>
+ * &lt;filter-mapping>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
  *   &lt;url-pattern>*.gif&lt;/url-pattern>
+ * &lt;/filter-mapping>
+ * &lt;filter-mapping>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;url-pattern>*.svg&lt;/url-pattern>
+ * &lt;/filter-mapping>
+ * &lt;filter-mapping>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;url-pattern>*.js&lt;/url-pattern>
+ * &lt;/filter-mapping>
+ * &lt;filter-mapping>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;url-pattern>*.html&lt;/url-pattern>
+ * &lt;/filter-mapping>
+ * &lt;filter-mapping>
+ *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
+ *   &lt;url-pattern>*.swf&lt;/url-pattern>
  * &lt;/filter-mapping>
  * </pre>
  */

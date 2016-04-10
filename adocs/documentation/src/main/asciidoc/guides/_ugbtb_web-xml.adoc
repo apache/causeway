@@ -186,7 +186,15 @@ Its mapping is:
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>Resource</servlet-name>
+    <url-pattern>*.jpeg</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>Resource</servlet-name>
     <url-pattern>*.gif</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>Resource</servlet-name>
+    <url-pattern>*.svg</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>Resource</servlet-name>
@@ -296,10 +304,6 @@ Its mapping is:
 ----
 <filter-mapping>
     <filter-name>ResourceCachingFilter</filter-name>
-    <url-pattern>*.js</url-pattern>
-</filter-mapping>
-<filter-mapping>
-    <filter-name>ResourceCachingFilter</filter-name>
     <url-pattern>*.css</url-pattern>
 </filter-mapping>
 <filter-mapping>
@@ -312,11 +316,23 @@ Its mapping is:
 </filter-mapping>
 <filter-mapping>
     <filter-name>ResourceCachingFilter</filter-name>
+    <url-pattern>*.jpeg</url-pattern>
+</filter-mapping>
+<filter-mapping>
+    <filter-name>ResourceCachingFilter</filter-name>
     <url-pattern>*.gif</url-pattern>
 </filter-mapping>
 <filter-mapping>
     <filter-name>ResourceCachingFilter</filter-name>
+    <url-pattern>*.svg</url-pattern>
+</filter-mapping>
+<filter-mapping>
+    <filter-name>ResourceCachingFilter</filter-name>
     <url-pattern>*.html</url-pattern>
+</filter-mapping>
+<filter-mapping>
+    <filter-name>ResourceCachingFilter</filter-name>
+    <url-pattern>*.js</url-pattern>
 </filter-mapping>
 <filter-mapping>
     <filter-name>ResourceCachingFilter</filter-name>

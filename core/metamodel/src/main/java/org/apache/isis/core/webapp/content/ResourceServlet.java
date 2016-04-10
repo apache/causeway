@@ -92,12 +92,8 @@ public class ResourceServlet extends HttpServlet {
     }
 
     private static String guessContentType(String servletPath) {
-        if(servletPath.endsWith(".js")) {
-            return "application/x-javascript";
-        } else if(servletPath.endsWith(".css")) {
+        if(servletPath.endsWith(".css")) {
             return "text/css";
-        } else if(servletPath.endsWith(".html")) {
-            return "text/html";
         } else if(servletPath.endsWith(".png")) {
             return "image/png";
         } else if(servletPath.endsWith(".jpg")) {
@@ -106,6 +102,14 @@ public class ResourceServlet extends HttpServlet {
             return "image/jpeg";
         } else if(servletPath.endsWith(".gif")) {
             return "image/gif";
+        } else if(servletPath.endsWith(".svg")) {
+            return "image/svg+xml";
+        } else if(servletPath.endsWith(".js")) {
+            return "application/x-javascript";
+        } else if(servletPath.endsWith(".html")) {
+            return "text/html";
+        } else if(servletPath.endsWith(".swf")) {
+            return "application/x-shockwave-flash";
         }
         return null;
     }
