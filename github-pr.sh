@@ -103,8 +103,13 @@ echo "username         : $username"
 echo "repo_full_name   : $repo_full_name"
 echo "repo_clone_url   : $repo_clone_url"
 echo "branch_name_fork : $branch_name_fork"
-
 echo ""
+
+if [ "x$repo_full_name" = "xnull" ]; then
+    die "Could not determine the repo to merge from"
+fi
+
+
 echo "merging into: $branch_name_temp"
 echo ""
 
