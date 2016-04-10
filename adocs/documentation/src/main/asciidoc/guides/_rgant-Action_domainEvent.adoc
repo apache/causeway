@@ -109,7 +109,7 @@ The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the g
 @Programmatic
 @com.google.common.eventbus.Subscribe
 public void on(ActionDomainEvent ev) {
-    switch(ev.getPhase()) {
+    switch(ev.getEventPhase()) {
         case HIDE:
             // call ev.hide() or ev.veto("") to hide the action
             break;

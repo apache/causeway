@@ -97,14 +97,14 @@ The subscriber's method is called (up to) 5 times:
 * steps to perform prior to the property being modified
 * steps to perform after the property has been modified.
 
-The subscriber can distinguish these by calling `ev.getPhase()`. Thus the general form is:
+The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the general form is:
 
 [source,java]
 ----
 @Programmatic
 @com.google.common.eventbus.Subscribe
 public void on(PropertyDomainEvent ev) {
-    switch(ev.getPhase()) {
+    switch(ev.getEventPhase()) {
         case HIDE:
             // call ev.hide() or ev.veto("") to hide the property
             break;
