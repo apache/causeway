@@ -114,14 +114,14 @@ The subscriber's method is called (up to) 5 times:
 * steps to perform prior to the collection being added to/removed from
 * steps to perform after the collection has been added to/removed from.
 
-The subscriber can distinguish these by calling `ev.getPhase()`. Thus the general form is:
+The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the general form is:
 
 [source,java]
 ----
 @Programmatic
 @com.google.common.eventbus.Subscribe
 public void on(CollectionDomainEvent ev) {
-    switch(ev.getPhase()) {
+    switch(ev.getEventPhase()) {
         case HIDE:
             // call ev.hide() or ev.veto("") to hide the collection
             break;
