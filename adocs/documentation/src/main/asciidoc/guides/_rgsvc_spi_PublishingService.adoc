@@ -6,7 +6,7 @@
 
 
 
-The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
+The `PublishingService2` API (the `PublishingService2` subinterface has been added in `1.13.0-SNAPSHOT`) is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
 
 
 
@@ -16,18 +16,20 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface PublishingService {
+public interface PublishingService2 {
     public void publish(
         EventMetadata metadata,                                 // <1>
         EventPayload payload);                                  // <2>
+    public void republish(Command);                             // <3>
     @Deprecated
-    @Programmatic
-    void setEventSerializer(EventSerializer eventSerializer);   // <3>
+    void setEventSerializer(EventSerializer eventSerializer);   // <4>
 }
 ----
 <1> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`], date/time etc
 <2> for published actions, an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, an `EventPayloadForObjectChanged` (or subclass thereof)
-<3> injects in the xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
+<3> (`1.13.0-SNAPSHOT`) allow a `Command` representing an action to be republished by the application (eg if an error occurred).  Note that this relies upon the `Command#getMemento()` to
+return serialized xref:rgcms.adoc#_rgcms_schema-aim[action invocation memento].
+<4> injects in the xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
 
 
 Typically implementations will use the injected `EventSerializer` to convert the metadata and payload into a form to be published:

@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.publish;
 
 
 import org.apache.isis.applib.annotation.Hidden;
-
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Will be called whenever an publishable entity has changed its state, or an published action has been invoked.
@@ -40,10 +40,10 @@ import org.apache.isis.applib.annotation.Hidden;
  */
 public interface PublishingService {
     
-    @Hidden
-    public void publish(EventMetadata metadata, EventPayload payload);
+    @Programmatic
+    void publish(EventMetadata metadata, EventPayload payload);
     
-    public static class Stderr implements PublishingService {
+    class Stderr implements PublishingService {
 
         private EventSerializer eventSerializer = new EventSerializer.Simple();
 
@@ -63,6 +63,7 @@ public interface PublishingService {
     /**
      * @deprecated  - not every implementation will use an {@link EventSerializer}, so this ought not to have been defined in the interface.
      */
+    @Programmatic
     @Deprecated
     void setEventSerializer(EventSerializer eventSerializer);
 }
