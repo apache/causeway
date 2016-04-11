@@ -343,7 +343,8 @@ public final class ActionInvocationMementoDtoUtils {
             return null;
         }
         final ValueDto valueDto = valueDtoFor(paramDto);
-        switch(paramDto.getParameterType()) {
+        final ValueType parameterType = paramDto.getParameterType();
+        switch(parameterType) {
         case STRING:
             return (T) valueDto.getString();
         case BYTE:
