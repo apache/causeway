@@ -1,0 +1,60 @@
+[[_rgsvc_spi_CommandMementoService]]
+= `CommandMementoService` (`1.13.0-SNAPSHOT`)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `CommandMementoService` (`1.13.0-SNAPSHOT`) is responsible for creating a memento of a current action invocation,
+to store in the `Command` object (from xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`]).
+This memento can be reified for use either in xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[background command]s, or to be published using xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+
+
+
+
+== SPI & Implementation
+
+The SPI of the service is:
+
+[source,java]
+----
+public interface CommandMementoService {
+    @Programmatic
+    ActionInvocationMemento asActionInvocationMemento(
+                        Method m, Object domainObject, Object[] args);
+}
+----
+
+The default implementation is provided by core (`o.a.i.core.runtime.services.command.CommandMementoServiceDefault`).
+
+
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `CommandMementoService` is automatically registered (it is annotated with `@DomainService`) so no
+further configuration is required.
+
+To use an alternative implementation, use
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+
+
+
+== Related Services
+
+This service is used when invoking an action, the memento being copied onto the `Command`.
+If the action turns out to be published, then the memento is copied down from the `Command`
+ and may be used by the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] implementation.
+
+In addition, the service is also called by xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`] in order to create a memento
+for a command that can then be run in the background at some time in the future.
+
+
+
+
+
+
+

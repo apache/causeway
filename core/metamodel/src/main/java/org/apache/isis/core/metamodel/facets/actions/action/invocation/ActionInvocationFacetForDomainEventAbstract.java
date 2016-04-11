@@ -39,10 +39,10 @@ import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandMementoService;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
@@ -339,12 +339,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     if(command.getMemento() == null) {
                         // similarly, guard here to deal with subsequent contributed/mixin actions.
 
-                        // the background service is used here merely as a means to capture an invocation memento
-                        final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
-                        if(backgroundService != null) {
+                        final CommandMementoService commandMementoService = getServicesInjector().lookupService(CommandMementoService.class);
+                        if(commandMementoService != null) {
                             final Object targetObject = unwrap(targetAdapter);
                             final Object[] args = CommandUtil.objectsFor(arguments);
-                            final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+                            final ActionInvocationMemento aim = commandMementoService.asActionInvocationMemento(method, targetObject, args);
 
                             if(aim != null) {
                                 command.setMemento(aim.asMementoString());

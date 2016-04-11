@@ -34,6 +34,17 @@ The table below summarizes the application layer SPIs defined by Apache Isis.  I
 `JdoRepository`
 
 
+|xref:rgsvc.adoc#_rgsvc_api_CommandContext[`o.a.i.applib.` +
+`services.command` +
+`CommandMementoService`]
+|(`1.13.0-SNAPSHOT`) Creates memento of current action invocation, for use either as a reified command or for implementatins of the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|`CommandMemento-` +
+`ServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtim``
+|
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_CommandService[`o.a.i.applib.` +
 `services.command.spi` +
 `CommandService`]
@@ -73,5 +84,6 @@ Key:
 
 
 include::_rgsvc_spi_BackgroundCommandService.adoc[leveloffset=+1]
+include::_rgsvc_api_CommandMementoService.adoc[leveloffset=+1]
 include::_rgsvc_spi_CommandService.adoc[leveloffset=+1]
 include::_rgsvc_api_HomePageProviderService.adoc[leveloffset=+1]

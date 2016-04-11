@@ -18,9 +18,6 @@ package org.apache.isis.core.runtime.services.background;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import com.google.common.collect.Lists;
 
@@ -76,13 +73,6 @@ public class BackgroundServiceDefault implements BackgroundService {
         this.mementoService = mementoService.withNoEncoding();
     }
     
-    // //////////////////////////////////////
-
-    
-    @Programmatic
-    @PostConstruct
-    public void init(Map<String,String> props) {
-    }
 
     // //////////////////////////////////////
 
@@ -213,42 +203,9 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Programmatic
     @Override
     public ActionInvocationMemento asActionInvocationMemento(Method method, Object domainObject, Object[] args) {
-        
-        final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(method);
-        final ObjectMember member = targetObjSpec.getMember(method);
-        if(member == null) {
-            return null;
-        }
-        if(!(member instanceof ObjectAction)) {
-            return null;
-        }
-
-        final ObjectAction action = (ObjectAction) member;
-        final String actionIdentifier = CommandUtil.actionIdentifierFor(action);
-        
-        final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
-
-        final List<Class<?>> argTypes = Lists.newArrayList();
-        final List<Object> argObjs = Lists.newArrayList();
-        CommandUtil.buildMementoArgLists(mementoService, bookmarkService, method, args, argTypes, argObjs);
-
-        final ActionInvocationMemento aim = 
-                new ActionInvocationMemento(mementoService, 
-                        actionIdentifier, 
-                        domainObjectBookmark,
-                        argTypes,
-                        argObjs);
-       
-        return aim;
+        throw new RuntimeException("Replaced by CommandMementoService");
     }
 
-
-    /**
-     * Not API
-     */
-    ActionInvocationMemento newActionInvocationMemento(String mementoStr) {
-        return new ActionInvocationMemento(mementoService, mementoStr);
-    }
 
     // //////////////////////////////////////
 
@@ -258,7 +215,6 @@ public class BackgroundServiceDefault implements BackgroundService {
     @javax.inject.Inject
     private BookmarkService bookmarkService;
 
-    @javax.inject.Inject
     private CommandContext commandContext;
 
     /**
