@@ -17,9 +17,12 @@
 package org.apache.isis.applib.services.command;
 
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
+import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
 
 /**
  * Submit actions to be invoked in the background.
@@ -41,5 +44,15 @@ public interface CommandMementoService {
 
     @Programmatic
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
+
+    @Programmatic
+    EventMetadata newEventMetadata(
+            final String currentUser,
+            final Timestamp timestamp,
+            final int eventSequence);
+
+    @Programmatic
+    ActionInvocationMementoDto asActionInvocationMementoDto(
+            final EventMetadata metadata);
 
 }

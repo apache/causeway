@@ -17,6 +17,7 @@
 package org.apache.isis.core.runtime.services.command;
 
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.CommandMementoService;
+import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -42,6 +44,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -139,6 +142,20 @@ public class CommandMementoServiceDefault implements CommandMementoService {
     ActionInvocationMemento newActionInvocationMemento(String mementoStr) {
         return new ActionInvocationMemento(mementoService, mementoStr);
     }
+
+    // //////////////////////////////////////
+
+    @Override
+    public EventMetadata newEventMetadata(
+            final String currentUser, final Timestamp timestamp, final int eventSequence) {
+        throw new RuntimeException("not yet implemented");
+    }
+
+    @Override
+    public ActionInvocationMementoDto asActionInvocationMementoDto(final EventMetadata metadata) {
+        throw new RuntimeException("not yet implemented");
+    }
+
 
     // //////////////////////////////////////
 
