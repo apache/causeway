@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -87,7 +86,9 @@ public interface ActionInvocationFacet extends Facet {
         }
 
         /**
-         * Undeprecated ... isn't necessarily the same as Command because Command only ever wraps the outer-most action, whereas this could be for an action invoked via the WrapperFactory.
+         * Undeprecated ... isn't necessarily the same as the info held in Command because
+         * Command only ever wraps the outer-most action, whereas this could be for an action invoked
+         * via the WrapperFactory.
          */
         public ObjectAdapter getTarget() {
             return target;
@@ -98,7 +99,9 @@ public interface ActionInvocationFacet extends Facet {
         }
 
         /**
-         * Undeprecated ... isn't necessarily the same as Command because Command only ever wraps the outer-most action, whereas this could be for an action invoked via the WrapperFactory.
+         * Undeprecated ... isn't necessarily the same as the info held in Command because
+         * Command only ever wraps the outer-most action, whereas this could be for an action invoked
+         * via the WrapperFactory.
          *
          * This is the FacetedMethod for the {@link #getAction()}.
          */
@@ -109,11 +112,12 @@ public interface ActionInvocationFacet extends Facet {
         public List<ObjectAdapter> getParameters() {
             return parameters;
         }
-        
+
         /**
-         * deprecated since part of {@link #getCommand()}
+         * Undeprecated ... isn't necessarily the same as the info held in Command because
+         * Command only ever wraps the outer-most action, whereas this could be for an action invoked
+         * via the WrapperFactory.
          */
-        @Deprecated
         public ObjectAdapter getResult() {
             return result;
         }
@@ -124,8 +128,11 @@ public interface ActionInvocationFacet extends Facet {
     }
     
     /**
-     * TODO...
-     * @deprecated - should instead use the {@link CommandContext} request.
+     * This thread-local is populated by ActionInvocationFacet, but is set to null when the action is
+     * published.  Note that if the WrapperFactory is in use then this can possibly many time
+     * within a calling action.  Therefore the contents of this thread-local are not necessarily
+     * the same as the info held on the CommandContext (which always holds the outer-most action
+     * details).
      */
     @Deprecated ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<>();
 
