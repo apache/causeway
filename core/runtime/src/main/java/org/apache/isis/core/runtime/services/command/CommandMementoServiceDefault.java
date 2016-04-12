@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandMementoService;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -147,12 +148,14 @@ public class CommandMementoServiceDefault implements CommandMementoService {
 
     @Override
     public EventMetadata newEventMetadata(
-            final String currentUser, final Timestamp timestamp, final int eventSequence) {
+            final Command command,
+            final String currentUser, final Timestamp timestamp, final String sequenceName) {
         throw new RuntimeException("not yet implemented");
     }
 
     @Override
-    public ActionInvocationMementoDto asActionInvocationMementoDto(final EventMetadata metadata) {
+    public ActionInvocationMementoDto asActionInvocationMementoDto(
+            final EventMetadata metadata) {
         throw new RuntimeException("not yet implemented");
     }
 

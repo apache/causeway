@@ -28,7 +28,32 @@ import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
+/**
+ * Represents either an action or a property edit.
+ *
+ * <p>
+ *     Note that when invoking an action, other actions may be invoked courtesy of the {@link WrapperFactory}.  These
+ *     "sub-actions" do <i>not</i> modify the contents of the command object; in other words think of the command
+ *     object as representing the outer-most originating action.
+ * </p>
+ *
+ * <p>
+ *     One of the responsibilities of the command is to generate unique sequence numbers for a given transactionId.
+ *     This is done by {@link #next(String)}.  There are three possible sequences that might be generated:
+ *     the sequence of changed domain objects being published by the {@link org.apache.isis.applib.services.publish.PublishingService#publish(EventMetadata, EventPayload)}; the
+ *     sequence of wrapped action invocations (each being published), and finally one or more background commands
+ *     that might be scheduled via the {@link BackgroundService}.
+ * </p>
+ *
+ * <p>
+ *     Known limitation: it isn't, I believe, possible for the outer command to be published and also the inner
+ *     sub-actions; the sub-actions will overwrite the {@link Command#getMemento()} and leave it set to <tt>null</tt>.
+ * </p>
+ */
 public interface Command extends HasTransactionId {
 
     // //////////////////////////////////////

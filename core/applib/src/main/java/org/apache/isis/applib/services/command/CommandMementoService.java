@@ -22,6 +22,9 @@ import java.sql.Timestamp;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
 
 /**
@@ -45,14 +48,30 @@ public interface CommandMementoService {
     @Programmatic
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
+    /**
+     *
+     * @param command
+     * @param currentUser - as provided by {@link UserService} (might change within an action if {@link SudoService} has been used).
+     * @param timestamp - as obtained from clock (might want multiple events to all have the same clock, eg publishing muliple changed objects)
+     * @param sequenceName - to create unique events per {@link Command#getTransactionId()}; see {@link EventMetadata#getId()}.
+     */
     @Programmatic
     EventMetadata newEventMetadata(
+            final Command command,
             final String currentUser,
             final Timestamp timestamp,
-            final int eventSequence);
+            final String sequenceName);
 
+    /**
+     * For {@link EventMetadata event}s representing an {@link org.apache.isis.applib.services.publish.EventType#ACTION_INVOCATION action invocation}, converts to an {@link ActionInvocationMementoDto}.
+     *
+     * <p>
+     *     The additional information needed for the {@link ActionInvocationMementoDto DTO} (namely the action arguments and
+     *     result) can be obtained from the thread-local in <tt>ActionInvocationFacet</tt>; this thread-local is reset for
+     *     each action invoked (eg for outer action, or for each sub-action invoked via {@link WrapperFactory}).
+     * </p>
+     */
     @Programmatic
-    ActionInvocationMementoDto asActionInvocationMementoDto(
-            final EventMetadata metadata);
+    ActionInvocationMementoDto asActionInvocationMementoDto(final EventMetadata metadata);
 
 }
