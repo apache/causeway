@@ -107,8 +107,10 @@ public class CommandMementoServiceDefault implements CommandMementoService {
         if(member == null) {
             return null;
         }
+
         if(!(member instanceof ObjectAction)) {
-            return null;
+            throw new UnsupportedOperationException(String.format(
+                    "Method %s does not correspond to an action.", method.getName()));
         }
 
         final ObjectAction action = (ObjectAction) member;

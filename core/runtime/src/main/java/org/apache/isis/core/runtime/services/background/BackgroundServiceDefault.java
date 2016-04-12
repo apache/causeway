@@ -17,9 +17,6 @@
 package org.apache.isis.core.runtime.services.background;
 
 import java.lang.reflect.Method;
-import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -27,10 +24,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandMementoService;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
@@ -165,26 +162,15 @@ public class BackgroundServiceDefault implements BackgroundService {
 
                 final ObjectAction action = (ObjectAction) member;
 
-                final String actionIdentifier = CommandUtil.actionIdentifierFor(action);
                 final String targetClassName = CommandUtil.targetClassNameFor(targetAdapter);
                 final String targetActionName = CommandUtil.targetActionNameFor(action);
                 final String targetArgs = CommandUtil.argDescriptionFor(action, adaptersFor(args));
-                
-                final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
-
-                final List<Class<?>> argTypes = Lists.newArrayList();
-                final List<Object> argObjs = Lists.newArrayList();
-                CommandUtil.buildMementoArgLists(mementoService, bookmarkService, proxiedMethod, args, argTypes, argObjs);
 
                 final Command command = commandContext.getCommand();
-                
-                final ActionInvocationMemento aim = 
-                        new ActionInvocationMemento(mementoService, 
-                                actionIdentifier, 
-                                domainObjectBookmark,
-                                argTypes,
-                                argObjs);
-               
+
+                final ActionInvocationMemento aim = commandMementoService
+                        .asActionInvocationMemento(proxyMethod, domainObject, args);
+
                 backgroundCommandService.schedule(aim, command, targetClassName, targetActionName, targetArgs);
                 
                 return null;
@@ -211,6 +197,9 @@ public class BackgroundServiceDefault implements BackgroundService {
 
     @javax.inject.Inject
     private BackgroundCommandService backgroundCommandService;
+
+    @javax.inject.Inject
+    private CommandMementoService commandMementoService;
 
     @javax.inject.Inject
     private BookmarkService bookmarkService;
