@@ -74,8 +74,8 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
 
             command.setTarget(CommandUtil.bookmarkFor(targetAdapter));
             command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-            command.setTargetAction("(edit)");
-            command.setMemberIdentifier("(edit)");
+            command.setTargetAction(Command.TARGET_ACTION_FOR_EDIT);
+            command.setMemberIdentifier(Command.TARGET_ACTION_FOR_EDIT);
 
             command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
             command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);

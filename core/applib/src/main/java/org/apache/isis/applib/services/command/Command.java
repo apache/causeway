@@ -56,6 +56,12 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  */
 public interface Command extends HasTransactionId {
 
+    /**
+     * The value for {@link #getTargetAction()} if this command represents an edit of an object's property
+     * (rather than an action).
+     */
+    String TARGET_ACTION_FOR_EDIT = "(edit)";
+
     // //////////////////////////////////////
     // user (property)
     // //////////////////////////////////////
@@ -116,13 +122,8 @@ public interface Command extends HasTransactionId {
     // //////////////////////////////////////
 
     /**
-     * Holds a string representation of the invoked action, equivalent to
+     * Holds a string representation of the invoked action, or the edited property, equivalent to
      * {@link Identifier#toClassAndNameIdentityString()}.
-     * 
-     * <p>
-     * This property is called 'memberIdentifier' rather than 'actionIdentifier' for
-     * consistency with other services (such as auditing and publishing) that may act on
-     * properties rather than simply just actions.
      */
     public abstract String getMemberIdentifier();
 
@@ -130,7 +131,8 @@ public interface Command extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
+     * Implementation notes: set when the action is invoked (in <tt>ActionInvocationFacet</tt>) or in
+     * property edited (in <tt>PropertySetterFacet</tt>).
      */
     public abstract void setMemberIdentifier(String actionIdentifier);
     
@@ -157,6 +159,10 @@ public interface Command extends HasTransactionId {
     
     /**
      * The human-friendly name of the action invoked on the target object.
+     *
+     * <p>
+     *     If the command represents an edit of a property, then holds the value &quot;{@value TARGET_ACTION_FOR_EDIT}&quot;.
+     * </p>
      */
     public abstract String getTargetAction();
     

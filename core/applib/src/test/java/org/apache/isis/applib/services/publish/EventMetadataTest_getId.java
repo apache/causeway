@@ -19,12 +19,13 @@
 
 package org.apache.isis.applib.services.publish;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.UUID;
 
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class EventMetadataTest_getId {
 
@@ -44,6 +45,37 @@ public class EventMetadataTest_getId {
         assertThat(eventMetadata.getId(), is("1bd8e5d4-2d67-4395-b5e8-d74acd766766.2"));
         assertThat(eventMetadata.getTitle(), is("some title"));
         assertThat(eventMetadata.getEventType(), is(EventType.ACTION_INVOCATION));
+    }
+
+    @Test
+    public void testWithoutSequence() {
+        UUID transactionId = UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766");
+        int sequence = 2;
+
+        EventMetadata eventMetadata = new EventMetadata(transactionId, null, sequence, EventType.ACTION_INVOCATION,
+                null, null, null, null, null, null, null, null, null, null);
+
+        assertThat(eventMetadata.getTransactionId(), is(UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766")));
+        assertThat(eventMetadata.getSequenceName(), is(nullValue()));
+        assertThat(eventMetadata.getSequence(), is(2));
+
+        assertThat(eventMetadata.getId(), is("1bd8e5d4-2d67-4395-b5e8-d74acd766766.2"));
+    }
+
+    @Test
+    public void testWithSequence() {
+        UUID transactionId = UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766");
+        final String sequenceName = "pt";
+        int sequence = 2;
+
+        EventMetadata eventMetadata = new EventMetadata(transactionId, sequenceName, sequence, EventType.ACTION_INVOCATION,
+                null, null, null, null, null, null, null, null, null, null);
+
+        assertThat(eventMetadata.getTransactionId(), is(UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766")));
+        assertThat(eventMetadata.getSequenceName(), is("pt"));
+        assertThat(eventMetadata.getSequence(), is(2));
+
+        assertThat(eventMetadata.getId(), is("1bd8e5d4-2d67-4395-b5e8-d74acd766766.pt.2"));
     }
 
 }
