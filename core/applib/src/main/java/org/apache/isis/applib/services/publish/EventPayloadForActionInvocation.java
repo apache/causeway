@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * No longer in use.
  *
- * @deprecated - replaced by {@link EventPayloadForObject}.
+ * @deprecated
  */
 @Deprecated
 public class EventPayloadForActionInvocation<T> implements EventPayload {
