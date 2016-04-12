@@ -19,17 +19,14 @@
 
 package org.apache.isis.applib.services.publish;
 
-import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * An immutable pojo that simply references some other (persistent) object.
- * 
- * <p>
- * This class is annotated as a domain object for the benefit of the
- * <tt>RestfulObjectsSpecEventSerializer</tt>.
+ * No longer in use.
+ *
+ * @deprecated - replaced by {@link EventPayloadForObject}.
  */
-@NotPersistable
+@Deprecated
 public class EventPayloadForObjectChanged<T> implements EventPayload {
     
     private final T changed;
@@ -42,15 +39,20 @@ public class EventPayloadForObjectChanged<T> implements EventPayload {
     /**
      * Injected by Isis runtime immediately after instantiation.
      */
+    @Deprecated
     @Programmatic
     public void withStringifier(ObjectStringifier stringifier) {
         this.stringifier = stringifier;
     }
 
+    @Deprecated
+    @Programmatic
     public T getChanged() {
         return changed;
     }
 
+    @Deprecated
+    @Programmatic
     public String getClassName() {
         if(stringifier == null) {
             throw new IllegalStateException("ObjectStringifier has not been injected");

@@ -23,18 +23,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * An immutable pojo that captures the information representing an
- * action invocation.
- * 
- * <p>
- * This class is annotated as a domain object for the benefit of the
- * <tt>RestfulObjectsSpecEventSerializer</tt>.
+ * No longer in use.
+ *
+ * @deprecated - replaced by {@link EventPayloadForObject}.
  */
-@NotPersistable
+@Deprecated
 public class EventPayloadForActionInvocation<T> implements EventPayload {
     
     private final Identifier actionIdentifier;
@@ -53,97 +49,146 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
     /**
      * Injected by Isis runtime immediately after instantiation.
      */
+    @Deprecated
     @Programmatic
     public void withStringifier(ObjectStringifier stringifier) {
         this.stringifier = stringifier;
     }
 
+    @Deprecated
     @Programmatic
     public List<? extends Object> getArguments() {
         return arguments;
     }
 
+    @Deprecated
+    @Programmatic
     public T getTarget() {
         return target;
     }
-    
+
+    @Deprecated
+    @Programmatic
     public String getActionName() {
         return actionIdentifier.toFullIdentityString();
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg0() {
         return getArg(0);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg0() {
         return hideArg(0);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg1() {
         return getArg(1);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg1() {
         return hideArg(1);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg2() {
         return getArg(2);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg2() {
         return hideArg(2);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg3() {
         return getArg(3);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg3() {
         return hideArg(3);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg4() {
         return getArg(4);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg4() {
         return hideArg(4);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg5() {
         return getArg(5);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg5() {
         return hideArg(5);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg6() {
         return getArg(6);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg6() {
         return hideArg(6);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg7() {
         return getArg(7);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg7() {
         return hideArg(7);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg8() {
         return getArg(8);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg8() {
         return hideArg(8);
     }
-    
+
+    @Deprecated
+    @Programmatic
     public Object getArg9() {
         return getArg(9);
     }
+    @Deprecated
+    @Programmatic
     public boolean hideArg9() {
         return hideArg(9);
     }
 
+    @Deprecated
+    @Programmatic
     public Object getResult() {
         return result;
     }
+
     private Object getArg(int paramNum) {
         return arguments.size()>paramNum?arguments.get(paramNum):null;
     }
