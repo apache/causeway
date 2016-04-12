@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
 
 public interface PublishingService2 extends PublishingService {
 
@@ -27,7 +27,7 @@ public interface PublishingService2 extends PublishingService {
      * To support implementations that allow the republishing of commands, eg onto an JMS message bus.
      */
     @Programmatic
-    void republish(final Command command);
+    void republish(final ActionInvocationMementoDto aimDto);
     
     class Stderr extends PublishingService.Stderr implements PublishingService2 {
 
