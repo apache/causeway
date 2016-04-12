@@ -623,19 +623,29 @@ public class IsisTransaction implements TransactionScopedComponent {
             final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
         
             final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
-            final String oidStr = getOidMarshaller().marshal(enlistedAdapterOid);
-            final String title = oidStr;
-        
-            final EventType eventTypeFor = eventTypeFor(changeKind);
-            
             final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
             final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
-            
-            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
-        
+
+            final EventMetadata metadata = newEventMetadata(
+                    currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
+
             publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
         return enlistedAdapters;
+    }
+
+    private EventMetadata newEventMetadata(
+            final String currentUser,
+            final Timestamp timestamp,
+            final ChangeKind changeKind,
+            final String enlistedAdapterClass,
+            final Bookmark enlistedTarget) {
+        final String oidStr = enlistedTarget.toString();
+        final String title = oidStr;
+
+        final EventType eventTypeFor = eventTypeFor(changeKind);
+
+        return newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
     private static EventType eventTypeFor(ChangeKind changeKind) {
