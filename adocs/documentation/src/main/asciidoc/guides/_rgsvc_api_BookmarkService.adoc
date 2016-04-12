@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `BookmarkService2` API (the ``BookmarkService2`` subinterface to ``BookmarkService`` was introduced in ``1.12.1-SNAPSHOT``) provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.  This can then in turn be converted to and from a string.
+The `BookmarkService2` API provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.  This can then in turn be converted to and from a string.
 
 For example, a `Customer` object with:
 
@@ -33,7 +33,7 @@ One downside of using ``Bookmark``s is that there is no way for the JDO/DataNucl
 
 == API & Implementation
 
-The API defined by `BookmarkService2` (`1.12.1-SNAPSHOT`) is:
+The API defined by `BookmarkService2` is:
 
 [source,java]
 ----
@@ -54,7 +54,7 @@ public interface BookmarkService2 {
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 }
 ----
-<1> (`1.12.1-SNAPSHOT`) - if the object has already been loaded from the database, then whether to reset its fields.  The default it to `RESET`.
+<1> if the object has already been loaded from the database, then whether to reset its fields.  The default it to `RESET`.
 <2> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
 
 
