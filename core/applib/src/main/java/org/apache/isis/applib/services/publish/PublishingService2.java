@@ -29,14 +29,6 @@ public interface PublishingService2 extends PublishingService {
     @Programmatic
     void republish(final ActionInvocationMementoDto aimDto);
     
-    class Stderr extends PublishingService.Stderr implements PublishingService2 {
-
-        @Override
-        public void republish(Command command) {
-            System.err.println(command.getMemento());
-        }
-
-    }
 }
 
 
