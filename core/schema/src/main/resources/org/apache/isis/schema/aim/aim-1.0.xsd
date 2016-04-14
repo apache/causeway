@@ -38,14 +38,14 @@
             <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
                 <xs:annotation>
                     <xs:documentation>
-                        Introduced in v1.1.  The major version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any 1.1+ instances of this schema.  If missing, assume '0'.
+                        Introduced in v1.1.  The major version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema.  If missing, assume '0'.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
                 <xs:annotation>
                     <xs:documentation>
-                        Introduced in v1.1.  The minor version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any 1.1+ instances of this schema.  If missing, assume '0'.
+                        Introduced in v1.1.  The minor version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema.  If missing, assume '0'.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -76,21 +76,21 @@
                         <xs:element name="timestampComplete" type="xs:dateTime" minOccurs="0" maxOccurs="1">
                             <xs:annotation>
                                 <xs:documentation>
-                                    Introduced in 1.1.  The point in time that this action completed.  The duration that the action took is the difference between 'timestamp' and 'timestampComplete'.  This element is optional for backward compatibility, but will be populated for any 1.1 instances of this schema.
+                                    Introduced in v1.1.  The point in time that this action completed.  The duration that the action took is the difference between 'timestamp' and 'timestampComplete'.  This element is optional for backward compatibility, but will be populated for any v1.1 instances of this schema.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
                         <xs:element name="mixinFqClassName" type="xs:string" minOccurs="0" maxOccurs="1">
                             <xs:annotation>
                                 <xs:documentation>
-                                    Introduced in v1.1.  Populated only for mixin actions, is the fully qualified class name of the mixin type.  This element is optional for backward compatibility, but will be populated for any 1.1+ instances of this schema for to mixin actions.
+                                    Introduced in v1.1.  Populated only for mixin actions, is the fully qualified class name of the mixin type.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema for to mixin actions.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
                         <xs:element name="target" type="common:oidDto">
                             <xs:annotation>
                                 <xs:documentation>
-                                    For regular actions, represents the entity or view model upon which the action is invoked.  For mixin actions, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Mixin actions can be determined by the presence of the 'mixinClass' element (1.1+ instances of the schema).
+                                    For regular actions, represents the entity or view model upon which the action is invoked.  For mixin actions, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Mixin actions can be determined by the presence of the 'mixinClass' element (v1.1+ instances of the schema).
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
@@ -146,14 +146,21 @@
                         <xs:element name="return" type="common:valueDto" minOccurs="0" maxOccurs="1">
                             <xs:annotation>
                                 <xs:documentation>
-                                    Deprecated in v1.1. Use the 'returned' element (which also provides the return type) instead.  For v1.1+ instances of this schema, either both 'return' and 'returned' will be populated, or neither.
+                                    Deprecated in v1.1; use the 'returned' element (which also provides the return type) instead.  For v1.1+ instances of this schema (representing a completed action), either both 'return' and 'returned' will be populated, or the 'threw' element will be populated.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
                         <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
                             <xs:annotation>
                                 <xs:documentation>
-                                    Introduced in v1.1. replaces the deprecated 'return' element (which exposes the return value, but not the return type).  For v1.1+ instances of this schema, ither both 'return' and 'returned' will be populated, or neither.
+                                    Introduced in v1.1, replaces the deprecated 'return' element (which exposes the return value, but not the return type).  For v1.1+ instances of this schema (representing a completed action), either both 'return' and 'returned' will be populated, or the 'threw' element will be populated.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="threw" type="xs:exceptionDto" minOccurs="0" maxOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    Introduced in v1.1.  Captures any exception thrown by an action.  For v1.1+ instances of this schema (representing a completed action), either both 'return' and 'returned' will be populated, or the 'threw' element will be populated.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
@@ -163,7 +170,7 @@
             <xs:element name="subActions" type="actionInvocationMementoType" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>
-                        Introduced in v1.1.  Capture subactions (if-any) invoked from this action, for example using the WrapperFactory service.  These therefore define a graph/call-stack of actions.  Note that the subactions will redundantly also specify their majorVersion and minorVersion (the alternative would have required restructuring in such a way as to break backward compatibility).
+                        Introduced in v1.1.  Capture sub-actions (if-any) invoked from this action, for example using the WrapperFactory service.  These therefore define a graph/call-stack of actions.  Note that the subactions will redundantly also specify their majorVersion and minorVersion (the alternative would have required restructuring in such a way as to break backward compatibility).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -171,6 +178,11 @@
     </xs:complexType>
 
     <xs:complexType name="paramDto">
+        <xs:annotation>
+            <xs:documentation>
+                sed as the xsd:type of the 'returned' element.
+            </xs:documentation>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="value" type="common:valueDto"/>
         </xs:sequence>
@@ -182,7 +194,7 @@
     <xs:complexType name="returnDto">
         <xs:annotation>
             <xs:documentation>
-                Introduced in v1.1; used as the xsd:type of the 'returned' element.
+                Introduced in v1.1.  Captures both the value returned of an action, and also the type of that returned value.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -190,6 +202,26 @@
         </xs:sequence>
         <xs:attribute name="returnType" use="required" type="common:valueType"/>
         <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="exceptionDto">
+        <xs:annotation>
+            <xs:documentation>
+                Introduced in v1.1, captures any exception thrown by an action invocation.  Use as the xsd:type of the 'threw' element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="stackTrace" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        A formatted stack trace.  (A future version of the 'exceptionDto' element might refine this to more easily
+                        parseable stack trace elements).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="causedBy" type="exceptionDto" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
     </xs:complexType>
 
 </xs:schema>
