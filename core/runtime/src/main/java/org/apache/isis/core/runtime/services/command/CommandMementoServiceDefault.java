@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -150,6 +151,13 @@ public class CommandMementoServiceDefault implements CommandMementoService {
     public EventMetadata newEventMetadata(
             final Command command,
             final String currentUser, final Timestamp timestamp, final String sequenceName) {
+
+        if(command.getTargetAction().equals(Command.TARGET_ACTION_FOR_EDIT)) {
+            throw new IllegalArgumentException(String.format(
+                    "EventMetadata can only be created for commands that represent actions, not property edits; object: %s, member: %s",
+                    command.getTarget(), command.getMemberIdentifier()));
+        }
+
         throw new RuntimeException("not yet implemented");
     }
 
