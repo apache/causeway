@@ -708,11 +708,11 @@ public class IsisTransaction implements TransactionScopedComponent {
         if(command == null) {
             throw new IllegalStateException("CommandContext service is required to support Publishing.");
         }
-        final EventMetadata.SequenceName sequenceName = EventMetadata.SequenceName.PUBLISHED_EVENT;
+        final Command.SequenceName sequenceName = Command.SequenceName.PUBLISHED_EVENT;
         final int nextEventSequence = command.next(sequenceName.abbr());
         final UUID transactionId = command.getTransactionId();
         return new EventMetadata(
-                transactionId, sequenceName, nextEventSequence, eventType, currentUser, timestampEpoch, title,
+                transactionId, nextEventSequence, eventType, currentUser, timestampEpoch, title,
                 targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
     }
 

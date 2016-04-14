@@ -440,7 +440,22 @@ public interface Command extends HasTransactionId {
      * Used to support the <tt>PublishingServiceJdo</tt> implementation whose
      * persisted entities are uniquely identified by a ({@link #getTransactionId() transactionId}, <tt>sequence</tt>)
      * tuple.
+     *
+     * @param sequenceAbbr - should be {@link SequenceName#abbr()}.
      */
     @Programmatic
-    public int next(final String sequenceName);
-}    
+    public int next(final String sequenceAbbr);
+
+    enum SequenceName {
+        /**
+         * &quot;pe&quot; - published event.  For objects: multiple such could be dirtied and thus published as separate events.  For actions: multiple sub-action invocations could occur based on for objects, and also if sub-actions are invoked through the {@link WrapperFactory}.
+         */
+        PUBLISHED_EVENT("pe");
+
+        private final String abbr;
+        SequenceName(final String abbr) {
+            this.abbr = abbr;
+        }
+        public String abbr() { return abbr; }
+    }
+}

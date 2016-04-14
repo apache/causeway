@@ -24,7 +24,6 @@ import java.util.UUID;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class EventMetadataTest_getId {
@@ -48,34 +47,18 @@ public class EventMetadataTest_getId {
     }
 
     @Test
-    public void testWithoutSequence() {
+    public void test2() {
         UUID transactionId = UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766");
         int sequence = 2;
 
-        EventMetadata eventMetadata = new EventMetadata(transactionId, null, sequence, EventType.ACTION_INVOCATION,
+        EventMetadata eventMetadata = new EventMetadata(transactionId, sequence, EventType.ACTION_INVOCATION,
                 null, null, null, null, null, null, null, null, null, null);
 
         assertThat(eventMetadata.getTransactionId(), is(UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766")));
-        assertThat(eventMetadata.getSequenceName(), is(nullValue()));
         assertThat(eventMetadata.getSequence(), is(2));
 
         assertThat(eventMetadata.getId(), is("1bd8e5d4-2d67-4395-b5e8-d74acd766766.2"));
     }
 
-    @Test
-    public void testWithSequence() {
-        UUID transactionId = UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766");
-        final EventMetadata.SequenceName sequenceName = EventMetadata.SequenceName.PUBLISHED_EVENT;
-        int sequence = 2;
-
-        EventMetadata eventMetadata = new EventMetadata(transactionId, sequenceName, sequence, EventType.ACTION_INVOCATION,
-                null, null, null, null, null, null, null, null, null, null);
-
-        assertThat(eventMetadata.getTransactionId(), is(UUID.fromString("1bd8e5d4-2d67-4395-b5e8-d74acd766766")));
-        assertThat(eventMetadata.getSequenceName(), is(EventMetadata.SequenceName.PUBLISHED_EVENT));
-        assertThat(eventMetadata.getSequence(), is(2));
-
-        assertThat(eventMetadata.getId(), is("1bd8e5d4-2d67-4395-b5e8-d74acd766766.pt.2"));
-    }
 
 }

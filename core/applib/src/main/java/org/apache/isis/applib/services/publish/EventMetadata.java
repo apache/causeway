@@ -24,9 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
  * Standard metadata about an event to be published.
@@ -39,7 +37,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 public class EventMetadata {
     
     private final UUID transactionId;
-    private final SequenceName sequenceName;
     private final int sequence;
     private final String user;
     private final java.sql.Timestamp javaSqlTimestamp;
@@ -85,51 +82,8 @@ public class EventMetadata {
         this(transactionId, sequence, eventType, user, javaSqlTimestamp, title, targetClass, targetAction, target, actionIdentifier, null, null, null );
     }
 
-    /**
-     * @deprecated - no longer called by the framework.
-     */
-    @Deprecated
     public EventMetadata(
             final UUID transactionId,
-            final int sequence,
-            final EventType eventType,
-            final String user,
-            final Timestamp javaSqlTimestamp,
-            final String title,
-            final String targetClass,
-            final String targetAction,
-            final Bookmark target,
-            final String actionIdentifier,
-            final List<String> actionParameterNames,
-            final List<Class<?>> actionParameterTypes,
-            final Class<?> actionReturnType) {
-        this(transactionId, null, sequence, eventType, user, javaSqlTimestamp, title, targetClass, targetAction, target, actionIdentifier, actionParameterNames, actionParameterTypes, actionReturnType);
-    }
-
-    public enum SequenceName {
-        /**
-         * &quot;pt&quot; - published event at the end of a transaction - could be multiple for objects
-         */
-        PUBLISHED_EVENT("pt"),
-        /**
-         * &quot;pw&quot; - published event as the result of an action invoked through the {@link WrapperFactory}
-         */
-        WRAPPED_ACTION("pw"),
-        /**
-         * &quot;bc&quot; - background command created through the {@link BackgroundService}
-         */
-        BACKGROUND_COMMAND("bc"),;
-
-        private final String abbr;
-        SequenceName(final String abbr) {
-            this.abbr = abbr;
-        }
-        public String abbr() { return abbr; }
-    }
-
-    public EventMetadata(
-            final UUID transactionId,
-            final SequenceName sequenceName,
             final int sequence,
             final EventType eventType,
             final String user,
@@ -143,7 +97,6 @@ public class EventMetadata {
             final List<Class<?>> actionParameterTypes,
             final Class<?> actionReturnType) {
         this.transactionId = transactionId;
-        this.sequenceName = sequenceName;
         this.sequence = sequence;
         this.user = user;
         this.javaSqlTimestamp = javaSqlTimestamp;
@@ -163,21 +116,17 @@ public class EventMetadata {
      * originated.
      * 
      * <p>
-     * Note that there could be several events all with the same transaction Id, distinguished by {@link #getSequenceName()} and {@link #getSequence()}.
+     * Note that there could be several events all with the same transaction Id, distinguished by {@link #getSequence()}.
      */
     public UUID getTransactionId() {
         return transactionId;
-    }
-
-    public SequenceName getSequenceName() {
-        return sequenceName;
     }
 
     /**
      * The zero-based sequence number within the sequence name.
      * 
      * <p>
-     * The combination of {@link #getTransactionId() transaction Id}, {@link #getSequenceName()} sequence name} and {@link #getSequence() sequence}
+     * The combination of [{@link #getTransactionId() transaction Id}, {@link #getSequence() sequence}]
      * is guaranteed to be unique.
      */
     public int getSequence() {
@@ -206,12 +155,10 @@ public class EventMetadata {
     }
     
     /**
-     * Returns a string in form <tt>transactionId.sequenceName.sequence</tt>.
-     *
-     * If the {@link #getSequenceName()} is null, then just <tt>transactionId.sequence</tt>.
+     * Returns a string in form <tt>transactionId.sequence</tt>.
      */
     public String getId() {
-        return getTransactionId() + (getSequenceName() != null ? "." + getSequenceName().abbr(): "") + "." + getSequence();
+        return getTransactionId() + "." + getSequence();
     }
     
     /**

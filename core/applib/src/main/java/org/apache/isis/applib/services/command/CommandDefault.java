@@ -409,11 +409,11 @@ public class CommandDefault implements Command3 {
     private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
 
     @Override
-    public int next(String sequenceName) {
-        AtomicInteger next = sequenceByName.get(sequenceName);
+    public int next(String sequenceAbbr) {
+        AtomicInteger next = sequenceByName.get(sequenceAbbr);
         if(next == null) {
             next = new AtomicInteger(0);
-            sequenceByName.put(sequenceName, next);
+            sequenceByName.put(sequenceAbbr, next);
         } else {
             next.incrementAndGet();
         }
