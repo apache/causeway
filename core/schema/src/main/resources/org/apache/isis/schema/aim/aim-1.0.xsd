@@ -80,10 +80,17 @@
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
+                        <xs:element name="mixinFqClassName" type="xs:string" minOccurs="0" maxOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    Introduced in v1.1.  Populated only for mixin actions, is the fully qualified class name of the mixin type.  This element is optional for backward compatibility, but will be populated for any 1.1+ instances of this schema for to mixin actions.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
                         <xs:element name="target" type="common:oidDto">
                             <xs:annotation>
                                 <xs:documentation>
-                                    For regular actions, represents the entity or view model upon which the action is invoked.  For mixin actions, is the mixin object itself; use the 'mixedIn' element (in the payload) to obtain the entity or view model being contributed to (is the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).s
+                                    For regular actions, represents the entity or view model upon which the action is invoked.  For mixin actions, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Mixin actions can be determined by the presence of the 'mixinClass' element (1.1+ instances of the schema).
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
@@ -118,7 +125,7 @@
                         <xs:element name="title" type="xs:string">
                             <xs:annotation>
                                 <xs:documentation>
-                                    User-friendly title of the 'target' object, or of the 'mixin' object if populated.
+                                    User-friendly title of the 'target' object.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
@@ -128,13 +135,6 @@
             <xs:element name="payload">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="mixedIn" type="common:oidDto" minOccurs="0" maxOccurs="1">
-                            <xs:annotation>
-                                <xs:documentation>
-                                    Introduced in v1.1.  Populated only for mixin actions, the entity or view model being contributed to (is the constructor arg to the mixin).
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:element>
                         <xs:element name="parameters">
                             <xs:complexType>
                                 <xs:sequence maxOccurs="unbounded">
