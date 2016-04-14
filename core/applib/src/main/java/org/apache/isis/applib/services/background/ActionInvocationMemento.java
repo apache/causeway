@@ -43,7 +43,8 @@ public class ActionInvocationMemento {
     public ActionInvocationMemento(
             final MementoService mementoService, 
             final String actionId, 
-            final Bookmark target, List<Class<?>> argTypes,
+            final Bookmark target,
+            final List<Class<?>> argTypes,
             final List<Object> args) {
         
         if(argTypes.size() != args.size()) {

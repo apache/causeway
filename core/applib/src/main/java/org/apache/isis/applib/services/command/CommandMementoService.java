@@ -49,8 +49,7 @@ public interface CommandMementoService {
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
     /**
-     *
-     * @param command
+     * @param command - must represent an action invocation (ie {@link Command#getTargetAction()} does not return {@link Command#TARGET_ACTION_FOR_EDIT}) (else throws exception).
      * @param currentUser - as provided by {@link UserService} (might change within an action if {@link SudoService} has been used).
      * @param timestamp - as obtained from clock (might want multiple events to all have the same clock, eg publishing muliple changed objects)
      * @param sequenceName - to create unique events per {@link Command#getTransactionId()}; see {@link EventMetadata#getId()}.
