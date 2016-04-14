@@ -553,7 +553,6 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(publishedActionFacet == null) {
                 return;
             }
-            final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
 
             final ObjectAdapter targetAdapter = currentInvocation.getTarget();
 
@@ -585,12 +584,14 @@ public class IsisTransaction implements TransactionScopedComponent {
                 parameterTypes = null;
                 returnType = null;
             }
-            
-            final EventMetadata metadata = newEventMetadata(
-                    EventType.ACTION_INVOCATION, currentUser, timestamp, title,
-                    actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier,
-                    // commandTargetClass, commandTargetAction, commandTarget, commandMemberIdentifier,
+
+            final Command command1 = this.command;
+            final EventMetadata metadata = newEventMetadata(command1, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
+                    actionTargetClass, actionTargetAction, actionTarget,
+                    actionMemberIdentifier,
                     parameterNames, parameterTypes, returnType);
+
+            final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
@@ -634,33 +635,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         return enlistedAdapters;
     }
 
-    private EventMetadata newEventMetadata(
-            final String currentUser,
-            final Timestamp timestamp,
-            final ChangeKind changeKind,
-            final String enlistedAdapterClass,
-            final Bookmark enlistedTarget) {
-        final String oidStr = enlistedTarget.toString();
-        final String title = oidStr;
-
-        final EventType eventTypeFor = eventTypeFor(changeKind);
-
-        return newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
-    }
-
-    private static EventType eventTypeFor(ChangeKind changeKind) {
-        if(changeKind == ChangeKind.UPDATE) {
-            return EventType.OBJECT_UPDATED;
-        }
-        if(changeKind == ChangeKind.CREATE) {
-            return EventType.OBJECT_CREATED;
-        }
-        if(changeKind == ChangeKind.DELETE) {
-            return EventType.OBJECT_DELETED;
-        }
-        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
-    }
-
     protected ObjectStringifier objectStringifier() {
         if(objectStringifier == null) {
             // lazily created; is threadsafe so no need to guard against race conditions
@@ -690,6 +664,36 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private EventMetadata newEventMetadata(
+            final String currentUser,
+            final Timestamp timestamp,
+            final ChangeKind changeKind,
+            final String enlistedAdapterClass,
+            final Bookmark enlistedTarget) {
+        final String oidStr = enlistedTarget.toString();
+        final String title = oidStr;
+
+        final EventType eventTypeFor = eventTypeFor(changeKind);
+
+        final Command command = this.command;
+        return newEventMetadata(command, eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget,
+                null, null, null, null);
+    }
+
+    private static EventType eventTypeFor(ChangeKind changeKind) {
+        if(changeKind == ChangeKind.UPDATE) {
+            return EventType.OBJECT_UPDATED;
+        }
+        if(changeKind == ChangeKind.CREATE) {
+            return EventType.OBJECT_CREATED;
+        }
+        if(changeKind == ChangeKind.DELETE) {
+            return EventType.OBJECT_DELETED;
+        }
+        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
+    }
+
+    private EventMetadata newEventMetadata(
+            final Command command,
             final EventType eventType,
             final String currentUser,
             final Timestamp timestampEpoch,
@@ -701,17 +705,15 @@ public class IsisTransaction implements TransactionScopedComponent {
             final List<String> parameterNames,
             final List<Class<?>> parameterTypes,
             final Class<?> returnType) {
-        int nextEventSequence = nextEventSequence();
-        return new EventMetadata(
-                getTransactionId(), nextEventSequence, eventType, currentUser, timestampEpoch, title, 
-                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
-    }
-
-    private int nextEventSequence() {
         if(command == null) {
             throw new IllegalStateException("CommandContext service is required to support Publishing.");
-        } 
-        return command.next("publishedEvent");
+        }
+        final EventMetadata.SequenceName sequenceName = EventMetadata.SequenceName.PUBLISHED_EVENT;
+        final int nextEventSequence = command.next(sequenceName.abbr());
+        final UUID transactionId = command.getTransactionId();
+        return new EventMetadata(
+                transactionId, sequenceName, nextEventSequence, eventType, currentUser, timestampEpoch, title,
+                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
     }
 
     public void auditChangedProperty(

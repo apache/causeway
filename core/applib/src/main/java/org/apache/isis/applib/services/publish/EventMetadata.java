@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 public class EventMetadata {
     
     private final UUID transactionId;
-    private final String sequenceName;
+    private final SequenceName sequenceName;
     private final int sequence;
     private final String user;
     private final java.sql.Timestamp javaSqlTimestamp;
@@ -106,9 +106,30 @@ public class EventMetadata {
         this(transactionId, null, sequence, eventType, user, javaSqlTimestamp, title, targetClass, targetAction, target, actionIdentifier, actionParameterNames, actionParameterTypes, actionReturnType);
     }
 
+    public enum SequenceName {
+        /**
+         * &quot;pt&quot; - published event at the end of a transaction - could be multiple for objects
+         */
+        PUBLISHED_EVENT("pt"),
+        /**
+         * &quot;pw&quot; - published event as the result of an action invoked through the {@link WrapperFactory}
+         */
+        WRAPPED_ACTION("pw"),
+        /**
+         * &quot;bc&quot; - background command created through the {@link BackgroundService}
+         */
+        BACKGROUND_COMMAND("bc"),;
+
+        private final String abbr;
+        SequenceName(final String abbr) {
+            this.abbr = abbr;
+        }
+        public String abbr() { return abbr; }
+    }
+
     public EventMetadata(
             final UUID transactionId,
-            final String sequenceName,
+            final SequenceName sequenceName,
             final int sequence,
             final EventType eventType,
             final String user,
@@ -148,15 +169,7 @@ public class EventMetadata {
         return transactionId;
     }
 
-    /**
-     * The name of this sequence, for example:
-     * <ul>
-     *     <li>&quot;pt&quot; - published event at the end of a transaction - could be multiple for objects,</li>
-     *     <li>&quot;pw&quot; - published event as the result of an action invoked through the {@link WrapperFactory}</li>
-     *     <li>&quot;bc&quot; - background command created through the {@link BackgroundService}</li>
-     * </ul>
-     */
-    public String getSequenceName() {
+    public SequenceName getSequenceName() {
         return sequenceName;
     }
 
@@ -198,7 +211,7 @@ public class EventMetadata {
      * If the {@link #getSequenceName()} is null, then just <tt>transactionId.sequence</tt>.
      */
     public String getId() {
-        return getTransactionId() + (getSequenceName() != null ? "." + getSequenceName(): "") + "." + getSequence();
+        return getTransactionId() + (getSequenceName() != null ? "." + getSequenceName().abbr(): "") + "." + getSequence();
     }
     
     /**
