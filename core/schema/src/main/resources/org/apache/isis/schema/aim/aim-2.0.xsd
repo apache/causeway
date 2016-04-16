@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<xs:schema targetNamespace="http://isis.apache.org/schema/aim"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/aim"
+           xmlns:cmd="http://isis.apache.org/schema/cmd"
+           xmlns:common="http://isis.apache.org/schema/common"
+        >
+
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.0.xsd"/>
+
+    <xs:element name="actionInvocationMementoDto" type="actionInvocationMementoDto">
+        <xs:annotation>
+            <xs:documentation>Represents v2.0 of this schema.  Changes since v1.0 are the addition of the 'majorVersion' and 'minorVersion', the 'mixinFqClassName' element, the 'threw' element, the 'timestampComplete' element and the 'subActions' element.  The 'timestamp' element has been replaced by 'timestampStart'.  The 'returned' element has been redefined.  The 'metadata' and 'payload' containers have been removed.  The supporting 'paramDto' types have been moved to common (so can be shared with cmd.xsd).
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="actionInvocationMementoDto">
+        <xs:sequence>
+            <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                <xs:annotation>
+                    <xs:documentation>The major version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema.  If missing, assume '0'.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                <xs:annotation>
+                    <xs:documentation>Introduced in v1.1. The minor version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema.  If missing, assume '0'.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="transactionId" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Transaction id within which this action was invoked; can be used to locate the corresponding Command object (which may have been persisted).  However, there could be many such actions (eg by virtue of WrapperFactory); the 'sequence' is used to provide a unique id for each action invocation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="invocation" type="actionInvocationDto"/>
+            <xs:element name="subActions" type="actionInvocationDto" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Introduced in v1.1. Capture sub-actions (if-any) invoked from this action, for example using the WrapperFactory service.  These therefore define a graph/call-stack of actions.  Note that the subactions will redundantly also specify their majorVersion and minorVersion (the alternative would have required restructuring in such a way as to break backward compatibility).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="actionInvocationDto">
+        <xs:sequence>
+            <xs:element name="sequence" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>The combination of ['transactionId', 'sequence'] is guaranteed to be unique.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="specification" type="cmd:specificationDto"/>
+            <xs:element name="user" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The name of the user that invoked this action.  Note that this isn't necessarily the user that initiated the original command; the SudoService may be being used to temporarily switch the effective user.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timestampStart" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>The point in time that this action was invoked.  See also 'timestampComplete'.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timestampComplete" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Introduced in v1.1. The point in time that this action completed.  The duration that the action took is the difference between 'timestamp' and 'timestampComplete'.  This element is optional for backward compatibility, but will be populated for any v1.1 instances of this schema.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="title" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>User-friendly title of the 'target' object.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element will be populated.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="threw" type="exceptionDto" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>Captures any exception thrown by an action.  Either the 'returned' or the 'threw' element will be populated.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="returnDto">
+        <xs:annotation>
+            <xs:documentation>Captures both the value returned of an action, and also the type of that returned value.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="value" type="common:valueDto"/>
+        </xs:sequence>
+        <xs:attribute name="returnType" use="required" type="common:valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="exceptionDto">
+        <xs:annotation>
+            <xs:documentation>Captures any exception thrown by an action invocation.  Use as the xsd:type of the 'threw' element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="stackTrace" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>A formatted stack trace.  (A future version of the 'exceptionDto' element might refine this to more easily parseable stack trace elements).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="causedBy" type="exceptionDto" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

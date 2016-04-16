@@ -76,11 +76,11 @@
                                 <configuration>
                                     <schemaDirectory>src/main/resources/org/apache/isis/schema/aim</schemaDirectory>
                                     <schemaIncludes>
-                                        <schemaInclude>aim-1.0.xsd</schemaInclude>
+                                        <schemaInclude>aim-2.0.xsd</schemaInclude>
                                     </schemaIncludes>
                                     <bindingDirectory>src/main/resources/org/apache/isis/schema/aim</bindingDirectory>
                                     <bindingIncludes>
-                                        <bindingInclude>aim-1.0-binding.xml</bindingInclude>
+                                        <bindingInclude>aim-2.0-binding.xml</bindingInclude>
                                     </bindingIncludes>
                                 </configuration>
                             </execution>
