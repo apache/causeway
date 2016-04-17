@@ -34,4 +34,4 @@ and in particular the http://isis.apache.org/guides/ugvro.html#_ugvro_simplified
 We expect that the scope of _Contact App_ will expand and new features added, these will (almost certainly) remain open source.
 Meanwhile we're now set up nicely to build further mobile apps using this technology stack.
 
-_Case study provided by Rosco Kalis, for link:[http://incode.org[Incode]_
+_Case study provided by Rosco Kalis, for link:http://incode.org[Incode]_
