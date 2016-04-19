@@ -52,7 +52,17 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="specification" type="specificationDto"/>
+            <xs:element name="targets" type="common:oidDto" minOccurs="1" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="action" type="actionDto">
+                <xs:annotation>
+                    <xs:documentation>The action and arguments to be invoked on the target object(s).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="user" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>The name of the user that initiated/created this command.
@@ -62,18 +72,12 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="specificationDto">
+    <xs:complexType name="actionDto">
         <xs:annotation>
-            <xs:documentation>Captures the information required to be able to invoke an action on an object(s).  In particular, identifies the the target object(s), the action to be invoked, whether that action is a mixin, and also the arguments for the parameters of said action.
+            <xs:documentation>Captures the information required to be able to invoke an action on the target(s).  In particular, identifies the action to be invoked, whether that action is a mixin, and also the arguments for the parameters of said action.  Note that the targets are not part of this structure so that it can be reused between cmd and aim schemas (the former of which can relate to multiple targets, the latter always to a single target).
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="target" type="common:oidDto" minOccurs="1" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that tis means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="mixinFqClassName" type="xs:string" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>Populated only for mixin actions, is the fully qualified class name of the mixin type.
@@ -86,14 +90,9 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="parameters">
-                <xs:complexType>
-                    <xs:sequence maxOccurs="unbounded">
-                        <xs:element name="param" type="paramDto"/>
-                    </xs:sequence>
-                    <xs:attribute name="num" use="required" type="xs:int"/>
-                </xs:complexType>
-            </xs:element>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="parameters" type="paramDto"/>
+            </xs:sequence>
         </xs:sequence>
     </xs:complexType>
 
@@ -103,7 +102,11 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="value" type="common:valueDto"/>
+            <xs:element name="argument" type="common:valueDto">
+                <xs:annotation>
+                    <xs:documentation>The argument value of this parameter.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="parameterName" use="required" type="xs:string"/>
         <xs:attribute name="parameterType" use="required" type="common:valueType"/>

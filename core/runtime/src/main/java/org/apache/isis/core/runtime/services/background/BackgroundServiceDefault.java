@@ -17,17 +17,19 @@
 package org.apache.isis.core.runtime.services.background;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
+import org.apache.isis.applib.services.background.BackgroundCommandService2;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
@@ -42,6 +44,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhan
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
@@ -164,15 +167,34 @@ public class BackgroundServiceDefault implements BackgroundService {
 
                 final String targetClassName = CommandUtil.targetClassNameFor(targetAdapter);
                 final String targetActionName = CommandUtil.targetActionNameFor(action);
-                final String targetArgs = CommandUtil.argDescriptionFor(action, adaptersFor(args));
+                final ObjectAdapter[] argAdapters = adaptersFor(args);
+                final String targetArgs = CommandUtil.argDescriptionFor(action, argAdapters);
 
                 final Command command = commandContext.getCommand();
 
+                if(backgroundCommandService instanceof BackgroundCommandService2) {
+                    final BackgroundCommandService2 backgroundCommandService2 =
+                            (BackgroundCommandService2) backgroundCommandService;
+
+                    final CommandMementoDto dto = commandMementoService
+                            .asCommandMemento(Collections.singletonList(targetAdapter), action, argAdapters);
+
+                    if(dto != null) {
+                        // the default implementation returns a non-null value.  This guard is to allow a different
+                        // implementation to be configured that returns null, thereby falling through to the
+                        // original behaviour (of using ActionInvocationMemento instead of CommandMementoDto).
+                        backgroundCommandService2.schedule(dto, command, targetClassName, targetActionName, targetArgs);
+
+                        return null;
+                    }
+                }
+
+                // fallback
                 final ActionInvocationMemento aim = commandMementoService
                         .asActionInvocationMemento(proxyMethod, domainObject, args);
 
                 backgroundCommandService.schedule(aim, command, targetClassName, targetActionName, targetArgs);
-                
+
                 return null;
             }
 

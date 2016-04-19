@@ -60,7 +60,7 @@ public interface Command extends HasTransactionId {
      * The value for {@link #getTargetAction()} if this command represents an edit of an object's property
      * (rather than an action).
      */
-    String TARGET_ACTION_FOR_EDIT = "(edit)";
+    String ACTION_IDENTIFIER_FOR_EDIT = "(edit)";
 
     // //////////////////////////////////////
     // user (property)
@@ -161,7 +161,7 @@ public interface Command extends HasTransactionId {
      * The human-friendly name of the action invoked on the target object.
      *
      * <p>
-     *     If the command represents an edit of a property, then holds the value &quot;{@value TARGET_ACTION_FOR_EDIT}&quot;.
+     *     If the command represents an edit of a property, then holds the value &quot;{@value ACTION_IDENTIFIER_FOR_EDIT}&quot;.
      * </p>
      */
     public abstract String getTargetAction();

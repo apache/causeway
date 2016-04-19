@@ -27,6 +27,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -82,11 +83,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 public class OidMarshaller {
 
     //region > public constants
-    public static final String VIEWMODEL_INDICATOR = "*";
+    public static final String VIEWMODEL_INDICATOR =
+            Bookmark.ObjectState.VIEW_MODEL.getCode(); // "*"
     //endregion
 
     //region > private constants
-    private static final String TRANSIENT_INDICATOR = "!";
+    private static final String TRANSIENT_INDICATOR =
+            Bookmark.ObjectState.TRANSIENT.getCode() ; // "!"
+
 	private static final String SEPARATOR = ":";
 	private static final String SEPARATOR_NESTING = "~";
 	private static final String SEPARATOR_COLLECTION = "$";

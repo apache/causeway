@@ -26,7 +26,7 @@
             we don't include the minor version, because the
             generated Java class will be backwards compatible
             -->
-            <jaxb:package name="org.apache.isis.schema.aim.v1"/>
+            <jaxb:package name="org.apache.isis.schema.aim.v2"/>
         </jaxb:schemaBindings>
     </jaxb:bindings>
     <!-- since aim-2.0.xsd does an xs:import of common-1.0.xsd, we need to specify common's package bindings -->

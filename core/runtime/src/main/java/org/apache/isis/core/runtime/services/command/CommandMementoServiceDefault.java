@@ -17,7 +17,6 @@
 package org.apache.isis.core.runtime.services.command;
 
 import java.lang.reflect.Method;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -33,24 +32,22 @@ import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandMementoService;
-import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import org.apache.isis.schema.cmd.v1.ActionDto;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 /**
  * Depends on an implementation of {@link BackgroundCommandService} to
@@ -103,9 +100,13 @@ public class CommandMementoServiceDefault implements CommandMementoService {
 
     // //////////////////////////////////////
 
+    @Deprecated
     @Programmatic
     @Override
-    public ActionInvocationMemento asActionInvocationMemento(Method method, Object domainObject, Object[] args) {
+    public ActionInvocationMemento asActionInvocationMemento(
+            final Method method,
+            final Object domainObject,
+            final Object[] args) {
         
         final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(method);
         final ObjectMember member = targetObjSpec.getMember(method);
@@ -137,46 +138,50 @@ public class CommandMementoServiceDefault implements CommandMementoService {
         return aim;
     }
 
-
-    /**
-     * Not API
-     */
-    ActionInvocationMemento newActionInvocationMemento(String mementoStr) {
-        return new ActionInvocationMemento(mementoService, mementoStr);
-    }
-
-    // //////////////////////////////////////
-
     @Override
-    public EventMetadata newEventMetadata(
-            final Command command,
-            final String currentUser, final Timestamp timestamp, final String sequenceName) {
+    public CommandMementoDto asCommandMemento(
+            final List<ObjectAdapter> targetAdapters,
+            final ObjectAction objectAction,
+            final ObjectAdapter[] argAdapters) {
 
-        if(command.getTargetAction().equals(Command.TARGET_ACTION_FOR_EDIT)) {
-            throw new IllegalArgumentException(String.format(
-                    "EventMetadata can only be created for commands that represent actions, not property edits; object: %s, member: %s",
-                    command.getTarget(), command.getMemberIdentifier()));
+        final CommandMementoDto dto = new CommandMementoDto();
+        dto.setMajorVersion("1");
+        dto.setMinorVersion("0");
+
+        for (ObjectAdapter targetAdapter : targetAdapters) {
+            final RootOid rootOid = (RootOid) targetAdapter.getOid();
+            final Bookmark bookmark = rootOid.asBookmark();
+            dto.getTargets().add(bookmark.toOidDto());
         }
 
-        throw new RuntimeException("not yet implemented");
-    }
+        final ActionDto actionDto = new ActionDto();
+        dto.setAction(actionDto);
 
-    @Override
-    public ActionInvocationMementoDto asActionInvocationMementoDto(
-            final EventMetadata metadata) {
-        throw new RuntimeException("not yet implemented");
+        final String actionIdentifier = CommandUtil.actionIdentifierFor(objectAction);
+        actionDto.setActionIdentifier(actionIdentifier);
+
+        List<ObjectActionParameter> actionParameters = objectAction.getParameters();
+        for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
+            final ObjectActionParameter actionParameter = actionParameters.get(paramNum);
+            final String parameterName = actionParameter.getName();
+            final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
+            ObjectAdapter argAdapter = argAdapters[paramNum];
+            final Object arg = argAdapter != null? argAdapter.getObject(): null;
+            CommandMementoDtoUtils.addParamArg(actionDto.getParameters(), parameterName, paramType, arg, bookmarkService);
+        }
+        actionDto.setMixinFqClassName(null);
+
+        dto.setTransactionId(UUID.randomUUID().toString());
+        return dto;
     }
 
 
     // //////////////////////////////////////
+
 
     @javax.inject.Inject
     private BookmarkService bookmarkService;
 
-
-    private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
-    }
 
     // //////////////////////////////////////
 

@@ -23,6 +23,9 @@ import java.util.Iterator;
 
 import com.google.common.base.Splitter;
 
+import org.apache.isis.schema.common.v1.BookmarkObjectState;
+import org.apache.isis.schema.common.v1.OidDto;
+
 /**
  * String representation of any persistent object managed by the framework.
  * 
@@ -35,14 +38,35 @@ public class Bookmark implements Serializable {
 
     private static final char SEPARATOR = ':';
 
-    public static enum ObjectState {
-        PERSISTENT(""),
-        TRANSIENT("!"), // same as OidMarshaller
-        VIEW_MODEL("*"); // same as OidMarshaller
+    public OidDto toOidDto() {
+        OidDto oidDto = new OidDto();
+        oidDto.setObjectState(getObjectState().toBookmarkState());
+        oidDto.setObjectType(getObjectType());
+        oidDto.setObjectIdentifier(getIdentifier());
+        return oidDto;
+    }
+
+    public static Bookmark from(final OidDto oidDto) {
+        final BookmarkObjectState bookmarkObjectState = oidDto.getObjectState();
+        final ObjectState objectState = ObjectState.from(bookmarkObjectState);
+        final Bookmark bookmark = new Bookmark(objectState.getCode() + oidDto.getObjectType(), oidDto.getObjectIdentifier());
+        return bookmark;
+    }
+
+
+    public enum ObjectState {
+        PERSISTENT("", BookmarkObjectState.PERSISTENT),
+        TRANSIENT("!", BookmarkObjectState.TRANSIENT), // same as OidMarshaller
+        VIEW_MODEL("*", BookmarkObjectState.VIEW_MODEL); // same as OidMarshaller
 
         private final String code;
-        private ObjectState(final String code) {
+        private final BookmarkObjectState bookmarkObjectState;
+
+        ObjectState(
+                final String code,
+                final BookmarkObjectState bookmarkObjectState) {
             this.code = code;
+            this.bookmarkObjectState = bookmarkObjectState;
         }
 
         public boolean isTransient() {
@@ -63,6 +87,22 @@ public class Bookmark implements Serializable {
             if(objectType.startsWith(TRANSIENT.code)) return TRANSIENT;
             if(objectType.startsWith(VIEW_MODEL.code)) return VIEW_MODEL;
             return PERSISTENT;
+        }
+
+        public static ObjectState from(final BookmarkObjectState objectState) {
+            switch (objectState) {
+            case PERSISTENT:
+                return ObjectState.PERSISTENT;
+            case TRANSIENT:
+                return ObjectState.TRANSIENT;
+            case VIEW_MODEL:
+                return ObjectState.VIEW_MODEL;
+            }
+            throw new IllegalArgumentException("BookmarkObjectState " + objectState + "' not recognized");
+        }
+
+        public BookmarkObjectState toBookmarkState() {
+            return bookmarkObjectState;
         }
     }
 

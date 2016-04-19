@@ -94,5 +94,26 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:complexType name="periodDto">
+        <xs:annotation>
+            <xs:documentation>Captures a period of time, eg for capturing metrics/timings.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="start" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>The point in time that this period of time started.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="complete" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>The point in time that this period of time completed.  The duration is the difference between 'start' and 'complete'.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
 
 </xs:schema>

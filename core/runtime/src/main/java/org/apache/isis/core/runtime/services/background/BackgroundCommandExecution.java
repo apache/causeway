@@ -18,7 +18,9 @@ package org.apache.isis.core.runtime.services.background;
 
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.clock.Clock;
@@ -28,6 +30,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -40,6 +43,11 @@ import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.schema.cmd.v1.ActionDto;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
@@ -89,41 +97,100 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
-                commandContext.setCommand(command);
-                try {
 
+                commandContext.setCommand(command);
+                final String memento = command.getMemento();
+                final boolean legacy = memento.startsWith("<memento");
+
+                try {
                     command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
                     command.setExecutor(Executor.BACKGROUND);
 
-                    final String memento = command.getMemento();
-                    final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
+                    if(legacy) {
 
-                    final String actionId = aim.getActionId();
+                        final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
 
-                    final Bookmark targetBookmark = aim.getTarget();
-                    final Object targetObject = bookmarkService.lookup(targetBookmark);
+                        final String actionId = aim.getActionId();
 
-                    final ObjectAdapter targetAdapter = adapterFor(targetObject);
-                    final ObjectSpecification specification = targetAdapter.getSpecification();
+                        final Bookmark targetBookmark = aim.getTarget();
+                        final Object targetObject = bookmarkService.lookup(targetBookmark);
 
-                    final ObjectAction objectAction = findAction(specification, actionId);
-                    if(objectAction == null) {
-                        throw new Exception("Unknown action '" + actionId + "'");
-                    }
+                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
+                        final ObjectSpecification specification = targetAdapter.getSpecification();
 
-                    final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
-                    final ObjectAdapter resultAdapter = objectAction.execute(
-                            targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
-                    if(resultAdapter != null) {
-                        Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                        command.setResult(resultBookmark);
+                        final ObjectAction objectAction = findAction(specification, actionId);
+                        if(objectAction == null) {
+                            throw new Exception("Unknown action '" + actionId + "'");
+                        }
+
+                        final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
+                        final ObjectAdapter resultAdapter = objectAction.execute(
+                                targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                        if(resultAdapter != null) {
+                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                            command.setResult(resultBookmark);
+                        }
+
+                    } else {
+
+                        final CommandMementoDto dto = jaxbService.fromXml(CommandMementoDto.class, memento);
+                        final ActionDto actionDto = dto.getAction();
+                        final String actionId = actionDto.getActionIdentifier();
+
+                        final List<OidDto> targetOidDtos = dto.getTargets();
+                        for (OidDto targetOidDto : targetOidDtos) {
+
+                            final Bookmark bookmark = Bookmark.from(targetOidDto);
+                            final Object targetObject = bookmarkService.lookup(bookmark);
+
+                            final ObjectAdapter targetAdapter = adapterFor(targetObject);
+                            final String mixinFqClassName = actionDto.getMixinFqClassName();
+
+                            final ObjectAction objectAction =
+                                    findObjectAction(mixinFqClassName, targetAdapter, actionId);
+
+                            final ObjectAdapter[] argAdapters = argAdaptersFor(dto);
+                            objectAction.execute(
+                                    targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+
+                            // no longer capture the result, because there may be many
+                            // (should be done by auditing/profiling instead).
+                        }
                     }
 
                 } catch (Exception e) {
-                    command.setException(Throwables.getStackTraceAsString(e));
+                    if(legacy) {
+                        command.setException(Throwables.getStackTraceAsString(e));
+                    } else {
+                        // no longer capture any exceptions, could be bulk action.
+                        // (should be done by auditing/profiling instead).
+                    }
                 } finally {
+                    // decided to keep this, even though really this
+                    // should be the responsibility of auditing/profiling
                     command.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
                 }
+            }
+
+            private ObjectAction findObjectAction(
+                    final String mixinFqClassName,
+                    final ObjectAdapter targetAdapter,
+                    final String actionId) throws Exception {
+
+                final ObjectAction objectAction;
+                if(mixinFqClassName != null) {
+                    final ObjectSpecification mixinSpec = getSpecificationLoader()
+                            .loadSpecification(mixinFqClassName);
+                    objectAction = mixinSpec.getObjectAction(actionId);
+                } else {
+                    final ObjectSpecification specification = targetAdapter.getSpecification();
+
+                    objectAction = findAction(specification, actionId);
+                }
+                if(objectAction == null) {
+                    throw new Exception("Unknown action '" + actionId + "'");
+                }
+                return objectAction;
             }
         });
     }
@@ -163,11 +230,29 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         }
     }
 
-    
+    private ObjectAdapter[] argAdaptersFor(final CommandMementoDto dto) {
+        final List<ParamDto> params = dto.getAction().getParameters();
+        final List<ObjectAdapter> args = Lists.newArrayList(
+                Iterables.transform(params, new Function<ParamDto, ObjectAdapter>() {
+                    @Override
+                    public ObjectAdapter apply(final ParamDto paramDto) {
+                        final Object arg = CommandMementoDtoUtils.paramArgOf(paramDto);
+                        return adapterFor(arg);
+                    }
+                })
+        );
+        return args.toArray(new ObjectAdapter[]{});
+    }
+
+
+
     // //////////////////////////////////////
 
     @javax.inject.Inject
     private BookmarkService bookmarkService;
+
+    @javax.inject.Inject
+    private JaxbService jaxbService;
 
     @javax.inject.Inject
     private CommandContext commandContext;

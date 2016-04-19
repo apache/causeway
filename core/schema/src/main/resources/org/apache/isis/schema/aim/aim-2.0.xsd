@@ -37,15 +37,15 @@
 
     <xs:complexType name="actionInvocationMementoDto">
         <xs:sequence>
-            <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+            <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
                 <xs:annotation>
-                    <xs:documentation>The major version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema.  If missing, assume '0'.
+                    <xs:documentation>The major version of the schema that an XML instance was created using.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+            <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
                 <xs:annotation>
-                    <xs:documentation>Introduced in v1.1. The minor version of the schema that an XML instance was created using.  This element is optional for backward compatibility, but will be populated for any v1.1+ instances of this schema.  If missing, assume '0'.
+                    <xs:documentation>The minor version of the schema that an XML instance was created using.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -56,9 +56,9 @@
                 </xs:annotation>
             </xs:element>
             <xs:element name="invocation" type="actionInvocationDto"/>
-            <xs:element name="subActions" type="actionInvocationDto" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="subInvocations" type="actionInvocationDto" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Introduced in v1.1. Capture sub-actions (if-any) invoked from this action, for example using the WrapperFactory service.  These therefore define a graph/call-stack of actions.  Note that the subactions will redundantly also specify their majorVersion and minorVersion (the alternative would have required restructuring in such a way as to break backward compatibility).
+                    <xs:documentation>Capture invocations of any other actions invoked from this action, using the WrapperFactory service.  These therefore define a graph/call-stack of actions.  Note that the subactions will redundantly also specify their majorVersion and minorVersion (the alternative would have required restructuring in such a way as to break backward compatibility).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -67,34 +67,44 @@
 
     <xs:complexType name="actionInvocationDto">
         <xs:sequence>
-            <xs:element name="sequence" type="xs:int">
+            <xs:element name="id" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>The combination of ['transactionId', 'sequence'] is guaranteed to be unique.
+                    <xs:documentation>Unique identifier for this action invocation in the format &quot;transactionId.sequence&quot;.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="specification" type="cmd:specificationDto"/>
+            <xs:element name="sequence" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Action invocation within this transaction/command.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="target" type="common:oidDto" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>For regular actions, represents the entity or view model upon which the action is to be invoked.  For mixin actions, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="action" type="cmd:actionDto">
+                <xs:annotation>
+                    <xs:documentation>The action and arguments to be invoked on the target object.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="user" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>The name of the user that invoked this action.  Note that this isn't necessarily the user that initiated the original command; the SudoService may be being used to temporarily switch the effective user.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="timestampStart" type="xs:dateTime">
-                <xs:annotation>
-                    <xs:documentation>The point in time that this action was invoked.  See also 'timestampComplete'.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="timestampComplete" type="xs:dateTime" minOccurs="0" maxOccurs="1">
-                <xs:annotation>
-                    <xs:documentation>Introduced in v1.1. The point in time that this action completed.  The duration that the action took is the difference between 'timestamp' and 'timestampComplete'.  This element is optional for backward compatibility, but will be populated for any v1.1 instances of this schema.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="title" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>User-friendly title of the 'target' object.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timings" type="common:periodDto">
+                <xs:annotation>
+                    <xs:documentation>Captures the time taken to invoke the action.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

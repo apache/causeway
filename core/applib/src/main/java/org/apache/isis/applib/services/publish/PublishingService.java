@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
 
 /**
  * Will be called whenever an publishable entity has changed its state, or an published action has been invoked.
@@ -39,7 +40,14 @@ import org.apache.isis.applib.annotation.Programmatic;
  * To use either service, must include on the classpath and also register the service (eg in <tt>isis.properties</tt>).
  */
 public interface PublishingService {
-    
+
+    /**
+     * @param metadata
+     * @param payload
+     *
+     * @deprecated - use instead {@link PublisherService#publish(ActionInvocationMementoDto)}.
+     */
+    @Deprecated
     @Programmatic
     void publish(EventMetadata metadata, EventPayload payload);
     

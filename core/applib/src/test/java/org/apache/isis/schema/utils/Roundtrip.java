@@ -30,7 +30,7 @@ import org.joda.time.LocalTime;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
+import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueType;
 
@@ -45,63 +45,60 @@ public class Roundtrip {
     public void happyCase() throws Exception {
 
         // given
-        final ActionInvocationMementoDto aim = ActionInvocationMementoDtoUtils.newDto();
-
-        ActionInvocationMementoDtoUtils.setMetadata(
-                aim,
+        final ActionInvocationMementoDto aim = ActionInvocationMementoDtoUtils.newDto(
                 UUID.randomUUID(),
                 1,
-                new java.sql.Timestamp(new java.util.Date().getTime()),
-                "com.mycompany.myapp.Customer", "placeOrder", "com.mycompany.myapp.Customer#placeOrder",
-                "CUS", "12345", "John Customer", "freddyUser");
+                "com.mycompany.myapp.Customer#placeOrder",
+                new Bookmark("CUS", "12345"), "John Customer", "freddyUser",
+                new java.sql.Timestamp(new java.util.Date().getTime()));
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aString", String.class, "Fred");
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullString", String.class, (String) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aString", String.class, "Fred", null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullString", String.class, (String) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aByte", Byte.class, (Byte) (byte) 123);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullByte", Byte.class, (Byte) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aByte", Byte.class, (Byte) (byte) 123, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullByte", Byte.class, (Byte) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aShort", Short.class, (Short) (short) 32123);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullShort", Short.class, (Short) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aShort", Short.class, (Short) (short) 32123, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullShort", Short.class, (Short) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "anInt", Integer.class, 123454321);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullInt", Integer.class, (Integer) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "anInt", Integer.class, 123454321, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullInt", Integer.class, (Integer) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aLong", Long.class, 1234567654321L);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullLong", Long.class, (Long) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aLong", Long.class, 1234567654321L, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullLong", Long.class, (Long) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aFloat", Float.class, 12345.6789F);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullFloat", Float.class, (Float) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aFloat", Float.class, 12345.6789F, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullFloat", Float.class, (Float) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aDouble", Double.class, 12345678.90123);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullDouble", Double.class, (Double) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aDouble", Double.class, 12345678.90123, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullDouble", Double.class, (Double) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aBoolean", Boolean.class, true);
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullBoolean", Boolean.class, (Boolean) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aBoolean", Boolean.class, true, null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullBoolean", Boolean.class, (Boolean) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aChar", Character.class, 'x');
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullChar", Character.class, (Character) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aChar", Character.class, 'x', null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullChar", Character.class, (Character) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aBigInteger", java.math.BigInteger.class, new java.math.BigInteger("12345678901234567890"));
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullBigInteger", java.math.BigInteger.class, (java.math.BigInteger) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aBigInteger", java.math.BigInteger.class, new java.math.BigInteger("12345678901234567890"), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullBigInteger", java.math.BigInteger.class, (java.math.BigInteger) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aBigDecimal", java.math.BigDecimal.class, new java.math.BigDecimal("12345678901234567890"));
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullBigDecimal", java.math.BigDecimal.class, (java.math.BigDecimal) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aBigDecimal", java.math.BigDecimal.class, new java.math.BigDecimal("12345678901234567890"), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullBigDecimal", java.math.BigDecimal.class, (java.math.BigDecimal) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aJodaDateTime", org.joda.time.DateTime.class, new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1));
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullJodaDateTime", org.joda.time.DateTime.class, (org.joda.time.DateTime) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aJodaDateTime", org.joda.time.DateTime.class, new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullJodaDateTime", org.joda.time.DateTime.class, (org.joda.time.DateTime) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aJodaLocalDate", org.joda.time.LocalDate.class, new org.joda.time.LocalDate(2015, 5, 23));
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullJodaLocalDate", org.joda.time.LocalDate.class, (org.joda.time.LocalDate) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aJodaLocalDate", org.joda.time.LocalDate.class, new org.joda.time.LocalDate(2015, 5, 23), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullJodaLocalDate", org.joda.time.LocalDate.class, (org.joda.time.LocalDate) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aJodaLocalDateTime", org.joda.time.LocalDateTime.class, new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1));
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullJodaLocalDateTime", org.joda.time.LocalDateTime.class, (org.joda.time.LocalDateTime) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aJodaLocalDateTime", org.joda.time.LocalDateTime.class, new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullJodaLocalDateTime", org.joda.time.LocalDateTime.class, (org.joda.time.LocalDateTime) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "aJodaLocalTime", org.joda.time.LocalTime.class, new org.joda.time.LocalTime(9, 54, 1));
-        ActionInvocationMementoDtoUtils.addArgValue(aim, "nullJodaLocalTime", org.joda.time.LocalTime.class, (org.joda.time.LocalTime) null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aJodaLocalTime", org.joda.time.LocalTime.class, new org.joda.time.LocalTime(9, 54, 1), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullJodaLocalTime", org.joda.time.LocalTime.class, (org.joda.time.LocalTime) null, null);
 
-        ActionInvocationMementoDtoUtils.addArgReference(aim, "aReference", new Bookmark("ORD", "12345"));
-        ActionInvocationMementoDtoUtils.addArgReference(aim, "nullReference", null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "aReference", null, new Bookmark("ORD", "12345"), null);
+        ActionInvocationMementoDtoUtils.addParamArg(aim, "nullReference", null, null, null);
 
 
         // when
@@ -115,9 +112,9 @@ public class Roundtrip {
 
 
         // then
-        assertThat(recreated.getMetadata().getActionIdentifier(), Matchers.is(aim.getMetadata().getActionIdentifier()));
-        assertThat(recreated.getMetadata().getTarget().getObjectType(), Matchers.is(aim.getMetadata().getTarget().getObjectType()));
-        assertThat(recreated.getMetadata().getTarget().getObjectIdentifier(), Matchers.is(aim.getMetadata().getTarget().getObjectIdentifier()));
+        assertThat(recreated.getInvocation().getAction().getActionIdentifier(), Matchers.is(aim.getInvocation().getAction().getActionIdentifier()));
+        assertThat(recreated.getInvocation().getTarget().getObjectType(), Matchers.is(aim.getInvocation().getTarget().getObjectType()));
+        assertThat(recreated.getInvocation().getTarget().getObjectIdentifier(), Matchers.is(aim.getInvocation().getTarget().getObjectIdentifier()));
 
 
         int param = 0;

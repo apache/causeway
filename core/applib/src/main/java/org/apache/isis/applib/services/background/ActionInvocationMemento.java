@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
 
 /**
  * A memento for an action invocation, to allow the details of an action invocation
@@ -30,12 +31,21 @@ import org.apache.isis.applib.services.memento.MementoService.Memento;
  * Provided as a mechanism by which implementations of {@link BackgroundService} can 
  * hand-off work to the {@link BackgroundCommandService}.  This is used by the
  * default implementation of <tt>BackgroundServiceDefault</tt> in the <tt>isis-module-background</tt> module.
- * 
+ * </p>
+ *
  * <p>
- * Implementation-wise this is a wrapper around {@link MementoService.Memento}, 
+ * Implementation-wise this is a wrapper around {@link MementoService.Memento},
  * and abstracts away the details of the keys used to store the various pieces of
  * information stored in the underlying memento.
+ * </p>
+ *
+ * <p>
+ * Note that this class - unlike {@link CommandMementoDto} does <i>not</i> support mixins.
+ * </p>
+ *
+ * @deprecated - use {@link CommandMementoDto} instead.
  */
+@Deprecated
 public class ActionInvocationMemento {
 
     private final Memento memento;

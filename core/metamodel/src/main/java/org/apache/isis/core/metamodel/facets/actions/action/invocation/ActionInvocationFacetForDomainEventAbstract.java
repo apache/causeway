@@ -42,10 +42,11 @@ import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -75,6 +76,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
@@ -193,7 +196,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+        final CommandContext commandContext = getCommandContext();
         final Command command = commandContext != null ? commandContext.getCommand() : null;
 
         // ... post the executing event
@@ -281,9 +284,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
 
-
         try {
-
 
             final Object[] executionParameters = new Object[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
@@ -294,7 +295,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
             if (bulkFacet != null) {
-                final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
+                final ActionInvocationContext actionInvocationContext = getActionInvocationContext();
                 if (actionInvocationContext != null &&
                     actionInvocationContext.getInvokedOn() == null) {
 
@@ -302,7 +303,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
                 }
 
-                final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
+                final Bulk.InteractionContext bulkInteractionContext = getBulkInteractionContext();
 
                 if (bulkInteractionContext != null &&
                         bulkInteractionContext.getInvokedAs() == null) {
@@ -326,7 +327,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     command.setTarget(targetBookmark);
                 }
 
-                if("(edit)".equals(command.getMemberIdentifier())) {
+                if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
                     // special case for edit properties
                 } else {
 
@@ -339,18 +340,34 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     if(command.getMemento() == null) {
                         // similarly, guard here to deal with subsequent contributed/mixin actions.
 
-                        final CommandMementoService commandMementoService = getServicesInjector().lookupService(CommandMementoService.class);
-                        if(commandMementoService != null) {
-                            final Object targetObject = unwrap(targetAdapter);
-                            final Object[] args = CommandUtil.objectsFor(arguments);
-                            final ActionInvocationMemento aim = commandMementoService.asActionInvocationMemento(method, targetObject, args);
+                        final CommandMementoService commandMementoService = getCommandMementoService();
 
+                        final Object targetObject = unwrap(targetAdapter);
+                        final Object[] args = CommandUtil.objectsFor(arguments);
+
+                        final CommandMementoDto dto = commandMementoService.asCommandMemento(
+                                Collections.singletonList(targetAdapter),
+                                owningAction, arguments);
+
+                        if(dto != null) {
+                            // the default implementation will always return a dto.  The guard is to allow
+                            // for the default implementation to be replaced with a version that returns null
+                            // allowing a fallback to the original API (using ActionInvocationMemento rather than
+                            // CommandMementoDto).
+                            final String mementoXml = CommandMementoDtoUtils.toXml(dto);
+                            command.setMemento(mementoXml);
+                        } else {
+
+                            // fallback to old behaviour
+                            ActionInvocationMemento aim = commandMementoService
+                                    .asActionInvocationMemento(method, targetObject, args);
                             if(aim != null) {
                                 command.setMemento(aim.asMementoString());
+
                             } else {
+                                String actionIdentifier = owningAction.getIdentifier().toClassAndNameIdentityString();
                                 throw new IsisException(
-                                        "Unable to build memento for action " +
-                                                owningAction.getIdentifier().toClassAndNameIdentityString());
+                                        "Unable to build memento for action " + actionIdentifier);
                             }
                         }
                     }
@@ -375,7 +392,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
 
                 // persist command so can be this command can be in the 'background'
-                final CommandService commandService = getServicesInjector().lookupService(CommandService.class);
+                final CommandService commandService = getCommandService();
                 if(commandService.persistIfPossible(command)) {
                     // force persistence, then return the command itself.
                     final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(command);
@@ -399,9 +416,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             Object result;
             if(cacheable) {
-                final QueryResultsCache queryResultsCache = getServicesInjector().lookupService(QueryResultsCache.class);
-                final Object[] targetPojoPlusExecutionParameters = ArrayExtensions
-                        .appendT(executionParameters, targetPojo);
+                final QueryResultsCache queryResultsCache = getQueryResultsCache();
+                final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
                 result = queryResultsCache.execute(new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
@@ -494,8 +510,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         }
     }
 
-
-
     private static Object unwrap(final ObjectAdapter adapter) {
         return adapter == null ? null : adapter.getObject();
     }
@@ -506,9 +520,43 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
 
+
+    // /////////////////////////////////////////////////////////
+    // Dependencies (looked up)
+    // /////////////////////////////////////////////////////////
+
+    private CommandContext getCommandContext() {
+        return lookupService(CommandContext.class);
+    }
+
+    private QueryResultsCache getQueryResultsCache() {
+        return lookupService(QueryResultsCache.class);
+    }
+
+    private CommandService getCommandService() {
+        return lookupService(CommandService.class);
+    }
+
+    private CommandMementoService getCommandMementoService() {
+        return lookupService(CommandMementoService.class);
+    }
+
+    private Bulk.InteractionContext getBulkInteractionContext() {
+        return lookupService(Bulk.InteractionContext.class);
+    }
+
+    private ActionInvocationContext getActionInvocationContext() {
+        return lookupService(ActionInvocationContext.class);
+    }
+
+    private <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
+    }
+
     // /////////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
+
 
     private AdapterManager getAdapterManager() {
         return adapterManager;

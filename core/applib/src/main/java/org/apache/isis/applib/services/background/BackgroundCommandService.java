@@ -34,9 +34,19 @@ import org.apache.isis.applib.services.command.Command;
  * API is through {@link org.apache.isis.applib.services.background.BackgroundService}).  It is therefore
  * annotated with {@link org.apache.isis.applib.annotation.DomainService} so that it is automatically registered as
  * a service.
+ *
+ * <p>
+ *     If an implementation also implements {@link BackgroundCommandService2}, then
+ *     {@link BackgroundCommandService2#schedule(ActionInvocationMemento, Command, String, String, String)} will be
+ *     called rather than {@link BackgroundCommandService#schedule(ActionInvocationMemento, Command, String, String, String)}.
+ * </p>
  */
 public interface BackgroundCommandService {
 
+    /**
+     * @deprecated - replaced by {@link BackgroundCommandService2#schedule(ActionInvocationMemento, Command, String, String, String)}
+     */
+    @Deprecated
     void schedule(
             final ActionInvocationMemento aim, 
             final Command command, 
