@@ -47,10 +47,10 @@ public interface BackgroundService {
 
     /**
      * Not API: for framework use only.
-     * @param domainObject
-     * @param args
-     * @return
+     *
+     * @deprecated - no longer called by the framework (moved to <tt>CommandMementoService</tt>, an internal SPI service).
      */
+    @Deprecated
     @Programmatic
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 

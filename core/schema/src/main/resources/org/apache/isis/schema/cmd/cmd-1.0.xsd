@@ -25,52 +25,52 @@
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
 
-    <xs:element name="commandMementoDto" type="commandMementoDto">
+    <xs:element name="commandMementoDto">
         <xs:annotation>
             <xs:documentation>Represents v1.0 of this schema.
             </xs:documentation>
         </xs:annotation>
-    </xs:element>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="1">
+                    <xs:annotation>
+                        <xs:documentation>The major version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="1">
+                    <xs:annotation>
+                        <xs:documentation>Introduced in v1.1. The minor version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="transactionId" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>Transaction id for this command, a unique identifier.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="targets" type="common:oidDto" minOccurs="1" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="action" type="actionDto">
+                    <xs:annotation>
+                        <xs:documentation>The action and arguments to be invoked on the target object(s).</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="user" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The name of the user that initiated/created this command.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
 
-    <xs:complexType name="commandMementoDto">
-        <xs:sequence>
-            <xs:element name="majorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="1">
-                <xs:annotation>
-                    <xs:documentation>The major version of the schema that an XML instance was created using.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="1">
-                <xs:annotation>
-                    <xs:documentation>Introduced in v1.1. The minor version of the schema that an XML instance was created using.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="transactionId" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Transaction id for this command, a unique identifier.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="targets" type="common:oidDto" minOccurs="1" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="action" type="actionDto">
-                <xs:annotation>
-                    <xs:documentation>The action and arguments to be invoked on the target object(s).</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="user" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>The name of the user that initiated/created this command.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    </xs:element>
 
     <xs:complexType name="actionDto">
         <xs:annotation>

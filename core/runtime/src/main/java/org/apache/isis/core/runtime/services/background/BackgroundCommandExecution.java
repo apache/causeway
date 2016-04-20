@@ -100,12 +100,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                 commandContext.setCommand(command);
                 final String memento = command.getMemento();
-                final boolean legacy = memento.startsWith("<memento");
 
                 try {
                     command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
                     command.setExecutor(Executor.BACKGROUND);
 
+                    final boolean legacy = memento.startsWith("<memento");
                     if(legacy) {
 
                         final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
@@ -150,21 +150,24 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                     findObjectAction(mixinFqClassName, targetAdapter, actionId);
 
                             final ObjectAdapter[] argAdapters = argAdaptersFor(dto);
-                            objectAction.execute(
+                            final ObjectAdapter resultAdapter = objectAction.execute(
                                     targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                            // no longer capture the result, because there may be many
-                            // (should be done by auditing/profiling instead).
+                            // this doesn't really make sense if >1 action
+                            // in any case, the capturing of the action interaction should be the
+                            // responsibiity of auditing/profiling
+                            if(resultAdapter != null) {
+                                Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                                command.setResult(resultBookmark);
+                            }
                         }
                     }
 
                 } catch (Exception e) {
-                    if(legacy) {
-                        command.setException(Throwables.getStackTraceAsString(e));
-                    } else {
-                        // no longer capture any exceptions, could be bulk action.
-                        // (should be done by auditing/profiling instead).
-                    }
+                    // this doesn't really make sense if >1 action
+                    // in any case, the capturing of the action interaction should be the
+                    // responsibiity of auditing/profiling
+                    command.setException(Throwables.getStackTraceAsString(e));
                 } finally {
                     // decided to keep this, even though really this
                     // should be the responsibility of auditing/profiling

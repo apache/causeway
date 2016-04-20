@@ -18,6 +18,10 @@ package org.apache.isis.core.runtime.services.background;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -29,20 +33,18 @@ import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.schema.cmd.v1.CommandMementoDto;
 
@@ -50,9 +52,6 @@ import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Depends on an implementation of {@link org.apache.isis.applib.services.background.BackgroundCommandService} to
@@ -63,16 +62,18 @@ import static org.hamcrest.CoreMatchers.nullValue;
 )
 public class BackgroundServiceDefault implements BackgroundService {
 
-    private final MementoServiceDefault mementoService;
-    
-    public BackgroundServiceDefault() {
-        this(new MementoServiceDefault());
+
+
+    @Programmatic
+    @PostConstruct
+    public void init(Map<String,String> props) {
     }
-    
-    BackgroundServiceDefault(MementoServiceDefault mementoService) {
-        this.mementoService = mementoService.withNoEncoding();
+
+    @Programmatic
+    @PreDestroy
+    public void shutdown() {
+
     }
-    
 
     // //////////////////////////////////////
 
@@ -101,10 +102,6 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Programmatic
     @Override
     public <T> T execute(final T domainObject) {
-
-        // only perform check if actually used.
-        ensureDependenciesInjected();
-
         final Class<? extends Object> cls = domainObject.getClass();
         final MethodHandler methodHandler = newMethodHandler(domainObject);
         return newProxy(cls, methodHandler);
@@ -226,16 +223,9 @@ public class BackgroundServiceDefault implements BackgroundService {
     @javax.inject.Inject
     private BookmarkService bookmarkService;
 
+    @javax.inject.Inject
     private CommandContext commandContext;
 
-    /**
-     * Checked lazily in {@link #execute(Object)}.
-     */
-    private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
-        Ensure.ensureThatState(this.backgroundCommandService, is(not(nullValue())), "BackgroundCommandService domain service must be configured");
-        Ensure.ensureThatState(this.commandContext, is(not(nullValue())), "CommandContext domain service must be configured");
-    }
 
     // //////////////////////////////////////
 
@@ -246,7 +236,5 @@ public class BackgroundServiceDefault implements BackgroundService {
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession();
     }
-
-
 
 }
