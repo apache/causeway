@@ -170,11 +170,6 @@ public class CommandMementoServiceDefault implements CommandMementoService {
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
             CommandMementoDtoUtils.addParamArg(actionDto.getParameters(), parameterName, paramType, arg, bookmarkService);
         }
-        if(objectAction instanceof ObjectActionMixedIn) {
-            final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
-            final String mixinTypeName = actionMixedIn.getMixinType().getCorrespondingClass().getName();
-            actionDto.setMixinFqClassName(mixinTypeName);
-        }
 
         dto.setTransactionId(UUID.randomUUID().toString());
         return dto;

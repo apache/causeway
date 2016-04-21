@@ -52,7 +52,7 @@
                 </xs:element>
                 <xs:element name="targets" type="common:oidDto" minOccurs="1" maxOccurs="unbounded">
                     <xs:annotation>
-                        <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
+                        <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
@@ -74,16 +74,10 @@
 
     <xs:complexType name="actionDto">
         <xs:annotation>
-            <xs:documentation>Captures the information required to be able to invoke an action on the target(s).  In particular, identifies the action to be invoked, whether that action is a mixin, and also the arguments for the parameters of said action.  Note that the targets are not part of this structure so that it can be reused between cmd and aim schemas (the former of which can relate to multiple targets, the latter always to a single target).
+            <xs:documentation>Captures the information required to be able to invoke an action on the target(s).  In particular, identifies the action to be invoked, and also the arguments for the parameters of said action.  Note that the targets are not part of this structure so that it can be reused between cmd and aim schemas (the former of which can relate to multiple targets, the latter always to a single target).  It also _isn't_ necessary to capture whether the action is actually a mixin; this detail is encapsulated within the Apache Isis metamodel.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="mixinFqClassName" type="xs:string" minOccurs="0" maxOccurs="1">
-                <xs:annotation>
-                    <xs:documentation>Populated only for mixin actions, is the fully qualified class name of the mixin type.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="actionIdentifier" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>Formal identifier of the action being invoked.

@@ -144,10 +144,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                             final Object targetObject = bookmarkService.lookup(bookmark);
 
                             final ObjectAdapter targetAdapter = adapterFor(targetObject);
-                            final String mixinFqClassName = actionDto.getMixinFqClassName();
 
                             final ObjectAction objectAction =
-                                    findObjectAction(mixinFqClassName, targetAdapter, actionId);
+                                    findObjectAction(targetAdapter, actionId);
 
                             final ObjectAdapter[] argAdapters = argAdaptersFor(dto);
                             final ObjectAdapter resultAdapter = objectAction.execute(
@@ -176,20 +175,14 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             }
 
             private ObjectAction findObjectAction(
-                    final String mixinFqClassName,
                     final ObjectAdapter targetAdapter,
                     final String actionId) throws Exception {
 
                 final ObjectAction objectAction;
-                if(mixinFqClassName != null) {
-                    final ObjectSpecification mixinSpec = getSpecificationLoader()
-                            .loadSpecification(mixinFqClassName);
-                    objectAction = mixinSpec.getObjectAction(actionId);
-                } else {
-                    final ObjectSpecification specification = targetAdapter.getSpecification();
 
-                    objectAction = findAction(specification, actionId);
-                }
+                final ObjectSpecification specification = targetAdapter.getSpecification();
+
+                objectAction = findAction(specification, actionId);
                 if(objectAction == null) {
                     throw new Exception("Unknown action '" + actionId + "'");
                 }

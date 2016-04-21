@@ -1,32 +1,46 @@
 [[_rgsvc_api_BackgroundService]]
-= `BackgroundService`
+= `BackgroundService2`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
-The `BackgroundService`, and the companion xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] SPI service (used by Apache Isis itself), enable action invocations to be persisted such that they may be invoked in the background.
+The `BackgroundService2` domain service, and also the companion
+xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands
+to be persisted such that they may be invoked in the background.  (The `BackgroundService2` and
+`BackgroundCommandService2` extensions to these services introduced in `1.13.0-SNAPSHOT`).
 
-The `BackgroundService` is responsible for capturing a memento representing the action invocation in a typesafe way, and persisting it rather than executing it directly.
+The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way,
+and persisting it rather than executing it directly.
 
-The default `BackgroundServiceDefault` implementation (provided by isis-core) works by using a proxy wrapper around the target so that it can capture the action to invoke and its arguments using (a private copy of) xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`].  The persistence delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService`.  One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
+The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can
+capture the action to invoke and its arguments.  (As of `1.13.0-SNAPSHOT`), this is done using xref:rgsvc.adoc#_rgsvc_spi_CommandMementoService[`CommandMementoService`] (in previous releases it used (a private copy of) xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`]).
 
-The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them. The `BackgroundCommandExecution` abstract class (discussed xref:rgsvc.adoc#_rgsvc_api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this; the concrete
-implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
+The persistence delegates the persistence of the memento to an appropriate implementation of the companion
+`BackgroundCommandService2`.  One such implementation of `BackgroundCommandService` is provided by (non-ASF)
+http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
+
+The persisting of commands is only half the story; there needs to be a separate process to read the commands and
+execute them. The `BackgroundCommandExecution` abstract class (discussed
+xref:rgsvc.adoc#_rgsvc_api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this;
+the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for
+the persisted (background) ``Command``s.
 
 
 
 == API & Implementation
 
-Returns a proxy around the object which is then used to obtain the signature of the action to be invoked in the background.
+The API is:
 
 [source,java]
 ----
-public interface BackgroundService {
-    @Programmatic
-    <T> T execute(final T object);
+public interface BackgroundService2 {
+    <T> T execute(final T object);                              // <1>
+    <T> T executeMixin(Class<T> mixinClass, Object mixedIn);    // <2>
 }
 ----
+<1> returns a proxy around the domain object; any methods executed against this proxy will result in a command (to invoke the corresponding action) being persisted by xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService2[`BackgroundCommandService2`]
+<2> (`1.13.0-SNAPSHOT`) returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService2[`BackgroundCommandService2`].
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
@@ -44,7 +58,7 @@ public void submitCustomerInvoices() {
     for(Customer customer: customerRepository.findCustomersToInvoice()) {
         backgroundService.execute(customer).submitInvoice();
     }
-    container.informUser("Calculating...");
+    messageService.informUser("Calculating...");
 }
 ----
 
@@ -112,12 +126,10 @@ The `CommandContext` service is responsible for providing a parent `Command` wit
 
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way. The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides implementations of both (see xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] and xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`]).
 
+The xref:rgsvc.adoc#_rgsvc_spi_CommandMementoService[`CommandMementoService`] (`1.13.0-SNAPSHOT`) is used to obtain
+a memento of the command such that it can be persisted.  (In earlier versions, xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] was used for this purpose).
+
 
 include::_rgsvc_api_BackgroundService_BackgroundCommandExecution.adoc[leveloffset=+1]
 include::_rgsvc_api_BackgroundService_Quartz.adoc[leveloffset=+1]
-
-
-
-
-
 

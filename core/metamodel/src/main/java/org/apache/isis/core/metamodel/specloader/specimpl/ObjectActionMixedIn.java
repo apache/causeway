@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
@@ -106,6 +107,10 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Override
     public String getOriginalId() {
         return super.getId();
+    }
+
+    public boolean hasMixinAction(final ObjectAction mixinAction) {
+        return this.mixinAction == mixinAction;
     }
 
     @Override

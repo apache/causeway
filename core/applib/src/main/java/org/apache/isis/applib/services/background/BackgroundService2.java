@@ -16,46 +16,18 @@
  */
 package org.apache.isis.applib.services.background;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Submit actions to be invoked in the background.
- * 
- * <p>
- * Example usage:
- * <pre>
- * public void submitInvoices() {
- *     for(Customer customer: customerRepository.findCustomersToInvoice()) {
- *         backgroundService.execute(customer).submitInvoice();
- *     }
- * }
- * 
- * &#64;javax.inject.Inject
- * private BackgroundService backgroundService;
- * </pre>
  */
-public interface BackgroundService {
+public interface BackgroundService2 extends BackgroundService {
 
     /**
-     * Returns a proxy around the object (entity or view model) which is then used to obtain the
+     * Returns a proxy around the mixin object which is then used to obtain the
      * signature of the action to be invoked in the background.
-     *
-     * <p>
-     *     To obtain a proxy for a mixin, use {@link BackgroundService2#executeMixin(Class, Object)}.
-     * </p>
      */
     @Programmatic
-    <T> T execute(final T object);
-
-    /**
-     * Not API: for framework use only.
-     *
-     * @deprecated - no longer called by the framework (moved to <tt>CommandMementoService</tt>, an internal SPI service).
-     */
-    @Deprecated
-    @Programmatic
-    ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
+    <T> T executeMixin(Class<T> mixinClass, Object mixedIn);
 
 }
