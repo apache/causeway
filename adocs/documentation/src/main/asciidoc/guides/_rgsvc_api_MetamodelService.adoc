@@ -6,9 +6,13 @@
 
 
 
-The `MetaModelService` provides access (albeit currently extremely limited) to aspects of Apache Isis' internal metamodel.
+The `MetaModelService2` (`MetaModelService2` sub-interface introduced in `1.13.0-SNAPSHOT`) provides access to
+a number of aspects of Apache Isis' internal metamodel.
 
-Currently this is limited to looking up the object type (as specified in xref:rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`] and equivalent mechanisms, and as used in  xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`Bookmark`]s and elsewhere) from an object's class, and vice versa.  In the future we expect other aspects of the metamodel to also be formally surfaced through this API.
+[NOTE]
+====
+====
+
 
 
 == API
@@ -18,17 +22,25 @@ The API defined by the service is:
 
 [source,java]
 ----
-public interface MetaModelService {
+public interface MetaModelService2 {
     Class<?> fromObjectType(final String objectType);   // <1>
     String toObjectType(final Class<?> domainType);     // <2>
     void rebuild(final Class<?> domainType);            // <3>
     List<DomainMember> export();                        // <4>
+
+    enum Sort {
+        VIEW_MODEL, JDO_ENTITY, DOMAIN_SERVICE,
+        MIXIN, VALUE, COLLECTION;
+    }
+    Sort sortOf(final Class<?> domainType);             // <5>
+    Sort sortOf(final Bookmark bookmark);
 }
 ----
 <1> reverse lookup of a domain class' object type
 <2> lookup of a domain class' object type
 <3> invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified domain type.
 <4> returns a list of representations of each of member of each domain class.
+<5> (`1.13.0-SNAPSHOT`) what sort of object a domain type is (or bookmark represents)
 
 
 == Implementation
@@ -51,4 +63,5 @@ in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to thi
 == Related Services
 
 The `MetaModelServiceMenu` provides a method to download all domain members as a CSV.  Internally
-this calls `MetaModelService#export()`.
+this calls `MetaModelService#export()`.  Under the covers this uses the API provided by the
+xref:rgsvc.adoc#_rgsvc_api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service.

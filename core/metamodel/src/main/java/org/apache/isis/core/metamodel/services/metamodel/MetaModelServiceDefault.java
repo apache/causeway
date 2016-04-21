@@ -26,15 +26,17 @@ import javax.inject.Inject;
 
 import com.google.common.collect.Lists;
 
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,7 +51,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class MetaModelServiceDefault implements MetaModelService, SpecificationLoaderAware {
+public class MetaModelServiceDefault implements MetaModelService2, SpecificationLoaderAware {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
@@ -158,6 +160,46 @@ public class MetaModelServiceDefault implements MetaModelService, SpecificationL
 
     // //////////////////////////////////////
 
+    @Override
+    public Sort sortOf(final Class<?> domainType) {
+        if(domainType == null) {
+            return null;
+        }
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainType);
+        if(objectSpec.isService()) {
+            return Sort.DOMAIN_SERVICE;
+        }
+        if(objectSpec.isViewModel()) {
+            return Sort.VIEW_MODEL;
+        }
+        if(objectSpec.isValue()) {
+            return Sort.VALUE;
+        }
+        if(objectSpec.isMixin()) {
+            return Sort.VALUE;
+        }
+        if(objectSpec.isParentedOrFreeCollection()) {
+            return Sort.COLLECTION;
+        }
+        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+        if(Persistable.class.isAssignableFrom(correspondingClass)) {
+            return Sort.JDO_ENTITY;
+        }
+        throw new IllegalArgumentException(String.format(
+                "Unable to determine what sort of domain object is '%s'", objectSpec.getFullIdentifier()));
+    }
+
+    @Override
+    public Sort sortOf(final Bookmark bookmark) {
+        if(bookmark == null) {
+            return null;
+        }
+        final Class<?> domainType = this.fromObjectType(bookmark.getObjectType());
+        return sortOf(domainType);
+    }
+
+    // //////////////////////////////////////
+
     private SpecificationLoader specificationLookup;
 
     @Override
@@ -167,4 +209,5 @@ public class MetaModelServiceDefault implements MetaModelService, SpecificationL
 
     @Inject
     GridService gridService;
+
 }

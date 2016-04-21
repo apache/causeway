@@ -24,10 +24,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * Indicates that this class is a wizard.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
- * applying the <tt>@Wizard</tt> annotation at the class level.
  */
 public interface WizardFacet extends Facet {
 
