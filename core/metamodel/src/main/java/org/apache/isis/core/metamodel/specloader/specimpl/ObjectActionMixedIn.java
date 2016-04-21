@@ -45,9 +45,12 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember2 {
 
@@ -231,7 +234,31 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
                 final Bookmark targetBookmark = CommandUtil.bookmarkFor(mixedInAdapter);
                 command.setTarget(targetBookmark);
+
             }
+
+            if(command.getMemento() == null) {
+                // similarly, guard here to deal with subsequent or prior contributed/mixin actions.
+
+                final CommandMementoService commandMementoService = getCommandMementoService();
+
+                final CommandMementoDto dto = commandMementoService.asCommandMemento(
+                        Collections.singletonList(mixedInAdapter),
+                        this, arguments);
+
+                if(dto != null) {
+                    // the default implementation will always return a dto.  The guard is to allow
+                    // for the default implementation to be replaced with a version that returns null
+                    // allowing a fallback to the original API (using ActionInvocationMemento rather than
+                    // CommandMementoDto).
+                    final String mementoXml = CommandMementoDtoUtils.toXml(dto);
+                    command.setMemento(mementoXml);
+                } else {
+                    // no fallback to old behaviour is required; mixin actions were simply not correctly supported.
+                }
+            }
+
+
         }
 
         return mixinAction.execute(mixinAdapterFor(mixinType, mixedInAdapter), arguments, interactionInitiatedBy);
@@ -250,6 +277,10 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return mixinAdapterFor(mixinType, mixedInAdapter);
     }
 
+    private static Object unwrap(final ObjectAdapter adapter) {
+        return adapter == null ? null : adapter.getObject();
+    }
+
     /* (non-Javadoc)
      * @see org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()
      */
@@ -263,4 +294,17 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return getSpecificationLoader().loadSpecification(mixinType);
 
     }
+
+
+
+    // //////////////////////////////////////
+
+    private CommandMementoService getCommandMementoService() {
+        return lookupService(CommandMementoService.class);
+    }
+
+    private <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
+    }
+
 }

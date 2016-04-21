@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -169,7 +170,11 @@ public class CommandMementoServiceDefault implements CommandMementoService {
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
             CommandMementoDtoUtils.addParamArg(actionDto.getParameters(), parameterName, paramType, arg, bookmarkService);
         }
-        actionDto.setMixinFqClassName(null);
+        if(objectAction instanceof ObjectActionMixedIn) {
+            final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
+            final String mixinTypeName = actionMixedIn.getMixinType().getCorrespondingClass().getName();
+            actionDto.setMixinFqClassName(mixinTypeName);
+        }
 
         dto.setTransactionId(UUID.randomUUID().toString());
         return dto;
