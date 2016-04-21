@@ -29,6 +29,9 @@
  */
 @javax.xml.bind.annotation.XmlSchema(
         namespace = "http://isis.apache.org/applib/layout/grid/bootstrap3",
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
-)
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
+        xmlns = {
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://isis.apache.org/applib/layout/grid/bootstrap3", prefix = "bs3")
+        })
 package org.apache.isis.applib.layout.grid.bootstrap3;
