@@ -37,6 +37,4 @@ public interface ObjectReflectorInstaller extends Installer {
             final DeploymentCategory deploymentCategory,
             final Collection<MetaModelRefiner> metaModelRefiners, final ServicesInjectorSpi servicesInjector);
 
-    void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller);
-
 }

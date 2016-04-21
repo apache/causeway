@@ -21,10 +21,8 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.InstallableFixture;
@@ -34,7 +32,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
@@ -56,7 +53,6 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationA
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -244,8 +240,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
 
         final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
 
-        final Set<FacetDecorator> facetDecorators =
-                Sets.newHashSet((FacetDecorator) new StandardTransactionFacetDecorator(getConfiguration()));
         final List<LayoutMetadataReader> layoutMetadataReaders =
                 Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson());
 
@@ -253,7 +247,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
                 .createObjectReflector(
                         deploymentCategory, getConfiguration(), programmingModel,
                         metaModelRefiners,
-                        facetDecorators, layoutMetadataReaders,
+                        layoutMetadataReaders,
                         metaModelValidator,
                         servicesInjector);
     }

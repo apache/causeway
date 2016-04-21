@@ -39,7 +39,6 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationA
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -108,9 +107,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         reflectorInstaller = this.installerLookup.reflectorInstaller(
                 configProperty(SystemConstants.REFLECTOR_KEY));
 
-        TransactionFacetDecoratorInstaller transactionFacetDecoratorInstaller =
-                this.installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class);
-
 
         // ensure we were able to load all components via InstallerLookup (fail fast)
         ensureThatState(authenticationInstaller, is(not(nullValue())),
@@ -121,16 +117,11 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
                 "servicesInstaller could not be looked up");
         ensureThatState(fixturesInstaller, is(not(nullValue())),
                 "fixtureInstaller could not be looked up");
-        ensureThatState(transactionFacetDecoratorInstaller, is(not(nullValue())),
-                "transactionFacetDecoratorInstaller could not be looked up");
         ensureThatState(persistenceMechanismInstaller, is(not(nullValue())),
                 "persistenceMechanismInstaller could not be looked up");
         ensureThatState(reflectorInstaller, is(not(nullValue())),
                 "reflectorInstaller could not be looked up");
 
-
-        // add in transaction support
-        reflectorInstaller.addFacetDecoratorInstaller(transactionFacetDecoratorInstaller);
 
         // capture the final configuration once all components have been loaded
         configuration = this.installerLookup.getConfiguration();

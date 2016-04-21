@@ -45,8 +45,6 @@ import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
@@ -122,13 +120,6 @@ public final class ObjectReflectorDefault
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
-    /**
-     * <p>
-     * {@link FacetDecorator}s must be added prior to {@link SpecificationLoaderSpi#init(RuntimeContext)
-     * initialization.}
-     */
-    private final FacetDecoratorSet facetDecoratorSet;
-
     private final ServicesInjectorSpi servicesInjector;
 
     private final MetaModelValidator metaModelValidator;
@@ -156,7 +147,6 @@ public final class ObjectReflectorDefault
             final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
-            final Set<FacetDecorator> facetDecorators,
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjectorSpi servicesInjector) {
@@ -165,7 +155,6 @@ public final class ObjectReflectorDefault
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(servicesInjector, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
-        ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
         ensureThatArg(layoutMetadataReaders, is(notNullValue()));
         ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
@@ -175,10 +164,6 @@ public final class ObjectReflectorDefault
 
         this.programmingModel = programmingModel;
 
-        this.facetDecoratorSet = new FacetDecoratorSet();
-        for (final FacetDecorator facetDecorator : facetDecorators) {
-            this.facetDecoratorSet.add(facetDecorator);
-        }
 
         this.metaModelValidator = metaModelValidator;
         this.facetProcessor = new FacetProcessor(configuration, programmingModel);
@@ -245,7 +230,6 @@ public final class ObjectReflectorDefault
         }
 
         // initialize subcomponents
-        facetDecoratorSet.init();
         programmingModel.init();
         facetProcessor.init();
         metaModelValidator.init();
@@ -300,7 +284,6 @@ public final class ObjectReflectorDefault
         initialized = false;
         
         getCache().clear();
-        facetDecoratorSet.shutdown();
     }
 
 
@@ -521,7 +504,6 @@ public final class ObjectReflectorDefault
 
     private void introspect(final ObjectSpecificationAbstract specSpi) {
         specSpi.introspectTypeHierarchyAndMembers();
-        facetDecoratorSet.decorate(specSpi);
         specSpi.updateFromFacetValues();
         specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
 
@@ -569,7 +551,6 @@ public final class ObjectReflectorDefault
 
     @Override
     public void debugData(final DebugBuilder debug) {
-        facetDecoratorSet.debugData(debug);
         debug.appendln();
 
         debug.appendTitle("Specifications");

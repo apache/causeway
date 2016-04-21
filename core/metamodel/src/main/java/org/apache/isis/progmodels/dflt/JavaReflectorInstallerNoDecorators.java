@@ -20,42 +20,33 @@
 package org.apache.isis.progmodels.dflt;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
-/**
- * An implementation of {@link ObjectReflectorInstaller} without support for {@link FacetDecoratorInstaller}
- * being looked up (since this functionality is only available from <tt>core.runtime</tt>).
- */
 public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implements ObjectReflectorInstaller {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorInstallerNoDecorators.class);
 
     public static final String PROPERTY_BASE = ConfigurationConstants.ROOT;
-
-    protected final LinkedHashSet<FacetDecoratorInstaller> decoratorInstallers = Sets.newLinkedHashSet();
 
     // /////////////////////////////////////////////////////
     // Constructor
@@ -81,11 +72,11 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
             final ServicesInjectorSpi servicesInjector) {
 
         final ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
-        final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
         final MetaModelValidator mmv = createMetaModelValidator(getConfiguration());
         final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders(getConfiguration());
 
-        return JavaReflectorHelper.createObjectReflector(deploymentCategory, getConfiguration(), programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv,
+        return JavaReflectorHelper.createObjectReflector(deploymentCategory, getConfiguration(), programmingModel, metaModelRefiners,
+                layoutMetadataReaders, mmv,
                 servicesInjector);
     }
 
@@ -143,13 +134,6 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
     }
 
-    /**
-     * Hook method to allow subclasses to specify a different sets of
-     * {@link FacetDecorator}s.
-     */
-    protected Set<FacetDecorator> createFacetDecorators(final IsisConfiguration configuration) {
-        return Collections.emptySet();
-    }
 
 
     /**
@@ -180,21 +164,6 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
 
 
 
-    // /////////////////////////////////////////////////////
-    // Optionally Injected: DecoratorInstallers
-    // /////////////////////////////////////////////////////
-
-    /**
-     * Adds in {@link FacetDecoratorInstaller}; if <tt>null</tt> or if already
-     * added then request will be silently ignored.
-     */
-    @Override
-    public void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller) {
-        if (decoratorInstaller == null) {
-            return;
-        }
-        decoratorInstallers.add(decoratorInstaller);
-    }
 
     // /////////////////////////////////////////////////////
     // Guice

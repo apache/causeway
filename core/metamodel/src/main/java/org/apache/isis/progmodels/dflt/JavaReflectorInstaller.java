@@ -17,16 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.progmodels.dflt;
 
-import java.util.List;
-
-import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-
-public interface FacetDecoratorInstaller extends Installer {
-
-    static String TYPE = "facet-decorator";
-
-    List<FacetDecorator> createDecorators();
+public class JavaReflectorInstaller extends JavaReflectorInstallerNoDecorators {
 }

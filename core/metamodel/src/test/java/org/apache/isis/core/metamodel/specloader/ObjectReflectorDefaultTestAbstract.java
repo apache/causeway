@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collections;
-import java.util.HashSet;
 
 import com.google.common.collect.Lists;
 
@@ -35,7 +34,6 @@ import org.junit.rules.ExpectedException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -89,7 +87,6 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                 new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
                         mockConfiguration,
                         new ProgrammingModelFacetsJava5(),
-                        new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(
                                 new LayoutMetadataReaderFromJson()), mockServicesInjector);
@@ -111,7 +108,6 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         new ObjectReflectorDefault(DeploymentCategory.PRODUCTION ,
                 mockConfiguration,
                 new ProgrammingModelFacetsJava5(),
-                new HashSet<FacetDecorator>(),
                 new MetaModelValidatorDefault(),
                 Lists.<LayoutMetadataReader>newArrayList(),
                 mockServicesInjector);
@@ -125,7 +121,6 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
                 mockConfiguration,
                 new ProgrammingModelFacetsJava5(),
-                new HashSet<FacetDecorator>(),
                 new MetaModelValidatorDefault(),
                 null,
                 mockServicesInjector);
