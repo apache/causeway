@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
@@ -69,10 +68,6 @@ public final class ReflectorConstants {
      */
     public static final String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ProgrammingModel.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST;
 
-    /**
-     * Key used to lookup comma-separated list of {@link FacetDecorator}s.
-     */
-    public static final String FACET_DECORATOR_CLASS_NAMES = ConfigurationConstants.ROOT + "reflector.facet-decorators";
 
     /**
      * Key used to lookup comma-separated list of {@link org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader}s.
