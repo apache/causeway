@@ -385,90 +385,92 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             }
 
 
-            // deal with background commands
+            ObjectAdapter resultAdapter;
+
             if( command != null &&
                 command.getExecutor() == Command.Executor.USER &&
                 command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
 
+                // deal with background commands
+
                 // persist command so can be this command can be in the 'background'
                 final CommandService commandService = getCommandService();
-                if(commandService.persistIfPossible(command)) {
-                    // force persistence, then return the command itself.
-                    final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(command);
-                    return InvocationResult.forActionThatReturned(resultAdapter);
-                } else {
+                if (!commandService.persistIfPossible(command)) {
                     throw new IsisException(
                             "Unable to schedule action '"
                                     + owningAction.getIdentifier().toClassAndNameIdentityString() + "' to run in background: "
                                     + "CommandService does not support persistent commands " );
                 }
-            }
+                resultAdapter = getAdapterManager().adapterFor(command);
 
-
-            // otherwise, go ahead and execute action in the 'foreground'
-            if(command != null) {
-                command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
-            }
-
-            final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
-            final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
-
-            Object result;
-            if(cacheable) {
-                final QueryResultsCache queryResultsCache = getQueryResultsCache();
-                final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
-                result = queryResultsCache.execute(new Callable<Object>() {
-                    @Override
-                    public Object call() throws Exception {
-                        return method.invoke(targetPojo, executionParameters);
-                    }
-                }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
             } else {
-                result = method.invoke(targetPojo, executionParameters);
-            }
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(" action result " + result);
-            }
-            if (result == null) {
-                if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
-                    // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
-                    // automatically do the clone and return the clone instead.
-                    final ViewModelFacet facet = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                    final Object clone = facet.clone(targetAdapter.getObject());
-                    final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
-                    return InvocationResult.forActionThatReturned(clonedAdapter);
+                // otherwise, go ahead and execute action in the 'foreground'
+                if(command != null) {
+                    command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
                 }
-                return InvocationResult.forActionThatReturned(null);
-            }
 
-            ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
+                final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
+                final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
 
-            if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
-                // if the object returned is cloneable, then
-                // (to save boilerplate in the domain) automatically do the clone.
-                final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                result = facet.clone(result);
+                Object result;
+                if(cacheable) {
+                    final QueryResultsCache queryResultsCache = getQueryResultsCache();
+                    final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
+                    result = queryResultsCache.execute(new Callable<Object>() {
+                        @Override
+                        public Object call() throws Exception {
+                            return method.invoke(targetPojo, executionParameters);
+                        }
+                    }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
+                } else {
+                    result = method.invoke(targetPojo, executionParameters);
+                }
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(" action result " + result);
+                }
+                if (result == null) {
+                    if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
+                        // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
+                        // automatically do the clone and return the clone instead.
+                        final ViewModelFacet facet = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                        final Object clone = facet.clone(targetAdapter.getObject());
+                        final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
+                        return InvocationResult.forActionThatReturned(clonedAdapter);
+                    }
+                    return InvocationResult.forActionThatReturned(null);
+                }
+
                 resultAdapter = getAdapterManager().adapterFor(result);
-            }
 
-
-            // copy over TypeOfFacet if required
-            final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
-
-            if(command != null) {
-                if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                    final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
-                    command.setResult(bookmark);
+                if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
+                    // if the object returned is cloneable, then
+                    // (to save boilerplate in the domain) automatically do the clone.
+                    final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                    result = facet.clone(result);
+                    resultAdapter = getAdapterManager().adapterFor(result);
                 }
-            }
 
-            if(currentInvocation.get() == null) {
-                final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-                if(publishedActionFacet != null) {
-                    currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
+
+                // copy over TypeOfFacet if required
+                final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
+                resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+
+                if(command != null) {
+                    if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
+                        final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
+                        command.setResult(bookmark);
+                    }
                 }
+
+                if(currentInvocation.get() == null) {
+                    final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+                    if(publishedActionFacet != null) {
+                        currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
+                    }
+                }
+
             }
 
             return InvocationResult.forActionThatReturned(resultAdapter);
