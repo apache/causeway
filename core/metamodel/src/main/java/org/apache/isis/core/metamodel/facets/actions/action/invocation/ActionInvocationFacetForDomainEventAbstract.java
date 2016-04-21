@@ -431,6 +431,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
+                    
                     if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
                         // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
                         // automatically do the clone and return the clone instead.
@@ -439,35 +440,37 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
                         return InvocationResult.forActionThatReturned(clonedAdapter);
                     }
-                    return InvocationResult.forActionThatReturned(null);
-                }
+                    resultAdapter = null;
 
-                resultAdapter = getAdapterManager().adapterFor(result);
+                } else {
 
-                if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
-                    // if the object returned is cloneable, then
-                    // (to save boilerplate in the domain) automatically do the clone.
-                    final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                    result = facet.clone(result);
                     resultAdapter = getAdapterManager().adapterFor(result);
-                }
 
-
-                // copy over TypeOfFacet if required
-                final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-                resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
-
-                if(command != null) {
-                    if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                        final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
-                        command.setResult(bookmark);
+                    if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
+                        // if the object returned is cloneable, then
+                        // (to save boilerplate in the domain) automatically do the clone.
+                        final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                        result = facet.clone(result);
+                        resultAdapter = getAdapterManager().adapterFor(result);
                     }
-                }
 
-                if(currentInvocation.get() == null) {
-                    final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-                    if(publishedActionFacet != null) {
-                        currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
+
+                    // copy over TypeOfFacet if required
+                    final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
+                    resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+
+                    if(command != null) {
+                        if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
+                            final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
+                            command.setResult(bookmark);
+                        }
+                    }
+
+                    if(currentInvocation.get() == null) {
+                        final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+                        if(publishedActionFacet != null) {
+                            currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
+                        }
                     }
                 }
 
