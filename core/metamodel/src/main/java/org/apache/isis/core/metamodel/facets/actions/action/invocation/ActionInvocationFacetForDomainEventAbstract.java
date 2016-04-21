@@ -208,80 +208,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         null);
 
         // ... invoke the action
-        final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
-        final ObjectAdapter invocationResultAdapter = invocationResult.getAdapter();
-
-        // ... post the executed event
-        if (invocationResult.getWhetherInvoked()) {
-            // perhaps the Action was not properly invoked (i.e. an exception was raised).
-            // If invoked ok, then post to the event bus
-            domainEventHelper.postEventForAction(
-                    AbstractDomainEvent.Phase.EXECUTED,
-                    eventType, verify(event),
-                    owningAction, targetAdapter, arguments,
-                    command,
-                    invocationResultAdapter);
-        }
-
-        if (invocationResultAdapter == null) {
-            return null;
-        }
-
-        boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
-        if(filterForVisibility) {
-            final Object result = invocationResultAdapter.getObject();
-            if(result instanceof Collection || result.getClass().isArray()) {
-                final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(invocationResultAdapter);
-
-                final Iterable<ObjectAdapter> adapterList = facet.iterable(invocationResultAdapter);
-                final List<ObjectAdapter> visibleAdapters =
-                        ObjectAdapter.Util.visibleAdapters(
-                                adapterList,
-                                interactionInitiatedBy);
-                final Object visibleObjects =
-                        CollectionUtils.copyOf(
-                                Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
-                                method.getReturnType());
-                if (visibleObjects != null) {
-                    return getAdapterManager().adapterFor(visibleObjects);
-                }
-                // would be null if unable to take a copy (unrecognized return type)
-                // fallback to returning the original adapter, without filtering for visibility
-
-            } else {
-                boolean visible =
-                        ObjectAdapter.Util.isVisible(
-                                invocationResultAdapter,
-                                interactionInitiatedBy);
-                if(!visible) {
-                    return null;
-                }
-            }
-        }
-        return invocationResultAdapter;
-    }
-
-    /**
-     * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
-     * to discard the event if the domain event is of a different type (specifically if was installed by virtue of a no
-     * @{@link org.apache.isis.applib.annotation.Action} or @{@link org.apache.isis.applib.annotation.ActionInteraction} annotations.
-     */
-    protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
-        return event;
-    }
-
-    /**
-     * For testing only.
-     */
-    public Class<? extends ActionDomainEvent<?>> getEventType() {
-        return eventType;
-    }
-
-    protected InvocationResult internalInvoke(
-            final Command command,
-            final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments) {
+        InvocationResult result1;
 
         try {
 
@@ -413,30 +340,30 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
                 final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
 
-                Object result;
+                Object result11;
                 if(cacheable) {
                     final QueryResultsCache queryResultsCache = getQueryResultsCache();
                     final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
-                    result = queryResultsCache.execute(new Callable<Object>() {
+                    result11 = queryResultsCache.execute(new Callable<Object>() {
                         @Override
                         public Object call() throws Exception {
                             return method.invoke(targetPojo, executionParameters);
                         }
                     }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
                 } else {
-                    result = method.invoke(targetPojo, executionParameters);
+                    result11 = method.invoke(targetPojo, executionParameters);
                 }
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(" action result " + result);
+                    LOG.debug(" action result " + result11);
                 }
-                if (result == null) {
+                if (result11 == null) {
 
                     if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
                         // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
                         // automatically do the clone and return the clone instead.
-                        final ViewModelFacet facet = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                        final Object clone = facet.clone(targetAdapter.getObject());
+                        final ViewModelFacet facet1 = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                        final Object clone = facet1.clone(targetAdapter.getObject());
                         final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
 
                         resultAdapter = clonedAdapter;
@@ -447,14 +374,14 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
                 } else {
 
-                    resultAdapter = getAdapterManager().adapterFor(result);
+                    resultAdapter = getAdapterManager().adapterFor(result11);
 
                     if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
                         // if the object returned is cloneable, then
                         // (to save boilerplate in the domain) automatically do the clone.
-                        final ViewModelFacet facet = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                        result = facet.clone(result);
-                        resultAdapter = getAdapterManager().adapterFor(result);
+                        final ViewModelFacet facet1 = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
+                        result11 = facet1.clone(result11);
+                        resultAdapter = getAdapterManager().adapterFor(result11);
                     }
 
 
@@ -472,14 +399,15 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     if(currentInvocation.get() == null) {
                         final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
                         if(publishedActionFacet != null) {
-                            currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(), arguments, resultAdapter, command));
+                            currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(),
+                                    arguments, resultAdapter, command));
                         }
                     }
                 }
 
             }
 
-            return InvocationResult.forActionThatReturned(resultAdapter);
+            result1 = InvocationResult.forActionThatReturned(resultAdapter);
 
         } catch (final IllegalArgumentException e) {
             throw e;
@@ -511,10 +439,77 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
 
             // Action was not invoked (an Exception was thrown)
-            return InvocationResult.forActionNotInvoked();
+            result1 = InvocationResult.forActionNotInvoked();
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }
+        final InvocationResult invocationResult = result1;
+        final ObjectAdapter invocationResultAdapter = invocationResult.getAdapter();
+
+        // ... post the executed event
+        if (invocationResult.getWhetherInvoked()) {
+            // perhaps the Action was not properly invoked (i.e. an exception was raised).
+            // If invoked ok, then post to the event bus
+            domainEventHelper.postEventForAction(
+                    AbstractDomainEvent.Phase.EXECUTED,
+                    eventType, verify(event),
+                    owningAction, targetAdapter, arguments,
+                    command,
+                    invocationResultAdapter);
+        }
+
+        if (invocationResultAdapter == null) {
+            return null;
+        }
+
+        boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
+        if(filterForVisibility) {
+            final Object result = invocationResultAdapter.getObject();
+            if(result instanceof Collection || result.getClass().isArray()) {
+                final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(invocationResultAdapter);
+
+                final Iterable<ObjectAdapter> adapterList = facet.iterable(invocationResultAdapter);
+                final List<ObjectAdapter> visibleAdapters =
+                        ObjectAdapter.Util.visibleAdapters(
+                                adapterList,
+                                interactionInitiatedBy);
+                final Object visibleObjects =
+                        CollectionUtils.copyOf(
+                                Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                                method.getReturnType());
+                if (visibleObjects != null) {
+                    return getAdapterManager().adapterFor(visibleObjects);
+                }
+                // would be null if unable to take a copy (unrecognized return type)
+                // fallback to returning the original adapter, without filtering for visibility
+
+            } else {
+                boolean visible =
+                        ObjectAdapter.Util.isVisible(
+                                invocationResultAdapter,
+                                interactionInitiatedBy);
+                if(!visible) {
+                    return null;
+                }
+            }
+        }
+        return invocationResultAdapter;
+    }
+
+    /**
+     * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
+     * to discard the event if the domain event is of a different type (specifically if was installed by virtue of a no
+     * @{@link org.apache.isis.applib.annotation.Action} or @{@link org.apache.isis.applib.annotation.ActionInteraction} annotations.
+     */
+    protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
+        return event;
+    }
+
+    /**
+     * For testing only.
+     */
+    public Class<? extends ActionDomainEvent<?>> getEventType() {
+        return eventType;
     }
 
     private static Object unwrap(final ObjectAdapter adapter) {
