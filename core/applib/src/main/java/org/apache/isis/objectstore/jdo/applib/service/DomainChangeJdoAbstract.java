@@ -19,8 +19,10 @@ package org.apache.isis.objectstore.jdo.applib.service;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,6 +38,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.util.ObjectContracts;
 
 import static org.apache.isis.applib.annotation.Optionality.MANDATORY;
@@ -222,9 +225,22 @@ public abstract class DomainChangeJdoAbstract {
     public Object openTargetObject() {
         return Util.lookupBookmark(getTarget(), bookmarkService, container);
     }
+
     public boolean hideOpenTargetObject() {
         return getTarget() == null;
     }
+
+    public String disableOpenTargetObject() {
+        final Object targetObject = getTarget();
+        if (targetObject == null) {
+            return null;
+        }
+        final MetaModelService2.Sort sortOfObject = metaModelService.sortOf(getTarget());
+        return !(sortOfObject.isViewModel() || sortOfObject.isJdoEntity())
+                ? "Can only open view models or entities"
+                : null;
+    }
+
 
 
     // //////////////////////////////////////
@@ -330,5 +346,8 @@ public abstract class DomainChangeJdoAbstract {
     
     @javax.inject.Inject
     protected DomainObjectContainer container;
+
+    @javax.inject.Inject
+    protected MetaModelService2 metaModelService;
 
 }
