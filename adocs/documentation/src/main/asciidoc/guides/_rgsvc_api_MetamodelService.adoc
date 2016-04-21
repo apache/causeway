@@ -9,11 +9,6 @@
 The `MetaModelService2` (`MetaModelService2` sub-interface introduced in `1.13.0-SNAPSHOT`) provides access to
 a number of aspects of Apache Isis' internal metamodel.
 
-[NOTE]
-====
-====
-
-
 
 == API
 
@@ -28,11 +23,11 @@ public interface MetaModelService2 {
     void rebuild(final Class<?> domainType);            // <3>
     List<DomainMember> export();                        // <4>
 
-    enum Sort {
+    enum Sort {                                         // <5>
         VIEW_MODEL, JDO_ENTITY, DOMAIN_SERVICE,
         MIXIN, VALUE, COLLECTION;
     }
-    Sort sortOf(final Class<?> domainType);             // <5>
+    Sort sortOf(final Class<?> domainType);
     Sort sortOf(final Bookmark bookmark);
 }
 ----
