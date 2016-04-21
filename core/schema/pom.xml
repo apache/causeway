@@ -82,9 +82,20 @@
                                     <bindingIncludes>
                                         <bindingInclude>aim-2.0-binding.xml</bindingInclude>
                                     </bindingIncludes>
+                                    <args>
+                                        <arg>-extension</arg>
+                                        <arg>-Xnamespace-prefix</arg>
+                                    </args>
                                 </configuration>
                             </execution>
                         </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.jvnet.jaxb2_commons</groupId>
+                                <artifactId>jaxb2-namespace-prefix</artifactId>
+                                <version>1.1</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>

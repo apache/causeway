@@ -19,7 +19,12 @@
 -->
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-               jaxb:version="2.0">
+               jaxb:version="2.0"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+               xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+			  http://jaxb2-commons.dev.java.net/namespace-prefix http://java.net/projects/jaxb2-commons/sources/svn/content/namespace-prefix/trunk/src/main/resources/prefix-namespace-schema.xsd"
+>
     <jaxb:bindings schemaLocation="aim-2.0.xsd">
         <jaxb:schemaBindings>
             <!--
@@ -28,6 +33,9 @@
             -->
             <jaxb:package name="org.apache.isis.schema.aim.v2"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="aim" />
+        </jaxb:bindings>
     </jaxb:bindings>
     <!-- since aim-2.0.xsd does an xs:import of common-1.0.xsd, we need to specify common's package bindings -->
     <jaxb:bindings schemaLocation="../common/common-1.0.xsd">
@@ -38,6 +46,9 @@
             -->
             <jaxb:package name="org.apache.isis.schema.common.v1"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="common" />
+        </jaxb:bindings>
     </jaxb:bindings>
     <!-- since aim-2.0.xsd does an xs:import of cmd-1.0.xsd, we need to specify common's package bindings -->
     <jaxb:bindings schemaLocation="../cmd/cmd-1.0.xsd">
@@ -48,5 +59,8 @@
             -->
             <jaxb:package name="org.apache.isis.schema.cmd.v1"/>
         </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="cmd" />
+        </jaxb:bindings>
     </jaxb:bindings>
 </jaxb:bindings>
