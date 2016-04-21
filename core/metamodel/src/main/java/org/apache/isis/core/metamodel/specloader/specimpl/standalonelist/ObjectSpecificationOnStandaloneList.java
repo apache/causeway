@@ -105,6 +105,11 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     @Override
+    public boolean isMixin() {
+        return false;
+    }
+
+    @Override
     public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
         return false;
     }

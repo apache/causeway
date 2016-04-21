@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -314,6 +315,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
         final Object pojo = targetAdapter.getObject();
         return facet.isCloneable(pojo);
+    }
+
+    @Override
+    public boolean isMixin() {
+        return containsFacet(MixinFacet.class);
     }
 
     @Override

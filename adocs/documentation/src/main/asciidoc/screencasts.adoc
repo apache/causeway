@@ -623,6 +623,129 @@ otherwise be part of the Apache Isis metamodel (and thus show up in the UI). +
 
 
 
+== Renaming
+
+
+[cols="2a,2a"]
+|===
+
+
+|The (very simple) steps required to rename a domain entity class.+
+(v1.12.0)
+
+|video::BYmSlgJP5KY[youtube,width="560px",height="315px"]
+
+
+|How to rename a menu (on the top-level menubar) as rendered in the xref:ugvw.adoc[Wicket viewer].+
+(v1.12.0)
+
+|video::J5xobU6X0ng[youtube,width="560px",height="315px"]
+
+
+
+|How to rename various elements (collections, title) of the xref:rgant.adoc#_rgant_HomePage[home page] view model,
+for an improved initial page.+
+(v1.12.0)
+
+|video::mgHqRxQrp28[youtube,width="560px",height="315px"]
+
+
+|How to rename the application name as it appears in the header.+
+(v1.12.0)
+
+|video::1i6N4wES6iw[youtube,width="560px",height="315px"]
+
+
+|Updating the logo for the application as it appears in the header.+
+(v1.12.0)
+
+|video::9nfDyhqCSvA[youtube,width="560px",height="315px"]
+
+
+
+|===
+
+
+
+== Decoupling
+
+
+[cols="2a,2a"]
+|===
+
+
+|Refactoring a mixin action, teasing out its separate responsibilities in order to decouple the code and uncover new concepts..+
+(v1.12.0)
+
+|video::vntv_5Z8Ros[youtube,width="560px",height="315px"]
+
+
+|Separating out the responsibilities of the persistent domain entities from those of view models that act upon those domain entities.+
+(v1.12.0)
+
+|video::Fgo2zFhRVco[youtube,width="560px",height="315px"]
+
+
+
+
+|===
+
+
+
+== (Parented) collections
+
+
+[cols="2a,2a"]
+|===
+
+
+|How to implement a bidirectional 1-to-many association between two domain entities.+
+(v1.12.0)
+
+|video::9PgOSqf7rYE[youtube,width="560px",height="315px"]
+
+
+|How domain entities can be automatically persisted just by being associated with an already persistent entity..+
+(v1.12.0)
+
+|video::0fbVg8xJ9sE[youtube,width="560px",height="315px"]
+
+
+
+|How bidirectional relationships between domain entities can be automatically maintained.+
+(v1.12.0)
+
+|video::FwzuCSlLLRM[youtube,width="560px",height="315px"]
+
+
+|How deleting one persistent entity can, if required, automatically delete another associated entity.+
+(v1.12.0)
+
+|video::IzZPbNYNJl4[youtube,width="560px",height="315px"]
+
+
+
+|===
+
+
+
+== Metadata fieldset
+
+
+[cols="2a,2a"]
+|===
+
+
+|Improving the layout of domain entities by adding a metadata fieldset.+
+(v1.12.0)
+
+|video::kdhwMc0f7_k[youtube,width="560px",height="315px"]
+
+
+|===
+
+
+
 
 == Older screencasts
 

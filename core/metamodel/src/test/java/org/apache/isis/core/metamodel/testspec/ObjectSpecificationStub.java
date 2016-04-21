@@ -416,6 +416,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return false;
     }
 
+    @Override
+    public boolean isMixin() {
+        return false;
+    }
 
 
     @Override

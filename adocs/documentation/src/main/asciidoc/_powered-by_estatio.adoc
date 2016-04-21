@@ -7,7 +7,7 @@
 
 
 
-Estatio is an estate management application being developed for and deployed at link:http://www.eurocommercialproperties.com/[Eurocommercial Properties].
+Estatio is an estate management application developed for and deployed at link:http://www.eurocommercialproperties.com/[Eurocommercial].
 
 Eurocommercial Properties is a Dutch-listed company that owns and operates over 50 shopping centres across Italy, France and Sweden, with income from property of approx. EUR150m per year.  Previously the company had used one of the leading software packages for its invoicing;
 however this had proven on the one hand lacking in key features/functionality for some locales, while
@@ -37,5 +37,5 @@ The Apache Isis committers are extremely grateful for Eurocommercial's investmen
 And to learn a little more about the Estatio domain model itself, take a look at both the source code (of course) and also at https://github.com/estatio/estatio/blob/master/adocs/documentation/src/main/asciidoc/auditability.adoc[this documentation], developed to allow Eurocommercial's accountants to understand and audit the application.
 
 
-_Case study provided by Jeroen van der Wal, http://incode.org_
+_Case study provided by Jeroen van der Wal, link:http://incode.org[Incode]_
 
