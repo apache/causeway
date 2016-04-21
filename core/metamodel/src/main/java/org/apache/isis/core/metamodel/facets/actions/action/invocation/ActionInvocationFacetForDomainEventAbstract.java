@@ -431,16 +431,19 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
-                    
+
                     if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
                         // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
                         // automatically do the clone and return the clone instead.
                         final ViewModelFacet facet = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
                         final Object clone = facet.clone(targetAdapter.getObject());
                         final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
-                        return InvocationResult.forActionThatReturned(clonedAdapter);
+
+                        resultAdapter = clonedAdapter;
+
+                    } else {
+                        resultAdapter = null;
                     }
-                    resultAdapter = null;
 
                 } else {
 
