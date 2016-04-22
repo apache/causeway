@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Objects;
@@ -29,8 +30,13 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -44,6 +50,9 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
@@ -59,12 +68,15 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
@@ -353,15 +365,15 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     @Override
     public ObjectAdapter execute(
-            final ObjectAdapter target,
+            final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if(LOG.isDebugEnabled()) {
-            LOG.debug("execute action " + target + "." + getId());
+            LOG.debug("execute action " + targetAdapter + "." + getId());
         }
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(this, target, arguments,
-                interactionInitiatedBy);
+
+        return facet.invoke(this, targetAdapter, arguments, interactionInitiatedBy);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
@@ -412,10 +424,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         }
 
         final ObjectAdapter[] parameterDefaultAdapters = new ObjectAdapter[parameterCount];
-        if (parameterDefaultPojos != null) {
-            for (int i = 0; i < parameterCount; i++) {
-                parameterDefaultAdapters[i] = adapterFor(parameterDefaultPojos[i]);
-            }
+        for (int i = 0; i < parameterCount; i++) {
+            parameterDefaultAdapters[i] = adapterFor(parameterDefaultPojos[i]);
         }
 
         return parameterDefaultAdapters;
@@ -494,6 +504,141 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameterChoicesAdapters;
     }
 
+
+    /**
+     * Internal API
+     */
+    @Override
+    public void setupActionInvocationContext(final ObjectAdapter targetAdapter) {
+
+        final Object targetPojo = unwrap(targetAdapter);
+
+        final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
+        if (bulkFacet != null) {
+            final org.apache.isis.applib.services.actinvoc.ActionInvocationContext actionInvocationContext = getActionInvocationContext();
+            if (actionInvocationContext != null && actionInvocationContext.getInvokedOn() == null) {
+
+                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
+                actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
+            }
+
+            final Bulk.InteractionContext bulkInteractionContext = getBulkInteractionContext();
+
+            if (bulkInteractionContext != null && bulkInteractionContext.getInvokedAs() == null) {
+
+                bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
+                bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
+            }
+        }
+    }
+
+    /**
+     * Internal API
+     */
+    @Override
+    public void setupCommand(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments) {
+
+        setupCommandTarget(targetAdapter, arguments);
+        setupCommandMemberIdentifier();
+        setupCommandMementoAndExecutionContext(targetAdapter, arguments);
+    }
+
+
+    protected void setupCommandTarget(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments) {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
+
+        if(command.getTarget() != null) {
+            // already set up by a ObjectActionContributee or edit form;
+            // don't overwrite
+            return;
+        }
+
+        command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
+        command.setTargetAction(CommandUtil.targetActionNameFor(this));
+        command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
+
+        final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
+        command.setTarget(targetBookmark);
+    }
+
+    protected void setupCommandMemberIdentifier() {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
+
+        if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
+            // special case for edit properties, don't overwrite
+            return;
+        }
+
+        if (command.getMemberIdentifier() != null) {
+            // any contributed/mixin actions will fire after the main action
+            // the guard here prevents them from trashing the command's memberIdentifier
+            return;
+        }
+
+        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(this));
+    }
+
+    protected void setupCommandMementoAndExecutionContext(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments) {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
+
+        if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
+            // special case for edit properties, don't overwrite
+            return;
+        }
+
+        if (command.getMemento() != null) {
+            // guard here to prevent subsequent contributed/mixin actions from
+            // trampling over the command's memento and execution context
+            return;
+        }
+
+        // memento
+        final CommandMementoService commandMementoService = getCommandMementoService();
+        final CommandMementoDto dto = commandMementoService.asCommandMemento(
+                Collections.singletonList(targetAdapter),
+                this, arguments);
+
+        final String mementoXml = CommandMementoDtoUtils.toXml(dto);
+        command.setMemento(mementoXml);
+
+        // copy over the command execution 'context' (if available)
+        final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
+        if(commandFacet != null && !commandFacet.isDisabled()) {
+            command.setExecuteIn(commandFacet.executeIn());
+            command.setPersistence(commandFacet.persistence());
+        } else {
+            // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
+            command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
+            command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
+        }
+
+    }
+
     //endregion
 
     //region > debug, toString
@@ -526,6 +671,35 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     //endregion
+
+
+    private static Object unwrap(final ObjectAdapter adapter) {
+        return adapter == null ? null : adapter.getObject();
+    }
+
+    private <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
+    }
+
+    protected CommandContext getCommandContext() {
+        CommandContext commandContext = lookupService(CommandContext.class);
+        if (commandContext == null) {
+            throw new IllegalStateException("The CommandContext service is not registered!");
+        }
+        return commandContext;
+    }
+
+    protected CommandMementoService getCommandMementoService() {
+        return lookupService(CommandMementoService.class);
+    }
+
+    protected Bulk.InteractionContext getBulkInteractionContext() {
+        return lookupService(Bulk.InteractionContext.class);
+    }
+
+    protected org.apache.isis.applib.services.actinvoc.ActionInvocationContext getActionInvocationContext() {
+        return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);
+    }
 
 
 }

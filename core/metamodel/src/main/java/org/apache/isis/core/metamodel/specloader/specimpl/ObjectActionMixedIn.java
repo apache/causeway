@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Objects;
@@ -24,13 +23,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,18 +33,13 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
-import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember2 {
 
@@ -154,7 +143,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final Where where) {
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                        mixinAdapterFor(mixedInAdapter), interactionInitiatedBy, where);
         ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
@@ -165,28 +154,32 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                        mixinAdapterFor(mixedInAdapter), interactionInitiatedBy, where);
         ic.putContributee(0, mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter mixedInAdapter) {
-        return mixinAction.getDefaults(mixinAdapterFor(mixinType, mixedInAdapter));
+        return mixinAction.getDefaults(mixinAdapterFor(mixedInAdapter));
     }
 
     @Override
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinAction.getChoices(mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy);
+        return mixinAction.getChoices(mixinAdapterFor(mixedInAdapter), interactionInitiatedBy);
+    }
+
+    protected ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
+        return mixinAdapterFor(mixinType, mixedInAdapter);
     }
 
     public Consent isProposedArgumentSetValid(
             final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinAction.isProposedArgumentSetValid(mixinAdapterFor(mixinType, mixedInAdapter), proposedArguments, interactionInitiatedBy);
+        return mixinAction.isProposedArgumentSetValid(mixinAdapterFor(mixedInAdapter), proposedArguments, interactionInitiatedBy);
     }
 
     @Override
@@ -198,72 +191,16 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         // this code also exists in ActionInvocationFacetViaMethod
         // we need to repeat it here because the target adapter should be the mixedInAdapter, not the mixin
 
-        final BulkFacet bulkFacet = getFacet(BulkFacet.class);
-        if (bulkFacet != null) {
+        setupActionInvocationContext(mixedInAdapter);
 
-            final ActionInvocationContext actionInvocationContext =
-                    getServicesInjector().lookupService(ActionInvocationContext.class);
-            if (actionInvocationContext != null &&
-                    actionInvocationContext.getInvokedOn() == null) {
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
 
-                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
-                actionInvocationContext.setDomainObjects(Collections.singletonList(mixedInAdapter.getObject()));
-            }
+        setupCommandTarget(mixedInAdapter, arguments);
+        setupCommandMementoAndExecutionContext(mixedInAdapter, arguments);
 
-            final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
-            if (bulkInteractionContext != null &&
-                    bulkInteractionContext.getInvokedAs() == null) {
-
-                bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                actionInvocationContext.setDomainObjects(Collections.singletonList(mixedInAdapter.getObject()));
-            }
-        }
-
-        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-        final Command command = commandContext != null ? commandContext.getCommand() : null;
-
-        if(command != null && command.getExecutor() == Executor.USER) {
-
-            if (command.getTarget() != null) {
-                // already set up by a edit form
-                // don't overwrite
-            } else {
-                command.setTargetClass(CommandUtil.targetClassNameFor(mixedInAdapter));
-                command.setTargetAction(CommandUtil.targetActionNameFor(this));
-                command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
-
-                final Bookmark targetBookmark = CommandUtil.bookmarkFor(mixedInAdapter);
-                command.setTarget(targetBookmark);
-
-            }
-
-            if(command.getMemento() == null) {
-                // similarly, guard here to deal with subsequent or prior contributed/mixin actions.
-
-                final CommandMementoService commandMementoService = getCommandMementoService();
-
-                final CommandMementoDto dto = commandMementoService.asCommandMemento(
-                        Collections.singletonList(mixedInAdapter),
-                        this, arguments);
-
-                if(dto != null) {
-                    // the default implementation will always return a dto.  The guard is to allow
-                    // for the default implementation to be replaced with a version that returns null
-                    // allowing a fallback to the original API (using ActionInvocationMemento rather than
-                    // CommandMementoDto).
-                    final String mementoXml = CommandMementoDtoUtils.toXml(dto);
-                    command.setMemento(mementoXml);
-                } else {
-                    // no fallback to old behaviour is required; mixin actions were simply not correctly supported.
-                }
-            }
-
-
-        }
-
-        return mixinAction.execute(mixinAdapterFor(mixinType, mixedInAdapter), arguments, interactionInitiatedBy);
+        return mixinAction.execute(mixinAdapterFor(mixedInAdapter), arguments, interactionInitiatedBy);
     }
-
 
     //region > facetHolder
     @Override
@@ -271,15 +208,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return facetHolder;
     }
     //endregion
-
-
-    ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
-        return mixinAdapterFor(mixinType, mixedInAdapter);
-    }
-
-    private static Object unwrap(final ObjectAdapter adapter) {
-        return adapter == null ? null : adapter.getObject();
-    }
 
     /* (non-Javadoc)
      * @see org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()
@@ -299,12 +227,5 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
     // //////////////////////////////////////
 
-    private CommandMementoService getCommandMementoService() {
-        return lookupService(CommandMementoService.class);
-    }
-
-    private <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
-    }
 
 }

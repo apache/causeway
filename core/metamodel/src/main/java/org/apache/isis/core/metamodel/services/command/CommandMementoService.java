@@ -41,8 +41,8 @@ public interface CommandMementoService {
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
     /**
-     * The default implementation returns a non-null value.  If a custom implementation returns <tt>null</tt>, then
-     * the framework will fall back to using the deprecated {@link #asActionInvocationMemento(Method, Object, Object[])}.
+     * Returns a JAXB DTO (hence convertible to XML) that represents the intention to invoke an action on an action
+     * (or possible many, for bulk actions).  The action can be a mixin action or a contributed action.
      */
     @Programmatic
     CommandMementoDto asCommandMemento(

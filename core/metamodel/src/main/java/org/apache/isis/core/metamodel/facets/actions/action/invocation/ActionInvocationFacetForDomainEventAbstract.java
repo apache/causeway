@@ -34,18 +34,18 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -62,21 +62,16 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
-import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
@@ -196,7 +191,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext != null ? commandContext.getCommand() : null;
+        final Command command = commandContext.getCommand();
 
         // ... post the executing event
         final ActionDomainEvent<?> event =
@@ -207,243 +202,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         command,
                         null);
 
-        // ... invoke the action
-        InvocationResult result1;
+        final InvocationResult invocationResult = invoke(owningAction, targetAdapter, arguments);
 
-        try {
-
-            final Object[] executionParameters = new Object[arguments.length];
-            for (int i = 0; i < arguments.length; i++) {
-                executionParameters[i] = unwrap(arguments[i]);
-            }
-
-            final Object targetPojo = unwrap(targetAdapter);
-
-            final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-            if (bulkFacet != null) {
-                final ActionInvocationContext actionInvocationContext = getActionInvocationContext();
-                if (actionInvocationContext != null &&
-                    actionInvocationContext.getInvokedOn() == null) {
-
-                    actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
-                    actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
-                }
-
-                final Bulk.InteractionContext bulkInteractionContext = getBulkInteractionContext();
-
-                if (bulkInteractionContext != null &&
-                        bulkInteractionContext.getInvokedAs() == null) {
-
-                    bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                    actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
-                }
-            }
-
-            if(command != null && command.getExecutor() == Command.Executor.USER && owningAction != null) {
-
-                if(command.getTarget() != null) {
-                    // already set up by a ObjectActionContributee or edit form;
-                    // don't overwrite
-                } else {
-                    command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-                    command.setTargetAction(CommandUtil.targetActionNameFor(owningAction));
-                    command.setArguments(CommandUtil.argDescriptionFor(owningAction, arguments));
-
-                    final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
-                    command.setTarget(targetBookmark);
-                }
-
-                if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
-                    // special case for edit properties
-                } else {
-
-                    if(command.getMemberIdentifier() == null) {
-                        // any contributed/mixin actions will fire after the main action
-                        // the guard here prevents them from trashing the command's memberIdentifier
-                        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
-                    }
-
-                    if(command.getMemento() == null) {
-                        // similarly, guard here to deal with subsequent or prior contributed/mixin actions.
-
-                        final CommandMementoService commandMementoService = getCommandMementoService();
-
-                        final Object targetObject = unwrap(targetAdapter);
-                        final Object[] args = CommandUtil.objectsFor(arguments);
-
-                        final CommandMementoDto dto = commandMementoService.asCommandMemento(
-                                Collections.singletonList(targetAdapter),
-                                owningAction, arguments);
-
-                        if(dto != null) {
-                            // the default implementation will always return a dto.  The guard is to allow
-                            // for the default implementation to be replaced with a version that returns null
-                            // allowing a fallback to the original API (using ActionInvocationMemento rather than
-                            // CommandMementoDto).
-                            final String mementoXml = CommandMementoDtoUtils.toXml(dto);
-                            command.setMemento(mementoXml);
-                        } else {
-
-                            // fallback to old behaviour
-                            ActionInvocationMemento aim = commandMementoService
-                                    .asActionInvocationMemento(method, targetObject, args);
-                            if(aim != null) {
-                                command.setMemento(aim.asMementoString());
-
-                            } else {
-                                String actionIdentifier = owningAction.getIdentifier().toClassAndNameIdentityString();
-                                throw new IsisException(
-                                        "Unable to build memento for action " + actionIdentifier);
-                            }
-                        }
-                    }
-                }
-
-                // copy over the command execution 'context' (if available)
-                final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
-                if(commandFacet != null && !commandFacet.isDisabled()) {
-                    command.setExecuteIn(commandFacet.executeIn());
-                    command.setPersistence(commandFacet.persistence());
-                } else {
-                    // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
-                    command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
-                    command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
-                }
-            }
-
-
-            ObjectAdapter resultAdapter;
-
-            if( command != null &&
-                command.getExecutor() == Command.Executor.USER &&
-                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
-
-                // deal with background commands
-
-                // persist command so can be this command can be in the 'background'
-                final CommandService commandService = getCommandService();
-                if (!commandService.persistIfPossible(command)) {
-                    throw new IsisException(
-                            "Unable to schedule action '"
-                                    + owningAction.getIdentifier().toClassAndNameIdentityString() + "' to run in background: "
-                                    + "CommandService does not support persistent commands " );
-                }
-                resultAdapter = getAdapterManager().adapterFor(command);
-
-            } else {
-
-                // otherwise, go ahead and execute action in the 'foreground'
-                if(command != null) {
-                    command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
-                }
-
-                final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
-                final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
-
-                Object result11;
-                if(cacheable) {
-                    final QueryResultsCache queryResultsCache = getQueryResultsCache();
-                    final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
-                    result11 = queryResultsCache.execute(new Callable<Object>() {
-                        @Override
-                        public Object call() throws Exception {
-                            return method.invoke(targetPojo, executionParameters);
-                        }
-                    }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
-                } else {
-                    result11 = method.invoke(targetPojo, executionParameters);
-                }
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(" action result " + result11);
-                }
-                if (result11 == null) {
-
-                    if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
-                        // if this was a void method on cloneable view model, then (to save boilerplate in the domain)
-                        // automatically do the clone and return the clone instead.
-                        final ViewModelFacet facet1 = targetAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                        final Object clone = facet1.clone(targetAdapter.getObject());
-                        final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
-
-                        resultAdapter = clonedAdapter;
-
-                    } else {
-                        resultAdapter = null;
-                    }
-
-                } else {
-
-                    resultAdapter = getAdapterManager().adapterFor(result11);
-
-                    if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
-                        // if the object returned is cloneable, then
-                        // (to save boilerplate in the domain) automatically do the clone.
-                        final ViewModelFacet facet1 = resultAdapter.getSpecification().getFacet(ViewModelFacet.class);
-                        result11 = facet1.clone(result11);
-                        resultAdapter = getAdapterManager().adapterFor(result11);
-                    }
-
-
-                    // copy over TypeOfFacet if required
-                    final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-                    resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
-
-                    if(command != null) {
-                        if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                            final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
-                            command.setResult(bookmark);
-                        }
-                    }
-
-                    if(currentInvocation.get() == null) {
-                        final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-                        if(publishedActionFacet != null) {
-                            currentInvocation.set(new CurrentInvocation(targetAdapter, owningAction, getIdentified(),
-                                    arguments, resultAdapter, command));
-                        }
-                    }
-                }
-
-            }
-
-            result1 = InvocationResult.forActionThatReturned(resultAdapter);
-
-        } catch (final IllegalArgumentException e) {
-            throw e;
-        } catch (final InvocationTargetException e) {
-            final Throwable targetException = e.getTargetException();
-            if (targetException instanceof IllegalStateException) {
-                throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " " + targetException.getMessage(), targetException);
-            }
-            if(targetException instanceof RecoverableException) {
-                if (!getTransactionState().canCommit()) {
-                    // something severe has happened to the underlying transaction;
-                    // so escalate this exception to be non-recoverable
-                    final Throwable targetExceptionCause = targetException.getCause();
-                    Throwable nonRecoverableCause = targetExceptionCause != null? targetExceptionCause: targetException;
-
-                    // trim to first 300 chars
-                    String message = nonRecoverableCause.getMessage();
-                    if(!Strings.isNullOrEmpty(message)) {
-                        message = message.substring(0, Math.min(message.length(), 300));
-                        if(message.length() == 300) {
-                            message += " ...";
-                        }
-                    }
-
-                    throw new NonRecoverableException(message, nonRecoverableCause);
-                }
-            }
-
-            ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-
-            // Action was not invoked (an Exception was thrown)
-            result1 = InvocationResult.forActionNotInvoked();
-        } catch (final IllegalAccessException e) {
-            throw new ReflectiveActionException("Illegal access of " + method, e);
-        }
-        final InvocationResult invocationResult = result1;
         final ObjectAdapter invocationResultAdapter = invocationResult.getAdapter();
 
         // ... post the executed event
@@ -462,39 +222,282 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             return null;
         }
 
-        boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
-        if(filterForVisibility) {
-            final Object result = invocationResultAdapter.getObject();
-            if(result instanceof Collection || result.getClass().isArray()) {
-                final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(invocationResultAdapter);
+        return filteredIfRequired(invocationResultAdapter, interactionInitiatedBy);
 
-                final Iterable<ObjectAdapter> adapterList = facet.iterable(invocationResultAdapter);
-                final List<ObjectAdapter> visibleAdapters =
-                        ObjectAdapter.Util.visibleAdapters(
-                                adapterList,
-                                interactionInitiatedBy);
-                final Object visibleObjects =
-                        CollectionUtils.copyOf(
-                                Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
-                                method.getReturnType());
-                if (visibleObjects != null) {
-                    return getAdapterManager().adapterFor(visibleObjects);
-                }
-                // would be null if unable to take a copy (unrecognized return type)
-                // fallback to returning the original adapter, without filtering for visibility
+    }
 
-            } else {
-                boolean visible =
-                        ObjectAdapter.Util.isVisible(
-                                invocationResultAdapter,
-                                interactionInitiatedBy);
-                if(!visible) {
-                    return null;
+    protected InvocationResult invoke(
+            final ObjectAction owningAction,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments) {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        try {
+            setupActionInvocationContext(owningAction, targetAdapter);
+
+            owningAction.setupCommand(targetAdapter, arguments);
+
+            ObjectAdapter resultAdapter = invokeThruCommand(owningAction, targetAdapter, arguments, command);
+
+            return InvocationResult.forActionThatReturned(resultAdapter);
+
+        } catch (final IllegalArgumentException e) {
+            throw e;
+        } catch (final InvocationTargetException e) {
+            final Throwable targetException = e.getTargetException();
+            if (targetException instanceof IllegalStateException) {
+                throw new ReflectiveActionException( String.format(
+                        "IllegalStateException thrown while executing %s %s",
+                        method, targetException.getMessage()), targetException);
+            }
+            if(targetException instanceof RecoverableException) {
+                if (!getTransactionState().canCommit()) {
+                    // something severe has happened to the underlying transaction;
+                    // so escalate this exception to be non-recoverable
+                    final Throwable targetExceptionCause = targetException.getCause();
+                    Throwable nonRecoverableCause = targetExceptionCause != null? targetExceptionCause: targetException;
+
+                    // trim to first 300 chars
+                    final String message = trim(nonRecoverableCause.getMessage(), 300);
+
+                    throw new NonRecoverableException(message, nonRecoverableCause);
                 }
             }
+
+            ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
+
+            // Action was not invoked (an Exception was thrown)
+            return InvocationResult.forActionNotInvoked();
+
+        } catch (final IllegalAccessException e) {
+            throw new ReflectiveActionException("Illegal access of " + method, e);
         }
-        return invocationResultAdapter;
     }
+
+    private static String trim(String message, final int maxLen) {
+        if(!Strings.isNullOrEmpty(message)) {
+            message = message.substring(0, Math.min(message.length(), maxLen));
+            if(message.length() == maxLen) {
+                message += " ...";
+            }
+        }
+        return message;
+    }
+
+    protected void setupActionInvocationContext(
+            final ObjectAction owningAction,
+            final ObjectAdapter targetAdapter) {
+
+        owningAction.setupActionInvocationContext(targetAdapter);
+    }
+
+    protected ObjectAdapter invokeThruCommand(
+            final ObjectAction owningAction,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments, final Command command)
+            throws IllegalAccessException, InvocationTargetException {
+        final ObjectAdapter resultAdapter;
+        if( command.getExecutor() == Command.Executor.USER &&
+                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+
+            // deal with background commands
+
+            // persist command so can be this command can be in the 'background'
+            final CommandService commandService = getCommandService();
+            if (!commandService.persistIfPossible(command)) {
+                throw new IsisException(
+                        "Unable to schedule action '"
+                                + owningAction.getIdentifier().toClassAndNameIdentityString() + "' to run in background: "
+                                + "CommandService does not support persistent commands " );
+            }
+            resultAdapter = getAdapterManager().adapterFor(command);
+
+        } else {
+
+            // otherwise, go ahead and execute action in the 'foreground'
+            command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+
+            final Object resultPojo = invokeMethodElseFromCache(targetAdapter, arguments);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(" action result " + resultPojo);
+            }
+
+            resultAdapter = cloneIfViewModelCloneable(resultPojo, targetAdapter);
+
+            setCommandResultIfEntity(command, resultAdapter);
+            captureCurrentInvocationForPublishing(owningAction, targetAdapter, arguments, command, resultAdapter);
+        }
+        return resultAdapter;
+    }
+
+
+    protected Object invokeMethodElseFromCache(
+            final ObjectAdapter targetAdapter, final ObjectAdapter[] arguments)
+            throws IllegalAccessException, InvocationTargetException {
+
+        final Object[] executionParameters = new Object[arguments.length];
+        for (int i = 0; i < arguments.length; i++) {
+            executionParameters[i] = unwrap(arguments[i]);
+        }
+
+        final Object targetPojo = unwrap(targetAdapter);
+
+        final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
+        final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
+        if(cacheable) {
+            final QueryResultsCache queryResultsCache = getQueryResultsCache();
+            final Object[] targetPojoPlusExecutionParameters = ArrayExtensions.appendT(executionParameters, targetPojo);
+            return queryResultsCache.execute(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    return method.invoke(targetPojo, executionParameters);
+                }
+            }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
+
+        } else {
+            return method.invoke(targetPojo, executionParameters);
+        }
+    }
+
+    protected ObjectAdapter cloneIfViewModelCloneable(
+            final Object resultPojo,
+            final ObjectAdapter targetAdapter) {
+
+        // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
+
+        if (resultPojo != null) {
+            final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(resultPojo);
+            return cloneIfViewModelElse(resultAdapter, resultAdapter);
+        } else {
+            // if void or null, attempt to clone the original target, else return null.
+            return cloneIfViewModelElse(targetAdapter, null);
+        }
+    }
+
+    private ObjectAdapter cloneIfViewModelElse(final ObjectAdapter adapter, final ObjectAdapter dfltAdapter) {
+
+        if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
+            return  dfltAdapter;
+        }
+
+        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        final Object clone = viewModelFacet.clone(adapter.getObject());
+
+        final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
+
+        // copy over TypeOfFacet if required
+        final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
+        clonedAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+
+        return clonedAdapter;
+    }
+
+
+    protected void setCommandResultIfEntity(final Command command, final ObjectAdapter resultAdapter) {
+        if(command.getResult() != null) {
+            // don't trample over any existing result, eg subsequent mixins.
+            return;
+        }
+        if (resultAdapter == null) {
+            return;
+        }
+
+        final Class<?> domainType = resultAdapter.getSpecification().getCorrespondingClass();
+        final MetaModelService2.Sort sort = getMetaModelService().sortOf(domainType);
+        switch (sort) {
+        case JDO_ENTITY:
+            final Object domainObject = resultAdapter.getObject();
+            // ensure that any still-to-be-persisted adapters get persisted to DB.
+            if(!getRepositoryService().isPersistent(domainObject)) {
+                getTransactionService().flushTransaction();
+            }
+            if(getRepositoryService().isPersistent(domainObject)) {
+                BookmarkService bookmarkService = getBookmarkService();
+                Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
+               command.setResult(bookmark);
+            }
+            break;
+        default:
+            // ignore all other sorts of objects
+            break;
+        }
+    }
+
+    private MetaModelService2 getMetaModelService() {
+        return lookupService(MetaModelService2.class);
+    }
+
+    private TransactionService getTransactionService() {
+        return lookupService(TransactionService.class);
+    }
+
+    private BookmarkService getBookmarkService() {
+        return lookupService(BookmarkService.class);
+    }
+
+    private RepositoryService getRepositoryService() {
+        return lookupService(RepositoryService.class);
+    }
+
+    protected void captureCurrentInvocationForPublishing(
+            final ObjectAction owningAction,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments,
+            final Command command,
+            final ObjectAdapter resultAdapter) {
+
+        // TODO: should instead be using the top-level ActionInvocationMemento associated with command.
+
+        final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+        if (publishedActionFacet != null && currentInvocation.get() == null) {
+            final CurrentInvocation currentInvocation = new CurrentInvocation(
+                    targetAdapter, owningAction, getIdentified(),
+                    arguments, resultAdapter, command);
+            ActionInvocationFacet.currentInvocation.set(currentInvocation);
+        }
+    }
+
+    protected ObjectAdapter filteredIfRequired(
+            final ObjectAdapter resultAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
+        if (!filterForVisibility) {
+            return resultAdapter;
+        }
+
+        final Object result = resultAdapter.getObject();
+
+        if(result instanceof Collection || result.getClass().isArray()) {
+            final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
+
+            final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+            final List<ObjectAdapter> visibleAdapters =
+                    ObjectAdapter.Util.visibleAdapters(
+                            adapterList,
+                            interactionInitiatedBy);
+            final Object visibleObjects =
+                    CollectionUtils.copyOf(
+                            Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                            method.getReturnType());
+            if (visibleObjects != null) {
+                return getAdapterManager().adapterFor(visibleObjects);
+            }
+
+            // would be null if unable to take a copy (unrecognized return type)
+            // fallback to returning the original adapter, without filtering for visibility
+
+            return resultAdapter;
+
+        } else {
+            boolean visible = ObjectAdapter.Util.isVisible(resultAdapter, interactionInitiatedBy);
+            return visible ? resultAdapter : null;
+        }
+    }
+
 
     /**
      * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
@@ -528,7 +531,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     // /////////////////////////////////////////////////////////
 
     private CommandContext getCommandContext() {
-        return lookupService(CommandContext.class);
+        CommandContext commandContext = lookupService(CommandContext.class);
+        if (commandContext == null) {
+            throw new IllegalStateException("The CommandContext service is not registered!");
+        }
+        return commandContext;
     }
 
     private QueryResultsCache getQueryResultsCache() {
@@ -537,18 +544,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private CommandService getCommandService() {
         return lookupService(CommandService.class);
-    }
-
-    private CommandMementoService getCommandMementoService() {
-        return lookupService(CommandMementoService.class);
-    }
-
-    private Bulk.InteractionContext getBulkInteractionContext() {
-        return lookupService(Bulk.InteractionContext.class);
-    }
-
-    private ActionInvocationContext getActionInvocationContext() {
-        return lookupService(ActionInvocationContext.class);
     }
 
     private <T> T lookupService(final Class<T> serviceClass) {

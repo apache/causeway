@@ -64,24 +64,20 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-        final Command command;
+        final Command command = commandContext.getCommand();
 
-        if (commandContext != null) {
-            command = commandContext.getCommand();
+        // cf similar code in ActionInvocationFacetForDomainEventFacet
+        command.setExecutor(Command.Executor.USER);
 
-            // cf similar code in ActionInvocationFacetForDomainEventFacet
-            command.setExecutor(Command.Executor.USER);
+        command.setTarget(CommandUtil.bookmarkFor(targetAdapter));
+        command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
+        command.setTargetAction(Command.ACTION_IDENTIFIER_FOR_EDIT);
+        command.setMemberIdentifier(Command.ACTION_IDENTIFIER_FOR_EDIT);
 
-            command.setTarget(CommandUtil.bookmarkFor(targetAdapter));
-            command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-            command.setTargetAction(Command.ACTION_IDENTIFIER_FOR_EDIT);
-            command.setMemberIdentifier(Command.ACTION_IDENTIFIER_FOR_EDIT);
+        command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
+        command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
 
-            command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
-            command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
-
-            command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
-        }
+        command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
 
         ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
     }
@@ -94,6 +90,18 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
 
     private ServicesInjector getServicesInjector() {
         return servicesInjector;
+    }
+
+    private <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
+    }
+
+    protected CommandContext getCommandContext() {
+        CommandContext commandContext = lookupService(CommandContext.class);
+        if (commandContext == null) {
+            throw new IllegalStateException("The CommandContext service is not registered!");
+        }
+        return commandContext;
     }
 
 }

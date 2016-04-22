@@ -17,7 +17,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -52,7 +51,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectAction extends ObjectMember {
 
-    // //////////////////////////////////////////////////////
+
+        // //////////////////////////////////////////////////////
     // semantics, realTarget, getOnType
     // //////////////////////////////////////////////////////
 
@@ -185,6 +185,20 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
+
+
+    /**
+     * internal API
+     */
+    void setupActionInvocationContext(
+            final ObjectAdapter targetAdapter);
+
+    /**
+     * internal API
+     */
+    void setupCommand(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] arguments);
 
     // //////////////////////////////////////////////////////
     // Utils

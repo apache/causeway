@@ -17,21 +17,13 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command.Executor;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -41,8 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -199,52 +189,13 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        // this code also exists in ActionInvocationFacetViaMethod
-        // we need to repeat it here because the target adapter should be the contributee, not the contributing service.
+        setupActionInvocationContext(contributee);
+        setupCommandTarget(contributee, arguments);
 
-        final BulkFacet bulkFacet = getFacet(BulkFacet.class);
-        if (bulkFacet != null) {
-
-            final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
-            if (actionInvocationContext != null &&
-                    actionInvocationContext.getInvokedOn() == null) {
-
-                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
-                actionInvocationContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
-            }
-
-            final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
-            if (bulkInteractionContext != null &&
-                    bulkInteractionContext.getInvokedAs() == null) {
-
-                bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
-                bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
-            }
-
-
-        }
-
-        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-        final Command command = commandContext != null ? commandContext.getCommand() : null;
-
-        if(command != null && command.getExecutor() == Executor.USER) {
-
-            if (command.getTarget() != null) {
-                // already set up by a edit form
-                // don't overwrite
-            } else {
-                command.setTargetClass(CommandUtil.targetClassNameFor(contributee));
-                command.setTargetAction(CommandUtil.targetActionNameFor(this));
-                command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
-
-                final Bookmark targetBookmark = CommandUtil.bookmarkFor(contributee);
-                command.setTarget(targetBookmark);
-            }
-        }
-        
         return serviceAction.execute(getServiceAdapter(), argsPlusContributee(contributee, arguments),
                 interactionInitiatedBy);
     }
+
 
     private ObjectAdapter[] argsPlusContributee(final ObjectAdapter contributee, final ObjectAdapter[] arguments) {
         return addElementToArray(arguments, contributeeParam, contributee, new ObjectAdapter[]{});

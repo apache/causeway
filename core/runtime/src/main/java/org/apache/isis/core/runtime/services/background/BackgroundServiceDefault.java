@@ -129,9 +129,7 @@ public class BackgroundServiceDefault implements BackgroundService {
             proxyObject.setHandler(methodHandler);
 
             return newInstance;
-        } catch (final InstantiationException e) {
-            throw new IsisException(e);
-        } catch (final IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException e) {
             throw new IsisException(e);
         }
     }
@@ -170,20 +168,13 @@ public class BackgroundServiceDefault implements BackgroundService {
                 final Command command = commandContext.getCommand();
 
                 if(backgroundCommandService instanceof BackgroundCommandService2) {
-                    final BackgroundCommandService2 backgroundCommandService2 =
-                            (BackgroundCommandService2) backgroundCommandService;
+                    final BackgroundCommandService2 bcs2 = (BackgroundCommandService2) backgroundCommandService;
 
                     final CommandMementoDto dto = commandMementoService
                             .asCommandMemento(Collections.singletonList(targetAdapter), action, argAdapters);
 
-                    if(dto != null) {
-                        // the default implementation returns a non-null value.  This guard is to allow a different
-                        // implementation to be configured that returns null, thereby falling through to the
-                        // original behaviour (of using ActionInvocationMemento instead of CommandMementoDto).
-                        backgroundCommandService2.schedule(dto, command, targetClassName, targetActionName, targetArgs);
-
-                        return null;
-                    }
+                    bcs2.schedule(dto, command, targetClassName, targetActionName, targetArgs);
+                    return null;
                 }
 
                 // fallback
@@ -191,7 +182,6 @@ public class BackgroundServiceDefault implements BackgroundService {
                         .asActionInvocationMemento(proxyMethod, domainObject, args);
 
                 backgroundCommandService.schedule(aim, command, targetClassName, targetActionName, targetArgs);
-
                 return null;
             }
 
