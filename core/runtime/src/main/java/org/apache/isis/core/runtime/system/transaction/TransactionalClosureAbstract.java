@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-public interface TransactionalClosureAbstract {
+/**
+ * Not used by the framework, but provided for backward compatibility, eg by the (non-ASF) Isis addons.
+ *
+ * @deprecated - implement {@link TransactionalClosure} instead
+ */
+@Deprecated
+public abstract class TransactionalClosureAbstract implements TransactionalClosure {
 
-    public void execute();
 }

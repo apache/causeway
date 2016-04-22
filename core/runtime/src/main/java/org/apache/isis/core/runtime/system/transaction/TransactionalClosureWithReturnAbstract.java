@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-public interface TransactionalClosureWithReturnAbstract<T> {
+/**
+ * Not used by the framework, but provided for backward compatibility, eg by the (non-ASF) Isis addons.
+ *
+ * @deprecated - implement {@link TransactionalClosureWithReturn} instead
+ */
+@Deprecated
+public abstract class TransactionalClosureWithReturnAbstract<T> implements TransactionalClosureWithReturn<T> {
 
-    public T execute();
 }

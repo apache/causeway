@@ -211,9 +211,13 @@ public interface ObjectMember extends ObjectFeature {
                 public int compare(final ObjectMember o1, final ObjectMember o2) {
                     final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
                     final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
+                    String memberId1 = o1.getId();
+                    String memberId2 = o2.getId();
+                    String o1Sequence = o1Facet != null ? o1Facet.sequence() : "0";
+                    String o2Sequence = o2Facet != null ? o2Facet.sequence() : "0";
                     return o1Facet == null? +1:
                             o2Facet == null? -1:
-                                    deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+                                    deweyOrderComparator.compare(o1Sequence, o2Sequence);
                 }
             };
         }

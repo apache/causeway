@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -28,6 +29,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
@@ -594,6 +596,26 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         command.setMemberIdentifier(CommandUtil.actionIdentifierFor(this));
     }
 
+    private static ThreadLocal<List<ObjectAdapter>> commandTargetAdaptersHolder = new ThreadLocal<>();
+
+    /**
+     * A horrible hack to be able to persist a number of adapters in the command object.
+     *
+     * <p>
+     *     What is really needed is to be able to invoke an action on a number of adapters all together.
+     * </p>
+     */
+    public static <T> T withTargetAdapters(final List<ObjectAdapter> adapters, final Callable<T> callable) {
+        commandTargetAdaptersHolder.set(adapters);
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            throw new ApplicationException(e);
+        } finally {
+            commandTargetAdaptersHolder.set(null);
+        }
+    }
+
     protected void setupCommandMementoAndExecutionContext(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
@@ -619,9 +641,14 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
         // memento
         final CommandMementoService commandMementoService = getCommandMementoService();
+
+        List<ObjectAdapter> commandTargetAdapters =
+                commandTargetAdaptersHolder.get() != null
+                        ? commandTargetAdaptersHolder.get()
+                        : Collections.singletonList(targetAdapter);
+
         final CommandMementoDto dto = commandMementoService.asCommandMemento(
-                Collections.singletonList(targetAdapter),
-                this, arguments);
+                commandTargetAdapters, this, arguments);
 
         final String mementoXml = CommandMementoDtoUtils.toXml(dto);
         command.setMemento(mementoXml);

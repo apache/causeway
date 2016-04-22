@@ -19,7 +19,10 @@
 package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Session;
@@ -41,6 +44,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -87,8 +91,10 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                 try {
                     final List<ObjectAdapterMemento> toggleMementosList = model.getToggleMementosList();
 
-                    final Iterable<ObjectAdapter> toggledAdapters =
-                            Iterables.transform(toggleMementosList, ObjectAdapterMemento.Functions.fromMemento(concurrencyChecking));
+                    final List<ObjectAdapter> toggledAdapters =
+                            FluentIterable.from(toggleMementosList)
+                            .transform(ObjectAdapterMemento.Functions.fromMemento(concurrencyChecking))
+                            .toList();
 
                     final List<Object> domainObjects = Lists.newArrayList(Iterables.transform(toggledAdapters, ObjectAdapter.Functions.getObject()));
 
@@ -125,11 +131,14 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                             bulkInteractionContext.setIndex(i++);
                         }
 
-                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{},
-                                InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION
-                        );
+                        lastReturnedAdapter = ObjectActionDefault.withTargetAdapters(toggledAdapters, new Callable<ObjectAdapter>() {
+                            @Override public ObjectAdapter call() throws Exception {
+                                return objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{},
+                                        InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION
+                                );
+                            }
+                        });
                     }
-
 
 
                     model.clearToggleMementosList();
