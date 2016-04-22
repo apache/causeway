@@ -19,32 +19,33 @@
 package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
+
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -111,17 +112,18 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                         bulkInteractionContext.setDomainObjects(domainObjects);
                     }
 
-                    final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-                    final Command command;
-                    if (commandContext != null) {
-                        command = commandContext.getCommand();
-                        command.setExecutor(Executor.USER);
-                    }
 
 
                     ObjectAdapter lastReturnedAdapter = null;
                     int i=0;
                     for(final ObjectAdapter adapter : toggledAdapters) {
+
+                        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+                        final Command command;
+                        if (commandContext != null) {
+                            command = commandContext.getCommand();
+                            command.setExecutor(Executor.USER);
+                        }
 
                         int numParameters = objectAction.getParameterCount();
                         if(numParameters != 0) {
@@ -131,13 +133,12 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                             bulkInteractionContext.setIndex(i++);
                         }
 
-                        lastReturnedAdapter = ObjectActionDefault.withTargetAdapters(toggledAdapters, new Callable<ObjectAdapter>() {
-                            @Override public ObjectAdapter call() throws Exception {
-                                return objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{},
-                                        InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION
-                                );
-                            }
-                        });
+                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{},
+                                InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION
+                        );
+                        TransactionService transactionService =
+                                getServicesInjector().lookupService(TransactionService.class);
+                        transactionService.nextTransaction();
                     }
 
 
