@@ -207,6 +207,9 @@ public final class CommandMementoDtoUtils {
         }else
         if(parameterType == LocalTime.class) {
             paramDto = newParamDto(params, parameterName, ValueType.JODA_LOCAL_TIME, arg);
+        }else
+        if(parameterType.isEnum()) {
+            paramDto = newParamDto(params, parameterName, ValueType.ENUM, arg);
         }
 
         if(paramDto != null) {

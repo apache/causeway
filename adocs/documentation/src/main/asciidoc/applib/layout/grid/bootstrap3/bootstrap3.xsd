@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://isis.apache.org/applib/layout/component" xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3" elementFormDefault="qualified" targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3" version="1.0">
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3" elementFormDefault="qualified" targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3" version="1.0">
 
-    <xs:import namespace="http://isis.apache.org/applib/layout/component" schemaLocation="../../component"/>
+    <xs:import namespace="http://isis.apache.org/applib/layout/component" schemaLocation="../../component/component.xsd"/>
 
     <xs:element name="clearFixHidden" type="tns:clearFixHidden"/>
 
@@ -44,12 +44,12 @@
             <xs:extension base="tns:bs3RowContent">
                 <xs:sequence>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="sizeSpan" type="tns:sizeSpan"/>
-                    <xs:element minOccurs="0" ref="ns1:domainObject"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:action"/>
+                    <xs:element minOccurs="0" ref="cpt:domainObject"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="cpt:action"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="row" type="tns:row"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="tabGroup" type="tns:tabGroup"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:fieldSet"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:collection"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="cpt:fieldSet"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="cpt:collection"/>
                     <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
                 </xs:sequence>
                 <xs:attribute name="id" type="xs:string"/>

@@ -33,6 +33,7 @@ import org.joda.time.LocalTime;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.common.v1.EnumDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
@@ -126,6 +127,13 @@ public final class CommonDtoUtils {
             final LocalTime argValue = (LocalTime) val;
             valueDto.setLocalTime(JodaLocalTimeXMLGregorianCalendarAdapter.print(argValue));
         }else
+        if(type.isEnum()) {
+            final Enum argValue = (Enum) val;
+            final EnumDto enumDto = new EnumDto();
+            valueDto.setEnum(enumDto);
+            enumDto.setEnumType(argValue.getClass().getName());
+            enumDto.setEnumName(argValue.name());
+        }else
         {
             // none of the supported value types
             return false;
@@ -169,10 +177,40 @@ public final class CommonDtoUtils {
             return (T) JodaLocalDateTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalDateTime());
         case JODA_LOCAL_TIME:
             return (T) JodaLocalTimeXMLGregorianCalendarAdapter.parse(valueDto.getLocalTime());
+        case ENUM:
+            final EnumDto enumDto = valueDto.getEnum();
+            final String enumType = enumDto.getEnumType();
+            final Class<? extends Enum> enumClass = loadClass3(enumType);
+            return (T) Enum.valueOf(enumClass, enumDto.getEnumName());
         case REFERENCE:
             return (T) valueDto.getReference();
         }
         throw new IllegalStateException("Value type was not recognised (possible bug)");
+    }
+
+    static <T> Class<T> loadClass3(final String enumType) {
+        try {
+            return (Class<T>) loadClass(enumType);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static Class<?> loadClass(String className) throws ClassNotFoundException {
+        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        if(ccl == null) {
+            return loadClass(className, (ClassLoader)null);
+        } else {
+            try {
+                return loadClass(className, ccl);
+            } catch (ClassNotFoundException var3) {
+                return loadClass(className, (ClassLoader)null);
+            }
+        }
+    }
+
+    static Class<?> loadClass(String className, ClassLoader classLoader) throws ClassNotFoundException {
+        return classLoader == null?Class.forName(className):Class.forName(className, true, classLoader);
     }
 
     public static OidDto asOidDto(final Bookmark reference) {
