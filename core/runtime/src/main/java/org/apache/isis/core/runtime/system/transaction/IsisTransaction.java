@@ -40,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
@@ -54,7 +53,6 @@ import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
@@ -91,7 +89,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
-import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -796,10 +793,12 @@ public class IsisTransaction implements TransactionScopedComponent {
                             Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
 
             ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(changedObjectProperties);
+
             preCommitServices(changedObjectProperties);
+
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
-            clearCommandServiceIfConfigured();
+            completeCommandAndClearDomainEvents();
             throw ex;
         }
     }
@@ -813,87 +812,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         if(!changedAdapters.isEmpty() && command.getMemberIdentifier() != null) {
             command.setPersistHint(true);
         }
-
-        ensureSafeSemanticsHonoured(command, changedAdapters);
     }
 
-    private void ensureSafeSemanticsHonoured(Command command, Set<ObjectAdapter> changedAdapters) {
-
-        if(true) {
-
-            // ISIS-921: disabling this functionality...
-            //
-            // ... the issue is that an edit (which mutates state, obviously), can cause a contributed property to
-            // be evaluated, which has safe semantics.
-            //
-            // the solution, I think, is to set up some sort of "dummy" action to represent the edit.
-            // this needs to be installed pretty early up in the stack trace.  ISIS-922 raised for this.
-            //
-
-            return;
-        }
-
-        if (!(command instanceof Command2)) {
-            return;
-        }
-
-        final List<? extends ActionDomainEvent<?>> events;
-        events = flushActionDomainEvents(command);
-        if (events.isEmpty()) {
-            return;
-        }
-
-        // are all safe?
-        for (ActionDomainEvent<?> event : events) {
-            if(!event.getActionSemantics().isSafeInNature()) {
-                // found at least one non-safe action, so all bets are off.
-                return;
-            }
-        }
-
-        // all actions invoked had safe semantics; were any objects changed?
-        if (changedAdapters.isEmpty()) {
-            return;
-        }
-
-        final String msg = "Action '" + events.get(0).getIdentifier().toFullIdentityString() + "'" +
-                " (with safe semantics)" +
-                " caused " + changedAdapters.size() + " object" + (changedAdapters.size() != 1 ? "s" : "") +
-                " to be modified";
-        LOG.error(msg);
-        for (ObjectAdapter changedAdapter : changedAdapters) {
-            final StringBuilder builder = new StringBuilder("  > ")
-                    .append(changedAdapter.getSpecification().getFullIdentifier())
-                    .append(": ");
-            if(!changedAdapter.isDestroyed()) {
-                builder.append(changedAdapter.titleString(null));
-            } else {
-                builder.append("(deleted object)");
-            }
-            LOG.error(builder.toString());
-        }
-
-        final boolean enforceSafeSemantics = getConfiguration().getBoolean(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
-        if(enforceSafeSemantics) {
-            throw new RecoverableException(msg);
-        }
-    }
-
-    private List<? extends ActionDomainEvent<?>> flushActionDomainEvents(
-            final Command command) {
-
-        if(command instanceof Command3) {
-            final Command3 command3 = (Command3) command;
-            return command3.flushActionDomainEvents();
-        }
-        // else
-        if(command instanceof Command2) {
-            final Command2 command2 = (Command2) command;
-            return command2.flushActionInteractionEvents();
-        }
-        // else
-        return Collections.emptyList();
-    }
 
     private static Set<ObjectAdapter> findChangedAdapters(
             final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
@@ -906,7 +826,9 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
 
-    private void preCommitServices(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+    private void preCommitServices(
+            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+
         doAudit(changedObjectProperties);
         
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
@@ -917,19 +839,12 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         publishedChangedObjectsIfRequired(currentUser, endTimestamp);
         doFlush();
-        
-        closeServices();
-        doFlush();
-    }
 
-    private void clearCommandServiceIfConfigured() {
-        completeCommand();
-    }
-
-
-    private void closeServices() {
         closeOtherApplibServicesIfConfigured();
-        completeCommand();
+
+        completeCommandAndClearDomainEvents();
+
+        doFlush();
     }
 
     private void closeOtherApplibServicesIfConfigured() {
@@ -939,13 +854,26 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    private void completeCommand() {
+    private void completeCommandAndClearDomainEvents() {
+
         final Command command = commandContext.getCommand();
 
         commandService.complete(command);
 
-        flushActionDomainEvents(command);
+        if(command instanceof Command3) {
+            final Command3 command3 = (Command3) command;
+            command3.flushActionDomainEvents();
+            return;
+        }
+
+        // else
+        if(command instanceof Command2) {
+            final Command2 command2 = (Command2) command;
+            command2.flushActionInteractionEvents();
+            return;
+        }
     }
+
 
     // ////////////////////////////////////////////////////////////////
 

@@ -352,7 +352,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
     private Command createCommand() {
-        final CommandService commandService = lookupServiceIfAny(CommandService.class);
         final Command command = commandService.create();
 
         servicesInjector.injectServicesInto(command);
