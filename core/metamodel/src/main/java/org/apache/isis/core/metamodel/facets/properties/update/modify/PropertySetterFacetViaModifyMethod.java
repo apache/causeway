@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.facets.properties.update.modify;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import org.apache.isis.applib.clock.Clock;
+
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -63,7 +64,7 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
             final ObjectAdapter valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+        final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
         // cf similar code in ActionInvocationFacetForDomainEventFacet
@@ -77,7 +78,7 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
         command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
         command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
 
-        command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+        command.setStartedAt(getClockService().nowAsJavaSqlTimestamp());
 
         ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
     }
@@ -92,16 +93,24 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
         return servicesInjector;
     }
 
+    private CommandContext getCommandContext() {
+        return lookupService(CommandContext.class);
+    }
+
+    private ClockService getClockService() {
+        return lookupService(ClockService.class);
+    }
+
     private <T> T lookupService(final Class<T> serviceClass) {
+        T service = lookupServiceIfAny(serviceClass);
+        if(service == null) {
+            throw new IllegalStateException("The '" + serviceClass.getName() + "' service is not registered!");
+        }
+        return service;
+    }
+    private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
         return getServicesInjector().lookupService(serviceClass);
     }
 
-    protected CommandContext getCommandContext() {
-        CommandContext commandContext = lookupService(CommandContext.class);
-        if (commandContext == null) {
-            throw new IllegalStateException("The CommandContext service is not registered!");
-        }
-        return commandContext;
-    }
 
 }

@@ -49,7 +49,7 @@ public interface Command3 extends Command2 {
     ActionDomainEvent<?> popActionDomainEvent();
 
     /**
-     * @deprecated - use {@link Interaction#getDomainEvents()} and {@link Interaction#clearDomainEvents()} instead.
+     * @deprecated - use {@link Interaction#getExecutionGraphs()} and {@link Interaction#clearDomainEvents()} instead.
      */
     @Deprecated
     @Programmatic

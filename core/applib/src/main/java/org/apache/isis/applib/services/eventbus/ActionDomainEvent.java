@@ -131,12 +131,12 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
      * The {@link org.apache.isis.applib.services.command.Command} for this action.
      *
      * <p>
-     * Set when in {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTING} and {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED}, but not for earlier phases.
+     * Set when in {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTING} and {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED}, but not for earlier phases.
      *
      * <p>
      * The command is set by the framework based on the configured
      * {@link org.apache.isis.applib.services.command.CommandContext}) service).  Ths command may or may not be
-     * persisted, depending on the which implementation of
+     * persisted, depending on which implementation of
      * {@link org.apache.isis.applib.services.command.spi.CommandService} service is configured.
      */
     public Command getCommand() {

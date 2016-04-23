@@ -31,19 +31,17 @@ import org.apache.isis.applib.services.command.Command;
  */
 public interface CommandService {
 
+    /**
+     * Simply instantiate the appropriate instance of the {@link Command}.  Its members will be populated automatically
+     * by the framework.
+     */
     @Programmatic
     Command create();
     
     /**
-     * Although the transactionId is also provided in the
-     * {@link #complete(Command)} callback, it is passed in here as well
-     * so that an implementation can ensure that the {@link Command} is fully populated in order
-     * to persist if required.
-     * 
-     * <p>
-     * One case where this may be supported (for example, by the <tt>CommandServiceJdo</tt> implementation)
-     * is to flush still-running {@link Command}s to the database on-demand.
+     * @deprecated - the framework automatically populates the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()}  and {@link Command#getTransactionId()}, so there is no need for the service implementation to initialize any of these.  In particular, the {@link Command} will already have been initialized with the provided <tt>transactionId</tt> argument.
      */
+    @Deprecated
     @Programmatic
     void startTransaction(final Command command, final UUID transactionId);
     

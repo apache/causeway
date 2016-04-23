@@ -698,11 +698,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         // specify that this command (if any) is being executed by a 'USER'
         final CommandContext commandContext = getService(CommandContext.class);
-        Command command;
-        if (commandContext != null) {
-            command = commandContext.getCommand();
-            command.setExecutor(Command.Executor.USER);
-        }
+        Command command = commandContext.getCommand();
+        command.setExecutor(Command.Executor.USER);
     }
 
     /**

@@ -139,7 +139,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    public static enum State {
+    public enum State {
         /**
          * Started, still in progress.
          * 
@@ -246,18 +246,16 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     private final Command command;
 
-    /**
-     * Could be null if not configured as a domain service.
-     */
     private final CommandContext commandContext;
+    private final CommandService commandService;
     /**
      * could be null if none has been registered.
      */
-    private final AuditingService3 auditingService3;
+    private final AuditingService3 auditingServiceIfAny;
     /**
      * could be null if none has been registered
      */
-    private final PublishingServiceWithDefaultPayloadFactories publishingService;
+    private final PublishingServiceWithDefaultPayloadFactories publishingServiceIfAny;
 
     /**
      * Will be that of the {@link #command} if not <tt>null</tt>, otherwise will be randomly created.
@@ -274,7 +272,8 @@ public class IsisTransaction implements TransactionScopedComponent {
             final IsisTransactionManager transactionManager,
             final MessageBroker messageBroker,
             final IsisTransactionManager.PersistenceSessionTransactionManagement persistenceSession,
-            final ServicesInjector servicesInjector) {
+            final ServicesInjector servicesInjector,
+            final UUID transactionId) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
@@ -284,26 +283,19 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.messageBroker = messageBroker;
         this.servicesInjector = servicesInjector;
         
-        this.commandContext = servicesInjector.lookupService(CommandContext.class);
-        this.auditingService3 = servicesInjector.lookupService(AuditingService3.class);
-        this.publishingService = getPublishingServiceIfAny(servicesInjector);
+        this.commandContext = lookupService(CommandContext.class);
+        this.commandService = lookupService(CommandService.class);
+
+        this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
+        this.publishingServiceIfAny = getPublishingServiceIfAny(servicesInjector);
 
         // determine whether this xactn is taking place in the context of an
         // existing command in which a previous xactn has already occurred.
         // if so, reuse that transactionId.
-        UUID previousTransactionId = null;
-        if(commandContext != null) {
-            command = commandContext.getCommand();
-            previousTransactionId = command.getTransactionId();
-        } else {
-            command = null;
-        }
-        if (previousTransactionId != null) {
-            this.transactionId = previousTransactionId;
-        } else {
-            this.transactionId = UUID.randomUUID();
-        }
-        
+        command = commandContext.getCommand();
+
+        this.transactionId = transactionId;
+
         this.state = State.IN_PROGRESS;
 
         this.persistenceSession = persistenceSession;
@@ -519,7 +511,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
         try {
-            if(auditingService3 == null) {
+            if(auditingServiceIfAny == null) {
                 return;
             }
 
@@ -538,7 +530,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     public void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
 
-        if(publishingService == null) {
+        if(publishingServiceIfAny == null) {
             return;
         }
 
@@ -593,7 +585,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                     parameterNames, parameterTypes, returnType);
 
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
+            publishingServiceIfAny.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
             ActionInvocationFacet.currentInvocation.set(null);
@@ -609,7 +601,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      * @return the adapters that were published (if any were).
      */
     protected List<ObjectAdapter> publishedChangedObjectsIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
-        if(publishingService == null) {
+        if(publishingServiceIfAny == null) {
             return Collections.emptyList();
         }
         
@@ -631,7 +623,8 @@ public class IsisTransaction implements TransactionScopedComponent {
             final EventMetadata metadata = newEventMetadata(
                     currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
 
-            publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
+            publishingServiceIfAny
+                    .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
         return enlistedAdapters;
     }
@@ -741,7 +734,8 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
 
-        auditingService3.audit(getTransactionId(), targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
+        auditingServiceIfAny
+                .audit(getTransactionId(), targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
     }
 
     private static String asString(Object object) {
@@ -812,14 +806,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private void ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
 
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if (commandContext == null) {
-            return;
-        }
         final Command command = commandContext.getCommand();
-        if(command == null) {
-            return;
-        }
 
         // ensure that any changed objects means that the command should be persisted
         final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
@@ -936,42 +923,29 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private void clearCommandServiceIfConfigured() {
-        completeCommandIfConfigured();
+        completeCommand();
     }
 
 
     private void closeServices() {
         closeOtherApplibServicesIfConfigured();
-        completeCommandIfConfigured();
-    }
-
-    /**
-     * @return - the service, or <tt>null</tt> if no service registered of specified type.
-     */
-    public <T> T getServiceOrNull(Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
+        completeCommand();
     }
 
     private void closeOtherApplibServicesIfConfigured() {
-        ActionInvocationContext bic = getServiceOrNull(ActionInvocationContext.class);
-        if(bic != null) {
+        final ActionInvocationContext actionInvocationContext = lookupService(ActionInvocationContext.class);
+        if(actionInvocationContext != null) {
             Bulk.InteractionContext.current.set(null);
         }
     }
 
-    private void completeCommandIfConfigured() {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if(commandContext != null) {
-            final CommandService commandService = getServiceOrNull(CommandService.class);
-            if(commandService != null) {
-                final Command command = commandContext.getCommand();
-                commandService.complete(command);
+    private void completeCommand() {
+        final Command command = commandContext.getCommand();
 
-                flushActionDomainEvents(command);
-            }
-        }
+        commandService.complete(command);
+
+        flushActionDomainEvents(command);
     }
-
 
     // ////////////////////////////////////////////////////////////////
 
@@ -1014,6 +988,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     // handle exceptions on load, flush or commit
     /////////////////////////////////////////////////////////////////////////
 
+    // SEEMINGLY UNUSED
     @Deprecated
     public void ensureNoAbortCause() {
         Ensure.ensureThatArg(abortCause, is(nullValue()), "abort cause has been set");
@@ -1429,6 +1404,22 @@ public class IsisTransaction implements TransactionScopedComponent {
 
 
     ////////////////////////////////////////////////////////////////////////
+    // Dependencies (lookup)
+    ////////////////////////////////////////////////////////////////////////
+
+    private <T> T lookupService(Class<T> serviceType) {
+        T service = lookupServiceIfAny(serviceType);
+        if(service == null) {
+            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
+        }
+        return service;
+    }
+
+    private <T> T lookupServiceIfAny(final Class<T> serviceType) {
+        return servicesInjector.lookupService(serviceType);
+    }
+
+    ////////////////////////////////////////////////////////////////////////
     // Dependencies (from constructor)
     ////////////////////////////////////////////////////////////////////////
 
@@ -1443,6 +1434,5 @@ public class IsisTransaction implements TransactionScopedComponent {
     protected IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
         return persistenceSession;
     }
-
 
 }

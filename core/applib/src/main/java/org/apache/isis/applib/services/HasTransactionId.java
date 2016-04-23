@@ -38,9 +38,9 @@ public interface HasTransactionId {
      * Note that this is the same as the Isis transaction guid as found in the JDO applib's
      * <tt>PublishedEvent</tt>.
      */
-    public UUID getTransactionId();
+    UUID getTransactionId();
 
-    public void setTransactionId(final UUID transactionId);
+    void setTransactionId(final UUID transactionId);
 
     
 

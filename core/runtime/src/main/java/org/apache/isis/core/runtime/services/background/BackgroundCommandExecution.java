@@ -23,10 +23,10 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -72,16 +72,16 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
         final PersistenceSession persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-        final List<Command> commands = Lists.newArrayList();
+        final List<Command> backgroundCommands = Lists.newArrayList();
         transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
-                commands.addAll(findBackgroundCommandsToExecute());
+                backgroundCommands.addAll(findBackgroundCommandsToExecute());
             }
         });
 
-        for (final Command command : commands) {
-            execute(transactionManager, command);
+        for (final Command backgroundCommand : backgroundCommands) {
+            execute(transactionManager, backgroundCommand);
         }
     }
 
@@ -93,17 +93,17 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     
-    private void execute(final IsisTransactionManager transactionManager, final Command command) {
-        transactionManager.executeWithinTransaction(new TransactionalClosure() {
+    private void execute(final IsisTransactionManager transactionManager, final Command backgroundCommand) {
+        transactionManager.executeWithinTransaction(
+                backgroundCommand,
+                new TransactionalClosure() {
             @Override
             public void execute() {
 
-                commandContext.setCommand(command);
-                final String memento = command.getMemento();
+                final String memento = backgroundCommand.getMemento();
 
                 try {
-                    command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
-                    command.setExecutor(Executor.BACKGROUND);
+                    backgroundCommand.setExecutor(Executor.BACKGROUND);
 
                     final boolean legacy = memento.startsWith("<memento");
                     if(legacy) {
@@ -120,7 +120,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                         final ObjectAction objectAction = findAction(specification, actionId);
                         if(objectAction == null) {
-                            throw new Exception("Unknown action '" + actionId + "'");
+                            throw new Exception(String.format("Unknown action '%s'", actionId));
                         }
 
                         final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
@@ -128,7 +128,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
                         if(resultAdapter != null) {
                             Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                            command.setResult(resultBookmark);
+                            backgroundCommand.setResult(resultBookmark);
                         }
 
                     } else {
@@ -157,7 +157,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                             // responsibiity of auditing/profiling
                             if(resultAdapter != null) {
                                 Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                                command.setResult(resultBookmark);
+                                backgroundCommand.setResult(resultBookmark);
                             }
                         }
                     }
@@ -166,11 +166,11 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     // this doesn't really make sense if >1 action
                     // in any case, the capturing of the action interaction should be the
                     // responsibiity of auditing/profiling
-                    command.setException(Throwables.getStackTraceAsString(e));
+                    backgroundCommand.setException(Throwables.getStackTraceAsString(e));
                 } finally {
                     // decided to keep this, even though really this
                     // should be the responsibility of auditing/profiling
-                    command.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
+                    backgroundCommand.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
                 }
             }
 
@@ -252,4 +252,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     @javax.inject.Inject
     private CommandContext commandContext;
+
+    @javax.inject.Inject
+    private ClockService clockService;
 }

@@ -26,10 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -45,12 +44,9 @@ import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -68,6 +64,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
     private IsisTransaction transaction;
 
     private final ServicesInjector servicesInjector;
+
+    private final CommandContext commandContext;
+    private final CommandService commandService;
+
+    private final ClockService clockService;
 
 
     // ////////////////////////////////////////////////////////////////
@@ -91,8 +92,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
     public IsisTransactionManager(
             final PersistenceSessionTransactionManagement persistenceSession,
             final ServicesInjector servicesInjector) {
+
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
+
+        this.commandContext = lookupService(CommandContext.class);
+        this.commandService = lookupService(CommandService.class);
+
+        this.clockService = lookupService(ClockService.class);
     }
 
     public PersistenceSessionTransactionManagement getPersistenceSession() {
@@ -134,8 +141,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
 
-    
-
     /**
      * Convenience method returning the {@link org.apache.isis.core.commons.authentication.MessageBroker} of the
      * {@link #getTransaction() current transaction}.
@@ -166,9 +171,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * </p>
      */
     public void executeWithinTransaction(final TransactionalClosure closure) {
+        executeWithinTransaction(null, closure);
+    }
+    public void executeWithinTransaction(
+            final Command existingCommandIfAny,
+            final TransactionalClosure closure) {
         final boolean initiallyInTransaction = inTransaction();
         if (!initiallyInTransaction) {
-            startTransaction();
+            startTransaction(existingCommandIfAny);
         }
         try {
             closure.execute();
@@ -194,7 +204,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     /**
      * Run the supplied {@link Runnable block of code (closure)} in a
      * {@link IsisTransaction transaction}.
-     * 
+     *
      * <p>
      * If a transaction is {@link IsisContext#inTransaction() in progress}, then
      * uses that. Otherwise will {@link #startTransaction() start} a transaction
@@ -208,9 +218,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
      *  </p>
      */
     public <Q> Q executeWithinTransaction(final TransactionalClosureWithReturn<Q> closure) {
+        return executeWithinTransaction(null, closure);
+    }
+    public <Q> Q executeWithinTransaction(
+            final Command existingCommandIfAny,
+            final TransactionalClosureWithReturn<Q> closure) {
         final boolean initiallyInTransaction = inTransaction();
         if (!initiallyInTransaction) {
-            startTransaction();
+            startTransaction(existingCommandIfAny);
         }
         try {
             final Q retVal = closure.execute();
@@ -233,42 +248,19 @@ public class IsisTransactionManager implements SessionScopedComponent {
         return getTransaction() != null && !getTransaction().getState().isComplete();
     }
 
-    // ////////////////////////////////////////////////////////////////
-    // create transaction, + hooks
-    // ////////////////////////////////////////////////////////////////
-
-    /**
-     * Creates a new transaction and saves, to be accessible in
-     * {@link #getTransaction()}.
-     */
-    protected final IsisTransaction createTransaction() {
-        MessageBroker messageBroker = createMessageBroker();
-        return this.transaction = createTransaction(messageBroker, persistenceSession);
-    }
-
-
-    /**
-     * The provided {@link org.apache.isis.core.commons.authentication.MessageBroker} is
-     * obtained from the {@link #createMessageBroker()} hook method.
-     * @param persistenceSession
-     *
-     * @see #createMessageBroker()
-     */
-    private IsisTransaction createTransaction(
-            final MessageBroker messageBroker,
-            final PersistenceSessionTransactionManagement persistenceSession) {
-        ensureThatArg(messageBroker, is(not(nullValue())));
-
-        return new IsisTransaction(this, messageBroker, persistenceSession, servicesInjector);
-    }
-    
 
     // //////////////////////////////////////////////////////
-    // start
+    // startTransaction
     // //////////////////////////////////////////////////////
 
     public synchronized void startTransaction() {
+        startTransaction(null);
+    }
 
+    /**
+     * @param existingCommandIfAny - specifically, a previously persisted background {@link Command}, now being executed by a background execution service.
+     */
+    public void startTransaction(final Command existingCommandIfAny) {
         boolean noneInProgress = false;
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
             noneInProgress = true;
@@ -277,16 +269,35 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
             // note that at this point there may not be an EventBusService initialized.  The PersistenceSession has
             // logic to suppress the posting of the ObjectCreatedEvent for the special case of Command objects.
-            createCommandIfConfigured();
+
+            final Command command;
+            final UUID transactionId;
+
+            if (existingCommandIfAny != null) {
+                command = existingCommandIfAny;
+                transactionId = command.getTransactionId();
+            }
+            else {
+                command = createCommand();
+                transactionId = UUID.randomUUID();
+            }
+
+            initComand(transactionId, command);
+            commandContext.setCommand(command);
+
 
             initOtherApplibServicesIfConfigured();
-            
-            IsisTransaction isisTransaction = createTransaction();
+
+            final MessageBroker messageBroker = MessageBroker.acquire(getAuthenticationSession());
+            this.transaction = new IsisTransaction(
+                    this, messageBroker, persistenceSession, servicesInjector, transactionId);
             transactionLevel = 0;
 
             persistenceSession.startTransaction();
 
-            startTransactionOnCommandIfConfigured(isisTransaction.getTransactionId());
+            // a no-op; the command will have been populated already
+            // in the earlier call to #createCommandAndInitAndSetAsContext(...).
+            commandService.startTransaction(command, transactionId);
         }
 
         transactionLevel++;
@@ -298,7 +309,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private void initOtherApplibServicesIfConfigured() {
         
-        final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
+        final Bulk.InteractionContext bic = lookupServiceIfAny(Bulk.InteractionContext.class);
         if(bic != null) {
             Bulk.InteractionContext.current.set(bic);
         }
@@ -340,54 +351,25 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
-    private void createCommandIfConfigured() {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if(commandContext == null) {
-            return;
-        } 
-        final CommandService commandService = getServiceOrNull(CommandService.class);
-        final Command command = 
-                commandService != null 
-                    ? commandService.create() 
-                    : new CommandDefault();
+    private Command createCommand() {
+        final CommandService commandService = lookupServiceIfAny(CommandService.class);
+        final Command command = commandService.create();
+
         servicesInjector.injectServicesInto(command);
-
-        commandContext.setCommand(command);
-
-        if(command.getTimestamp() == null) {
-            command.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
-        }
-        if(command.getUser() == null) {
-            command.setUser(getAuthenticationSession().getUserName());
-        }
-        
-        // the remaining properties are set further down the call-stack, if an action is actually performed
+        return command;
     }
 
     /**
-     * Called by IsisTransactionManager on start
+     * Sets up {@link Command#getTransactionId()}, {@link Command#getUser()} and {@link Command#getTimestamp()}.
+     *
+     * The remaining properties are set further down the call-stack, if an action is actually performed
+     * @param transactionId
      */
-    public void startTransactionOnCommandIfConfigured(final UUID transactionId) {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if(commandContext == null) {
-            return;
-        } 
-        final CommandService commandService = getServiceOrNull(CommandService.class);
-        if(commandService == null) {
-            return;
-        } 
-        final Command command = commandContext.getCommand();
-        commandService.startTransaction(command, transactionId);
+    private void initComand(final UUID transactionId, final Command command) {
+        command.setTimestamp(clockService.nowAsJavaSqlTimestamp());
+        command.setUser(getAuthenticationSession().getUserName());
+        command.setTransactionId(transactionId);
     }
-
-
-    /**
-     * @return - the service, or <tt>null</tt> if no service registered of specified type.
-     */
-    public <T> T getServiceOrNull(Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
-    }
-
 
 
     // //////////////////////////////////////////////////////
@@ -554,32 +536,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // Hooks
     // //////////////////////////////////////////////////////////////
 
-
-    /**
-     * Overridable hook, used in
-     * {@link #createTransaction(MessageBroker, PersistenceSessionTransactionManagement)}
-     * 
-     * <p> Called when a new {@link IsisTransaction} is created.
-     */
-    protected MessageBroker createMessageBroker() {
-        return MessageBroker.acquire(getAuthenticationSession());
-    }
-
-    // ////////////////////////////////////////////////////////////////
-    // helpers
-    // ////////////////////////////////////////////////////////////////
-
-    // unused?
-    protected void ensureTransactionInProgress() {
-        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(true), "No transaction in progress");
-    }
-
-    // unused?
-    protected void ensureTransactionNotInProgress() {
-        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(false), "Transaction in progress");
-    }
-
-
     // //////////////////////////////////////////////////////
     // debugging
     // //////////////////////////////////////////////////////
@@ -587,6 +543,27 @@ public class IsisTransactionManager implements SessionScopedComponent {
     public void debugData(final DebugBuilder debug) {
         debug.appendln("Transaction", getTransaction());
     }
+
+
+    ////////////////////////////////////////////////////////////////////////
+    // Dependencies (lookup)
+    ////////////////////////////////////////////////////////////////////////
+
+    private <T> T lookupService(Class<T> serviceType) {
+        T service = lookupServiceIfAny(serviceType);
+        if(service == null) {
+            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
+        }
+        return service;
+    }
+
+    /**
+     * @return - the service, or <tt>null</tt> if no service registered of specified type.
+     */
+    private <T> T lookupServiceIfAny(Class<T> serviceType) {
+        return servicesInjector.lookupService(serviceType);
+    }
+
 
     // ////////////////////////////////////////////////////////////////
     // Dependencies (injected)
@@ -614,7 +591,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // ////////////////////////////////////////////////////////////////
-
 
     /**
      * Called back by {@link IsisTransaction}.

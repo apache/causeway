@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
@@ -239,7 +239,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             owningAction.setupCommand(targetAdapter, arguments);
 
-            ObjectAdapter resultAdapter = invokeThruCommand(owningAction, targetAdapter, arguments, command);
+            ObjectAdapter resultAdapter = invokeThruCommand(owningAction, targetAdapter, arguments);
 
             return InvocationResult.forActionThatReturned(resultAdapter);
 
@@ -296,8 +296,13 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     protected ObjectAdapter invokeThruCommand(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments, final Command command)
+            final ObjectAdapter[] arguments)
             throws IllegalAccessException, InvocationTargetException {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+
         final ObjectAdapter resultAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
                 command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
@@ -317,7 +322,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         } else {
 
             // otherwise, go ahead and execute action in the 'foreground'
-            command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+            command.setStartedAt(getClockService().nowAsJavaSqlTimestamp());
 
             final Object resultPojo = invokeMethodElseFromCache(targetAdapter, arguments);
 
@@ -427,19 +432,19 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     private MetaModelService2 getMetaModelService() {
-        return lookupService(MetaModelService2.class);
+        return lookupServiceIfAny(MetaModelService2.class);
     }
 
     private TransactionService getTransactionService() {
-        return lookupService(TransactionService.class);
+        return lookupServiceIfAny(TransactionService.class);
     }
 
     private BookmarkService getBookmarkService() {
-        return lookupService(BookmarkService.class);
+        return lookupServiceIfAny(BookmarkService.class);
     }
 
     private RepositoryService getRepositoryService() {
-        return lookupService(RepositoryService.class);
+        return lookupServiceIfAny(RepositoryService.class);
     }
 
     protected void captureCurrentInvocationForPublishing(
@@ -531,11 +536,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     // /////////////////////////////////////////////////////////
 
     private CommandContext getCommandContext() {
-        CommandContext commandContext = lookupService(CommandContext.class);
-        if (commandContext == null) {
-            throw new IllegalStateException("The CommandContext service is not registered!");
-        }
-        return commandContext;
+        return lookupService(CommandContext.class);
     }
 
     private QueryResultsCache getQueryResultsCache() {
@@ -546,7 +547,19 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         return lookupService(CommandService.class);
     }
 
+    private ClockService getClockService() {
+        return lookupService(ClockService.class);
+    }
+
     private <T> T lookupService(final Class<T> serviceClass) {
+        T service = lookupServiceIfAny(serviceClass);
+        if(service == null) {
+            throw new IllegalStateException("The '" + serviceClass.getName() + "' service is not registered!");
+        }
+        return service;
+    }
+
+    private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
         return getServicesInjector().lookupService(serviceClass);
     }
 
