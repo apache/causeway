@@ -126,11 +126,18 @@ public interface Interaction extends HasTransactionId {
     AbstractDomainEvent<?> popDomainEvent();
 
     /**
-     * Returns a graph indicating the domain events in the order that they were
+     * Returns a (list of) graph(es) indicating the domain events in the order that they were
      * {@link #pushDomainEvent(AbstractDomainEvent) pushed}.
+     *
+     * <p>
+     *     Each {@link ExecutionGraph} represents a call stack of domain events (action invocations or property edits),
+     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
+     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
+     *     action will return a list of just one element.
+     * </p>
      */
     @Programmatic
-    ExecutionGraph getDomainEvents();
+    List<ExecutionGraph> getExecutionGraphs();
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
