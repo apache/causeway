@@ -60,7 +60,7 @@ public interface Command2 extends Command {
      * <b>NOT API</b>: intended to be called only by the framework.
      *
      * <p>
-     * Pops a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
+     * Pops the top-most {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
      * from the stack of events held by the command.
      * </p>
      *

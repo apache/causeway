@@ -55,6 +55,7 @@ import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
@@ -708,7 +709,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         if(command == null) {
             throw new IllegalStateException("CommandContext service is required to support Publishing.");
         }
-        final Command.SequenceName sequenceName = Command.SequenceName.PUBLISHED_EVENT;
+        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
         final int nextEventSequence = command.next(sequenceName.abbr());
         final UUID transactionId = command.getTransactionId();
         return new EventMetadata(

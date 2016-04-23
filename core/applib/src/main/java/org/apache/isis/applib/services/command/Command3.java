@@ -19,6 +19,7 @@ package org.apache.isis.applib.services.command;
 import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.iactn.Interaction;
 
 /**
  * An extension to {@link Command} that makes the
@@ -27,45 +28,30 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 public interface Command3 extends Command2 {
 
     /**
-     * The current (most recently pushed) {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}.
-     *
-     * <p>
-     *     Note that the {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} itself is mutable,
-     *     as its {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent#getPhase() phase} changes from
-     *     {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTING executing} to
-     *     {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED executed}.  The
-     *     event returned from this method will always be in one or other of these phases.
-     * </p>
+     * @deprecated - use {@link Interaction#peekDomainEvent()} instead.
      */
+    @Deprecated
     @Programmatic
     ActionDomainEvent<?> peekActionDomainEvent();
 
     /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Push a new {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
-     * onto the stack of events held by the command.
-     * </p>
+     * @deprecated - use {@link Interaction#pushDomainEvent(org.apache.isis.applib.services.eventbus.AbstractDomainEvent)} instead.
      */
+    @Deprecated
     @Programmatic
     void pushActionDomainEvent(ActionDomainEvent<?> event);
 
     /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
-     * Push a new {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
-     * onto the stack of events held by the command.
-     * </p>
+     * @deprecated - use {@link Interaction#popDomainEvent()} instead.
      */
+    @Deprecated
     @Programmatic
     ActionDomainEvent<?> popActionDomainEvent();
 
     /**
-     * Returns the {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}s in the order that they
-     * were {@link #pushActionDomainEvent(org.apache.isis.applib.services.eventbus.ActionDomainEvent) pushed}.
+     * @deprecated - use {@link Interaction#getDomainEvents()} and {@link Interaction#clearDomainEvents()} instead.
      */
+    @Deprecated
     @Programmatic
     List<ActionDomainEvent<?>> flushActionDomainEvents();
 }

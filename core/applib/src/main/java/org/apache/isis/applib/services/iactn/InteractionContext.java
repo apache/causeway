@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.command;
+package org.apache.isis.applib.services.iactn;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -26,34 +26,38 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * This service (API and implementation) provides access to context information about any {@link Command}.
+ * This service (API and implementation) provides access to context information about any {@link Interaction}.
  *
  * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
+ * {@link DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
 @RequestScoped
-public class CommandContext {
+public class InteractionContext {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(CommandContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InteractionContext.class);
 
-    private Command command;
+    private Interaction interaction;
 
+    /**
+     * Returns the currently active {@link Interaction} for this thread.
+     * @return
+     */
     @Programmatic
-    public Command getCommand() {
-        return command;
+    public Interaction getInteraction() {
+        return interaction;
     }
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Programmatic
-    public void setCommand(final Command command) {
-        this.command = command;
+    public void setInteraction(final Interaction interaction) {
+        this.interaction = interaction;
     }
 
 }
