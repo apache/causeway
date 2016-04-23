@@ -20,14 +20,22 @@
 package org.apache.isis.applib.services.iactn;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.isis.applib.annotation.Optional;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
@@ -52,41 +60,213 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  * </p>
  *
  */
-public interface Interaction extends HasTransactionId {
+public class Interaction implements HasTransactionId {
 
-    //region > startedAt (property)
+    //region > transactionId (property)
 
-    /**
-     * The date/time at which this interaction started.
-     */
-    Timestamp getStartedAt();
+    @Override
+    public UUID getTransactionId() {
+        return null;
+    }
 
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     */
-    void setStartedAt(Timestamp startedAt);
+    @Override
+    public void setTransactionId(final UUID transactionId) {
 
+    }
     //endregion
 
-    //region > completedAt (property)
+    //region > push/pop/current/get/clear (Abstract)DomainEvents
+
+    private List<Execution> executionGraphs = Lists.newArrayList();
+    private Execution currentExecution;
+    private Execution priorExecution;
+
 
     /**
-     * The date/time at which this interaction completed.
+     * The execution that preceded the current one.
      */
-    Timestamp getCompletedAt();
+    public Execution getPriorExecution() {
+        return priorExecution;
+    }
+
+    public <T> T execute(
+            final Callable<T> callable,
+            final String memberId,
+            final ClockService clockService,
+            final Command command) {
+        Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
+        Execution currentExecution = push(startedAt, memberId);
+
+        // as a convenience, since in all cases we want the command to start when the first interaction executes,
+        // we populate the command here.
+        if(command.getStartedAt() == null) {
+            command.setStartedAt(startedAt);
+        }
+
+        try {
+            try {
+                T result = callable.call();
+                currentExecution.setResult(result);
+                return result;
+            } catch (Exception e) {
+
+                // just because an exception has thrown, does not mean it is that significant; it could be that
+                // it is recognized by an ExceptionRecognizer and is not severe, eg unique index violation in the DB.
+                RuntimeException re = e instanceof RuntimeException? (RuntimeException) e : new RuntimeException(e);
+                currentExecution.setException(re);
+
+                // propagate (as in previous design); caller will need to trap and decide
+                throw re;
+            }
+        } finally {
+            final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
+            pop(completedAt);
+        }
+    }
 
     /**
-     * <b>NOT API</b>: intended to be called only by the framework.
+     * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
+     * being made by way of the {@link WrapperFactory}).
      */
-    void setCompletedAt(Timestamp completedAt);
+    public static class Execution {
 
-    //endregion
+        private final Timestamp startedAt;
+        private final String memberId;
+        private final Execution parent;
+        private final List<Execution> children = Lists.newArrayList();
 
-    //region > push/pop/peek/get/clear (Abstract)DomainEvents
+        public Execution(final Timestamp startedAt, final String memberId) {
+            this.startedAt = startedAt;
+            this.memberId = memberId;
+            this.parent = null;
+        }
 
-    interface ExecutionGraph {
-        AbstractDomainEvent<?> getEvent();
-        List<AbstractDomainEvent<?>> getChildEvents();
+        public Execution(final Execution parent, final Timestamp startedAt, final String memberId) {
+            this.startedAt = startedAt;
+            this.parent = parent;
+            this.memberId = memberId;
+            parent.children.add(this);
+        }
+
+        /**
+         * The action/property that invoked this action/property edit (if any).
+         */
+        public Execution getParent() {
+            return parent;
+        }
+
+        /**
+         * The actions/property edits made in turn via the {@link WrapperFactory}.
+         */
+        public List<Execution> getChildren() {
+            return Collections.unmodifiableList(children);
+        }
+
+        public String getMemberId() {
+            return memberId;
+        }
+
+        //region > event
+
+        private AbstractDomainEvent<?> event;
+        /**
+         * The domain event fired on the {@link EventBusService event bus} representing the execution of
+         * this action invocation/property edit.
+         */
+        public AbstractDomainEvent<?> getEvent() {
+            return event;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setEvent(final AbstractDomainEvent<?> event) {
+            this.event = event;
+        }
+        //endregion
+
+        //region > startedAt
+
+
+        /**
+         * The date/time at which this execution started.
+         */
+        public Timestamp getStartedAt() {
+            return startedAt;
+        }
+
+
+        //endregion
+
+        //region > completedAt
+
+        private Timestamp completedAt;
+
+        /**
+         * The date/time at which this execution completed.
+         */
+        public Timestamp getCompletedAt() {
+            return completedAt;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        void setCompletedAt(Timestamp completedAt) {
+            this.completedAt = completedAt;
+        }
+
+        //endregion
+
+
+
+        //region > exception (property)
+
+        private RuntimeException exception;
+        @Programmatic
+        public RuntimeException getException() {
+            return exception;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setException(RuntimeException exception) {
+            this.exception = exception;
+        }
+
+        //endregion
+
+        //region > result (property)
+
+
+        private Object result;
+        /**
+         * The object returned by the action invocation/property edit.
+         *
+         * <p>
+         * If the action returned either a domain entity or a simple value (and did not throw an
+         * exception) then this object is provided here.
+         *
+         * <p>
+         * For <tt>void</tt> methods and for actions returning collections, the value
+         * will be <tt>null</tt>.
+         */
+        public Object getResult() {
+            return result;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setResult(Object result) {
+            this.result =  result;
+        }
+
+        //endregion
+
+
+
     }
 
     /**
@@ -101,7 +281,9 @@ public interface Interaction extends HasTransactionId {
      * </p>
      */
     @Programmatic
-    AbstractDomainEvent<?> peekDomainEvent();
+    public Execution getCurrentExecution() {
+        return currentExecution;
+    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -112,7 +294,24 @@ public interface Interaction extends HasTransactionId {
      * </p>
      */
     @Programmatic
-    void pushDomainEvent(final AbstractDomainEvent domainEvent);
+    Execution push(final Timestamp startedAt, final String memberId) {
+
+        final Execution newExecution;
+        if(currentExecution == null) {
+            // new top-level execution
+            newExecution = new Execution(startedAt, memberId);
+            executionGraphs.add(newExecution);
+
+        } else {
+            // adds to graph of parent
+            newExecution = new Execution(currentExecution, startedAt, memberId);
+        }
+
+        // set
+        moveCurrentTo(newExecution);
+
+        return currentExecution;
+    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -121,75 +320,55 @@ public interface Interaction extends HasTransactionId {
      * Pops the top-most  {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
      * from the stack of events held by the command.
      * </p>
+     * @param completedAt
      */
     @Programmatic
-    AbstractDomainEvent<?> popDomainEvent();
+    Execution pop(final Timestamp completedAt) {
+        if(currentExecution == null) {
+            throw new IllegalStateException("No current execution graph to pop");
+        }
+        final Execution popped = currentExecution;
+        popped.setCompletedAt(completedAt);
+
+        moveCurrentTo(currentExecution.getParent());
+        return popped;
+    }
+
+    private void moveCurrentTo(final Execution newExecution) {
+        priorExecution = currentExecution;
+        currentExecution = newExecution;
+    }
 
     /**
      * Returns a (list of) graph(es) indicating the domain events in the order that they were
-     * {@link #pushDomainEvent(AbstractDomainEvent) pushed}.
+     * {@link #push(Timestamp, String) pushed}.
      *
      * <p>
-     *     Each {@link ExecutionGraph} represents a call stack of domain events (action invocations or property edits),
+     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
      *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
      *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
      *     action will return a list of just one element.
      * </p>
      */
     @Programmatic
-    List<ExecutionGraph> getExecutionGraphs();
+    public List<Execution> getExecutions() {
+        return Collections.unmodifiableList(executionGraphs);
+    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * Clears the set of {@link AbstractDomainEvent}s that have been {@link #pushDomainEvent(AbstractDomainEvent) push}ed.
+     * Clears the set of {@link AbstractDomainEvent}s that have been {@link #push(Timestamp, String) push}ed.
      */
     @Programmatic
-    void clearDomainEvents();
-
+    public void clear() {
+        executionGraphs.clear();
+    }
     //endregion
-
-
-    //region > exception (property)
-
-
-    @Optional
-    String getException();
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     */
-    void setException(String stackTrace);
-
-    //endregion
-
-    //region > result (property)
-
-
-    /**
-     * A {@link Bookmark} to the object returned by the action.
-     *
-     * <p>
-     * If the action returned either a domain entity or a simple value (and did not throw an
-     * exception) then this object is provided here.
-     *
-     * <p>
-     * For <tt>void</tt> methods and for actions returning collections, the value
-     * will be <tt>null</tt>.
-     */
-    Bookmark getResult();
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     */
-    void setResult(Bookmark resultBookmark);
-
-    //endregion
-
 
     //region > next (programmatic)
 
-    enum SequenceName {
+    public enum SequenceName {
 
         /**
          * &quot;pe&quot; - published event.  For objects: multiple such could be dirtied and thus published as
@@ -205,18 +384,24 @@ public interface Interaction extends HasTransactionId {
     }
 
 
+    private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
+
     /**
      * Generates numbers in a named sequence
-     *
-     * <p>
-     * Used to support the <tt>PublishingServiceJdo</tt> implementation whose
-     * persisted entities are uniquely identified by a ({@link #getTransactionId() transactionId}, <tt>sequence</tt>)
-     * tuple.
      *
      * @param sequenceAbbr - should be {@link SequenceName#abbr()}.
      */
     @Programmatic
-    int next(final String sequenceAbbr);
+    public int next(String sequenceAbbr) {
+        AtomicInteger next = sequenceByName.get(sequenceAbbr);
+        if(next == null) {
+            next = new AtomicInteger(0);
+            sequenceByName.put(sequenceAbbr, next);
+        } else {
+            next.incrementAndGet();
+        }
+        return next.get();
+    }
 
     //endregion
 

@@ -42,6 +42,8 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -302,6 +304,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
+        final InteractionContext interactionContext = getInteractionContext();
+        final Interaction interaction = interactionContext.getInteraction();
+
 
         final ObjectAdapter resultAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
@@ -322,18 +327,42 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         } else {
 
             // otherwise, go ahead and execute action in the 'foreground'
-            command.setStartedAt(getClockService().nowAsJavaSqlTimestamp());
+            interaction.execute(new Callable<Object>() {
 
-            final Object resultPojo = invokeMethodElseFromCache(targetAdapter, arguments);
+                @Override
+                public Object call() {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(" action result " + resultPojo);
+                    try {
+                        final Object resultPojo = invokeMethodElseFromCache(targetAdapter, arguments);
+
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(" action result " + resultPojo);
+                        }
+
+                        ObjectAdapter resultAdapter = cloneIfViewModelCloneable(resultPojo, targetAdapter);
+
+                        return resultAdapter != null? resultAdapter.getObject(): null;
+
+                    } catch (InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            }, getIdentified().getIdentifier().toFullIdentityString(), getClockService(), command);
+
+            final Interaction.Execution priorExecution = interaction.getPriorExecution();
+
+            final RuntimeException executionExceptionIfAny = priorExecution.getException();
+            if(executionExceptionIfAny != null) {
+                throw executionExceptionIfAny;
             }
 
-            resultAdapter = cloneIfViewModelCloneable(resultPojo, targetAdapter);
-
+            resultAdapter = getAdapterManager().adapterFor(priorExecution.getResult());
             setCommandResultIfEntity(command, resultAdapter);
+
+            // TODO: use InteractionContext instead
             captureCurrentInvocationForPublishing(owningAction, targetAdapter, arguments, command, resultAdapter);
+
         }
         return resultAdapter;
     }
@@ -537,6 +566,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private CommandContext getCommandContext() {
         return lookupService(CommandContext.class);
+    }
+    private InteractionContext getInteractionContext() {
+        return lookupService(InteractionContext.class);
     }
 
     private QueryResultsCache getQueryResultsCache() {

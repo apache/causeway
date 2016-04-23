@@ -49,13 +49,7 @@ public class CommandServiceDefault implements CommandService {
     @Programmatic
     @Override
     public void complete(final Command command) {
-        if(command.getCompletedAt() != null) {
-            // already attempted to complete.
-            // chances are, we're here as the result of a redirect following a previous exception
-            // so just ignore.
-            return;
-        }
-        command.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
+        // nothing to do
     }
 
 

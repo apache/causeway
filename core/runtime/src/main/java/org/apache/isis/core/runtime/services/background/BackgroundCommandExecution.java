@@ -30,6 +30,8 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -100,6 +102,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             @Override
             public void execute() {
 
+                // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
+                final Interaction backgroundInteraction = interactionContext.getInteraction();
+
                 final String memento = backgroundCommand.getMemento();
 
                 try {
@@ -120,7 +125,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                         final ObjectAction objectAction = findAction(specification, actionId);
                         if(objectAction == null) {
-                            throw new Exception(String.format("Unknown action '%s'", actionId));
+                            throw new RuntimeException(String.format("Unknown action '%s'", actionId));
                         }
 
                         final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
@@ -129,6 +134,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         if(resultAdapter != null) {
                             Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                             backgroundCommand.setResult(resultBookmark);
+                            backgroundInteraction.getCurrentExecution().setResult(resultAdapter.getObject());
                         }
 
                     } else {
@@ -152,9 +158,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                             final ObjectAdapter resultAdapter = objectAction.execute(
                                     targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
+                            // alternatively, could use...
+                            Object unused = backgroundInteraction.getPriorExecution().getResult();
+
                             // this doesn't really make sense if >1 action
                             // in any case, the capturing of the action interaction should be the
-                            // responsibiity of auditing/profiling
+                            // responsibility of auditing/profiling
                             if(resultAdapter != null) {
                                 Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                                 backgroundCommand.setResult(resultBookmark);
@@ -162,21 +171,24 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         }
                     }
 
-                } catch (Exception e) {
+                } catch (RuntimeException e) {
                     // this doesn't really make sense if >1 action
                     // in any case, the capturing of the action interaction should be the
-                    // responsibiity of auditing/profiling
+                    // responsibility of auditing/profiling
                     backgroundCommand.setException(Throwables.getStackTraceAsString(e));
-                } finally {
-                    // decided to keep this, even though really this
-                    // should be the responsibility of auditing/profiling
-                    backgroundCommand.setCompletedAt(clockService.nowAsJavaSqlTimestamp());
+
+                    // alternatively, could use...
+                    RuntimeException unused = backgroundInteraction.getPriorExecution().getException();
+
+                    backgroundInteraction.getCurrentExecution().setException(e);
                 }
+
+                backgroundCommand.setCompletedAt(backgroundInteraction.getPriorExecution().getCompletedAt());
             }
 
             private ObjectAction findObjectAction(
                     final ObjectAdapter targetAdapter,
-                    final String actionId) throws Exception {
+                    final String actionId) throws RuntimeException {
 
                 final ObjectAction objectAction;
 
@@ -184,7 +196,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                 objectAction = findAction(specification, actionId);
                 if(objectAction == null) {
-                    throw new Exception("Unknown action '" + actionId + "'");
+                    throw new RuntimeException(String.format("Unknown action '%s'", actionId));
                 }
                 return objectAction;
             }
@@ -201,7 +213,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         return null;
     }
 
-    private ObjectAdapter[] argAdaptersFor(final ActionInvocationMemento aim) throws ClassNotFoundException {
+    private ObjectAdapter[] argAdaptersFor(final ActionInvocationMemento aim)  {
         final int numArgs = aim.getNumArgs();
         final List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
         for(int i=0; i<numArgs; i++) {
@@ -211,18 +223,23 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         return argumentAdapters.toArray(new ObjectAdapter[]{});
     }
 
-    private ObjectAdapter argAdapterFor(final ActionInvocationMemento aim, int num) throws ClassNotFoundException {
-        final Class<?> argType = aim.getArgType(num);
-        final Object arg = aim.getArg(num, argType);
-        if(arg == null) {
-            return null;
-        }
-        if(Bookmark.class != argType) {
-            return adapterFor(arg);
-        } else {
-            final Bookmark argBookmark = (Bookmark)arg;
-            final RootOid rootOid = RootOid.create(argBookmark);
-            return adapterFor(rootOid);
+    private ObjectAdapter argAdapterFor(final ActionInvocationMemento aim, int num) {
+        final Class<?> argType;
+        try {
+            argType = aim.getArgType(num);
+            final Object arg = aim.getArg(num, argType);
+            if(arg == null) {
+                return null;
+            }
+            if(Bookmark.class != argType) {
+                return adapterFor(arg);
+            } else {
+                final Bookmark argBookmark = (Bookmark)arg;
+                final RootOid rootOid = RootOid.create(argBookmark);
+                return adapterFor(rootOid);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -254,5 +271,10 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     private CommandContext commandContext;
 
     @javax.inject.Inject
+    private InteractionContext interactionContext;
+
+    @javax.inject.Inject
     private ClockService clockService;
+
+
 }

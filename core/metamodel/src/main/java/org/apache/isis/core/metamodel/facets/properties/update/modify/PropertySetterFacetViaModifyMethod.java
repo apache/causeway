@@ -22,10 +22,13 @@ package org.apache.isis.core.metamodel.facets.properties.update.modify;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -67,6 +70,9 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
+        final InteractionContext interactionContext = getInteractionContext();
+        final Interaction interaction = interactionContext.getInteraction();
+
         // cf similar code in ActionInvocationFacetForDomainEventFacet
         command.setExecutor(Command.Executor.USER);
 
@@ -78,9 +84,12 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
         command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
         command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
 
-        command.setStartedAt(getClockService().nowAsJavaSqlTimestamp());
-
-        ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
+        interaction.execute(new Callable<Object>() {
+            @Override
+            public Object call() {
+                return ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
+            }
+        }, getIdentified().getIdentifier().toFullIdentityString(), getClockService(), command);
     }
 
     @Override
@@ -95,6 +104,10 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
 
     private CommandContext getCommandContext() {
         return lookupService(CommandContext.class);
+    }
+
+    private InteractionContext getInteractionContext() {
+        return lookupService(InteractionContext.class);
     }
 
     private ClockService getClockService() {

@@ -100,7 +100,7 @@ public interface Command extends HasTransactionId {
      * <p>
      * Implementation notes: set when the Isis PersistenceSession is opened.  Uses the applib {@link Clock}.
      */
-    void setTimestamp(Timestamp startedAt);
+    void setTimestamp(Timestamp timestamp);
 
     //endregion
 
@@ -290,7 +290,7 @@ public interface Command extends HasTransactionId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * @deprecated - see {@link Interaction#setStartedAt(Timestamp)}.
+     * @deprecated - see {@link Interaction#getCurrentExecution()} and {@link org.apache.isis.applib.services.iactn.Interaction.Execution#setStartedAt(Timestamp)}.
      */
     @Deprecated
     void setStartedAt(Timestamp startedAt);
@@ -303,7 +303,7 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
      * executed the command completed.
      *
-     * @deprecated - see {@link Interaction#getCompletedAt()}.
+     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getCompletedAt()}.
      */
     @Deprecated
     Timestamp getCompletedAt();
@@ -311,7 +311,7 @@ public interface Command extends HasTransactionId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * @deprecated - see {@link Interaction#setCompletedAt(Timestamp)}.
+     * @deprecated - see {@link org.apache.isis.applib.services.iactn.Interaction.Execution#setCompletedAt(Timestamp)}.
      */
     @Deprecated
     void setCompletedAt(Timestamp completedAt);
@@ -339,7 +339,7 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the exception stack
      * trace if the action invocation/property modification threw an exception.
      *
-     * @deprecated - use {@link Interaction#getException()} instead.
+     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getException()} instead.
      */
     @Deprecated
     @Optional
@@ -358,7 +358,7 @@ public interface Command extends HasTransactionId {
     /**
      * For an command that has actually been executed, holds a {@link Bookmark} to the object returned by the corresponding action/property modification.
      * 
-     * @deprecated - use {@link Interaction#getResult()} instead.
+     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getResult()} instead.
      */
     @Deprecated
     Bookmark getResult();
@@ -427,9 +427,9 @@ public interface Command extends HasTransactionId {
     //region > next (programmatic, deprecated)
 
     /**
-     * @param sequenceAbbr - should be {@link Interaction.SequenceName#abbr()}.
+     * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * @deprecated - use {@link Interaction#next(String)} instead.
+     * @deprecated - no longer used (the framework uses {@link Interaction#next(String)} instead).
      */
     @Deprecated
     @Programmatic

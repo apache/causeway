@@ -47,6 +47,10 @@ public interface CommandService {
      * 
      * <p>
      * However, not every implementation necessarily {@link #persistIfPossible(Command) supports persistence}.
+     *
+     * <p>
+     *     The framework will automatically have set the {@link Command#getCompletedAt()} property.
+     * </p>
      */
     @Programmatic
     void complete(final Command command);

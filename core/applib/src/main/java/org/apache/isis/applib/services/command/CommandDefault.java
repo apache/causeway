@@ -138,8 +138,8 @@ public class CommandDefault implements Command3 {
     }
 
     @Override
-    public void setTimestamp(Timestamp startedAt) {
-        this.timestamp = startedAt;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     
@@ -408,6 +408,7 @@ public class CommandDefault implements Command3 {
 
     private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
 
+    @Deprecated
     @Override
     public int next(String sequenceAbbr) {
         AtomicInteger next = sequenceByName.get(sequenceAbbr);
@@ -420,7 +421,6 @@ public class CommandDefault implements Command3 {
         return next.get();
     }
 
-    
 
     // //////////////////////////////////////
     // toString
@@ -428,7 +428,7 @@ public class CommandDefault implements Command3 {
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "startedAt,user,memberIdentifier,target,transactionId");
+        return ObjectContracts.toString(this, "startedAt","user","memberIdentifier","target","transactionId");
     }
 
 }

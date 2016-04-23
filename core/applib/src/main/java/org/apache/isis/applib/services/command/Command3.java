@@ -28,28 +28,28 @@ import org.apache.isis.applib.services.iactn.Interaction;
 public interface Command3 extends Command2 {
 
     /**
-     * @deprecated - use {@link Interaction#peekDomainEvent()} instead.
+     * @deprecated - use {@link Interaction#getCurrentExecution()} instead.
      */
     @Deprecated
     @Programmatic
     ActionDomainEvent<?> peekActionDomainEvent();
 
     /**
-     * @deprecated - use {@link Interaction#pushDomainEvent(org.apache.isis.applib.services.eventbus.AbstractDomainEvent)} instead.
+     * @deprecated - use {@link Interaction#push(java.sql.Timestamp)} instead.
      */
     @Deprecated
     @Programmatic
     void pushActionDomainEvent(ActionDomainEvent<?> event);
 
     /**
-     * @deprecated - use {@link Interaction#popDomainEvent()} instead.
+     * @deprecated - use {@link Interaction#pop(java.sql.Timestamp)} instead.
      */
     @Deprecated
     @Programmatic
     ActionDomainEvent<?> popActionDomainEvent();
 
     /**
-     * @deprecated - use {@link Interaction#getExecutionGraphs()} and {@link Interaction#clearDomainEvents()} instead.
+     * @deprecated - use {@link Interaction#getExecutions()} and {@link Interaction#clear()} instead.
      */
     @Deprecated
     @Programmatic

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +31,8 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -68,6 +71,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
     private final CommandContext commandContext;
     private final CommandService commandService;
 
+    private final InteractionContext interactionContext;
+
     private final ClockService clockService;
 
 
@@ -98,6 +103,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
         this.commandContext = lookupService(CommandContext.class);
         this.commandService = lookupService(CommandService.class);
+
+        this.interactionContext = lookupService(InteractionContext.class);
 
         this.clockService = lookupService(ClockService.class);
     }
@@ -281,9 +288,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 command = createCommand();
                 transactionId = UUID.randomUUID();
             }
+            final Interaction interaction = new Interaction();
 
-            initComand(transactionId, command);
+            initCommandAndInteraction(transactionId, command, interaction);
+
             commandContext.setCommand(command);
+            interactionContext.setInteraction(interaction);
 
 
             initOtherApplibServicesIfConfigured();
@@ -363,11 +373,22 @@ public class IsisTransactionManager implements SessionScopedComponent {
      *
      * The remaining properties are set further down the call-stack, if an action is actually performed
      * @param transactionId
+     * @param interaction
      */
-    private void initComand(final UUID transactionId, final Command command) {
-        command.setTimestamp(clockService.nowAsJavaSqlTimestamp());
-        command.setUser(getAuthenticationSession().getUserName());
+    private void initCommandAndInteraction(
+            final UUID transactionId,
+            final Command command,
+            final Interaction interaction) {
+
+        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+        final String userName = getAuthenticationSession().getUserName();
+
+        command.setTimestamp(timestamp);
+        command.setUser(userName);
         command.setTransactionId(transactionId);
+
+        interaction.setTransactionId(transactionId);
+
     }
 
 

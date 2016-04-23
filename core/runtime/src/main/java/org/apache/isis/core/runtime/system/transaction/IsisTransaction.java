@@ -48,12 +48,14 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
@@ -245,6 +247,10 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private final CommandContext commandContext;
     private final CommandService commandService;
+
+    private final InteractionContext interactionContext;
+
+    private final ClockService clockService;
     /**
      * could be null if none has been registered.
      */
@@ -282,6 +288,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         this.commandContext = lookupService(CommandContext.class);
         this.commandService = lookupService(CommandService.class);
+
+        this.interactionContext = lookupService(InteractionContext.class);
+        this.clockService = lookupService(ClockService.class);
 
         this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
         this.publishingServiceIfAny = getPublishingServiceIfAny(servicesInjector);
@@ -798,7 +807,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
-            completeCommandAndClearDomainEvents();
+            completeCommandAndInteractionAndClearDomainEvents();
             throw ex;
         }
     }
@@ -842,7 +851,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         closeOtherApplibServicesIfConfigured();
 
-        completeCommandAndClearDomainEvents();
+        completeCommandAndInteractionAndClearDomainEvents();
 
         doFlush();
     }
@@ -854,24 +863,32 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    private void completeCommandAndClearDomainEvents() {
+    private void completeCommandAndInteractionAndClearDomainEvents() {
 
         final Command command = commandContext.getCommand();
+        final Interaction interaction = interactionContext.getInteraction();
+
+        if(command.getStartedAt() != null && command.getCompletedAt() == null) {
+            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
+
+            // copy over from the most recent interaction
+            Interaction.Execution priorExecution = interaction.getPriorExecution();
+            final Timestamp completedAt = priorExecution.getCompletedAt();
+            command.setCompletedAt(completedAt);
+        }
 
         commandService.complete(command);
 
         if(command instanceof Command3) {
             final Command3 command3 = (Command3) command;
             command3.flushActionDomainEvents();
-            return;
-        }
-
-        // else
+        } else
         if(command instanceof Command2) {
             final Command2 command2 = (Command2) command;
             command2.flushActionInteractionEvents();
-            return;
         }
+
+        interaction.clear();
     }
 
 
