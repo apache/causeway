@@ -9,745 +9,624 @@
 
 pass:[<br/><br/>]
 
-We've prepared a number of screencasts to help you see what Apache Isis has to offer; the following were recorded using Apache Isis v1.12.0.
+We've prepared a number of screencasts to help you see what Apache Isis has to offer; the following were recorded using Apache Isis v1.12.x.
 
-While these each follow on from each other, you should be able to watch them in any order; the typical duration is 3 minutes.  Or, you can watch them all through this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
+While these each follow on from each other, you should be able to watch them in any order; the typical duration is
+3 minutes.  the number of each screencast (eg 'link:https://www.youtube.com/watch?v=OTNHR5EdAs8[001^]') is a link over
+to youtube.
 
-You can also find some earlier screencasts (for older versions of the framework) link:./screencasts-older.html[here].
+Or, if you have a little more time, you can watch the screencasts by playlist.  You can either watch
+link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[ALL] of them one after the other, or you
+can use one of the themed playlists to explore particular aspects of the framework.  The table below indicates which screencasts are in which playlist.
 
-
-
-== Playlist
-
-To watch all of the v1.12.0 screencasts in order, use this link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[playlist].
-
-
-
-== Archetype, IDE, layouts
-
-
-[cols="2a,2a"]
-|===
-
-|Generating an app using the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp Maven archetype] +
-(v1.12.0)
-
-|video::OTNHR5EdAs8[youtube,width="560px",height="315px"]
+Finally, you can also find some screencasts for earlier versions of the framework link:./screencasts-older.html[here].
 
 
 
 
-|Importing the generated app into an xref:dg.adoc#_dg_ide[IDE] +
-(v1.12.0)
 
-|video::6GPtec5Hu5Q[youtube,width="560px",height="315px"]
-
-
-
-|Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:ugbtb.adoc#_ugbtb_view-models[view model] and `SimpleObjects` domain service (repository). +
-(v1.12.0)
-
-|video::xVTjtiJM8XM[youtube,width="560px",height="315px"]
-
-
-
-|Using the optional `Xxx.layout.xml` file to provide xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system. +
-(v1.12.0)
-
-|video::KCJ1ZPPB3pA[youtube,width="560px",height="315px"]
-
-
+[cols="4a,1a,1a,1a,1a,1a,1a,1a,1a,1a,1a"]
 |===
 
 
 
-== Fixture scripts, rules, tests
+|    10+|[big]#*Playlists*#
 
-[cols="2a,2a"]
-|===
 
 
-|Using xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] to initialize the database, eg while prototyping and for demos +
-(v1.12.0)
 
-|video::pH02g0l2GKY[youtube,width="560px",height="315px"]
+11+| [big]#*Archetype, IDE, layouts*#
 
+include::_screencasts-playlists.adoc[]
 
 
-|Implementing xref:ugfun.adoc#_ugfun_how-tos_business-rules[business rules]for domain object members, using supporting methods ("see it, use it, do it") +
-(v1.12.0)
 
-|video::dXtmxmYxa30[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=OTNHR5EdAs8[001^] +
+Generating an app using the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp Maven archetype]
 
+|x|||||||||
 
-|Writing xref:ugtst.adoc#_ugtst_unit-test-support[unit tests] for a domain object responsibility  +
-(v1.12.0)
 
-|video::imHfxQGUgV8[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=6GPtec5Hu5Q[002^] +
+Importing the generated app into an xref:dg.adoc#_dg_ide[IDE] +
 
+|x||x|||||||
 
-|Writing end-to-end xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] for a domain object responsibility  +
-(v1.12.0)
 
-|video::-lAt4UWiBjE[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=xVTjtiJM8XM[003^] +
+Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:ugbtb.adoc#_ugbtb_view-models[view model] and `SimpleObjects` domain service (repository).
+||||x||||||
 
 
+|link:https://www.youtube.com/watch?v=KCJ1ZPPB3pA[004^] +
+Using the optional `Xxx.layout.xml` file to provide xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
+||x||||||||
 
-|===
 
 
 
-== Swagger UI, Maven plugin
 
-[cols="2a,2a"]
-|===
+11+| [big]#*Fixture scripts, rules, tests*#
 
-|Using the Swagger UI to access the xref:ugvro.adoc#[REST API] automatically exposed for domain services, entities, and/or view models +
-(v1.12.0)
+include::_screencasts-playlists.adoc[]
 
-|video::lkZxRSS0Zwg[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=pH02g0l2GKY[005^] +
+Using xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] to initialize the database, eg while prototyping and for demos
+||x||||||||
 
 
-|Using the xref:rgmvn.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime). +
-(v1.12.0)
 
-|video::yOh3WphhR1E[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=dXtmxmYxa30[006^] +
+Implementing xref:ugfun.adoc#_ugfun_how-tos_business-rules[business rules]for domain object members, using supporting methods ("see it, use it, do it")
+|x|||||||||
 
-|===
+|link:https://www.youtube.com/watch?v=imHfxQGUgV8[007^] +
+Writing xref:ugtst.adoc#_ugtst_unit-test-support[unit tests] for a domain object responsibility
+||x||||||||
 
 
-== App Manifest
 
-[cols="2a,2a"]
-|===
+|link:https://www.youtube.com/watch?v=-lAt4UWiBjE[008^] +
+Writing end-to-end xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] for a domain object responsibility
+||x||||||||
 
 
-|How the framework uses the xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] is used to bootstrap the application +
-(v1.12.0)
 
-|video::1sNiR3Y84c0[youtube,width="560px",height="315px"]
 
 
+11+| [big]#*Swagger UI, Maven plugin*#
 
+include::_screencasts-playlists.adoc[]
 
-|===
+|link:https://www.youtube.com/watch?v=lkZxRSS0Zwg[009^] +
+Using the Swagger UI to access the xref:ugvro.adoc#[REST API] automatically exposed for domain services, entities, and/or view models
+||||||||||x
 
 
-== Actions
 
-[cols="2a,2a"]
-|===
 
+|link:https://www.youtube.com/watch?v=yOh3WphhR1E[010^] +
+Using the xref:rgmvn.adoc[Apache Isis maven plugin] to validate domain object models during the build process (rather than at runtime).
+||||||||x||
 
 
-|Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] annotations or using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts]. +
-(v1.12.0)
 
-|video::dfRZeYqzMtI[youtube,width="560px",height="315px"]
 
 
+11+| [big]#*App Manifest*#
 
-|Invoking (no-arg) action on multiple objects at once (using xref:rgant.adoc#_rgant_Action_invokeOn[`@Action#invokeOn()`], and using the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience. +
-(v1.12.0)
 
-|video::0naoVsWppuQ[youtube,width="560px",height="315px"]
+|link:https://www.youtube.com/watch?v=1sNiR3Y84c0[011^] +
+How the framework uses the xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] is used to bootstrap the application
+||||||||||x
 
 
 
 
-|===
+11+| [big]#*Actions*#
 
 
-== Titles and icons, UI event subscribers
+include::_screencasts-playlists.adoc[]
 
-[cols="2a,2a"]
-|===
 
+|link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] annotations or using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts].
+|x||||||||x|
 
-|Using the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`], xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI. +
-(v1.12.0)
 
-|video::CwM430UH5WE[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
+Invoking (no-arg) action on multiple objects at once (using xref:rgant.adoc#_rgant_Action_invokeOn[`@Action#invokeOn()`], and using the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience.
+|||x||||||x|
 
 
-|Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`IconUiEvent`] as per the xref:rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation +
-(v1.12.0)
 
-|video::7ToRKBOeemM[youtube,width="560px",height="315px"]
 
 
+11+| [big]#*Titles and icons, UI event subscribers*#
 
-|===
 
+include::_screencasts-playlists.adoc[]
 
-== Derived collections
 
-[cols="2a,2a"]
-|===
+|link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
+Using the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`], xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
+|x||x||||||x|
 
 
-|How to implement a derived collection on a domain object. +
-(v1.12.0)
 
-|video::ckT8Lt20SE4[youtube,width="560px",height="315px"]
+|link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`IconUiEvent`] as per the xref:rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
+||||||x||||
 
 
 
-|===
 
 
-== More on fixture scripts
+11+| [big]#*Derived collections*#
 
-[cols="2a,2a"]
-|===
 
-|Extending a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] to more easily demonstrate new functionality. +
-(v1.12.0)
+|link:https://www.youtube.com/watch?v=ckT8Lt20SE4[016^] +
+How to implement a derived collection on a domain object.
+|||||||||x|
 
-|video::l_oZymgb65I[youtube,width="560px",height="315px"]
 
 
 
-|===
 
+11+| [big]#*More on fixture scripts*#
 
-== Page size of collections
 
-[cols="2a,2a"]
-|===
+|link:https://www.youtube.com/watch?v=l_oZymgb65I[017^] +
+Extending a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] to more easily demonstrate new functionality.
+||x||||||||
 
 
-|Using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts] to specify the page size for a domain object's collection. +
-(v1.12.0)
 
-|video::39Hpd7C4Kvo[youtube,width="560px",height="315px"]
 
 
+11+| [big]#*Page size of collections*#
 
-|===
 
+|link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
+Using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts] to specify the page size for a domain object's collection.
+||||x||||||
 
-== Hints and end-user features
 
-[cols="2a,2a"]
-|===
 
-|Demonstrates how Apache Isis' xref:ugvw.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
- application can clear these UI hints using the (framework-provided) xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action. +
-(v1.12.0)
 
-|video::0d713-V4vrg[youtube,width="560px",height="315px"]
 
 
-|Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:ugvw.adoc[Wicket viewer]. +
-(v1.12.0)
+11+| [big]#*Hints and end-user features*#
 
-|video::Kqch-XNlBMA[youtube,width="560px",height="315px"]
 
+include::_screencasts-playlists.adoc[]
 
-|Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ugvw.adoc[Wicket viewer], and how the developer can ensure that xref:rgant.adoc#_rgant_DomainObjectLayout_bookmarking[domain objects] and (xref:rgant.adoc#_rgant_Action_semantics[query-only]) xref:rgant.adoc#_rgant_ActionLayout_bookmarking[actions] can be bookmarked. +
-(v1.12.0)
+|link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
+Demonstrates how Apache Isis' xref:ugvw.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
+ application can clear these UI hints using the (framework-provided) xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action.
+|||x|||||||
 
-|video::a0QQLT_16To[youtube,width="560px",height="315px"]
 
 
+|link:https://www.youtube.com/watch?v=Kqch-XNlBMA[020^] +
+Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:ugvw.adoc[Wicket viewer].
+|||x|||||||
 
 
-|===
 
+|link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ugvw.adoc[Wicket viewer], and how the developer can ensure that xref:rgant.adoc#_rgant_DomainObjectLayout_bookmarking[domain objects] and (xref:rgant.adoc#_rgant_Action_semantics[query-only]) xref:rgant.adoc#_rgant_ActionLayout_bookmarking[actions] can be bookmarked.
+|||x|||||||
 
-== Decoupling (mixins & subscribers)
 
-[cols="2a,2a"]
-|===
 
 
-|Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin] (useful for decoupling).  +
-(v1.12.0)
 
-|video::Wn5215K7_Jg[youtube,width="560px",height="315px"]
 
+11+| [big]#*Decoupling (mixins & subscribers)*#
 
 
-|Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin]. +
-(v1.12.0)
+include::_screencasts-playlists.adoc[]
 
-|video::m633OEBpWqQ[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=Wn5215K7_Jg[022^] +
+Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin] (useful for decoupling).
+|x|||||x||||
 
 
-|Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:ugbtb.adoc#_ugbtb_decoupling_event-bus[decouple] and abstract business rules ( xref:rgcms.adoc#_rgcms_methods_prefixes_validate[validation]). +
-(v1.12.0)
 
-|video::-AQJb9GtIqI[youtube,width="560px",height="315px"]
+|link:https://www.youtube.com/watch?v=m633OEBpWqQ[023^] +
+Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin].
+||||||x||||
 
 
 
-|Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to hide functionality, in this
-  case the xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework. +
-(v1.12.0)
+|link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
+Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:ugbtb.adoc#_ugbtb_decoupling_event-bus[decouple] and abstract business rules ( xref:rgcms.adoc#_rgcms_methods_prefixes_validate[validation]).
+||||||x||||
 
-|video::6GjLW0hlrm4[youtube,width="560px",height="315px"]
 
 
+|link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
+Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to hide functionality, in this
+  case the xref:rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
+||||||||||x
 
-|===
 
 
-== Titles using the @Title annotation
 
-[cols="2a,2a"]
-|===
 
-|Using the xref:rgant.adoc#_rgant_Title[`@Title`] annotation (instead of the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another..  +
-(v1.12.0)
+11+| [big]#*Titles using the @Title annotation*#
 
-|video::qj4bMkQRBUY[youtube,width="560px",height="315px"]
 
 
-|===
+|link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
+Using the xref:rgant.adoc#_rgant_Title[`@Title`] annotation (instead of the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+|x||||||||x|
 
 
-== Integration testing of mixins
 
-[cols="2a,2a"]
-|===
 
-|How to write an xref:ugtst.adoc#_ugtst_integ-test-support[integration test] for an xref:rgant.adoc#_rgant_Mixin[mixin]. +
-(v1.12.0)
 
-|video::yi52Gbd3lmY[youtube,width="560px",height="315px"]
+11+| [big]#*Integration testing of mixins*#
 
 
 
-|===
 
+|link:https://www.youtube.com/watch?v=yi52Gbd3lmY[027^] +
+How to write an xref:ugtst.adoc#_ugtst_integ-test-support[integration test] for an xref:rgant.adoc#_rgant_Mixin[mixin].
+||x||||||||
 
-== Removing boilerplate
 
-[cols="2a,2a"]
-|===
 
 
-|Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from your domain objects (getters and setters). +
-(v1.12.0)
 
-|video::SLJPBruFMKY[youtube,width="560px",height="315px"]
 
+11+| [big]#*Removing boilerplate*#
 
 
-|Using the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] module to remove boilerplate from your domain object (xref:rgant.adoc#_rgant_ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters). +
-(v1.12.0)
 
-|video::AXuxULuRtm0[youtube,width="560px",height="315px"]
+include::_screencasts-playlists.adoc[]
 
-|===
 
+|link:https://www.youtube.com/watch?v=SLJPBruFMKY[028^] +
+Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from your domain objects (getters and setters).
+||||||||x||
 
-== Action validation
 
-[cols="2a,2a"]
-|===
 
 
-|How to validate action parameters using a supporting xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validateNXxx()`] method. +
-(v1.12.0)
+|link:https://www.youtube.com/watch?v=AXuxULuRtm0[029^] +
+Using the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] module to remove boilerplate from your domain object (xref:rgant.adoc#_rgant_ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters).
+|||||x|||x||
 
-|video::ORoEYlg6XFM[youtube,width="560px",height="315px"]
 
 
 
-|How to validate action parameters using the xref:rgant.adoc#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface..  +
-(v1.12.0)
 
-|video::1Vlzob89pYI[youtube,width="560px",height="315px"]
+11+| [big]#*Action validation*#
 
-|===
 
 
+include::_screencasts-playlists.adoc[]
 
-== Instantiating/Initializing Objects
 
-[cols="2a,2a"]
-|===
+|link:https://www.youtube.com/watch?v=ORoEYlg6XFM[030^] +
+How to validate action parameters using a supporting xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validateNXxx()`] method.
+|x||||||||x|
 
 
-|How to instantiate/initialize objects using xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] and/or xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]. +
-(v1.12.0)
 
-|video::fYJjXAepWAs[youtube,width="560px",height="315px"]
+|link:https://www.youtube.com/watch?v=1Vlzob89pYI[031^] +
+How to validate action parameters using the xref:rgant.adoc#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
+|||||||||x|
 
-|===
 
 
 
-== Property and parameter choices
+11+| [big]#*Instantiating/Initializing Objects*#
 
-[cols="2a,2a"]
-|===
 
 
-|How to provide a set of xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when editing a property. +
-(v1.12.0)
 
-|video::cQ06PoMNDPw[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
+How to instantiate/initialize objects using xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] and/or xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
+|x||||||||x|
 
-|How to provide a set of xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when invoking an action. +
-(v1.12.0)
 
-|video::afEnYKljBQs[youtube,width="560px",height="315px"]
 
 
-|How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] supporting methods as a source for default values within a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script]. +
-(v1.12.0)
+11+| [big]#*Property and parameter choices*#
 
-|video::fKo6aTPK-gk[youtube,width="560px",height="315px"]
 
 
-|How to use an enum for choices (drop down list) for both a property or an action parameter. +
-(v1.12.0)
+include::_screencasts-playlists.adoc[]
 
-|video::ZWOzmwCJVzA[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=cQ06PoMNDPw[033^] +
+How to provide a set of xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when editing a property.
+|x||||||||x|
 
 
-|===
 
+|link:https://www.youtube.com/watch?v=afEnYKljBQs[034^] +
+How to provide a set of xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] (a drop-down list) when invoking an action.
+|||||||||x|
 
 
-== Hiding columns
 
-[cols="2a,2a"]
-|===
+|link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
+How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_choices[choices] supporting methods as a source for default values within a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script].
+||x|||||||x|
 
 
-|How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rgant.adoc#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`]) . +
-(v1.12.0)
 
-|video::1SCyBlMM2Bo[youtube,width="560px",height="315px"]
+|link:https://www.youtube.com/watch?v=ZWOzmwCJVzA[036^] +
+How to use an enum for choices (drop down list) for both a property or an action parameter.
+|||||||||x|
 
 
-|How to hide properties as columns in tables, using CSS. +
-(v1.12.0)
 
-|video::H11yby1Xkbc[youtube,width="560px",height="315px"]
 
+11+| [big]#*Hiding columns*#
 
 
-|===
 
+include::_screencasts-playlists.adoc[]
 
 
-== Fixture scripts defaults / fake data
+|link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
+How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rgant.adoc#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`]).
+||||x||||||
 
-[cols="2a,2a"]
-|===
 
+|link:https://www.youtube.com/watch?v=H11yby1Xkbc[038^] +
+How to hide properties as columns in tables, using CSS.
+||||x||||||
 
-|Using the xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller. +
-(v1.12.0)
 
-|video::NKaR7ZedI8E[youtube,width="560px",height="315px"]
 
 
+11+| [big]#*Fixture scripts defaults / fake data*#
 
-|Using the (non-ASF) http://github.com/isisaddons/isis-module-fakedata[Isis addons' fakedata] module's `FakeDataService` to provide fake (random) names within a fixture script. +
-(v1.12.0)
 
-|video::-jMiD9n1L5U[youtube,width="560px",height="315px"]
 
+include::_screencasts-playlists.adoc[]
 
-|===
 
+|link:https://www.youtube.com/watch?v=NKaR7ZedI8E[039^] +
+Using the xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
+||x||||||||
 
 
-== BigDecimals
 
-[cols="2a,2a"]
-|===
+|link:https://www.youtube.com/watch?v=-jMiD9n1L5U[040^] +
+Using the (non-ASF) http://github.com/isisaddons/isis-module-fakedata[Isis addons' fakedata] module's `FakeDataService` to provide fake (random) names within a fixture script.
+||x|||x|||||
 
 
-|Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:ugvw.adoc[Wicket viewer]. +
-(v1.12.0)
 
-|video::esujf_DFeWA[youtube,width="560px",height="315px"]
 
+11+| [big]#*BigDecimals*#
 
 
-|How to use the xref:rgant.adoc#_rgant_Digits[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.  +
-(v1.12.0)
+include::_screencasts-playlists.adoc[]
 
-|video::n9Oy0m2bplw[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=esujf_DFeWA[041^] +
+Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:ugvw.adoc[Wicket viewer].
+|||||||x||x|x
 
 
 
-|===
 
+|link:https://www.youtube.com/watch?v=n9Oy0m2bplw[042^] +
+How to use the xref:rgant.adoc#_rgant_Digits[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.
+|||||||||x|
 
 
-== Action parameters
 
-[cols="2a,2a"]
-|===
 
+11+| [big]#*Action parameters*#
 
-|How to use the supporting xref:rgcms.adoc#_rgcms_methods_prefixes_default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters. +
-(v1.12.0)
 
-|video::Rt4JoV4ssVY[youtube,width="560px",height="315px"]
 
+include::_screencasts-playlists.adoc[]
 
 
-|How to use xref:rgant.adoc#_rgant_DomainObject_bounded[`@DomainObject#bounded()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types. +
-(v1.12.0)
+|link:https://www.youtube.com/watch?v=Rt4JoV4ssVY[043^] +
+How to use the supporting xref:rgcms.adoc#_rgcms_methods_prefixes_default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
+|x||||||||x|
 
-|video::qAJDGxztWIQ[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
+How to use xref:rgant.adoc#_rgant_DomainObject_bounded[`@DomainObject#bounded()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+|||||||||x|
 
 
-|How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models). +
-(v1.12.0)
+|link:https://www.youtube.com/watch?v=0ro_YhXOpJU[045^] +
+How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+|||||||||x|
 
-|video::0ro_YhXOpJU[youtube,width="560px",height="315px"]
 
+|link:https://www.youtube.com/watch?v=K36IJQ_hDfs[046^] +
+How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+|||||||||x|
 
-|How to use the xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models). +
-(v1.12.0)
 
-|video::K36IJQ_hDfs[youtube,width="560px",height="315px"]
 
 
-|===
+11+| [big]#*Excel, Calendars, Maps*#
 
 
 
-== Excel, Calendars, Maps
+include::_screencasts-playlists.adoc[]
 
-Using the (non-ASF) link:http://isisaddons.org[Isis Addons] wicket UI extensions to render (collections of) domain objects on a
-calendar, on a map, or downloadable within an Excel spreadsheet.
 
+|link:https://www.youtube.com/watch?v=SoREp-8MQz0[047^] +
+Configuring an Apache Isis app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) http://github.com/isisaddons/isis-wicket-excel[Isis addons' excel] wicket extension.
+|||||x|||||
 
-[cols="2a,2a"]
-|===
 
-
-|Configuring an Apache Isis app to allow tables of objects to be downloaded as an Excel spreadsheet, using the (non-ASF) http://github.com/isisaddons/isis-wicket-excel[Isis addons' excel] wicket extension. +
-(v1.12.0)
-
-|video::SoREp-8MQz0[youtube,width="560px",height="315px"]
-
-
-
-|Configuring an Apache Isis app to allow tables of domain objects with date information to be rendered on a full-page
+|link:https://www.youtube.com/watch?v=bqjLx8gMOEw[048^] +
+Configuring an Apache Isis app to allow tables of domain objects with date information to be rendered on a full-page
 calendar, using the (non-ASF) http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2] wicket
-extension. +
-(v1.12.0)
-
-|video::bqjLx8gMOEw[youtube,width="560px",height="315px"]
+extension.
+|||||x|||||
 
 
-
-|Using the xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`] annotation to exclude methods from a domain object
+|link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
+Using the xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`] annotation to exclude methods from a domain object
 (eg implementing methods of an interface as defined by the (non-ASF)
 http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2 ] wicket extension) that would
-otherwise be part of the Apache Isis metamodel (and thus show up in the UI). +
-(v1.12.0)
-
-|video::0YoFa44Xr6M[youtube,width="560px",height="315px"]
+otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
+||||||||||x
 
 
-
-|Configuring an Apache Isis app to allow tables of domain objects with location information to be rendered on map,
+|link:https://www.youtube.com/watch?v=mIwptdeZ67Q[050^] +
+Configuring an Apache Isis app to allow tables of domain objects with location information to be rendered on map,
  using the (non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3] wicket
- extension. +
-(v1.12.0)
-
-|video::mIwptdeZ67Q[youtube,width="560px",height="315px"]
+ extension.
+|||||x|||||
 
 
+|link:https://www.youtube.com/watch?v=3n_70HJ23uY[051^] +
+Using derived properties to persist value types (such as gmap3's Location value type) as regular primitive datatypes.
+|||||||x|||
 
-|Using derived properties to persist value types (such as gmap3's Location value type) as regular primitive datatypes. +
-(v1.12.0)
 
-|video::3n_70HJ23uY[youtube,width="560px",height="315px"]
+
+
+11+| [big]#*View Models*#
+
+
+
+include::_screencasts-playlists.adoc[]
+
+
+|link:https://www.youtube.com/watch?v=puG-pzxRSd0[052^] +
+How to write a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], holding references to two domain objects.
+|x||||||||x|
+
+
+|link:https://www.youtube.com/watch?v=tdBkmA2CCZY[053^] +
+Updating the title, icon and layout of a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model].
+||||x||||||
+
+
+|link:https://www.youtube.com/watch?v=TKF0FB_od00[054^] +
+How to expose information from underlying domain entities referenced by a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model] using derived properties
+||||||||||x
+
+
+|link:https://www.youtube.com/watch?v=TMMeVhRNi8A[055^] +
+Adding an action to a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
+||||x||||||
+
+
+
+
+11+| [big]#*Renaming*#
+
+
+
+include::_screencasts-playlists.adoc[]
+
+
+|link:https://www.youtube.com/watch?v=BYmSlgJP5KY[056^] +
+The (very simple) steps required to rename a domain entity class.
+|x|||||||||
+
+
+
+|link:https://www.youtube.com/watch?v=J5xobU6X0ng[057^] +
+How to rename a menu (on the top-level menubar) as rendered in the xref:ugvw.adoc[Wicket viewer].
+|x|||||||||
+
+
+|link:https://www.youtube.com/watch?v=mgHqRxQrp28[058^] +
+How to rename various elements (collections, title) of the xref:rgant.adoc#_rgant_HomePage[home page] view model,
+for an improved initial page.
+||||||||||x
+
+
+
+|link:https://www.youtube.com/watch?v=1i6N4wES6iw[059^] +
+How to rename the application name as it appears in the header.
+||||||||||x
+
+
+
+|link:https://www.youtube.com/watch?v=9nfDyhqCSvA[060^] +
+Updating the logo for the application as it appears in the header.
+||||||||||x
+
+
+
+
+11+| [big]#*Decoupling*#
+
+
+include::_screencasts-playlists.adoc[]
+
+
+|link:https://www.youtube.com/watch?v=vntv_5Z8Ros[061^] +
+Refactoring a mixin action, teasing out its separate responsibilities in order to decouple the code and uncover new concepts.
+||||||x||||
+
+
+|link:https://www.youtube.com/watch?v=Fgo2zFhRVco[062^] +
+Separating out the responsibilities of the persistent domain entities from those of view models that act upon those domain entities.
+||||||x||||
+
+
+
+
+
+11+| [big]#*(Parented) collections*#
+
+
+
+include::_screencasts-playlists.adoc[]
+
+|link:https://www.youtube.com/watch?v=9PgOSqf7rYE[063^] +
+How to implement a bidirectional 1-to-many association between two domain entities.
+|||||||x|||
+
+
+|link:https://www.youtube.com/watch?v=0fbVg8xJ9sE[064^] +
+How domain entities can be automatically persisted just by being associated with an already persistent entity.
+|||||||x|||
+
+
+|link:https://www.youtube.com/watch?v=FwzuCSlLLRM[065^] +
+How bidirectional relationships between domain entities can be automatically maintained.
+|||||||x|||
+
+
+|link:https://www.youtube.com/watch?v=IzZPbNYNJl4[066^] +
+How deleting one persistent entity can, if required, automatically delete another associated entity.
+|||||||x|||
+
+
+
+
+11+| [big]#*Metadata fieldset*#
+
+
+
+|link:https://www.youtube.com/watch?v=kdhwMc0f7_k[067^] +
+Improving the layout of domain entities by adding a metadata fieldset.
+||||x||||||
 
 
 |===
 
-
-
-== View Models
-
-
-[cols="2a,2a"]
-|===
-
-
-|How to write a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], holding references to two domain objects.+
-(v1.12.0)
-
-|video::puG-pzxRSd0[youtube,width="560px",height="315px"]
-
-
-
-|Updating the title, icon and layout of a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model].+
-(v1.12.0)
-
-|video::tdBkmA2CCZY[youtube,width="560px",height="315px"]
-
-
-
-|How to expose information from underlying domain entities referenced by a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model] using derived properties.+
-(v1.12.0)
-
-|video::TKF0FB_od00[youtube,width="560px",height="315px"]
-
-
-
-|Adding an action to a xref:ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], and adjusting the layout using custom CSS.+
-(v1.12.0)
-
-|video::TMMeVhRNi8A[youtube,width="560px",height="315px"]
-
-
-
-|===
-
-
-
-== Renaming
-
-
-[cols="2a,2a"]
-|===
-
-
-|The (very simple) steps required to rename a domain entity class.+
-(v1.12.0)
-
-|video::BYmSlgJP5KY[youtube,width="560px",height="315px"]
-
-
-|How to rename a menu (on the top-level menubar) as rendered in the xref:ugvw.adoc[Wicket viewer].+
-(v1.12.0)
-
-|video::J5xobU6X0ng[youtube,width="560px",height="315px"]
-
-
-
-|How to rename various elements (collections, title) of the xref:rgant.adoc#_rgant_HomePage[home page] view model,
-for an improved initial page.+
-(v1.12.0)
-
-|video::mgHqRxQrp28[youtube,width="560px",height="315px"]
-
-
-|How to rename the application name as it appears in the header.+
-(v1.12.0)
-
-|video::1i6N4wES6iw[youtube,width="560px",height="315px"]
-
-
-|Updating the logo for the application as it appears in the header.+
-(v1.12.0)
-
-|video::9nfDyhqCSvA[youtube,width="560px",height="315px"]
-
-
-
-|===
-
-
-
-== Decoupling
-
-
-[cols="2a,2a"]
-|===
-
-
-|Refactoring a mixin action, teasing out its separate responsibilities in order to decouple the code and uncover new concepts..+
-(v1.12.0)
-
-|video::vntv_5Z8Ros[youtube,width="560px",height="315px"]
-
-
-|Separating out the responsibilities of the persistent domain entities from those of view models that act upon those domain entities.+
-(v1.12.0)
-
-|video::Fgo2zFhRVco[youtube,width="560px",height="315px"]
-
-
-
-
-|===
-
-
-
-== (Parented) collections
-
-
-[cols="2a,2a"]
-|===
-
-
-|How to implement a bidirectional 1-to-many association between two domain entities.+
-(v1.12.0)
-
-|video::9PgOSqf7rYE[youtube,width="560px",height="315px"]
-
-
-|How domain entities can be automatically persisted just by being associated with an already persistent entity..+
-(v1.12.0)
-
-|video::0fbVg8xJ9sE[youtube,width="560px",height="315px"]
-
-
-
-|How bidirectional relationships between domain entities can be automatically maintained.+
-(v1.12.0)
-
-|video::FwzuCSlLLRM[youtube,width="560px",height="315px"]
-
-
-|How deleting one persistent entity can, if required, automatically delete another associated entity.+
-(v1.12.0)
-
-|video::IzZPbNYNJl4[youtube,width="560px",height="315px"]
-
-
-
-|===
-
-
-
-== Metadata fieldset
-
-
-[cols="2a,2a"]
-|===
-
-
-|Improving the layout of domain entities by adding a metadata fieldset.+
-(v1.12.0)
-
-|video::kdhwMc0f7_k[youtube,width="560px",height="315px"]
-
-
-|===
-
-
-
-
-== Older screencasts
-
-Older screencasts can be found link:./screencasts-older.html[here].
 
