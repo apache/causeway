@@ -30,18 +30,20 @@ public interface RepositoryService {
 
     boolean isPersistent(Object domainObject);                                              // <2>
     void persist(Object domainObject);                                                      // <3>
-    void remove(Object persistentDomainObject);                                             // <4>
+    void persistAndFlush(Object domainObject);                                              // <4>
+    void remove(Object persistentDomainObject);                                             // <5>
+    void removeAndFlush(Object persistentDomainObject);                                     // <6>
 
-    <T> List<T> allInstances(Class<T> ofType, long... range);                               // <5>
+    <T> List<T> allInstances(Class<T> ofType, long... range);                               // <7>
 
-    <T> List<T> allMatches(Query<T> query);                                                 // <6>
-    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <7>
+    <T> List<T> allMatches(Query<T> query);                                                 // <8>
+    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <9>
 
-    <T> T uniqueMatch(Query<T> query);                                                      // <8>
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);                 // <9>
+    <T> T uniqueMatch(Query<T> query);                                                      // <10>
+    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);                 // <11>
 
-    <T> T firstMatch(Query<T> query);                                                       // <10>
-    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);                  // <11>
+    <T> T firstMatch(Query<T> query);                                                       // <12>
+    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);                  // <13>
 
 }
 ----
@@ -50,14 +52,16 @@ xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s `instantiate(...)`
 ``RepositoryService``'s API too because instantiating and persisting objects are often done together.
 <2> test whether a particular domain object is persistent or not
 <3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
-<4> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
-<5> return all persisted instances of specified type.  Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.  The optional varargs parameters are for paging control; more on this below.
-<6> all persistence instances matching the specified `Query`.  Query itself is an Isis abstraction on top of JDO/DataNucleus' Query API.  *This is the primary API used for querying*
-<7> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
-<8> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned, while if there is more that one instances a run-time exception will be thrown.  Generally this method is preferred for looking up an object by its (primary or alternate) key.
+<4> persistAndFlush (ie save and flush) same as "persist()", but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the Persistence Mechanism - such as DataNucleus -).
+<5> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
+<6> remove (ie delete and flush) same as "remove()", but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the Persistence Mechanism - such as DataNucleus -). 
+<7> return all persisted instances of specified type.  Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.  The optional varargs parameters are for paging control; more on this below.
+<8> all persistence instances matching the specified `Query`.  Query itself is an Isis abstraction on top of JDO/DataNucleus' Query API.  *This is the primary API used for querying*
 <9> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
-<10> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.  No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
+<10> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned, while if there is more that one instances a run-time exception will be thrown.  Generally this method is preferred for looking up an object by its (primary or alternate) key.
 <11> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
+<12> Returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.  No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
+<13> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
 
 
 The `uniqueMatch(...)` methods are the recommended way of querying for (precisely) one instance.  The `firstMatch(...)` methods are for less strict querying.
@@ -67,6 +71,94 @@ The `uniqueMatch(...)` methods are the recommended way of querying for (precisel
 
 This section briefly discusses how application code can use these APIs.
 
+
+=== "persistAndFlush(..)", "removeAndFlush(...)"
+
+In some cases, such as when using Managed Properties and Collections for implementing 1-1, 1-n, or m-n relationships, the user needs to invoke "flush()" to send the changes to the persistence mechanism (such as JDO/DataNucleus).
+Then is when the persistence mechanism updates the managed properties and collections.
+ 
+
+[source,java]
+----
+public abstract class Warehouse extends SalesVIPEntity<Marketplace> {
+
+    // {{ ExcludedProducts (Collection)
+    @Persistent(mappedBy = "marketplace", dependentElement = "true")
+    private SortedSet<MarketplaceExcludedProduct> excludedProducts = new TreeSet<MarketplaceExcludedProduct>();
+
+    @MemberOrder(sequence = "1")
+    public SortedSet<MarketplaceExcludedProduct> getExcludedProducts() {
+	return this.excludedProducts;
+    }
+
+    public void setExcludedProducts(
+	    final SortedSet<MarketplaceExcludedProduct> excludedProducts) {
+	this.excludedProducts = excludedProducts;
+    }
+
+    // }}
+
+    // {{ addExcludedProduct (action)
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @MemberOrder(sequence = "1")
+    public MarketplaceExcludedProduct addExcludedProduct(final Product product) {
+	MarketplaceExcludedProduct marketplaceExcludedProduct = this
+		.findExcludedProduct(product);
+	if (marketplaceExcludedProduct == null) {
+	    marketplaceExcludedProduct = this.factoryService
+		    .instantiate(MarketplaceExcludedProduct.class);
+	}
+
+	this.wrap(marketplaceExcludedProduct).setMarketplace(this);
+	this.wrap(marketplaceExcludedProduct).setProduct(product);
+
+	this.repositoryService.persistAndFlush(marketplaceExcludedProduct);  // <— Needed for updating the managed properties and collections.
+
+	return marketplaceExcludedProduct;
+    }
+
+    // }}
+
+    // {{ deleteFromExcludedProducts (action)
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @MemberOrder(sequence = "1")
+    public void deleteFromExcludedProducts(final Product product) {
+	final MarketplaceExcludedProduct marketplaceExcludedProduct = this
+		.findExcludedProduct(product);
+	if (marketplaceExcludedProduct != null) {
+	    this.repositoryService.remove(marketplaceExcludedProduct);
+	    this.flushTransaction();
+	}
+    }
+
+    // }}
+----
+
+On the “addExcludedProduct()” action, if the user don’t flush, this test would fail, as the managed collection would not containing the given product:
+
+[source,java]
+----
+    @Test
+  	public void addExcludedProduct() {
+
+  	    // given
+  	    final AmazonMarketplace amazonMarketplace = this.wrapSkipRules(
+  		    this.marketplaceRepository).findOrCreateAmazonMarketplace(
+  			    AmazonMarketplaceLocation.FRANCE);
+  	    
+	    final Product product = this.wrap(this.productRepository)
+		    .createProduct(UUID.randomUUID().toString(),
+			    UUID.randomUUID().toString());
+  	    
+  	    // when
+  	    this.wrap(amazonMarketplace).addExcludedProduct(product);
+
+  	    // then
+  	    Assertions.assertThat(this.wrapSkipRules(amazonMarketplace).findAllProductsExcluded()).contains(product); // <-- this would fail.
+
+  	}
+  	
+----
 
 === Query
 
