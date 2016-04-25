@@ -22,8 +22,8 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 
 | xref:r1.12.1[1.12.1]
-| apr-2016
-| (currently being voted on)
+| 12-apr-2016
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335484[Release notes for v1.12.1]
 | Bug-fix release
 | 0
 | 0
