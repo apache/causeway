@@ -8,7 +8,7 @@
 
 [NOTE]
 ====
-This material does not constitute an endorsement; AgileJ Structure Views is not affiliated to Apache Software Foundation in any way.
+This material does not constitute an endorsement; AgileJ Structure Views is not affiliated to Apache Software Foundation in any way.  AgileJ has however provided a complimentary copy of its software to Apache Isis committers.
 ====
 
 link:http://www.agilej.com/[AgileJ Structure Views] is a commercial product to reverse engineer and visualize Java classes from source code.

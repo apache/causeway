@@ -238,7 +238,7 @@ To log in, use `sven/pass`.
 
 Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main link:../documentation.html[documentation] page first).
 
-If you use Eclipse or IntelliJ IDEA, do also install the xref:dg.adoc#_dg_ide-templates[IDE templates]; these will help you follow the Apache Isis naming conventions.
+If you use IntelliJ IDEA or Eclipse, do also install the xref:dg.adoc#_dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:dg.adoc#_dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 
 
 

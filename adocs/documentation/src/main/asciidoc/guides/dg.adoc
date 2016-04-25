@@ -51,7 +51,6 @@ The remaining guides are:
 
 
 include::_dg_ide.adoc[leveloffset=+1]
-include::_dg_ide-templates.adoc[leveloffset=+1]
 
 include::_dg_building-isis.adoc[leveloffset=+1]
 

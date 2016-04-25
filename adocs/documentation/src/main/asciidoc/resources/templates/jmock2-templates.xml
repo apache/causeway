@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="java" deleted="false" description="JMock2 AutoMock Definition" enabled="true" name="jmautomock">${:import(org.jmock.auto.Mock)}@Mock&#13;
-private ${MockClass} mock${MockClass};&#13;
-</template><template autoinsert="true" context="java" deleted="false" description="JMock2 Context field" enabled="true" name="jmcontext">${:import(org.jmock.Mockery,org.jmock.integration.junit4.JUnit4Mockery)}private Mockery context = new JUnit4Mockery();&#13;
-</template><template autoinsert="true" context="java" deleted="false" description="JMock2 Expectations" enabled="true" name="jmexpectations">${:import(org.jmock.Expectations)}context.checking(new Expectations() {{&#13;
-    ${cursor}&#13;
-}});</template><template autoinsert="true" context="java" deleted="false" description="JMock2 Mock Definition" enabled="true" name="jmmock">${MockClass} ${mockObject} = context.mock(${MockClass}.class);</template><template autoinsert="true" context="java" deleted="false" description="JMock2 Rule (Isis variant)" enabled="true" name="jmrule">${:import(org.junit.Rule,org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2,org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode)}@Rule&#13;
-public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES${cursor});&#13;
-&#13;
-</template><template autoinsert="true" context="java" deleted="false" description="JMock2 RunWith" enabled="true" name="jmrunwith">${:import(org.junit.runner.RunWith,org.jmock.integration.junit4.JMock)}@RunWith(JMock.class)</template><template autoinsert="true" context="java" deleted="false" description="JMock2 Expectation Return Value" enabled="true" name="jmvalue">will(returnValue(${cursor}));</template></templates>
