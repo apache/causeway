@@ -70,10 +70,17 @@ public interface RepositoryService {
      *
      * @see org.apache.isis.applib.DomainObjectContainer#newTransientInstance(Class)
      * @see #isPersistent(Object)
-     * @see #persist(Object)
      */
     @Programmatic
     void persist(Object domainObject);
+    
+    /**
+     * Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
+     *
+     * @see #persist(Object)
+     */
+    @Programmatic
+    void persistAndFlush(Object domainObject);
 
     /**
      * Deletes the domain object but only if is persistent.
@@ -83,7 +90,13 @@ public interface RepositoryService {
     @Programmatic
     void remove(Object domainObject);
 
-
+    /**
+     * Deletes the domain object but only if is persistent, and flushes changes to the database.
+     *
+     * @param domainObject
+     */
+    @Programmatic
+    void removeAndFlush(Object domainObject);
 
     /**
      * Returns all the instances of the specified type (including subtypes).
