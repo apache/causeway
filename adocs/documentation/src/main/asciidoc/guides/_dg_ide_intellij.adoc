@@ -55,7 +55,7 @@ Later on we'll specify the Apache Isis/ASF code style settings, so for now selec
 .IntelliJ Installation Wizard - Import Settings
 image::{_imagesdir}appendices/dev-env/intellij-idea/010-installing/060-import-settings-or-not.png[width="400px"]
 
-Finally, if you are young and trendy, set the UI theme to Darcula:
+Finally, if you are a trendy hipster, set the UI theme to Darcula:
 
 .IntelliJ Installation Wizard Set UI Theme
 image::{_imagesdir}appendices/dev-env/intellij-idea/010-installing/070-set-ui-theme.png[width="600px"]
@@ -72,6 +72,7 @@ Start off by creating a new project:
 .IntelliJ Create New Project
 image::{_imagesdir}appendices/dev-env/intellij-idea/020-create-new-project/010-new-project-create.png[width="400px"]
 
+
 We want to create a new *Java* project:
 
 .IntelliJ Create New Project - Create a Java project
@@ -83,10 +84,12 @@ We therefore need to specify the JDK.  Apache Isis supports both Java 7 and Java
 .IntelliJ Create New Java Project - Select the JDK
 image::{_imagesdir}appendices/dev-env/intellij-idea/020-create-new-project/030-java-project-select-jdk.png[width="250px"]
 
+
 Specify the directory containing the JDK:
 
 .IntelliJ Create New Project - Select the JDK location
 image::{_imagesdir}appendices/dev-env/intellij-idea/020-create-new-project/050-name-and-location.png[width="400px"]
+
 
 Finally allow IntelliJ to create the directory for the new project:
 
@@ -104,16 +107,29 @@ Next we recommend you import a set of standard file templates.  These are used t
 .File templates
 image::{_imagesdir}appendices/dev-env/intellij-idea/030-import-settings/040-file-templates.png[width="400px"]
 
-The file templates are provided as a settings JAR file, namely *link:resources/appendices/dev-env/intellij/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.  Download this file and import using `File > Import Settings`, specifying the
-directory that you have downloaded the file to:
+The file templates are provided as a settings JAR file, namely *link:resources/appendices/dev-env/intellij/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.  Download this file.
+
+Next, import using `File > Import Settings`, specifying the directory that you have downloaded the file to:
 
 .IntelliJ Import Settings - Specify JAR file
 image::{_imagesdir}appendices/dev-env/intellij-idea/030-import-settings/010-settings-import-jar.png[width="400px"]
 
-Select all the categories (there should just be one), and hit OK.  then hit restart:
+Select all the categories (there should just be one), and hit OK.  then hit restart.
 
-.IntelliJ Import Settings - Restart
-image::{_imagesdir}appendices/dev-env/intellij-idea/030-import-settings/030-restart.png[width="250px"]
+
+[WARNING]
+====
+Apparently no categories are shown if importing into IntelliJ 2016.1.1 Community Edition (and perhaps other 2016
+versions).  The file does import ok into IntelliJ 15.0.x, so we think this is a bug in the 2016 version.
+
+The workaround is to extract the `.jar` file locally and copy the files into IntelliJ's `config` directory, somewhere
+in your home directory:
+
+* Windows `<User home>\.IdeaIC2016\config`
+* Linux `~/..IdeaIC2016/config`
+* Mac OS `~/Library/Preferences/IdeaIC2016`
+
+====
 
 
 
