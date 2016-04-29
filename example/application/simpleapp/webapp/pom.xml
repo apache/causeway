@@ -84,6 +84,13 @@
             <artifactId>geronimo-servlet_3.0_spec</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-webserver</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
     <profiles>
