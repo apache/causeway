@@ -451,9 +451,20 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return this;
     }
 
+    // //////////////////////////////////////////////////////////
+    // detach
+    // //////////////////////////////////////////////////////////
 
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        for (PropertyMemento propertyMemento : propertyScalarModels.keySet()) {
+            final ScalarModel scalarModel = propertyScalarModels.get(propertyMemento);
+            scalarModel.detach();
+        }
+        propertyScalarModels.clear();
+    }
 
-    
     // //////////////////////////////////////////////////////////
     // concurrency exceptions
     // //////////////////////////////////////////////////////////
