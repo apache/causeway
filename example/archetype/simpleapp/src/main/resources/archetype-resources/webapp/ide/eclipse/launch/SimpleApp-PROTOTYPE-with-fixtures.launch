@@ -15,7 +15,7 @@
   <stringAttribute value="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector" key="org.eclipse.debug.core.source_locator_id"/>
   <booleanAttribute value="true" key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS"/>
   <stringAttribute value="org.eclipse.m2e.launchconfig.classpathProvider" key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER"/>
-  <stringAttribute value="org.apache.isis.WebServer" key="org.eclipse.jdt.launching.MAIN_TYPE"/>
+  <stringAttribute value="org.apache.isis.core.webserver.WebServer" key="org.eclipse.jdt.launching.MAIN_TYPE"/>
   <stringAttribute value="--type SERVER_PROTOTYPE --port 8080 --manifest domainapp.app.DomainAppAppManifestWithFixtures" key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS"/>
   <stringAttribute value="${rootArtifactId}-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
   <stringAttribute value="org.eclipse.m2e.launchconfig.sourcepathProvider" key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"/>
