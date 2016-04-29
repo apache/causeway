@@ -55,6 +55,7 @@ public class EntityPage extends PageAbstract {
     private static final long serialVersionUID = 1L;
     
     private final EntityModel model;
+    private final String titleString;
 
     /**
      * Called reflectively, in support of 
@@ -110,51 +111,9 @@ public class EntityPage extends PageAbstract {
         super(pageParameters, titleString, ComponentType.ENTITY);
 
         this.model = entityModel;
+        this.titleString = titleString;
 
-        final ObjectAdapter objectAdapter;
-        try {
-            // check object still exists
-            objectAdapter = entityModel.getObject();
-        } catch(final RuntimeException ex) {
-            removeAnyBookmark(model);
-            removeAnyBreadcrumb(model);
-
-            // we throw an authorization exception here to avoid leaking out information as to whether the object exists or not.
-            throw new ObjectMember.AuthorizationException(ex);
-        }
-
-        // check that the entity overall can be viewed.
-        if(!ObjectAdapter.Util.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
-            throw new ObjectMember.AuthorizationException();
-        }
-
-        final ObjectSpecification objectSpec = entityModel.getTypeOfSpecification();
-        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-        if(facet != null) {
-            // the facet should always exist, in fact
-            // just enough to ask for the metadata.
-            // This will cause the current ObjectSpec to be updated as a side effect.
-            final Grid unused = facet.getGrid();
-        }
-
-
-        if(titleString == null) {
-            final String titleStr = objectAdapter.titleString(null);
-            setTitle(titleStr);
-        }
-
-        WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
-        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
-        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
-        themeDiv.addOrReplace(entityPageContainer);
-
-        addChildComponents(entityPageContainer, model);
-        
-        // bookmarks and breadcrumbs
-        bookmarkPage(model);
-        addBreadcrumb(entityModel);
-
-        addBookmarkedPages(entityPageContainer);
+        buildPage();
     }
 
     private void addBreadcrumb(final EntityModel entityModel) {
@@ -178,6 +137,8 @@ public class EntityPage extends PageAbstract {
      */
     @Override
     protected void onBeforeRender() {
+
+
         ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                 new Runnable() {
                     @Override
@@ -187,6 +148,52 @@ public class EntityPage extends PageAbstract {
                     }
                 }
         );
+    }
+
+    private void buildPage() {
+        final ObjectAdapter objectAdapter;
+        try {
+            // check object still exists
+            objectAdapter = model.getObject();
+        } catch(final RuntimeException ex) {
+            removeAnyBookmark(model);
+            removeAnyBreadcrumb(model);
+
+            // we throw an authorization exception here to avoid leaking out information as to whether the object exists or not.
+            throw new ObjectMember.AuthorizationException(ex);
+        }
+
+        // check that the entity overall can be viewed.
+        if(!ObjectAdapter.Util.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
+            throw new ObjectMember.AuthorizationException();
+        }
+
+        final ObjectSpecification objectSpec = model.getTypeOfSpecification();
+        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
+        if(facet != null) {
+            // the facet should always exist, in fact
+            // just enough to ask for the metadata.
+            // This will cause the current ObjectSpec to be updated as a side effect.
+            final Grid unused = facet.getGrid();
+        }
+
+        if(titleString == null) {
+            final String titleStr = objectAdapter.titleString(null);
+            setTitle(titleStr);
+        }
+
+        WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
+        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
+        CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
+        themeDiv.addOrReplace(entityPageContainer);
+
+        addChildComponents(entityPageContainer, model);
+
+        // bookmarks and breadcrumbs
+        bookmarkPage(model);
+        addBreadcrumb(model);
+
+        addBookmarkedPages(entityPageContainer);
     }
 
     private DeploymentType getDeploymentType() {
