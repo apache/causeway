@@ -471,9 +471,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    public void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
+    public void publishActionIfRequired() {
 
-        publishingServiceInternal.publishAction(currentUser, timestamp);
+        publishingServiceInternal.publishAction();
     }
 
 
@@ -667,7 +667,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
         final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
         
-        publishActionIfRequired(currentUser, endTimestamp);
+        publishActionIfRequired();
         doFlush();
         
         publishedChangedObjectsIfRequired(currentUser, endTimestamp);

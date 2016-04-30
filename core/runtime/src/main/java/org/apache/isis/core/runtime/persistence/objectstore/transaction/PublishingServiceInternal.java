@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -46,6 +47,7 @@ import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -69,11 +71,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 @DomainService(nature = NatureOfService.DOMAIN)
 public class PublishingServiceInternal {
 
-    @Inject
-    private PublishingService publishingServiceIfAny;
-
-    @Inject
-    private CommandContext commandContext;
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
@@ -122,10 +119,13 @@ public class PublishingServiceInternal {
 
 
     @Programmatic
-    public void publishAction(final String currentUser, final Timestamp timestamp) {
+    public void publishAction() {
         if(!canPublish()) {
             return;
         }
+
+        final String currentUser = userService.getUser().getName();
+        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
         try {
             final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
@@ -277,6 +277,18 @@ public class PublishingServiceInternal {
         return IsisContext.getPersistenceSession();
     }
 
+
+    @Inject
+    private PublishingService publishingServiceIfAny;
+
+    @Inject
+    private CommandContext commandContext;
+
+    @Inject
+    private ClockService clockService;
+
+    @Inject
+    private UserService userService;
 
 
 }

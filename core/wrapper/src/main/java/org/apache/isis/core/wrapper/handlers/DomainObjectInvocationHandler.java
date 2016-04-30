@@ -630,10 +630,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             final IsisTransaction transaction = IsisContext.getTransactionManager().getTransaction();
 
-            final String currentUser = IsisContext.getAuthenticationSession().getUserName();
-            final Timestamp timestamp = Clock.getTimeAsJavaSqlTimestamp();
-
-            transaction.publishActionIfRequired(currentUser, timestamp);
+            transaction.publishActionIfRequired();
 
             return ObjectAdapter.Util.unwrap(actionReturnNO);
         }
