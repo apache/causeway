@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
+import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -27,20 +30,38 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet.CurrentInvocation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -50,6 +71,9 @@ public class PublishingServiceInternal {
 
     @Inject
     private PublishingService publishingServiceIfAny;
+
+    @Inject
+    private CommandContext commandContext;
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
@@ -96,6 +120,99 @@ public class PublishingServiceInternal {
         publishingServiceIfAny.publish(metadata, payload);
     }
 
+
+    @Programmatic
+    public void publishAction(final String currentUser, final Timestamp timestamp) {
+        if(!canPublish()) {
+            return;
+        }
+
+        try {
+            final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
+            if(currentInvocation == null) {
+                return;
+            }
+            ObjectAction currentAction = currentInvocation.getAction();
+            IdentifiedHolder currentInvocationHolder = currentInvocation.getIdentifiedHolder();
+
+            final PublishedActionFacet publishedActionFacet = currentInvocationHolder.getFacet(PublishedActionFacet.class);
+            if(publishedActionFacet == null) {
+                return;
+            }
+
+            final ObjectAdapter targetAdapter = currentInvocation.getTarget();
+
+            final RootOid adapterOid = (RootOid) targetAdapter.getOid();
+            final String oidStr = getOidMarshaller().marshal(adapterOid);
+            final Identifier actionIdentifier = currentAction.getIdentifier();
+            final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
+
+            final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
+            final String actionTargetAction = CommandUtil.targetActionNameFor(currentAction);
+            final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
+            final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(currentAction);
+
+            final List<String> parameterNames;
+            final List<Class<?>> parameterTypes;
+            final Class<?> returnType;
+
+            if(currentInvocationHolder instanceof FacetedMethod) {
+                // should always be the case
+
+                final FacetedMethod facetedMethod = (FacetedMethod) currentInvocationHolder;
+                returnType = facetedMethod.getType();
+
+                final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
+                parameterNames = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_NAME));
+                parameterTypes = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_TYPE));
+            } else {
+                parameterNames = null;
+                parameterTypes = null;
+                returnType = null;
+            }
+
+            final Command command = commandContext.getCommand();
+            final EventMetadata metadata = newEventMetadata(command, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
+                    actionTargetClass, actionTargetAction, actionTarget,
+                    actionMemberIdentifier,
+                    parameterNames, parameterTypes, returnType);
+
+            final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
+            publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
+        } finally {
+            // ensures that cannot publish this action more than once
+            ActionInvocationFacet.currentInvocation.set(null);
+        }
+    }
+
+    private static <T> List<T> immutableList(final Iterable<T> iterable) {
+        return Collections.unmodifiableList(Lists.newArrayList(iterable));
+    }
+
+    public ObjectStringifier objectStringifier() {
+        return new ObjectStringifier() {
+                @Override
+                public String toString(Object object) {
+                    if(object == null) {
+                        return null;
+                    }
+                    final ObjectAdapter adapter = IsisContext.getPersistenceSession().adapterFor(object);
+                    Oid oid = adapter.getOid();
+                    return oid != null? oid.enString(getOidMarshaller()): encodedValueOf(adapter);
+                }
+                private String encodedValueOf(ObjectAdapter adapter) {
+                    EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
+                    return facet != null? facet.toEncodedString(adapter): adapter.toString();
+                }
+                @Override
+                public String classNameOf(Object object) {
+                    final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
+                    final String className = adapter.getSpecification().getFullIdentifier();
+                    return className;
+                }
+            };
+    }
+
     @Programmatic
     public void publishAction(
             final PublishedAction.PayloadFactory payloadFactory,
@@ -126,4 +243,40 @@ public class PublishingServiceInternal {
     private static ObjectAdapter undeletedElseEmpty(ObjectAdapter adapter) {
         return NOT_DESTROYED_ELSE_EMPTY.apply(adapter);
     }
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+
+    @Programmatic
+    public EventMetadata newEventMetadata(
+            final Command command,
+            final EventType eventType,
+            final String currentUser,
+            final Timestamp timestampEpoch,
+            final String title,
+            final String targetClass,
+            final String targetAction,
+            final Bookmark target,
+            final String memberIdentifier,
+            final List<String> parameterNames,
+            final List<Class<?>> parameterTypes,
+            final Class<?> returnType) {
+        if(command == null) {
+            throw new IllegalStateException("CommandContext service is required to support Publishing.");
+        }
+        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
+        final int nextEventSequence = command.next(sequenceName.abbr());
+        final UUID transactionId = command.getTransactionId();
+        return new EventMetadata(
+                transactionId, nextEventSequence, eventType, currentUser, timestampEpoch, title,
+                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
+    }
+
+    private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+
+
 }

@@ -39,9 +39,7 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
@@ -68,23 +66,14 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -484,71 +473,9 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     public void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
 
-        if(!publishingServiceInternal.canPublish()) {
-            return;
-        }
-
-        try {
-            final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
-            if(currentInvocation == null) {
-                return;
-            } 
-            ObjectAction currentAction = currentInvocation.getAction();
-            IdentifiedHolder currentInvocationHolder = currentInvocation.getIdentifiedHolder();
-
-            final PublishedActionFacet publishedActionFacet = currentInvocationHolder.getFacet(PublishedActionFacet.class);
-            if(publishedActionFacet == null) {
-                return;
-            }
-
-            final ObjectAdapter targetAdapter = currentInvocation.getTarget();
-
-            final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-            final String oidStr = getOidMarshaller().marshal(adapterOid);
-            final Identifier actionIdentifier = currentAction.getIdentifier();
-            final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
-
-            final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
-            final String actionTargetAction = CommandUtil.targetActionNameFor(currentAction);
-            final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
-            final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(currentAction);
-
-            final List<String> parameterNames;
-            final List<Class<?>> parameterTypes;
-            final Class<?> returnType;
-
-            if(currentInvocationHolder instanceof FacetedMethod) {
-                // should always be the case
-
-                final FacetedMethod facetedMethod = (FacetedMethod) currentInvocationHolder;
-                returnType = facetedMethod.getType();
-
-                final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
-                parameterNames = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_NAME));
-                parameterTypes = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_TYPE));
-            } else {
-                parameterNames = null;
-                parameterTypes = null;
-                returnType = null;
-            }
-
-            final Command command1 = this.command;
-            final EventMetadata metadata = newEventMetadata(command1, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
-                    actionTargetClass, actionTargetAction, actionTarget,
-                    actionMemberIdentifier,
-                    parameterNames, parameterTypes, returnType);
-
-            final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            publishingServiceInternal.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
-        } finally {
-            // ensures that cannot publish this action more than once
-            ActionInvocationFacet.currentInvocation.set(null);
-        }
+        publishingServiceInternal.publishAction(currentUser, timestamp);
     }
 
-    private static <T> List<T> immutableList(final Iterable<T> iterable) {
-        return Collections.unmodifiableList(Lists.newArrayList(iterable));
-    }
 
 
     /**
@@ -579,37 +506,10 @@ public class IsisTransaction implements TransactionScopedComponent {
                     currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
 
             publishingServiceInternal
-                    .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
+                    .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, publishingServiceInternal.objectStringifier());
         }
     }
 
-    protected ObjectStringifier objectStringifier() {
-        if(objectStringifier == null) {
-            // lazily created; is threadsafe so no need to guard against race conditions
-            objectStringifier = new ObjectStringifier() {
-                @Override
-                public String toString(Object object) {
-                    if(object == null) {
-                        return null;
-                    }
-                    final ObjectAdapter adapter = IsisContext.getPersistenceSession().adapterFor(object);
-                    Oid oid = adapter.getOid();
-                    return oid != null? oid.enString(getOidMarshaller()): encodedValueOf(adapter);
-                }
-                private String encodedValueOf(ObjectAdapter adapter) {
-                    EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
-                    return facet != null? facet.toEncodedString(adapter): adapter.toString();
-                }
-                @Override
-                public String classNameOf(Object object) {
-                    final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
-                    final String className = adapter.getSpecification().getFullIdentifier();
-                    return className;
-                }
-            };
-        }
-        return objectStringifier;
-    }
 
     private EventMetadata newEventMetadata(
             final String currentUser,
@@ -618,12 +518,12 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String enlistedAdapterClass,
             final Bookmark enlistedTarget) {
         final String oidStr = enlistedTarget.toString();
-        final String title = oidStr;
 
         final EventType eventTypeFor = eventTypeFor(changeKind);
 
         final Command command = this.command;
-        return newEventMetadata(command, eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget,
+        return publishingServiceInternal.newEventMetadata(
+                command, eventTypeFor, currentUser, timestamp, oidStr, enlistedAdapterClass, null, enlistedTarget,
                 null, null, null, null);
     }
 
@@ -638,30 +538,6 @@ public class IsisTransaction implements TransactionScopedComponent {
             return EventType.OBJECT_DELETED;
         }
         throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
-    }
-
-    private EventMetadata newEventMetadata(
-            final Command command,
-            final EventType eventType,
-            final String currentUser,
-            final Timestamp timestampEpoch,
-            final String title,
-            final String targetClass,
-            final String targetAction,
-            final Bookmark target,
-            final String memberIdentifier,
-            final List<String> parameterNames,
-            final List<Class<?>> parameterTypes,
-            final Class<?> returnType) {
-        if(command == null) {
-            throw new IllegalStateException("CommandContext service is required to support Publishing.");
-        }
-        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-        final int nextEventSequence = command.next(sequenceName.abbr());
-        final UUID transactionId = command.getTransactionId();
-        return new EventMetadata(
-                transactionId, nextEventSequence, eventType, currentUser, timestampEpoch, title,
-                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
     }
 
     public void auditChangedProperty(
