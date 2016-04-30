@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.update.modify;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -84,12 +83,20 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
         command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
         command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
 
-        interaction.execute(new Callable<Object>() {
-            @Override
-            public Object call() {
-                return ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
-            }
-        }, getIdentified().getIdentifier().toFullIdentityString(), getClockService(), command);
+        final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
+        final Object argValue = ObjectAdapter.Util.unwrap(valueAdapter);
+
+        final Interaction.PropertyArgs propertyArgs =
+                new Interaction.PropertyArgs(command, target, argValue);
+
+        final Interaction.MemberCallable<?> callable =
+                new Interaction.MemberCallable<Interaction.PropertyArgs>() {
+                    @Override public Object call(final Interaction.PropertyArgs propertyArgs) {
+                        return ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
+                    }
+                };
+
+        interaction.execute(callable, propertyArgs, getClockService());
     }
 
     @Override

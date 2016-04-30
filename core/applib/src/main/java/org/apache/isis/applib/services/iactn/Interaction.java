@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.Lists;
@@ -89,14 +88,108 @@ public class Interaction implements HasTransactionId {
         return priorExecution;
     }
 
-    public <T> T execute(
-            final Callable<T> callable,
-            final String memberId,
-            final ClockService clockService,
-            final Command command) {
-        Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
-        Execution currentExecution = push(startedAt, memberId);
+    public interface MemberCallable<T extends MemberArgs> {
+        Object call(T args);
+    }
 
+    public static abstract class MemberArgs {
+
+        public enum Type {
+            PROPERTY,
+            ACTION
+        }
+
+        private final Command command;
+        private final Object target;
+        private final Type type;
+
+        protected MemberArgs(
+                final Command command,
+                final Object target, final Type type) {
+            this.command = command;
+            this.target = target;
+            this.type = type;
+        }
+
+        public Command getCommand() {
+            return command;
+        }
+
+        public Object getTarget() {
+            return target;
+        }
+
+        public Type getType() {
+            return type;
+        }
+    }
+
+
+    public static class ActionArgs extends MemberArgs {
+        private final List<Object> args;
+
+        public ActionArgs(
+                final Command command,
+                final Object target,
+                final List<Object> args) {
+            super(command, target, Type.ACTION);
+            this.args = args;
+        }
+
+        public List<Object> getArgs() {
+            return args;
+        }
+    }
+
+    public static class PropertyArgs extends MemberArgs {
+        private final Object argValue;
+
+        public PropertyArgs(
+                final Command command,
+                final Object target,
+                final Object argValue) {
+            super(command, target, Type.PROPERTY);
+            this.argValue = argValue;
+        }
+
+        public Object getArgValue() {
+            return argValue;
+        }
+    }
+
+    public <T> T execute(
+            final MemberCallable memberCallable,
+            final ActionArgs actionArgs,
+            final ClockService clockService) {
+
+        final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
+        final Execution execution = push(startedAt, actionArgs);
+
+        final Command command = actionArgs.getCommand();
+        return execute(memberCallable, actionArgs, clockService, command, startedAt, execution);
+
+    }
+
+    public <T> T execute(
+            final MemberCallable memberCallable,
+            final PropertyArgs propertyArgs,
+            final ClockService clockService) {
+
+        final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
+        Execution execution = push(startedAt, propertyArgs);
+
+        final Command command = propertyArgs.getCommand();
+        return execute(memberCallable, propertyArgs, clockService, command, startedAt, execution);
+
+    }
+
+    private <T> T execute(
+            final MemberCallable memberCallable,
+            final MemberArgs memberArgs,
+            final ClockService clockService,
+            final Command command,
+            final Timestamp startedAt,
+            final Execution currentExecution) {
         // as a convenience, since in all cases we want the command to start when the first interaction executes,
         // we populate the command here.
         if(command.getStartedAt() == null) {
@@ -105,9 +198,9 @@ public class Interaction implements HasTransactionId {
 
         try {
             try {
-                T result = callable.call();
+                Object result = memberCallable.call(memberArgs);
                 currentExecution.setResult(result);
-                return result;
+                return (T)result;
             } catch (Exception e) {
 
                 // just because an exception has thrown, does not mean it is that significant; it could be that
@@ -131,20 +224,22 @@ public class Interaction implements HasTransactionId {
     public static class Execution {
 
         private final Timestamp startedAt;
-        private final String memberId;
+        private final MemberArgs memberArgs;
         private final Execution parent;
         private final List<Execution> children = Lists.newArrayList();
 
-        public Execution(final Timestamp startedAt, final String memberId) {
+        public Execution(
+                final MemberArgs memberArgs, final Timestamp startedAt) {
             this.startedAt = startedAt;
-            this.memberId = memberId;
+            this.memberArgs = memberArgs;
             this.parent = null;
         }
 
-        public Execution(final Execution parent, final Timestamp startedAt, final String memberId) {
+        public Execution(
+                final MemberArgs memberArgs, final Timestamp startedAt, final Execution parent) {
             this.startedAt = startedAt;
             this.parent = parent;
-            this.memberId = memberId;
+            this.memberArgs = memberArgs;
             parent.children.add(this);
         }
 
@@ -162,8 +257,8 @@ public class Interaction implements HasTransactionId {
             return Collections.unmodifiableList(children);
         }
 
-        public String getMemberId() {
-            return memberId;
+        public MemberArgs getMemberArgs() {
+            return memberArgs;
         }
 
         //region > event
@@ -294,17 +389,17 @@ public class Interaction implements HasTransactionId {
      * </p>
      */
     @Programmatic
-    Execution push(final Timestamp startedAt, final String memberId) {
+    Execution push(final Timestamp startedAt, final MemberArgs memberArgs) {
 
         final Execution newExecution;
         if(currentExecution == null) {
             // new top-level execution
-            newExecution = new Execution(startedAt, memberId);
+            newExecution = new Execution(memberArgs, startedAt);
             executionGraphs.add(newExecution);
 
         } else {
             // adds to graph of parent
-            newExecution = new Execution(currentExecution, startedAt, memberId);
+            newExecution = new Execution(memberArgs, startedAt, currentExecution);
         }
 
         // set
@@ -341,7 +436,7 @@ public class Interaction implements HasTransactionId {
 
     /**
      * Returns a (list of) graph(es) indicating the domain events in the order that they were
-     * {@link #push(Timestamp, String) pushed}.
+     * {@link #push(Timestamp, MemberArgs pushed}.
      *
      * <p>
      *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
@@ -358,7 +453,7 @@ public class Interaction implements HasTransactionId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * Clears the set of {@link AbstractDomainEvent}s that have been {@link #push(Timestamp, String) push}ed.
+     * Clears the set of {@link AbstractDomainEvent}s that have been {@link #push(Timestamp, MemberArgs push)}ed.
      */
     @Programmatic
     public void clear() {

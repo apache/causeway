@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -298,7 +299,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     protected ObjectAdapter invokeThruCommand(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments)
+            final ObjectAdapter[] argumentAdapters)
             throws IllegalAccessException, InvocationTargetException {
 
         final CommandContext commandContext = getCommandContext();
@@ -327,13 +328,18 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         } else {
 
             // otherwise, go ahead and execute action in the 'foreground'
-            interaction.execute(new Callable<Object>() {
 
+            final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
+            final List<Object> arguments = ObjectAdapter.Util.unwrap(Arrays.asList(argumentAdapters));
+
+
+            final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(command, target, arguments);
+            final Interaction.MemberCallable callable = new Interaction.MemberCallable<Interaction.ActionArgs>() {
                 @Override
-                public Object call() {
+                public Object call(final Interaction.ActionArgs actionArgs) {
 
                     try {
-                        final Object resultPojo = invokeMethodElseFromCache(targetAdapter, arguments);
+                        final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
 
                         if (LOG.isDebugEnabled()) {
                             LOG.debug(" action result " + resultPojo);
@@ -341,14 +347,16 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
                         ObjectAdapter resultAdapter = cloneIfViewModelCloneable(resultPojo, targetAdapter);
 
-                        return resultAdapter != null? resultAdapter.getObject(): null;
+                        return resultAdapter != null ? resultAdapter.getObject() : null;
 
                     } catch (InvocationTargetException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
-            }, getIdentified().getIdentifier().toFullIdentityString(), getClockService(), command);
+            };
+
+
+            interaction.execute(callable, actionArgs, getClockService());
 
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
@@ -361,7 +369,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             setCommandResultIfEntity(command, resultAdapter);
 
             // TODO: use InteractionContext instead
-            captureCurrentInvocationForPublishing(owningAction, targetAdapter, arguments, command, resultAdapter);
+            captureCurrentInvocationForPublishing(owningAction, targetAdapter, argumentAdapters, command, resultAdapter);
 
         }
         return resultAdapter;
