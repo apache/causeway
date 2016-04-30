@@ -19,11 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.publish;
 
-import java.util.List;
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
@@ -50,28 +47,7 @@ public abstract class PublishedActionFacetAbstract extends SingleValueFacetAbstr
             final PublishingPayloadFactoryForAction.Adapter adapter = (PublishingPayloadFactoryForAction.Adapter) publishingPayloadFactory;
             return adapter.getPayloadFactory();
         }
-        return new LegacyAdapter(publishingPayloadFactory);
-    }
-
-    public static class LegacyAdapter implements PublishedAction.PayloadFactory {
-
-        private final PublishingPayloadFactoryForAction payloadFactory;
-
-        LegacyAdapter(final PublishingPayloadFactoryForAction payloadFactory) {
-            this.payloadFactory = payloadFactory;
-        }
-
-        @Override
-        public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
-            return payloadFactory.payloadFor(actionIdentifier, target, arguments, result);
-        }
-
-        /**
-         * For testing only.
-         */
-        public PublishingPayloadFactoryForAction getPayloadFactory() {
-            return payloadFactory;
-        }
+        return new PublishedActionPayloadFactoryDefault(publishingPayloadFactory);
     }
 
 }

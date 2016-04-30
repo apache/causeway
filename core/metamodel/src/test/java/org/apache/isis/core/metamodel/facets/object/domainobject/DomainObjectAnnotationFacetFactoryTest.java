@@ -59,7 +59,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -449,8 +449,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 final PublishedObject.PayloadFactory payloadFactory = ((PublishedObjectFacetForDomainObjectAnnotationAsConfigured) facet).value();
 
-                assertThat(payloadFactory, instanceOf(PublishedObjectFacetAbstract.LegacyAdapter.class));
-                final PublishedObjectFacetAbstract.LegacyAdapter legacyAdapter = (PublishedObjectFacetAbstract.LegacyAdapter) payloadFactory;
+                assertThat(payloadFactory, instanceOf(PublishedObjectPayloadFactoryDefault.class));
+                final PublishedObjectPayloadFactoryDefault legacyAdapter = (PublishedObjectPayloadFactoryDefault) payloadFactory;
 
                 final PublishingPayloadFactoryForObject specifiedPayloadFactory = legacyAdapter.getPayloadFactory();
                 assertThat(specifiedPayloadFactory, instanceOf(CustomerPayloadFactory.class));
@@ -511,8 +511,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
                 final PublishedObject.PayloadFactory payloadFactory = ((PublishedObjectFacetForDomainObjectAnnotation) facet).value();
 
-                assertThat(payloadFactory, instanceOf(PublishedObjectFacetForDomainObjectAnnotation.LegacyAdapter.class));
-                final PublishedObjectFacetForDomainObjectAnnotation.LegacyAdapter legacyAdapter = (PublishedObjectFacetForDomainObjectAnnotation.LegacyAdapter) payloadFactory;
+                assertThat(payloadFactory, instanceOf(PublishedObjectPayloadFactoryDefault.class));
+                final PublishedObjectPayloadFactoryDefault legacyAdapter = (PublishedObjectPayloadFactoryDefault) payloadFactory;
 
                 final PublishingPayloadFactoryForObject specifiedPayloadFactory = legacyAdapter.getPayloadFactory();
                 assertThat(specifiedPayloadFactory, instanceOf(CustomerPayloadFactory.class));

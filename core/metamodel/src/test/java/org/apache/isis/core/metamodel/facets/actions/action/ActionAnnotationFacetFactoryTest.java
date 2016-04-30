@@ -82,7 +82,7 @@ import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -1246,9 +1246,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             assertNotNull(facet);
             final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
             final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, instanceOf(PublishedActionFacetAbstract.LegacyAdapter.class));
+            assertThat(payloadFactory, instanceOf(PublishedActionPayloadFactoryDefault.class));
 
-            final PublishedActionFacetAbstract.LegacyAdapter legacyAdapter = (PublishedActionFacetAbstract.LegacyAdapter) payloadFactory;
+            final PublishedActionPayloadFactoryDefault legacyAdapter = (PublishedActionPayloadFactoryDefault) payloadFactory;
             assertThat(legacyAdapter.getPayloadFactory(), instanceOf(CustomerSomeActionPublishingPayloadFactory.class));
 
             expectNoMethodsRemoved();
@@ -1316,9 +1316,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             final PublishedActionFacetForActionAnnotation facetImpl = (PublishedActionFacetForActionAnnotation) facet;
             final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, instanceOf(PublishedActionFacetAbstract.LegacyAdapter.class));
+            assertThat(payloadFactory, instanceOf(PublishedActionPayloadFactoryDefault.class));
 
-            final PublishedActionFacetAbstract.LegacyAdapter legacyAdapter = (PublishedActionFacetAbstract.LegacyAdapter) payloadFactory;
+            final PublishedActionPayloadFactoryDefault legacyAdapter = (PublishedActionPayloadFactoryDefault) payloadFactory;
             assertThat(legacyAdapter.getPayloadFactory(), instanceOf(CustomerSomeActionPublishingPayloadFactory.class));
 
             expectNoMethodsRemoved();

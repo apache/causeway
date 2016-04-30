@@ -57,9 +57,6 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
-import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
 import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
@@ -83,9 +80,11 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -323,45 +322,21 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         PublishedObject.PayloadFactory objectPayloadFactory = servicesInjector.lookupService(PublishedObject.PayloadFactory.class);
         if(objectPayloadFactory == null) {
-            objectPayloadFactory = newDefaultObjectPayloadFactory();
+            objectPayloadFactory = new PublishedObjectPayloadFactoryDefault();
         }
         
         PublishedAction.PayloadFactory actionPayloadFactory = servicesInjector.lookupService(PublishedAction.PayloadFactory.class);
         if(actionPayloadFactory == null) {
-            actionPayloadFactory = newDefaultActionPayloadFactory();
+            actionPayloadFactory = new PublishedActionPayloadFactoryDefault();
         }
         
         return new PublishingServiceWithDefaultPayloadFactories(publishingService, objectPayloadFactory, actionPayloadFactory);
     }
     
-
     protected EventSerializer newSimpleEventSerializer() {
         return new EventSerializer.Simple();
     }
 
-
-    protected PublishedObject.PayloadFactory newDefaultObjectPayloadFactory() {
-        return new PublishedObject.PayloadFactory() {
-            @Override
-            public EventPayload payloadFor(final Object changedObject, ChangeKind changeKind) {
-                return new EventPayloadForObjectChanged<Object>(changedObject);
-            }
-        };
-    }
-
-    protected PublishedAction.PayloadFactory newDefaultActionPayloadFactory() {
-        return new PublishedAction.PayloadFactory(){
-            @Override
-            public EventPayload payloadFor(Identifier actionIdentifier, Object target, List<Object> arguments, Object result) {
-                return new EventPayloadForActionInvocation<Object>(
-                        actionIdentifier, 
-                        target, 
-                        arguments, 
-                        result);
-            }
-        };
-    }
-    
     // ////////////////////////////////////////////////////////////////
     // GUID
     // ////////////////////////////////////////////////////////////////
