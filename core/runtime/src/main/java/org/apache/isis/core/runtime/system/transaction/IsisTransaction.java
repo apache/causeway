@@ -60,7 +60,6 @@ import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
-import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -80,11 +79,9 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -93,7 +90,7 @@ import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -257,7 +254,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     /**
      * could be null if none has been registered
      */
-    private final PublishingServiceWithDefaultPayloadFactories publishingServiceIfAny;
+    private final PublishingServiceInternal publishingServiceInternal;
 
     /**
      * Will be that of the {@link #command} if not <tt>null</tt>, otherwise will be randomly created.
@@ -292,7 +289,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.clockService = lookupService(ClockService.class);
 
         this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
-        this.publishingServiceIfAny = getPublishingServiceIfAny(servicesInjector);
+        this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
 
         // determine whether this xactn is taking place in the context of an
         // existing command in which a previous xactn has already occurred.
@@ -309,30 +306,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    
-    // ///////////////////////////////////////////
-    // Publishing service
-    // ///////////////////////////////////////////
-
-    private PublishingServiceWithDefaultPayloadFactories getPublishingServiceIfAny(ServicesInjector servicesInjector) {
-        final PublishingService publishingService = servicesInjector.lookupService(PublishingService.class);
-        if(publishingService == null) {
-            return null;
-        }
-
-        PublishedObject.PayloadFactory objectPayloadFactory = servicesInjector.lookupService(PublishedObject.PayloadFactory.class);
-        if(objectPayloadFactory == null) {
-            objectPayloadFactory = new PublishedObjectPayloadFactoryDefault();
-        }
-        
-        PublishedAction.PayloadFactory actionPayloadFactory = servicesInjector.lookupService(PublishedAction.PayloadFactory.class);
-        if(actionPayloadFactory == null) {
-            actionPayloadFactory = new PublishedActionPayloadFactoryDefault();
-        }
-        
-        return new PublishingServiceWithDefaultPayloadFactories(publishingService);
-    }
-    
     protected EventSerializer newSimpleEventSerializer() {
         return new EventSerializer.Simple();
     }
@@ -511,7 +484,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     public void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
 
-        if(publishingServiceIfAny == null) {
+        if(!publishingServiceInternal.canPublish()) {
             return;
         }
 
@@ -566,7 +539,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                     parameterNames, parameterTypes, returnType);
 
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            publishingServiceIfAny.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
+            publishingServiceInternal.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
             ActionInvocationFacet.currentInvocation.set(null);
@@ -581,11 +554,12 @@ public class IsisTransaction implements TransactionScopedComponent {
     /**
      * @return the adapters that were published (if any were).
      */
-    protected List<ObjectAdapter> publishedChangedObjectsIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
-        if(publishingServiceIfAny == null) {
-            return Collections.emptyList();
+    protected void publishedChangedObjectsIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
+
+        if(!publishingServiceInternal.canPublish()) {
+            return;
         }
-        
+
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService 
         // creates further entities which would be enlisted; taking copy of the keys avoids ConcurrentModificationException
         List<ObjectAdapter> enlistedAdapters = Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
@@ -604,10 +578,9 @@ public class IsisTransaction implements TransactionScopedComponent {
             final EventMetadata metadata = newEventMetadata(
                     currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
 
-            publishingServiceIfAny
+            publishingServiceInternal
                     .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
-        return enlistedAdapters;
     }
 
     protected ObjectStringifier objectStringifier() {

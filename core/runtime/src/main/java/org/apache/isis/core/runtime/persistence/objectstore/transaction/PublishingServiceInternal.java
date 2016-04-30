@@ -21,10 +21,15 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
@@ -38,12 +43,13 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
- * Wrapper around {@link PublishingService} that also includes the payload factories for
- * {@link PublishedObject.PayloadFactory published object}s and {@link PublishedAction.PayloadFactory published action}s.
+ * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
  */
-public class PublishingServiceWithDefaultPayloadFactories {
+@DomainService(nature = NatureOfService.DOMAIN)
+public class PublishingServiceInternal {
 
-    private final PublishingService publishingService;
+    @Inject
+    private PublishingService publishingServiceIfAny;
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
@@ -65,29 +71,42 @@ public class PublishingServiceWithDefaultPayloadFactories {
         }
 
     };
-    
-    public PublishingServiceWithDefaultPayloadFactories(
-            final PublishingService publishingService) {
-        this.publishingService = publishingService;
+
+
+    @Programmatic
+    public boolean canPublish() {
+        return publishingServiceIfAny != null;
     }
 
+    @Programmatic
     public void publishObject(
             final PublishedObject.PayloadFactory payloadFactory,
             final EventMetadata metadata, 
             final ObjectAdapter changedAdapter, 
             final ChangeKind changeKind, 
             final ObjectStringifier stringifier) {
+
+        if (publishingServiceIfAny == null) {
+            return;
+        }
+
         final EventPayload payload = payloadFactory.payloadFor(
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(changedAdapter)), changeKind);
         payload.withStringifier(stringifier);
-        publishingService.publish(metadata, payload);
+        publishingServiceIfAny.publish(metadata, payload);
     }
 
+    @Programmatic
     public void publishAction(
             final PublishedAction.PayloadFactory payloadFactory,
             final EventMetadata metadata, 
             final CurrentInvocation currentInvocation, 
             final ObjectStringifier stringifier) {
+
+        if (publishingServiceIfAny == null) {
+            return;
+        }
+
         final ObjectAdapter target = currentInvocation.getTarget();
         final ObjectAdapter result = currentInvocation.getResult();
         final List<ObjectAdapter> parameters = currentInvocation.getParameters();
@@ -97,7 +116,7 @@ public class PublishingServiceWithDefaultPayloadFactories {
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)), 
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(result)));
         payload.withStringifier(stringifier);
-        publishingService.publish(metadata, payload);
+        publishingServiceIfAny.publish(metadata, payload);
     }
 
     private static List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
