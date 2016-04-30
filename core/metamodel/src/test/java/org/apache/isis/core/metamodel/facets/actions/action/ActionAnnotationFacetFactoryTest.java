@@ -816,12 +816,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -833,12 +833,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -854,10 +854,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingCommandConfigurationToReturn("ignoreQueryOnly");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
         }
 
         @Test
@@ -865,10 +865,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingCommandConfigurationToReturn("none");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -879,12 +879,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
 
             // given
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             allowingCommandConfigurationToReturn("all");
 
             // when
-            facetFactory.processCommand(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processCommand(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(CommandFacet.class);
@@ -1119,12 +1119,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.SAFE, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1136,12 +1136,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(Of.IDEMPOTENT, facetedMethod) {});
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1156,10 +1156,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingPublishingConfigurationToReturn("ignoreQueryOnly");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
         }
 
@@ -1168,10 +1168,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // given
             allowingPublishingConfigurationToReturn("none");
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
@@ -1185,12 +1185,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
 
             // given
-            final Method actionMethod = findMethod(Customer.class, "someAction");
+            final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
             allowingPublishingConfigurationToReturn("all");
 
             // when
-            facetFactory.processPublishing(new ProcessMethodContext(Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
+            facetFactory.processPublishing(new ProcessMethodContext(ActionAnnotationFacetFactoryTest.Customer.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
 
             // then
             final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
