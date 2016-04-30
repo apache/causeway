@@ -330,7 +330,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             actionPayloadFactory = new PublishedActionPayloadFactoryDefault();
         }
         
-        return new PublishingServiceWithDefaultPayloadFactories(publishingService, objectPayloadFactory, actionPayloadFactory);
+        return new PublishingServiceWithDefaultPayloadFactories(publishingService);
     }
     
     protected EventSerializer newSimpleEventSerializer() {

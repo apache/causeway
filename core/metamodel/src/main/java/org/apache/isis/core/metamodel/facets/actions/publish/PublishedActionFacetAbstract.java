@@ -36,7 +36,11 @@ public abstract class PublishedActionFacetAbstract extends SingleValueFacetAbstr
     }
 
     public PublishedActionFacetAbstract(final PublishedAction.PayloadFactory payloadFactory, final FacetHolder holder) {
-        super(type(), payloadFactory, holder);
+        super(  type(),
+                payloadFactory != null
+                        ? payloadFactory
+                        : new PublishedActionPayloadFactoryDefault(),
+                holder);
     }
 
     static PublishedAction.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForAction publishingPayloadFactory) {

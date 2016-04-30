@@ -31,11 +31,19 @@ public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstr
         return PublishedObjectFacet.class;
     }
 
-    public PublishedObjectFacetAbstract(final PublishedObject.PayloadFactory payloadFactory, final FacetHolder holder) {
-        super(type(), payloadFactory, holder);
+    public PublishedObjectFacetAbstract(
+            final PublishedObject.PayloadFactory payloadFactory,
+            final FacetHolder holder) {
+        super(  type(),
+                payloadFactory != null
+                        ? payloadFactory
+                        : new PublishedObjectPayloadFactoryDefault(),
+                holder);
     }
 
-    protected PublishedObjectFacetAbstract(final PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
+    protected PublishedObjectFacetAbstract(
+            final PublishingPayloadFactoryForObject publishingPayloadFactory,
+            final FacetHolder holder) {
         this(legacyPayloadFactoryFor(publishingPayloadFactory), holder);
     }
 

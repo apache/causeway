@@ -44,8 +44,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 public class PublishingServiceWithDefaultPayloadFactories {
 
     private final PublishingService publishingService;
-    private final PublishedObject.PayloadFactory defaultObjectPayloadFactory;
-    private final PublishedAction.PayloadFactory defaultActionPayloadFactory;
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
@@ -68,44 +66,32 @@ public class PublishingServiceWithDefaultPayloadFactories {
 
     };
     
-    public PublishingServiceWithDefaultPayloadFactories (
-            final PublishingService publishingService, 
-            final PublishedObject.PayloadFactory defaultObjectPayloadFactory, 
-            final PublishedAction.PayloadFactory defaultActionPayloadFactory) {
+    public PublishingServiceWithDefaultPayloadFactories(
+            final PublishingService publishingService) {
         this.publishingService = publishingService;
-        this.defaultObjectPayloadFactory = defaultObjectPayloadFactory;
-        this.defaultActionPayloadFactory = defaultActionPayloadFactory;
     }
 
     public void publishObject(
-            final PublishedObject.PayloadFactory payloadFactoryIfAny, 
+            final PublishedObject.PayloadFactory payloadFactory,
             final EventMetadata metadata, 
             final ObjectAdapter changedAdapter, 
             final ChangeKind changeKind, 
             final ObjectStringifier stringifier) {
-        final PublishedObject.PayloadFactory payloadFactoryToUse = 
-                payloadFactoryIfAny != null
-                ? payloadFactoryIfAny
-                : defaultObjectPayloadFactory;
-        final EventPayload payload = payloadFactoryToUse.payloadFor(
+        final EventPayload payload = payloadFactory.payloadFor(
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(changedAdapter)), changeKind);
         payload.withStringifier(stringifier);
         publishingService.publish(metadata, payload);
     }
 
     public void publishAction(
-            final PublishedAction.PayloadFactory payloadFactoryIfAny, 
+            final PublishedAction.PayloadFactory payloadFactory,
             final EventMetadata metadata, 
             final CurrentInvocation currentInvocation, 
             final ObjectStringifier stringifier) {
-        final PublishedAction.PayloadFactory payloadFactoryToUse = 
-                payloadFactoryIfAny != null
-                ? payloadFactoryIfAny
-                : defaultActionPayloadFactory;
         final ObjectAdapter target = currentInvocation.getTarget();
         final ObjectAdapter result = currentInvocation.getResult();
         final List<ObjectAdapter> parameters = currentInvocation.getParameters();
-        final EventPayload payload = payloadFactoryToUse.payloadFor(
+        final EventPayload payload = payloadFactory.payloadFor(
                 currentInvocation.getIdentifiedHolder().getIdentifier(),
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(target)), 
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)), 
