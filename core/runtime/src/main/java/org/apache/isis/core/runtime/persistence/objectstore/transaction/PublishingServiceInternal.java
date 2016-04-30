@@ -102,14 +102,15 @@ public class PublishingServiceInternal {
     @Programmatic
     public void publishObject(
             final PublishedObject.PayloadFactory payloadFactory,
-            final EventMetadata metadata, 
-            final ObjectAdapter changedAdapter, 
-            final ChangeKind changeKind, 
-            final ObjectStringifier stringifier) {
+            final EventMetadata metadata,
+            final ObjectAdapter changedAdapter,
+            final ChangeKind changeKind) {
 
         if (publishingServiceIfAny == null) {
             return;
         }
+
+        final ObjectStringifier stringifier = objectStringifier();
 
         final EventPayload payload = payloadFactory.payloadFor(
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(changedAdapter)), changeKind);
@@ -178,7 +179,7 @@ public class PublishingServiceInternal {
                     parameterNames, parameterTypes, returnType);
 
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
+            publishAction(payloadFactory, metadata, currentInvocation);
         } finally {
             // ensures that cannot publish this action more than once
             ActionInvocationFacet.currentInvocation.set(null);
@@ -189,7 +190,7 @@ public class PublishingServiceInternal {
         return Collections.unmodifiableList(Lists.newArrayList(iterable));
     }
 
-    public ObjectStringifier objectStringifier() {
+    private ObjectStringifier objectStringifier() {
         return new ObjectStringifier() {
                 @Override
                 public String toString(Object object) {
@@ -216,13 +217,14 @@ public class PublishingServiceInternal {
     @Programmatic
     public void publishAction(
             final PublishedAction.PayloadFactory payloadFactory,
-            final EventMetadata metadata, 
-            final CurrentInvocation currentInvocation, 
-            final ObjectStringifier stringifier) {
+            final EventMetadata metadata,
+            final CurrentInvocation currentInvocation) {
 
         if (publishingServiceIfAny == null) {
             return;
         }
+
+        final ObjectStringifier stringifier = objectStringifier();
 
         final ObjectAdapter target = currentInvocation.getTarget();
         final ObjectAdapter result = currentInvocation.getResult();

@@ -506,7 +506,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                     currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
 
             publishingServiceInternal
-                    .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, publishingServiceInternal.objectStringifier());
+                    .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind);
         }
     }
 
