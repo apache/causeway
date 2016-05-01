@@ -122,6 +122,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Transact
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
+import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.PojoAdapterHashMap;
@@ -2045,8 +2046,10 @@ public class PersistenceSession implements
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
-        final IsisTransaction transaction = getCurrentTransaction();
-        transaction.enlistDeleting(adapter);
+        final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal =
+                getServicesInjector().lookupService(EnlistedObjectsServiceInternal.class);
+
+        enlistedObjectsServiceInternal.enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
@@ -2237,8 +2240,10 @@ public class PersistenceSession implements
             postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
 
 
-            final IsisTransaction transaction = getCurrentTransaction();
-            transaction.enlistCreated(adapter);
+            final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal =
+                    getServicesInjector().lookupService(EnlistedObjectsServiceInternal.class);
+
+            enlistedObjectsServiceInternal.enlistCreated(adapter);
 
         } else {
             // updating;
@@ -2283,7 +2288,10 @@ public class PersistenceSession implements
         postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
 
 
-        getCurrentTransaction().enlistUpdating(adapter);
+        final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal =
+                getServicesInjector().lookupService(EnlistedObjectsServiceInternal.class);
+
+        enlistedObjectsServiceInternal.enlistUpdating(adapter);
 
         ensureRootObject(pojo);
     }

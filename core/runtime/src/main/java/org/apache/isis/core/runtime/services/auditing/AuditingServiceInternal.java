@@ -36,7 +36,9 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.services.enlist.AdapterAndProperty;
+import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.enlist.PreAndPostValues;
 
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditingService3}.  Is a no-op if there is no injected service.
@@ -51,28 +53,34 @@ public class AuditingServiceInternal {
     }
 
     @Programmatic
-    public void audit(
-            final Set<Map.Entry<IsisTransaction.AdapterAndProperty, IsisTransaction.PreAndPostValues>> changedObjectProperties) {
+    public void audit() {
+        final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
+                enlistedObjectsServiceInternal.getChangedObjectProperties();
 
-        if(!canAudit()) {
-            return;
+        try {
+            if(!canAudit()) {
+                return;
+            }
+
+            final String currentUser = userService.getUser().getName();
+            final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();
+
+            for (Map.Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
+                auditChangedProperty(currentTime, currentUser, auditEntry);
+            }
+
+        } finally {
+            // not needed in production, but is required for integration testing
+            enlistedObjectsServiceInternal.clearChangedObjectProperties();
         }
-
-        final String currentUser = userService.getUser().getName();
-        final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();
-
-        for (Map.Entry<IsisTransaction.AdapterAndProperty, IsisTransaction.PreAndPostValues> auditEntry : changedObjectProperties) {
-            auditChangedProperty(currentTime, currentUser, auditEntry);
-        }
-
     }
 
     private void auditChangedProperty(
             final java.sql.Timestamp timestamp,
             final String user,
-            final Map.Entry<IsisTransaction.AdapterAndProperty, IsisTransaction.PreAndPostValues> auditEntry) {
+            final Map.Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
 
-        final IsisTransaction.AdapterAndProperty aap = auditEntry.getKey();
+        final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
 
         final AuditableFacet auditableFacet = adapter.getSpecification().getFacet(AuditableFacet.class);
@@ -84,7 +92,7 @@ public class AuditingServiceInternal {
         final String propertyId = aap.getPropertyId();
         final String memberId = aap.getMemberId();
 
-        final IsisTransaction.PreAndPostValues papv = auditEntry.getValue();
+        final PreAndPostValues papv = auditEntry.getValue();
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
 
@@ -105,6 +113,9 @@ public class AuditingServiceInternal {
     private AuditingService3 auditingServiceIfAny;
 
     @Inject
+    private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
+
+    @Inject
     UserService userService;
 
     @Inject
@@ -112,6 +123,5 @@ public class AuditingServiceInternal {
 
     @Inject
     CommandContext commandContext;
-
 
 }

@@ -19,21 +19,19 @@
 package org.apache.isis.core.metamodel.services.publishing;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public interface PublishingServiceInternal {
+
     @Programmatic
     boolean canPublish();
 
     @Programmatic
-    void publishObjects(
-            final Map<ObjectAdapter, PublishedObject.ChangeKind> changeKindByEnlistedAdapter);
+    void publishObjects();
 
     @Programmatic
     void publishAction(
@@ -42,5 +40,4 @@ public interface PublishingServiceInternal {
             final ObjectAdapter targetAdapter,
             final List<ObjectAdapter> parameterAdapters,
             final ObjectAdapter resultAdapter);
-
 }

@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -107,17 +108,22 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
     }
 
-    @Override @Programmatic
+    @Override
+    @Programmatic
     public boolean canPublish() {
         return publishingServiceIfAny != null;
     }
 
-    @Override @Programmatic
-    public void publishObjects(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+    @Override
+    @Programmatic
+    public void publishObjects() {
 
         if(!canPublish()) {
             return;
         }
+
+        final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter =
+                enlistedObjectsServiceInternal.getChangeKindByEnlistedAdapter();
 
         final String currentUser = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
@@ -234,6 +240,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         publishingServiceIfAny.publish(metadata, payload);
     }
 
+
     private static <T> List<T> immutableList(final Iterable<T> iterable) {
         return Collections.unmodifiableList(Lists.newArrayList(iterable));
     }
@@ -299,6 +306,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Inject
     private PublishingService publishingServiceIfAny;
+
+    @Inject
+    private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
 
     @Inject
     private CommandContext commandContext;
