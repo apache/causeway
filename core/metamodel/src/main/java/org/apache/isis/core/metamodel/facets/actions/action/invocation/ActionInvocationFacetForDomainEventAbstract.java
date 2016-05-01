@@ -367,46 +367,18 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             resultAdapter = getAdapterManager().adapterFor(priorExecution.getResult());
             setCommandResultIfEntity(command, resultAdapter);
 
-            // TODO: use InteractionContext instead
-
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-            if (publishedActionFacet != null && currentInvocation.get() == null) {
-                final CurrentInvocation currentInvocation1 = new CurrentInvocation(
-                        targetAdapter, owningAction, getIdentified(),
-                        argumentAdapters, resultAdapter, command);
-                currentInvocation.set(currentInvocation1);
-            }
+            if (publishedActionFacet != null) {
 
-            publishAction();
+                final IdentifiedHolder identifiedHolder = getIdentified();
+                final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
+
+                getPublishingServiceInternal().publishAction(
+                        owningAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter);
+            }
 
         }
         return resultAdapter;
-    }
-
-    private void publishAction() {
-
-        final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
-        if(currentInvocation == null) {
-            return;
-        } else {
-            final ObjectAction currentAction = currentInvocation.getAction();
-            final IdentifiedHolder identifiedHolder = currentInvocation.getIdentifiedHolder();
-            final ObjectAdapter targetAdapter = currentInvocation.getTarget();
-            final List<ObjectAdapter> parameterAdapters = currentInvocation.getParameters();
-            final ObjectAdapter resultAdapter = currentInvocation.getResult();
-
-            try {
-
-                if (getPublishingServiceInternal().publishAction(currentAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter))
-                    return;
-            } finally {
-                // ensures that cannot publish this action more than once
-                ActionInvocationFacet.currentInvocation.set(null);
-            }
-
-            getPublishingServiceInternal().publishAction();
-        }
-
     }
 
     protected Object invokeMethodElseFromCache(

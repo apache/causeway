@@ -56,8 +56,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -165,38 +163,14 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         publishingServiceIfAny.publish(metadata, payload);
     }
 
-    @Override @Programmatic
-    public void publishAction() {
-
-        final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
-        if(currentInvocation == null) {
-            return;
-        }
-
-        final ObjectAction currentAction = currentInvocation.getAction();
-        final IdentifiedHolder identifiedHolder = currentInvocation.getIdentifiedHolder();
-        final ObjectAdapter targetAdapter = currentInvocation.getTarget();
-        final List<ObjectAdapter> parameterAdapters = currentInvocation.getParameters();
-        final ObjectAdapter resultAdapter = currentInvocation.getResult();
-
-        try {
-
-            if (publishAction(currentAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter))
-                return;
-        } finally {
-            // ensures that cannot publish this action more than once
-            ActionInvocationFacet.currentInvocation.set(null);
-        }
-    }
-
-    public boolean publishAction(
+    public void publishAction(
             final ObjectAction objectAction,
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
             final List<ObjectAdapter> parameterAdapters,
             final ObjectAdapter resultAdapter) {
         if(!canPublish()) {
-            return true;
+            return;
         }
 
         final String currentUser = userService.getUser().getName();
@@ -205,7 +179,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final PublishedActionFacet publishedActionFacet =
                 identifiedHolder.getFacet(PublishedActionFacet.class);
         if(publishedActionFacet == null) {
-            return true;
+            return;
         }
 
         final RootOid adapterOid = (RootOid) targetAdapter.getOid();
@@ -258,7 +232,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 ObjectAdapter.Util.unwrap(undeletedElseEmpty(resultAdapter)));
         payload.withStringifier(stringifier);
         publishingServiceIfAny.publish(metadata, payload);
-        return false;
     }
 
     private static <T> List<T> immutableList(final Iterable<T> iterable) {

@@ -36,10 +36,7 @@ public interface PublishingServiceInternal {
             final Map<ObjectAdapter, PublishedObject.ChangeKind> changeKindByEnlistedAdapter);
 
     @Programmatic
-    void publishAction();
-
-    @Programmatic
-    boolean publishAction(
+    void publishAction(
             final ObjectAction objectAction,
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
