@@ -60,6 +60,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -376,13 +377,37 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 currentInvocation.set(currentInvocation1);
             }
 
-            getPublishingServiceInternal().publishAction();
-
+            publishAction();
 
         }
         return resultAdapter;
     }
 
+    private void publishAction() {
+
+        final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
+        if(currentInvocation == null) {
+            return;
+        } else {
+            final ObjectAction currentAction = currentInvocation.getAction();
+            final IdentifiedHolder identifiedHolder = currentInvocation.getIdentifiedHolder();
+            final ObjectAdapter targetAdapter = currentInvocation.getTarget();
+            final List<ObjectAdapter> parameterAdapters = currentInvocation.getParameters();
+            final ObjectAdapter resultAdapter = currentInvocation.getResult();
+
+            try {
+
+                if (getPublishingServiceInternal().publishAction(currentAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter))
+                    return;
+            } finally {
+                // ensures that cannot publish this action more than once
+                ActionInvocationFacet.currentInvocation.set(null);
+            }
+
+            getPublishingServiceInternal().publishAction();
+        }
+
+    }
 
     protected Object invokeMethodElseFromCache(
             final ObjectAdapter targetAdapter, final ObjectAdapter[] arguments)

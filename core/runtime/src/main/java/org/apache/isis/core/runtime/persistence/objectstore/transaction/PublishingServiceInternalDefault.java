@@ -168,88 +168,97 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @Override @Programmatic
     public void publishAction() {
 
-        if(!canPublish()) {
+        final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
+        if(currentInvocation == null) {
             return;
+        }
+
+        final ObjectAction currentAction = currentInvocation.getAction();
+        final IdentifiedHolder identifiedHolder = currentInvocation.getIdentifiedHolder();
+        final ObjectAdapter targetAdapter = currentInvocation.getTarget();
+        final List<ObjectAdapter> parameterAdapters = currentInvocation.getParameters();
+        final ObjectAdapter resultAdapter = currentInvocation.getResult();
+
+        try {
+
+            if (publishAction(currentAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter))
+                return;
+        } finally {
+            // ensures that cannot publish this action more than once
+            ActionInvocationFacet.currentInvocation.set(null);
+        }
+    }
+
+    public boolean publishAction(
+            final ObjectAction objectAction,
+            final IdentifiedHolder identifiedHolder,
+            final ObjectAdapter targetAdapter,
+            final List<ObjectAdapter> parameterAdapters,
+            final ObjectAdapter resultAdapter) {
+        if(!canPublish()) {
+            return true;
         }
 
         final String currentUser = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        try {
-            final CurrentInvocation currentInvocation = ActionInvocationFacet.currentInvocation.get();
-            if(currentInvocation == null) {
-                return;
-            }
-            ObjectAction currentAction = currentInvocation.getAction();
-            IdentifiedHolder currentInvocationHolder = currentInvocation.getIdentifiedHolder();
-
-            final PublishedActionFacet publishedActionFacet =
-                    currentInvocationHolder.getFacet(PublishedActionFacet.class);
-            if(publishedActionFacet == null) {
-                return;
-            }
-
-            final ObjectAdapter targetAdapter = currentInvocation.getTarget();
-
-            final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-            final String oidStr = getOidMarshaller().marshal(adapterOid);
-            final Identifier actionIdentifier = currentAction.getIdentifier();
-            final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
-
-            final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
-            final String actionTargetAction = CommandUtil.targetActionNameFor(currentAction);
-            final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
-            final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(currentAction);
-
-            final List<String> parameterNames;
-            final List<Class<?>> parameterTypes;
-            final Class<?> returnType;
-
-            if(currentInvocationHolder instanceof FacetedMethod) {
-                // should always be the case
-
-                final FacetedMethod facetedMethod = (FacetedMethod) currentInvocationHolder;
-                returnType = facetedMethod.getType();
-
-                final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
-                parameterNames = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_NAME));
-                parameterTypes = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_TYPE));
-            } else {
-                parameterNames = null;
-                parameterTypes = null;
-                returnType = null;
-            }
-
-            final Command command = commandContext.getCommand();
-
-            final Command command1 = commandContext.getCommand();
-
-            final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-            final int nextEventSequence = command1.next(sequenceName.abbr());
-            final UUID transactionId = command1.getTransactionId();
-            final EventMetadata metadata = new EventMetadata(
-                    transactionId, nextEventSequence, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
-                    actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier, parameterNames,
-                    parameterTypes, returnType);
-
-            final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-
-            final ObjectStringifier stringifier = objectStringifier();
-
-            final ObjectAdapter target = currentInvocation.getTarget();
-            final ObjectAdapter result = currentInvocation.getResult();
-            final List<ObjectAdapter> parameters = currentInvocation.getParameters();
-            final EventPayload payload = payloadFactory.payloadFor(
-                    currentInvocation.getIdentifiedHolder().getIdentifier(),
-                    ObjectAdapter.Util.unwrap(undeletedElseEmpty(target)),
-                    ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)),
-                    ObjectAdapter.Util.unwrap(undeletedElseEmpty(result)));
-            payload.withStringifier(stringifier);
-            publishingServiceIfAny.publish(metadata, payload);
-        } finally {
-            // ensures that cannot publish this action more than once
-            ActionInvocationFacet.currentInvocation.set(null);
+        final PublishedActionFacet publishedActionFacet =
+                identifiedHolder.getFacet(PublishedActionFacet.class);
+        if(publishedActionFacet == null) {
+            return true;
         }
+
+        final RootOid adapterOid = (RootOid) targetAdapter.getOid();
+        final String oidStr = getOidMarshaller().marshal(adapterOid);
+        final Identifier actionIdentifier = objectAction.getIdentifier();
+        final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
+
+        final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
+        final String actionTargetAction = CommandUtil.targetActionNameFor(objectAction);
+        final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
+        final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(objectAction);
+
+        final List<String> parameterNames;
+        final List<Class<?>> parameterTypes;
+        final Class<?> returnType;
+
+        if(identifiedHolder instanceof FacetedMethod) {
+            // should always be the case
+
+            final FacetedMethod facetedMethod = (FacetedMethod) identifiedHolder;
+            returnType = facetedMethod.getType();
+
+            final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
+            parameterNames = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_NAME));
+            parameterTypes = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_TYPE));
+        } else {
+            parameterNames = null;
+            parameterTypes = null;
+            returnType = null;
+        }
+
+        final Command command = commandContext.getCommand();
+
+        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
+        final int nextEventSequence = command.next(sequenceName.abbr());
+        final UUID transactionId = command.getTransactionId();
+        final EventMetadata metadata = new EventMetadata(
+                transactionId, nextEventSequence, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
+                actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier, parameterNames,
+                parameterTypes, returnType);
+
+        final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
+
+        final ObjectStringifier stringifier = objectStringifier();
+
+        final EventPayload payload = payloadFactory.payloadFor(
+                identifiedHolder.getIdentifier(),
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(targetAdapter)),
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameterAdapters)),
+                ObjectAdapter.Util.unwrap(undeletedElseEmpty(resultAdapter)));
+        payload.withStringifier(stringifier);
+        publishingServiceIfAny.publish(metadata, payload);
+        return false;
     }
 
     private static <T> List<T> immutableList(final Iterable<T> iterable) {
