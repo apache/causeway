@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -71,7 +72,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-public class PublishingServiceInternal {
+public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
@@ -108,12 +109,12 @@ public class PublishingServiceInternal {
         throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
     }
 
-    @Programmatic
+    @Override @Programmatic
     public boolean canPublish() {
         return publishingServiceIfAny != null;
     }
 
-    @Programmatic
+    @Override @Programmatic
     public void publishObjects(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
 
         if(!canPublish()) {
@@ -122,25 +123,29 @@ public class PublishingServiceInternal {
 
         final String currentUser = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+        final ObjectStringifier stringifier = objectStringifier();
 
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; taking copy of the keys avoids ConcurrentModificationException
-        List<ObjectAdapter> enlistedAdapters = Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
+        final List<ObjectAdapter> enlistedAdapters =
+                Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
+
         for (final ObjectAdapter enlistedAdapter : enlistedAdapters) {
             final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
-            publishObject(enlistedAdapter, changeKind, currentUser,
-                    timestamp);
+
+            publishObject(enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
         }
     }
-
 
     private void publishObject(
             final ObjectAdapter enlistedAdapter,
             final ChangeKind changeKind,
             final String currentUser,
-            final Timestamp timestamp) {
+            final Timestamp timestamp,
+            final ObjectStringifier stringifier) {
 
-        final PublishedObjectFacet publishedObjectFacet = enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+        final PublishedObjectFacet publishedObjectFacet =
+                enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
         if(publishedObjectFacet == null) {
             return;
         }
@@ -150,33 +155,17 @@ public class PublishingServiceInternal {
         final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
         final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
 
-        final EventMetadata metadata = newEventMetadata(currentUser, timestamp, changeKind, enlistedAdapterClass,
-                enlistedTarget);
+        final EventMetadata metadata = newEventMetadata(
+                currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
 
-        publishObject(payloadFactory, metadata, enlistedAdapter, changeKind);
-    }
+        final Object pojo = ObjectAdapter.Util.unwrap(undeletedElseEmpty(enlistedAdapter));
+        final EventPayload payload = payloadFactory.payloadFor(pojo, changeKind);
 
-    @Programmatic
-    public void publishObject(
-            final PublishedObject.PayloadFactory payloadFactory,
-            final EventMetadata metadata,
-            final ObjectAdapter changedAdapter,
-            final ChangeKind changeKind) {
-
-        if(!canPublish()) {
-            return;
-        }
-
-        final ObjectStringifier stringifier = objectStringifier();
-
-        final EventPayload payload = payloadFactory.payloadFor(
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(changedAdapter)), changeKind);
         payload.withStringifier(stringifier);
         publishingServiceIfAny.publish(metadata, payload);
     }
 
-
-    @Programmatic
+    @Override @Programmatic
     public void publishAction() {
 
         if(!canPublish()) {
@@ -194,7 +183,8 @@ public class PublishingServiceInternal {
             ObjectAction currentAction = currentInvocation.getAction();
             IdentifiedHolder currentInvocationHolder = currentInvocation.getIdentifiedHolder();
 
-            final PublishedActionFacet publishedActionFacet = currentInvocationHolder.getFacet(PublishedActionFacet.class);
+            final PublishedActionFacet publishedActionFacet =
+                    currentInvocationHolder.getFacet(PublishedActionFacet.class);
             if(publishedActionFacet == null) {
                 return;
             }
@@ -308,7 +298,7 @@ public class PublishingServiceInternal {
             final ChangeKind changeKind,
             final String enlistedAdapterClass,
             final Bookmark enlistedTarget) {
-        final EventType eventType = PublishingServiceInternal.eventTypeFor(changeKind);
+        final EventType eventType = PublishingServiceInternalDefault.eventTypeFor(changeKind);
 
         final Command command = commandContext.getCommand();
 

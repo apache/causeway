@@ -70,6 +70,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
@@ -230,7 +231,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     }
 
-    protected InvocationResult invoke(
+    private InvocationResult invoke(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
@@ -316,10 +317,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             // persist command so can be this command can be in the 'background'
             final CommandService commandService = getCommandService();
             if (!commandService.persistIfPossible(command)) {
-                throw new IsisException(
-                        "Unable to schedule action '"
-                                + owningAction.getIdentifier().toClassAndNameIdentityString() + "' to run in background: "
-                                + "CommandService does not support persistent commands " );
+                throw new IsisException(String.format(
+                        "Unable to schedule action '%s' to run in background; CommandService does not support persistent commands ",
+                                owningAction.getIdentifier().toClassAndNameIdentityString()));
             }
             resultAdapter = getAdapterManager().adapterFor(command);
 
@@ -367,7 +367,17 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             setCommandResultIfEntity(command, resultAdapter);
 
             // TODO: use InteractionContext instead
-            captureCurrentInvocationForPublishing(owningAction, targetAdapter, argumentAdapters, command, resultAdapter);
+
+            final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+            if (publishedActionFacet != null && currentInvocation.get() == null) {
+                final CurrentInvocation currentInvocation1 = new CurrentInvocation(
+                        targetAdapter, owningAction, getIdentified(),
+                        argumentAdapters, resultAdapter, command);
+                currentInvocation.set(currentInvocation1);
+            }
+
+            getPublishingServiceInternal().publishAction();
+
 
         }
         return resultAdapter;
@@ -482,24 +492,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         return lookupServiceIfAny(RepositoryService.class);
     }
 
-    protected void captureCurrentInvocationForPublishing(
-            final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments,
-            final Command command,
-            final ObjectAdapter resultAdapter) {
-
-        // TODO: should instead be using the top-level ActionInvocationMemento associated with command.
-
-        final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-        if (publishedActionFacet != null && currentInvocation.get() == null) {
-            final CurrentInvocation currentInvocation = new CurrentInvocation(
-                    targetAdapter, owningAction, getIdentified(),
-                    arguments, resultAdapter, command);
-            ActionInvocationFacet.currentInvocation.set(currentInvocation);
-        }
-    }
-
     protected ObjectAdapter filteredIfRequired(
             final ObjectAdapter resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -587,6 +579,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private ClockService getClockService() {
         return lookupService(ClockService.class);
+    }
+
+    private PublishingServiceInternal getPublishingServiceInternal() {
+        return lookupService(PublishingServiceInternal.class);
     }
 
     private <T> T lookupService(final Class<T> serviceClass) {

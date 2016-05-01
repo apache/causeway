@@ -63,13 +63,14 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternal;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternalDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -253,7 +254,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.interactionContext = lookupService(InteractionContext.class);
 
         this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
-        this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
+        this.publishingServiceInternal = lookupService(PublishingServiceInternalDefault.class);
 
 
         this.transactionId = transactionId;
@@ -562,9 +563,6 @@ public class IsisTransaction implements TransactionScopedComponent {
             final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
 
         doAudit(changedObjectProperties);
-
-        publishingServiceInternal.publishAction();
-        doFlush();
 
         publishingServiceInternal.publishObjects(this.changeKindByEnlistedAdapter);
         doFlush();

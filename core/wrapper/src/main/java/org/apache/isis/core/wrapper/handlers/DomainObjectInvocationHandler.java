@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -72,7 +73,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternal;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternalDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
@@ -629,9 +630,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                             targetAdapter, mixedInAdapter, argAdapters,
                             interactionInitiatedBy);
 
-            final PublishingServiceInternal publishingServiceInternal = getPublishingServiceInternal();
-            publishingServiceInternal.publishAction();
-
             return ObjectAdapter.Util.unwrap(returnedAdapter);
         }
 
@@ -808,7 +806,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private PublishingServiceInternal getPublishingServiceInternal() {
         return IsisContext.getPersistenceSession()
-                .getServicesInjector().lookupService(PublishingServiceInternal.class);
+                .getServicesInjector().lookupService(PublishingServiceInternalDefault.class);
     }
 
 

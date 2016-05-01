@@ -193,7 +193,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         setupActionInvocationContext(targetAdapter);
         setupCommandTarget(targetAdapter, arguments);
 
-        return serviceAction.execute(getServiceAdapter(), mixedInAdapter, argsPlusContributee(targetAdapter, arguments),
+        return serviceAction.execute(
+                getServiceAdapter(), mixedInAdapter, argsPlusContributee(targetAdapter, arguments),
                 interactionInitiatedBy);
     }
 
