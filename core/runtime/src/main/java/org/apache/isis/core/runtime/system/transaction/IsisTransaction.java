@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
@@ -60,8 +58,6 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -70,6 +66,7 @@ import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.services.publishing.AuditingServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -219,11 +216,8 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private final InteractionContext interactionContext;
     private final PublishingServiceInternal publishingServiceInternal;
+    private final AuditingServiceInternal auditingServiceInternal;
 
-    /**
-     * could be null if none has been registered.
-     */
-    private final AuditingService3 auditingServiceIfAny;
 
     private final UUID transactionId;
         
@@ -252,8 +246,8 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         this.interactionContext = lookupService(InteractionContext.class);
 
-        this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
         this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
+        this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
 
 
         this.transactionId = transactionId;
@@ -419,53 +413,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         
     }
 
-    protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
-        try {
-            if(auditingServiceIfAny == null) {
-                return;
-            }
-
-            // else
-            final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-            final java.sql.Timestamp currentTime = Clock.getTimeAsJavaSqlTimestamp();
-            for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
-                auditChangedProperty(currentTime, currentUser, auditEntry);
-            }
-
-        } finally {
-            // not needed in production, but is required for integration testing
-            this.changedObjectProperties.clear();
-        }
-    }
-
-    public void auditChangedProperty(
-            final java.sql.Timestamp timestamp,
-            final String user,
-            final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
-
-        final AdapterAndProperty aap = auditEntry.getKey();
-        final ObjectAdapter adapter = aap.getAdapter();
-        
-        final AuditableFacet auditableFacet = adapter.getSpecification().getFacet(AuditableFacet.class);
-        if(auditableFacet == null || auditableFacet.isDisabled()) {
-            return;
-        }
-
-        final Bookmark target = aap.getBookmark();
-        final String propertyId = aap.getPropertyId();
-        final String memberId = aap.getMemberId();
-
-        final PreAndPostValues papv = auditEntry.getValue();
-        final String preValue = papv.getPreString();
-        final String postValue = papv.getPostString();
-        
-
-        final String targetClass = CommandUtil.targetClassNameFor(adapter);
-
-        auditingServiceIfAny
-                .audit(getTransactionId(), targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
-    }
-
     private static String asString(Object object) {
         return object != null? object.toString(): null;
     }
@@ -525,7 +472,21 @@ public class IsisTransaction implements TransactionScopedComponent {
 
             ensureCommandsPersistedIfDirtyXactn(changedObjectProperties);
 
-            preCommitServices(changedObjectProperties);
+            try {
+                auditingServiceInternal.audit(changedObjectProperties);
+            } finally {
+                // not needed in production, but is required for integration testing
+                this.changedObjectProperties.clear();
+            }
+
+            publishingServiceInternal.publishObjects(this.changeKindByEnlistedAdapter);
+            doFlush();
+
+            closeOtherApplibServicesIfConfigured();
+
+            completeCommandAndInteractionAndClearDomainEvents();
+            doFlush();
+
 
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
@@ -555,22 +516,6 @@ public class IsisTransaction implements TransactionScopedComponent {
                                 changedObjectProperties,
                                 AdapterAndProperty.Functions.GET_ADAPTER),
                         Predicates.not(IS_COMMAND)));
-    }
-
-
-    private void preCommitServices(
-            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
-
-        doAudit(changedObjectProperties);
-
-        publishingServiceInternal.publishObjects(this.changeKindByEnlistedAdapter);
-        doFlush();
-
-        closeOtherApplibServicesIfConfigured();
-
-        completeCommandAndInteractionAndClearDomainEvents();
-
-        doFlush();
     }
 
     private void closeOtherApplibServicesIfConfigured() {
