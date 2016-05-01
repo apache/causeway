@@ -32,7 +32,7 @@ different configuration; see the final section for differences.
 
 == `dom` submodule
 
-Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:rgmvn.adoc#_rgmvn_intro_app-manifest[minimal AppManifest]:
+Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:rgmvn.adoc#_rgmvn_intro_app-manifest[minimal AppManifest]):
 
 [source,xml]
 ----

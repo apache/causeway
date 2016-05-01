@@ -62,7 +62,7 @@ xxx-xxx/resources/.
 
 == Writing the docs
 
-We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:dg.adoc#_dg_ide-templates[IDE templates].  These provide a large number of helper templates.
+We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:dg.adoc#_dg_ide_intellij_live-templates[IDE templates].  These provide a large number of helper templates.
 
 An xref:dg.adoc#_dg_appendix_asciidoc-templates[appendix] lists all the templates available, demonstrating their intended usage and output.
 

@@ -7,7 +7,7 @@
 
 
 
-This appendix lists the (IntelliJ) live templates available for xref:dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:dg.adoc#_dg_ide-templates[here].
+This appendix lists the (IntelliJ) live templates available for xref:dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:dg.adoc#_dg_ide_intellij_live-templates[here].
 
 In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
 

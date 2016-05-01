@@ -100,6 +100,13 @@ public class RepositoryServiceDefault
         }
         persistenceSessionService.makePersistent(adapter);
     }
+    
+    @Programmatic
+    @Override
+    public void persistAndFlush(final Object object) {
+	persist(object);
+	transactionService.flushTransaction();
+    }
 
     @Override
     @Programmatic
@@ -120,6 +127,13 @@ public class RepositoryServiceDefault
         }
 
         persistenceSessionService.remove(adapter);
+    }
+    
+    @Override
+    @Programmatic
+    public void removeAndFlush(final Object domainObject) {
+        remove(domainObject);
+	transactionService.flushTransaction();
     }
 
 
