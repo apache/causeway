@@ -299,8 +299,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             initOtherApplibServicesIfConfigured();
 
             final MessageBroker messageBroker = MessageBroker.acquire(getAuthenticationSession());
-            this.transaction = new IsisTransaction(
-                    this, messageBroker, persistenceSession, servicesInjector, transactionId);
+            this.transaction = new IsisTransaction(this, messageBroker, servicesInjector, transactionId);
             transactionLevel = 0;
 
             persistenceSession.startTransaction();

@@ -45,7 +45,6 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
@@ -53,17 +52,12 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.publish.EventSerializer;
-import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -214,36 +208,23 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
-    private final IsisTransactionManager.PersistenceSessionTransactionManagement persistenceSession;
     private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
 
     private final ServicesInjector servicesInjector;
 
-    /**
-     * the 'owning' command, (if service configured).
-     */
-    private final Command command;
-
     private final CommandContext commandContext;
     private final CommandService commandService;
 
     private final InteractionContext interactionContext;
+    private final PublishingServiceInternal publishingServiceInternal;
 
-    private final ClockService clockService;
     /**
      * could be null if none has been registered.
      */
     private final AuditingService3 auditingServiceIfAny;
-    /**
-     * could be null if none has been registered
-     */
-    private final PublishingServiceInternal publishingServiceInternal;
 
-    /**
-     * Will be that of the {@link #command} if not <tt>null</tt>, otherwise will be randomly created.
-     */
     private final UUID transactionId;
         
     private State state;
@@ -255,7 +236,6 @@ public class IsisTransaction implements TransactionScopedComponent {
     public IsisTransaction(
             final IsisTransactionManager transactionManager,
             final MessageBroker messageBroker,
-            final IsisTransactionManager.PersistenceSessionTransactionManagement persistenceSession,
             final ServicesInjector servicesInjector,
             final UUID transactionId) {
         
@@ -271,29 +251,20 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.commandService = lookupService(CommandService.class);
 
         this.interactionContext = lookupService(InteractionContext.class);
-        this.clockService = lookupService(ClockService.class);
 
         this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
         this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
 
-        // determine whether this xactn is taking place in the context of an
-        // existing command in which a previous xactn has already occurred.
-        // if so, reuse that transactionId.
-        command = commandContext.getCommand();
 
         this.transactionId = transactionId;
 
         this.state = State.IN_PROGRESS;
 
-        this.persistenceSession = persistenceSession;
         if (LOG.isDebugEnabled()) {
             LOG.debug("new transaction " + this);
         }
     }
 
-    protected EventSerializer newSimpleEventSerializer() {
-        return new EventSerializer.Simple();
-    }
 
     // ////////////////////////////////////////////////////////////////
     // GUID
@@ -552,7 +523,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                     Collections.unmodifiableSet(
                             Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
 
-            ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(changedObjectProperties);
+            ensureCommandsPersistedIfDirtyXactn(changedObjectProperties);
 
             preCommitServices(changedObjectProperties);
 
@@ -563,7 +534,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    private void ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+    private void ensureCommandsPersistedIfDirtyXactn(
+            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
 
         final Command command = commandContext.getCommand();
 
@@ -681,14 +653,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     // handle exceptions on load, flush or commit
     /////////////////////////////////////////////////////////////////////////
 
-    // SEEMINGLY UNUSED
-    @Deprecated
-    public void ensureNoAbortCause() {
-        Ensure.ensureThatArg(abortCause, is(nullValue()), "abort cause has been set");
-    }
 
-    
-    
     /**
      * Indicate that the transaction must be aborted, and that there is
      * an unhandled exception to be rendered somehow.
@@ -863,9 +828,6 @@ public class IsisTransaction implements TransactionScopedComponent {
             return bookmarkStr + " , " + getProperty().getId();
         }
 
-        protected OidMarshaller getMarshaller() {
-            return new OidMarshaller();
-        }
 
         private Object getPropertyValue() {
             ObjectAdapter referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
@@ -968,8 +930,6 @@ public class IsisTransaction implements TransactionScopedComponent {
    
     private final Map<ObjectAdapter,ChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
     private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();
-
-    private ObjectStringifier objectStringifier;
 
 
 
@@ -1112,20 +1072,5 @@ public class IsisTransaction implements TransactionScopedComponent {
         return servicesInjector.lookupService(serviceType);
     }
 
-    ////////////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    ////////////////////////////////////////////////////////////////////////
-
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
-    protected IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
-        return persistenceSession;
-    }
 
 }
