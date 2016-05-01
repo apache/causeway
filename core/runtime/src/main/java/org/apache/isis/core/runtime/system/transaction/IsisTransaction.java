@@ -70,7 +70,6 @@ import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternalDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -254,7 +253,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.interactionContext = lookupService(InteractionContext.class);
 
         this.auditingServiceIfAny = lookupServiceIfAny(AuditingService3.class);
-        this.publishingServiceInternal = lookupService(PublishingServiceInternalDefault.class);
+        this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
 
 
         this.transactionId = transactionId;

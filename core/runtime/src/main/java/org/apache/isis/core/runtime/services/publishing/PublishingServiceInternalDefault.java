@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.objectstore.transaction;
+package org.apache.isis.core.runtime.services.publishing;
 
 import java.sql.Timestamp;
 import java.util.Collections;
