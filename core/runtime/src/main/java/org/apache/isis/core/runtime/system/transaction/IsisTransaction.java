@@ -467,32 +467,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    public void publishActionIfRequired() {
-
-        publishingServiceInternal.publishAction();
-    }
-
-
-
-    /**
-     * @return the adapters that were published (if any were).
-     */
-    protected void publishedChangedObjectsIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
-
-        if(!publishingServiceInternal.canPublish()) {
-            return;
-        }
-
-        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService 
-        // creates further entities which would be enlisted; taking copy of the keys avoids ConcurrentModificationException
-        List<ObjectAdapter> enlistedAdapters = Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
-        for (final ObjectAdapter enlistedAdapter : enlistedAdapters) {
-            final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
-            publishingServiceInternal.publishObject(currentUser, timestamp, enlistedAdapter, changeKind);
-        }
-    }
-
-
     public void auditChangedProperty(
             final java.sql.Timestamp timestamp,
             final String user,
@@ -616,14 +590,11 @@ public class IsisTransaction implements TransactionScopedComponent {
             final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
 
         doAudit(changedObjectProperties);
-        
-        final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-        final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
-        
-        publishActionIfRequired();
+
+        publishingServiceInternal.publishAction();
         doFlush();
-        
-        publishedChangedObjectsIfRequired(currentUser, endTimestamp);
+
+        publishingServiceInternal.publishObjects(this.changeKindByEnlistedAdapter);
         doFlush();
 
         closeOtherApplibServicesIfConfigured();

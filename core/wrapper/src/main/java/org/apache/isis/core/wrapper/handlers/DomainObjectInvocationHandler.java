@@ -21,7 +21,6 @@ package org.apache.isis.core.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +35,6 @@ import com.google.common.collect.Sets;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.ObjectTitleEvent;
@@ -55,7 +53,6 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -63,6 +60,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -74,8 +72,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -628,9 +626,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ObjectAdapter actionReturnNO =
                     objectAction.execute(targetAdapter, argAdapters, interactionInitiatedBy);
 
-            final IsisTransaction transaction = IsisContext.getTransactionManager().getTransaction();
-
-            transaction.publishActionIfRequired();
+            final PublishingServiceInternal publishingServiceInternal = getPublishingServiceInternal();
+            publishingServiceInternal.publishAction();
 
             return ObjectAdapter.Util.unwrap(actionReturnNO);
         }
@@ -805,5 +802,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected PersistenceSessionService getPersistenceSessionService() {
         return persistenceSessionService;
     }
+
+    private PublishingServiceInternal getPublishingServiceInternal() {
+        return IsisContext.getPersistenceSession()
+                .getServicesInjector().lookupService(PublishingServiceInternal.class);
+    }
+
 
 }

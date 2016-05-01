@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -113,11 +114,32 @@ public class PublishingServiceInternal {
     }
 
     @Programmatic
-    public void publishObject(
-            final String currentUser,
-            final Timestamp timestamp,
+    public void publishObjects(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+
+        if(!canPublish()) {
+            return;
+        }
+
+        final String currentUser = userService.getUser().getName();
+        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+
+        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
+        // creates further entities which would be enlisted; taking copy of the keys avoids ConcurrentModificationException
+        List<ObjectAdapter> enlistedAdapters = Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
+        for (final ObjectAdapter enlistedAdapter : enlistedAdapters) {
+            final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
+            publishObject(enlistedAdapter, changeKind, currentUser,
+                    timestamp);
+        }
+    }
+
+
+    private void publishObject(
             final ObjectAdapter enlistedAdapter,
-            final ChangeKind changeKind) {
+            final ChangeKind changeKind,
+            final String currentUser,
+            final Timestamp timestamp) {
+
         final PublishedObjectFacet publishedObjectFacet = enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
         if(publishedObjectFacet == null) {
             return;
