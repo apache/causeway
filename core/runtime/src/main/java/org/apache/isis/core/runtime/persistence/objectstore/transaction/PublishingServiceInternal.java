@@ -60,6 +60,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -70,7 +71,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  */
 @DomainService(nature = NatureOfService.DOMAIN)
 public class PublishingServiceInternal {
-
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
@@ -93,10 +93,45 @@ public class PublishingServiceInternal {
 
     };
 
+    @Programmatic
+    public static EventType eventTypeFor(ChangeKind changeKind) {
+        if(changeKind == ChangeKind.UPDATE) {
+            return EventType.OBJECT_UPDATED;
+        }
+        if(changeKind == ChangeKind.CREATE) {
+            return EventType.OBJECT_CREATED;
+        }
+        if(changeKind == ChangeKind.DELETE) {
+            return EventType.OBJECT_DELETED;
+        }
+        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
+    }
 
     @Programmatic
     public boolean canPublish() {
         return publishingServiceIfAny != null;
+    }
+
+    @Programmatic
+    public void publishObject(
+            final String currentUser,
+            final Timestamp timestamp,
+            final ObjectAdapter enlistedAdapter,
+            final ChangeKind changeKind) {
+        final PublishedObjectFacet publishedObjectFacet = enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+        if(publishedObjectFacet == null) {
+            return;
+        }
+        final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
+
+        final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
+        final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
+        final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
+
+        final EventMetadata metadata = newEventMetadata(currentUser, timestamp, changeKind, enlistedAdapterClass,
+                enlistedTarget);
+
+        publishObject(payloadFactory, metadata, enlistedAdapter, changeKind);
     }
 
     @Programmatic
@@ -106,7 +141,7 @@ public class PublishingServiceInternal {
             final ObjectAdapter changedAdapter,
             final ChangeKind changeKind) {
 
-        if (publishingServiceIfAny == null) {
+        if(!canPublish()) {
             return;
         }
 
@@ -121,6 +156,7 @@ public class PublishingServiceInternal {
 
     @Programmatic
     public void publishAction() {
+
         if(!canPublish()) {
             return;
         }
@@ -173,13 +209,31 @@ public class PublishingServiceInternal {
             }
 
             final Command command = commandContext.getCommand();
-            final EventMetadata metadata = newEventMetadata(command, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
-                    actionTargetClass, actionTargetAction, actionTarget,
-                    actionMemberIdentifier,
-                    parameterNames, parameterTypes, returnType);
+
+            final Command command1 = commandContext.getCommand();
+
+            final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
+            final int nextEventSequence = command1.next(sequenceName.abbr());
+            final UUID transactionId = command1.getTransactionId();
+            final EventMetadata metadata = new EventMetadata(
+                    transactionId, nextEventSequence, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
+                    actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier, parameterNames,
+                    parameterTypes, returnType);
 
             final PublishedAction.PayloadFactory payloadFactory = publishedActionFacet.value();
-            publishAction(payloadFactory, metadata, currentInvocation);
+
+            final ObjectStringifier stringifier = objectStringifier();
+
+            final ObjectAdapter target = currentInvocation.getTarget();
+            final ObjectAdapter result = currentInvocation.getResult();
+            final List<ObjectAdapter> parameters = currentInvocation.getParameters();
+            final EventPayload payload = payloadFactory.payloadFor(
+                    currentInvocation.getIdentifiedHolder().getIdentifier(),
+                    ObjectAdapter.Util.unwrap(undeletedElseEmpty(target)),
+                    ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)),
+                    ObjectAdapter.Util.unwrap(undeletedElseEmpty(result)));
+            payload.withStringifier(stringifier);
+            publishingServiceIfAny.publish(metadata, payload);
         } finally {
             // ensures that cannot publish this action more than once
             ActionInvocationFacet.currentInvocation.set(null);
@@ -214,30 +268,6 @@ public class PublishingServiceInternal {
             };
     }
 
-    @Programmatic
-    public void publishAction(
-            final PublishedAction.PayloadFactory payloadFactory,
-            final EventMetadata metadata,
-            final CurrentInvocation currentInvocation) {
-
-        if (publishingServiceIfAny == null) {
-            return;
-        }
-
-        final ObjectStringifier stringifier = objectStringifier();
-
-        final ObjectAdapter target = currentInvocation.getTarget();
-        final ObjectAdapter result = currentInvocation.getResult();
-        final List<ObjectAdapter> parameters = currentInvocation.getParameters();
-        final EventPayload payload = payloadFactory.payloadFor(
-                currentInvocation.getIdentifiedHolder().getIdentifier(),
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(target)), 
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(parameters)), 
-                ObjectAdapter.Util.unwrap(undeletedElseEmpty(result)));
-        payload.withStringifier(stringifier);
-        publishingServiceIfAny.publish(metadata, payload);
-    }
-
     private static List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
         return Lists.newArrayList(Iterables.transform(parameters, NOT_DESTROYED_ELSE_EMPTY));
     }
@@ -250,29 +280,22 @@ public class PublishingServiceInternal {
         return IsisContext.getOidMarshaller();
     }
 
-    @Programmatic
-    public EventMetadata newEventMetadata(
-            final Command command,
-            final EventType eventType,
+    private EventMetadata newEventMetadata(
             final String currentUser,
-            final Timestamp timestampEpoch,
-            final String title,
-            final String targetClass,
-            final String targetAction,
-            final Bookmark target,
-            final String memberIdentifier,
-            final List<String> parameterNames,
-            final List<Class<?>> parameterTypes,
-            final Class<?> returnType) {
-        if(command == null) {
-            throw new IllegalStateException("CommandContext service is required to support Publishing.");
-        }
+            final Timestamp timestamp,
+            final ChangeKind changeKind,
+            final String enlistedAdapterClass,
+            final Bookmark enlistedTarget) {
+        final EventType eventType = PublishingServiceInternal.eventTypeFor(changeKind);
+
+        final Command command = commandContext.getCommand();
+
         final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
         final int nextEventSequence = command.next(sequenceName.abbr());
         final UUID transactionId = command.getTransactionId();
         return new EventMetadata(
-                transactionId, nextEventSequence, eventType, currentUser, timestampEpoch, title,
-                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
+                transactionId, nextEventSequence, eventType, currentUser, timestamp, enlistedTarget.toString(),
+                enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
     private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {

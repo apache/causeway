@@ -40,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
@@ -54,9 +53,7 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventSerializer;
-import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -71,7 +68,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -492,53 +488,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         List<ObjectAdapter> enlistedAdapters = Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
         for (final ObjectAdapter enlistedAdapter : enlistedAdapters) {
             final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
-            final PublishedObjectFacet publishedObjectFacet = enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-            if(publishedObjectFacet == null) {
-                continue;
-            }
-            final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
-        
-            final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
-            final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
-            final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
-
-            final EventMetadata metadata = newEventMetadata(
-                    currentUser, timestamp, changeKind, enlistedAdapterClass, enlistedTarget);
-
-            publishingServiceInternal
-                    .publishObject(payloadFactory, metadata, enlistedAdapter, changeKind);
+            publishingServiceInternal.publishObject(currentUser, timestamp, enlistedAdapter, changeKind);
         }
     }
 
-
-    private EventMetadata newEventMetadata(
-            final String currentUser,
-            final Timestamp timestamp,
-            final ChangeKind changeKind,
-            final String enlistedAdapterClass,
-            final Bookmark enlistedTarget) {
-        final String oidStr = enlistedTarget.toString();
-
-        final EventType eventTypeFor = eventTypeFor(changeKind);
-
-        final Command command = this.command;
-        return publishingServiceInternal.newEventMetadata(
-                command, eventTypeFor, currentUser, timestamp, oidStr, enlistedAdapterClass, null, enlistedTarget,
-                null, null, null, null);
-    }
-
-    private static EventType eventTypeFor(ChangeKind changeKind) {
-        if(changeKind == ChangeKind.UPDATE) {
-            return EventType.OBJECT_UPDATED;
-        }
-        if(changeKind == ChangeKind.CREATE) {
-            return EventType.OBJECT_CREATED;
-        }
-        if(changeKind == ChangeKind.DELETE) {
-            return EventType.OBJECT_DELETED;
-        }
-        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
-    }
 
     public void auditChangedProperty(
             final java.sql.Timestamp timestamp,
