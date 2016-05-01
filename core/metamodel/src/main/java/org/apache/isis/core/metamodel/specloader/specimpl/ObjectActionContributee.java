@@ -185,14 +185,15 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
 
     @Override
     public ObjectAdapter execute(
-            final ObjectAdapter contributee,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        setupActionInvocationContext(contributee);
-        setupCommandTarget(contributee, arguments);
+        setupActionInvocationContext(targetAdapter);
+        setupCommandTarget(targetAdapter, arguments);
 
-        return serviceAction.execute(getServiceAdapter(), argsPlusContributee(contributee, arguments),
+        return serviceAction.execute(getServiceAdapter(), mixedInAdapter, argsPlusContributee(targetAdapter, arguments),
                 interactionInitiatedBy);
     }
 

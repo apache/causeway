@@ -61,8 +61,10 @@ public class DomainEventHelper {
             final AbstractDomainEvent.Phase phase,
             final Class eventType,
             final ActionDomainEvent<?> existingEvent,
+            final ObjectAction objectAction,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] argumentAdapters,
             final Command command,
             final ObjectAdapter resultAdapter) {
@@ -70,6 +72,7 @@ public class DomainEventHelper {
         if(!hasEventBusService()) {
             return null;
         }
+
         try {
             final ActionDomainEvent<?> event;
 
@@ -83,9 +86,13 @@ public class DomainEventHelper {
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
-                if(identified instanceof ObjectAction) {
+                // copy over if have
+                if(mixedInAdapter != null ) {
+                    event.setMixedIn(mixedInAdapter.getObject());
+                }
+
+                if(objectAction != null) {
                     // should always be the case...
-                    final ObjectAction objectAction = (ObjectAction) identified;
                     event.setActionSemantics(objectAction.getSemantics());
 
                     final List<ObjectActionParameter> parameters = objectAction.getParameters();

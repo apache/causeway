@@ -67,6 +67,8 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     private int contributeeParam = -1; // no contributee
     private ObjectAdapter contributee = null;
 
+    private ObjectAdapter mixedInAdapter = null; // for mixin members only, obviously
+
     public InteractionContext(
             final InteractionContextType interactionType,
             final InteractionInitiatedBy invocationMethod,
@@ -142,6 +144,16 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         return contributee != null
                 ? ImmutableMap.<Integer, ObjectAdapter>of(contributeeParam, contributee)
                 : ImmutableMap.<Integer, ObjectAdapter>of();
+    }
+
+    // //////////////////////////////////////
+
+    public void setMixedIn(final ObjectAdapter mixedInAdapter) {
+        this.mixedInAdapter = mixedInAdapter;
+    }
+
+    public ObjectAdapter getMixedIn() {
+        return mixedInAdapter;
     }
 
     // //////////////////////////////////////

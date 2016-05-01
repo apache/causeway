@@ -128,7 +128,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return mixinAction.execute(mixinAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+        return mixinAction.execute(mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
-        ic.putContributee(0, mixedInAdapter);
+        ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -165,7 +165,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
                         mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
-        ic.putContributee(0, mixedInAdapter);
+        ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 

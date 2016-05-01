@@ -452,9 +452,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final ObjectAdapter[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        //final ObjectAdapter targetAdapter = targetForDefaultOrChoicesOrValidate(objectAdapter);
         return new ActionArgumentContext(
-                objectAdapter, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override

@@ -28,12 +28,14 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -50,7 +52,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     /**
      * The {@link ObjectActionDefault} for the action being mixed in (ie on the {@link #mixinType}.
      */
-    private final ObjectActionDefault mixinAction;
+    final ObjectActionDefault mixinAction;
 
     /**
      * The domain object type being mixed in to (being supplemented).
@@ -146,8 +148,8 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final Where where) {
         final VisibilityContext<?> ic =
                 mixinAction.createVisibleInteractionContext(
-                        mixinAdapterFor(mixedInAdapter), interactionInitiatedBy, where);
-        ic.putContributee(0, mixedInAdapter);
+                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -157,10 +159,11 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
-                        mixinAdapterFor(mixedInAdapter), interactionInitiatedBy, where);
-        ic.putContributee(0, mixedInAdapter);
+                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+        ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
+
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter mixedInAdapter) {
@@ -178,16 +181,28 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return mixinAdapterFor(mixinType, mixedInAdapter);
     }
 
-    public Consent isProposedArgumentSetValid(
+    @Override
+    protected void validateArgumentSet(
             final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] proposedArguments,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinAction.isProposedArgumentSetValid(mixinAdapterFor(mixedInAdapter), proposedArguments, interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionResultSet resultSet) {
+
+        final ObjectAdapter targetObject = mixinAdapterFor(mixinType, mixedInAdapter);
+
+        final ValidityContext<?> ic =  mixinAction.createActionInvocationInteractionContext(
+                targetObject, proposedArguments, interactionInitiatedBy);
+        ic.setMixedIn(mixedInAdapter);
+
+        InteractionUtils.isValidResultSet(this, ic, resultSet);
     }
+
+
 
     @Override
     public ObjectAdapter execute(
-            final ObjectAdapter mixedInAdapter,
+            final ObjectAdapter target,         // will be the mixedInAdapter
+            final ObjectAdapter mixedInAdapter, // will be passed in as null
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -199,7 +214,11 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         setupCommandTarget(mixedInAdapter, arguments);
         setupCommandMementoAndExecutionContext(mixedInAdapter, arguments);
 
-        return mixinAction.execute(mixinAdapterFor(mixedInAdapter), arguments, interactionInitiatedBy);
+        final ObjectAdapter targetAdapter = mixinAdapterFor(mixinType, target);
+        final ObjectAdapter actualMixedInAdapter = target;
+        return mixinAction.execute(
+                targetAdapter, actualMixedInAdapter, arguments,
+                interactionInitiatedBy);
     }
 
     //region > facetHolder

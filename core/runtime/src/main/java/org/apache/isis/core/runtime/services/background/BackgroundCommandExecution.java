@@ -128,9 +128,16 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                             throw new RuntimeException(String.format("Unknown action '%s'", actionId));
                         }
 
+                        // TODO: background commands won't work for mixin actions...
+                        // ... we obtain the target from the bookmark service (above), which will
+                        // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
+                        // and also capture the mixinType within the aim memento.
+                        final ObjectAdapter mixedInAdapter = null;
+
                         final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
                         final ObjectAdapter resultAdapter = objectAction.execute(
-                                targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                                targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+
                         if(resultAdapter != null) {
                             Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                             backgroundCommand.setResult(resultBookmark);
@@ -154,9 +161,15 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                             final ObjectAction objectAction =
                                     findObjectAction(targetAdapter, actionId);
 
+                            // TODO: background commands won't work for mixin actions...
+                            // ... we obtain the target from the bookmark service (above), which will
+                            // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
+                            // and also capture the mixinType within the aim memento.
+                            final ObjectAdapter mixedInAdapter = null;
+
                             final ObjectAdapter[] argAdapters = argAdaptersFor(dto);
                             final ObjectAdapter resultAdapter = objectAction.execute(
-                                    targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                                    targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                             // alternatively, could use...
                             Object unused = backgroundInteraction.getPriorExecution().getResult();

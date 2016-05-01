@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.ws.rs.HEAD;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -263,7 +265,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return selectedParameters;
     }
 
-    private ObjectActionParameter getParameter(final int position) {
+    ObjectActionParameter getParameter(final int position) {
         final List<ObjectActionParameter> parameters = getParameters();
         if (position >= parameters.size()) {
             throw new IllegalArgumentException("getParameter(int): only " + parameters.size() + " parameters, position=" + position);
@@ -279,14 +281,14 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public VisibilityContext<?> createVisibleInteractionContext(
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        return new ActionVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy, where);
+        return new ActionVisibilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        return new ActionUsabilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy, where);
+        return new ActionUsabilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
     }
     //endregion
 
@@ -294,18 +296,26 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     @Override
     public Consent isProposedArgumentSetValid(
-            final ObjectAdapter target,
-            final ObjectAdapter[] proposedArguments,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return isProposedArgumentSetValidResultSet(target, proposedArguments, interactionInitiatedBy).createConsent();
-    }
-
-    private InteractionResultSet isProposedArgumentSetValidResultSet(
-            final ObjectAdapter objectAdapter,
+            final ObjectAdapter targetObject,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
+
+        validateArgumentsIndividually(targetObject, proposedArguments, interactionInitiatedBy, resultSet);
+        if (resultSet.isAllowed()) {
+            // only check the action's own validity if all the arguments are OK.
+            validateArgumentSet(targetObject, proposedArguments, interactionInitiatedBy, resultSet);
+        }
+
+        return resultSet.createConsent();
+    }
+
+    protected void validateArgumentsIndividually(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionResultSet resultSet) {
         final List<ObjectActionParameter> actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.length; i++) {
@@ -316,20 +326,23 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
             }
         }
-        // only check the action's own validity if all the arguments are OK.
-        if (resultSet.isAllowed()) {
-            final ValidityContext<?> ic = createActionInvocationInteractionContext(
-                    objectAdapter, proposedArguments, interactionInitiatedBy);
-            InteractionUtils.isValidResultSet(this, ic, resultSet);
-        }
-        return resultSet;
     }
 
-    private ActionInvocationContext createActionInvocationInteractionContext(
+    protected void validateArgumentSet(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionResultSet resultSet) {
+        final ValidityContext<?> ic = createActionInvocationInteractionContext(
+                objectAdapter, proposedArguments, interactionInitiatedBy);
+        InteractionUtils.isValidResultSet(this, ic, resultSet);
+    }
+
+    ActionInvocationContext createActionInvocationInteractionContext(
             final ObjectAdapter targetObject,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ActionInvocationContext(targetObject, getIdentifier(), proposedArguments,
+        return new ActionInvocationContext(targetObject, this, getIdentifier(), proposedArguments,
                 interactionInitiatedBy);
     }
 
@@ -340,6 +353,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public ObjectAdapter executeWithRuleChecking(
             final ObjectAdapter target,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
@@ -362,20 +376,20 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             throw new RecoverableException(validity.getReason());
         }
 
-        return execute(target, arguments, interactionInitiatedBy);
+        return execute(target, mixedInAdapter, arguments, interactionInitiatedBy);
     }
 
     @Override
     public ObjectAdapter execute(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments,
+            final ObjectAdapter mixedInAdapter,
+            final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if(LOG.isDebugEnabled()) {
             LOG.debug("execute action " + targetAdapter + "." + getId());
         }
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-
-        return facet.invoke(this, targetAdapter, arguments, interactionInitiatedBy);
+        return facet.invoke(this, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
