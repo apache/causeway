@@ -766,11 +766,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private ObjectSpecificationDefault getJavaSpecification(final Class<?> clazz) {
-        final ObjectSpecification nos = getSpecification(clazz);
-        if (!(nos instanceof ObjectSpecificationDefault)) {
-            throw new UnsupportedOperationException("Only Java is supported (specification is '" + nos.getClass().getCanonicalName() + "')");
+        final ObjectSpecification objectSpec = getSpecification(clazz);
+        if (!(objectSpec instanceof ObjectSpecificationDefault)) {
+            throw new UnsupportedOperationException("Only Java is supported (specification is '" + objectSpec.getClass().getCanonicalName() + "')");
         }
-        return (ObjectSpecificationDefault) nos;
+        return (ObjectSpecificationDefault) objectSpec;
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {

@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.services.publishing.AuditingServiceInternal;
+import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;

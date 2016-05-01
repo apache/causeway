@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services.publishing;
+package org.apache.isis.core.runtime.services.auditing;
 
 import java.util.Map;
 import java.util.Set;
