@@ -2225,9 +2225,8 @@ public class PersistenceSession implements
      * to determine which callback to fire.
      */
     public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
-        final ObjectAdapter objectAdapter = adapterFor(pojo);
+        final ObjectAdapter adapter = adapterFor(pojo);
 
-        final ObjectAdapter adapter = objectAdapter;
         final RootOid rootOid = (RootOid) adapter.getOid(); // ok since this is for a Persistable
 
         if (rootOid.isTransient()) {

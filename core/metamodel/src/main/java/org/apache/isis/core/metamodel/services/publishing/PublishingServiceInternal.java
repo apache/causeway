@@ -28,9 +28,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 public interface PublishingServiceInternal {
 
     @Programmatic
-    boolean canPublish();
-
-    @Programmatic
     void publishObjects();
 
     @Programmatic

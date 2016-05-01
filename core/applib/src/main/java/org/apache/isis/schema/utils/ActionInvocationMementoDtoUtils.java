@@ -132,7 +132,7 @@ public final class ActionInvocationMementoDtoUtils {
 
         aim.setTransactionId(transactionId.toString());
 
-        ActionInvocationDto invocation = invocationFor(aim);
+        final ActionInvocationDto invocation = invocationFor(aim);
 
         invocation.setSequence(sequence);
         invocation.setId(aim.getTransactionId() + "." + invocation.getSequence());

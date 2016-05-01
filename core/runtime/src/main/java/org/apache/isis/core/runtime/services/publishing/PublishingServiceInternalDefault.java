@@ -43,10 +43,12 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
+import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -66,6 +68,8 @@ import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceIntern
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
+import org.apache.isis.schema.utils.ActionInvocationMementoDtoUtils;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -110,15 +114,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Override
     @Programmatic
-    public boolean canPublish() {
-        return publishingServiceIfAny != null;
-    }
-
-    @Override
-    @Programmatic
     public void publishObjects() {
 
-        if(!canPublish()) {
+        if(publishingServiceIfAny == null) {
             return;
         }
 
@@ -169,16 +167,30 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         publishingServiceIfAny.publish(metadata, payload);
     }
 
+    @Programmatic
     public void publishAction(
             final ObjectAction objectAction,
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
             final List<ObjectAdapter> parameterAdapters,
             final ObjectAdapter resultAdapter) {
-        if(!canPublish()) {
+
+        publishActionToPublishingService(
+                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter);
+
+        publishActionToPublisherServices(
+                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter);
+
+    }
+
+    private void publishActionToPublishingService(
+            final ObjectAction objectAction,
+            final IdentifiedHolder identifiedHolder,
+            final ObjectAdapter targetAdapter,
+            final List<ObjectAdapter> parameterAdapters, final ObjectAdapter resultAdapter) {
+        if(publishingServiceIfAny == null) {
             return;
         }
-
         final String currentUser = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
@@ -240,7 +252,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         publishingServiceIfAny.publish(metadata, payload);
     }
 
-
     private static <T> List<T> immutableList(final Iterable<T> iterable) {
         return Collections.unmodifiableList(Lists.newArrayList(iterable));
     }
@@ -299,16 +310,70 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
+    private void publishActionToPublisherServices(
+            final ObjectAction objectAction,
+            final IdentifiedHolder identifiedHolder,
+            final ObjectAdapter targetAdapter,
+            final List<ObjectAdapter> parameterAdapters,
+            final ObjectAdapter resultAdapter) {
+
+        final Interaction interaction = interactionContext.getInteraction();
+        final Interaction.Execution execution = interaction.getPriorExecution();
+
+        if(publisherServices == null || publisherServices.isEmpty()) {
+            return;
+        }
+
+        final Command command = commandContext.getCommand();
+
+        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
+        final int nextEventSequence = command.next(sequenceName.abbr());
+        final UUID transactionId = command.getTransactionId();
+
+        final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(objectAction);
+        final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
+
+        final RootOid adapterOid = (RootOid) targetAdapter.getOid();
+        final String oidStr = getOidMarshaller().marshal(adapterOid);
+        final Identifier actionIdentifier = objectAction.getIdentifier();
+
+        final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
+
+        final String currentUser = userService.getUser().getName();
+        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+
+        for (PublisherService publisherService : publisherServices) {
+            final ActionInvocationMementoDto aimDto =
+                ActionInvocationMementoDtoUtils.newDto(
+                        transactionId,
+                        nextEventSequence,
+                        actionMemberIdentifier,
+                        actionTarget,
+                        title,
+                        currentUser,
+                        timestamp
+                );
+            publisherService.publish(aimDto);
+        }
+    }
+
+
     private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
 
     @Inject
+    private List<PublisherService> publisherServices;
+
+    @Inject
     private PublishingService publishingServiceIfAny;
 
     @Inject
     private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
+
+    @Inject
+    private InteractionContext interactionContext;
 
     @Inject
     private CommandContext commandContext;
