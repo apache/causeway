@@ -234,9 +234,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
 
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
-
         try {
             setupActionInvocationContext(owningAction, targetAdapter);
 

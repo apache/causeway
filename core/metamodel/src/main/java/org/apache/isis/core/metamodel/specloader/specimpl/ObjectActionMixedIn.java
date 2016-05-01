@@ -24,8 +24,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -198,9 +196,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         setupActionInvocationContext(mixedInAdapter);
 
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
-
         setupCommandTarget(mixedInAdapter, arguments);
         setupCommandMementoAndExecutionContext(mixedInAdapter, arguments);
 
@@ -227,10 +222,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return getSpecificationLoader().loadSpecification(mixinType);
 
     }
-
-
-
-    // //////////////////////////////////////
 
 
 }
