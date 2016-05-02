@@ -17,10 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/aim"
+<xs:schema targetNamespace="http://isis.apache.org/schema/mim"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://isis.apache.org/schema/aim"
+           xmlns="http://isis.apache.org/schema/mim"
            xmlns:cmd="http://isis.apache.org/schema/cmd"
            xmlns:common="http://isis.apache.org/schema/common"
         >
@@ -28,9 +28,9 @@
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
     <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.0.xsd"/>
 
-    <xs:element name="actionInvocationMementoDto">
+    <xs:element name="memberInteractionMementoDto">
         <xs:annotation>
-            <xs:documentation>Represents v2.0 of this schema.  Changes since v1.0 are the addition of the 'majorVersion' and 'minorVersion', the 'mixinFqClassName' element, the 'threw' element, the 'timestampComplete' element and the 'subActions' element.  The 'timestamp' element has been replaced by 'timestampStart'.  The 'returned' element has been redefined.  The 'metadata' and 'payload' containers have been removed.  The supporting 'paramDto' types have been moved to common (so can be shared with cmd.xsd).
+            <xs:documentation>Represents v1.0 of this schema, replacing and generalizing the earlier 'actionInvocationMemento'.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -49,14 +49,14 @@
                 </xs:element>
                 <xs:element name="transactionId" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>Transaction id within which this action was invoked; can be used to locate the corresponding Command object (which may have been persisted).  However, there could be many such actions (eg by virtue of WrapperFactory); the 'sequence' is used to provide a unique id for each action invocation.
+                        <xs:documentation>Transaction id within which this member was interacted with (action invoked/property modified); can be used to locate the corresponding Command object (which may have been persisted).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="invocation" type="actionInvocationDto"/>
-                <xs:element name="subInvocations" type="actionInvocationDto" minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="interaction" type="memberInteractionDto"/>
+                <xs:element name="subInteractions" type="memberInteractionDto" minOccurs="0" maxOccurs="unbounded">
                     <xs:annotation>
-                        <xs:documentation>Capture invocations of any other actions invoked from this action, using the WrapperFactory service.  These therefore define a graph/call-stack of actions.  Note that the subactions will redundantly also specify their majorVersion and minorVersion (the alternative would have required restructuring in such a way as to break backward compatibility).
+                        <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property modification, and - much rarer - for a property modification to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
@@ -65,29 +65,34 @@
 
     </xs:element>
 
-    <xs:complexType name="actionInvocationDto">
+    <xs:complexType name="memberInteractionDto" abstract="true">
+        <xs:annotation>
+            <xs:documentation>Represents either an action invocation or a property modification.  Is subclassed by both.
+            </xs:documentation>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="id" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>Unique identifier for this action invocation in the format &quot;transactionId.sequence&quot;.
+                    <xs:documentation>Unique identifier for this individual member interaction, in the format &quot;transactionId.sequence&quot; (where 'transactionId' is part of the owning 'memberInteractionMementoDto' and 'sequence' is defined below).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="sequence" type="xs:int">
                 <xs:annotation>
-                    <xs:documentation>Action invocation within this transaction/command.
+                    <xs:documentation>Unique sequence number of an individual member interaction within a transaction.  There could be many such member interactions (within a single transaction ) for two reasons: either a single top-level interaction could call sub-interactions (by virtue of WrapperFactory), or there may be a bulk action interaction against many targets.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="target" type="common:oidDto" minOccurs="1" maxOccurs="1">
                 <xs:annotation>
-                    <xs:documentation>For regular actions, represents the entity or view model upon which the action is to be invoked.  For mixin actions, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Mixin actions can be determined by the presence of the 'mixinFqClassName' element.
+                    <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property modified.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="action" type="cmd:actionDto">
+            <xs:element name="memberIdentifier" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>The action and arguments to be invoked on the target object.</xs:documentation>
+                    <xs:documentation>Formal identifier of the member being interacted with (action or property).
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="user" type="xs:string">
@@ -104,25 +109,38 @@
             </xs:element>
             <xs:element name="timings" type="common:periodDto">
                 <xs:annotation>
-                    <xs:documentation>Captures the time taken to invoke the action.
+                    <xs:documentation>Captures the time taken to perform the member interaction (invoke the action, or modify the property).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:choice>
-                <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
-                    <xs:annotation>
-                        <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element will be populated.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="threw" type="exceptionDto" minOccurs="0" maxOccurs="1">
-                    <xs:annotation>
-                        <xs:documentation>Captures any exception thrown by an action.  Either the 'returned' or the 'threw' element will be populated.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-            </xs:choice>
         </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="actionInvocationDto">
+        <xs:complexContent>
+            <xs:extension base="memberInteractionDto">
+                <xs:sequence>
+                    <xs:element name="action" type="cmd:actionDto">
+                        <xs:annotation>
+                            <xs:documentation>The action and arguments to be invoked on the target object.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:choice>
+                        <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element will be populated.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="threw" type="exceptionDto" minOccurs="0" maxOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation>Captures any exception thrown by an action.  Either the 'returned' or the 'threw' element will be populated.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="returnDto">

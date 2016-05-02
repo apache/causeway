@@ -78,12 +78,6 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="actionIdentifier" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Formal identifier of the action being invoked.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="parameters" type="paramDto"/>
             </xs:sequence>
