@@ -51,9 +51,7 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
-import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.CommonDtoUtils;
 
 /**
  * Depends on an implementation of {@link BackgroundCommandService} to
@@ -210,8 +208,9 @@ public class CommandDtoServiceDefault implements CommandDtoService {
             final ObjectAdapter argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
             final List<ParamDto> parameters = actionDto.getParameters();
-            CommandDtoUtils.addParamArg(
-                    parameters, parameterName, paramType, arg, bookmarkService);
+
+            ParamDto paramDto = CommandDtoUtils.newParamDto(parameterName, paramType, arg, bookmarkService);
+            parameters.add(paramDto);
         }
     }
 
@@ -225,12 +224,11 @@ public class CommandDtoServiceDefault implements CommandDtoService {
         propertyDto.setMemberIdentifier(actionIdentifier);
 
         final ObjectSpecification valueSpec = property.getSpecification();
+        final Class<?> valueType = valueSpec.getCorrespondingClass();
 
-        final ValueDto valueDto = new ValueDto();
-        CommonDtoUtils.setValue(
-                valueDto, valueSpec.getCorrespondingClass(), ObjectAdapter.Util.unwrap(valueAdapter));
-
-        propertyDto.setNewValue(valueDto);
+        final ParamDto paramDto = CommandDtoUtils.newParamDto(
+                "newValue", valueType, ObjectAdapter.Util.unwrap(valueAdapter), bookmarkService);
+        propertyDto.setNewValue(paramDto);
     }
 
     // //////////////////////////////////////

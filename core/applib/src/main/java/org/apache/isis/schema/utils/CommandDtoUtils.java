@@ -114,7 +114,6 @@ public final class CommandDtoUtils {
     }
 
     /**
-     *
      * @param params
      * @param parameterName
      * @param parameterType - to determine the value type (if any)
@@ -127,106 +126,94 @@ public final class CommandDtoUtils {
             final Class<?> parameterType,
             final Object arg,
             final BookmarkService bookmarkService) {
-        boolean isValueType = addParamArgValue(params, parameterName, parameterType, arg);
-        if(!isValueType) {
-            addParamArgReference(
-                    params, parameterName,
-                    arg instanceof Bookmark
-                            ? (Bookmark)arg
-                            : bookmarkService.bookmarkFor(arg));
-        }
+
+        ParamDto paramDto = newParamDto(parameterName, parameterType, arg, bookmarkService);
+        params.add(paramDto);
     }
 
-    private static boolean addParamArgValue(
-            final List<ParamDto> params,
+    public static ParamDto newParamDto(
             final String parameterName,
             final Class<?> parameterType,
-            final Object arg) {
-        ParamDto paramDto = null;
-        if(parameterType == String.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.STRING, arg);
-        } else
-        if(parameterType == byte.class || parameterType == Byte.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.BYTE, arg);
-        } else
-        if(parameterType == short.class || parameterType == Short.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.SHORT, arg);
-        }else
-        if(parameterType == int.class || parameterType == Integer.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.INT, arg);
-        }else
-        if(parameterType == long.class || parameterType == Long.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.LONG, arg);
-        }else
-        if(parameterType == char.class || parameterType == Character.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.CHAR, arg);
-        }else
-        if(parameterType == boolean.class || parameterType == Boolean.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.BOOLEAN, arg);
-        }else
-        if(parameterType == float.class || parameterType == Float.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.FLOAT, arg);
-        }else
-        if(parameterType == double.class || parameterType == Double.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.DOUBLE, arg);
-        }else
-        if(parameterType == BigInteger.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.BIG_INTEGER, arg);
-        }else
-        if(parameterType == BigDecimal.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.BIG_DECIMAL, arg);
-        }else
-        if(parameterType == DateTime.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.JODA_DATE_TIME, arg);
-        }else
-        if(parameterType == LocalDateTime.class) {
-            paramDto =
-                    newParamDto(params, parameterName, ValueType.JODA_LOCAL_DATE_TIME, arg);
-        }else
-        if(parameterType == LocalDate.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.JODA_LOCAL_DATE, arg);
-        }else
-        if(parameterType == LocalTime.class) {
-            paramDto = newParamDto(params, parameterName, ValueType.JODA_LOCAL_TIME, arg);
-        }else
-        if(parameterType.isEnum()) {
-            paramDto = newParamDto(params, parameterName, ValueType.ENUM, arg);
-        }
+            final Object arg,
+            final BookmarkService bookmarkService) {
 
+        ParamDto paramDto = newParamDto(parameterName, parameterType, arg);
         if(paramDto != null) {
+
             if (arg != null) {
                 final ValueDto valueDto = argumentFor(paramDto);
                 CommonDtoUtils.setValue(valueDto, parameterType, arg);
             }
-            return true;
-        }
 
-        // none of the supported value types
-        return false;
+        } else {
+
+            // none of the supported value types
+            final Bookmark bookmark = arg instanceof Bookmark
+                    ? (Bookmark)arg
+                    : bookmarkService.bookmarkFor(arg);
+
+            paramDto = newParamDto(parameterName, ValueType.REFERENCE, bookmark);
+
+            if (bookmark != null) {
+                final ValueDto valueDto = argumentFor(paramDto);
+
+                OidDto argValue = CommonDtoUtils.asOidDto(bookmark);
+                valueDto.setReference(argValue);
+            }
+        }
+        return paramDto;
     }
 
-    private static void addParamArgReference(
-            final List<ParamDto> params,
-            final String parameterName,
-            final Bookmark bookmark) {
-        final ParamDto paramDto =
-                newParamDto(params, parameterName, ValueType.REFERENCE, bookmark);
-
-        if (bookmark != null) {
-            final ValueDto valueDto = argumentFor(paramDto);
-
-            OidDto argValue = CommonDtoUtils.asOidDto(bookmark);
-            valueDto.setReference(argValue);
+    private static ParamDto newParamDto(final String parameterName, final Class<?> parameterType, final Object arg) {
+        ParamDto paramDto = null;
+        if(parameterType == String.class) {
+            paramDto = newParamDto(parameterName, ValueType.STRING, arg);
+        } else
+        if(parameterType == byte.class || parameterType == Byte.class) {
+            paramDto = newParamDto(parameterName, ValueType.BYTE, arg);
+        } else
+        if(parameterType == short.class || parameterType == Short.class) {
+            paramDto = newParamDto(parameterName, ValueType.SHORT, arg);
+        }else
+        if(parameterType == int.class || parameterType == Integer.class) {
+            paramDto = newParamDto(parameterName, ValueType.INT, arg);
+        }else
+        if(parameterType == long.class || parameterType == Long.class) {
+            paramDto = newParamDto(parameterName, ValueType.LONG, arg);
+        }else
+        if(parameterType == char.class || parameterType == Character.class) {
+            paramDto = newParamDto(parameterName, ValueType.CHAR, arg);
+        }else
+        if(parameterType == boolean.class || parameterType == Boolean.class) {
+            paramDto = newParamDto(parameterName, ValueType.BOOLEAN, arg);
+        }else
+        if(parameterType == float.class || parameterType == Float.class) {
+            paramDto = newParamDto(parameterName, ValueType.FLOAT, arg);
+        }else
+        if(parameterType == double.class || parameterType == Double.class) {
+            paramDto = newParamDto(parameterName, ValueType.DOUBLE, arg);
+        }else
+        if(parameterType == BigInteger.class) {
+            paramDto = newParamDto(parameterName, ValueType.BIG_INTEGER, arg);
+        }else
+        if(parameterType == BigDecimal.class) {
+            paramDto = newParamDto(parameterName, ValueType.BIG_DECIMAL, arg);
+        }else
+        if(parameterType == DateTime.class) {
+            paramDto = newParamDto(parameterName, ValueType.JODA_DATE_TIME, arg);
+        }else
+        if(parameterType == LocalDateTime.class) {
+            paramDto = newParamDto(parameterName, ValueType.JODA_LOCAL_DATE_TIME, arg);
+        }else
+        if(parameterType == LocalDate.class) {
+            paramDto = newParamDto(parameterName, ValueType.JODA_LOCAL_DATE, arg);
+        }else
+        if(parameterType == LocalTime.class) {
+            paramDto = newParamDto(parameterName, ValueType.JODA_LOCAL_TIME, arg);
+        }else
+        if(parameterType.isEnum()) {
+            paramDto = newParamDto(parameterName, ValueType.ENUM, arg);
         }
-    }
-
-    private static ParamDto newParamDto(
-            final List<ParamDto> params,
-            final String parameterName,
-            final ValueType parameterType,
-            final Object value) {
-        final ParamDto paramDto = newParamDto(parameterName, parameterType, value);
-        params.add(paramDto);
         return paramDto;
     }
 

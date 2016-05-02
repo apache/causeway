@@ -54,7 +54,6 @@ import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 
 /**
@@ -267,13 +266,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     }
 
     protected ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
-
-        final ValueDto newValue = propertyDto.getNewValue();
-        if(newValue == null) {
-            return null;
-        } else {
-            throw new RuntimeException("NOT YET IMPLEMENTED; need to refactor cmd.xsd to take a paramDto for newValue");
-        }
+        final ParamDto paramDto = propertyDto.getNewValue();
+        final Object arg = CommandDtoUtils.paramArgOf(paramDto);
+        return adapterFor(arg);
     }
 
     private static ObjectAction findActionElseNull(

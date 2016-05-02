@@ -111,7 +111,7 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="common:valueDto"/>
+                    <xs:element name="newValue" type="paramDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
