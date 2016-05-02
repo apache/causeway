@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class PropertyClearFacetForDomainEventFromDefault
-        extends PropertyClearFacetForDomainEventAbstract {
+        extends PropertySetterOrClearFacetForDomainEventAbstract
+        implements PropertyClearFacet {
 
 
     public PropertyClearFacetForDomainEventFromDefault(
@@ -34,7 +35,8 @@ public class PropertyClearFacetForDomainEventFromDefault
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
             final PropertyDomainEventFacetAbstract propertyInteractionFacet,
-            final FacetHolder holder, final ServicesInjector servicesInjector) {
-        super(eventType, getterFacet, clearFacet, propertyInteractionFacet, servicesInjector, holder);
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(eventType, getterFacet, null, clearFacet, propertyInteractionFacet, servicesInjector, holder);
     }
 }

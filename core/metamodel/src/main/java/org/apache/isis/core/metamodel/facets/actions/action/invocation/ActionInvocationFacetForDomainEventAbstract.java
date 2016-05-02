@@ -196,7 +196,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        // similar code in Property{Setter/Clear}FacetFDEA
+        // similar code in PropertySetterOrClearFacetFDEA
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
@@ -237,7 +237,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
 
-        // similar code in Property{Setter/Clear}FacetFDEA
+        // similar code in PropertySetterOrClearFacetFDEA
 
         try {
             owningAction.setupActionInvocationContext(targetAdapter);
@@ -296,7 +296,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter[] argumentAdapters)
             throws IllegalAccessException, InvocationTargetException {
 
-        // similar code in Property{Setter/Clear}FacetFDEA
+        // similar code in PropertySetterOrClearFacetFDEA
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();

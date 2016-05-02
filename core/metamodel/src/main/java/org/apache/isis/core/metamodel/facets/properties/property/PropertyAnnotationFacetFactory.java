@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Mandatory;
@@ -60,7 +61,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation;
@@ -69,7 +69,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation;
@@ -188,7 +187,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final PropertySetterFacet setterFacet = holder.getFacet(PropertySetterFacet.class);
         if(setterFacet != null) {
             // the current setter facet will end up as the underlying facet
-            final PropertySetterFacetForDomainEventAbstract replacementFacet;
+            final PropertySetterFacet replacementFacet;
             // deprecated
             if(postsPropertyChangedEvent != null) {
                 final Class<? extends PropertyChangedEvent<?, ?>> propertySetEventType = postsPropertyChangedEvent.value();
@@ -216,7 +215,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
         if(clearFacet != null) {
             // the current clear facet will end up as the underlying facet
-            final PropertyClearFacetForDomainEventAbstract replacementFacet;
+            final PropertyClearFacet replacementFacet;
 
             // deprecated
             if(postsPropertyChangedEvent != null) {
@@ -234,6 +233,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
                         propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
+            // default
             {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
                         propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);

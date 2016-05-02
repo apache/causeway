@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  */
 @Deprecated
 public class PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation
-        extends PropertyClearFacetForDomainEventAbstract {
+        extends PropertySetterOrClearFacetForDomainEventAbstract
+        implements PropertyClearFacet {
 
 
     public PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation(
@@ -38,7 +39,8 @@ public class PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
             final PropertyDomainEventFacetAbstract propertyInteractionFacet,
-            final FacetHolder holder, final ServicesInjector servicesInjector) {
-        super(eventType, getterFacet, clearFacet, propertyInteractionFacet, servicesInjector, holder);
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(eventType, getterFacet, null, clearFacet, propertyInteractionFacet, servicesInjector, holder);
     }
 }

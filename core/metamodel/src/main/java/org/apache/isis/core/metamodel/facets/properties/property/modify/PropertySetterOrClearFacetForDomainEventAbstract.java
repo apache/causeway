@@ -37,13 +37,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class PropertySetterFacetForDomainEventAbstract
-        extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>>
-        implements PropertySetterFacet {
+public abstract class PropertySetterOrClearFacetForDomainEventAbstract
+        extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     public static Class<? extends Facet> type() {
         return PropertySetterFacet.class;
@@ -53,36 +53,109 @@ public abstract class PropertySetterFacetForDomainEventAbstract
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertySetterFacet setterFacet;
+    private final PropertyClearFacet clearFacet;
     private final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
 
     private final ServicesInjector servicesInjector;
 
 
-    public PropertySetterFacetForDomainEventAbstract(
+    public PropertySetterOrClearFacetForDomainEventAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertySetterFacet setterFacet,
+            final PropertyClearFacet clearFacet,
             final PropertyDomainEventFacetAbstract propertyDomainEventFacet,
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
+        this.clearFacet = clearFacet;
         this.propertyDomainEventFacet = propertyDomainEventFacet;
         this.servicesInjector = servicesInjector;
         this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
-    @Override
+    enum Type {
+        SET {
+            @Override
+            boolean meetsPrereqs(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
+                return facet.setterFacet != null;
+            }
+
+            @Override
+            void invoke(
+                    final PropertySetterOrClearFacetForDomainEventAbstract facet,
+                    final OneToOneAssociation owningProperty,
+                    final ObjectAdapter targetAdapter,
+                    final ObjectAdapter valueAdapterOrNull,
+                    final InteractionInitiatedBy interactionInitiatedBy) {
+                facet.setterFacet.setProperty(
+                        owningProperty, targetAdapter, valueAdapterOrNull, interactionInitiatedBy);
+
+            }
+        },
+        CLEAR {
+            @Override
+            boolean meetsPrereqs(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
+                return facet.clearFacet != null;
+            }
+
+            @Override
+            void invoke(
+                    final PropertySetterOrClearFacetForDomainEventAbstract facet,
+                    final OneToOneAssociation owningProperty,
+                    final ObjectAdapter targetAdapter,
+                    final ObjectAdapter valueAdapterOrNull,
+                    final InteractionInitiatedBy interactionInitiatedBy) {
+
+                facet.clearFacet.clearProperty(
+                        owningProperty, targetAdapter, interactionInitiatedBy);
+
+            }
+        };
+
+        abstract boolean meetsPrereqs(final PropertySetterOrClearFacetForDomainEventAbstract facet);
+
+        abstract void invoke(
+                final PropertySetterOrClearFacetForDomainEventAbstract facet,
+                final OneToOneAssociation owningProperty,
+                final ObjectAdapter targetAdapter,
+                final ObjectAdapter valueAdapterOrNull,
+                final InteractionInitiatedBy interactionInitiatedBy);
+    }
+
+    public void clearProperty(
+            final OneToOneAssociation owningProperty,
+            final ObjectAdapter targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        setOrClearProperty(Type.CLEAR,
+                owningProperty, targetAdapter, null, interactionInitiatedBy);
+
+    }
+
     public void setProperty(
+            final OneToOneAssociation owningProperty,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter newValueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        setOrClearProperty(Type.SET,
+                owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
+
+    }
+
+    private void setOrClearProperty(
+            final Type type,
             final OneToOneAssociation owningAssociation,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        // similar code in PropertyClearFacetFDEA and ActionInvocationFacetFDEA
+        // similar code in ActionInvocationFacetFDEA
 
-        if(setterFacet == null) {
+        if(!type.meetsPrereqs(this)) {
             return;
         }
 
@@ -97,7 +170,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
                         getIdentified(), targetAdapter,
                         oldValue, newValue);
 
-        setPropertyInternal(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
+        setPropertyInternal(type, owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
         // reading the actual value from the target object, playing it safe...
         final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
@@ -113,25 +186,27 @@ public abstract class PropertySetterFacetForDomainEventAbstract
     }
 
     public void setPropertyInternal(
-            final OneToOneAssociation owningAssociation,
+            final Type type,
+            final OneToOneAssociation owningProperty,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        // similar code in PropertyClearFacetFDEA and ActionInvocationFacetFDEA
+        // similar code in ActionInvocationFacetFDEA
 
-        owningAssociation.setupCommand(targetAdapter, newValueAdapter);
+        owningProperty.setupCommand(targetAdapter, newValueAdapter);
 
-        invokeThruCommand(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
+        invokeThruCommand(type, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
     }
 
     private void invokeThruCommand(
+            final Type type,
             final OneToOneAssociation owningProperty,
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapter,
+            final ObjectAdapter valueAdapterOrNull,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        // similar code in PropertyClearFacetFDEA and ActionInvocationFacetFDEA
+        // similar code in ActionInvocationFacetFDEA
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
@@ -159,14 +234,13 @@ public abstract class PropertySetterFacetForDomainEventAbstract
             // otherwise, go ahead and execute action in the 'foreground'
 
             final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
-            final Object argValue = ObjectAdapter.Util.unwrap(valueAdapter);
+            final Object argValue = ObjectAdapter.Util.unwrap(valueAdapterOrNull);
 
             final Interaction.PropertyArgs propertyArgs = new Interaction.PropertyArgs(propertyId, target, argValue);
             final Interaction.MemberCallable<?> callable = new Interaction.MemberCallable<Interaction.PropertyArgs>() {
                         @Override public Object call(final Interaction.PropertyArgs propertyArgs11) {
 
-                            setterFacet.setProperty(
-                                    owningProperty, targetAdapter, valueAdapter, interactionInitiatedBy);
+                            type.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty, targetAdapter, valueAdapterOrNull, interactionInitiatedBy);
                             return null;
                         }
                     };
