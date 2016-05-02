@@ -17,10 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/mim"
+<xs:schema targetNamespace="http://isis.apache.org/schema/ixn"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://isis.apache.org/schema/mim"
+           xmlns="http://isis.apache.org/schema/ixn"
            xmlns:cmd="http://isis.apache.org/schema/cmd"
            xmlns:common="http://isis.apache.org/schema/common"
         >
@@ -28,7 +28,7 @@
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
     <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.0.xsd"/>
 
-    <xs:element name="memberInteractionMementoDto">
+    <xs:element name="interactionDto">
         <xs:annotation>
             <xs:documentation>Represents v1.0 of this schema, replacing and generalizing the earlier 'actionInvocationMemento'.
             </xs:documentation>
@@ -53,19 +53,13 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="interaction" type="memberInteractionDto"/>
-                <xs:element name="subInteractions" type="memberInteractionDto" minOccurs="0" maxOccurs="unbounded">
-                    <xs:annotation>
-                        <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property modification, and - much rarer - for a property modification to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
+                <xs:element name="execution" type="interactionExecutionDto"/>
             </xs:sequence>
         </xs:complexType>
 
     </xs:element>
 
-    <xs:complexType name="memberInteractionDto" abstract="true">
+    <xs:complexType name="interactionExecutionDto" abstract="true">
         <xs:annotation>
             <xs:documentation>Represents either an action invocation or a property modification.  Is subclassed by both.
             </xs:documentation>
@@ -119,12 +113,24 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="subExecutions" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="subExecution" type="interactionExecutionDto" minOccurs="0" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property modification, and - much rarer - for a property modification to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="actionInvocationDto">
         <xs:complexContent>
-            <xs:extension base="memberInteractionDto">
+            <xs:extension base="interactionExecutionDto">
                 <xs:sequence>
                     <xs:element name="parameters" minOccurs="1" maxOccurs="1">
                         <xs:annotation>
@@ -151,7 +157,7 @@
 
     <xs:complexType name="propertyModificationDto">
         <xs:complexContent>
-            <xs:extension base="memberInteractionDto">
+            <xs:extension base="interactionExecutionDto">
                 <xs:sequence>
                     <xs:element name="newValue" type="cmd:paramDto"/>
                 </xs:sequence>

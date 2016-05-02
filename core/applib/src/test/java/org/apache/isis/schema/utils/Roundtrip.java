@@ -36,9 +36,9 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueType;
-import org.apache.isis.schema.mim.v1.ActionInvocationDto;
-import org.apache.isis.schema.mim.v1.MemberInteractionMementoDto;
-import org.apache.isis.schema.mim.v1.ReturnDto;
+import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
+import org.apache.isis.schema.ixn.v1.InteractionDto;
+import org.apache.isis.schema.ixn.v1.ReturnDto;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -59,264 +59,266 @@ public class Roundtrip {
         returnDto.setReturnType(ValueType.BOOLEAN);
         returnDto.setNull(true);
 
-        final MemberInteractionMementoDto mim = MemberInteractionMementoDtoUtils.newActionDto(
+        final InteractionDto interactionDto = InteractionDtoUtils.newActionDto(
                 UUID.randomUUID(),
                 1,
                 new Bookmark("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(), returnDto, "freddyUser",
                 startedAt, completedAt);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aString", String.class, "Fred", null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullString", String.class, (String) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aString", String.class, "Fred", null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullString", String.class, (String) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aByte", Byte.class, (Byte) (byte) 123, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullByte", Byte.class, (Byte) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aByte", Byte.class, (Byte) (byte) 123, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullByte", Byte.class, (Byte) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aShort", Short.class, (Short) (short) 32123, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullShort", Short.class, (Short) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aShort", Short.class, (Short) (short) 32123, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullShort", Short.class, (Short) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "anInt", Integer.class, 123454321, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullInt", Integer.class, (Integer) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "anInt", Integer.class, 123454321, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullInt", Integer.class, (Integer) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aLong", Long.class, 1234567654321L, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullLong", Long.class, (Long) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aLong", Long.class, 1234567654321L, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullLong", Long.class, (Long) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aFloat", Float.class, 12345.6789F, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullFloat", Float.class, (Float) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aFloat", Float.class, 12345.6789F, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullFloat", Float.class, (Float) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aDouble", Double.class, 12345678.90123, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullDouble", Double.class, (Double) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aDouble", Double.class, 12345678.90123, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullDouble", Double.class, (Double) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aBoolean", Boolean.class, true, null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullBoolean", Boolean.class, (Boolean) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aBoolean", Boolean.class, true, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullBoolean", Boolean.class, (Boolean) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aChar", Character.class, 'x', null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullChar", Character.class, (Character) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aChar", Character.class, 'x', null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullChar", Character.class, (Character) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aBigInteger", java.math.BigInteger.class, new java.math.BigInteger("12345678901234567890"), null);
-        MemberInteractionMementoDtoUtils
-                .addParamArg(mim, "nullBigInteger", java.math.BigInteger.class, (java.math.BigInteger) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aBigInteger", java.math.BigInteger.class, new java.math.BigInteger("12345678901234567890"), null);
+        InteractionDtoUtils
+                .addParamArg(interactionDto, "nullBigInteger", java.math.BigInteger.class, (java.math.BigInteger) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aBigDecimal", java.math.BigDecimal.class, new java.math.BigDecimal("12345678901234567890"), null);
-        MemberInteractionMementoDtoUtils
-                .addParamArg(mim, "nullBigDecimal", java.math.BigDecimal.class, (java.math.BigDecimal) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aBigDecimal", java.math.BigDecimal.class, new java.math.BigDecimal("12345678901234567890"), null);
+        InteractionDtoUtils
+                .addParamArg(interactionDto, "nullBigDecimal", java.math.BigDecimal.class, (java.math.BigDecimal) null, null);
 
-        MemberInteractionMementoDtoUtils
-                .addParamArg(mim, "aJodaDateTime", org.joda.time.DateTime.class, new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1), null);
-        MemberInteractionMementoDtoUtils
-                .addParamArg(mim, "nullJodaDateTime", org.joda.time.DateTime.class, (org.joda.time.DateTime) null, null);
+        InteractionDtoUtils
+                .addParamArg(interactionDto, "aJodaDateTime", org.joda.time.DateTime.class, new org.joda.time.DateTime(2015, 5, 23, 9, 54, 1), null);
+        InteractionDtoUtils
+                .addParamArg(interactionDto, "nullJodaDateTime", org.joda.time.DateTime.class, (org.joda.time.DateTime) null, null);
 
-        MemberInteractionMementoDtoUtils
-                .addParamArg(mim, "aJodaLocalDate", org.joda.time.LocalDate.class, new org.joda.time.LocalDate(2015, 5, 23), null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullJodaLocalDate", org.joda.time.LocalDate.class, (org.joda.time.LocalDate) null, null);
+        InteractionDtoUtils
+                .addParamArg(interactionDto, "aJodaLocalDate", org.joda.time.LocalDate.class, new org.joda.time.LocalDate(2015, 5, 23), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullJodaLocalDate", org.joda.time.LocalDate.class, (org.joda.time.LocalDate) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aJodaLocalDateTime", org.joda.time.LocalDateTime.class, new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1), null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullJodaLocalDateTime", org.joda.time.LocalDateTime.class, (org.joda.time.LocalDateTime) null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aJodaLocalDateTime", org.joda.time.LocalDateTime.class, new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullJodaLocalDateTime", org.joda.time.LocalDateTime.class, (org.joda.time.LocalDateTime) null, null);
 
-        MemberInteractionMementoDtoUtils
-                .addParamArg(mim, "aJodaLocalTime", org.joda.time.LocalTime.class, new org.joda.time.LocalTime(9, 54, 1), null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullJodaLocalTime", org.joda.time.LocalTime.class, (org.joda.time.LocalTime) null, null);
+        InteractionDtoUtils
+                .addParamArg(interactionDto, "aJodaLocalTime", org.joda.time.LocalTime.class, new org.joda.time.LocalTime(9, 54, 1), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullJodaLocalTime", org.joda.time.LocalTime.class, (org.joda.time.LocalTime) null, null);
 
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "aReference", null, new Bookmark("ORD", "12345"), null);
-        MemberInteractionMementoDtoUtils.addParamArg(mim, "nullReference", null, null, null);
+        InteractionDtoUtils.addParamArg(interactionDto, "aReference", null, new Bookmark("ORD", "12345"), null);
+        InteractionDtoUtils.addParamArg(interactionDto, "nullReference", null, null, null);
 
 
         // when
         final CharArrayWriter caw = new CharArrayWriter();
-        MemberInteractionMementoDtoUtils.toXml(mim, caw);
+        InteractionDtoUtils.toXml(interactionDto, caw);
 
-        MemberInteractionMementoDtoUtils.dump(mim, System.out);
+        InteractionDtoUtils.dump(interactionDto, System.out);
 
         final CharArrayReader reader = new CharArrayReader(caw.toCharArray());
-        final MemberInteractionMementoDto recreated = MemberInteractionMementoDtoUtils.fromXml(reader);
+        final InteractionDto recreated = InteractionDtoUtils.fromXml(reader);
 
 
         // then
-        assertThat(recreated.getInteraction().getMemberIdentifier(), Matchers.is(mim.getInteraction().getMemberIdentifier()));
-        assertThat(recreated.getInteraction().getTarget().getObjectType(), Matchers.is(mim.getInteraction().getTarget().getObjectType()));
-        assertThat(recreated.getInteraction().getTarget().getObjectIdentifier(), Matchers.is(mim.getInteraction().getTarget().getObjectIdentifier()));
+        assertThat(recreated.getExecution().getMemberIdentifier(), Matchers.is(interactionDto.getExecution().getMemberIdentifier()));
+        assertThat(recreated.getExecution().getTarget().getObjectType(), Matchers.is(interactionDto.getExecution().getTarget().getObjectType()));
+        assertThat(recreated.getExecution().getTarget().getObjectIdentifier(), Matchers.is(interactionDto.getExecution().getTarget().getObjectIdentifier()));
 
-        final ActionInvocationDto invocationDto = (ActionInvocationDto) recreated.getInteraction();
+        final ActionInvocationDto invocationDto = (ActionInvocationDto) recreated.getExecution();
 
         int param = 0;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aString"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.STRING));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, String.class), is("Fred"));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aString"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.STRING));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, String.class), is("Fred"));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullString"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.STRING));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, String.class), is(nullValue()));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullString"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.STRING));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, String.class), is(nullValue()));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aByte"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BYTE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, Byte.class), is((byte) 123));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aByte"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BYTE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, Byte.class), is((byte) 123));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BYTE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullByte"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BYTE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullByte"));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aShort"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.SHORT));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, Short.class), is((short) 32123));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aShort"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.SHORT));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, Short.class), is((short) 32123));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullShort"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.SHORT));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullShort"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.SHORT));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("anInt"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.INT));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, int.class), is((int) 123454321));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("anInt"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.INT));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, int.class), is((int) 123454321));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullInt"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.INT));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullInt"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.INT));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aLong"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LONG));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, long.class), is((long) 1234567654321L));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aLong"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LONG));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, long.class), is((long) 1234567654321L));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullLong"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LONG));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullLong"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LONG));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aFloat"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.FLOAT));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, float.class), is((float) 12345.6789F));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aFloat"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.FLOAT));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, float.class), is((float) 12345.6789F));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullFloat"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.FLOAT));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullFloat"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.FLOAT));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aDouble"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.DOUBLE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, double.class), is(12345678.90123));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aDouble"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.DOUBLE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, double.class), is(12345678.90123));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullDouble"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.DOUBLE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullDouble"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.DOUBLE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aBoolean"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BOOLEAN));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, boolean.class), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aBoolean"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BOOLEAN));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, boolean.class), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullBoolean"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BOOLEAN));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullBoolean"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BOOLEAN));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aChar"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.CHAR));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, char.class), is('x'));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aChar"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.CHAR));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, char.class), is('x'));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullChar"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.CHAR));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullChar"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.CHAR));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aBigInteger"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_INTEGER));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, BigInteger.class), is(new java.math.BigInteger("12345678901234567890")));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aBigInteger"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_INTEGER));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, BigInteger.class), is(new java.math.BigInteger("12345678901234567890")));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullBigInteger"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_INTEGER));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullBigInteger"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_INTEGER));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aBigDecimal"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_DECIMAL));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, BigDecimal.class), is(new java.math.BigDecimal("12345678901234567890")));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aBigDecimal"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_DECIMAL));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, BigDecimal.class), is(new java.math.BigDecimal("12345678901234567890")));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullBigDecimal"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_DECIMAL));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullBigDecimal"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_DECIMAL));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aJodaDateTime"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         // bit hacky... regular comparison fails but toString() works... must be some additional data that differs, not sure what tho'
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, DateTime.class).toString(), is(new DateTime(2015, 5, 23, 9, 54, 1).toString()));
+        assertThat(
+                InteractionDtoUtils.getArg(invocationDto, param, DateTime.class).toString(), is(new DateTime(2015, 5, 23, 9, 54, 1).toString()));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullJodaDateTime"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));;
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_DATE_TIME));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));;
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDate"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        final LocalDate actual = MemberInteractionMementoDtoUtils.getArg(invocationDto, param, LocalDate.class);
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDate"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        final LocalDate actual = InteractionDtoUtils.getArg(invocationDto, param, LocalDate.class);
         final LocalDate expected = new LocalDate(2015, 5, 23);
         assertThat(actual, equalTo(expected));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDate"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDate"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDateTime"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, LocalDateTime.class), is(new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1)));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, LocalDateTime.class), is(new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1)));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDateTime"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDateTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalTime"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, LocalTime.class), is(new org.joda.time.LocalTime(9, 54, 1)));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(
+                InteractionDtoUtils.getArg(invocationDto, param, LocalTime.class), is(new org.joda.time.LocalTime(9, 54, 1)));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalTime"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalTime"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("aReference"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.REFERENCE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, OidDto.class).getObjectType(), is("ORD"));
-        assertThat(MemberInteractionMementoDtoUtils.getArg(invocationDto, param, OidDto.class).getObjectIdentifier(), is("12345"));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aReference"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.REFERENCE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, OidDto.class).getObjectType(), is("ORD"));
+        assertThat(InteractionDtoUtils.getArg(invocationDto, param, OidDto.class).getObjectIdentifier(), is("12345"));
 
         param++;
-        assertThat(MemberInteractionMementoDtoUtils.getParameterName(invocationDto, param), is("nullReference"));
-        assertThat(MemberInteractionMementoDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.REFERENCE));
-        assertThat(MemberInteractionMementoDtoUtils.isNull(invocationDto, param), is(true));
+        assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullReference"));
+        assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.REFERENCE));
+        assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
 
         param++;
 //        final int expected = param;

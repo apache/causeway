@@ -72,9 +72,9 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.mim.v1.MemberInteractionMementoDto;
-import org.apache.isis.schema.mim.v1.ReturnDto;
-import org.apache.isis.schema.utils.MemberInteractionMementoDtoUtils;
+import org.apache.isis.schema.ixn.v1.InteractionDto;
+import org.apache.isis.schema.ixn.v1.ReturnDto;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -364,11 +364,11 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Object resultPojo = argAdapter != null? argAdapter.getObject(): null;
 
         final ReturnDto returnDto = new ReturnDto();
-        MemberInteractionMementoDtoUtils.setValue(returnDto, returnType, resultPojo);
+        InteractionDtoUtils.setValue(returnDto, returnType, resultPojo);
 
         for (PublisherService publisherService : publisherServices) {
-            final MemberInteractionMementoDto aimDto =
-                MemberInteractionMementoDtoUtils.newActionDto(
+            final InteractionDto interactionDto =
+                InteractionDtoUtils.newActionDto(
                         transactionId,
                         nextEventSequence,
                         targetBookmark,
@@ -379,9 +379,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                         startedAt, completedAt
                 );
 
-            MemberInteractionMementoDtoUtils.addReturn(aimDto, returnType, resultPojo, bookmarkService);
+            InteractionDtoUtils.addReturn(interactionDto, returnType, resultPojo, bookmarkService);
 
-            publisherService.publish(aimDto);
+            publisherService.publish(interactionDto);
         }
     }
 

@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.schema.mim.v1.MemberInteractionMementoDto;
 
 /**
  * Will be called whenever an publishable entity has changed its state, or an published action has been invoked.
@@ -44,7 +43,7 @@ public interface PublishingService {
      * @param metadata
      * @param payload
      *
-     * @deprecated - use instead {@link PublisherService#publish(MemberInteractionMementoDto)}.
+     * @deprecated - use instead {@link PublisherService#publish(org.apache.isis.schema.ixn.v1.InteractionDto)}.
      */
     @Deprecated
     @Programmatic

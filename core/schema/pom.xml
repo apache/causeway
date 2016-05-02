@@ -68,19 +68,19 @@
                         <artifactId>maven-jaxb2-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>generate-mim-xsd</id>
+                                <id>generate-ixn-xsd</id>
                                 <phase>generate-sources</phase>
                                 <goals>
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <schemaDirectory>src/main/resources/org/apache/isis/schema/mim</schemaDirectory>
+                                    <schemaDirectory>src/main/resources/org/apache/isis/schema/ixn</schemaDirectory>
                                     <schemaIncludes>
-                                        <schemaInclude>mim-1.0.xsd</schemaInclude>
+                                        <schemaInclude>ixn-1.0.xsd</schemaInclude>
                                     </schemaIncludes>
-                                    <bindingDirectory>src/main/resources/org/apache/isis/schema/mim</bindingDirectory>
+                                    <bindingDirectory>src/main/resources/org/apache/isis/schema/ixn</bindingDirectory>
                                     <bindingIncludes>
-                                        <bindingInclude>mim-1.0-binding.xml</bindingInclude>
+                                        <bindingInclude>ixn-1.0-binding.xml</bindingInclude>
                                     </bindingIncludes>
                                     <args>
                                         <arg>-extension</arg>
