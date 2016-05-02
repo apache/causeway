@@ -29,14 +29,13 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
-import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.services.command.CommandDtoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -53,22 +52,18 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 
-/**
- * Depends on an implementation of {@link BackgroundCommandService} to
- * be configured.
- */
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class CommandDtoServiceDefault implements CommandDtoService {
+public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
     private final MementoServiceDefault mementoService;
 
-    public CommandDtoServiceDefault() {
+    public CommandDtoServiceInternalDefault() {
         this(new MementoServiceDefault());
     }
 
-    CommandDtoServiceDefault(MementoServiceDefault mementoService) {
+    CommandDtoServiceInternalDefault(MementoServiceDefault mementoService) {
         this.mementoService = mementoService.withNoEncoding();
     }
     

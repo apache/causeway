@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandDtoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
@@ -351,8 +351,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapterOrNull) {
 
-        final CommandDtoService commandDtoService = getCommandDtoService();
-        final CommandDto dto = commandDtoService.asCommandDto(
+        final CommandDtoServiceInternal commandDtoServiceInternal = getCommandDtoService();
+        final CommandDto dto = commandDtoServiceInternal.asCommandDto(
                 Collections.singletonList(targetAdapter), this, valueAdapterOrNull);
 
         setupCommandDtoAndExecutionContext(dto);

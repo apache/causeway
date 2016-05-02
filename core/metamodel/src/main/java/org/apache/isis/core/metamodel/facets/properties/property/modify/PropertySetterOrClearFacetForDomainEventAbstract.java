@@ -238,7 +238,9 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
             final Interaction.PropertyArgs propertyArgs = new Interaction.PropertyArgs(propertyId, target, argValue);
             final Interaction.MemberCallable<?> callable = new Interaction.MemberCallable<Interaction.PropertyArgs>() {
-                        @Override public Object call(final Interaction.PropertyArgs propertyArgs11) {
+                        @Override public Object call(
+                                final Interaction.Execution currentExecution,
+                                final Interaction.PropertyArgs propertyArgs11) {
 
                             type.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty, targetAdapter, valueAdapterOrNull, interactionInitiatedBy);
                             return null;

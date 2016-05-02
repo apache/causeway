@@ -31,7 +31,6 @@ import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -116,58 +115,99 @@ public final class InteractionDtoUtils {
     }
     //endregion
 
-    //region > newDto
+    //region > newInteractionDto, newInteractionDtoWithActionExecution
 
-    enum Type {
-        ACTION_INVOCATION,
-        PROPERTY_MODIFICATION
+    public static InteractionDto newInteractionDto(final String transactionId) {
+        final InteractionDto interactionDto = new InteractionDto();
+
+        interactionDto.setMajorVersion("1");
+        interactionDto.setMinorVersion("0");
+
+        interactionDto.setTransactionId(transactionId);
+        return interactionDto;
     }
 
-    /**
-     *
-     * @param newValueDto - will be null if clearing the property
-     */
-    public static InteractionDto newPropertyDto(
-            final UUID transactionId,
-            final int sequence,
-            final Bookmark targetBookmark,
-            final String targetTitle,
-            final String propertyIdentifier,
-            final ParamDto newValueDto,
-            final String user,
-            final Timestamp startedAt, final Timestamp completedAt
-    ) {
-
-        return newDto(Type.PROPERTY_MODIFICATION, transactionId, sequence, targetBookmark, targetTitle,
-                propertyIdentifier, null, null, newValueDto,
-                user, startedAt, completedAt);
-
-    }
-
-    public static InteractionDto newActionDto(
-            final UUID transactionId,
+    public static InteractionDto newInteractionDtoWithActionInvocation(
+            final String transactionId,
             final int sequence,
             final Bookmark targetBookmark,
             final String targetTitle,
             final String actionIdentifier,
             final List<ParamDto> parameterDtos,
             final ReturnDto returnDto,
-            final String user,
-            final Timestamp startedAt, final Timestamp completedAt) {
+            final String user) {
 
-        return newDto(Type.ACTION_INVOCATION, transactionId, sequence, targetBookmark, targetTitle, actionIdentifier,
-                parameterDtos, returnDto, null,
-                user, startedAt, completedAt);
+        final InteractionDto interactionDto = newInteractionDto(transactionId);
+
+        final InteractionExecutionDto executionDto = newActionInvocation(
+                sequence, targetBookmark, targetTitle,
+                actionIdentifier, parameterDtos, returnDto,
+                user, transactionId);
+
+        addExecution(interactionDto, executionDto);
+
+        return interactionDto;
     }
 
-    /**
-     * @param parameterDtos - populated only for actions
-     * @param returnDto     - populated only for actions (could be null)
-     * @param newValueDto   - populated only for property modificaitons
-     */
-    private static InteractionDto newDto(
-            final Type type,
-            final UUID transactionId,
+    public static InteractionDto newInteractionDtoWithPropertyModification(
+            final String transactionId,
+            final int sequence,
+            final Bookmark targetBookmark,
+            final String targetTitle,
+            final String propertyIdentifier,
+            final ParamDto newValueDto,
+            final String user
+    ) {
+
+        final InteractionDto interactionDto = newInteractionDto(transactionId);
+
+        final InteractionExecutionDto executionDto = newPropertyModification(
+                sequence, targetBookmark, targetTitle,
+                propertyIdentifier, newValueDto,
+                user, transactionId);
+
+        addExecution(interactionDto, executionDto);
+
+        return interactionDto;
+    }
+
+    //endregion
+
+    //region > newActionInvocation, newPropertyModification
+
+    public static ActionInvocationDto newActionInvocation(
+            final int sequence,
+            final Bookmark targetBookmark,
+            final String targetTitle,
+            final String actionIdentifier,
+            final List<ParamDto> parameterDtos,
+            final ReturnDto returnDto, final String user, final String transactionId) {
+
+        return (ActionInvocationDto) newInteractionExecutionDto(
+                InteractionType.ACTION_INVOCATION, transactionId, sequence,
+                targetBookmark, targetTitle, actionIdentifier,
+                parameterDtos, returnDto, null,
+                user);
+    }
+
+    public static PropertyModificationDto newPropertyModification(
+            final int sequence,
+            final Bookmark targetBookmark,
+            final String targetTitle,
+            final String propertyIdentifier,
+            final ParamDto newValueDto,
+            final String user,
+            final String transactionId) {
+        return (PropertyModificationDto) newInteractionExecutionDto(
+                InteractionType.PROPERTY_MODIFICATION, transactionId, sequence,
+                targetBookmark, targetTitle, propertyIdentifier,
+                null, null, newValueDto,
+                user);
+    }
+
+    private static InteractionExecutionDto newInteractionExecutionDto(
+            final InteractionType type,
+            final String transactionId,
             final int sequence,
             final Bookmark targetBookmark,
             final String targetTitle,
@@ -175,33 +215,27 @@ public final class InteractionDtoUtils {
             final List<ParamDto> parameterDtos,
             final ReturnDto returnDto,
             final ParamDto newValueDto,
-            final String user,
-            final Timestamp startedAt, final Timestamp completedAt) {
-        final InteractionDto interactionDto = new InteractionDto();
-
-        interactionDto.setMajorVersion("1");
-        interactionDto.setMinorVersion("0");
-
-        interactionDto.setTransactionId(transactionId.toString());
+            final String user) {
 
         final InteractionExecutionDto executionDto;
-        if(type == Type.ACTION_INVOCATION) {
+        if(type == InteractionType.ACTION_INVOCATION) {
 
-            final ActionInvocationDto invocation = actionInvocationFor(interactionDto);
+            final ActionInvocationDto invocation = new ActionInvocationDto();
+
             final ActionInvocationDto.Parameters parameters = invocation.getParameters();
             parameters.getParameter().addAll(parameterDtos);
             invocation.setReturned(returnDto);
 
             executionDto = invocation;
         } else {
-            final PropertyModificationDto modification = propertyModificationFor(interactionDto);
-            // modification.
+            final PropertyModificationDto modification = new PropertyModificationDto();
+            modification.setNewValue(newValueDto);
 
             executionDto = modification;
         }
 
         executionDto.setSequence(sequence);
-        executionDto.setId(interactionDto.getTransactionId() + "." + sequence);
+        executionDto.setId(transactionId + "." + sequence);
 
         final OidDto target = new OidDto();
         target.setObjectType(targetBookmark.getObjectType());
@@ -212,12 +246,33 @@ public final class InteractionDtoUtils {
         executionDto.setUser(user);
 
         executionDto.setMemberIdentifier(memberIdentifier);
+        return executionDto;
+    }
 
+    //endregion
+
+    //region > addExecution
+
+    public static void addExecution(final InteractionDto interactionDto, final InteractionExecutionDto executionDto) {
+        interactionDto.setExecution(executionDto);
+
+        interactionDto.setInteractionType(
+                executionDto instanceof ActionInvocationDto
+                        ? InteractionType.ACTION_INVOCATION
+                        : InteractionType.PROPERTY_MODIFICATION);
+    }
+
+
+    //endregion
+
+    //region > addTimings
+    public static void addTimings(
+            final InteractionExecutionDto executionDto,
+            final Timestamp startedAt,
+            final Timestamp completedAt) {
         final PeriodDto timings = timingsFor(executionDto);
         timings.setStart(JavaSqlTimestampXmlGregorianCalendarAdapter.print(startedAt));
         timings.setComplete(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
-
-        return interactionDto;
     }
 
     //endregion
@@ -284,29 +339,21 @@ public final class InteractionDtoUtils {
      * @param result - either a value type (possibly boxed primitive), or a reference type
      * @param bookmarkService - used if not a value type
      */
-    public static void addReturn(
-            final InteractionDto interactionDto,
+    // REVIEW: done in InteractionDtoServiceInternalDefault, I believe
+    private static void addReturn(
+            final ActionInvocationDto invocationDto,
             final Class<?> returnType,
-            final Object result,
-            final BookmarkService bookmarkService) {
-        boolean isValueType = InteractionDtoUtils.addReturnValue(interactionDto, returnType, result);
+            final Object result, final BookmarkService bookmarkService) {
+        final ReturnDto returnDto = returnValueFor(invocationDto);
+        boolean isValueType = setValue(returnDto, returnType, result);
         if(!isValueType) {
-            InteractionDtoUtils.addReturnReference(interactionDto, bookmarkService.bookmarkFor(result));
+            addReturnReference(bookmarkService.bookmarkFor(result), invocationDto);
         }
     }
 
-    public static boolean addReturnValue(
-            final InteractionDto interactionDto,
-            final Class<?> returnType,
-            final Object returnVal) {
-        final ReturnDto returnDto = returnValueDtoFor(interactionDto);
-        return setValue(returnDto, returnType, returnVal);
-    }
-
-    public static void addReturnReference(
-            final InteractionDto interactionDto,
-            final Bookmark bookmark) {
-        final ReturnDto returnedDto = returnValueDtoFor(interactionDto);
+    // REVIEW: done in InteractionDtoServiceInternalDefault, I believe
+    private static void addReturnReference(final Bookmark bookmark, final ActionInvocationDto invocationDto) {
+        final ReturnDto returnedDto = returnValueFor(invocationDto);
         OidDto oidDto = CommonDtoUtils.asOidDto(bookmark);
         ValueDto value = new ValueDto();
         value.setReference(oidDto);
@@ -314,8 +361,8 @@ public final class InteractionDtoUtils {
         returnedDto.setReturnType(ValueType.REFERENCE);
     }
 
-    private static ReturnDto returnValueDtoFor(final InteractionDto ixnDto) {
-        ActionInvocationDto invocationDto = actionInvocationFor(ixnDto);
+    // REVIEW: done in InteractionDtoServiceInternalDefault, I believe
+    private static ReturnDto returnValueFor(final ActionInvocationDto invocationDto) {
         ReturnDto returned = invocationDto.getReturned();
         if(returned == null) {
             returned = new ReturnDto();
@@ -476,6 +523,7 @@ public final class InteractionDtoUtils {
     public static void dump(final InteractionDto ixnDto, final PrintStream out) throws JAXBException {
         out.println(toXml(ixnDto));
     }
+
     //endregion
 
 

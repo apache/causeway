@@ -56,7 +56,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.command.CommandDtoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -404,8 +404,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return commandContext;
     }
 
-    protected CommandDtoService getCommandDtoService() {
-        return lookupService(CommandDtoService.class);
+    protected CommandDtoServiceInternal getCommandDtoService() {
+        return lookupService(CommandDtoServiceInternal.class);
     }
 
     //endregion

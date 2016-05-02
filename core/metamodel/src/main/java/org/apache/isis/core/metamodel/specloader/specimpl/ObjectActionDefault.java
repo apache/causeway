@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandDtoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -589,13 +589,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
 
-        final CommandDtoService commandDtoService = getCommandDtoService();
+        final CommandDtoServiceInternal commandDtoServiceInternal = getCommandDtoService();
         final List<ObjectAdapter> commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
                         ? commandTargetAdaptersHolder.get()
                         : Collections.singletonList(targetAdapter);
 
-        final CommandDto dto = commandDtoService.asCommandDto(
+        final CommandDto dto = commandDtoServiceInternal.asCommandDto(
                 commandTargetAdapters, this, argumentAdapters);
 
         setupCommandDtoAndExecutionContext(dto);

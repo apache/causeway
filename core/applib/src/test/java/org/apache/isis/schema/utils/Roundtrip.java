@@ -59,11 +59,11 @@ public class Roundtrip {
         returnDto.setReturnType(ValueType.BOOLEAN);
         returnDto.setNull(true);
 
-        final InteractionDto interactionDto = InteractionDtoUtils.newActionDto(
-                UUID.randomUUID(),
+        final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDtoWithActionInvocation(
+                UUID.randomUUID().toString(),
                 1,
-                new Bookmark("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(), returnDto, "freddyUser",
-                startedAt, completedAt);
+                new Bookmark("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(), returnDto, "freddyUser"
+        );
 
         InteractionDtoUtils.addParamArg(interactionDto, "aString", String.class, "Fred", null);
         InteractionDtoUtils.addParamArg(interactionDto, "nullString", String.class, (String) null, null);

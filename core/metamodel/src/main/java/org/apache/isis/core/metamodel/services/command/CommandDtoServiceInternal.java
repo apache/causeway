@@ -32,7 +32,7 @@ import org.apache.isis.schema.cmd.v1.PropertyDto;
  * Used to create mementos of a command, such that it can be persisted and then executed either immediately (ie invoke
  * in the foreground) or deferred (ie invoke in the background at some later time).
  */
-public interface CommandDtoService {
+public interface CommandDtoServiceInternal {
 
     /**
      * Note that this method (more precisely, {@link ActionInvocationMemento}) does <i>not</i> support mixins.

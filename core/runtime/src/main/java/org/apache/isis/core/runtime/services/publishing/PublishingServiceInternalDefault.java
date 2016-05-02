@@ -39,12 +39,10 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
@@ -63,17 +61,15 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.services.command.CommandDtoService;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
-import org.apache.isis.schema.ixn.v1.ReturnDto;
+import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 /**
@@ -185,9 +181,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter
         );
 
-        publishActionToPublisherServices(
-                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter,
-                execution);
+        publishActionToPublisherServices(execution);
 
     }
 
@@ -319,76 +313,27 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
-    private void publishActionToPublisherServices(
-            final ObjectAction objectAction,
-            final IdentifiedHolder identifiedHolder,
-            final ObjectAdapter targetAdapter,
-            final List<ObjectAdapter> parameterAdapters,
-            final ObjectAdapter resultAdapter,
-            final Interaction.Execution execution) {
+    private void publishActionToPublisherServices(final Interaction.Execution execution) {
 
         if(publisherServices == null || publisherServices.isEmpty()) {
             return;
         }
 
         //
-        // TODO: currently MemberInteractionMementoDtoUtils does _not_ serialize out the call graph of Interaction.Execution; that enhancement might follow at a later stage.
+        // TODO: this is where we could now stitch together a deep call graph from the execution.getDto()s
         //
 
-        final Command command = commandContext.getCommand();
+        final InteractionExecutionDto executionDto = execution.getDto();
 
-        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-        final int nextEventSequence = command.next(sequenceName.abbr());
-        final UUID transactionId = command.getTransactionId();
-
-        final Object targetPojo = execution.getMemberArgs().getTarget();
-        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
-
-        final String actionClassNameId = execution.getMemberArgs().getMemberId();
-        final String actionId = actionClassNameId.substring(actionClassNameId.indexOf('#')+1);
-        final String targetTitle = targetBookmark.toString() + ": " + actionId;
-
-        final String currentUser = userService.getUser().getName();
-        final Timestamp startedAt = execution.getStartedAt();
-        final Timestamp completedAt = execution.getCompletedAt();
-
-        final ActionDto actionDto = new ActionDto();
-        commandDtoService.addActionArgs(
-                objectAction, actionDto, parameterAdapters.toArray(new ObjectAdapter[]{}));
-
-        final ObjectSpecification returnSpec = objectAction.getReturnType();
-
-
-        final Class<?> returnType = returnSpec.getCorrespondingClass();
-        final ObjectAdapter argAdapter = resultAdapter;
-        final Object resultPojo = argAdapter != null? argAdapter.getObject(): null;
-
-        final ReturnDto returnDto = new ReturnDto();
-        InteractionDtoUtils.setValue(returnDto, returnType, resultPojo);
+        final String transactionId = commandContext.getCommand().getTransactionId().toString();
+        final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDto(transactionId);
+        InteractionDtoUtils.addExecution(interactionDto, executionDto);
 
         for (PublisherService publisherService : publisherServices) {
-            final InteractionDto interactionDto =
-                InteractionDtoUtils.newActionDto(
-                        transactionId,
-                        nextEventSequence,
-                        targetBookmark,
-                        targetTitle,
-                        actionDto.getMemberIdentifier(),
-                        actionDto.getParameters(), returnDto,
-                        currentUser,
-                        startedAt, completedAt
-                );
-
-            InteractionDtoUtils.addReturn(interactionDto, returnType, resultPojo, bookmarkService);
-
             publisherService.publish(interactionDto);
         }
     }
 
-
-    private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
 
 
     @Inject
@@ -398,16 +343,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     private PublishingService publishingServiceIfAny;
 
     @Inject
-    CommandDtoService commandDtoService;
-
-    @Inject
-    private BookmarkService bookmarkService;
-
-    @Inject
     private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
 
     @Inject
-    private InteractionContext interactionContext;
+    private InteractionDtoServiceInternal interactionDtoServiceInternal;
 
     @Inject
     private CommandContext commandContext;
@@ -418,5 +357,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @Inject
     private UserService userService;
 
+
+    private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
 }

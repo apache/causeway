@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.services.command.CommandDtoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -228,13 +228,13 @@ public class BackgroundServiceDefault implements BackgroundService2 {
 
                     final List<ObjectAdapter> targetList = Collections.singletonList(domainObjectAdapter);
                     final CommandDto dto =
-                            commandDtoService.asCommandDto(targetList, action, argAdapters);
+                            commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
 
                     bcs2.schedule(dto, command, domainObjectClassName, targetActionName, targetArgs);
                 } else {
                     // fallback
                     final ActionInvocationMemento aim =
-                            commandDtoService.asActionInvocationMemento(proxyMethod, target, args);
+                            commandDtoServiceInternal.asActionInvocationMemento(proxyMethod, target, args);
 
                     backgroundCommandService.schedule(aim, command, domainObjectClassName, targetActionName, targetArgs);
                 }
@@ -282,7 +282,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     private BackgroundCommandService backgroundCommandService;
 
     @javax.inject.Inject
-    private CommandDtoService commandDtoService;
+    private CommandDtoServiceInternal commandDtoServiceInternal;
 
     @javax.inject.Inject
     private CommandContext commandContext;

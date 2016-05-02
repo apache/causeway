@@ -37,6 +37,9 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.schema.common.v1.PeriodDto;
+import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
+import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 /**
  * Represents an action invocation or property modification, resulting in some state change of the system.  It captures
@@ -98,7 +101,7 @@ public class Interaction implements HasTransactionId {
      * @param <T>
      */
     public interface MemberCallable<T extends MemberArgs> {
-        Object call(T args);
+        Object call(final Execution currentExecution, final T args);
     }
 
     public static abstract class MemberArgs {
@@ -214,7 +217,7 @@ public class Interaction implements HasTransactionId {
 
         try {
             try {
-                Object result = memberCallable.call(memberArgs);
+                Object result = memberCallable.call(currentExecution, memberArgs);
                 currentExecution.setReturned(result);
                 return (T)result;
             } catch (Exception e) {
@@ -231,156 +234,6 @@ public class Interaction implements HasTransactionId {
             final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
             pop(completedAt);
         }
-    }
-
-    /**
-     * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
-     * being made by way of the {@link WrapperFactory}).
-     */
-    public static class Execution {
-
-        //region > fields, constructor
-        private final Timestamp startedAt;
-        private final MemberArgs memberArgs;
-        private final Execution parent;
-        private final List<Execution> children = Lists.newArrayList();
-
-        public Execution(
-                final MemberArgs memberArgs, final Timestamp startedAt) {
-            this.startedAt = startedAt;
-            this.memberArgs = memberArgs;
-            this.parent = null;
-        }
-
-        public Execution(
-                final MemberArgs memberArgs, final Timestamp startedAt, final Execution parent) {
-            this.startedAt = startedAt;
-            this.parent = parent;
-            this.memberArgs = memberArgs;
-            parent.children.add(this);
-        }
-        //endregion
-
-        //region > parent
-        /**
-         * The action/property that invoked this action/property edit (if any).
-         */
-        public Execution getParent() {
-            return parent;
-        }
-        //endregion
-
-        //region > children
-        /**
-         * The actions/property edits made in turn via the {@link WrapperFactory}.
-         */
-        public List<Execution> getChildren() {
-            return Collections.unmodifiableList(children);
-        }
-        //endregion
-
-        //region > memberArgs
-        public MemberArgs getMemberArgs() {
-            return memberArgs;
-        }
-        //endregion
-
-        //region > event
-
-        private AbstractDomainEvent<?> event;
-        /**
-         * The domain event fired on the {@link EventBusService event bus} representing the execution of
-         * this action invocation/property edit.
-         */
-        public AbstractDomainEvent<?> getEvent() {
-            return event;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        public void setEvent(final AbstractDomainEvent<?> event) {
-            this.event = event;
-        }
-        //endregion
-
-        //region > startedAt
-
-
-        /**
-         * The date/time at which this execution started.
-         */
-        public Timestamp getStartedAt() {
-            return startedAt;
-        }
-
-
-        //endregion
-
-        //region > completedAt
-
-        private Timestamp completedAt;
-
-        /**
-         * The date/time at which this execution completed.
-         */
-        public Timestamp getCompletedAt() {
-            return completedAt;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        void setCompletedAt(Timestamp completedAt) {
-            this.completedAt = completedAt;
-        }
-
-        //endregion
-
-        //region > returned (property)
-
-        private Object returned;
-        /**
-         * The object returned by the action invocation/property edit.
-         *
-         * <p>
-         * If the action returned either a domain entity or a simple value (and did not throw an
-         * exception) then this object is provided here.
-         *
-         * <p>
-         * For <tt>void</tt> methods and for actions returning collections, the value
-         * will be <tt>null</tt>.
-         */
-        public Object getReturned() {
-            return returned;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        public void setReturned(Object returned) {
-            this.returned = returned;
-        }
-
-        //endregion
-
-        //region > threw (property)
-
-        private RuntimeException threw;
-        @Programmatic
-        public RuntimeException getThrew() {
-            return threw;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        public void setThrew(RuntimeException threw) {
-            this.threw = threw;
-        }
-
-        //endregion
-
     }
 
     /**
@@ -518,5 +371,194 @@ public class Interaction implements HasTransactionId {
     }
 
     //endregion
+
+    /**
+     * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
+     * being made by way of the {@link WrapperFactory}).
+     */
+    public static class Execution {
+
+        //region > fields, constructor
+        private final Timestamp startedAt;
+        private final MemberArgs memberArgs;
+        private final Execution parent;
+        private final List<Execution> children = Lists.newArrayList();
+
+        public Execution(
+                final MemberArgs memberArgs, final Timestamp startedAt) {
+            this.startedAt = startedAt;
+            this.memberArgs = memberArgs;
+            this.parent = null;
+        }
+
+        public Execution(
+                final MemberArgs memberArgs, final Timestamp startedAt, final Execution parent) {
+            this.startedAt = startedAt;
+            this.parent = parent;
+            this.memberArgs = memberArgs;
+            parent.children.add(this);
+        }
+        //endregion
+
+        //region > parent
+        /**
+         * The action/property that invoked this action/property edit (if any).
+         */
+        public Execution getParent() {
+            return parent;
+        }
+        //endregion
+
+        //region > children
+        /**
+         * The actions/property edits made in turn via the {@link WrapperFactory}.
+         */
+        public List<Execution> getChildren() {
+            return Collections.unmodifiableList(children);
+        }
+        //endregion
+
+        //region > memberArgs
+        public MemberArgs getMemberArgs() {
+            return memberArgs;
+        }
+        //endregion
+
+        //region > event
+
+        private AbstractDomainEvent<?> event;
+        /**
+         * The domain event fired on the {@link EventBusService event bus} representing the execution of
+         * this action invocation/property edit.
+         */
+        public AbstractDomainEvent<?> getEvent() {
+            return event;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setEvent(final AbstractDomainEvent<?> event) {
+            this.event = event;
+        }
+        //endregion
+
+        //region > startedAt
+
+
+        /**
+         * The date/time at which this execution started.
+         */
+        public Timestamp getStartedAt() {
+            return startedAt;
+        }
+
+
+        //endregion
+
+        //region > completedAt
+
+        private Timestamp completedAt;
+
+        /**
+         * The date/time at which this execution completed.
+         */
+        public Timestamp getCompletedAt() {
+            return completedAt;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        void setCompletedAt(Timestamp completedAt) {
+            this.completedAt = completedAt;
+            syncMetrics();
+        }
+
+        //endregion
+
+        //region > returned (property)
+
+        private Object returned;
+        /**
+         * The object returned by the action invocation/property edit.
+         *
+         * <p>
+         * If the action returned either a domain entity or a simple value (and did not throw an
+         * exception) then this object is provided here.
+         *
+         * <p>
+         * For <tt>void</tt> methods and for actions returning collections, the value
+         * will be <tt>null</tt>.
+         */
+        public Object getReturned() {
+            return returned;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setReturned(Object returned) {
+            this.returned = returned;
+        }
+
+        //endregion
+
+        //region > threw (property)
+
+        private RuntimeException threw;
+        @Programmatic
+        public RuntimeException getThrew() {
+            return threw;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setThrew(RuntimeException threw) {
+            this.threw = threw;
+        }
+
+
+        //endregion
+
+        //region > dto (property)
+
+        private InteractionExecutionDto dto;
+
+        public InteractionExecutionDto getDto() {
+            return dto;
+        }
+
+        /**
+         * Set by framework (implementation of {@link MemberCallable})
+         */
+        public void setDto(final InteractionExecutionDto executionDto) {
+            this.dto = executionDto;
+            syncMetrics();
+        }
+
+        //endregion
+
+        //region > helpers (syncMetrics)
+        private void syncMetrics() {
+            if (this.dto == null) {
+                return;
+            }
+            final PeriodDto periodDto = periodDtoFor(this.dto);
+            periodDto.setStart(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getStartedAt()));
+            periodDto.setComplete(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getCompletedAt()));
+        }
+
+        private static PeriodDto periodDtoFor(final InteractionExecutionDto executionDto) {
+            PeriodDto timings = executionDto.getTimings();
+            if(timings == null) {
+                timings = new PeriodDto();
+            }
+            return timings;
+        }
+        //endregion
+
+    }
 
 }

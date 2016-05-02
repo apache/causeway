@@ -71,12 +71,14 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
@@ -331,7 +333,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(actionId, target, arguments);
             final Interaction.MemberCallable callable = new Interaction.MemberCallable<Interaction.ActionArgs>() {
                 @Override
-                public Object call(final Interaction.ActionArgs actionArgs) {
+                public Object call(
+                        final Interaction.Execution currentExecution,
+                        final Interaction.ActionArgs actionArgs) {
 
                     try {
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
@@ -341,6 +345,14 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         }
 
                         ObjectAdapter resultAdapter = cloneIfViewModelCloneable(resultPojo, targetAdapter);
+
+                        // update the current execution
+                        final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
+                        final ActionInvocationDto invocationDto =
+                                getInteractionDtoServiceInternal().asActionInvocationDto(
+                                    owningAction, targetAdapter, parameterAdapters, resultAdapter);
+
+                        currentExecution.setDto(invocationDto);
 
                         return resultAdapter != null ? resultAdapter.getObject() : null;
 
@@ -580,6 +592,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private PublishingServiceInternal getPublishingServiceInternal() {
         return lookupService(PublishingServiceInternal.class);
     }
+
+    private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
+        return lookupService(InteractionDtoServiceInternal.class);
+    }
+
 
     private <T> T lookupService(final Class<T> serviceClass) {
         T service = lookupServiceIfAny(serviceClass);
