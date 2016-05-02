@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstract implements ImperativeFacet {
 
@@ -62,9 +62,30 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
 
     @Override
     public void setProperty(
-            final ObjectAdapter targetAdapter,
+            final OneToOneAssociation owningAssociation, final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+
+        owningAssociation.setupCommand(targetAdapter, valueAdapter);
+
+        invokeThruCommand(owningAssociation, targetAdapter, valueAdapter);
+
+    }
+
+    private void invokeThruCommand(
+            final OneToOneAssociation owningAssociation,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter valueAdapter) {
+
+        // TODO: refactor to be the same as ActionInvocationFacetFDEA
+
+        final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
+        final Object argValue = ObjectAdapter.Util.unwrap(valueAdapter);
+
+        final String propertyId = owningAssociation.getIdentifier().toClassAndNameIdentityString();
+
+        final Interaction.PropertyArgs propertyArgs =
+                new Interaction.PropertyArgs(propertyId, target, argValue);
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
@@ -72,31 +93,14 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
 
-        // cf similar code in ActionInvocationFacetForDomainEventFacet
-        command.setExecutor(Command.Executor.USER);
-
-        command.setTarget(CommandUtil.bookmarkFor(targetAdapter));
-        command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-        command.setTargetAction(Command.ACTION_IDENTIFIER_FOR_EDIT);
-        command.setMemberIdentifier(Command.ACTION_IDENTIFIER_FOR_EDIT);
-
-        command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
-        command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
-
-        final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
-        final Object argValue = ObjectAdapter.Util.unwrap(valueAdapter);
-
-        final Interaction.PropertyArgs propertyArgs =
-                new Interaction.PropertyArgs(command, target, argValue);
-
         final Interaction.MemberCallable<?> callable =
                 new Interaction.MemberCallable<Interaction.PropertyArgs>() {
-                    @Override public Object call(final Interaction.PropertyArgs propertyArgs) {
+                    @Override public Object call(final Interaction.PropertyArgs propertyArgs11) {
                         return ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
                     }
                 };
 
-        interaction.execute(callable, propertyArgs, getClockService());
+        interaction.execute(callable, propertyArgs, getClockService(), command);
     }
 
     @Override

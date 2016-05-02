@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * The mechanism by which the value of the property can be set.
@@ -41,7 +42,8 @@ public interface PropertySetterFacet extends Facet {
      * Sets the value of this property.
      */
     public void setProperty(
-            ObjectAdapter inObject,
-            ObjectAdapter value,
+            final OneToOneAssociation owningAssociation,
+            final ObjectAdapter inObject,
+            final ObjectAdapter value,
             final InteractionInitiatedBy interactionInitiatedBy);
 }

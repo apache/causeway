@@ -114,16 +114,17 @@ public final class ActionInvocationMementoDtoUtils {
     }
     //endregion
 
-    //region > actionIdentifier, target
+    //region > newDto
 
     public static ActionInvocationMementoDto newDto(
             final UUID transactionId,
             final int sequence,
-            final String actionIdentifier,
             final Bookmark targetBookmark,
+            final ActionDto actionDto,
             final String title,
             final String user,
-            final Timestamp timestamp) {
+            final Timestamp startedAt, final Timestamp completedAt,
+            final ReturnDto returnDto) {
 
         final ActionInvocationMementoDto aim = new ActionInvocationMementoDto();
 
@@ -145,11 +146,12 @@ public final class ActionInvocationMementoDtoUtils {
         invocation.setTitle(title);
         invocation.setUser(user);
 
-        ActionDto action = actionFor(invocation);
-        action.setActionIdentifier(actionIdentifier);
+        invocation.setAction(actionDto);
+        invocation.setReturned(returnDto);
 
-        PeriodDto timings = timingsFor(invocation);
-        timings.setStart(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+        final PeriodDto timings = timingsFor(invocation);
+        timings.setStart(JavaSqlTimestampXmlGregorianCalendarAdapter.print(startedAt));
+        timings.setComplete(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
 
         return aim;
     }
@@ -333,14 +335,20 @@ public final class ActionInvocationMementoDtoUtils {
         return Collections.unmodifiableList(Lists.newArrayList(iterable));
     }
 
-    private static boolean setValue(
+    public static boolean setValue(
             final ReturnDto returnDto,
             final Class<?> type,
             final Object val) {
-        ValueDto valueDto = new ValueDto();
-        returnDto.setValue(valueDto);
-        setValueType(returnDto, type);
-        return CommonDtoUtils.setValue(valueDto, type, val);
+        if(val == null) {
+            returnDto.setNull(true);
+            return true;
+        } else {
+            returnDto.setNull(false);
+            final ValueDto valueDto = new ValueDto();
+            returnDto.setValue(valueDto);
+            setValueType(returnDto, type);
+            return CommonDtoUtils.setValue(valueDto, type, val);
+        }
     }
 
     private static boolean setValueType(

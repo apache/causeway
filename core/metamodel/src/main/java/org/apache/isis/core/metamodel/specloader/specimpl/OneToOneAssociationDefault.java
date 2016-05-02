@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -50,10 +51,12 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
 
 public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
 
@@ -209,7 +212,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             // TODO: move to facet ?
             throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString(null) + " (transient)");
         }
-        setterFacet.setProperty(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
+        setterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
 
     /**
@@ -222,6 +225,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final InteractionInitiatedBy interactionInitiatedBy) {
         clearValue(ownerAdapter, interactionInitiatedBy);
     }
+
 
     private void clearValue(
             final ObjectAdapter ownerAdapter,
@@ -319,6 +323,41 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     //endregion
+
+    /**
+     * Internal API
+     */
+    @Override
+    public void setupCommand(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter valueAdapter) {
+
+        setupCommandTarget(targetAdapter, valueAdapter);
+        setupCommandMemberIdentifier();
+        setupCommandMementoAndExecutionContext(targetAdapter, valueAdapter);
+    }
+
+    protected void setupCommandTarget(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter valueAdapter) {
+
+        final String arguments = CommandUtil.argDescriptionFor(valueAdapter);
+
+        setupCommandTarget(targetAdapter, arguments);
+    }
+
+    protected void setupCommandMementoAndExecutionContext(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter valueAdapter) {
+
+        final CommandMementoService commandMementoService = getCommandMementoService();
+        final CommandMementoDto dto = commandMementoService.asCommandMemento(targetAdapter, this, valueAdapter);
+
+        setupCommandMementoAndExecutionContext(dto);
+
+    }
+
+
 
     //region > debug, toString
     @Override

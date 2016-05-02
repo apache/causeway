@@ -235,14 +235,13 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private InvocationResult invoke(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] argumentAdapters) {
 
         try {
-            setupActionInvocationContext(owningAction, targetAdapter);
+            owningAction.setupActionInvocationContext(targetAdapter);
+            owningAction.setupCommand(targetAdapter, argumentAdapters);
 
-            owningAction.setupCommand(targetAdapter, arguments);
-
-            ObjectAdapter resultAdapter = invokeThruCommand(owningAction, targetAdapter, arguments);
+            ObjectAdapter resultAdapter = invokeThruCommand(owningAction, targetAdapter, argumentAdapters);
 
             return InvocationResult.forActionThatReturned(resultAdapter);
 
@@ -289,13 +288,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         return message;
     }
 
-    protected void setupActionInvocationContext(
-            final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter) {
-
-        owningAction.setupActionInvocationContext(targetAdapter);
-    }
-
     protected ObjectAdapter invokeThruCommand(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
@@ -308,19 +300,20 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
 
+        final String actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
 
         final ObjectAdapter resultAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
-                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+            command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
 
             // deal with background commands
 
-            // persist command so can be this command can be in the 'background'
+            // persist command so can it can subsequently be invoked in the 'background'
             final CommandService commandService = getCommandService();
             if (!commandService.persistIfPossible(command)) {
                 throw new IsisException(String.format(
-                        "Unable to schedule action '%s' to run in background; CommandService does not support persistent commands ",
-                                owningAction.getIdentifier().toClassAndNameIdentityString()));
+                        "Unable to persist command for action '%s'; CommandService does not support persistent commands ",
+                        actionId));
             }
             resultAdapter = getAdapterManager().adapterFor(command);
 
@@ -331,8 +324,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
             final List<Object> arguments = ObjectAdapter.Util.unwrap(Arrays.asList(argumentAdapters));
 
-
-            final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(command, target, arguments);
+            final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(actionId, target, arguments);
             final Interaction.MemberCallable callable = new Interaction.MemberCallable<Interaction.ActionArgs>() {
                 @Override
                 public Object call(final Interaction.ActionArgs actionArgs) {
@@ -355,7 +347,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             };
 
 
-            interaction.execute(callable, actionArgs, getClockService());
+            interaction.execute(callable, actionArgs, getClockService(), command);
 
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
@@ -374,7 +366,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
 
                 getPublishingServiceInternal().publishAction(
-                        owningAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter);
+                        priorExecution,
+                        owningAction, identifiedHolder,
+                        targetAdapter, parameterAdapters,
+                        resultAdapter);
             }
 
         }

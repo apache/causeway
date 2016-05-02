@@ -39,6 +39,7 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -62,13 +63,17 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
+import org.apache.isis.schema.aim.v2.ReturnDto;
+import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.utils.ActionInvocationMementoDtoUtils;
 
 /**
@@ -169,6 +174,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Programmatic
     public void publishAction(
+            final Interaction.Execution execution,
             final ObjectAction objectAction,
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
@@ -176,10 +182,12 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             final ObjectAdapter resultAdapter) {
 
         publishActionToPublishingService(
-                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter);
+                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter
+        );
 
         publishActionToPublisherServices(
-                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter);
+                objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter,
+                execution);
 
     }
 
@@ -187,7 +195,8 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             final ObjectAction objectAction,
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
-            final List<ObjectAdapter> parameterAdapters, final ObjectAdapter resultAdapter) {
+            final List<ObjectAdapter> parameterAdapters,
+            final ObjectAdapter resultAdapter) {
         if(publishingServiceIfAny == null) {
             return;
         }
@@ -315,10 +324,8 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
             final List<ObjectAdapter> parameterAdapters,
-            final ObjectAdapter resultAdapter) {
-
-        final Interaction interaction = interactionContext.getInteraction();
-        final Interaction.Execution execution = interaction.getPriorExecution();
+            final ObjectAdapter resultAdapter,
+            final Interaction.Execution execution) {
 
         if(publisherServices == null || publisherServices.isEmpty()) {
             return;
@@ -330,29 +337,45 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final int nextEventSequence = command.next(sequenceName.abbr());
         final UUID transactionId = command.getTransactionId();
 
-        final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(objectAction);
-        final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
+        final Object targetPojo = execution.getMemberArgs().getTarget();
+        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
 
-        final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-        final String oidStr = getOidMarshaller().marshal(adapterOid);
-        final Identifier actionIdentifier = objectAction.getIdentifier();
+        final String actionClassNameId = execution.getMemberArgs().getMemberId();
+        final String actionId = actionClassNameId.substring(actionClassNameId.indexOf('#')+1);
 
-        final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
+        final String title = targetBookmark.toString() + ": " + actionId;
 
         final String currentUser = userService.getUser().getName();
-        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+        final Timestamp startedAt = execution.getStartedAt();
+        final Timestamp completedAt = execution.getCompletedAt();
+
+        final ActionDto actionDto = new ActionDto();
+        commandMementoService.addActionArgs(
+                objectAction, actionDto, parameterAdapters.toArray(new ObjectAdapter[]{}));
+
+        final ObjectSpecification returnSpec = objectAction.getReturnType();
+
+
+        final Class<?> returnType = returnSpec.getCorrespondingClass();
+        final ObjectAdapter argAdapter = resultAdapter;
+        final Object resultPojo = argAdapter != null? argAdapter.getObject(): null;
+
+        final ReturnDto returnDto = new ReturnDto();
+        ActionInvocationMementoDtoUtils.setValue(returnDto, returnType, resultPojo);
 
         for (PublisherService publisherService : publisherServices) {
             final ActionInvocationMementoDto aimDto =
                 ActionInvocationMementoDtoUtils.newDto(
                         transactionId,
                         nextEventSequence,
-                        actionMemberIdentifier,
-                        actionTarget,
-                        title,
+                        targetBookmark,
+                        actionDto, title,
                         currentUser,
-                        timestamp
-                );
+                        startedAt, completedAt,
+                        returnDto);
+
+            ActionInvocationMementoDtoUtils.addReturn(aimDto, returnType, resultPojo, bookmarkService);
+
             publisherService.publish(aimDto);
         }
     }
@@ -368,6 +391,12 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Inject
     private PublishingService publishingServiceIfAny;
+
+    @Inject
+    CommandMementoService commandMementoService;
+
+    @Inject
+    private BookmarkService bookmarkService;
 
     @Inject
     private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;

@@ -78,6 +78,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -144,7 +145,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             FacetUtil.addFacet(new PropertySetterFacetAbstract(holder) {
                 @Override
                 public void setProperty(
-                        final ObjectAdapter inObject,
+                        final OneToOneAssociation owningAssociation, final ObjectAdapter inObject,
                         final ObjectAdapter value,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                 }

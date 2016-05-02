@@ -23,6 +23,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandMementoDto;
 
 /**
@@ -41,8 +43,9 @@ public interface CommandMementoService {
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
     /**
-     * Returns a JAXB DTO (hence convertible to XML) that represents the intention to invoke an action on an action
-     * (or possible many, for bulk actions).  The action can be a mixin action or a contributed action.
+     * Returns a JAXB DTO (hence convertible to XML) that represents the intention to invoke an action on a
+     * target object (or possible many targets, for bulk actions).  The action can be a mixin action or a
+     * contributed action.
      */
     @Programmatic
     CommandMementoDto asCommandMemento(
@@ -50,4 +53,20 @@ public interface CommandMementoService {
             final ObjectAction objectAction,
             final ObjectAdapter[] argAdapters);
 
-}
+    /**
+     * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit a property on
+     * a target.  The property can be a mixin or contributed.
+     */
+    @Programmatic
+    CommandMementoDto asCommandMemento(
+            final ObjectAdapter targetAdapter,
+            final OneToOneAssociation association,
+            final ObjectAdapter valueAdapter);
+
+    @Programmatic
+    void addActionArgs(
+            final ObjectAction objectAction,
+            final ActionDto actionDto,
+            final ObjectAdapter[] argAdapters);
+
+    }

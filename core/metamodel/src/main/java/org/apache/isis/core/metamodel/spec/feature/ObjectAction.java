@@ -204,7 +204,7 @@ public interface ObjectAction extends ObjectMember {
      */
     void setupCommand(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments);
+            final ObjectAdapter[] argumentAdapters);
 
     // //////////////////////////////////////////////////////
     // Utils

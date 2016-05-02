@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.publishing;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -32,6 +33,7 @@ public interface PublishingServiceInternal {
 
     @Programmatic
     void publishAction(
+            final Interaction.Execution execution,
             final ObjectAction objectAction,
             final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,

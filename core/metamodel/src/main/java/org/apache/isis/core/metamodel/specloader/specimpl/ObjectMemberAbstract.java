@@ -27,6 +27,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -37,6 +40,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -51,11 +56,14 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.command.CommandMementoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
@@ -382,6 +390,102 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     public CollectionTypeRegistry getCollectionTypeRegistry() {
         return collectionTypeRegistry;
+    }
+
+    protected <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
+    }
+
+    protected CommandContext getCommandContext() {
+        CommandContext commandContext = lookupService(CommandContext.class);
+        if (commandContext == null) {
+            throw new IllegalStateException("The CommandContext service is not registered!");
+        }
+        return commandContext;
+    }
+
+    protected CommandMementoService getCommandMementoService() {
+        return lookupService(CommandMementoService.class);
+    }
+
+    //endregion
+
+    //region > command (setup)
+
+
+    protected void setupCommandTarget(final ObjectAdapter targetAdapter, final String arguments) {
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
+
+        if(command.getTarget() != null) {
+            // already set up by a ObjectActionContributee or edit form; don't overwrite
+            return;
+        }
+
+        command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
+        command.setTargetAction(CommandUtil.targetActionNameFor(this));
+        command.setArguments(arguments);
+
+        final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
+        command.setTarget(targetBookmark);
+    }
+
+    protected void setupCommandMemberIdentifier() {
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
+
+        if (command.getMemberIdentifier() != null) {
+            // any contributed/mixin actions will fire after the main action
+            // the guard here prevents them from trashing the command's memberIdentifier
+            return;
+        }
+
+        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(this));
+    }
+
+    protected void setupCommandMementoAndExecutionContext(final CommandMementoDto dto) {
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        if (command.getExecutor() != Command.Executor.USER) {
+            return;
+        }
+
+        if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
+            // special case for edit properties, don't overwrite
+            return;
+        }
+
+        if (command.getMemento() != null) {
+            // guard here to prevent subsequent contributed/mixin actions from
+            // trampling over the command's memento and execution context
+            return;
+        }
+
+        // memento
+
+        final String mementoXml = CommandMementoDtoUtils.toXml(dto);
+        command.setMemento(mementoXml);
+
+        // copy over the command execution 'context' (if available)
+        final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
+        if(commandFacet != null && !commandFacet.isDisabled()) {
+            command.setExecuteIn(commandFacet.executeIn());
+            command.setPersistence(commandFacet.persistence());
+        } else {
+            // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
+            command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
+            command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
+        }
     }
 
     //endregion

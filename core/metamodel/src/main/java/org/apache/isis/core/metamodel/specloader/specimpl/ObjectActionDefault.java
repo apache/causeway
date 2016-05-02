@@ -23,8 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.ws.rs.HEAD;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -38,9 +36,6 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -56,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
@@ -80,7 +74,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.schema.cmd.v1.CommandMementoDto;
-import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
@@ -379,6 +372,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return execute(target, mixedInAdapter, arguments, interactionInitiatedBy);
     }
 
+
     @Override
     public ObjectAdapter execute(
             final ObjectAdapter targetAdapter,
@@ -450,6 +444,27 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     private ObjectAdapter adapterFor(final Object pojo) {
         return pojo == null ? null : getPersistenceSessionService().adapterFor(pojo);
     }
+
+    private static ThreadLocal<List<ObjectAdapter>> commandTargetAdaptersHolder = new ThreadLocal<>();
+
+    /**
+     * A horrible hack to be able to persist a number of adapters in the command object.
+     *
+     * <p>
+     *     What is really needed is to be able to invoke an action on a number of adapters all together.
+     * </p>
+     */
+    public static <T> T withTargetAdapters(final List<ObjectAdapter> adapters, final Callable<T> callable) {
+        commandTargetAdaptersHolder.set(adapters);
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            throw new ApplicationException(e);
+        } finally {
+            commandTargetAdaptersHolder.set(null);
+        }
+    }
+
 
     //endregion
 
@@ -527,7 +542,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public void setupActionInvocationContext(final ObjectAdapter targetAdapter) {
 
-        final Object targetPojo = unwrap(targetAdapter);
+        final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
 
         final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
         if (bulkFacet != null) {
@@ -554,131 +569,39 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public void setupCommand(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] argumentAdapters) {
 
-        setupCommandTarget(targetAdapter, arguments);
+        setupCommandTarget(targetAdapter, argumentAdapters);
         setupCommandMemberIdentifier();
-        setupCommandMementoAndExecutionContext(targetAdapter, arguments);
+        setupCommandMementoAndExecutionContext(targetAdapter, argumentAdapters);
     }
-
 
     protected void setupCommandTarget(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] argumentAdapters) {
 
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
+        final String arguments = CommandUtil.argDescriptionFor(this, argumentAdapters);
 
-        if (command.getExecutor() != Command.Executor.USER) {
-            return;
-        }
-
-        if(command.getTarget() != null) {
-            // already set up by a ObjectActionContributee or edit form;
-            // don't overwrite
-            return;
-        }
-
-        command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-        command.setTargetAction(CommandUtil.targetActionNameFor(this));
-        command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
-
-        final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
-        command.setTarget(targetBookmark);
-    }
-
-    protected void setupCommandMemberIdentifier() {
-
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
-
-        if (command.getExecutor() != Command.Executor.USER) {
-            return;
-        }
-
-        if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
-            // special case for edit properties, don't overwrite
-            return;
-        }
-
-        if (command.getMemberIdentifier() != null) {
-            // any contributed/mixin actions will fire after the main action
-            // the guard here prevents them from trashing the command's memberIdentifier
-            return;
-        }
-
-        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(this));
-    }
-
-    private static ThreadLocal<List<ObjectAdapter>> commandTargetAdaptersHolder = new ThreadLocal<>();
-
-    /**
-     * A horrible hack to be able to persist a number of adapters in the command object.
-     *
-     * <p>
-     *     What is really needed is to be able to invoke an action on a number of adapters all together.
-     * </p>
-     */
-    public static <T> T withTargetAdapters(final List<ObjectAdapter> adapters, final Callable<T> callable) {
-        commandTargetAdaptersHolder.set(adapters);
-        try {
-            return callable.call();
-        } catch (Exception e) {
-            throw new ApplicationException(e);
-        } finally {
-            commandTargetAdaptersHolder.set(null);
-        }
+        setupCommandTarget(targetAdapter, arguments);
     }
 
     protected void setupCommandMementoAndExecutionContext(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] argumentAdapters) {
 
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
-
-
-        if (command.getExecutor() != Command.Executor.USER) {
-            return;
-        }
-
-        if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
-            // special case for edit properties, don't overwrite
-            return;
-        }
-
-        if (command.getMemento() != null) {
-            // guard here to prevent subsequent contributed/mixin actions from
-            // trampling over the command's memento and execution context
-            return;
-        }
-
-        // memento
         final CommandMementoService commandMementoService = getCommandMementoService();
-
-        List<ObjectAdapter> commandTargetAdapters =
+        final List<ObjectAdapter> commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
                         ? commandTargetAdaptersHolder.get()
                         : Collections.singletonList(targetAdapter);
 
         final CommandMementoDto dto = commandMementoService.asCommandMemento(
-                commandTargetAdapters, this, arguments);
+                commandTargetAdapters, this, argumentAdapters);
 
-        final String mementoXml = CommandMementoDtoUtils.toXml(dto);
-        command.setMemento(mementoXml);
-
-        // copy over the command execution 'context' (if available)
-        final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
-        if(commandFacet != null && !commandFacet.isDisabled()) {
-            command.setExecuteIn(commandFacet.executeIn());
-            command.setPersistence(commandFacet.persistence());
-        } else {
-            // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
-            command.setExecuteIn(org.apache.isis.applib.annotation.Command.ExecuteIn.FOREGROUND);
-            command.setPersistence(org.apache.isis.applib.annotation.Command.Persistence.IF_HINTED);
-        }
+        setupCommandMementoAndExecutionContext(dto);
 
     }
+
 
     //endregion
 
@@ -713,26 +636,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
+    //region > services (lookup)
 
-    private static Object unwrap(final ObjectAdapter adapter) {
-        return adapter == null ? null : adapter.getObject();
-    }
-
-    private <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
-    }
-
-    protected CommandContext getCommandContext() {
-        CommandContext commandContext = lookupService(CommandContext.class);
-        if (commandContext == null) {
-            throw new IllegalStateException("The CommandContext service is not registered!");
-        }
-        return commandContext;
-    }
-
-    protected CommandMementoService getCommandMementoService() {
-        return lookupService(CommandMementoService.class);
-    }
 
     protected Bulk.InteractionContext getBulkInteractionContext() {
         return lookupService(Bulk.InteractionContext.class);
@@ -741,6 +646,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     protected org.apache.isis.applib.services.actinvoc.ActionInvocationContext getActionInvocationContext() {
         return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);
     }
+
+    //endregion
 
 
 }

@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public abstract class PropertySetterFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>>
@@ -62,6 +63,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
 
     @Override
     public void setProperty(
+            final OneToOneAssociation owningAssociation,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -69,7 +71,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
             return;
         }
         if(!domainEventHelper.hasEventBusService()) {
-            setterFacet.setProperty(targetAdapter, newValueAdapter, interactionInitiatedBy);
+            setterFacet.setProperty(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
             return;
         }
 
@@ -86,7 +88,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
                         oldValue, newValue);
 
         // ... perform the property modification
-        setterFacet.setProperty(targetAdapter, newValueAdapter, interactionInitiatedBy);
+        setterFacet.setProperty(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
         // reading the actual value from the target object, playing it safe...
         final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);

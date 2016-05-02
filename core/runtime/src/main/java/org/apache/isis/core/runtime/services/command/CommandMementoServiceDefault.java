@@ -42,12 +42,13 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 
 /**
@@ -158,6 +159,28 @@ public class CommandMementoServiceDefault implements CommandMementoService {
         final ActionDto actionDto = new ActionDto();
         dto.setAction(actionDto);
 
+        addActionArgs(objectAction, actionDto, argAdapters);
+
+        dto.setTransactionId(UUID.randomUUID().toString());
+        return dto;
+    }
+
+    @Override
+    public CommandMementoDto asCommandMemento(
+            final ObjectAdapter targetAdapter,
+            final OneToOneAssociation association,
+            final ObjectAdapter valueAdapter) {
+
+        // TODO.  introduce a choice for aim vs pmm, in the cmd.xsd
+
+        throw new RuntimeException("not yet implemented");
+    }
+
+    @Override
+    public void addActionArgs(
+            final ObjectAction objectAction,
+            final ActionDto actionDto,
+            final ObjectAdapter[] argAdapters) {
         final String actionIdentifier = CommandUtil.actionIdentifierFor(objectAction);
         actionDto.setActionIdentifier(actionIdentifier);
 
@@ -166,15 +189,13 @@ public class CommandMementoServiceDefault implements CommandMementoService {
             final ObjectActionParameter actionParameter = actionParameters.get(paramNum);
             final String parameterName = actionParameter.getName();
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
-            ObjectAdapter argAdapter = argAdapters[paramNum];
+            final ObjectAdapter argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
-            CommandMementoDtoUtils.addParamArg(actionDto.getParameters(), parameterName, paramType, arg, bookmarkService);
+            final List<ParamDto> parameters = actionDto.getParameters();
+            CommandMementoDtoUtils.addParamArg(
+                    parameters, parameterName, paramType, arg, bookmarkService);
         }
-
-        dto.setTransactionId(UUID.randomUUID().toString());
-        return dto;
     }
-
 
     // //////////////////////////////////////
 

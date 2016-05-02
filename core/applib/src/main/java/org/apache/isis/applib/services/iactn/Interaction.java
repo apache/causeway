@@ -94,25 +94,27 @@ public class Interaction implements HasTransactionId {
 
     public static abstract class MemberArgs {
 
+        private final String memberId;
+
         public enum Type {
             PROPERTY,
             ACTION
         }
 
-        private final Command command;
         private final Object target;
         private final Type type;
 
         protected MemberArgs(
-                final Command command,
-                final Object target, final Type type) {
-            this.command = command;
+                final Type type,
+                final String memberId,
+                final Object target) {
+            this.memberId = memberId;
             this.target = target;
             this.type = type;
         }
 
-        public Command getCommand() {
-            return command;
+        public String getMemberId() {
+            return memberId;
         }
 
         public Object getTarget() {
@@ -129,10 +131,10 @@ public class Interaction implements HasTransactionId {
         private final List<Object> args;
 
         public ActionArgs(
-                final Command command,
+                final String actionId,
                 final Object target,
                 final List<Object> args) {
-            super(command, target, Type.ACTION);
+            super(Type.ACTION, actionId, target);
             this.args = args;
         }
 
@@ -145,10 +147,9 @@ public class Interaction implements HasTransactionId {
         private final Object argValue;
 
         public PropertyArgs(
-                final Command command,
-                final Object target,
+                final String propertyId, final Object target,
                 final Object argValue) {
-            super(command, target, Type.PROPERTY);
+            super(Type.PROPERTY, propertyId, target);
             this.argValue = argValue;
         }
 
@@ -160,41 +161,47 @@ public class Interaction implements HasTransactionId {
     public <T> T execute(
             final MemberCallable memberCallable,
             final ActionArgs actionArgs,
-            final ClockService clockService) {
+            final ClockService clockService,
+            final Command command) {
 
-        final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
-        final Execution execution = push(startedAt, actionArgs);
+        final Execution execution = push(actionArgs, clockService, command);
 
-        final Command command = actionArgs.getCommand();
-        return execute(memberCallable, actionArgs, clockService, command, startedAt, execution);
-
+        return execute(memberCallable, actionArgs, clockService, execution);
     }
 
     public <T> T execute(
             final MemberCallable memberCallable,
             final PropertyArgs propertyArgs,
-            final ClockService clockService) {
+            final ClockService clockService,
+            final Command command) {
 
-        final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
-        Execution execution = push(startedAt, propertyArgs);
-
-        final Command command = propertyArgs.getCommand();
-        return execute(memberCallable, propertyArgs, clockService, command, startedAt, execution);
-
+        final Execution execution = push(propertyArgs, clockService, command);
+        return execute(memberCallable, propertyArgs, clockService, execution);
     }
+
+
+    private Execution push(
+            final MemberArgs memberArgs,
+            final ClockService clockService,
+            final Command command) {
+        final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
+        final Execution execution = push(startedAt, memberArgs);
+
+        if(command.getStartedAt() == null) {
+            command.setStartedAt(startedAt);
+        }
+        return execution;
+    }
+
 
     private <T> T execute(
             final MemberCallable memberCallable,
             final MemberArgs memberArgs,
             final ClockService clockService,
-            final Command command,
-            final Timestamp startedAt,
             final Execution currentExecution) {
+
         // as a convenience, since in all cases we want the command to start when the first interaction executes,
         // we populate the command here.
-        if(command.getStartedAt() == null) {
-            command.setStartedAt(startedAt);
-        }
 
         try {
             try {
@@ -312,8 +319,6 @@ public class Interaction implements HasTransactionId {
         }
 
         //endregion
-
-
 
         //region > exception (property)
 

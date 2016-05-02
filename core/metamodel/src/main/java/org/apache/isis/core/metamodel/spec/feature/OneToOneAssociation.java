@@ -79,6 +79,11 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
     @Deprecated
     void clearAssociation(ObjectAdapter inObject, final InteractionInitiatedBy interactionInitiatedBy);
 
+    /**
+     * Internal API
+     */
+    void setupCommand(final ObjectAdapter targetAdapter, final ObjectAdapter valueAdapter);
+
     
     // //////////////////////////////////////////////////////
     // Functions

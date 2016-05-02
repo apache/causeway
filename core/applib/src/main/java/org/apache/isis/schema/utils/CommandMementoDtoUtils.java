@@ -160,7 +160,8 @@ public final class CommandMementoDtoUtils {
     private static boolean addParamArgValue(
             final List<ParamDto> params,
             final String parameterName,
-            final Class<?> parameterType, final Object arg) {
+            final Class<?> parameterType,
+            final Object arg) {
         ParamDto paramDto = null;
         if(parameterType == String.class) {
             paramDto = newParamDto(params, parameterName, ValueType.STRING, arg);
@@ -213,9 +214,10 @@ public final class CommandMementoDtoUtils {
         }
 
         if(paramDto != null) {
-            final ValueDto valueDto = argumentFor(paramDto);
-
-            CommonDtoUtils.setValue(valueDto, parameterType, arg);
+            if (arg != null) {
+                final ValueDto valueDto = argumentFor(paramDto);
+                CommonDtoUtils.setValue(valueDto, parameterType, arg);
+            }
             return true;
         }
 
@@ -229,9 +231,13 @@ public final class CommandMementoDtoUtils {
             final Bookmark bookmark) {
         final ParamDto paramDto =
                 newParamDto(params, parameterName, ValueType.REFERENCE, bookmark);
-        final ValueDto valueDto = argumentFor(paramDto);
-        OidDto argValue = CommonDtoUtils.asOidDto(bookmark);
-        valueDto.setReference(argValue);
+
+        if (bookmark != null) {
+            final ValueDto valueDto = argumentFor(paramDto);
+
+            OidDto argValue = CommonDtoUtils.asOidDto(bookmark);
+            valueDto.setReference(argValue);
+        }
     }
 
     private static ParamDto newParamDto(

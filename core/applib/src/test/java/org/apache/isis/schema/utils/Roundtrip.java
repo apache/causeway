@@ -20,6 +20,8 @@ import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 import org.hamcrest.Matchers;
@@ -31,6 +33,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
+import org.apache.isis.schema.aim.v2.ReturnDto;
+import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueType;
 
@@ -45,12 +49,21 @@ public class Roundtrip {
     public void happyCase() throws Exception {
 
         // given
+        final ActionDto actionDto = new ActionDto();
+        actionDto.setActionIdentifier("com.mycompany.Customer#placeOrder");
+
+        final Timestamp startedAt = new Timestamp(new Date().getTime());
+        final Timestamp completedAt = new Timestamp(startedAt.getTime() + 1000);
+
+        final ReturnDto returnDto = new ReturnDto();
+        returnDto.setReturnType(ValueType.BOOLEAN);
+        returnDto.setNull(true);
+
         final ActionInvocationMementoDto aim = ActionInvocationMementoDtoUtils.newDto(
                 UUID.randomUUID(),
                 1,
-                "com.mycompany.myapp.Customer#placeOrder",
-                new Bookmark("CUS", "12345"), "John Customer", "freddyUser",
-                new java.sql.Timestamp(new java.util.Date().getTime()));
+                new Bookmark("CUS", "12345"), actionDto, "John Customer", "freddyUser",
+                startedAt, completedAt, returnDto);
 
         ActionInvocationMementoDtoUtils.addParamArg(aim, "aString", String.class, "Fred", null);
         ActionInvocationMementoDtoUtils.addParamArg(aim, "nullString", String.class, (String) null, null);
