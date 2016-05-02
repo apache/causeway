@@ -54,14 +54,14 @@ public interface CommandMementoService {
             final ObjectAdapter[] argAdapters);
 
     /**
-     * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit a property on
+     * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit (set or clear) a property on
      * a target.  The property can be a mixin or contributed.
      */
     @Programmatic
     CommandMementoDto asCommandMemento(
             final ObjectAdapter targetAdapter,
             final OneToOneAssociation association,
-            final ObjectAdapter valueAdapter);
+            final ObjectAdapter valueAdapterOrNull);
 
     @Programmatic
     void addActionArgs(

@@ -41,7 +41,7 @@ public interface PropertySetterFacet extends Facet {
     /**
      * Sets the value of this property.
      */
-    public void setProperty(
+    void setProperty(
             final OneToOneAssociation owningAssociation,
             final ObjectAdapter inObject,
             final ObjectAdapter value,

@@ -69,11 +69,6 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
         if (this.collectionRemoveFromFacet == null) {
             return;
         }
-        if(!domainEventHelper.hasEventBusService()) {
-            collectionRemoveFromFacet.remove(targetAdapter, referencedObjectAdapter, interactionInitiatedBy
-            );
-            return;
-        }
 
 
         final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);

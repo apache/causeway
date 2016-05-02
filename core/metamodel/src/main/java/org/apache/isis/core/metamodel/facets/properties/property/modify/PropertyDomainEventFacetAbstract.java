@@ -66,9 +66,6 @@ public abstract class PropertyDomainEventFacetAbstract
 
     @Override
     public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -84,9 +81,6 @@ public abstract class PropertyDomainEventFacetAbstract
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -106,9 +100,6 @@ public abstract class PropertyDomainEventFacetAbstract
 
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final Object oldValue = getterFacet.getProperty(ic.getTarget(),
                 ic.getInitiatedBy());

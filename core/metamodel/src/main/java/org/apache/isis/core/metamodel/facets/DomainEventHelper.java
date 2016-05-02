@@ -69,10 +69,6 @@ public class DomainEventHelper {
             final Command command,
             final ObjectAdapter resultAdapter) {
 
-        if(!hasEventBusService()) {
-            return null;
-        }
-
         try {
             final ActionDomainEvent<?> event;
 
@@ -199,9 +195,6 @@ public class DomainEventHelper {
             final Object oldValue,
             final Object newValue) {
 
-        if(!hasEventBusService()) {
-            return null;
-        }
         try {
             final PropertyDomainEvent<?, ?> event;
             final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
@@ -292,9 +285,6 @@ public class DomainEventHelper {
             final ObjectAdapter targetAdapter,
             final CollectionDomainEvent.Of of,
             final Object reference) {
-        if(!hasEventBusService()) {
-            return null;
-        }
         try {
             final CollectionDomainEvent<?, ?> event;
             if (existingEvent != null && phase.isExecuted()) {
@@ -419,22 +409,10 @@ public class DomainEventHelper {
 
     //region > eventBusService
 
-    private EventBusService eventBusService;
-    private boolean searchedForEventBusService = false;
-
-    public boolean hasEventBusService() {
-        return getEventBusService() != null;
-    }
-
     private EventBusService getEventBusService() {
-        if (!searchedForEventBusService) {
-            eventBusService = this.servicesInjector.lookupService(EventBusService.class);
-        }
-        // this caching has been disabled, because it prevents integration tests from switching out the
-        // EventBusService with a mock.
-        // perhaps a better appraoch
-        //searchedForEventBusService = true;
-        return eventBusService;
+        // previously this method used to cache, however it prevents integration tests
+        // from switching out the EventBusService with a mock.
+        return this.servicesInjector.lookupService(EventBusService.class);
     }
 
     //endregion

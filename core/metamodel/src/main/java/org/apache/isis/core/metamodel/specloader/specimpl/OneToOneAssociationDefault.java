@@ -231,7 +231,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ObjectAdapter ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertyClearFacet facet = getFacet(PropertyClearFacet.class);
-        facet.clearProperty(ownerAdapter, interactionInitiatedBy);
+        facet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
     //endregion
@@ -330,11 +330,11 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     @Override
     public void setupCommand(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapter) {
+            final ObjectAdapter valueAdapterOrNull) {
 
-        setupCommandTarget(targetAdapter, valueAdapter);
+        setupCommandTarget(targetAdapter, valueAdapterOrNull);
         setupCommandMemberIdentifier();
-        setupCommandMementoAndExecutionContext(targetAdapter, valueAdapter);
+        setupCommandMementoAndExecutionContext(targetAdapter, valueAdapterOrNull);
     }
 
     protected void setupCommandTarget(
@@ -348,10 +348,10 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     protected void setupCommandMementoAndExecutionContext(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapter) {
+            final ObjectAdapter valueAdapterOrNull) {
 
         final CommandMementoService commandMementoService = getCommandMementoService();
-        final CommandMementoDto dto = commandMementoService.asCommandMemento(targetAdapter, this, valueAdapter);
+        final CommandMementoDto dto = commandMementoService.asCommandMemento(targetAdapter, this, valueAdapterOrNull);
 
         setupCommandMementoAndExecutionContext(dto);
 

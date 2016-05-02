@@ -68,10 +68,6 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
         if (this.collectionAddToFacet == null) {
             return;
         }
-        if(!domainEventHelper.hasEventBusService()) {
-            collectionAddToFacet.add(targetAdapter, referencedObjectAdapter, interactionInitiatedBy);
-            return;
-        }
 
         final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
 

@@ -59,7 +59,11 @@ public class CommandUtil {
 
     public static String argDescriptionFor(final ObjectAdapter valueAdapter) {
         final StringBuilder buf = new StringBuilder();
-        appendArg(buf, "new value", valueAdapter);
+        if(valueAdapter != null) {
+            appendArg(buf, "new value", valueAdapter);
+        } else {
+            buf.append("cleared");
+        }
         return buf.toString();
     }
     public static String argDescriptionFor(

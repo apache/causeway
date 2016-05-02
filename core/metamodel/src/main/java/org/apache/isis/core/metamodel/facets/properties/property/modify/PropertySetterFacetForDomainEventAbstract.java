@@ -20,8 +20,16 @@
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import com.google.common.base.Objects;
+
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -47,6 +55,9 @@ public abstract class PropertySetterFacetForDomainEventAbstract
     private final PropertySetterFacet setterFacet;
     private final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
 
+    private final ServicesInjector servicesInjector;
+
+
     public PropertySetterFacetForDomainEventAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
@@ -58,6 +69,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.propertyDomainEventFacet = propertyDomainEventFacet;
+        this.servicesInjector = servicesInjector;
         this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
@@ -67,14 +79,12 @@ public abstract class PropertySetterFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+
+        // similar code in PropertyClearFacetFDEA and ActionInvocationFacetFDEA
+
         if(setterFacet == null) {
             return;
         }
-        if(!domainEventHelper.hasEventBusService()) {
-            setterFacet.setProperty(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
-            return;
-        }
-
 
         // ... post the executing event
         final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
@@ -87,23 +97,95 @@ public abstract class PropertySetterFacetForDomainEventAbstract
                         getIdentified(), targetAdapter,
                         oldValue, newValue);
 
-        // ... perform the property modification
-        setterFacet.setProperty(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
+        setPropertyInternal(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
         // reading the actual value from the target object, playing it safe...
         final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-        if(Objects.equal(oldValue, actualNewValue)) {
-            // do nothing
-            return;
+        if (!Objects.equal(oldValue, actualNewValue)) {
+
+            // ... post the executed event
+            domainEventHelper.postEventForProperty(
+                    AbstractDomainEvent.Phase.EXECUTED,
+                    eventType(), verify(event),
+                    getIdentified(), targetAdapter,
+                    oldValue, actualNewValue);
         }
+    }
 
-        // ... post the executed event
-        domainEventHelper.postEventForProperty(
-                AbstractDomainEvent.Phase.EXECUTED,
-                eventType(), verify(event),
-                getIdentified(), targetAdapter,
-                oldValue, actualNewValue);
+    public void setPropertyInternal(
+            final OneToOneAssociation owningAssociation,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter newValueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
+        // similar code in PropertyClearFacetFDEA and ActionInvocationFacetFDEA
+
+        owningAssociation.setupCommand(targetAdapter, newValueAdapter);
+
+        invokeThruCommand(owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
+    }
+
+    private void invokeThruCommand(
+            final OneToOneAssociation owningProperty,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter valueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        // similar code in PropertyClearFacetFDEA and ActionInvocationFacetFDEA
+
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext.getCommand();
+
+        final InteractionContext interactionContext = getInteractionContext();
+        final Interaction interaction = interactionContext.getInteraction();
+
+        final String propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
+
+        if( command.getExecutor() == Command.Executor.USER &&
+                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+
+            // deal with background commands
+
+            // persist command so can it can subsequently be invoked in the 'background'
+            final CommandService commandService = getCommandService();
+            if (!commandService.persistIfPossible(command)) {
+                throw new IsisException(String.format(
+                        "Unable to persist command for property '%s'; CommandService does not support persistent commands ",
+                        propertyId));
+            }
+
+        } else {
+
+            // otherwise, go ahead and execute action in the 'foreground'
+
+            final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
+            final Object argValue = ObjectAdapter.Util.unwrap(valueAdapter);
+
+            final Interaction.PropertyArgs propertyArgs = new Interaction.PropertyArgs(propertyId, target, argValue);
+            final Interaction.MemberCallable<?> callable = new Interaction.MemberCallable<Interaction.PropertyArgs>() {
+                        @Override public Object call(final Interaction.PropertyArgs propertyArgs11) {
+
+                            setterFacet.setProperty(
+                                    owningProperty, targetAdapter, valueAdapter, interactionInitiatedBy);
+                            return null;
+                        }
+                    };
+
+            interaction.execute(callable, propertyArgs, getClockService(), command);
+
+            final Interaction.Execution priorExecution = interaction.getPriorExecution();
+
+            final RuntimeException executionExceptionIfAny = priorExecution.getException();
+            if(executionExceptionIfAny != null) {
+                throw executionExceptionIfAny;
+            }
+
+            //
+            // at this point in ActionInvocationFacetFDEA, the action is optionally published via the
+            // PublishingServiceInternal.  However, we currently do not support the concept of publishing simple
+            // property modifications.
+            //
+        }
     }
 
     private Class<? extends PropertyDomainEvent<?, ?>> eventType() {
@@ -116,6 +198,39 @@ public abstract class PropertySetterFacetForDomainEventAbstract
      */
     protected PropertyDomainEvent<?, ?> verify(PropertyDomainEvent<?, ?> event) {
         return event;
+    }
+
+
+
+    private ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
+
+    private CommandContext getCommandContext() {
+        return lookupService(CommandContext.class);
+    }
+
+    private InteractionContext getInteractionContext() {
+        return lookupService(InteractionContext.class);
+    }
+
+    private CommandService getCommandService() {
+        return lookupService(CommandService.class);
+    }
+
+    private ClockService getClockService() {
+        return lookupService(ClockService.class);
+    }
+
+    private <T> T lookupService(final Class<T> serviceClass) {
+        T service = lookupServiceIfAny(serviceClass);
+        if(service == null) {
+            throw new IllegalStateException("The '" + serviceClass.getName() + "' service is not registered!");
+        }
+        return service;
+    }
+    private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
     }
 
 }

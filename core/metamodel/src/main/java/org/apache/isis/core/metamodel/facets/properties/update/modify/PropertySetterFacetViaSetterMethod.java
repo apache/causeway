@@ -54,7 +54,8 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
 
     @Override
     public void setProperty(
-            final OneToOneAssociation owningAssociation, final ObjectAdapter adapter,
+            final OneToOneAssociation owningAssociation,
+            final ObjectAdapter adapter,
             final ObjectAdapter valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         ObjectAdapter.InvokeUtils.invoke(method, adapter, valueAdapter);

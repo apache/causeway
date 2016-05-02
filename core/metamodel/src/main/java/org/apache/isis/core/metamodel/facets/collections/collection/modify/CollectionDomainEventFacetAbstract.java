@@ -60,9 +60,6 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
@@ -79,9 +76,6 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
@@ -102,9 +96,6 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final ProposedHolder catc = (ProposedHolder) ic;
         final Object proposed = catc.getProposed().getObject();

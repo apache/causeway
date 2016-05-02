@@ -64,7 +64,7 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         processMethodContext.removeMethod(modifyMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modifyMethod, property, servicesInjector));
+        FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modifyMethod, property));
     }
 
     @Override

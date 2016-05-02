@@ -156,7 +156,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
                 @Override
                 public void clearProperty(
-                        final ObjectAdapter inObject,
+                        final OneToOneAssociation owningProperty, final ObjectAdapter targetAdapter,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });

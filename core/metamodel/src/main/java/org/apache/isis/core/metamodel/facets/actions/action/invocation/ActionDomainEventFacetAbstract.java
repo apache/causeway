@@ -74,9 +74,6 @@ public abstract class ActionDomainEventFacetAbstract
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -94,9 +91,6 @@ public abstract class ActionDomainEventFacetAbstract
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -132,9 +126,6 @@ public abstract class ActionDomainEventFacetAbstract
 
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
-        if(!domainEventHelper.hasEventBusService()) {
-            return null;
-        }
 
         final ActionInvocationContext aic = (ActionInvocationContext) ic;
         final ActionDomainEvent<?> event =

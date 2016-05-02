@@ -23,27 +23,21 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final ServicesInjector servicesInjector;
 
-    public PropertySetterFacetViaModifyMethod(final Method method, final FacetHolder holder, final ServicesInjector servicesInjector) {
+    public PropertySetterFacetViaModifyMethod(
+            final Method method,
+            final FacetHolder holder) {
         super(holder);
         this.method = method;
-        this.servicesInjector = servicesInjector;
     }
 
     /**
@@ -62,46 +56,14 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
 
     @Override
     public void setProperty(
-            final OneToOneAssociation owningAssociation, final ObjectAdapter targetAdapter,
+            final OneToOneAssociation owningAssociation,
+            final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        owningAssociation.setupCommand(targetAdapter, valueAdapter);
-
-        invokeThruCommand(owningAssociation, targetAdapter, valueAdapter);
-
+        ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
     }
 
-    private void invokeThruCommand(
-            final OneToOneAssociation owningAssociation,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapter) {
-
-        // TODO: refactor to be the same as ActionInvocationFacetFDEA
-
-        final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
-        final Object argValue = ObjectAdapter.Util.unwrap(valueAdapter);
-
-        final String propertyId = owningAssociation.getIdentifier().toClassAndNameIdentityString();
-
-        final Interaction.PropertyArgs propertyArgs =
-                new Interaction.PropertyArgs(propertyId, target, argValue);
-
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
-
-        final InteractionContext interactionContext = getInteractionContext();
-        final Interaction interaction = interactionContext.getInteraction();
-
-        final Interaction.MemberCallable<?> callable =
-                new Interaction.MemberCallable<Interaction.PropertyArgs>() {
-                    @Override public Object call(final Interaction.PropertyArgs propertyArgs11) {
-                        return ObjectAdapter.InvokeUtils.invoke(method, targetAdapter, valueAdapter);
-                    }
-                };
-
-        interaction.execute(callable, propertyArgs, getClockService(), command);
-    }
 
     @Override
     protected String toStringValues() {
@@ -109,32 +71,6 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
     }
 
 
-    private ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    private CommandContext getCommandContext() {
-        return lookupService(CommandContext.class);
-    }
-
-    private InteractionContext getInteractionContext() {
-        return lookupService(InteractionContext.class);
-    }
-
-    private ClockService getClockService() {
-        return lookupService(ClockService.class);
-    }
-
-    private <T> T lookupService(final Class<T> serviceClass) {
-        T service = lookupServiceIfAny(serviceClass);
-        if(service == null) {
-            throw new IllegalStateException("The '" + serviceClass.getName() + "' service is not registered!");
-        }
-        return service;
-    }
-    private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
-    }
 
 
 }

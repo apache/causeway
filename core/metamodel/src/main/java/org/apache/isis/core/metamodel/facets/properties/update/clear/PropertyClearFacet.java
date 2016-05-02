@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.update.clear;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * Mechanism for clearing a property of an object (that is, setting it to
@@ -35,5 +36,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface PropertyClearFacet extends Facet {
 
-    public void clearProperty(ObjectAdapter inObject, final InteractionInitiatedBy interactionInitiatedBy);
+    void clearProperty(
+            final OneToOneAssociation owningProperty,
+            final ObjectAdapter targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy);
 }

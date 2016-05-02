@@ -169,7 +169,7 @@ public class CommandMementoServiceDefault implements CommandMementoService {
     public CommandMementoDto asCommandMemento(
             final ObjectAdapter targetAdapter,
             final OneToOneAssociation association,
-            final ObjectAdapter valueAdapter) {
+            final ObjectAdapter valueAdapterOrNull) {
 
         // TODO.  introduce a choice for aim vs pmm, in the cmd.xsd
 

@@ -334,7 +334,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));
-        FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod, null));
+        FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod));
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clear, facetedMethod));
         FacetUtil.addFacet(new HideForContextFacetViaMethod(hide, facetedMethod));
         FacetUtil.addFacet(new DisableForContextFacetViaMethod(disable, null, null, facetedMethod));
