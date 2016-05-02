@@ -28,7 +28,6 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -44,21 +43,20 @@ import org.joda.time.LocalTime;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
 
-public final class CommandMementoDtoUtils {
+public final class CommandDtoUtils {
 
     //region > marshalling
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
             try {
-                jaxbContext = JAXBContext.newInstance(CommandMementoDto.class);
+                jaxbContext = JAXBContext.newInstance(CommandDto.class);
             } catch (JAXBException e) {
                 throw new RuntimeException(e);
             }
@@ -66,20 +64,20 @@ public final class CommandMementoDtoUtils {
         return jaxbContext;
     }
 
-    public static CommandMementoDto fromXml(final Reader reader) {
+    public static CommandDto fromXml(final Reader reader) {
         try {
             final Unmarshaller un = getJaxbContext().createUnmarshaller();
-            return (CommandMementoDto) un.unmarshal(reader);
+            return (CommandDto) un.unmarshal(reader);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static CommandMementoDto fromXml(final String xml) {
+    public static CommandDto fromXml(final String xml) {
         return fromXml(new StringReader(xml));
     }
 
-    public static CommandMementoDto fromXml(
+    public static CommandDto fromXml(
             final Class<?> contextClass,
             final String resourceName,
             final Charset charset) throws IOException {
@@ -88,13 +86,13 @@ public final class CommandMementoDtoUtils {
         return fromXml(new StringReader(s));
     }
 
-    public static String toXml(final CommandMementoDto aimDto) {
+    public static String toXml(final CommandDto aimDto) {
         final CharArrayWriter caw = new CharArrayWriter();
         toXml(aimDto, caw);
         return caw.toString();
     }
 
-    public static void toXml(final CommandMementoDto aimDto, final Writer writer) {
+    public static void toXml(final CommandDto aimDto, final Writer writer) {
         try {
             final Marshaller m = getJaxbContext().createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -104,24 +102,6 @@ public final class CommandMementoDtoUtils {
         }
     }
     //endregion
-
-    public static CommandMementoDto newDto(
-            final UUID transactionId, final String user) {
-        CommandMementoDto dto = new CommandMementoDto();
-
-        dto.setMajorVersion("1");
-        dto.setMinorVersion("0");
-
-        dto.setTransactionId(transactionId.toString());
-
-        ActionDto actionDto = new ActionDto();
-        dto.setAction(actionDto);
-
-
-        dto.setUser(user);
-
-        return dto;
-    }
 
 
     static ValueDto argumentFor(final ParamDto paramDto) {
@@ -245,9 +225,14 @@ public final class CommandMementoDtoUtils {
             final String parameterName,
             final ValueType parameterType,
             final Object value) {
+        final ParamDto paramDto = newParamDto(parameterName, parameterType, value);
+        params.add(paramDto);
+        return paramDto;
+    }
+
+    private static ParamDto newParamDto(final String parameterName, final ValueType parameterType, final Object value) {
         final ParamDto paramDto = newParamDto(parameterName, parameterType);
         paramDto.setNull(value == null);
-        params.add(paramDto);
         return paramDto;
     }
 

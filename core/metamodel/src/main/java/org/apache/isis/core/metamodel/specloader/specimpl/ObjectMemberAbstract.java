@@ -56,14 +56,14 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
-import org.apache.isis.schema.utils.CommandMementoDtoUtils;
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.utils.CommandDtoUtils;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
@@ -404,8 +404,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return commandContext;
     }
 
-    protected CommandMementoService getCommandMementoService() {
-        return lookupService(CommandMementoService.class);
+    protected CommandDtoService getCommandDtoService() {
+        return lookupService(CommandDtoService.class);
     }
 
     //endregion
@@ -427,7 +427,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         }
 
         command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-        command.setTargetAction(CommandUtil.targetActionNameFor(this));
+        command.setTargetAction(CommandUtil.targetMemberNameFor(this));
         command.setArguments(arguments);
 
         final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
@@ -449,10 +449,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             return;
         }
 
-        command.setMemberIdentifier(CommandUtil.actionIdentifierFor(this));
+        command.setMemberIdentifier(CommandUtil.memberIdentifierFor(this));
     }
 
-    protected void setupCommandMementoAndExecutionContext(final CommandMementoDto dto) {
+    protected void setupCommandDtoAndExecutionContext(final CommandDto dto) {
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
@@ -473,7 +473,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
         // memento
 
-        final String mementoXml = CommandMementoDtoUtils.toXml(dto);
+        final String mementoXml = CommandDtoUtils.toXml(dto);
         command.setMemento(mementoXml);
 
         // copy over the command execution 'context' (if available)

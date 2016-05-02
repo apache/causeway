@@ -25,7 +25,7 @@
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
 
-    <xs:element name="commandMementoDto">
+    <xs:element name="commandDto">
         <xs:annotation>
             <xs:documentation>Represents v1.0 of this schema.
             </xs:documentation>
@@ -56,9 +56,10 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="action" type="actionDto">
+                <xs:element name="interactionType" type="interactionTypeDto"/>
+                <xs:element name="member" type="memberDto">
                     <xs:annotation>
-                        <xs:documentation>The action and arguments to be invoked on the target object(s).</xs:documentation>
+                        <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="user" type="xs:string">
@@ -69,8 +70,17 @@
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
-
     </xs:element>
+
+    <xs:simpleType name="interactionTypeDto" final="restriction" >
+        <xs:annotation>
+            <xs:documentation>Whether this interaction with a member is invoking an action, or modifying a property.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="ACTION_INVOCATION" />
+            <xs:enumeration value="PROPERTY_MODIFICATION" />
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="memberDto" abstract="true">
         <xs:annotation>
@@ -111,7 +121,7 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="paramDto"/>
+                    <xs:element name="newValue" type="common:valueDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

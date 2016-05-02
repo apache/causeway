@@ -270,7 +270,7 @@ public final class InteractionDtoUtils {
             final BookmarkService bookmarkService) {
 
         final List<ParamDto> params = parametersFor(ixn);
-        CommandMementoDtoUtils.addParamArg(params, parameterName, parameterType, arg, bookmarkService);
+        CommandDtoUtils.addParamArg(params, parameterName, parameterType, arg, bookmarkService);
     }
 
     //region > addReturn
@@ -361,7 +361,7 @@ public final class InteractionDtoUtils {
 
     public static ValueDto getParameterArg(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
-        return CommandMementoDtoUtils.argumentFor(paramDto);
+        return CommandDtoUtils.argumentFor(paramDto);
     }
 
 
@@ -383,7 +383,7 @@ public final class InteractionDtoUtils {
         if(paramDto.isNull()) {
             return null;
         }
-        final ValueDto valueDto = CommandMementoDtoUtils.argumentFor(paramDto);
+        final ValueDto valueDto = CommandDtoUtils.argumentFor(paramDto);
         final ValueType parameterType = paramDto.getParameterType();
         return CommonDtoUtils.getValue(valueDto, parameterType);
     }

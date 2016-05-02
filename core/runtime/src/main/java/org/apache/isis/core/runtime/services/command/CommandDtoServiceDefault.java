@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -47,9 +47,13 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.InteractionTypeDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
-import org.apache.isis.schema.utils.CommandMementoDtoUtils;
+import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.common.v1.ValueDto;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.CommonDtoUtils;
 
 /**
  * Depends on an implementation of {@link BackgroundCommandService} to
@@ -58,15 +62,15 @@ import org.apache.isis.schema.utils.CommandMementoDtoUtils;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class CommandMementoServiceDefault implements CommandMementoService {
+public class CommandDtoServiceDefault implements CommandDtoService {
 
     private final MementoServiceDefault mementoService;
 
-    public CommandMementoServiceDefault() {
+    public CommandDtoServiceDefault() {
         this(new MementoServiceDefault());
     }
 
-    CommandMementoServiceDefault(MementoServiceDefault mementoService) {
+    CommandDtoServiceDefault(MementoServiceDefault mementoService) {
         this.mementoService = mementoService.withNoEncoding();
     }
     
@@ -122,7 +126,7 @@ public class CommandMementoServiceDefault implements CommandMementoService {
         }
 
         final ObjectAction action = (ObjectAction) member;
-        final String actionIdentifier = CommandUtil.actionIdentifierFor(action);
+        final String actionIdentifier = CommandUtil.memberIdentifierFor(action);
         
         final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
 
@@ -141,47 +145,61 @@ public class CommandMementoServiceDefault implements CommandMementoService {
     }
 
     @Override
-    public CommandMementoDto asCommandMemento(
+    public CommandDto asCommandDto(
             final List<ObjectAdapter> targetAdapters,
             final ObjectAction objectAction,
             final ObjectAdapter[] argAdapters) {
 
-        final CommandMementoDto dto = new CommandMementoDto();
+        final CommandDto dto = asCommandDto(targetAdapters);
+
+        dto.setInteractionType(InteractionTypeDto.ACTION_INVOCATION);
+        final ActionDto actionDto = new ActionDto();
+        dto.setMember(actionDto);
+
+        addActionArgs(objectAction, actionDto, argAdapters);
+
+        return dto;
+    }
+
+    @Override
+    public CommandDto asCommandDto(
+            final List<ObjectAdapter> targetAdapters,
+            final OneToOneAssociation property,
+            final ObjectAdapter valueAdapterOrNull) {
+
+        final CommandDto dto = asCommandDto(targetAdapters);
+
+        dto.setInteractionType(InteractionTypeDto.PROPERTY_MODIFICATION);
+        final PropertyDto propertyDto = new PropertyDto();
+        dto.setMember(propertyDto);
+
+        addPropertyValue(property, propertyDto, valueAdapterOrNull);
+
+        return dto;
+    }
+
+    private CommandDto asCommandDto(final List<ObjectAdapter> targetAdapters) {
+        final CommandDto dto = new CommandDto();
         dto.setMajorVersion("1");
         dto.setMinorVersion("0");
+
+        dto.setTransactionId(UUID.randomUUID().toString());
 
         for (ObjectAdapter targetAdapter : targetAdapters) {
             final RootOid rootOid = (RootOid) targetAdapter.getOid();
             final Bookmark bookmark = rootOid.asBookmark();
             dto.getTargets().add(bookmark.toOidDto());
         }
-
-        final ActionDto actionDto = new ActionDto();
-        dto.setAction(actionDto);
-
-        addActionArgs(objectAction, actionDto, argAdapters);
-
-        dto.setTransactionId(UUID.randomUUID().toString());
         return dto;
     }
 
-    @Override
-    public CommandMementoDto asCommandMemento(
-            final ObjectAdapter targetAdapter,
-            final OneToOneAssociation association,
-            final ObjectAdapter valueAdapterOrNull) {
-
-        // TODO.  introduce a choice for aim vs pmm, in the cmd.xsd
-
-        throw new RuntimeException("not yet implemented");
-    }
 
     @Override
     public void addActionArgs(
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final ObjectAdapter[] argAdapters) {
-        final String actionIdentifier = CommandUtil.actionIdentifierFor(objectAction);
+        final String actionIdentifier = CommandUtil.memberIdentifierFor(objectAction);
         actionDto.setMemberIdentifier(actionIdentifier);
 
         List<ObjectActionParameter> actionParameters = objectAction.getParameters();
@@ -192,9 +210,27 @@ public class CommandMementoServiceDefault implements CommandMementoService {
             final ObjectAdapter argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
             final List<ParamDto> parameters = actionDto.getParameters();
-            CommandMementoDtoUtils.addParamArg(
+            CommandDtoUtils.addParamArg(
                     parameters, parameterName, paramType, arg, bookmarkService);
         }
+    }
+
+    @Override
+    public void addPropertyValue(
+            final OneToOneAssociation property,
+            final PropertyDto propertyDto,
+            final ObjectAdapter valueAdapter) {
+
+        final String actionIdentifier = CommandUtil.memberIdentifierFor(property);
+        propertyDto.setMemberIdentifier(actionIdentifier);
+
+        final ObjectSpecification valueSpec = property.getSpecification();
+
+        final ValueDto valueDto = new ValueDto();
+        CommonDtoUtils.setValue(
+                valueDto, valueSpec.getCorrespondingClass(), ObjectAdapter.Util.unwrap(valueAdapter));
+
+        propertyDto.setNewValue(valueDto);
     }
 
     // //////////////////////////////////////

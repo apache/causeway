@@ -66,14 +66,14 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoService;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
@@ -589,16 +589,16 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
 
-        final CommandMementoService commandMementoService = getCommandMementoService();
+        final CommandDtoService commandDtoService = getCommandDtoService();
         final List<ObjectAdapter> commandTargetAdapters =
                 commandTargetAdaptersHolder.get() != null
                         ? commandTargetAdaptersHolder.get()
                         : Collections.singletonList(targetAdapter);
 
-        final CommandMementoDto dto = commandMementoService.asCommandMemento(
+        final CommandDto dto = commandDtoService.asCommandDto(
                 commandTargetAdapters, this, argumentAdapters);
 
-        setupCommandMementoAndExecutionContext(dto);
+        setupCommandDtoAndExecutionContext(dto);
 
     }
 

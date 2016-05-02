@@ -17,10 +17,10 @@
 package org.apache.isis.applib.services.background;
 
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
- * Persists a {@link org.apache.isis.schema.cmd.v1.CommandMementoDto memento-ized} command such that it can be executed asynchronously,
+ * Persists a {@link org.apache.isis.schema.cmd.v1.CommandDto memento-ized} command such that it can be executed asynchronously,
  * for example through a Quartz scheduler.
  *
  * <p>
@@ -39,7 +39,7 @@ public interface BackgroundCommandService2 extends BackgroundCommandService {
      * @param targetArgs
      */
     void schedule(
-            final CommandMementoDto dto,
+            final CommandDto dto,
             final Command command,
             final String targetClassName, final String targetActionName, final String targetArgs);
 }

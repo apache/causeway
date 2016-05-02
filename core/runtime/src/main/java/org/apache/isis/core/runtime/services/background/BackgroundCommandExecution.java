@@ -46,10 +46,13 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.InteractionTypeDto;
+import org.apache.isis.schema.cmd.v1.MemberDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.utils.CommandMementoDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
@@ -156,42 +159,53 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                     } else {
 
-                        final CommandMementoDto dto = jaxbService.fromXml(CommandMementoDto.class, memento);
-                        final ActionDto actionDto = dto.getAction();
-                        final String actionId = actionDto.getMemberIdentifier();
+                        final CommandDto dto = jaxbService.fromXml(CommandDto.class, memento);
 
-                        final List<OidDto> targetOidDtos = dto.getTargets();
-                        for (OidDto targetOidDto : targetOidDtos) {
+                        final MemberDto memberDto = dto.getMember();
+                        final String memberId = memberDto.getMemberIdentifier();
 
-                            final Bookmark bookmark = Bookmark.from(targetOidDto);
-                            final Object targetObject = bookmarkService.lookup(bookmark);
+                        final InteractionTypeDto interactionType = dto.getInteractionType();
+                        if(interactionType == InteractionTypeDto.ACTION_INVOCATION) {
 
-                            final ObjectAdapter targetAdapter = adapterFor(targetObject);
+                            final ActionDto actionDto = (ActionDto) memberDto;
 
-                            final ObjectAction objectAction =
-                                    findObjectAction(targetAdapter, actionId);
+                            final List<OidDto> targetOidDtos = dto.getTargets();
+                            for (OidDto targetOidDto : targetOidDtos) {
 
-                            // TODO: background commands won't work for mixin actions...
-                            // ... we obtain the target from the bookmark service (above), which will
-                            // simply fail for a mixin.  Instead we would need to serialize out the mixedInAdapter
-                            // and also capture the mixinType within the aim memento.
-                            final ObjectAdapter mixedInAdapter = null;
+                                final Bookmark bookmark = Bookmark.from(targetOidDto);
+                                final Object targetObject = bookmarkService.lookup(bookmark);
 
-                            final ObjectAdapter[] argAdapters = argAdaptersFor(dto);
-                            final ObjectAdapter resultAdapter = objectAction.execute(
-                                    targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                                final ObjectAdapter targetAdapter = adapterFor(targetObject);
 
-                            // alternatively, could use...
-                            Object unused = backgroundInteraction.getPriorExecution().getReturned();
+                                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
-                            // this doesn't really make sense if >1 action
-                            // in any case, the capturing of the action interaction should be the
-                            // responsibility of auditing/profiling
-                            if(resultAdapter != null) {
-                                Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                                backgroundCommand.setResult(resultBookmark);
+                                // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                                // it will switch the targetAdapter to be the mixedInAdapter transparently
+                                final ObjectAdapter[] argAdapters = argAdaptersFor(actionDto);
+                                final ObjectAdapter resultAdapter = objectAction.execute(
+                                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+
+                                // for the result adapter, we could alternatively have used...
+                                Object unused = backgroundInteraction.getPriorExecution().getReturned();
+
+                                // this doesn't really make sense if >1 action
+                                // in any case, the capturing of the action interaction should be the
+                                // responsibility of auditing/profiling
+                                if(resultAdapter != null) {
+                                    Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                                    backgroundCommand.setResult(resultBookmark);
+                                }
                             }
+                        } else {
+
+                            final PropertyDto propertyDto = (PropertyDto) memberDto;
+
+                            //
+                            // TODO: need equivalent logic if this is a property modification
+                            //
+                            throw new RuntimeException("Not yet implemented");
                         }
+
                     }
 
                 } catch (RuntimeException e) {
@@ -266,21 +280,19 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         }
     }
 
-    private ObjectAdapter[] argAdaptersFor(final CommandMementoDto dto) {
-        final List<ParamDto> params = dto.getAction().getParameters();
+    private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
+        final List<ParamDto> params = actionDto.getParameters();
         final List<ObjectAdapter> args = Lists.newArrayList(
                 Iterables.transform(params, new Function<ParamDto, ObjectAdapter>() {
                     @Override
                     public ObjectAdapter apply(final ParamDto paramDto) {
-                        final Object arg = CommandMementoDtoUtils.paramArgOf(paramDto);
+                        final Object arg = CommandDtoUtils.paramArgOf(paramDto);
                         return adapterFor(arg);
                     }
                 })
         );
         return args.toArray(new ObjectAdapter[]{});
     }
-
-
 
     // //////////////////////////////////////
 

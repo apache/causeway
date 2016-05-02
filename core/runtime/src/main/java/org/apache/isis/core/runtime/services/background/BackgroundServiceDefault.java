@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhan
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
@@ -216,7 +216,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
                 final ObjectAdapter domainObjectAdapter = getAdapterManager().adapterFor(domainObject);
                 final String domainObjectClassName = CommandUtil.targetClassNameFor(domainObjectAdapter);
 
-                final String targetActionName = CommandUtil.targetActionNameFor(action);
+                final String targetActionName = CommandUtil.targetMemberNameFor(action);
 
                 final ObjectAdapter[] argAdapters = adaptersFor(args);
                 final String targetArgs = CommandUtil.argDescriptionFor(action, argAdapters);
@@ -227,14 +227,14 @@ public class BackgroundServiceDefault implements BackgroundService2 {
                     final BackgroundCommandService2 bcs2 = (BackgroundCommandService2) backgroundCommandService;
 
                     final List<ObjectAdapter> targetList = Collections.singletonList(domainObjectAdapter);
-                    final CommandMementoDto dto =
-                            commandMementoService.asCommandMemento(targetList, action, argAdapters);
+                    final CommandDto dto =
+                            commandDtoService.asCommandDto(targetList, action, argAdapters);
 
                     bcs2.schedule(dto, command, domainObjectClassName, targetActionName, targetArgs);
                 } else {
                     // fallback
                     final ActionInvocationMemento aim =
-                            commandMementoService.asActionInvocationMemento(proxyMethod, target, args);
+                            commandDtoService.asActionInvocationMemento(proxyMethod, target, args);
 
                     backgroundCommandService.schedule(aim, command, domainObjectClassName, targetActionName, targetArgs);
                 }
@@ -282,7 +282,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     private BackgroundCommandService backgroundCommandService;
 
     @javax.inject.Inject
-    private CommandMementoService commandMementoService;
+    private CommandDtoService commandDtoService;
 
     @javax.inject.Inject
     private CommandContext commandContext;

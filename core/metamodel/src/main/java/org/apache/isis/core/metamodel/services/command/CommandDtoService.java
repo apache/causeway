@@ -25,18 +25,19 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.PropertyDto;
 
 /**
  * Used to create mementos of a command, such that it can be persisted and then executed either immediately (ie invoke
  * in the foreground) or deferred (ie invoke in the background at some later time).
  */
-public interface CommandMementoService {
+public interface CommandDtoService {
 
     /**
      * Note that this method (more precisely, {@link ActionInvocationMemento}) does <i>not</i> support mixins.
      *
-     * @deprecated - use {@link #asCommandMemento(List, ObjectAction, ObjectAdapter[])} instead.
+     * @deprecated - use {@link #asCommandDto(List, ObjectAction, ObjectAdapter[])} instead.
      */
     @Deprecated
     @Programmatic
@@ -44,22 +45,22 @@ public interface CommandMementoService {
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to invoke an action on a
-     * target object (or possible many targets, for bulk actions).  The action can be a mixin action or a
+     * target object (or possibly many targets, for bulk actions).  The action can be a mixin action or a
      * contributed action.
      */
     @Programmatic
-    CommandMementoDto asCommandMemento(
+    CommandDto asCommandDto(
             final List<ObjectAdapter> targetAdapters,
             final ObjectAction objectAction,
             final ObjectAdapter[] argAdapters);
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit (set or clear) a property on
-     * a target.  The property can be a mixin or contributed.
+     * a target (or possibly many targets, for symmetry with actions).  The property can be a mixin or contributed.
      */
     @Programmatic
-    CommandMementoDto asCommandMemento(
-            final ObjectAdapter targetAdapter,
+    CommandDto asCommandDto(
+            final List<ObjectAdapter> targetAdapters,
             final OneToOneAssociation association,
             final ObjectAdapter valueAdapterOrNull);
 
@@ -68,5 +69,11 @@ public interface CommandMementoService {
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final ObjectAdapter[] argAdapters);
+
+    @Programmatic
+    void addPropertyValue(
+            final OneToOneAssociation property,
+            final PropertyDto propertyDto,
+            final ObjectAdapter valueAdapter);
 
     }

@@ -63,7 +63,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoService;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -215,9 +215,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
 
         final String actionTargetClass = CommandUtil.targetClassNameFor(targetAdapter);
-        final String actionTargetAction = CommandUtil.targetActionNameFor(objectAction);
+        final String actionTargetAction = CommandUtil.targetMemberNameFor(objectAction);
         final Bookmark actionTarget = CommandUtil.bookmarkFor(targetAdapter);
-        final String actionMemberIdentifier = CommandUtil.actionIdentifierFor(objectAction);
+        final String actionMemberIdentifier = CommandUtil.memberIdentifierFor(objectAction);
 
         final List<String> parameterNames;
         final List<Class<?>> parameterTypes;
@@ -353,7 +353,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Timestamp completedAt = execution.getCompletedAt();
 
         final ActionDto actionDto = new ActionDto();
-        commandMementoService.addActionArgs(
+        commandDtoService.addActionArgs(
                 objectAction, actionDto, parameterAdapters.toArray(new ObjectAdapter[]{}));
 
         final ObjectSpecification returnSpec = objectAction.getReturnType();
@@ -398,7 +398,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     private PublishingService publishingServiceIfAny;
 
     @Inject
-    CommandMementoService commandMementoService;
+    CommandDtoService commandDtoService;
 
     @Inject
     private BookmarkService bookmarkService;

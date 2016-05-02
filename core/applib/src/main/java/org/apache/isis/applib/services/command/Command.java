@@ -31,16 +31,16 @@ import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  This intention is reified as a
  * {@link Command#getMemento() memento} by way of the (internal) <tt>CommandMementoService</tt>; typically corresponding
- * to the XML equivalent of a {@link CommandMementoDto}.
+ * to the XML equivalent of a {@link CommandDto}.
  *
  * <p>
  *     The {@link Command} interface also captures details of the corresponding action invocation (or property edit),

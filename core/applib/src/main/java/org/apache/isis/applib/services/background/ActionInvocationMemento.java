@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
  * A memento for an action invocation, to allow the details of an action invocation
@@ -40,10 +40,10 @@ import org.apache.isis.schema.cmd.v1.CommandMementoDto;
  * </p>
  *
  * <p>
- * Note that this class - unlike {@link CommandMementoDto} does <i>not</i> support mixins.
+ * Note that this class - unlike {@link CommandDto} does <i>not</i> support mixins.
  * </p>
  *
- * @deprecated - use {@link CommandMementoDto} instead.
+ * @deprecated - use {@link CommandDto} instead.
  */
 @Deprecated
 public class ActionInvocationMemento {

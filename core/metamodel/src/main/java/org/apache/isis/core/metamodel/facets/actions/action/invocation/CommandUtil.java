@@ -45,7 +45,7 @@ public class CommandUtil {
 
     private CommandUtil(){}
 
-    public static String targetActionNameFor(final ObjectMember objectMember) {
+    public static String targetMemberNameFor(final ObjectMember objectMember) {
         return objectMember.getName();
     }
 
@@ -53,7 +53,7 @@ public class CommandUtil {
         return StringExtensions.asNaturalName2(targetAdapter.getSpecification().getSingularName());
     }
 
-    public static String actionIdentifierFor(final ObjectMember objectMember) {
+    public static String memberIdentifierFor(final ObjectMember objectMember) {
         return objectMember.getIdentifier().toClassAndNameIdentityString();
     }
 

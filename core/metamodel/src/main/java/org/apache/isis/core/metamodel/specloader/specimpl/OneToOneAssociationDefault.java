@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -51,12 +52,12 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.command.CommandMementoService;
+import org.apache.isis.core.metamodel.services.command.CommandDtoService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.cmd.v1.CommandMementoDto;
+import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
 
@@ -350,10 +351,11 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapterOrNull) {
 
-        final CommandMementoService commandMementoService = getCommandMementoService();
-        final CommandMementoDto dto = commandMementoService.asCommandMemento(targetAdapter, this, valueAdapterOrNull);
+        final CommandDtoService commandDtoService = getCommandDtoService();
+        final CommandDto dto = commandDtoService.asCommandDto(
+                Collections.singletonList(targetAdapter), this, valueAdapterOrNull);
 
-        setupCommandMementoAndExecutionContext(dto);
+        setupCommandDtoAndExecutionContext(dto);
 
     }
 
