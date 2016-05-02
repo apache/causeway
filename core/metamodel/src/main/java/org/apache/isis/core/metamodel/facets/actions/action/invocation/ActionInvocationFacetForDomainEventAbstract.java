@@ -355,12 +355,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
-            final RuntimeException executionExceptionIfAny = priorExecution.getException();
+            final RuntimeException executionExceptionIfAny = priorExecution.getThrew();
             if(executionExceptionIfAny != null) {
                 throw executionExceptionIfAny;
             }
 
-            resultAdapter = getAdapterManager().adapterFor(priorExecution.getResult());
+            resultAdapter = getAdapterManager().adapterFor(priorExecution.getReturned());
             setCommandResultIfEntity(command, resultAdapter);
 
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);

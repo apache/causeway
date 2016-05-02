@@ -71,10 +71,10 @@ import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceIntern
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
-import org.apache.isis.schema.aim.v2.ReturnDto;
 import org.apache.isis.schema.cmd.v1.ActionDto;
-import org.apache.isis.schema.utils.ActionInvocationMementoDtoUtils;
+import org.apache.isis.schema.mim.v1.MemberInteractionMementoDto;
+import org.apache.isis.schema.mim.v1.ReturnDto;
+import org.apache.isis.schema.utils.MemberInteractionMementoDtoUtils;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -331,6 +331,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             return;
         }
 
+        //
+        // TODO: currently MemberInteractionMementoDtoUtils does _not_ serialize out the call graph of Interaction.Execution; that enhancement might follow at a later stage.
+        //
+
         final Command command = commandContext.getCommand();
 
         final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
@@ -342,8 +346,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
         final String actionClassNameId = execution.getMemberArgs().getMemberId();
         final String actionId = actionClassNameId.substring(actionClassNameId.indexOf('#')+1);
-
-        final String title = targetBookmark.toString() + ": " + actionId;
+        final String targetTitle = targetBookmark.toString() + ": " + actionId;
 
         final String currentUser = userService.getUser().getName();
         final Timestamp startedAt = execution.getStartedAt();
@@ -361,20 +364,22 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final Object resultPojo = argAdapter != null? argAdapter.getObject(): null;
 
         final ReturnDto returnDto = new ReturnDto();
-        ActionInvocationMementoDtoUtils.setValue(returnDto, returnType, resultPojo);
+        MemberInteractionMementoDtoUtils.setValue(returnDto, returnType, resultPojo);
 
         for (PublisherService publisherService : publisherServices) {
-            final ActionInvocationMementoDto aimDto =
-                ActionInvocationMementoDtoUtils.newDto(
+            final MemberInteractionMementoDto aimDto =
+                MemberInteractionMementoDtoUtils.newActionDto(
                         transactionId,
                         nextEventSequence,
                         targetBookmark,
-                        actionDto, title,
+                        targetTitle,
+                        actionDto.getMemberIdentifier(),
+                        actionDto.getParameters(), returnDto,
                         currentUser,
-                        startedAt, completedAt,
-                        returnDto);
+                        startedAt, completedAt
+                );
 
-            ActionInvocationMementoDtoUtils.addReturn(aimDto, returnType, resultPojo, bookmarkService);
+            MemberInteractionMementoDtoUtils.addReturn(aimDto, returnType, resultPojo, bookmarkService);
 
             publisherService.publish(aimDto);
         }

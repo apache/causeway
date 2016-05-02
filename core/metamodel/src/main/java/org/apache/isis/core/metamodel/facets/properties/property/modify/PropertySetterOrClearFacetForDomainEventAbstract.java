@@ -249,7 +249,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
-            final RuntimeException executionExceptionIfAny = priorExecution.getException();
+            final RuntimeException executionExceptionIfAny = priorExecution.getThrew();
             if(executionExceptionIfAny != null) {
                 throw executionExceptionIfAny;
             }

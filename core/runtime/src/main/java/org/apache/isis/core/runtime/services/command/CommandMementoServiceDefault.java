@@ -182,7 +182,7 @@ public class CommandMementoServiceDefault implements CommandMementoService {
             final ActionDto actionDto,
             final ObjectAdapter[] argAdapters) {
         final String actionIdentifier = CommandUtil.actionIdentifierFor(objectAction);
-        actionDto.setActionIdentifier(actionIdentifier);
+        actionDto.setMemberIdentifier(actionIdentifier);
 
         List<ObjectActionParameter> actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {

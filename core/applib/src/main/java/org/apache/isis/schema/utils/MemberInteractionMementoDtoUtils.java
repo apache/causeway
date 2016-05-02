@@ -49,25 +49,26 @@ import org.joda.time.LocalTime;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.schema.aim.v2.ActionInvocationDto;
-import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
-import org.apache.isis.schema.aim.v2.ReturnDto;
-import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
+import org.apache.isis.schema.mim.v1.ActionInvocationDto;
+import org.apache.isis.schema.mim.v1.MemberInteractionDto;
+import org.apache.isis.schema.mim.v1.MemberInteractionMementoDto;
+import org.apache.isis.schema.mim.v1.PropertyModificationDto;
+import org.apache.isis.schema.mim.v1.ReturnDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
-public final class ActionInvocationMementoDtoUtils {
+public final class MemberInteractionMementoDtoUtils {
 
     //region > marshalling
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
         if(jaxbContext == null) {
             try {
-                jaxbContext = JAXBContext.newInstance(ActionInvocationMementoDto.class);
+                jaxbContext = JAXBContext.newInstance(MemberInteractionMementoDto.class);
             } catch (JAXBException e) {
                 throw new RuntimeException(e);
             }
@@ -75,20 +76,20 @@ public final class ActionInvocationMementoDtoUtils {
         return jaxbContext;
     }
 
-    public static ActionInvocationMementoDto fromXml(final Reader reader) {
+    public static MemberInteractionMementoDto fromXml(final Reader reader) {
         try {
             final Unmarshaller un = getJaxbContext().createUnmarshaller();
-            return (ActionInvocationMementoDto) un.unmarshal(reader);
+            return (MemberInteractionMementoDto) un.unmarshal(reader);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ActionInvocationMementoDto fromXml(final String xml) {
+    public static MemberInteractionMementoDto fromXml(final String xml) {
         return fromXml(new StringReader(xml));
     }
 
-    public static ActionInvocationMementoDto fromXml(
+    public static MemberInteractionMementoDto fromXml(
             final Class<?> contextClass,
             final String resourceName,
             final Charset charset) throws IOException {
@@ -97,13 +98,13 @@ public final class ActionInvocationMementoDtoUtils {
         return fromXml(new StringReader(s));
     }
 
-    public static String toXml(final ActionInvocationMementoDto aimDto) {
+    public static String toXml(final MemberInteractionMementoDto aimDto) {
         final CharArrayWriter caw = new CharArrayWriter();
         toXml(aimDto, caw);
         return caw.toString();
     }
 
-    public static void toXml(final ActionInvocationMementoDto aimDto, final Writer writer) {
+    public static void toXml(final MemberInteractionMementoDto aimDto, final Writer writer) {
         try {
             final Marshaller m = getJaxbContext().createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -116,79 +117,141 @@ public final class ActionInvocationMementoDtoUtils {
 
     //region > newDto
 
-    public static ActionInvocationMementoDto newDto(
+    enum Type {
+        ACTION_INVOCATION,
+        PROPERTY_MODIFICATION
+    }
+
+    /**
+     *
+     * @param newValueDto - will be null if clearing the property
+     */
+    public static MemberInteractionMementoDto newPropertyDto(
             final UUID transactionId,
             final int sequence,
             final Bookmark targetBookmark,
-            final ActionDto actionDto,
-            final String title,
+            final String targetTitle,
+            final String propertyIdentifier,
+            final ParamDto newValueDto,
             final String user,
-            final Timestamp startedAt, final Timestamp completedAt,
-            final ReturnDto returnDto) {
+            final Timestamp startedAt, final Timestamp completedAt
+    ) {
 
-        final ActionInvocationMementoDto aim = new ActionInvocationMementoDto();
+        return newDto(Type.PROPERTY_MODIFICATION, transactionId, sequence, targetBookmark, targetTitle,
+                propertyIdentifier, null, null, newValueDto,
+                user, startedAt, completedAt);
 
-        aim.setMajorVersion("2");
-        aim.setMinorVersion("0");
+    }
 
-        aim.setTransactionId(transactionId.toString());
+    public static MemberInteractionMementoDto newActionDto(
+            final UUID transactionId,
+            final int sequence,
+            final Bookmark targetBookmark,
+            final String targetTitle,
+            final String actionIdentifier,
+            final List<ParamDto> parameterDtos,
+            final ReturnDto returnDto,
+            final String user,
+            final Timestamp startedAt, final Timestamp completedAt) {
 
-        final ActionInvocationDto invocation = invocationFor(aim);
+        return newDto(Type.ACTION_INVOCATION, transactionId, sequence, targetBookmark, targetTitle, actionIdentifier,
+                parameterDtos, returnDto, null,
+                user, startedAt, completedAt);
+    }
 
-        invocation.setSequence(sequence);
-        invocation.setId(aim.getTransactionId() + "." + invocation.getSequence());
+    /**
+     * @param parameterDtos - populated only for actions
+     * @param returnDto     - populated only for actions (could be null)
+     * @param newValueDto   - populated only for property modificaitons
+     */
+    private static MemberInteractionMementoDto newDto(
+            final Type type,
+            final UUID transactionId,
+            final int sequence,
+            final Bookmark targetBookmark,
+            final String targetTitle,
+            final String memberIdentifier,
+            final List<ParamDto> parameterDtos,
+            final ReturnDto returnDto,
+            final ParamDto newValueDto,
+            final String user,
+            final Timestamp startedAt, final Timestamp completedAt) {
+        final MemberInteractionMementoDto mim = new MemberInteractionMementoDto();
+
+        mim.setMajorVersion("1");
+        mim.setMinorVersion("0");
+
+        mim.setTransactionId(transactionId.toString());
+
+        final MemberInteractionDto memberInteraction;
+        if(type == Type.ACTION_INVOCATION) {
+
+            final ActionInvocationDto invocation = actionInvocationFor(mim);
+            final ActionInvocationDto.Parameters parameters = invocation.getParameters();
+            parameters.getParameter().addAll(parameterDtos);
+            invocation.setReturned(returnDto);
+
+            memberInteraction = invocation;
+        } else {
+            final PropertyModificationDto modification = propertyModificationFor(mim);
+            // modification.
+
+            memberInteraction = modification;
+        }
+
+        memberInteraction.setSequence(sequence);
+        memberInteraction.setId(mim.getTransactionId() + "." + sequence);
 
         final OidDto target = new OidDto();
         target.setObjectType(targetBookmark.getObjectType());
         target.setObjectIdentifier(target.getObjectIdentifier());
-        invocation.setTarget(target);
+        memberInteraction.setTarget(target);
 
-        invocation.setTitle(title);
-        invocation.setUser(user);
+        memberInteraction.setTitle(targetTitle);
+        memberInteraction.setUser(user);
 
-        invocation.setAction(actionDto);
-        invocation.setReturned(returnDto);
+        memberInteraction.setMemberIdentifier(memberIdentifier);
 
-        final PeriodDto timings = timingsFor(invocation);
+        final PeriodDto timings = timingsFor(memberInteraction);
         timings.setStart(JavaSqlTimestampXmlGregorianCalendarAdapter.print(startedAt));
         timings.setComplete(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
 
-        return aim;
+        return mim;
     }
 
     //endregion
 
     //region > invocationFor, actionFor, timingsFor
 
-    private static ActionInvocationDto invocationFor(
-            final ActionInvocationMementoDto aim) {
-        ActionInvocationDto invocation = aim.getInvocation();
+    private static ActionInvocationDto actionInvocationFor(
+            final MemberInteractionMementoDto mim) {
+        ActionInvocationDto invocation = (ActionInvocationDto) mim.getInteraction();
         if(invocation == null) {
             invocation = new ActionInvocationDto();
-            aim.setInvocation(invocation);
+            mim.setInteraction(invocation);
         }
         return invocation;
     }
 
-    private static ActionDto actionFor(final ActionInvocationDto invocation) {
-        ActionDto action = invocation.getAction();
-        if(action == null) {
-            action = new ActionDto();
-            invocation.setAction(action);
+    private static PropertyModificationDto propertyModificationFor(
+            final MemberInteractionMementoDto mim) {
+        PropertyModificationDto modification = (PropertyModificationDto) mim.getInteraction();
+        if(modification == null) {
+            modification = new PropertyModificationDto();
+            mim.setInteraction(modification);
         }
-        return action;
+        return modification;
     }
 
-    private static List<ParamDto> parametersFor(final ActionInvocationMementoDto aim) {
-        return parametersFor(invocationFor(aim));
+    private static List<ParamDto> parametersFor(final MemberInteractionMementoDto mim) {
+        return parametersFor(actionInvocationFor(mim));
     }
 
     private static List<ParamDto> parametersFor(final ActionInvocationDto invocationDto) {
-        final ActionDto actionDto = actionFor(invocationDto);
-        return actionDto.getParameters();
+        return invocationDto.getParameters().getParameter();
     }
 
-    private static PeriodDto timingsFor(final ActionInvocationDto invocation) {
+    private static PeriodDto timingsFor(final MemberInteractionDto invocation) {
         PeriodDto timings = invocation.getTimings();
         if(timings == null) {
             timings = new PeriodDto();
@@ -202,13 +265,13 @@ public final class ActionInvocationMementoDtoUtils {
     //region > addParamArg
 
     public static void addParamArg(
-            final ActionInvocationMementoDto aim,
+            final MemberInteractionMementoDto mim,
             final String parameterName,
             final Class<?> parameterType,
             final Object arg,
             final BookmarkService bookmarkService) {
 
-        final List<ParamDto> params = parametersFor(aim);
+        final List<ParamDto> params = parametersFor(mim);
         CommandMementoDtoUtils.addParamArg(params, parameterName, parameterType, arg, bookmarkService);
     }
 
@@ -216,32 +279,32 @@ public final class ActionInvocationMementoDtoUtils {
 
     /**
      *
-     * @param aim
+     * @param mim
      * @param returnType - to determine the value type (if any)
      * @param result - either a value type (possibly boxed primitive), or a reference type
      * @param bookmarkService - used if not a value type
      */
     public static void addReturn(
-            final ActionInvocationMementoDto aim,
+            final MemberInteractionMementoDto mim,
             final Class<?> returnType,
             final Object result,
             final BookmarkService bookmarkService) {
-        boolean isValueType = ActionInvocationMementoDtoUtils.addReturnValue(aim, returnType, result);
+        boolean isValueType = MemberInteractionMementoDtoUtils.addReturnValue(mim, returnType, result);
         if(!isValueType) {
-            ActionInvocationMementoDtoUtils.addReturnReference(aim, bookmarkService.bookmarkFor(result));
+            MemberInteractionMementoDtoUtils.addReturnReference(mim, bookmarkService.bookmarkFor(result));
         }
     }
 
     public static boolean addReturnValue(
-            final ActionInvocationMementoDto aim,
+            final MemberInteractionMementoDto mim,
             final Class<?> returnType,
             final Object returnVal) {
-        final ReturnDto returnDto = returnValueDtoFor(aim);
+        final ReturnDto returnDto = returnValueDtoFor(mim);
         return setValue(returnDto, returnType, returnVal);
     }
 
     public static void addReturnReference(
-            final ActionInvocationMementoDto aim,
+            final MemberInteractionMementoDto aim,
             final Bookmark bookmark) {
         final ReturnDto returnedDto = returnValueDtoFor(aim);
         OidDto oidDto = CommonDtoUtils.asOidDto(bookmark);
@@ -251,8 +314,8 @@ public final class ActionInvocationMementoDtoUtils {
         returnedDto.setReturnType(ValueType.REFERENCE);
     }
 
-    private static ReturnDto returnValueDtoFor(final ActionInvocationMementoDto aim) {
-        ActionInvocationDto invocationDto = invocationFor(aim);
+    private static ReturnDto returnValueDtoFor(final MemberInteractionMementoDto mim) {
+        ActionInvocationDto invocationDto = actionInvocationFor(mim);
         ReturnDto returned = invocationDto.getReturned();
         if(returned == null) {
             returned = new ReturnDto();
@@ -265,9 +328,9 @@ public final class ActionInvocationMementoDtoUtils {
 
 
     //region > getParameters, getParameterNames, getParameterTypes
-    public static List<ParamDto> getParameters(final ActionInvocationMementoDto aim) {
-        final List<ParamDto> params = parametersFor(aim);
-        final int parameterNumber = getNumberOfParameters(aim);
+    public static List<ParamDto> getParameters(final ActionInvocationDto ai) {
+        final List<ParamDto> params = parametersFor(ai);
+        final int parameterNumber = getNumberOfParameters(ai);
         final List<ParamDto> paramDtos = Lists.newArrayList();
         for (int i = 0; i < parameterNumber; i++) {
             final ParamDto paramDto = params.get(i);
@@ -276,50 +339,50 @@ public final class ActionInvocationMementoDtoUtils {
         return Collections.unmodifiableList(paramDtos);
     }
 
-    private static int getNumberOfParameters(final ActionInvocationMementoDto aim) {
-        final List<ParamDto> params = parametersFor(aim);
+    private static int getNumberOfParameters(final ActionInvocationDto ai) {
+        final List<ParamDto> params = parametersFor(ai);
         return params != null ? params.size() : 0;
     }
 
-    public static List<String> getParameterNames(final ActionInvocationMementoDto aim) {
-        return immutableList(Iterables.transform(getParameters(aim), CommonDtoUtils.PARAM_DTO_TO_NAME));
+    public static List<String> getParameterNames(final ActionInvocationDto ai) {
+        return immutableList(Iterables.transform(getParameters(ai), CommonDtoUtils.PARAM_DTO_TO_NAME));
     }
-    public static List<ValueType> getParameterTypes(final ActionInvocationMementoDto aim) {
-        return immutableList(Iterables.transform(getParameters(aim), CommonDtoUtils.PARAM_DTO_TO_TYPE));
+    public static List<ValueType> getParameterTypes(final ActionInvocationDto ai) {
+        return immutableList(Iterables.transform(getParameters(ai), CommonDtoUtils.PARAM_DTO_TO_TYPE));
     }
     //endregion
 
     //region > getParameter, getParameterName, getParameterType
-    public static ParamDto getParameter(final ActionInvocationMementoDto aim, final int paramNum) {
-        final int parameterNumber = getNumberOfParameters(aim);
+    public static ParamDto getParameter(final ActionInvocationDto ai, final int paramNum) {
+        final int parameterNumber = getNumberOfParameters(ai);
         if(paramNum > parameterNumber) {
             throw new IllegalArgumentException(String.format("No such parameter %d (the memento has %d parameters)", paramNum, parameterNumber));
         }
-        final List<ParamDto> parameters = getParameters(aim);
+        final List<ParamDto> parameters = getParameters(ai);
         return parameters.get(paramNum);
     }
 
-    public static ValueDto getParameterArg(final ActionInvocationMementoDto aim, final int paramNum) {
-        final ParamDto paramDto = getParameter(aim, paramNum);
+    public static ValueDto getParameterArg(final ActionInvocationDto ai, final int paramNum) {
+        final ParamDto paramDto = getParameter(ai, paramNum);
         return CommandMementoDtoUtils.argumentFor(paramDto);
     }
 
 
-    public static String getParameterName(final ActionInvocationMementoDto aim, final int paramNum) {
-        return CommonDtoUtils.PARAM_DTO_TO_NAME.apply(getParameter(aim, paramNum));
+    public static String getParameterName(final ActionInvocationDto ai, final int paramNum) {
+        return CommonDtoUtils.PARAM_DTO_TO_NAME.apply(getParameter(ai, paramNum));
     }
-    public static ValueType getParameterType(final ActionInvocationMementoDto aim, final int paramNum) {
-        return CommonDtoUtils.PARAM_DTO_TO_TYPE.apply(getParameter(aim, paramNum));
+    public static ValueType getParameterType(final ActionInvocationDto ai, final int paramNum) {
+        return CommonDtoUtils.PARAM_DTO_TO_TYPE.apply(getParameter(ai, paramNum));
     }
-    public static boolean isNull(final ActionInvocationMementoDto aim, int paramNum) {
-        final ParamDto paramDto = getParameter(aim, paramNum);
+    public static boolean isNull(final ActionInvocationDto ai, int paramNum) {
+        final ParamDto paramDto = getParameter(ai, paramNum);
         return paramDto.isNull();
     }
     //endregion
 
     //region > getArg
-    public static <T> T getArg(final ActionInvocationMementoDto aim, int paramNum, Class<T> cls) {
-        final ParamDto paramDto = getParameter(aim, paramNum);
+    public static <T> T getArg(final ActionInvocationDto ai, int paramNum, Class<T> cls) {
+        final ParamDto paramDto = getParameter(ai, paramNum);
         if(paramDto.isNull()) {
             return null;
         }
@@ -410,8 +473,8 @@ public final class ActionInvocationMementoDtoUtils {
     //endregion
 
     //region > debugging
-    public static void dump(final ActionInvocationMementoDto aim, final PrintStream out) throws JAXBException {
-        out.println(toXml(aim));
+    public static void dump(final MemberInteractionMementoDto mim, final PrintStream out) throws JAXBException {
+        out.println(toXml(mim));
     }
     //endregion
 

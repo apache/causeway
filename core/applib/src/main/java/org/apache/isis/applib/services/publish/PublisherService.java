@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
+import org.apache.isis.schema.mim.v1.MemberInteractionMementoDto;
 
 /**
  * Replaces {@link PublishingService}.
@@ -27,13 +27,13 @@ import org.apache.isis.schema.aim.v2.ActionInvocationMementoDto;
 public interface PublisherService {
 
     @Programmatic
-    void publish(final ActionInvocationMementoDto aimDto);
+    void publish(final MemberInteractionMementoDto mimDto);
 
     /**
      * To support implementations that allow the republishing of commands, eg onto an JMS message bus.
      */
     @Programmatic
-    void republish(final ActionInvocationMementoDto aimDto);
+    void republish(final MemberInteractionMementoDto mimDto);
     
 }
 

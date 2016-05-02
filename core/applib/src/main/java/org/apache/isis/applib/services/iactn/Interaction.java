@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.Lists;
@@ -38,11 +39,13 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * Represents an action invocation or property modification, resulting in some state change of the system.
+ * Represents an action invocation or property modification, resulting in some state change of the system.  It captures
+ * not only the target object and arguments passed, but also builds up the call-graph, and captures metrics, eg
+ * for profiling.
  *
  * <p>
  *     The distinction between {@link Command} and this object is perhaps subtle: the former represents the
- *     intention to invoke an action/edit a property, whereas this represents the actual invocation itself.
+ *     intention to invoke an action/edit a property, whereas this represents the actual invocation/edit itself.
  * </p>
  *
  * <p>
@@ -53,9 +56,10 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  * </p>
  *
  * <p>
- *     NOTE: this interface might also be considered as representing the (persistence) transaction.  That name was
- *     not chosen however because there is also the system-level transaction that also manages the persistence of
- *     the {@link Command} object.
+ *     NOTE: you could also think of this interface as being analogous to the (database) transaction.  The name
+ *     &quot;Transaction&quot; has not been used for the interface not chosen however because there is also the
+ *     system-level transaction that manages the persistence of
+ *     the {@link Command} object itself.
  * </p>
  *
  */
@@ -74,9 +78,9 @@ public class Interaction implements HasTransactionId {
     }
     //endregion
 
-    //region > push/pop/current/get/clear (Abstract)DomainEvents
+    //region > push/pop/current/get/clear Execution(s)
 
-    private List<Execution> executionGraphs = Lists.newArrayList();
+    private final List<Execution> executionGraphs = Lists.newArrayList();
     private Execution currentExecution;
     private Execution priorExecution;
 
@@ -88,6 +92,11 @@ public class Interaction implements HasTransactionId {
         return priorExecution;
     }
 
+    /**
+     * Implemented by the framework (and modelled after {@link Callable}), is the implementation
+     * by which the framework actually performs the interaction.
+     * @param <T>
+     */
     public interface MemberCallable<T extends MemberArgs> {
         Object call(T args);
     }
@@ -96,7 +105,7 @@ public class Interaction implements HasTransactionId {
 
         private final String memberId;
 
-        public enum Type {
+        enum Type {
             PROPERTY,
             ACTION
         }
@@ -206,14 +215,14 @@ public class Interaction implements HasTransactionId {
         try {
             try {
                 Object result = memberCallable.call(memberArgs);
-                currentExecution.setResult(result);
+                currentExecution.setReturned(result);
                 return (T)result;
             } catch (Exception e) {
 
                 // just because an exception has thrown, does not mean it is that significant; it could be that
                 // it is recognized by an ExceptionRecognizer and is not severe, eg unique index violation in the DB.
                 RuntimeException re = e instanceof RuntimeException? (RuntimeException) e : new RuntimeException(e);
-                currentExecution.setException(re);
+                currentExecution.setThrew(re);
 
                 // propagate (as in previous design); caller will need to trap and decide
                 throw re;
@@ -230,6 +239,7 @@ public class Interaction implements HasTransactionId {
      */
     public static class Execution {
 
+        //region > fields, constructor
         private final Timestamp startedAt;
         private final MemberArgs memberArgs;
         private final Execution parent;
@@ -249,24 +259,31 @@ public class Interaction implements HasTransactionId {
             this.memberArgs = memberArgs;
             parent.children.add(this);
         }
+        //endregion
 
+        //region > parent
         /**
          * The action/property that invoked this action/property edit (if any).
          */
         public Execution getParent() {
             return parent;
         }
+        //endregion
 
+        //region > children
         /**
          * The actions/property edits made in turn via the {@link WrapperFactory}.
          */
         public List<Execution> getChildren() {
             return Collections.unmodifiableList(children);
         }
+        //endregion
 
+        //region > memberArgs
         public MemberArgs getMemberArgs() {
             return memberArgs;
         }
+        //endregion
 
         //region > event
 
@@ -320,27 +337,9 @@ public class Interaction implements HasTransactionId {
 
         //endregion
 
-        //region > exception (property)
+        //region > returned (property)
 
-        private RuntimeException exception;
-        @Programmatic
-        public RuntimeException getException() {
-            return exception;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
-         */
-        public void setException(RuntimeException exception) {
-            this.exception = exception;
-        }
-
-        //endregion
-
-        //region > result (property)
-
-
-        private Object result;
+        private Object returned;
         /**
          * The object returned by the action invocation/property edit.
          *
@@ -352,20 +351,35 @@ public class Interaction implements HasTransactionId {
          * For <tt>void</tt> methods and for actions returning collections, the value
          * will be <tt>null</tt>.
          */
-        public Object getResult() {
-            return result;
+        public Object getReturned() {
+            return returned;
         }
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        public void setResult(Object result) {
-            this.result =  result;
+        public void setReturned(Object returned) {
+            this.returned = returned;
         }
 
         //endregion
 
+        //region > threw (property)
 
+        private RuntimeException threw;
+        @Programmatic
+        public RuntimeException getThrew() {
+            return threw;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setThrew(RuntimeException threw) {
+            this.threw = threw;
+        }
+
+        //endregion
 
     }
 

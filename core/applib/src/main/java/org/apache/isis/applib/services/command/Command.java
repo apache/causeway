@@ -339,7 +339,7 @@ public interface Command extends HasTransactionId {
      * For an command that has actually been executed, holds the exception stack
      * trace if the action invocation/property modification threw an exception.
      *
-     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getException()} instead.
+     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()} instead.
      */
     @Deprecated
     @Optional
@@ -358,7 +358,7 @@ public interface Command extends HasTransactionId {
     /**
      * For an command that has actually been executed, holds a {@link Bookmark} to the object returned by the corresponding action/property modification.
      * 
-     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getResult()} instead.
+     * @deprecated - see {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()} instead.
      */
     @Deprecated
     Bookmark getResult();

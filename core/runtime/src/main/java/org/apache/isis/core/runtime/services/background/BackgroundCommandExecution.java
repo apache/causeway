@@ -95,7 +95,17 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     
-    private void execute(final IsisTransactionManager transactionManager, final Command backgroundCommand) {
+    private void execute(
+            final IsisTransactionManager transactionManager,
+            final Command backgroundCommand) {
+
+
+        //
+        // TODO: need to generalize so that can invoke property modifications also.
+        //
+
+
+
         transactionManager.executeWithinTransaction(
                 backgroundCommand,
                 new TransactionalClosure() {
@@ -141,14 +151,14 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         if(resultAdapter != null) {
                             Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                             backgroundCommand.setResult(resultBookmark);
-                            backgroundInteraction.getCurrentExecution().setResult(resultAdapter.getObject());
+                            backgroundInteraction.getCurrentExecution().setReturned(resultAdapter.getObject());
                         }
 
                     } else {
 
                         final CommandMementoDto dto = jaxbService.fromXml(CommandMementoDto.class, memento);
                         final ActionDto actionDto = dto.getAction();
-                        final String actionId = actionDto.getActionIdentifier();
+                        final String actionId = actionDto.getMemberIdentifier();
 
                         final List<OidDto> targetOidDtos = dto.getTargets();
                         for (OidDto targetOidDto : targetOidDtos) {
@@ -172,7 +182,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                     targetAdapter, mixedInAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                             // alternatively, could use...
-                            Object unused = backgroundInteraction.getPriorExecution().getResult();
+                            Object unused = backgroundInteraction.getPriorExecution().getReturned();
 
                             // this doesn't really make sense if >1 action
                             // in any case, the capturing of the action interaction should be the
@@ -191,9 +201,9 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     backgroundCommand.setException(Throwables.getStackTraceAsString(e));
 
                     // alternatively, could use...
-                    RuntimeException unused = backgroundInteraction.getPriorExecution().getException();
+                    RuntimeException unused = backgroundInteraction.getPriorExecution().getThrew();
 
-                    backgroundInteraction.getCurrentExecution().setException(e);
+                    backgroundInteraction.getCurrentExecution().setThrew(e);
                 }
 
                 backgroundCommand.setCompletedAt(backgroundInteraction.getPriorExecution().getCompletedAt());

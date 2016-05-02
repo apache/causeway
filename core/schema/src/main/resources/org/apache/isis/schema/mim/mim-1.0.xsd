@@ -113,31 +113,47 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="threw" type="exceptionDto" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Captures any exception thrown by an action.  Either the 'returned' or the 'threw' element will be populated.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
+
     <xs:complexType name="actionInvocationDto">
         <xs:complexContent>
             <xs:extension base="memberInteractionDto">
                 <xs:sequence>
-                    <xs:element name="action" type="cmd:actionDto">
+                    <xs:element name="parameters" minOccurs="1" maxOccurs="1">
                         <xs:annotation>
-                            <xs:documentation>The action and arguments to be invoked on the target object.</xs:documentation>
+                            <xs:documentation>
+                                The set of parameter/argument values for this action invocation.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                                <xs:element name="parameter" type="cmd:paramDto"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberInteractionDto') will be populated.
+                            </xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:choice>
-                        <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
-                            <xs:annotation>
-                                <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element will be populated.
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:element>
-                        <xs:element name="threw" type="exceptionDto" minOccurs="0" maxOccurs="1">
-                            <xs:annotation>
-                                <xs:documentation>Captures any exception thrown by an action.  Either the 'returned' or the 'threw' element will be populated.
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:element>
-                    </xs:choice>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="propertyModificationDto">
+        <xs:complexContent>
+            <xs:extension base="memberInteractionDto">
+                <xs:sequence>
+                    <xs:element name="newValue" type="cmd:paramDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
