@@ -48,9 +48,9 @@ import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.InteractionTypeDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
@@ -152,7 +152,7 @@ public class CommandDtoServiceDefault implements CommandDtoService {
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
-        dto.setInteractionType(InteractionTypeDto.ACTION_INVOCATION);
+        dto.setInteractionType(InteractionType.ACTION_INVOCATION);
         final ActionDto actionDto = new ActionDto();
         dto.setMember(actionDto);
 
@@ -169,7 +169,7 @@ public class CommandDtoServiceDefault implements CommandDtoService {
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
-        dto.setInteractionType(InteractionTypeDto.PROPERTY_MODIFICATION);
+        dto.setInteractionType(InteractionType.PROPERTY_MODIFICATION);
         final PropertyDto propertyDto = new PropertyDto();
         dto.setMember(propertyDto);
 

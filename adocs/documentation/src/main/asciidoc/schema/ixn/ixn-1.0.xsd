@@ -54,6 +54,7 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="execution" type="interactionExecutionDto"/>
+                <xs:element name="interactionType" type="common:interactionType"/>
             </xs:sequence>
         </xs:complexType>
 

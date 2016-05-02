@@ -50,6 +50,7 @@ import org.joda.time.LocalTime;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.common.v1.ValueDto;
@@ -228,6 +229,7 @@ public final class InteractionDtoUtils {
         if(invocation == null) {
             invocation = new ActionInvocationDto();
             interactionDto.setExecution(invocation);
+            interactionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
         }
         return invocation;
     }
@@ -237,6 +239,7 @@ public final class InteractionDtoUtils {
         if(modification == null) {
             modification = new PropertyModificationDto();
             interactionDto.setExecution(modification);
+            interactionDto.setInteractionType(InteractionType.PROPERTY_MODIFICATION);
         }
         return modification;
     }

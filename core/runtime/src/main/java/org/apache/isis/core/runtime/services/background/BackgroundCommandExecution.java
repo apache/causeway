@@ -40,6 +40,8 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -47,11 +49,12 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
-import org.apache.isis.schema.cmd.v1.InteractionTypeDto;
 import org.apache.isis.schema.cmd.v1.MemberDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 
 /**
@@ -136,7 +139,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         final ObjectAdapter targetAdapter = adapterFor(targetObject);
                         final ObjectSpecification specification = targetAdapter.getSpecification();
 
-                        final ObjectAction objectAction = findAction(specification, actionId);
+                        final ObjectAction objectAction = findActionElseNull(specification, actionId);
                         if(objectAction == null) {
                             throw new RuntimeException(String.format("Unknown action '%s'", actionId));
                         }
@@ -164,8 +167,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         final MemberDto memberDto = dto.getMember();
                         final String memberId = memberDto.getMemberIdentifier();
 
-                        final InteractionTypeDto interactionType = dto.getInteractionType();
-                        if(interactionType == InteractionTypeDto.ACTION_INVOCATION) {
+                        final InteractionType interactionType = dto.getInteractionType();
+                        if(interactionType == InteractionType.ACTION_INVOCATION) {
 
                             final ActionDto actionDto = (ActionDto) memberDto;
 
@@ -200,10 +203,21 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                             final PropertyDto propertyDto = (PropertyDto) memberDto;
 
-                            //
-                            // TODO: need equivalent logic if this is a property modification
-                            //
-                            throw new RuntimeException("Not yet implemented");
+                            final List<OidDto> targetOidDtos = dto.getTargets();
+                            for (OidDto targetOidDto : targetOidDtos) {
+
+                                final Bookmark bookmark = Bookmark.from(targetOidDto);
+                                final Object targetObject = bookmarkService.lookup(bookmark);
+
+                                final ObjectAdapter targetAdapter = adapterFor(targetObject);
+
+                                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+
+                                final ObjectAdapter newValueAdapter = newValueAdapterFor(propertyDto);
+
+                                property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+                                // there is no return value for property modifications.
+                            }
                         }
 
                     }
@@ -227,24 +241,61 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     final ObjectAdapter targetAdapter,
                     final String actionId) throws RuntimeException {
 
-                final ObjectAction objectAction;
-
                 final ObjectSpecification specification = targetAdapter.getSpecification();
 
-                objectAction = findAction(specification, actionId);
+                final ObjectAction objectAction = findActionElseNull(specification, actionId);
                 if(objectAction == null) {
                     throw new RuntimeException(String.format("Unknown action '%s'", actionId));
                 }
                 return objectAction;
             }
+
+            private OneToOneAssociation findOneToOneAssociation(
+                    final ObjectAdapter targetAdapter,
+                    final String propertyId) throws RuntimeException {
+
+
+                final ObjectSpecification specification = targetAdapter.getSpecification();
+
+                final OneToOneAssociation property = findOneToOneAssociationElseNull(specification, propertyId);
+                if(property == null) {
+                    throw new RuntimeException(String.format("Unknown property '%s'", propertyId));
+                }
+                return property;
+            }
         });
     }
 
-    private ObjectAction findAction(final ObjectSpecification specification, final String actionId) {
+    protected ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
+
+        final ValueDto newValue = propertyDto.getNewValue();
+        if(newValue == null) {
+            return null;
+        } else {
+            throw new RuntimeException("NOT YET IMPLEMENTED; need to refactor cmd.xsd to take a paramDto for newValue");
+        }
+    }
+
+    private static ObjectAction findActionElseNull(
+            final ObjectSpecification specification,
+            final String actionId) {
         final List<ObjectAction> objectActions = specification.getObjectActions(Contributed.INCLUDED);
         for (final ObjectAction objectAction : objectActions) {
             if(objectAction.getIdentifier().toClassAndNameIdentityString().equals(actionId)) {
                 return objectAction;
+            }
+        }
+        return null;
+    }
+
+    private static OneToOneAssociation findOneToOneAssociationElseNull(
+            final ObjectSpecification specification,
+            final String propertyId) {
+        final List<ObjectAssociation> associations = specification.getAssociations(Contributed.INCLUDED);
+        for (final ObjectAssociation association : associations) {
+            if( association.getIdentifier().toClassAndNameIdentityString().equals(propertyId) &&
+                association instanceof OneToOneAssociation) {
+                return (OneToOneAssociation) association;
             }
         }
         return null;

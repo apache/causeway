@@ -56,7 +56,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="interactionType" type="interactionTypeDto"/>
+                <xs:element name="interactionType" type="common:interactionType"/>
                 <xs:element name="member" type="memberDto">
                     <xs:annotation>
                         <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
@@ -71,16 +71,6 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-
-    <xs:simpleType name="interactionTypeDto" final="restriction" >
-        <xs:annotation>
-            <xs:documentation>Whether this interaction with a member is invoking an action, or modifying a property.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="ACTION_INVOCATION" />
-            <xs:enumeration value="PROPERTY_MODIFICATION" />
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:complexType name="memberDto" abstract="true">
         <xs:annotation>

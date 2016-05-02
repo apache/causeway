@@ -118,5 +118,15 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:simpleType name="interactionType" >
+        <xs:annotation>
+            <xs:documentation>Whether this interaction with a member is invoking an action, or modifying a property.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="action_invocation" />
+            <xs:enumeration value="property_modification" />
+        </xs:restriction>
+    </xs:simpleType>
+
 
 </xs:schema>

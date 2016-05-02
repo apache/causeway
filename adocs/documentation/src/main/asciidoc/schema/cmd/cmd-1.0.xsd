@@ -56,9 +56,10 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="interactionType" type="common:interactionType"/>
                 <xs:element name="member" type="memberDto">
                     <xs:annotation>
-                        <xs:documentation>The action and arguments to be invoked on the target object(s).</xs:documentation>
+                        <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="user" type="xs:string">
@@ -69,7 +70,6 @@
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
-
     </xs:element>
 
     <xs:complexType name="memberDto" abstract="true">
@@ -111,7 +111,7 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="paramDto"/>
+                    <xs:element name="newValue" type="common:valueDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
