@@ -145,7 +145,7 @@
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
+                    <xs:element name="returned" type="valueWithTypeDto" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
                             <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberInteractionDto') will be populated.
                             </xs:documentation>
@@ -160,21 +160,21 @@
         <xs:complexContent>
             <xs:extension base="interactionExecutionDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="cmd:paramDto"/>
+                    <xs:element name="newValue" type="valueWithTypeDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="returnDto">
+    <xs:complexType name="valueWithTypeDto">
         <xs:annotation>
-            <xs:documentation>Captures both the value returned of an action, and also the type of that returned value.
+            <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property modifications.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="value" type="common:valueDto"/>
         </xs:sequence>
-        <xs:attribute name="returnType" use="required" type="common:valueType"/>
+        <xs:attribute name="type" use="required" type="common:valueType"/>
         <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 

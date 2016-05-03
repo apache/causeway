@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
-import org.apache.isis.schema.ixn.v1.ReturnDto;
+import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 @DomainService(nature = NatureOfService.DOMAIN)
@@ -81,7 +81,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final Class<?> returnType = returnSpec.getCorrespondingClass();
         final Object resultPojo = resultAdapter != null? resultAdapter.getObject(): null;
 
-        final ReturnDto returnDto = new ReturnDto();
+        final ValueWithTypeDto returnDto = new ValueWithTypeDto();
         InteractionDtoUtils.setValue(returnDto, returnType, resultPojo);
 
         final String transactionIdStr = transactionId.toString();

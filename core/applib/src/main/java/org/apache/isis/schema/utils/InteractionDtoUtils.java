@@ -58,7 +58,7 @@ import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
 import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
 import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
-import org.apache.isis.schema.ixn.v1.ReturnDto;
+import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 public final class InteractionDtoUtils {
@@ -134,7 +134,7 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String actionIdentifier,
             final List<ParamDto> parameterDtos,
-            final ReturnDto returnDto,
+            final ValueWithTypeDto returnDto,
             final String user) {
 
         final InteractionDto interactionDto = newInteractionDto(transactionId);
@@ -155,7 +155,7 @@ public final class InteractionDtoUtils {
             final Bookmark targetBookmark,
             final String targetTitle,
             final String propertyIdentifier,
-            final ParamDto newValueDto,
+            final ValueWithTypeDto newValueDto,
             final String user
     ) {
 
@@ -181,7 +181,9 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String actionIdentifier,
             final List<ParamDto> parameterDtos,
-            final ReturnDto returnDto, final String user, final String transactionId) {
+            final ValueWithTypeDto returnDto,
+            final String user,
+            final String transactionId) {
 
         return (ActionInvocationDto) newInteractionExecutionDto(
                 InteractionType.ACTION_INVOCATION, transactionId, sequence,
@@ -195,7 +197,7 @@ public final class InteractionDtoUtils {
             final Bookmark targetBookmark,
             final String targetTitle,
             final String propertyIdentifier,
-            final ParamDto newValueDto,
+            final ValueWithTypeDto newValueDto,
             final String user,
             final String transactionId) {
         return (PropertyModificationDto) newInteractionExecutionDto(
@@ -213,8 +215,8 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String memberIdentifier,
             final List<ParamDto> parameterDtos,
-            final ReturnDto returnDto,
-            final ParamDto newValueDto,
+            final ValueWithTypeDto returnDto,
+            final ValueWithTypeDto newValueDto,
             final String user) {
 
         final InteractionExecutionDto executionDto;
@@ -344,7 +346,7 @@ public final class InteractionDtoUtils {
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
             final Object result, final BookmarkService bookmarkService) {
-        final ReturnDto returnDto = returnValueFor(invocationDto);
+        final ValueWithTypeDto returnDto = returnValueFor(invocationDto);
         boolean isValueType = setValue(returnDto, returnType, result);
         if(!isValueType) {
             addReturnReference(bookmarkService.bookmarkFor(result), invocationDto);
@@ -353,19 +355,19 @@ public final class InteractionDtoUtils {
 
     // REVIEW: done in InteractionDtoServiceInternalDefault, I believe
     private static void addReturnReference(final Bookmark bookmark, final ActionInvocationDto invocationDto) {
-        final ReturnDto returnedDto = returnValueFor(invocationDto);
+        final ValueWithTypeDto returnedDto = returnValueFor(invocationDto);
         OidDto oidDto = CommonDtoUtils.asOidDto(bookmark);
         ValueDto value = new ValueDto();
         value.setReference(oidDto);
         returnedDto.setValue(value);
-        returnedDto.setReturnType(ValueType.REFERENCE);
+        returnedDto.setType(ValueType.REFERENCE);
     }
 
     // REVIEW: done in InteractionDtoServiceInternalDefault, I believe
-    private static ReturnDto returnValueFor(final ActionInvocationDto invocationDto) {
-        ReturnDto returned = invocationDto.getReturned();
+    private static ValueWithTypeDto returnValueFor(final ActionInvocationDto invocationDto) {
+        ValueWithTypeDto returned = invocationDto.getReturned();
         if(returned == null) {
-            returned = new ReturnDto();
+            returned = new ValueWithTypeDto();
             invocationDto.setReturned(returned);
         }
         return returned;
@@ -446,7 +448,7 @@ public final class InteractionDtoUtils {
     }
 
     public static boolean setValue(
-            final ReturnDto returnDto,
+            final ValueWithTypeDto returnDto,
             final Class<?> type,
             final Object val) {
         if(val == null) {
@@ -462,52 +464,52 @@ public final class InteractionDtoUtils {
     }
 
     private static boolean setValueType(
-            final ReturnDto returnDto,
+            final ValueWithTypeDto returnDto,
             final Class<?> type) {
         if(type == String.class) {
-            returnDto.setReturnType(ValueType.STRING);
+            returnDto.setType(ValueType.STRING);
         } else
         if(type == byte.class || type == Byte.class) {
-            returnDto.setReturnType(ValueType.BYTE);
+            returnDto.setType(ValueType.BYTE);
         } else
         if(type == short.class || type == Short.class) {
-            returnDto.setReturnType(ValueType.SHORT);
+            returnDto.setType(ValueType.SHORT);
         }else
         if(type == int.class || type == Integer.class) {
-            returnDto.setReturnType(ValueType.INT);
+            returnDto.setType(ValueType.INT);
         }else
         if(type == long.class || type == Long.class) {
-            returnDto.setReturnType(ValueType.LONG);
+            returnDto.setType(ValueType.LONG);
         }else
         if(type == char.class || type == Character.class) {
-            returnDto.setReturnType(ValueType.CHAR);
+            returnDto.setType(ValueType.CHAR);
         }else
         if(type == boolean.class || type == Boolean.class) {
-            returnDto.setReturnType(ValueType.BOOLEAN);
+            returnDto.setType(ValueType.BOOLEAN);
         }else
         if(type == float.class || type == Float.class) {
-            returnDto.setReturnType(ValueType.FLOAT);
+            returnDto.setType(ValueType.FLOAT);
         }else
         if(type == double.class || type == Double.class) {
-            returnDto.setReturnType(ValueType.DOUBLE);
+            returnDto.setType(ValueType.DOUBLE);
         }else
         if(type == BigInteger.class) {
-            returnDto.setReturnType(ValueType.BIG_INTEGER);
+            returnDto.setType(ValueType.BIG_INTEGER);
         }else
         if(type == BigDecimal.class) {
-            returnDto.setReturnType(ValueType.BIG_DECIMAL);
+            returnDto.setType(ValueType.BIG_DECIMAL);
         }else
         if(type == DateTime.class) {
-            returnDto.setReturnType(ValueType.JODA_DATE_TIME);
+            returnDto.setType(ValueType.JODA_DATE_TIME);
         }else
         if(type == LocalDateTime.class) {
-            returnDto.setReturnType(ValueType.JODA_LOCAL_DATE_TIME);
+            returnDto.setType(ValueType.JODA_LOCAL_DATE_TIME);
         }else
         if(type == LocalDate.class) {
-            returnDto.setReturnType(ValueType.JODA_LOCAL_DATE);
+            returnDto.setType(ValueType.JODA_LOCAL_DATE);
         }else
         if(type == LocalTime.class) {
-            returnDto.setReturnType(ValueType.JODA_LOCAL_TIME);
+            returnDto.setType(ValueType.JODA_LOCAL_TIME);
         }else
         {
             // none of the supported value types

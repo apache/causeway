@@ -38,7 +38,7 @@ import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
-import org.apache.isis.schema.ixn.v1.ReturnDto;
+import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -55,8 +55,8 @@ public class Roundtrip {
         final Timestamp startedAt = new Timestamp(new Date().getTime());
         final Timestamp completedAt = new Timestamp(startedAt.getTime() + 1000);
 
-        final ReturnDto returnDto = new ReturnDto();
-        returnDto.setReturnType(ValueType.BOOLEAN);
+        final ValueWithTypeDto returnDto = new ValueWithTypeDto();
+        returnDto.setType(ValueType.BOOLEAN);
         returnDto.setNull(true);
 
         final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDtoWithActionInvocation(
