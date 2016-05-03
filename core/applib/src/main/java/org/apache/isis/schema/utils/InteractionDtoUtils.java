@@ -252,10 +252,12 @@ public final class InteractionDtoUtils {
 
     //region > addExecution
 
-    public static void addExecution(final InteractionDto interactionDto, final InteractionExecutionDto executionDto) {
+    public static void addExecution(
+            final InteractionDto interactionDto,
+            final InteractionExecutionDto executionDto) {
         interactionDto.setExecution(executionDto);
 
-        interactionDto.setInteractionType(
+        executionDto.setInteractionType(
                 executionDto instanceof ActionInvocationDto
                         ? InteractionType.ACTION_INVOCATION
                         : InteractionType.PROPERTY_EDIT);
@@ -283,7 +285,7 @@ public final class InteractionDtoUtils {
         if(invocation == null) {
             invocation = new ActionInvocationDto();
             interactionDto.setExecution(invocation);
-            interactionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
+            invocation.setInteractionType(InteractionType.ACTION_INVOCATION);
         }
         return invocation;
     }
@@ -293,7 +295,7 @@ public final class InteractionDtoUtils {
         if(edit == null) {
             edit = new PropertyEditDto();
             interactionDto.setExecution(edit);
-            interactionDto.setInteractionType(InteractionType.PROPERTY_EDIT);
+            edit.setInteractionType(InteractionType.PROPERTY_EDIT);
         }
         return edit;
     }

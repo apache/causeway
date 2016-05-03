@@ -54,7 +54,6 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="execution" type="interactionExecutionDto"/>
-                <xs:element name="interactionType" type="common:interactionType"/>
             </xs:sequence>
         </xs:complexType>
 
@@ -81,6 +80,12 @@
             <xs:element name="target" type="common:oidDto" minOccurs="1" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property edited.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="interactionType" type="common:interactionType">
+                <xs:annotation>
+                    <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

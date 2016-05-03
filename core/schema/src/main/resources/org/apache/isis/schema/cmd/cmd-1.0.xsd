@@ -56,7 +56,6 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="interactionType" type="common:interactionType"/>
                 <xs:element name="member" type="memberDto">
                     <xs:annotation>
                         <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
@@ -81,6 +80,12 @@
             <xs:element name="memberIdentifier" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>Formal identifier of the member being interacted with (action or property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="interactionType" type="common:interactionType">
+                <xs:annotation>
+                    <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

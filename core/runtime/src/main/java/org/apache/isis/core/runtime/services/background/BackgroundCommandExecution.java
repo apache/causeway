@@ -166,7 +166,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         final MemberDto memberDto = dto.getMember();
                         final String memberId = memberDto.getMemberIdentifier();
 
-                        final InteractionType interactionType = dto.getInteractionType();
+                        final InteractionType interactionType = memberDto.getInteractionType();
                         if(interactionType == InteractionType.ACTION_INVOCATION) {
 
                             final ActionDto actionDto = (ActionDto) memberDto;

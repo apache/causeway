@@ -145,8 +145,8 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
-        dto.setInteractionType(InteractionType.ACTION_INVOCATION);
         final ActionDto actionDto = new ActionDto();
+        actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
         dto.setMember(actionDto);
 
         addActionArgs(objectAction, actionDto, argAdapters);
@@ -162,8 +162,8 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
         final CommandDto dto = asCommandDto(targetAdapters);
 
-        dto.setInteractionType(InteractionType.PROPERTY_EDIT);
         final PropertyDto propertyDto = new PropertyDto();
+        propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
         dto.setMember(propertyDto);
 
         addPropertyValue(property, propertyDto, valueAdapterOrNull);
