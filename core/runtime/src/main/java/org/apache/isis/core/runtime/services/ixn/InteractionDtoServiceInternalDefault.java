@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
+import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
@@ -102,7 +102,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     }
 
     @Override @Programmatic
-    public PropertyModificationDto asPropertyModificationDto(
+    public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapterIfAny) {

@@ -49,7 +49,7 @@
                 </xs:element>
                 <xs:element name="transactionId" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>Transaction id within which this member was interacted with (action invoked/property modified); can be used to locate the corresponding Command object (which may have been persisted).
+                        <xs:documentation>Transaction id within which this member was interacted with (action invoked/property edited); can be used to locate the corresponding Command object (which may have been persisted).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
@@ -62,7 +62,7 @@
 
     <xs:complexType name="interactionExecutionDto" abstract="true">
         <xs:annotation>
-            <xs:documentation>Represents either an action invocation or a property modification.  Is subclassed by both.
+            <xs:documentation>Represents either an action invocation or a property edit.  Is subclassed by both.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -80,11 +80,11 @@
             </xs:element>
             <xs:element name="target" type="common:oidDto" minOccurs="1" maxOccurs="1">
                 <xs:annotation>
-                    <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property modified.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
+                    <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property edited.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="memberIdentifier" type="xs:string">
+            <xs:element name="memberId" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>Formal identifier of the member being interacted with (action or property).
                     </xs:documentation>
@@ -104,7 +104,7 @@
             </xs:element>
             <xs:element name="timings" type="common:periodDto">
                 <xs:annotation>
-                    <xs:documentation>Captures the time taken to perform the member interaction (invoke the action, or modify the property).
+                    <xs:documentation>Captures the time taken to perform the member interaction (invoke the action, or edit the property).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -119,7 +119,7 @@
                     <xs:sequence>
                         <xs:element name="execution" type="interactionExecutionDto" minOccurs="0" maxOccurs="unbounded">
                             <xs:annotation>
-                                <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property modification, and - much rarer - for a property modification to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
+                                <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property edit, and - much rarer - for a property edit to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>
@@ -156,7 +156,7 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="propertyModificationDto">
+    <xs:complexType name="propertyEditDto">
         <xs:complexContent>
             <xs:extension base="interactionExecutionDto">
                 <xs:sequence>
@@ -168,7 +168,7 @@
 
     <xs:complexType name="valueWithTypeDto">
         <xs:annotation>
-            <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property modifications.
+            <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>

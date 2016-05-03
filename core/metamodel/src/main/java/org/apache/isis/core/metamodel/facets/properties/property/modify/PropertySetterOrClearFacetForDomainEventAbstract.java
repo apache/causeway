@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
+import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -200,10 +200,10 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                             try {
 
                                 // update the current execution with the DTO (memento)
-                                final PropertyModificationDto invocationDto =
-                                        getInteractionDtoServiceInternal().asPropertyModificationDto(
+                                final PropertyEditDto editDto =
+                                        getInteractionDtoServiceInternal().asPropertyEditDto(
                                                 owningProperty, targetAdapter, newValueAdapter);
-                                currentExecution.setDto(invocationDto);
+                                currentExecution.setDto(editDto);
 
 
                                 // ... post the executing event

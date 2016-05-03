@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
+import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
 public interface InteractionDtoServiceInternal {
 
@@ -42,7 +42,7 @@ public interface InteractionDtoServiceInternal {
             Object resultPojo);
 
     @Programmatic
-    PropertyModificationDto asPropertyModificationDto(
+    PropertyEditDto asPropertyEditDto(
             OneToOneAssociation property,
             ObjectAdapter targetAdapter,
             ObjectAdapter newValueAdapterIfAny);

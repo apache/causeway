@@ -57,7 +57,7 @@ import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
 import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
-import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
+import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
@@ -161,7 +161,7 @@ public final class InteractionDtoUtils {
 
         final InteractionDto interactionDto = newInteractionDto(transactionId);
 
-        final InteractionExecutionDto executionDto = newPropertyModification(
+        final InteractionExecutionDto executionDto = newPropertyEdit(
                 sequence, targetBookmark, targetTitle,
                 propertyIdentifier, newValueDto,
                 user, transactionId);
@@ -191,7 +191,7 @@ public final class InteractionDtoUtils {
                 user);
     }
 
-    public static PropertyModificationDto newPropertyModification(
+    public static PropertyEditDto newPropertyEdit(
             final int sequence,
             final Bookmark targetBookmark,
             final String targetTitle,
@@ -199,8 +199,8 @@ public final class InteractionDtoUtils {
             final ValueWithTypeDto newValueDto,
             final String user,
             final String transactionId) {
-        return (PropertyModificationDto) newInteractionExecutionDto(
-                InteractionType.PROPERTY_MODIFICATION, transactionId, sequence,
+        return (PropertyEditDto) newInteractionExecutionDto(
+                InteractionType.PROPERTY_EDIT, transactionId, sequence,
                 targetBookmark, targetTitle, propertyIdentifier,
                 null, newValueDto,
                 user);
@@ -212,7 +212,7 @@ public final class InteractionDtoUtils {
             final int sequence,
             final Bookmark targetBookmark,
             final String targetTitle,
-            final String memberIdentifier,
+            final String memberId,
             final List<ParamDto> parameterDtos,
             final ValueWithTypeDto newValueDto,
             final String user) {
@@ -227,10 +227,10 @@ public final class InteractionDtoUtils {
 
             executionDto = invocation;
         } else {
-            final PropertyModificationDto modification = new PropertyModificationDto();
-            modification.setNewValue(newValueDto);
+            final PropertyEditDto edit = new PropertyEditDto();
+            edit.setNewValue(newValueDto);
 
-            executionDto = modification;
+            executionDto = edit;
         }
 
         executionDto.setSequence(sequence);
@@ -244,7 +244,7 @@ public final class InteractionDtoUtils {
         executionDto.setTitle(targetTitle);
         executionDto.setUser(user);
 
-        executionDto.setMemberIdentifier(memberIdentifier);
+        executionDto.setMemberId(memberId);
         return executionDto;
     }
 
@@ -258,7 +258,7 @@ public final class InteractionDtoUtils {
         interactionDto.setInteractionType(
                 executionDto instanceof ActionInvocationDto
                         ? InteractionType.ACTION_INVOCATION
-                        : InteractionType.PROPERTY_MODIFICATION);
+                        : InteractionType.PROPERTY_EDIT);
     }
 
 
@@ -288,14 +288,14 @@ public final class InteractionDtoUtils {
         return invocation;
     }
 
-    private static PropertyModificationDto propertyModificationFor(final InteractionDto interactionDto) {
-        PropertyModificationDto modification = (PropertyModificationDto) interactionDto.getExecution();
-        if(modification == null) {
-            modification = new PropertyModificationDto();
-            interactionDto.setExecution(modification);
-            interactionDto.setInteractionType(InteractionType.PROPERTY_MODIFICATION);
+    private static PropertyEditDto propertyEditFor(final InteractionDto interactionDto) {
+        PropertyEditDto edit = (PropertyEditDto) interactionDto.getExecution();
+        if(edit == null) {
+            edit = new PropertyEditDto();
+            interactionDto.setExecution(edit);
+            interactionDto.setInteractionType(InteractionType.PROPERTY_EDIT);
         }
-        return modification;
+        return edit;
     }
 
     private static List<ParamDto> parametersFor(final InteractionDto ixnDto) {

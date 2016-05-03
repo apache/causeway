@@ -43,7 +43,7 @@ import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
-import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
+import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 /**
@@ -319,16 +319,16 @@ public class Interaction implements HasTransactionId {
 
         //region > fields, constructor
 
-        private final String memberId;
+        private final String memberIdentifier;
         private final Object target;
         private final InteractionType interactionType;
 
         public Execution(
                 final InteractionType interactionType,
-                final String memberId,
+                final String memberIdentifier,
                 final Object target) {
             this.interactionType = interactionType;
-            this.memberId = memberId;
+            this.memberIdentifier = memberIdentifier;
             this.target = target;
         }
         //endregion
@@ -339,8 +339,8 @@ public class Interaction implements HasTransactionId {
             return interactionType;
         }
 
-        public String getMemberId() {
-            return memberId;
+        public String getMemberIdentifier() {
+            return memberIdentifier;
         }
 
         public Object getTarget() {
@@ -543,7 +543,7 @@ public class Interaction implements HasTransactionId {
         }
     }
 
-    public static class PropertyModification extends Execution<PropertyModificationDto, PropertyDomainEvent<?,?>> {
+    public static class PropertyModification extends Execution<PropertyEditDto, PropertyDomainEvent<?,?>> {
 
         private final Object newValue;
 
@@ -551,7 +551,7 @@ public class Interaction implements HasTransactionId {
                 final String memberId,
                 final Object target,
                 final Object newValue) {
-            super(InteractionType.PROPERTY_MODIFICATION, memberId, target);
+            super(InteractionType.PROPERTY_EDIT, memberId, target);
             this.newValue = newValue;
         }
 
