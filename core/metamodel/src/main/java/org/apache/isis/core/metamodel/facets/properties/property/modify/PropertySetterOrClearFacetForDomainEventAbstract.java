@@ -76,10 +76,10 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
-    enum Type {
+    enum Style {
         SET {
             @Override
-            boolean meetsPrereqs(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
+            boolean hasCorrespondingFacet(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
                 return facet.setterFacet != null;
             }
 
@@ -97,7 +97,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         },
         CLEAR {
             @Override
-            boolean meetsPrereqs(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
+            boolean hasCorrespondingFacet(final PropertySetterOrClearFacetForDomainEventAbstract facet) {
                 return facet.clearFacet != null;
             }
 
@@ -115,7 +115,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             }
         };
 
-        abstract boolean meetsPrereqs(final PropertySetterOrClearFacetForDomainEventAbstract facet);
+        abstract boolean hasCorrespondingFacet(final PropertySetterOrClearFacetForDomainEventAbstract facet);
 
         abstract void invoke(
                 final PropertySetterOrClearFacetForDomainEventAbstract facet,
@@ -130,7 +130,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setOrClearProperty(Type.CLEAR,
+        setOrClearProperty(Style.CLEAR,
                 owningProperty, targetAdapter, null, interactionInitiatedBy);
 
     }
@@ -141,13 +141,13 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setOrClearProperty(Type.SET,
+        setOrClearProperty(Style.SET,
                 owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
     }
 
     private void setOrClearProperty(
-            final Type type,
+            final Style style,
             final OneToOneAssociation owningAssociation,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapter,
@@ -155,66 +155,20 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
         // similar code in ActionInvocationFacetFDEA
 
-        if(!type.meetsPrereqs(this)) {
+        if(!style.hasCorrespondingFacet(this)) {
             return;
         }
-
-        // ... post the executing event
-        final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-        final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
-
-        final PropertyDomainEvent<?, ?> event =
-                domainEventHelper.postEventForProperty(
-                        AbstractDomainEvent.Phase.EXECUTING,
-                        eventType(), null,
-                        getIdentified(), targetAdapter,
-                        oldValue, newValue);
-
-        setPropertyInternal(type, owningAssociation, targetAdapter, newValueAdapter, interactionInitiatedBy);
-
-        // reading the actual value from the target object, playing it safe...
-        final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-        if (!Objects.equal(oldValue, actualNewValue)) {
-
-            // ... post the executed event
-            domainEventHelper.postEventForProperty(
-                    AbstractDomainEvent.Phase.EXECUTED,
-                    eventType(), verify(event),
-                    getIdentified(), targetAdapter,
-                    oldValue, actualNewValue);
-        }
-    }
-
-    public void setPropertyInternal(
-            final Type type,
-            final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter newValueAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        // similar code in ActionInvocationFacetFDEA
-
-        owningProperty.setupCommand(targetAdapter, newValueAdapter);
-
-        invokeThruCommand(type, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
-    }
-
-    private void invokeThruCommand(
-            final Type type,
-            final OneToOneAssociation owningProperty,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter valueAdapterOrNull,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        // similar code in ActionInvocationFacetFDEA
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
+        owningAssociation.setupCommand(targetAdapter, newValueAdapter);
+
+
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
 
-        final String propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
+        final String propertyId = owningAssociation.getIdentifier().toClassAndNameIdentityString();
 
         if( command.getExecutor() == Command.Executor.USER &&
                 command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
@@ -234,7 +188,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             // otherwise, go ahead and execute action in the 'foreground'
 
             final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
-            final Object argValue = ObjectAdapter.Util.unwrap(valueAdapterOrNull);
+            final Object argValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
             final Interaction.PropertyArgs propertyArgs = new Interaction.PropertyArgs(propertyId, target, argValue);
             final Interaction.MemberCallable<?> callable = new Interaction.MemberCallable<Interaction.PropertyArgs>() {
@@ -242,8 +196,46 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                                 final Interaction.Execution currentExecution,
                                 final Interaction.PropertyArgs propertyArgs11) {
 
-                            type.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty, targetAdapter, valueAdapterOrNull, interactionInitiatedBy);
-                            return null;
+                            try {
+
+                                // ... post the executing event
+                                final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
+                                final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
+
+                                final PropertyDomainEvent<?, ?> event =
+                                        domainEventHelper.postEventForProperty(
+                                                AbstractDomainEvent.Phase.EXECUTING,
+                                                eventType(), null,
+                                                getIdentified(), targetAdapter,
+                                                oldValue, newValue);
+
+
+                                style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningAssociation,
+                                        targetAdapter, newValueAdapter, interactionInitiatedBy);
+
+
+                                // reading the actual value from the target object, playing it safe...
+                                final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
+                                if (!Objects.equal(oldValue, actualNewValue)) {
+
+                                    // ... post the executed event
+                                    domainEventHelper.postEventForProperty(
+                                            AbstractDomainEvent.Phase.EXECUTED,
+                                            eventType(), verify(event),
+                                            getIdentified(), targetAdapter,
+                                            oldValue, actualNewValue);
+                                }
+
+                                return null;
+
+                                //
+                                // REVIEW: the corresponding action has a whole bunch of error handling here.
+                                // we probably should do something similar...
+                                //
+
+                            } finally {
+
+                            }
                         }
                     };
 
@@ -262,6 +254,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             // property modifications.
             //
         }
+
     }
 
     private Class<? extends PropertyDomainEvent<?, ?>> eventType() {
