@@ -141,7 +141,7 @@ public final class InteractionDtoUtils {
 
         final InteractionExecutionDto executionDto = newActionInvocation(
                 sequence, targetBookmark, targetTitle,
-                actionIdentifier, parameterDtos, returnDto,
+                actionIdentifier, parameterDtos,
                 user, transactionId);
 
         addExecution(interactionDto, executionDto);
@@ -181,14 +181,13 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String actionIdentifier,
             final List<ParamDto> parameterDtos,
-            final ValueWithTypeDto returnDto,
             final String user,
             final String transactionId) {
 
         return (ActionInvocationDto) newInteractionExecutionDto(
                 InteractionType.ACTION_INVOCATION, transactionId, sequence,
                 targetBookmark, targetTitle, actionIdentifier,
-                parameterDtos, returnDto, null,
+                parameterDtos, null,
                 user);
     }
 
@@ -203,7 +202,7 @@ public final class InteractionDtoUtils {
         return (PropertyModificationDto) newInteractionExecutionDto(
                 InteractionType.PROPERTY_MODIFICATION, transactionId, sequence,
                 targetBookmark, targetTitle, propertyIdentifier,
-                null, null, newValueDto,
+                null, newValueDto,
                 user);
     }
 
@@ -215,7 +214,6 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String memberIdentifier,
             final List<ParamDto> parameterDtos,
-            final ValueWithTypeDto returnDto,
             final ValueWithTypeDto newValueDto,
             final String user) {
 
@@ -226,7 +224,6 @@ public final class InteractionDtoUtils {
 
             final ActionInvocationDto.Parameters parameters = invocation.getParameters();
             parameters.getParameter().addAll(parameterDtos);
-            invocation.setReturned(returnDto);
 
             executionDto = invocation;
         } else {

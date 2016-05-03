@@ -35,10 +35,15 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.PeriodDto;
+import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
+import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 /**
@@ -100,104 +105,41 @@ public class Interaction implements HasTransactionId {
      * by which the framework actually performs the interaction.
      * @param <T>
      */
-    public interface MemberCallable<T extends MemberArgs> {
-        Object call(final Execution currentExecution, final T args);
-    }
-
-    public static abstract class MemberArgs {
-
-        private final String memberId;
-
-        enum Type {
-            PROPERTY,
-            ACTION
-        }
-
-        private final Object target;
-        private final Type type;
-
-        protected MemberArgs(
-                final Type type,
-                final String memberId,
-                final Object target) {
-            this.memberId = memberId;
-            this.target = target;
-            this.type = type;
-        }
-
-        public String getMemberId() {
-            return memberId;
-        }
-
-        public Object getTarget() {
-            return target;
-        }
-
-        public Type getType() {
-            return type;
-        }
+    public interface MemberExecutor<T extends Execution> {
+        Object execute(final T currentExecution);
     }
 
 
-    public static class ActionArgs extends MemberArgs {
-        private final List<Object> args;
 
-        public ActionArgs(
-                final String actionId,
-                final Object target,
-                final List<Object> args) {
-            super(Type.ACTION, actionId, target);
-            this.args = args;
-        }
-
-        public List<Object> getArgs() {
-            return args;
-        }
-    }
-
-    public static class PropertyArgs extends MemberArgs {
-        private final Object argValue;
-
-        public PropertyArgs(
-                final String propertyId, final Object target,
-                final Object argValue) {
-            super(Type.PROPERTY, propertyId, target);
-            this.argValue = argValue;
-        }
-
-        public Object getArgValue() {
-            return argValue;
-        }
-    }
-
-    public <T> T execute(
-            final MemberCallable memberCallable,
-            final ActionArgs actionArgs,
+    public Object execute(
+            final MemberExecutor<ActionInvocation> memberExecutor,
+            final ActionInvocation actionInvocation,
             final ClockService clockService,
             final Command command) {
 
-        final Execution execution = push(actionArgs, clockService, command);
+        pushAndUpdateCommand(actionInvocation, clockService, command);
 
-        return execute(memberCallable, actionArgs, clockService, execution);
+        return execute(memberExecutor, actionInvocation, clockService);
     }
 
-    public <T> T execute(
-            final MemberCallable memberCallable,
-            final PropertyArgs propertyArgs,
+    public Object execute(
+            final MemberExecutor<PropertyModification> memberExecutor,
+            final PropertyModification propertyModification,
             final ClockService clockService,
             final Command command) {
 
-        final Execution execution = push(propertyArgs, clockService, command);
-        return execute(memberCallable, propertyArgs, clockService, execution);
+        pushAndUpdateCommand(propertyModification, clockService, command);
+        return execute(memberExecutor, propertyModification, clockService);
     }
 
 
-    private Execution push(
-            final MemberArgs memberArgs,
+    private Execution pushAndUpdateCommand(
+            final Execution execution,
             final ClockService clockService,
             final Command command) {
+
         final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
-        final Execution execution = push(startedAt, memberArgs);
+        push(startedAt, execution);
 
         if(command.getStartedAt() == null) {
             command.setStartedAt(startedAt);
@@ -206,29 +148,27 @@ public class Interaction implements HasTransactionId {
     }
 
 
-    private <T> T execute(
-            final MemberCallable memberCallable,
-            final MemberArgs memberArgs,
-            final ClockService clockService,
-            final Execution currentExecution) {
+    private <T extends Execution> Object execute(
+            final MemberExecutor<T> memberExecutor,
+            final T execution,
+            final ClockService clockService) {
 
         // as a convenience, since in all cases we want the command to start when the first interaction executes,
         // we populate the command here.
 
         try {
             try {
-                Object result = memberCallable.call(currentExecution, memberArgs);
-                currentExecution.setReturned(result);
-                return (T)result;
-            } catch (Exception e) {
+                Object result = memberExecutor.execute(execution);
+                execution.setReturned(result);
+                return result;
+            } catch (Exception ex) {
 
                 // just because an exception has thrown, does not mean it is that significant; it could be that
                 // it is recognized by an ExceptionRecognizer and is not severe, eg unique index violation in the DB.
-                RuntimeException re = e instanceof RuntimeException? (RuntimeException) e : new RuntimeException(e);
-                currentExecution.setThrew(re);
+                currentExecution.setThrew(ex);
 
                 // propagate (as in previous design); caller will need to trap and decide
-                throw re;
+                throw ex;
             }
         } finally {
             final Timestamp completedAt = clockService.nowAsJavaSqlTimestamp();
@@ -261,23 +201,23 @@ public class Interaction implements HasTransactionId {
      * </p>
      */
     @Programmatic
-    Execution push(final Timestamp startedAt, final MemberArgs memberArgs) {
+    private Execution push(final Timestamp startedAt, final Execution execution) {
 
-        final Execution newExecution;
         if(currentExecution == null) {
             // new top-level execution
-            newExecution = new Execution(memberArgs, startedAt);
-            executionGraphs.add(newExecution);
+            executionGraphs.add(execution);
 
         } else {
             // adds to graph of parent
-            newExecution = new Execution(memberArgs, startedAt, currentExecution);
+            execution.setParent(currentExecution);
         }
 
-        // set
-        moveCurrentTo(newExecution);
+        execution.setStartedAt(startedAt);
 
-        return currentExecution;
+        // update this.currentExecution and this.previousExecution
+        moveCurrentTo(execution);
+
+        return execution;
     }
 
     /**
@@ -290,9 +230,9 @@ public class Interaction implements HasTransactionId {
      * @param completedAt
      */
     @Programmatic
-    Execution pop(final Timestamp completedAt) {
+    private Execution pop(final Timestamp completedAt) {
         if(currentExecution == null) {
-            throw new IllegalStateException("No current execution graph to pop");
+            throw new IllegalStateException("No current execution to pop");
         }
         final Execution popped = currentExecution;
         popped.setCompletedAt(completedAt);
@@ -307,8 +247,7 @@ public class Interaction implements HasTransactionId {
     }
 
     /**
-     * Returns a (list of) graph(es) indicating the domain events in the order that they were
-     * {@link #push(Timestamp, MemberArgs pushed}.
+     * Returns a (list of) graph(es) indicating the domain events in the order that they were pushed.
      *
      * <p>
      *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
@@ -325,7 +264,7 @@ public class Interaction implements HasTransactionId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * Clears the set of {@link AbstractDomainEvent}s that have been {@link #push(Timestamp, MemberArgs push)}ed.
+     * Clears the set of {@link Execution}s that may have been {@link #push(Timestamp, Execution)}ed.
      */
     @Programmatic
     public void clear() {
@@ -376,40 +315,59 @@ public class Interaction implements HasTransactionId {
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
      * being made by way of the {@link WrapperFactory}).
      */
-    public static class Execution {
+    public static class Execution<T extends InteractionExecutionDto, E extends AbstractDomainEvent<?>> {
 
         //region > fields, constructor
-        private final Timestamp startedAt;
-        private final MemberArgs memberArgs;
-        private final Execution parent;
-        private final List<Execution> children = Lists.newArrayList();
+
+        private final String memberId;
+        private final Object target;
+        private final InteractionType interactionType;
 
         public Execution(
-                final MemberArgs memberArgs, final Timestamp startedAt) {
-            this.startedAt = startedAt;
-            this.memberArgs = memberArgs;
-            this.parent = null;
-        }
-
-        public Execution(
-                final MemberArgs memberArgs, final Timestamp startedAt, final Execution parent) {
-            this.startedAt = startedAt;
-            this.parent = parent;
-            this.memberArgs = memberArgs;
-            parent.children.add(this);
+                final InteractionType interactionType,
+                final String memberId,
+                final Object target) {
+            this.interactionType = interactionType;
+            this.memberId = memberId;
+            this.target = target;
         }
         //endregion
 
-        //region > parent
+        //region > via constructor: interactionType, memberId, target
+
+        public InteractionType getInteractionType() {
+            return interactionType;
+        }
+
+        public String getMemberId() {
+            return memberId;
+        }
+
+        public Object getTarget() {
+            return target;
+        }
+
+        //endregion
+
+        //region > parent, children
+
+        private final List<Execution> children = Lists.newArrayList();
+        private Execution parent;
+
         /**
          * The action/property that invoked this action/property edit (if any).
          */
         public Execution getParent() {
             return parent;
         }
-        //endregion
 
-        //region > children
+        public void setParent(final Execution parent) {
+            this.parent = parent;
+            if(parent != null) {
+                parent.children.add(this);
+            }
+        }
+
         /**
          * The actions/property edits made in turn via the {@link WrapperFactory}.
          */
@@ -418,33 +376,36 @@ public class Interaction implements HasTransactionId {
         }
         //endregion
 
-        //region > memberArgs
-        public MemberArgs getMemberArgs() {
-            return memberArgs;
-        }
-        //endregion
 
         //region > event
 
-        private AbstractDomainEvent<?> event;
+        private E event;
         /**
          * The domain event fired on the {@link EventBusService event bus} representing the execution of
          * this action invocation/property edit.
+         *
+         * <p>
+         *     This event field is called by the framework before the action invocation/property edit itself;
+         *     if read by the executing action/property edit method it will be in the
+         *     {@link AbstractDomainEvent.Phase#EXECUTING executing} phase.
+         * </p>
          */
-        public AbstractDomainEvent<?> getEvent() {
+        public E getEvent() {
             return event;
         }
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        public void setEvent(final AbstractDomainEvent<?> event) {
+        public void setEvent(final E event) {
             this.event = event;
         }
         //endregion
 
-        //region > startedAt
+        //region > startedAt, completedAt
 
+        private Timestamp startedAt;
+        private Timestamp completedAt;
 
         /**
          * The date/time at which this execution started.
@@ -453,12 +414,11 @@ public class Interaction implements HasTransactionId {
             return startedAt;
         }
 
+        public void setStartedAt(final Timestamp startedAt) {
+            this.startedAt = startedAt;
+            syncMetrics();
+        }
 
-        //endregion
-
-        //region > completedAt
-
-        private Timestamp completedAt;
 
         /**
          * The date/time at which this execution completed.
@@ -470,14 +430,14 @@ public class Interaction implements HasTransactionId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        void setCompletedAt(Timestamp completedAt) {
+        void setCompletedAt(final Timestamp completedAt) {
             this.completedAt = completedAt;
             syncMetrics();
         }
 
         //endregion
 
-        //region > returned (property)
+        //region > returned, threw (properties)
 
         private Object returned;
         /**
@@ -502,20 +462,16 @@ public class Interaction implements HasTransactionId {
             this.returned = returned;
         }
 
-        //endregion
-
-        //region > threw (property)
-
-        private RuntimeException threw;
+        private Exception threw;
         @Programmatic
-        public RuntimeException getThrew() {
+        public Exception getThrew() {
             return threw;
         }
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        public void setThrew(RuntimeException threw) {
+        public void setThrew(Exception threw) {
             this.threw = threw;
         }
 
@@ -524,16 +480,25 @@ public class Interaction implements HasTransactionId {
 
         //region > dto (property)
 
-        private InteractionExecutionDto dto;
+        private T dto;
 
-        public InteractionExecutionDto getDto() {
+        /**
+         * A serializable representation of this action invocation/property edit.
+         *
+         * <p>
+         *     This <i>will</i> be populated (by the framework) during the method call itself (representing the
+         *     action invocation/property edit), though some fields ({@link Execution#getCompletedAt()},
+         *     {@link Execution#getReturned()}) will (obviously) still be null.
+         * </p>
+         */
+        public T getDto() {
             return dto;
         }
 
         /**
-         * Set by framework (implementation of {@link MemberCallable})
+         * Set by framework (implementation of {@link MemberExecutor})
          */
-        public void setDto(final InteractionExecutionDto executionDto) {
+        public void setDto(final T executionDto) {
             this.dto = executionDto;
             syncMetrics();
         }
@@ -561,4 +526,37 @@ public class Interaction implements HasTransactionId {
 
     }
 
+    public static class ActionInvocation extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
+
+        private final List<Object> args;
+
+        public ActionInvocation(
+                final String memberId,
+                final Object target,
+                final List<Object> args) {
+            super(InteractionType.ACTION_INVOCATION, memberId, target);
+            this.args = args;
+        }
+
+        public List<Object> getArgs() {
+            return args;
+        }
+    }
+
+    public static class PropertyModification extends Execution<PropertyModificationDto, PropertyDomainEvent<?,?>> {
+
+        private final Object newValue;
+
+        public PropertyModification(
+                final String memberId,
+                final Object target,
+                final Object newValue) {
+            super(InteractionType.PROPERTY_MODIFICATION, memberId, target);
+            this.newValue = newValue;
+        }
+
+        public Object getNewValue() {
+            return newValue;
+        }
+    }
 }

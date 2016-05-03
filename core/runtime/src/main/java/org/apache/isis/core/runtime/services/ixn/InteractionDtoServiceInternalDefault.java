@@ -54,8 +54,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
             final ObjectAdapter targetAdapter,
-            final List<ObjectAdapter> parameterAdapters,
-            final ObjectAdapter resultAdapter) {
+            final List<ObjectAdapter> argumentAdapters) {
 
         final Command command = commandContext.getCommand();
         final UUID transactionId = command.getTransactionId();
@@ -74,15 +73,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
         final ActionDto actionDto = new ActionDto();
         commandDtoServiceInternal.addActionArgs(
-                objectAction, actionDto, parameterAdapters.toArray(new ObjectAdapter[]{}));
-
-        final ObjectSpecification returnSpec = objectAction.getReturnType();
-
-        final Class<?> returnType = returnSpec.getCorrespondingClass();
-        final Object resultPojo = resultAdapter != null? resultAdapter.getObject(): null;
-
-        final ValueWithTypeDto returnDto = new ValueWithTypeDto();
-        InteractionDtoUtils.setValue(returnDto, returnType, resultPojo);
+                objectAction, actionDto, argumentAdapters.toArray(new ObjectAdapter[]{}));
 
         final String transactionIdStr = transactionId.toString();
 
@@ -90,8 +81,24 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         // InteractionDtoUtils.addReturn(invocationDto, returnType, resultPojo, bookmarkService);
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,
-                actionDto.getMemberIdentifier(), actionDto.getParameters(), returnDto, currentUser,
+                actionDto.getMemberIdentifier(), actionDto.getParameters(), currentUser,
                 transactionIdStr);
+    }
+
+    @Override @Programmatic
+    public ActionInvocationDto updateResult(
+            final ActionInvocationDto actionInvocationDto,
+            final ObjectAction objectAction,
+            final Object resultPojo) {
+
+        final ObjectSpecification returnSpec = objectAction.getReturnType();
+
+        final Class<?> returnType = returnSpec.getCorrespondingClass();
+
+        final ValueWithTypeDto returnDto = new ValueWithTypeDto();
+        InteractionDtoUtils.setValue(returnDto, returnType, resultPojo);
+
+        return actionInvocationDto;
     }
 
     @Override @Programmatic

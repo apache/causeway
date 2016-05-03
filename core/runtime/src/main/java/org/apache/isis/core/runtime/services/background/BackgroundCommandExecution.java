@@ -227,8 +227,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     // responsibility of auditing/profiling
                     backgroundCommand.setException(Throwables.getStackTraceAsString(e));
 
-                    // alternatively, could use...
-                    RuntimeException unused = backgroundInteraction.getPriorExecution().getThrew();
+                    // alternatively, could have used ...
+                    Exception unused = backgroundInteraction.getPriorExecution().getThrew();
 
                     backgroundInteraction.getCurrentExecution().setThrew(e);
                 }

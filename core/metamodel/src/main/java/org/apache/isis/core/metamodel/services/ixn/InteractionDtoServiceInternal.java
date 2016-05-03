@@ -33,10 +33,16 @@ public interface InteractionDtoServiceInternal {
     ActionInvocationDto asActionInvocationDto(
             ObjectAction objectAction,
             ObjectAdapter targetAdapter,
-            List<ObjectAdapter> parameterAdapters,
-            ObjectAdapter resultAdapter);
+            List<ObjectAdapter> argumentAdapters);
 
-    @Programmatic PropertyModificationDto asPropertyModificationDto(
+    @Programmatic
+    ActionInvocationDto updateResult(
+            ActionInvocationDto actionInvocationDto,
+            ObjectAction objectAction,
+            Object resultPojo);
+
+    @Programmatic
+    PropertyModificationDto asPropertyModificationDto(
             OneToOneAssociation property,
             ObjectAdapter targetAdapter,
             ObjectAdapter newValueAdapterIfAny);

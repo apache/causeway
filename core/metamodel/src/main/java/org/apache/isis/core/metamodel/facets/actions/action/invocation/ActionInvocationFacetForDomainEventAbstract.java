@@ -173,7 +173,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
         final String actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
 
-        final ObjectAdapter resultAdapter;
+        final ObjectAdapter returnedAdapter;
         if( command.getExecutor() == Command.Executor.USER &&
             command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
 
@@ -186,7 +186,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         "Unable to persist command for action '%s'; CommandService does not support persistent commands ",
                         actionId));
             }
-            resultAdapter = getAdapterManager().adapterFor(command);
+            returnedAdapter = getAdapterManager().adapterFor(command);
 
         } else {
 
@@ -194,17 +194,25 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             owningAction.setupActionInvocationContext(targetAdapter);
 
             final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
-            final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(Arrays.asList(argumentAdapters));
+            final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);
+            final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(argumentAdapterList);
 
-            final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(actionId, targetPojo, argumentPojos);
-            final Interaction.MemberCallable callable = new Interaction.MemberCallable<Interaction.ActionArgs>() {
+            final Interaction.ActionInvocation execution =
+                    new Interaction.ActionInvocation(actionId, targetPojo, argumentPojos);
+            final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
+                    new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
 
                 @Override
-                public Object call(
-                        final Interaction.Execution currentExecution,
-                        final Interaction.ActionArgs actionArgs) {
+                public Object execute(final Interaction.ActionInvocation currentExecution) {
 
                     try {
+
+                        // update the current execution with the DTO (memento)
+                        final ActionInvocationDto invocationDto =
+                                getInteractionDtoServiceInternal().asActionInvocationDto(
+                                        owningAction, targetAdapter, argumentAdapterList);
+                        currentExecution.setDto(invocationDto);
+
                         // ... post the executing event
                         final ActionDomainEvent<?> event =
                                 domainEventHelper.postEventForAction(
@@ -215,18 +223,14 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                                         command,
                                         null);
 
+                        // set event onto the execution
+                        currentExecution.setEvent(event);
 
+                        // invoke method
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
 
                         final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, targetAdapter);
 
-                        // update the current execution with the DTO (memento)
-                        final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
-                        final ActionInvocationDto invocationDto =
-                                getInteractionDtoServiceInternal().asActionInvocationDto(
-                                        owningAction, targetAdapter, parameterAdapters, resultAdapterPossiblyCloned);
-
-                        currentExecution.setDto(invocationDto);
 
                         // ... post the executed event
                         domainEventHelper.postEventForAction(
@@ -271,19 +275,32 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 }
             };
 
-            interaction.execute(callable, actionArgs, getClockService(), command);
-            final Interaction.Execution priorExecution = interaction.getPriorExecution();
+            // sets up startedAt and completedAt on the execution, also manages the execution call graph
+            interaction.execute(callable, execution, getClockService(), command);
 
-            final RuntimeException executionExceptionIfAny = priorExecution.getThrew();
+            // handle any exceptions
+            final Interaction.Execution<ActionInvocationDto, ?> priorExecution = interaction.getPriorExecution();
+
+            final Exception executionExceptionIfAny = priorExecution.getThrew();
+
+            // TODO: should also sync DTO's threw here...
+
             if(executionExceptionIfAny != null) {
-                throw executionExceptionIfAny;
+                throw executionExceptionIfAny instanceof RuntimeException
+                        ? ((RuntimeException)executionExceptionIfAny)
+                        : new RuntimeException(executionExceptionIfAny);
             }
 
-            resultAdapter = getAdapterManager().adapterFor(priorExecution.getReturned());
+
+            final Object returnedPojo = priorExecution.getReturned();
+            returnedAdapter = adapterManager.adapterFor(returnedPojo);
+
+            // sync DTO with result
+            getInteractionDtoServiceInternal().updateResult(priorExecution.getDto(), owningAction, returnedPojo);
 
 
             // update Command (if required)
-            setCommandResultIfEntity(command, resultAdapter);
+            setCommandResultIfEntity(command, returnedAdapter);
 
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             if (publishedActionFacet != null) {
@@ -295,12 +312,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         priorExecution,
                         owningAction, identifiedHolder,
                         targetAdapter, parameterAdapters,
-                        resultAdapter);
+                        returnedAdapter);
             }
         }
 
 
-        return filteredIfRequired(resultAdapter, interactionInitiatedBy);
+        return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
     }
 
     private static String trim(String message, final int maxLen) {

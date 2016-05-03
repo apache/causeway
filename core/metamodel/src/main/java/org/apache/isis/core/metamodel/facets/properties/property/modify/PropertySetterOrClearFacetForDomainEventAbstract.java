@@ -40,7 +40,9 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.schema.ixn.v1.PropertyModificationDto;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -148,7 +150,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
     private void setOrClearProperty(
             final Style style,
-            final OneToOneAssociation owningAssociation,
+            final OneToOneAssociation owningProperty,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -162,13 +164,13 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
-        owningAssociation.setupCommand(targetAdapter, newValueAdapter);
+        owningProperty.setupCommand(targetAdapter, newValueAdapter);
 
 
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
 
-        final String propertyId = owningAssociation.getIdentifier().toClassAndNameIdentityString();
+        final String propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
         if( command.getExecutor() == Command.Executor.USER &&
                 command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
@@ -185,18 +187,24 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
         } else {
 
-            // otherwise, go ahead and execute action in the 'foreground'
-
             final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
             final Object argValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
-            final Interaction.PropertyArgs propertyArgs = new Interaction.PropertyArgs(propertyId, target, argValue);
-            final Interaction.MemberCallable<?> callable = new Interaction.MemberCallable<Interaction.PropertyArgs>() {
-                        @Override public Object call(
-                                final Interaction.Execution currentExecution,
-                                final Interaction.PropertyArgs propertyArgs11) {
+            final Interaction.PropertyModification execution =
+                    new Interaction.PropertyModification(propertyId, target, argValue);
+            final Interaction.MemberExecutor<Interaction.PropertyModification> executor =
+                    new Interaction.MemberExecutor<Interaction.PropertyModification>() {
+                        @Override
+                        public Object execute(final Interaction.PropertyModification currentExecution) {
 
                             try {
+
+                                // update the current execution with the DTO (memento)
+                                final PropertyModificationDto invocationDto =
+                                        getInteractionDtoServiceInternal().asPropertyModificationDto(
+                                                owningProperty, targetAdapter, newValueAdapter);
+                                currentExecution.setDto(invocationDto);
+
 
                                 // ... post the executing event
                                 final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
@@ -210,8 +218,13 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                                                 oldValue, newValue);
 
 
-                                style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningAssociation,
+                                // set event onto the execution
+                                currentExecution.setEvent(event);
+
+                                // invoke method
+                                style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
                                         targetAdapter, newValueAdapter, interactionInitiatedBy);
+
 
 
                                 // reading the actual value from the target object, playing it safe...
@@ -239,13 +252,19 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                         }
                     };
 
-            interaction.execute(callable, propertyArgs, getClockService(), command);
+            // sets up startedAt and completedAt on the execution, also manages the execution call graph
+            interaction.execute(executor, execution, getClockService(), command);
 
+            // handle any exceptions
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
-            final RuntimeException executionExceptionIfAny = priorExecution.getThrew();
+            // TODO: should also sync DTO's threw here...
+
+            final Exception executionExceptionIfAny = priorExecution.getThrew();
             if(executionExceptionIfAny != null) {
-                throw executionExceptionIfAny;
+                throw executionExceptionIfAny instanceof RuntimeException
+                        ? ((RuntimeException)executionExceptionIfAny)
+                        : new RuntimeException(executionExceptionIfAny);
             }
 
             //
@@ -270,6 +289,9 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
     }
 
 
+    private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
+        return lookupService(InteractionDtoServiceInternal.class);
+    }
 
     private ServicesInjector getServicesInjector() {
         return servicesInjector;
