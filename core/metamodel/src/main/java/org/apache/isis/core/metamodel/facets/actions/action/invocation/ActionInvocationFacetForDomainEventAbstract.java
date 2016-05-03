@@ -152,50 +152,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
 
-    /**
-     * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link ActionInvocationFacet#invoke(ObjectAction, ObjectAdapter, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
-     */
-    public static class InvocationResult {
-
-        public static InvocationResult forActionThatReturned(final ObjectAdapter resultAdapter) {
-            return new InvocationResult(true, resultAdapter);
-        }
-
-        public static InvocationResult forActionNotInvoked() {
-            return new InvocationResult(false, null);
-        }
-
-        private final boolean whetherInvoked;
-        private final ObjectAdapter adapter;
-
-        private InvocationResult(final boolean whetherInvoked, final ObjectAdapter result) {
-            this.whetherInvoked = whetherInvoked;
-            this.adapter = result;
-        }
-
-        public boolean getWhetherInvoked() {
-            return whetherInvoked;
-        }
-
-        /**
-         * Returns the result, or null if either the action invocation returned null or
-         * if the action was never invoked in the first place.
-         *
-         * <p>
-         * Use {@link #getWhetherInvoked()} to distinguish between these two cases.
-         */
-        public ObjectAdapter getAdapter() {
-            return adapter;
-        }
-    }
-
     @Override
     public ObjectAdapter invoke(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] arguments,
+            final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         // similar code in PropertySetterOrClearFacetFDEA
@@ -203,105 +165,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
-        // ... post the executing event
-        final ActionDomainEvent<?> event =
-                domainEventHelper.postEventForAction(
-                        AbstractDomainEvent.Phase.EXECUTING,
-                        eventType, null,
-                        owningAction, owningAction, targetAdapter, mixedInAdapter, arguments,
-                        command,
-                        null);
+        owningAction.setupCommand(targetAdapter, argumentAdapters);
 
-        final InvocationResult invocationResult = invokeInternal(owningAction, targetAdapter, arguments);
-        final ObjectAdapter invocationResultAdapter = invocationResult.getAdapter();
-
-        // ... post the executed event
-        if (invocationResult.getWhetherInvoked()) {
-            // perhaps the Action was not properly invoked (i.e. an exception was raised).
-            // If invoked ok, then post to the event bus
-            domainEventHelper.postEventForAction(
-                    AbstractDomainEvent.Phase.EXECUTED,
-                    eventType, verify(event),
-                    owningAction, owningAction, targetAdapter, mixedInAdapter, arguments,
-                    command,
-                    invocationResultAdapter);
-        }
-
-        if (invocationResultAdapter == null) {
-            return null;
-        }
-
-        return filteredIfRequired(invocationResultAdapter, interactionInitiatedBy);
-    }
-
-    private InvocationResult invokeInternal(
-            final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters) {
-
-        // similar code in PropertySetterOrClearFacetFDEA
-
-        try {
-            owningAction.setupActionInvocationContext(targetAdapter);
-            owningAction.setupCommand(targetAdapter, argumentAdapters);
-
-            ObjectAdapter resultAdapter = invokeThruCommand(owningAction, targetAdapter, argumentAdapters);
-
-            return InvocationResult.forActionThatReturned(resultAdapter);
-
-        } catch (final IllegalArgumentException e) {
-            throw e;
-        } catch (final InvocationTargetException e) {
-            final Throwable targetException = e.getTargetException();
-            if (targetException instanceof IllegalStateException) {
-                throw new ReflectiveActionException( String.format(
-                        "IllegalStateException thrown while executing %s %s",
-                        method, targetException.getMessage()), targetException);
-            }
-            if(targetException instanceof RecoverableException) {
-                if (!getTransactionState().canCommit()) {
-                    // something severe has happened to the underlying transaction;
-                    // so escalate this exception to be non-recoverable
-                    final Throwable targetExceptionCause = targetException.getCause();
-                    Throwable nonRecoverableCause = targetExceptionCause != null? targetExceptionCause: targetException;
-
-                    // trim to first 300 chars
-                    final String message = trim(nonRecoverableCause.getMessage(), 300);
-
-                    throw new NonRecoverableException(message, nonRecoverableCause);
-                }
-            }
-
-            ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-
-            // Action was not invoked (an Exception was thrown)
-            return InvocationResult.forActionNotInvoked();
-
-        } catch (final IllegalAccessException e) {
-            throw new ReflectiveActionException("Illegal access of " + method, e);
-        }
-    }
-
-    private static String trim(String message, final int maxLen) {
-        if(!Strings.isNullOrEmpty(message)) {
-            message = message.substring(0, Math.min(message.length(), maxLen));
-            if(message.length() == maxLen) {
-                message += " ...";
-            }
-        }
-        return message;
-    }
-
-    protected ObjectAdapter invokeThruCommand(
-            final ObjectAction owningAction,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters)
-            throws IllegalAccessException, InvocationTargetException {
-
-        // similar code in PropertySetterOrClearFacetFDEA
-
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
 
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
@@ -326,45 +191,87 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         } else {
 
             // otherwise, go ahead and execute action in the 'foreground'
+            owningAction.setupActionInvocationContext(targetAdapter);
 
-            final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
-            final List<Object> arguments = ObjectAdapter.Util.unwrap(Arrays.asList(argumentAdapters));
+            final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
+            final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(Arrays.asList(argumentAdapters));
 
-            final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(actionId, target, arguments);
+            final Interaction.ActionArgs actionArgs = new Interaction.ActionArgs(actionId, targetPojo, argumentPojos);
             final Interaction.MemberCallable callable = new Interaction.MemberCallable<Interaction.ActionArgs>() {
+
                 @Override
                 public Object call(
                         final Interaction.Execution currentExecution,
                         final Interaction.ActionArgs actionArgs) {
 
                     try {
+                        // ... post the executing event
+                        final ActionDomainEvent<?> event =
+                                domainEventHelper.postEventForAction(
+                                        AbstractDomainEvent.Phase.EXECUTING,
+                                        eventType, null,
+                                        owningAction, owningAction,
+                                        targetAdapter, mixedInAdapter, argumentAdapters,
+                                        command,
+                                        null);
+
+
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
 
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug(" action result " + resultPojo);
-                        }
+                        final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, targetAdapter);
 
-                        ObjectAdapter resultAdapter = cloneIfViewModelCloneable(resultPojo, targetAdapter);
-
-                        // update the current execution
+                        // update the current execution with the DTO (memento)
                         final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
                         final ActionInvocationDto invocationDto =
                                 getInteractionDtoServiceInternal().asActionInvocationDto(
-                                    owningAction, targetAdapter, parameterAdapters, resultAdapter);
+                                        owningAction, targetAdapter, parameterAdapters, resultAdapterPossiblyCloned);
 
                         currentExecution.setDto(invocationDto);
 
-                        return resultAdapter != null ? resultAdapter.getObject() : null;
+                        // ... post the executed event
+                        domainEventHelper.postEventForAction(
+                                AbstractDomainEvent.Phase.EXECUTED,
+                                eventType, verify(event),
+                                owningAction, owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
+                                command,
+                                resultAdapterPossiblyCloned);
 
-                    } catch (InvocationTargetException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                        return ObjectAdapter.Util.unwrap(resultAdapterPossiblyCloned);
+
+                    } catch (IllegalAccessException ex) {
+                        throw new ReflectiveActionException("Illegal access of " + method, ex);
+                    } catch (InvocationTargetException ex) {
+
+                        final Throwable targetException = ex.getTargetException();
+                        if (targetException instanceof IllegalStateException) {
+                            throw new ReflectiveActionException( String.format(
+                                    "IllegalStateException thrown while executing %s %s",
+                                    method, targetException.getMessage()), targetException);
+                        }
+
+                        if(targetException instanceof RecoverableException) {
+                            if (!getTransactionState().canCommit()) {
+                                // something severe has happened to the underlying transaction;
+                                // so escalate this exception to be non-recoverable
+                                final Throwable targetExceptionCause = targetException.getCause();
+                                Throwable nonRecoverableCause = targetExceptionCause != null
+                                        ? targetExceptionCause
+                                        : targetException;
+
+                                // trim to first 300 chars
+                                final String message = trim(nonRecoverableCause.getMessage(), 300);
+
+                                throw new NonRecoverableException(message, nonRecoverableCause);
+                            }
+                        }
+
+                        ThrowableExtensions.throwWithinIsisException(ex, "Exception executing " + method);
+                        return null; // never executed, previous line throws
                     }
                 }
             };
 
-
             interaction.execute(callable, actionArgs, getClockService(), command);
-
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
             final RuntimeException executionExceptionIfAny = priorExecution.getThrew();
@@ -373,6 +280,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             }
 
             resultAdapter = getAdapterManager().adapterFor(priorExecution.getReturned());
+
+
+            // update Command (if required)
             setCommandResultIfEntity(command, resultAdapter);
 
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
@@ -387,9 +297,20 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         targetAdapter, parameterAdapters,
                         resultAdapter);
             }
-
         }
-        return resultAdapter;
+
+
+        return filteredIfRequired(resultAdapter, interactionInitiatedBy);
+    }
+
+    private static String trim(String message, final int maxLen) {
+        if(!Strings.isNullOrEmpty(message)) {
+            message = message.substring(0, Math.min(message.length(), maxLen));
+            if(message.length() == maxLen) {
+                message += " ...";
+            }
+        }
+        return message;
     }
 
     protected Object invokeMethodElseFromCache(
@@ -503,6 +424,10 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     protected ObjectAdapter filteredIfRequired(
             final ObjectAdapter resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+
+        if (resultAdapter == null) {
+            return null;
+        }
 
         final boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if (!filterForVisibility) {
