@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -54,7 +54,9 @@ import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
+import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 /**
@@ -134,7 +136,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         final String actionId = aim.getActionId();
 
                         final Bookmark targetBookmark = aim.getTarget();
-                        final Object targetObject = bookmarkService.lookup(targetBookmark);
+                        final Object targetObject = bookmarkService.lookup(
+                                                        targetBookmark, BookmarkService2.FieldResetPolicy.RESET);
 
                         final ObjectAdapter targetAdapter = adapterFor(targetObject);
                         final ObjectSpecification specification = targetAdapter.getSpecification();
@@ -167,12 +170,14 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                         final MemberDto memberDto = dto.getMember();
                         final String memberId = memberDto.getMemberIdentifier();
 
+                        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+                        final List<OidDto> targetOidDtos = oidsDto.getOid();
+
                         final InteractionType interactionType = memberDto.getInteractionType();
                         if(interactionType == InteractionType.ACTION_INVOCATION) {
 
                             final ActionDto actionDto = (ActionDto) memberDto;
 
-                            final List<OidDto> targetOidDtos = dto.getTargets();
                             for (OidDto targetOidDto : targetOidDtos) {
 
                                 final Bookmark bookmark = Bookmark.from(targetOidDto);
@@ -203,7 +208,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                             final PropertyDto propertyDto = (PropertyDto) memberDto;
 
-                            final List<OidDto> targetOidDtos = dto.getTargets();
                             for (OidDto targetOidDto : targetOidDtos) {
 
                                 final Bookmark bookmark = Bookmark.from(targetOidDto);
@@ -344,7 +348,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BookmarkService bookmarkService;
+    private BookmarkService2 bookmarkService;
 
     @javax.inject.Inject
     private JaxbService jaxbService;

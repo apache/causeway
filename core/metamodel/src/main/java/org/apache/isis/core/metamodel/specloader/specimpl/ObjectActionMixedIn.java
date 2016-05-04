@@ -206,17 +206,13 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final ObjectAdapter[] arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        // this code also exists in ActionInvocationFacetViaMethod
-        // we need to repeat it here because the target adapter should be the mixedInAdapter, not the mixin
-
-        setupActionInvocationContext(mixedInAdapter);
-
-        setupCommandTarget(mixedInAdapter, arguments);
-        setupCommandMementoAndExecutionContext(mixedInAdapter, arguments);
 
         final ObjectAdapter targetAdapter = mixinAdapterFor(mixinType, target);
         final ObjectAdapter actualMixedInAdapter = target;
-        return mixinAction.execute(
+
+        setupCommand(actualMixedInAdapter, arguments);
+
+        return mixinAction.executeInternal(
                 targetAdapter, actualMixedInAdapter, arguments,
                 interactionInitiatedBy);
     }

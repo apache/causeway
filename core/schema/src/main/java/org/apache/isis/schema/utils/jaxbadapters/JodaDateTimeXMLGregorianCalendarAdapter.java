@@ -30,7 +30,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 /**
- * Not registered in the XSD schema (as a JAXB binding, because can only map xs:dateTime once (and have chosen to map to LocalDateTime).
+ * Note: not actually registered as a JAXB adapter.
  */
 public final class JodaDateTimeXMLGregorianCalendarAdapter {
     private JodaDateTimeXMLGregorianCalendarAdapter() {

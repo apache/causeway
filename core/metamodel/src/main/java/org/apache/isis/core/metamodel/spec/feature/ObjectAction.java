@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -194,17 +195,11 @@ public interface ObjectAction extends ObjectMember {
 
 
     /**
-     * internal API
+     * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
      */
     void setupActionInvocationContext(
             final ObjectAdapter targetAdapter);
 
-    /**
-     * internal API
-     */
-    void setupCommand(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters);
 
     // //////////////////////////////////////////////////////
     // Utils

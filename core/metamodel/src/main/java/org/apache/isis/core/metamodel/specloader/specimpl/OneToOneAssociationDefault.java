@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -54,7 +55,6 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.CommandDto;
@@ -152,7 +152,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         return getPersistenceSessionService().adapterFor(referencedPojo);
     }
 
-    // UNUSED
+    // REVIEW: UNUSED
     private PropertyAccessContext createAccessInteractionContext(
             final ObjectAdapter ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -177,8 +177,22 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         set(ownerAdapter, newReferencedAdapter, InteractionInitiatedBy.USER);
     }
 
+    /**
+     * Sets up the {@link Command}, then delegates to the appropriate facet
+     * ({@link PropertySetterFacet} or {@link PropertyClearFacet}).
+     */
     @Override
     public void set(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter newReferencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        setupCommand(ownerAdapter, newReferencedAdapter);
+
+        setInternal(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
+    }
+
+    private void setInternal(
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -189,44 +203,27 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         }
     }
 
-    /**
-     * @see MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
-     */
-    @Deprecated
-    @Override
-    public void setAssociation(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter newReferencedAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
-    }
-
     private void setValue(
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
+
         final PropertySetterFacet setterFacet = getFacet(PropertySetterFacet.class);
         if (setterFacet == null) {
             return;
         }
-        if (ownerAdapter.representsPersistent() && newReferencedAdapter != null && newReferencedAdapter.isTransient() && !newReferencedAdapter.getSpecification().isParented()) {
-            // TODO: move to facet ?
+
+        if (    ownerAdapter.representsPersistent() &&
+                newReferencedAdapter != null &&
+                newReferencedAdapter.isTransient() &&
+                !newReferencedAdapter.getSpecification().isParented()) {
+
+            // TODO: I've never seen this exception, and in any case DataNucleus supports persistence-by-reachability; so probably not required
             throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString(null) + " (transient)");
         }
+
         setterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
-
-    /**
-     * @see MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
-     */
-    @Deprecated
-    @Override
-    public void clearAssociation(
-            final ObjectAdapter ownerAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        clearValue(ownerAdapter, interactionInitiatedBy);
-    }
-
 
     private void clearValue(
             final ObjectAdapter ownerAdapter,
@@ -328,7 +325,6 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     /**
      * Internal API
      */
-    @Override
     public void setupCommand(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapterOrNull) {
@@ -338,16 +334,15 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         setupCommandMementoAndExecutionContext(targetAdapter, valueAdapterOrNull);
     }
 
-    protected void setupCommandTarget(
+    private void setupCommandTarget(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapter) {
 
         final String arguments = CommandUtil.argDescriptionFor(valueAdapter);
-
         setupCommandTarget(targetAdapter, arguments);
     }
 
-    protected void setupCommandMementoAndExecutionContext(
+    private void setupCommandMementoAndExecutionContext(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter valueAdapterOrNull) {
 

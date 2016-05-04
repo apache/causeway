@@ -31,15 +31,14 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 public interface BackgroundCommandService2 extends BackgroundCommandService {
 
     /**
-     * Replaces {@link BackgroundCommandService#schedule(ActionInvocationMemento, Command, String, String, String)}
-     * @param dto
-     * @param command
-     * @param targetClassName
-     * @param targetActionName
-     * @param targetArgs
+     * Will be called instead of
+     * {@link BackgroundCommandService#schedule(ActionInvocationMemento, Command, String, String, String)}
+     * (ie if the implementation implements this interface rather than simply {@link BackgroundCommandService}).
      */
     void schedule(
             final CommandDto dto,
-            final Command command,
-            final String targetClassName, final String targetActionName, final String targetArgs);
+            final Command parentCommand,
+            final String targetClassName,
+            final String targetActionName,
+            final String targetArgs);
 }

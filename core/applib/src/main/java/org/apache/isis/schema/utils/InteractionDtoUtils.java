@@ -41,6 +41,7 @@ import com.google.common.io.Resources;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.PeriodDto;
@@ -211,7 +212,7 @@ public final class InteractionDtoUtils {
         if(type == InteractionType.ACTION_INVOCATION) {
 
             final ActionInvocationDto invocation = new ActionInvocationDto();
-            final ActionInvocationDto.Parameters invocationParameters = parametersFor(invocation);
+            final ParamsDto invocationParameters = parametersFor(invocation);
             invocation.setParameters(invocationParameters);
             invocationParameters.getParameter().addAll(parameterDtos);
 
@@ -282,10 +283,10 @@ public final class InteractionDtoUtils {
         return parameterListFor(actionInvocationFor(ixnDto));
     }
 
-    private static ActionInvocationDto.Parameters parametersFor(final ActionInvocationDto invocationDto) {
-        ActionInvocationDto.Parameters parameters = invocationDto.getParameters();
+    private static ParamsDto parametersFor(final ActionInvocationDto invocationDto) {
+        ParamsDto parameters = invocationDto.getParameters();
         if(parameters == null) {
-            parameters = new ActionInvocationDto.Parameters();
+            parameters = new ParamsDto();
             invocationDto.setParameters(parameters);
         }
         return parameters;
@@ -380,18 +381,17 @@ public final class InteractionDtoUtils {
     }
 
     public static ValueDto getParameterArgument(final ActionInvocationDto ai, final int paramNum) {
-        final ParamDto paramDto = getParameter(ai, paramNum);
-        return paramDto.getArgument();
+        return getParameter(ai, paramNum);
     }
 
     public static String getParameterName(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
-        return paramDto.getParameterName();
+        return paramDto.getName();
     }
 
     public static ValueType getParameterType(final ActionInvocationDto ai, final int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);
-        return paramDto.getParameterType();
+        return paramDto.getType();
     }
     public static boolean isNull(final ActionInvocationDto ai, int paramNum) {
         final ParamDto paramDto = getParameter(ai, paramNum);

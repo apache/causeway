@@ -48,8 +48,10 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
+import org.apache.isis.schema.common.v1.OidsDto;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
@@ -183,11 +185,11 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         for (ObjectAdapter targetAdapter : targetAdapters) {
             final RootOid rootOid = (RootOid) targetAdapter.getOid();
             final Bookmark bookmark = rootOid.asBookmark();
-            dto.getTargets().add(bookmark.toOidDto());
+            final OidsDto targets = CommandDtoUtils.targetsFor(dto);
+            targets.getOid().add(bookmark.toOidDto());
         }
         return dto;
     }
-
 
     @Override
     public void addActionArgs(
@@ -204,7 +206,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
             final ObjectAdapter argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
-            final ActionDto.Parameters parameters = CommandDtoUtils.parametersFor(actionDto);
+            final ParamsDto parameters = CommandDtoUtils.parametersFor(actionDto);
             final List<ParamDto> parameterList = parameters.getParameter();
 
             ParamDto paramDto = CommonDtoUtils.newParamDto(

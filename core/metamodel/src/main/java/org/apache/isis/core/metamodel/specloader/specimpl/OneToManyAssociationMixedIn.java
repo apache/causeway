@@ -143,9 +143,11 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     @Override
-    public ObjectAdapter get(final ObjectAdapter mixedInAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public ObjectAdapter get(
+            final ObjectAdapter mixedInAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return mixinAction.execute(mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+        return mixinAction.executeInternal(mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
     }
 
     @Override
@@ -168,9 +170,10 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
+
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final VisibilityContext<?> ic =
-                mixinAction.createVisibleInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
@@ -180,9 +183,11 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
+
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final UsabilityContext<?> ic =
                 mixinAction.createUsableInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                        mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
@@ -201,7 +206,6 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     //endregion
-
 
 
 }

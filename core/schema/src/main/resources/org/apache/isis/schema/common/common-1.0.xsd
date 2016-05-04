@@ -53,6 +53,16 @@
         <xs:attribute name="objectState" type="bookmarkObjectState" default="persistent"/>
     </xs:complexType>
 
+    <xs:complexType name="oidsDto">
+        <xs:annotation>
+            <xs:documentation>A list of OIDs
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="enumDto">
         <xs:sequence>
             <xs:element name="enumType" type="xs:string"/>
@@ -124,11 +134,12 @@
             <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="value" type="valueDto"/>
-        </xs:sequence>
-        <xs:attribute name="type" use="required" type="valueType"/>
-        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+        <xs:complexContent>
+            <xs:extension base="valueDto">
+                <xs:attribute name="type" use="required" type="valueType"/>
+                <xs:attribute name="null" use="optional" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
 

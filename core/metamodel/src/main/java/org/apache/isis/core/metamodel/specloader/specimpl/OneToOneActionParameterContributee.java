@@ -49,7 +49,7 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterD
                 interactionInitiatedBy);
     }
 
-    protected ObjectAdapter targetForDefaultOrChoicesOrValidate(final ObjectAdapter adapter) {
+    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
         return serviceAdapter;
     }
 

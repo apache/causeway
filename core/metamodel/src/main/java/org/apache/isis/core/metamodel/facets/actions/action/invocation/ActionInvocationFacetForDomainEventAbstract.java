@@ -165,8 +165,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
-        owningAction.setupCommand(targetAdapter, argumentAdapters);
-
 
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();

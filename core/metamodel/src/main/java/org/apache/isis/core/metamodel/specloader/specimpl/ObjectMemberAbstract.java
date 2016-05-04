@@ -422,7 +422,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         }
 
         if(command.getTarget() != null) {
-            // already set up by a ObjectActionContributee or edit form; don't overwrite
+            // is set up by the outer-most action; inner actions (invoked via the WrapperFactory) must not overwrite
             return;
         }
 

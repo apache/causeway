@@ -52,39 +52,7 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
             final ObjectAdapter proposedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    /**
-     * Set up the association represented by this field in the specified object
-     * with the specified reference - this call sets up the logical state of the
-     * object and might affect other objects that share this association (such
-     * as back-links or bidirectional association). To initialise a recreated
-     * object to this logical state the <code>initAssociation</code> method
-     * should be used on each of the objects.
-     * 
-     * @deprecated - see {@link MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)}
-     * @see #initAssociation(ObjectAdapter, ObjectAdapter)
-     */
-    @Deprecated
-    void setAssociation(
-            ObjectAdapter inObject,
-            ObjectAdapter associate,
-            final InteractionInitiatedBy interactionInitiatedBy);
 
-    /**
-     * Clear this reference field (make it <code>null</code>) in the specified
-     * object, and remove any association back-link.
-     * 
-     * @see #setAssociation(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
-     * @deprecated - see {@link MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)}
-     */
-    @Deprecated
-    void clearAssociation(ObjectAdapter inObject, final InteractionInitiatedBy interactionInitiatedBy);
-
-    /**
-     * Internal API
-     */
-    void setupCommand(final ObjectAdapter targetAdapter, final ObjectAdapter valueAdapter);
-
-    
     // //////////////////////////////////////////////////////
     // Functions
     // //////////////////////////////////////////////////////

@@ -44,7 +44,7 @@ public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefau
                 interactionInitiatedBy);
     }
 
-    protected ObjectAdapter targetForDefaultOrChoicesOrValidate(final ObjectAdapter mixedInAdapter) {
+    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter mixedInAdapter) {
         return mixinAdapterFor(mixedInAdapter);
     }
 

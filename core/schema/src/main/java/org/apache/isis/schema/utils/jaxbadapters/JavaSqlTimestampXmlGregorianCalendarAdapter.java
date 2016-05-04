@@ -21,12 +21,14 @@ package org.apache.isis.schema.utils.jaxbadapters;
 import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-public class JavaSqlTimestampXmlGregorianCalendarAdapter extends XmlAdapter<XMLGregorianCalendar, java.sql.Timestamp> {
+/**
+ * Note: not actually registered as a JAXB adapter.
+ */
+public class JavaSqlTimestampXmlGregorianCalendarAdapter  {
 
 
     // this assumes DTF is thread-safe, which it most probably is..
@@ -60,13 +62,4 @@ public class JavaSqlTimestampXmlGregorianCalendarAdapter extends XmlAdapter<XMLG
         return getDatatypeFactory().newXMLGregorianCalendar(c);
     }
 
-    @Override
-    public Timestamp unmarshal(final XMLGregorianCalendar v) throws Exception {
-        return null;
-    }
-
-    @Override
-    public XMLGregorianCalendar marshal(final Timestamp v) throws Exception {
-        return null;
-    }
 }

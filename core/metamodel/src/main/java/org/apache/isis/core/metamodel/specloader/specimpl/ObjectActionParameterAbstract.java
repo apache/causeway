@@ -325,7 +325,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final InteractionInitiatedBy interactionInitiatedBy) {
         final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
         
-        final ObjectAdapter target = targetForDefaultOrChoicesOrValidate(adapter);
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
         
         return findChoices(target, args, interactionInitiatedBy);
@@ -363,7 +363,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         
-        final ObjectAdapter target = targetForDefaultOrChoicesOrValidate(adapter);
+        final ObjectAdapter target = targetForDefaultOrChoices(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, null);
         
         return findDefault(target, args);
@@ -388,7 +388,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter targetForDefaultOrChoicesOrValidate(final ObjectAdapter adapter) {
+    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
         return adapter;
     }
 
@@ -476,10 +476,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         }
 
-        final ObjectAdapter targetAdapter = targetForDefaultOrChoicesOrValidate(objectAdapter);
         final ObjectAdapter[] argumentAdapters = arguments(proposedValueAdapter);
         final ValidityContext<?> ic = createProposedArgumentInteractionContext(
-                targetAdapter, argumentAdapters, getNumber(), interactionInitiatedBy
+                objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy
         );
 
         final InteractionResultSet buf = new InteractionResultSet();

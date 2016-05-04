@@ -78,8 +78,7 @@ public class CommandUtil {
                 CommandUtil.appendParamArg(argsBuf, param, arguments[i++]);
             }
         }
-        String argsStr = argsBuf.toString();
-        return argsStr;
+        return argsBuf.toString();
     }
 
     public static Bookmark bookmarkFor(final ObjectAdapter adapter) {

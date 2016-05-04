@@ -25,7 +25,7 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
 import org.joda.time.LocalDate;
 
 /**
- * Not registered in the XSD schema (as a JAXB binding, because can only map xs:dateTime once (and have chosen to map to LocalDateTime).
+ * Note: not actually registered as a JAXB adapter.
  */
 public final class JodaLocalDateXMLGregorianCalendarAdapter {
     private JodaLocalDateXMLGregorianCalendarAdapter() {

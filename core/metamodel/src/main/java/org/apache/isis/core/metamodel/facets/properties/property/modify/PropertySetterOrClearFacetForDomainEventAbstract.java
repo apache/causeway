@@ -161,9 +161,6 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
 
-        owningProperty.setupCommand(targetAdapter, newValueAdapter);
-
-
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
 

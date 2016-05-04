@@ -50,12 +50,12 @@ public final class CommonDtoUtils {
 
     public static final Function<ParamDto, String> PARAM_DTO_TO_NAME = new Function<ParamDto, String>() {
         @Override public String apply(final ParamDto paramDto) {
-            return paramDto.getParameterName();
+            return paramDto.getName();
         }
     };
     public static final Function<ParamDto, ValueType> PARAM_DTO_TO_TYPE = new Function<ParamDto, ValueType>() {
         @Override public ValueType apply(final ParamDto paramDto) {
-            return paramDto.getParameterType();
+            return paramDto.getType();
         }
     };
     //endregion
@@ -102,7 +102,7 @@ public final class CommonDtoUtils {
     }
     //endregion
 
-    //region > newValueDto
+    //region > newValueDto, setValueOn
 
     public static ValueDto newValueDto(
             final ValueType valueType,
@@ -114,6 +114,24 @@ public final class CommonDtoUtils {
         }
 
         final ValueDto valueDto = new ValueDto();
+        return setValueOn(valueDto, valueType, val, bookmarkService);
+    }
+
+    public static <T extends ValueWithTypeDto> T setValueOn(
+            final T valueWithTypeDto,
+            final ValueType valueType,
+            final Object val,
+            final BookmarkService bookmarkService) {
+        setValueOn((ValueDto)valueWithTypeDto, valueType, val, bookmarkService);
+        valueWithTypeDto.setNull(val == null);
+        return valueWithTypeDto;
+    }
+
+    public static <T extends ValueDto> T setValueOn(
+            final T valueDto,
+            final ValueType valueType,
+            final Object val,
+            final BookmarkService bookmarkService) {
         switch (valueType) {
         case STRING: {
             final String argValue = (String) val;
@@ -321,8 +339,7 @@ public final class CommonDtoUtils {
         final ValueType valueType = asValueType(type);
         valueWithTypeDto.setType(valueType);
 
-        final ValueDto valueDto = newValueDto(valueType, val, bookmarkService);
-        valueWithTypeDto.setValue(valueDto);
+        setValueOn(valueWithTypeDto, valueType, val, bookmarkService);
 
         return valueWithTypeDto;
     }
@@ -336,8 +353,7 @@ public final class CommonDtoUtils {
             return null;
         }
         final ValueType type = valueWithTypeDto.getType();
-        final ValueDto value = valueWithTypeDto.getValue();
-        return CommonDtoUtils.getValue(value, type);
+        return CommonDtoUtils.getValue(valueWithTypeDto, type);
     }
 
 
@@ -354,16 +370,12 @@ public final class CommonDtoUtils {
 
         final ParamDto paramDto = new ParamDto();
 
-        paramDto.setParameterName(parameterName);
+        paramDto.setName(parameterName);
 
         final ValueType valueType = CommonDtoUtils.asValueType(parameterType);
-        paramDto.setParameterType(valueType);
+        paramDto.setType(valueType);
 
-        final ValueDto valueDto =
-                CommonDtoUtils.newValueDto(valueType, arg, bookmarkService);
-        paramDto.setArgument(valueDto);
-
-        paramDto.setNull(arg == null);
+        CommonDtoUtils.setValueOn(paramDto, valueType, arg, bookmarkService);
 
         return paramDto;
     }
@@ -375,9 +387,8 @@ public final class CommonDtoUtils {
         if(paramDto.isNull()) {
             return null;
         }
-        final ValueType parameterType = paramDto.getParameterType();
-        final ValueDto argument = paramDto.getArgument();
-        return CommonDtoUtils.getValue(argument, parameterType);
+        final ValueType parameterType = paramDto.getType();
+        return CommonDtoUtils.getValue(paramDto, parameterType);
     }
 
     //endregion

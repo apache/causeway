@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -372,16 +373,32 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return execute(target, mixedInAdapter, arguments, interactionInitiatedBy);
     }
 
-
+    /**
+     * Sets up the {@link Command}, then delegates off to
+     * {@link #executeInternal(ObjectAdapter, ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) executeInternal}
+     * to invoke the {@link ActionInvocationFacet invocation facet}.
+     *
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
+     */
     @Override
     public ObjectAdapter execute(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("execute action " + targetAdapter + "." + getId());
-        }
+
+        setupCommand(targetAdapter, argumentAdapters);
+
+        return this.executeInternal(targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+    }
+
+    /**
+     * private API, called by mixins and contributees.
+     */
+    public ObjectAdapter executeInternal(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
+            final ObjectAdapter[] argumentAdapters, final InteractionInitiatedBy interactionInitiatedBy) {
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
         return facet.invoke(this, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
     }
@@ -564,9 +581,9 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     /**
-     * Internal API
+     * Internal API, called by the various implementations of {@link ObjectAction} ({@link ObjectActionDefault default},
+     * {@link ObjectActionMixedIn mixed-in} and {@link ObjectActionContributee contributee}).
      */
-    @Override
     public void setupCommand(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
@@ -576,16 +593,15 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         setupCommandMementoAndExecutionContext(targetAdapter, argumentAdapters);
     }
 
-    protected void setupCommandTarget(
+    private void setupCommandTarget(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
 
         final String arguments = CommandUtil.argDescriptionFor(this, argumentAdapters);
-
         setupCommandTarget(targetAdapter, arguments);
     }
 
-    protected void setupCommandMementoAndExecutionContext(
+    private void setupCommandMementoAndExecutionContext(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
 

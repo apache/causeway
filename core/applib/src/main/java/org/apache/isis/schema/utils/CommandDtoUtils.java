@@ -35,6 +35,8 @@ import com.google.common.io.Resources;
 
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
+import org.apache.isis.schema.common.v1.OidsDto;
 
 public final class CommandDtoUtils {
 
@@ -91,14 +93,22 @@ public final class CommandDtoUtils {
 
     //endregion
 
-    public static ActionDto.Parameters parametersFor(final ActionDto actionDto) {
-        ActionDto.Parameters parameters = actionDto.getParameters();
+    public static OidsDto targetsFor(final CommandDto dto) {
+        OidsDto targets = dto.getTargets();
+        if(targets == null) {
+            targets = new OidsDto();
+            dto.setTargets(targets);
+        }
+        return targets;
+    }
+
+    public static ParamsDto parametersFor(final ActionDto actionDto) {
+        ParamsDto parameters = actionDto.getParameters();
         if(parameters == null) {
-            parameters = new ActionDto.Parameters();
+            parameters = new ParamsDto();
             actionDto.setParameters(parameters);
         }
         return parameters;
     }
-
 
 }

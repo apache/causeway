@@ -128,7 +128,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return mixinAction.execute(mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+        return mixinAction.executeInternal(mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
     }
 
     @Override
@@ -150,10 +150,11 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     public Consent isVisible(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
+            final Where where) {
+
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final VisibilityContext<?> ic =
-                mixinAction.createVisibleInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
@@ -161,10 +162,12 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     @Override
     public Consent isUsable(
             final ObjectAdapter mixedInAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final UsabilityContext<?> ic =
-                mixinAction.createUsableInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }

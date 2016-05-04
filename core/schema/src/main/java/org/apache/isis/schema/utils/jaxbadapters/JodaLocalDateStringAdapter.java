@@ -24,6 +24,9 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+/**
+ * Note: not actually registered as a JAXB adapter.
+ */
 public final class JodaLocalDateStringAdapter {
     private JodaLocalDateStringAdapter() {
     }
