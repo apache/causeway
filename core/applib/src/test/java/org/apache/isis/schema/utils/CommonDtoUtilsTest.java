@@ -18,30 +18,31 @@
  */
 package org.apache.isis.schema.utils;
 
+import org.jmock.auto.Mock;
+import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class CommonDtoUtilsTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    private BookmarkService mockBookmarkService;
+
     @Test
     public void enums() throws Exception {
-
-        ValueDto valueDto = new ValueDto();
-        boolean b = CommonDtoUtils.setValue(valueDto, Vertical.class, Vertical.DOWN);
-
-        assertThat(b, is(true));
-
-        Object value = CommonDtoUtils.getValue(valueDto, ValueType.ENUM);
-        assertThat(value, is(notNullValue()));
-
-        assertThat((Vertical)value, is(equalTo(Vertical.DOWN)));
+        test(Vertical.DOWN);
     }
 
     enum Horizontal {
@@ -50,17 +51,25 @@ public class CommonDtoUtilsTest {
 
     @Test
     public void nested_enums() throws Exception {
-
-        ValueDto valueDto = new ValueDto();
-        boolean b = CommonDtoUtils.setValue(valueDto, Horizontal.class, Horizontal.LEFT);
-
-        assertThat(b, is(true));
-
-        Object value = CommonDtoUtils.getValue(valueDto, ValueType.ENUM);
-        assertThat(value, is(notNullValue()));
-
-        assertThat((Horizontal)value, is(equalTo(Horizontal.LEFT)));
+        test(Horizontal.LEFT);
     }
 
+    private void test(final Enum<?> enumVal) {
+
+        // when
+        final ValueType valueType = CommonDtoUtils.asValueType(enumVal.getClass());
+
+        // then
+        assertThat(valueType, is(ValueType.ENUM));
+
+        // and when
+        final ValueDto valueDto = CommonDtoUtils.newValueDto(valueType, enumVal, mockBookmarkService);
+
+        // then
+        Object value = CommonDtoUtils.getValue(valueDto, valueType);
+        assertThat(value, is(notNullValue()));
+
+        Assert.assertEquals(value, enumVal);
+    }
 
 }

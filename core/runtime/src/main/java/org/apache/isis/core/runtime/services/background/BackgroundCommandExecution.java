@@ -54,7 +54,8 @@ import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.common.v1.ValueWithTypeDto;
+import org.apache.isis.schema.utils.CommonDtoUtils;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
@@ -266,8 +267,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     }
 
     protected ObjectAdapter newValueAdapterFor(final PropertyDto propertyDto) {
-        final ParamDto paramDto = propertyDto.getNewValue();
-        final Object arg = CommandDtoUtils.paramArgOf(paramDto);
+        final ValueWithTypeDto newValue = propertyDto.getNewValue();
+        final Object arg = CommonDtoUtils.getValue(newValue);
         return adapterFor(arg);
     }
 
@@ -327,12 +328,12 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     }
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
-        final List<ParamDto> params = actionDto.getParameters();
+        final List<ParamDto> params = actionDto.getParameters().getParameter();
         final List<ObjectAdapter> args = Lists.newArrayList(
                 Iterables.transform(params, new Function<ParamDto, ObjectAdapter>() {
                     @Override
                     public ObjectAdapter apply(final ParamDto paramDto) {
-                        final Object arg = CommandDtoUtils.paramArgOf(paramDto);
+                        final Object arg = CommonDtoUtils.getValue(paramDto);
                         return adapterFor(arg);
                     }
                 })

@@ -69,7 +69,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
-import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
+import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 /**
@@ -323,7 +323,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         // TODO: this is where we could now stitch together a deep call graph from the execution.getDto()s
         //
 
-        final InteractionExecutionDto executionDto = execution.getDto();
+        final MemberExecutionDto executionDto = execution.getDto();
 
         final String transactionId = commandContext.getCommand().getTransactionId().toString();
         final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDto(transactionId);

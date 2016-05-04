@@ -53,13 +53,13 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="execution" type="interactionExecutionDto"/>
+                <xs:element name="execution" type="memberExecutionDto"/>
             </xs:sequence>
         </xs:complexType>
 
     </xs:element>
 
-    <xs:complexType name="interactionExecutionDto" abstract="true">
+    <xs:complexType name="memberExecutionDto" abstract="true">
         <xs:annotation>
             <xs:documentation>Represents either an action invocation or a property edit.  Is subclassed by both.
             </xs:documentation>
@@ -122,7 +122,7 @@
             <xs:element name="childExecutions" minOccurs="1" maxOccurs="1">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="execution" type="interactionExecutionDto" minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="execution" type="memberExecutionDto" minOccurs="0" maxOccurs="unbounded">
                             <xs:annotation>
                                 <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property edit, and - much rarer - for a property edit to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
                                 </xs:documentation>
@@ -136,7 +136,7 @@
 
     <xs:complexType name="actionInvocationDto">
         <xs:complexContent>
-            <xs:extension base="interactionExecutionDto">
+            <xs:extension base="memberExecutionDto">
                 <xs:sequence>
                     <xs:element name="parameters" minOccurs="1" maxOccurs="1">
                         <xs:annotation>
@@ -150,7 +150,7 @@
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element name="returned" type="valueWithTypeDto" minOccurs="0" maxOccurs="1">
+                    <xs:element name="returned" type="common:valueWithTypeDto" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
                             <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberInteractionDto') will be populated.
                             </xs:documentation>
@@ -163,24 +163,12 @@
 
     <xs:complexType name="propertyEditDto">
         <xs:complexContent>
-            <xs:extension base="interactionExecutionDto">
+            <xs:extension base="memberExecutionDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="valueWithTypeDto"/>
+                    <xs:element name="newValue" type="common:valueWithTypeDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="valueWithTypeDto">
-        <xs:annotation>
-            <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="value" type="common:valueDto"/>
-        </xs:sequence>
-        <xs:attribute name="type" use="required" type="common:valueType"/>
-        <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="exceptionDto">

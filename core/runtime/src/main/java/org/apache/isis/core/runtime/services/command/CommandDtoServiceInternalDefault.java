@@ -50,7 +50,8 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
-import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.common.v1.ValueWithTypeDto;
+import org.apache.isis.schema.utils.CommonDtoUtils;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -202,9 +203,10 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
             final ObjectAdapter argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
-            final List<ParamDto> parameters = actionDto.getParameters();
+            final List<ParamDto> parameters = actionDto.getParameters().getParameter();
 
-            ParamDto paramDto = CommandDtoUtils.newParamDto(parameterName, paramType, arg, bookmarkService);
+            ParamDto paramDto = CommonDtoUtils.newParamDto(
+                    parameterName, paramType, arg, bookmarkService);
             parameters.add(paramDto);
         }
     }
@@ -221,9 +223,9 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         final ObjectSpecification valueSpec = property.getSpecification();
         final Class<?> valueType = valueSpec.getCorrespondingClass();
 
-        final ParamDto paramDto = CommandDtoUtils.newParamDto(
-                "newValue", valueType, ObjectAdapter.Util.unwrap(valueAdapter), bookmarkService);
-        propertyDto.setNewValue(paramDto);
+        final ValueWithTypeDto newValue = CommonDtoUtils.newValueWithTypeDto(
+                valueType, ObjectAdapter.Util.unwrap(valueAdapter), bookmarkService);
+        propertyDto.setNewValue(newValue);
     }
 
     // //////////////////////////////////////

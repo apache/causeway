@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v1.InteractionExecutionDto;
+import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
@@ -227,7 +227,6 @@ public class Interaction implements HasTransactionId {
      * Pops the top-most  {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}
      * from the stack of events held by the command.
      * </p>
-     * @param completedAt
      */
     @Programmatic
     private Execution pop(final Timestamp completedAt) {
@@ -315,7 +314,7 @@ public class Interaction implements HasTransactionId {
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
      * being made by way of the {@link WrapperFactory}).
      */
-    public static class Execution<T extends InteractionExecutionDto, E extends AbstractDomainEvent<?>> {
+    public static class Execution<T extends MemberExecutionDto, E extends AbstractDomainEvent<?>> {
 
         //region > fields, constructor
 
@@ -351,17 +350,17 @@ public class Interaction implements HasTransactionId {
 
         //region > parent, children
 
-        private final List<Execution> children = Lists.newArrayList();
-        private Execution parent;
+        private final List<Execution<?,?>> children = Lists.newArrayList();
+        private Execution<?,?> parent;
 
         /**
          * The action/property that invoked this action/property edit (if any).
          */
-        public Execution getParent() {
+        public Execution<?,?> getParent() {
             return parent;
         }
 
-        public void setParent(final Execution parent) {
+        public void setParent(final Execution<?,?> parent) {
             this.parent = parent;
             if(parent != null) {
                 parent.children.add(this);
@@ -371,7 +370,7 @@ public class Interaction implements HasTransactionId {
         /**
          * The actions/property edits made in turn via the {@link WrapperFactory}.
          */
-        public List<Execution> getChildren() {
+        public List<Execution<?,?>> getChildren() {
             return Collections.unmodifiableList(children);
         }
         //endregion
@@ -511,11 +510,11 @@ public class Interaction implements HasTransactionId {
                 return;
             }
             final PeriodDto periodDto = periodDtoFor(this.dto);
-            periodDto.setStart(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getStartedAt()));
-            periodDto.setComplete(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getCompletedAt()));
+            periodDto.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getStartedAt()));
+            periodDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getCompletedAt()));
         }
 
-        private static PeriodDto periodDtoFor(final InteractionExecutionDto executionDto) {
+        private static PeriodDto periodDtoFor(final MemberExecutionDto executionDto) {
             PeriodDto timings = executionDto.getTimings();
             if(timings == null) {
                 timings = new PeriodDto();

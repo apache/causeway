@@ -36,9 +36,9 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueType;
+import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
-import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -62,7 +62,8 @@ public class Roundtrip {
         final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDtoWithActionInvocation(
                 UUID.randomUUID().toString(),
                 1,
-                new Bookmark("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(), returnDto, "freddyUser"
+                new Bookmark("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(),
+                "freddyUser"
         );
 
         InteractionDtoUtils.addParamArg(interactionDto, "aString", String.class, "Fred", null);
@@ -141,19 +142,19 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aString"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.STRING));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, String.class), is("Fred"));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, String.class), is("Fred"));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullString"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.STRING));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(true));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, String.class), is(nullValue()));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, String.class), is(nullValue()));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aByte"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BYTE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, Byte.class), is((byte) 123));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, Byte.class), is((byte) 123));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BYTE));
@@ -164,7 +165,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aShort"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.SHORT));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, Short.class), is((short) 32123));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, Short.class), is((short) 32123));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullShort"));
@@ -175,7 +176,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("anInt"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.INT));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, int.class), is((int) 123454321));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, int.class), is((int) 123454321));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullInt"));
@@ -186,7 +187,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aLong"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.LONG));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, long.class), is((long) 1234567654321L));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, long.class), is((long) 1234567654321L));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullLong"));
@@ -197,7 +198,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aFloat"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.FLOAT));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, float.class), is((float) 12345.6789F));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, float.class), is((float) 12345.6789F));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullFloat"));
@@ -208,7 +209,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aDouble"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.DOUBLE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, double.class), is(12345678.90123));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, double.class), is(12345678.90123));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullDouble"));
@@ -219,7 +220,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aBoolean"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BOOLEAN));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, boolean.class), is(true));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, boolean.class), is(true));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullBoolean"));
@@ -230,7 +231,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aChar"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.CHAR));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, char.class), is('x'));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, char.class), is('x'));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullChar"));
@@ -241,7 +242,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aBigInteger"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_INTEGER));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, BigInteger.class), is(new java.math.BigInteger("12345678901234567890")));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, BigInteger.class), is(new java.math.BigInteger("12345678901234567890")));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullBigInteger"));
@@ -252,7 +253,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aBigDecimal"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.BIG_DECIMAL));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, BigDecimal.class), is(new java.math.BigDecimal("12345678901234567890")));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, BigDecimal.class), is(new java.math.BigDecimal("12345678901234567890")));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullBigDecimal"));
@@ -265,7 +266,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         // bit hacky... regular comparison fails but toString() works... must be some additional data that differs, not sure what tho'
         assertThat(
-                InteractionDtoUtils.getArg(invocationDto, param, DateTime.class).toString(), is(new DateTime(2015, 5, 23, 9, 54, 1).toString()));
+                InteractionDtoUtils.getParameterArgValue(invocationDto, param, DateTime.class).toString(), is(new DateTime(2015, 5, 23, 9, 54, 1).toString()));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaDateTime"));
@@ -276,7 +277,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDate"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        final LocalDate actual = InteractionDtoUtils.getArg(invocationDto, param, LocalDate.class);
+        final LocalDate actual = InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalDate.class);
         final LocalDate expected = new LocalDate(2015, 5, 23);
         assertThat(actual, equalTo(expected));
 
@@ -289,7 +290,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aJodaLocalDateTime"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_DATE_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, LocalDateTime.class), is(new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1)));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalDateTime.class), is(new org.joda.time.LocalDateTime(2015, 5, 23, 9, 54, 1)));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalDateTime"));
@@ -301,7 +302,7 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.JODA_LOCAL_TIME));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
         assertThat(
-                InteractionDtoUtils.getArg(invocationDto, param, LocalTime.class), is(new org.joda.time.LocalTime(9, 54, 1)));
+                InteractionDtoUtils.getParameterArgValue(invocationDto, param, LocalTime.class), is(new org.joda.time.LocalTime(9, 54, 1)));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullJodaLocalTime"));
@@ -312,8 +313,8 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aReference"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.REFERENCE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, OidDto.class).getObjectType(), is("ORD"));
-        assertThat(InteractionDtoUtils.getArg(invocationDto, param, OidDto.class).getObjectIdentifier(), is("12345"));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, OidDto.class).getObjectType(), is("ORD"));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, OidDto.class).getObjectIdentifier(), is("12345"));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullReference"));

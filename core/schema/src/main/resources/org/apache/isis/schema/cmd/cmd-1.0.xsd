@@ -100,9 +100,18 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="parameters" type="paramDto"/>
-                    </xs:sequence>
+                    <xs:element name="parameters" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The set of parameter/argument values for this action invocation.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                                <xs:element name="parameter" type="paramDto"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -116,7 +125,7 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="paramDto"/>
+                    <xs:element name="newValue" type="common:valueWithTypeDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

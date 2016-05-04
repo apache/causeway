@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-import org.apache.isis.schema.ixn.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 @DomainService(nature = NatureOfService.DOMAIN)
@@ -81,7 +80,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         // InteractionDtoUtils.addReturn(invocationDto, returnType, resultPojo, bookmarkService);
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,
-                actionDto.getMemberIdentifier(), actionDto.getParameters(), currentUser,
+                actionDto.getMemberIdentifier(), actionDto.getParameters().getParameter(), currentUser,
                 transactionIdStr);
     }
 
@@ -92,11 +91,10 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final Object resultPojo) {
 
         final ObjectSpecification returnSpec = objectAction.getReturnType();
-
         final Class<?> returnType = returnSpec.getCorrespondingClass();
 
-        final ValueWithTypeDto returnDto = new ValueWithTypeDto();
-        InteractionDtoUtils.setValue(returnDto, returnType, resultPojo);
+        InteractionDtoUtils.addReturn(
+                actionInvocationDto, returnType, resultPojo, bookmarkService);
 
         return actionInvocationDto;
     }

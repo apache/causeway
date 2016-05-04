@@ -39,6 +39,7 @@
             <xs:element name="localDate" type="xs:date"/>
             <xs:element name="localDateTime" type="xs:dateTime"/>
             <xs:element name="localTime" type="xs:time"/>
+            <xs:element name="timestamp" type="xs:dateTime"/>
             <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
         </xs:choice>
@@ -80,7 +81,7 @@
             <xs:enumeration value="char"/>
             <xs:enumeration value="bigInteger"/>
             <xs:enumeration value="bigDecimal"/>
-            <xs:enumeration value="javaUtilDate"/>
+            <xs:enumeration value="javaSqlTimestamp"/>
             <xs:enumeration value="jodaDateTime"/>
             <xs:enumeration value="jodaLocalDate"/>
             <xs:enumeration value="jodaLocalTime"/>
@@ -103,13 +104,13 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="start" type="xs:dateTime">
+            <xs:element name="startedAt" type="xs:dateTime">
                 <xs:annotation>
                     <xs:documentation>The point in time that this period of time started.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="complete" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+            <xs:element name="completedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>The point in time that this period of time completed.  The duration is the difference between 'start' and 'complete'.
                     </xs:documentation>
@@ -117,6 +118,19 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="valueWithTypeDto">
+        <xs:annotation>
+            <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="value" type="valueDto"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
 
     <xs:simpleType name="interactionType" >
         <xs:annotation>
