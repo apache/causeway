@@ -41,8 +41,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.ActionDto;
+import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.PropertyDto;
+import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 @DomainService(nature = NatureOfService.DOMAIN)
@@ -64,8 +68,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final Object targetPojo = targetAdapter.getObject();
         final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
 
-        final String actionClassNameId = objectAction.getIdentifier().toClassAndNameIdentityString();
-        final String actionId = actionClassNameId.substring(actionClassNameId.indexOf('#')+1);
+        final String actionIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
+        final String actionId = actionIdentifier.substring(actionIdentifier.indexOf('#')+1);
         final String targetTitle = targetBookmark.toString() + ": " + actionId;
 
         final String currentUser = userService.getUser().getName();
@@ -73,14 +77,14 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final ActionDto actionDto = new ActionDto();
         commandDtoServiceInternal.addActionArgs(
                 objectAction, actionDto, argumentAdapters.toArray(new ObjectAdapter[]{}));
+        final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         final String transactionIdStr = transactionId.toString();
 
-        // done above, I believe
-        // InteractionDtoUtils.addReturn(invocationDto, returnType, resultPojo, bookmarkService);
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,
-                actionDto.getMemberIdentifier(), actionDto.getParameters().getParameter(), currentUser,
+                actionDto.getMemberIdentifier(),
+                parameterDtos, currentUser,
                 transactionIdStr);
     }
 
@@ -105,11 +109,33 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapterIfAny) {
 
-        //
-        //
-        //
+        final Command command = commandContext.getCommand();
+        final UUID transactionId = command.getTransactionId();
 
-        throw new RuntimeException("not yet implemented");
+        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
+        final int nextEventSequence = command.next(sequenceName.abbr());
+
+        final Object targetPojo = targetAdapter.getObject();
+        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
+
+        final String propertyIdentifier = property.getIdentifier().toClassAndNameIdentityString();
+        final String propertyId = propertyIdentifier.substring(propertyIdentifier.indexOf('#')+1);
+        final String targetTitle = targetBookmark.toString() + ": " + propertyId;
+
+        final String currentUser = userService.getUser().getName();
+
+        final PropertyDto propertyDto = new PropertyDto();
+        commandDtoServiceInternal.addPropertyValue(property, propertyDto, newValueAdapterIfAny);
+        final ValueWithTypeDto newValue = propertyDto.getNewValue();
+
+        final String transactionIdStr = transactionId.toString();
+
+        return InteractionDtoUtils.newPropertyEdit(
+                nextEventSequence, targetBookmark, targetTitle,
+                propertyDto.getMemberIdentifier(),
+                newValue, currentUser,
+                transactionIdStr);
+
     }
 
 

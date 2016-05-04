@@ -52,6 +52,9 @@ public class JavaSqlTimestampXmlGregorianCalendarAdapter extends XmlAdapter<XMLG
     }
 
     public static XMLGregorianCalendar print(final java.sql.Timestamp timestamp) {
+        if(timestamp == null) {
+            return null;
+        }
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(timestamp);
         return getDatatypeFactory().newXMLGregorianCalendar(c);

@@ -31,11 +31,17 @@ public final class JodaLocalDateTimeStringAdapter {
     private static DateTimeFormatter formatter = ISODateTimeFormat.localDateOptionalTimeParser();
 
     public static LocalDateTime parse(final String date) {
-        return !Strings.isNullOrEmpty(date) ? formatter.parseLocalDateTime(date) : null;
+        if (Strings.isNullOrEmpty(date)) {
+            return null;
+        }
+        return formatter.parseLocalDateTime(date);
     }
 
     public static String print(final LocalDateTime date) {
-        return date != null? date.toString(): null;
+        if (date == null) {
+            return null;
+        }
+        return formatter.print(date);
     }
 
 }

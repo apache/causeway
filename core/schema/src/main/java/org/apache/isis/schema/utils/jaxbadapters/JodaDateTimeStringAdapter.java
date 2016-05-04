@@ -38,7 +38,10 @@ public final class JodaDateTimeStringAdapter {
     }
 
     public static String print(final DateTime date) {
-        return date != null? date.toString(): null;
+        if (date == null) {
+            return null;
+        }
+        return formatter.print(date);
     }
 
 }

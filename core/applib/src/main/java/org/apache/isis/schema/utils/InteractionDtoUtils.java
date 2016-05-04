@@ -211,9 +211,9 @@ public final class InteractionDtoUtils {
         if(type == InteractionType.ACTION_INVOCATION) {
 
             final ActionInvocationDto invocation = new ActionInvocationDto();
-
-            final ActionInvocationDto.Parameters parameters = invocation.getParameters();
-            parameters.getParameter().addAll(parameterDtos);
+            final ActionInvocationDto.Parameters invocationParameters = parametersFor(invocation);
+            invocation.setParameters(invocationParameters);
+            invocationParameters.getParameter().addAll(parameterDtos);
 
             executionDto = invocation;
         } else {
@@ -278,12 +278,21 @@ public final class InteractionDtoUtils {
         return edit;
     }
 
-    private static List<ParamDto> parametersFor(final InteractionDto ixnDto) {
-        return parametersFor(actionInvocationFor(ixnDto));
+    private static List<ParamDto> parameterListFor(final InteractionDto ixnDto) {
+        return parameterListFor(actionInvocationFor(ixnDto));
     }
 
-    private static List<ParamDto> parametersFor(final ActionInvocationDto invocationDto) {
-        return invocationDto.getParameters().getParameter();
+    private static ActionInvocationDto.Parameters parametersFor(final ActionInvocationDto invocationDto) {
+        ActionInvocationDto.Parameters parameters = invocationDto.getParameters();
+        if(parameters == null) {
+            parameters = new ActionInvocationDto.Parameters();
+            invocationDto.setParameters(parameters);
+        }
+        return parameters;
+    }
+
+    private static List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
+        return parametersFor(invocationDto).getParameter();
     }
 
     private static PeriodDto timingsFor(final MemberExecutionDto executionDto) {
@@ -306,7 +315,7 @@ public final class InteractionDtoUtils {
             final Object arg,
             final BookmarkService bookmarkService) {
 
-        final List<ParamDto> params = parametersFor(interactionDto);
+        final List<ParamDto> params = parameterListFor(interactionDto);
         ParamDto paramDto = CommonDtoUtils.newParamDto(parameterName, parameterType, arg, bookmarkService);
         params.add(paramDto);
     }
@@ -332,7 +341,7 @@ public final class InteractionDtoUtils {
 
     //region > getParameters, getParameterNames, getParameterTypes
     public static List<ParamDto> getParameters(final ActionInvocationDto ai) {
-        final List<ParamDto> params = parametersFor(ai);
+        final List<ParamDto> params = parameterListFor(ai);
         final int parameterNumber = getNumberOfParameters(ai);
         final List<ParamDto> paramDtos = Lists.newArrayList();
         for (int i = 0; i < parameterNumber; i++) {
@@ -343,7 +352,7 @@ public final class InteractionDtoUtils {
     }
 
     private static int getNumberOfParameters(final ActionInvocationDto ai) {
-        final List<ParamDto> params = parametersFor(ai);
+        final List<ParamDto> params = parameterListFor(ai);
         return params != null ? params.size() : 0;
     }
 

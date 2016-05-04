@@ -32,7 +32,9 @@ public final class JodaLocalTimeXMLGregorianCalendarAdapter {
     }
 
     public static LocalTime parse(final XMLGregorianCalendar xgc) {
-        if(xgc == null) return null;
+        if(xgc == null) {
+            return null;
+        }
 
         final int hour = xgc.getHour();
         final int minute = xgc.getMinute();
@@ -43,7 +45,9 @@ public final class JodaLocalTimeXMLGregorianCalendarAdapter {
     }
 
     public static XMLGregorianCalendar print(final LocalTime dateTime) {
-        if(dateTime == null) return null;
+        if(dateTime == null) {
+            return null;
+        }
 
         final XMLGregorianCalendarImpl xgc = new XMLGregorianCalendarImpl();
         xgc.setHour(dateTime.getHourOfDay());

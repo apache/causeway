@@ -33,6 +33,7 @@ import javax.xml.bind.Unmarshaller;
 
 import com.google.common.io.Resources;
 
+import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public final class CommandDtoUtils {
@@ -87,7 +88,17 @@ public final class CommandDtoUtils {
             throw new RuntimeException(e);
         }
     }
+
     //endregion
+
+    public static ActionDto.Parameters parametersFor(final ActionDto actionDto) {
+        ActionDto.Parameters parameters = actionDto.getParameters();
+        if(parameters == null) {
+            parameters = new ActionDto.Parameters();
+            actionDto.setParameters(parameters);
+        }
+        return parameters;
+    }
 
 
 }

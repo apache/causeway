@@ -47,10 +47,6 @@ import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
-    public static Class<? extends Facet> type() {
-        return PropertySetterFacet.class;
-    }
-
     private final DomainEventHelper domainEventHelper;
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
@@ -62,6 +58,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
 
     public PropertySetterOrClearFacetForDomainEventAbstract(
+            final Class<? extends Facet> facetType,
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertySetterFacet setterFacet,
@@ -69,7 +66,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final PropertyDomainEventFacetAbstract propertyDomainEventFacet,
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
-        super(type(), eventType, holder);
+        super(facetType, eventType, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;

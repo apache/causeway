@@ -37,7 +37,7 @@ public class PropertySetterFacetForDomainEventFromDefault
             final PropertyDomainEventFacetAbstract propertyInteractionFacet,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
-        super(eventType, getterFacet, setterFacet, null, propertyInteractionFacet, servicesInjector, holder);
+        super(PropertySetterFacet.class, eventType, getterFacet, setterFacet, null, propertyInteractionFacet, servicesInjector, holder);
     }
 
 }

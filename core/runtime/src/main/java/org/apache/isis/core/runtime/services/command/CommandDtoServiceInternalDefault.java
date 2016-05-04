@@ -51,6 +51,7 @@ import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
+import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 @DomainService(
@@ -203,11 +204,12 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
             final ObjectAdapter argAdapter = argAdapters[paramNum];
             final Object arg = argAdapter != null? argAdapter.getObject(): null;
-            final List<ParamDto> parameters = actionDto.getParameters().getParameter();
+            final ActionDto.Parameters parameters = CommandDtoUtils.parametersFor(actionDto);
+            final List<ParamDto> parameterList = parameters.getParameter();
 
             ParamDto paramDto = CommonDtoUtils.newParamDto(
                     parameterName, paramType, arg, bookmarkService);
-            parameters.add(paramDto);
+            parameterList.add(paramDto);
         }
     }
 
