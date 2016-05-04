@@ -83,13 +83,13 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="interactionType" type="common:interactionType">
-                <xs:annotation>
-                    <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
         </xs:sequence>
+        <xs:attribute  name="interactionType" type="common:interactionType">
+            <xs:annotation>
+                <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="actionDto">

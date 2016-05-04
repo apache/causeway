@@ -132,7 +132,7 @@ public class Roundtrip {
 
 
         // then
-        assertThat(recreated.getExecution().getMemberId(), Matchers.is(interactionDto.getExecution().getMemberId()));
+        assertThat(recreated.getExecution().getMemberIdentifier(), Matchers.is(interactionDto.getExecution().getMemberIdentifier()));
         assertThat(recreated.getExecution().getTarget().getObjectType(), Matchers.is(interactionDto.getExecution().getTarget().getObjectType()));
         assertThat(recreated.getExecution().getTarget().getObjectIdentifier(), Matchers.is(interactionDto.getExecution().getTarget().getObjectIdentifier()));
 

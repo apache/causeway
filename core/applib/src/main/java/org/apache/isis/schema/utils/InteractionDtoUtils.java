@@ -234,7 +234,7 @@ public final class InteractionDtoUtils {
         executionDto.setTitle(targetTitle);
         executionDto.setUser(user);
 
-        executionDto.setMemberId(memberId);
+        executionDto.setMemberIdentifier(memberId);
         return executionDto;
     }
 
