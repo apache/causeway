@@ -147,7 +147,7 @@
                     </xs:element>
                     <xs:element name="returned" type="returnDto" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
-                            <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberInteractionDto') will be populated.
+                            <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberExecutionDto') will be populated.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -156,7 +156,7 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="propertyModificationDto">
+    <xs:complexType name="propertyEditDto">
         <xs:complexContent>
             <xs:extension base="interactionExecutionDto">
                 <xs:sequence>

@@ -101,9 +101,9 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="timings" type="common:periodDto">
+            <xs:element name="metrics" type="metricsDto">
                 <xs:annotation>
-                    <xs:documentation>Captures the time taken to perform the member interaction (invoke the action, or edit the property).
+                    <xs:documentation>Profiling metrics capturng the this time/number of objects affected as a result of performing this member interaction (invoke the action, or edit the property).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -146,7 +146,7 @@
                     </xs:element>
                     <xs:element name="returned" type="common:valueWithTypeDto" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
-                            <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberInteractionDto') will be populated.
+                            <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberExecutionDto') will be populated.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -163,6 +163,48 @@
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="metricsDto">
+        <xs:sequence>
+            <xs:element name="timings" type="common:periodDto">
+                <xs:annotation>
+                    <xs:documentation>The time taken to perform the member interaction (invoke the action, or edit the property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="objectCounts" type="objectCountsDto">
+                <xs:annotation>
+                    <xs:documentation>How many objets were affected by the member interaction.
+                    </xs:documentation>
+                </xs:annotation>
+
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="objectCountsDto">
+        <xs:sequence>
+            <xs:element name="numberObjectsLoaded" type="common:differenceDto">
+                <xs:annotation>
+                    <xs:documentation>The number of objects loaded.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="numberObjectsDirtied" type="common:differenceDto">
+                <xs:annotation>
+                    <xs:documentation>The number of objects dirtied (ie updated).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="numberObjectPropertiesModified" type="common:differenceDto">
+                <xs:annotation>
+                    <xs:documentation>The number of individual properties of objects that were modified (eg as per individual calls to AuditingService).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+
     </xs:complexType>
 
     <xs:complexType name="exceptionDto">

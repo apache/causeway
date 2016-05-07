@@ -27,6 +27,8 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -38,12 +40,17 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.schema.common.v1.DifferenceDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
+import org.apache.isis.schema.ixn.v1.MetricsDto;
+import org.apache.isis.schema.ixn.v1.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+import org.apache.isis.schema.utils.MemberExecutionDtoUtils;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 /**
@@ -112,48 +119,27 @@ public class Interaction implements HasTransactionId {
     }
 
 
-
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
-            final ActionInvocation actionInvocation,
-            final ClockService clockService,
-            final Command command) {
+            final ActionInvocation actionInvocation) {
 
-        pushAndUpdateCommand(actionInvocation, clockService, command);
+        push(actionInvocation);
 
-        return execute(memberExecutor, actionInvocation, clockService);
+        return executeInternal(memberExecutor, actionInvocation);
     }
 
     public Object execute(
-            final MemberExecutor<PropertyModification> memberExecutor,
-            final PropertyModification propertyModification,
-            final ClockService clockService,
-            final Command command) {
+            final MemberExecutor<PropertyEdit> memberExecutor,
+            final PropertyEdit propertyEdit) {
 
-        pushAndUpdateCommand(propertyModification, clockService, command);
-        return execute(memberExecutor, propertyModification, clockService);
+        push(propertyEdit);
+
+        return executeInternal(memberExecutor, propertyEdit);
     }
 
-
-    private Execution pushAndUpdateCommand(
-            final Execution execution,
-            final ClockService clockService,
-            final Command command) {
-
-        final Timestamp startedAt = clockService.nowAsJavaSqlTimestamp();
-        push(startedAt, execution);
-
-        if(command.getStartedAt() == null) {
-            command.setStartedAt(startedAt);
-        }
-        return execution;
-    }
-
-
-    private <T extends Execution> Object execute(
+    private <T extends Execution> Object executeInternal(
             final MemberExecutor<T> memberExecutor,
-            final T execution,
-            final ClockService clockService) {
+            final T execution) {
 
         // as a convenience, since in all cases we want the command to start when the first interaction executes,
         // we populate the command here.
@@ -203,7 +189,7 @@ public class Interaction implements HasTransactionId {
      * </p>
      */
     @Programmatic
-    private Execution push(final Timestamp startedAt, final Execution execution) {
+    private Execution push(final Execution execution) {
 
         if(currentExecution == null) {
             // new top-level execution
@@ -214,7 +200,6 @@ public class Interaction implements HasTransactionId {
             execution.setParent(currentExecution);
         }
 
-        execution.setStartedAt(startedAt);
 
         // update this.currentExecution and this.previousExecution
         moveCurrentTo(execution);
@@ -265,7 +250,7 @@ public class Interaction implements HasTransactionId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * Clears the set of {@link Execution}s that may have been {@link #push(Timestamp, Execution)}ed.
+     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
      */
     @Programmatic
     public void clear() {
@@ -432,8 +417,7 @@ public class Interaction implements HasTransactionId {
         }
 
         public void setStartedAt(final Timestamp startedAt) {
-            this.startedAt = startedAt;
-            syncMetrics();
+            syncMetrics(When.BEFORE, startedAt);
         }
 
 
@@ -448,8 +432,7 @@ public class Interaction implements HasTransactionId {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         void setCompletedAt(final Timestamp completedAt) {
-            this.completedAt = completedAt;
-            syncMetrics();
+            syncMetrics(When.AFTER, completedAt);
         }
 
         //endregion
@@ -517,28 +500,103 @@ public class Interaction implements HasTransactionId {
          */
         public void setDto(final T executionDto) {
             this.dto = executionDto;
-            syncMetrics();
         }
 
         //endregion
 
         //region > helpers (syncMetrics)
-        private void syncMetrics() {
-            if (this.dto == null) {
-                return;
+
+        enum When {
+            BEFORE {
+                @Override
+                public void syncMetrics(
+                        final Execution<?, ?> execution,
+                        final Timestamp timestamp,
+                        final int numberObjectsLoaded,
+                        final int numberObjectsDirtied,
+                        final int numberObjectPropertiesModified) {
+
+                    execution.startedAt = timestamp;
+
+                    final MetricsDto metricsDto = metricsFor(execution);
+
+                    final PeriodDto periodDto = timingsFor(metricsDto);
+                    periodDto.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+
+                    final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
+                    numberObjectsLoadedFor(objectCountsDto).setBefore(numberObjectsLoaded);
+                    numberObjectsDirtiedFor(objectCountsDto).setBefore(numberObjectsDirtied);
+                    numberObjectPropertiesModifiedFor(objectCountsDto).setBefore(numberObjectPropertiesModified);
+                }
+
+            },
+            AFTER {
+                @Override public void syncMetrics(
+                        final Execution<?, ?> execution,
+                        final Timestamp timestamp,
+                        final int numberObjectsLoaded,
+                        final int numberObjectsDirtied,
+                        final int numberObjectPropertiesModified) {
+
+                    execution.completedAt = timestamp;
+
+                    final MetricsDto metricsDto = metricsFor(execution);
+
+                    final PeriodDto periodDto = timingsFor(metricsDto);
+                    periodDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+
+                    final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
+                    numberObjectsLoadedFor(objectCountsDto).setAfter(numberObjectsLoaded);
+                    numberObjectsDirtiedFor(objectCountsDto).setAfter(numberObjectsDirtied);
+                    numberObjectPropertiesModifiedFor(objectCountsDto).setAfter(numberObjectPropertiesModified);
+
+                }
+
+            };
+
+            //region > helpers
+            private static DifferenceDto numberObjectPropertiesModifiedFor(final ObjectCountsDto objectCountsDto) {
+                return MemberExecutionDtoUtils.numberObjectPropertiesModifiedFor(objectCountsDto);
             }
-            final PeriodDto periodDto = periodDtoFor(this.dto);
-            periodDto.setStartedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getStartedAt()));
-            periodDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(getCompletedAt()));
+
+            private static DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto) {
+                return MemberExecutionDtoUtils.numberObjectsDirtiedFor(objectCountsDto);
+            }
+
+            private static DifferenceDto numberObjectsLoadedFor(final ObjectCountsDto objectCountsDto) {
+                return MemberExecutionDtoUtils.numberObjectsLoadedFor(objectCountsDto);
+            }
+
+            private static ObjectCountsDto objectCountsFor(final MetricsDto metricsDto) {
+                return MemberExecutionDtoUtils.objectCountsFor(metricsDto);
+            }
+
+            private static MetricsDto metricsFor(final Execution<?, ?> execution) {
+                return MemberExecutionDtoUtils.metricsFor(execution.dto);
+            }
+
+            private static PeriodDto timingsFor(final MetricsDto metricsDto) {
+                return MemberExecutionDtoUtils.timingsFor(metricsDto);
+            }
+            //endregion
+
+            public abstract void syncMetrics(
+                    final Execution<?,?> teExecution,
+                    final Timestamp timestamp,
+                    final int numberObjectsLoaded,
+                    final int numberObjectsDirtied,
+                    final int numberObjectPropertiesModified);
+        }
+        private void syncMetrics(final When when, final Timestamp timestamp) {
+            final MetricsService metricsService = interaction.metricsService;
+
+            final int numberObjectsLoaded = metricsService.numberObjectsLoaded();
+            final int numberObjectsDirtied = metricsService.numberObjectsDirtied();
+            final int numberObjectPropertiesModified = metricsService.numberObjectPropertiesModified();
+
+            when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied, numberObjectPropertiesModified);
         }
 
-        private static PeriodDto periodDtoFor(final MemberExecutionDto executionDto) {
-            PeriodDto timings = executionDto.getTimings();
-            if(timings == null) {
-                timings = new PeriodDto();
-            }
-            return timings;
-        }
         //endregion
 
     }
@@ -561,11 +619,11 @@ public class Interaction implements HasTransactionId {
         }
     }
 
-    public static class PropertyModification extends Execution<PropertyEditDto, PropertyDomainEvent<?,?>> {
+    public static class PropertyEdit extends Execution<PropertyEditDto, PropertyDomainEvent<?,?>> {
 
         private final Object newValue;
 
-        public PropertyModification(
+        public PropertyEdit(
                 final Interaction interaction,
                 final String memberId,
                 final Object target,
@@ -578,4 +636,12 @@ public class Interaction implements HasTransactionId {
             return newValue;
         }
     }
+
+
+    @Inject
+    MetricsService metricsService;
+
+    @Inject
+    ClockService clockService;
+
 }

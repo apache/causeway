@@ -45,7 +45,6 @@ import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.common.v1.ValueDto;
 import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
@@ -332,15 +331,6 @@ public final class InteractionDtoUtils {
 
     private static List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
         return parametersFor(invocationDto).getParameter();
-    }
-
-    private static PeriodDto timingsFor(final MemberExecutionDto executionDto) {
-        PeriodDto timings = executionDto.getTimings();
-        if(timings == null) {
-            timings = new PeriodDto();
-            executionDto.setTimings(timings);
-        }
-        return timings;
     }
 
     //endregion

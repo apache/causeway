@@ -123,6 +123,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.metrics.MetricsServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.PojoAdapterHashMap;
@@ -301,6 +302,9 @@ public class PersistenceSession implements
 
         initServices();
 
+        final MetricsServiceDefault metricsServiceDefault = servicesInjector.lookupService(MetricsServiceDefault.class);
+        persistenceManager.addInstanceLifecycleListener(metricsServiceDefault, (Class[])null);
+
         setState(State.OPEN);
     }
 
@@ -396,8 +400,6 @@ public class PersistenceSession implements
     //endregion
 
     //region > Injectable
-    //endregion
-
     @Override
     public void injectInto(final Object candidate) {
         if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
@@ -417,6 +419,7 @@ public class PersistenceSession implements
             cast.setConfigurationService(this);
         }
     }
+    //endregion
 
     //region > QuerySubmitter impl, findInstancesInTransaction
 
@@ -509,6 +512,7 @@ public class PersistenceSession implements
     public OidMarshaller getOidMarshaller() {
         return oidMarshaller;
     }
+
 
     //endregion
 

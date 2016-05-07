@@ -29,7 +29,11 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.isis.schema.common.v1.DifferenceDto;
+import org.apache.isis.schema.common.v1.PeriodDto;
 import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
+import org.apache.isis.schema.ixn.v1.MetricsDto;
+import org.apache.isis.schema.ixn.v1.ObjectCountsDto;
 
 public final class MemberExecutionDtoUtils {
 
@@ -63,4 +67,55 @@ public final class MemberExecutionDtoUtils {
         }
     }
 
+    public static MetricsDto metricsFor(final MemberExecutionDto executionDto) {
+        MetricsDto metrics = executionDto.getMetrics();
+        if(metrics == null) {
+            metrics = new MetricsDto();
+            executionDto.setMetrics(metrics);
+        }
+        return metrics;
+    }
+
+    public static PeriodDto timingsFor(final MetricsDto metricsDto) {
+        PeriodDto timings = metricsDto.getTimings();
+        if(timings == null) {
+            timings = new PeriodDto();
+            metricsDto.setTimings(timings);
+        }
+        return timings;
+    }
+
+    public static ObjectCountsDto objectCountsFor(final MetricsDto metricsDto) {
+        ObjectCountsDto objectCounts = metricsDto.getObjectCounts();
+        if(objectCounts == null) {
+            objectCounts = new ObjectCountsDto();
+            metricsDto.setObjectCounts(objectCounts);
+        }
+        return objectCounts;
+    }
+
+    public static DifferenceDto numberObjectsLoadedFor(final ObjectCountsDto objectCountsDto) {
+        DifferenceDto differenceDto = objectCountsDto.getNumberObjectsLoaded();
+        if(differenceDto == null) {
+            differenceDto = new DifferenceDto();
+            objectCountsDto.setNumberObjectsLoaded(differenceDto);
+        }
+        return differenceDto;
+    }
+    public static DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto) {
+        DifferenceDto differenceDto = objectCountsDto.getNumberObjectsDirtied();
+        if(differenceDto == null) {
+            differenceDto = new DifferenceDto();
+            objectCountsDto.setNumberObjectsDirtied(differenceDto);
+        }
+        return differenceDto;
+    }
+    public static DifferenceDto numberObjectPropertiesModifiedFor(final ObjectCountsDto objectCountsDto) {
+        DifferenceDto differenceDto = objectCountsDto.getNumberObjectPropertiesModified();
+        if(differenceDto == null) {
+            differenceDto = new DifferenceDto();
+            objectCountsDto.setNumberObjectPropertiesModified(differenceDto);
+        }
+        return differenceDto;
+    }
 }

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -211,6 +212,17 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                                         owningAction, targetAdapter, argumentAdapterList);
                         currentExecution.setDto(invocationDto);
 
+
+                        // set the startedAt (and update command if this is the top-most member execution)
+                        // (this isn't done within Interaction#execute(...) because it requires the DTO
+                        // to have been set on the current execution).
+                        final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
+                        execution.setStartedAt(startedAt);
+                        if(command.getStartedAt() == null) {
+                            command.setStartedAt(startedAt);
+                        }
+
+
                         // ... post the executing event
                         final ActionDomainEvent<?> event =
                                 domainEventHelper.postEventForAction(
@@ -274,7 +286,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             };
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
-            interaction.execute(callable, execution, getClockService(), command);
+            interaction.execute(callable, execution);
 
             // handle any exceptions
             final Interaction.Execution<ActionInvocationDto, ?> priorExecution = interaction.getPriorExecution();

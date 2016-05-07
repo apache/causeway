@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import java.sql.Timestamp;
+
 import com.google.common.base.Objects;
 
 import org.apache.isis.applib.services.clock.ClockService;
@@ -184,12 +186,12 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
             final Object argValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
-            final Interaction.PropertyModification execution =
-                    new Interaction.PropertyModification(interaction, propertyId, target, argValue);
-            final Interaction.MemberExecutor<Interaction.PropertyModification> executor =
-                    new Interaction.MemberExecutor<Interaction.PropertyModification>() {
+            final Interaction.PropertyEdit execution =
+                    new Interaction.PropertyEdit(interaction, propertyId, target, argValue);
+            final Interaction.MemberExecutor<Interaction.PropertyEdit> executor =
+                    new Interaction.MemberExecutor<Interaction.PropertyEdit>() {
                         @Override
-                        public Object execute(final Interaction.PropertyModification currentExecution) {
+                        public Object execute(final Interaction.PropertyEdit currentExecution) {
 
                             try {
 
@@ -199,6 +201,15 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                                                 owningProperty, targetAdapter, newValueAdapter);
                                 currentExecution.setDto(editDto);
 
+
+                                // set the startedAt (and update command if this is the top-most member execution)
+                                // (this isn't done within Interaction#execute(...) because it requires the DTO
+                                // to have been set on the current execution).
+                                final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
+                                execution.setStartedAt(startedAt);
+                                if(command.getStartedAt() == null) {
+                                    command.setStartedAt(startedAt);
+                                }
 
                                 // ... post the executing event
                                 final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
@@ -247,7 +258,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                     };
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
-            interaction.execute(executor, execution, getClockService(), command);
+            interaction.execute(executor, execution);
 
             // handle any exceptions
             final Interaction.Execution priorExecution = interaction.getPriorExecution();

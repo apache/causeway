@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -68,6 +69,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private final ServicesInjector servicesInjector;
 
+    private final FactoryService factoryService;
     private final CommandContext commandContext;
     private final CommandService commandService;
 
@@ -101,6 +103,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
 
+        this.factoryService = lookupService(FactoryService.class);
         this.commandContext = lookupService(CommandContext.class);
         this.commandService = lookupService(CommandService.class);
 
@@ -288,13 +291,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 command = createCommand();
                 transactionId = UUID.randomUUID();
             }
-            final Interaction interaction = new Interaction();
+            final Interaction interaction = factoryService.instantiate(Interaction.class);
 
             initCommandAndInteraction(transactionId, command, interaction);
 
             commandContext.setCommand(command);
             interactionContext.setInteraction(interaction);
-
 
             initOtherApplibServicesIfConfigured();
 

@@ -251,6 +251,13 @@ public class EnlistedObjectsServiceInternal {
         return object != null? object.toString(): null;
     }
 
+    @Programmatic
+    public int numberObjectsDirtied() {
+        return changedObjectProperties.size();
+    }
 
-
+    @Programmatic
+    public int numberObjectPropertiesModified() {
+        return changedObjectProperties.size();
+    }
 }

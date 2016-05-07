@@ -129,6 +129,27 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="differenceDto">
+        <xs:annotation>
+            <xs:documentation>Captures a pair of numbers representing a difference.  Used for example to capture metrics (number objects modified before and after).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="before" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The initial quantity.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="after" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The final quantity, once known.  The difference is therefore the computation of (after - before).
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
     <xs:complexType name="valueWithTypeDto">
         <xs:annotation>
             <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
