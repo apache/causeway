@@ -50,13 +50,12 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="targets" type="common:oidDto" minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="targets" type="common:oidsDto">
                     <xs:annotation>
                         <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="interactionType" type="common:interactionType"/>
                 <xs:element name="member" type="memberDto">
                     <xs:annotation>
                         <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
@@ -85,6 +84,12 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
+        <xs:attribute  name="interactionType" type="common:interactionType">
+            <xs:annotation>
+                <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="actionDto">
@@ -95,9 +100,12 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="parameters" type="paramDto"/>
-                    </xs:sequence>
+                    <xs:element name="parameters" type="paramsDto">
+                        <xs:annotation>
+                            <xs:documentation>The list of parameter/argument values for this action invocation.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -111,27 +119,32 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="paramDto"/>
+                    <xs:element name="newValue" type="common:valueWithTypeDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="paramDto">
+    <xs:complexType name="paramsDto">
         <xs:annotation>
-            <xs:documentation>The parameter types and values (ie arguments) of action parameters or the new value for a property.
+            <xs:documentation>A list of of parameter/argument values.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="argument" type="common:valueDto">
-                <xs:annotation>
-                    <xs:documentation>The argument value of this parameter.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="parameter" type="paramDto"/>
         </xs:sequence>
-        <xs:attribute name="parameterName" use="required" type="xs:string"/>
-        <xs:attribute name="parameterType" use="required" type="common:valueType"/>
-        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="paramDto">
+        <xs:annotation>
+            <xs:documentation>Defines an action parameter: its name, type and value (ie provided argument).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="common:valueWithTypeDto">
+                <xs:attribute name="name" use="required" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
 
