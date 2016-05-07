@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.hamcrest.Matchers;
@@ -34,11 +35,13 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
+import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -46,6 +49,33 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class Roundtrip {
+
+    private static InteractionDto newInteractionDtoWithActionInvocation(
+            final String transactionId,
+            final int sequence,
+            final Bookmark targetBookmark,
+            final String targetTitle,
+            final String actionIdentifier,
+            final List<ParamDto> parameterDtos,
+            final String user) {
+
+        final MemberExecutionDto executionDto = InteractionDtoUtils.newActionInvocation(
+                sequence, targetBookmark, targetTitle,
+                actionIdentifier, parameterDtos,
+                user, transactionId);
+
+        final InteractionDto interactionDto = new InteractionDto();
+
+        interactionDto.setMajorVersion("1");
+        interactionDto.setMinorVersion("0");
+
+        interactionDto.setTransactionId(transactionId);
+        interactionDto.setExecution(executionDto);
+
+        executionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
+
+        return interactionDto;
+    }
 
     @Test
     public void happyCase() throws Exception {
@@ -59,7 +89,7 @@ public class Roundtrip {
         returnDto.setType(ValueType.BOOLEAN);
         returnDto.setNull(true);
 
-        final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDtoWithActionInvocation(
+        final InteractionDto interactionDto = newInteractionDtoWithActionInvocation(
                 UUID.randomUUID().toString(),
                 1,
                 new Bookmark("CUS", "12345"), "John Customer", "com.mycompany.Customer#placeOrder", Arrays.<ParamDto>asList(),

@@ -19,18 +19,24 @@
 package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.schema.ixn.v1.InteractionDto;
+import org.apache.isis.applib.services.iactn.Interaction;
 
 /**
  * Replaces {@link PublishingService}.
+ *
+ * <p>
+ *     Note that re-publishing is not
+ * </p>
  */
 public interface PublisherService {
 
     /**
-     * Can also be used for republishing.
+     * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
+     * XML representation of the execution.  The easiest way to do this is using {@link org.apache.isis.schema.utils.InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
+     * some flexibility here, though.
      */
     @Programmatic
-    void publish(final InteractionDto interactionDto);
+    void publish(final Interaction.Execution<?, ?> execution);
 
 
 }

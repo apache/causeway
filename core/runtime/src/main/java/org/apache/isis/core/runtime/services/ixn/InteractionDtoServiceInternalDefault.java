@@ -29,10 +29,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
@@ -59,11 +57,10 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ObjectAdapter targetAdapter,
             final List<ObjectAdapter> argumentAdapters) {
 
-        final Command command = commandContext.getCommand();
-        final UUID transactionId = command.getTransactionId();
+        final Interaction interaction = interactionContext.getInteraction();
+        final UUID transactionId = interaction.getTransactionId();
 
-        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-        final int nextEventSequence = command.next(sequenceName.abbr());
+        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Object targetPojo = targetAdapter.getObject();
         final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
@@ -109,11 +106,10 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ObjectAdapter targetAdapter,
             final ObjectAdapter newValueAdapterIfAny) {
 
-        final Command command = commandContext.getCommand();
-        final UUID transactionId = command.getTransactionId();
+        final Interaction interaction = interactionContext.getInteraction();
+        final UUID transactionId = interaction.getTransactionId();
 
-        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-        final int nextEventSequence = command.next(sequenceName.abbr());
+        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Object targetPojo = targetAdapter.getObject();
         final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
@@ -135,9 +131,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 propertyDto.getMemberIdentifier(),
                 newValue, currentUser,
                 transactionIdStr);
-
     }
-
 
     @Inject
     CommandDtoServiceInternal commandDtoServiceInternal;
@@ -146,10 +140,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     private BookmarkService bookmarkService;
 
     @Inject
-    private CommandContext commandContext;
-
-    @Inject
-    private ClockService clockService;
+    private InteractionContext interactionContext;
 
     @Inject
     private UserService userService;

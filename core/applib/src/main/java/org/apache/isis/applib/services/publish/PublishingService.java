@@ -43,7 +43,7 @@ public interface PublishingService {
      * @param metadata
      * @param payload
      *
-     * @deprecated - use instead {@link PublisherService#publish(org.apache.isis.schema.ixn.v1.InteractionDto)}.
+     * @deprecated - use instead {@link PublisherService#publish(org.apache.isis.applib.services.iactn.Interaction.Execution)}.
      */
     @Deprecated
     @Programmatic

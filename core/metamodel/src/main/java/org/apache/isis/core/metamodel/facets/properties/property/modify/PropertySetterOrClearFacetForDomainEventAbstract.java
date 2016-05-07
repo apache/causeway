@@ -185,7 +185,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final Object argValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
             final Interaction.PropertyModification execution =
-                    new Interaction.PropertyModification(propertyId, target, argValue);
+                    new Interaction.PropertyModification(interaction, propertyId, target, argValue);
             final Interaction.MemberExecutor<Interaction.PropertyModification> executor =
                     new Interaction.MemberExecutor<Interaction.PropertyModification>() {
                         @Override

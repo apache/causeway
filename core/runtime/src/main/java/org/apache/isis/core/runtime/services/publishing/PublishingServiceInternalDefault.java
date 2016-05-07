@@ -40,9 +40,9 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
@@ -68,9 +68,6 @@ import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceIntern
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.schema.ixn.v1.InteractionDto;
-import org.apache.isis.schema.ixn.v1.MemberExecutionDto;
-import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -232,11 +229,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             returnType = null;
         }
 
-        final Command command = commandContext.getCommand();
+        final Interaction interaction = interactionContext.getInteraction();
 
-        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-        final int nextEventSequence = command.next(sequenceName.abbr());
-        final UUID transactionId = command.getTransactionId();
+        final int nextEventSequence = interaction.next(Interaction.Sequence.PUBLISHED_EVENT.id());
+        final UUID transactionId = interaction.getTransactionId();
         final EventMetadata metadata = new EventMetadata(
                 transactionId, nextEventSequence, EventType.ACTION_INVOCATION, currentUser, timestamp, title,
                 actionTargetClass, actionTargetAction, actionTarget, actionMemberIdentifier, parameterNames,
@@ -303,38 +299,25 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             final Bookmark enlistedTarget) {
         final EventType eventType = PublishingServiceInternalDefault.eventTypeFor(changeKind);
 
-        final Command command = commandContext.getCommand();
+        final Interaction interaction = interactionContext.getInteraction();
 
-        final Interaction.SequenceName sequenceName = Interaction.SequenceName.PUBLISHED_EVENT;
-        final int nextEventSequence = command.next(sequenceName.abbr());
-        final UUID transactionId = command.getTransactionId();
+        final int nextEventSequence = interaction.next(Interaction.Sequence.PUBLISHED_EVENT.id());
+        final UUID transactionId = interaction.getTransactionId();
         return new EventMetadata(
                 transactionId, nextEventSequence, eventType, currentUser, timestamp, enlistedTarget.toString(),
                 enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
-    private void publishActionToPublisherServices(final Interaction.Execution execution) {
+    private void publishActionToPublisherServices(final Interaction.Execution<?,?> execution) {
 
         if(publisherServices == null || publisherServices.isEmpty()) {
             return;
         }
 
-        //
-        // TODO: this is where we could now stitch together a deep call graph from the execution.getDto()s
-        //
-
-        final MemberExecutionDto executionDto = execution.getDto();
-
-        final String transactionId = commandContext.getCommand().getTransactionId().toString();
-        final InteractionDto interactionDto = InteractionDtoUtils.newInteractionDto(transactionId);
-        InteractionDtoUtils.addExecution(interactionDto, executionDto);
-
-        for (PublisherService publisherService : publisherServices) {
-            publisherService.publish(interactionDto);
+        for (final PublisherService publisherService : publisherServices) {
+            publisherService.publish(execution);
         }
     }
-
-
 
     @Inject
     private List<PublisherService> publisherServices;
@@ -350,6 +333,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Inject
     private CommandContext commandContext;
+
+    @Inject
+    private InteractionContext interactionContext;
 
     @Inject
     private ClockService clockService;

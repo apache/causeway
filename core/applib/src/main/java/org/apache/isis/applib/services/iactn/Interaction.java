@@ -75,14 +75,16 @@ public class Interaction implements HasTransactionId {
 
     //region > transactionId (property)
 
+    private UUID transactionId;
+
     @Override
     public UUID getTransactionId() {
-        return null;
+        return transactionId;
     }
 
     @Override
     public void setTransactionId(final UUID transactionId) {
-
+        this.transactionId = transactionId;
     }
     //endregion
 
@@ -273,35 +275,44 @@ public class Interaction implements HasTransactionId {
 
     //region > next (programmatic)
 
-    public enum SequenceName {
+    /**
+     * Enumerates the different reasons why multiple occurrences of a certain type might occur within a single
+     * (top-level) interaction.
+     */
+    public enum Sequence {
 
+        /**
+         * Each interaction is either an action invocation or a property edit.  There could be multiple of these,
+         * typically as the result of a nested calls using the {@link WrapperFactory}.  Another reason is
+         * support for bulk action invocations within a single transaction.
+         */
+        INTERACTION,
         /**
          * &quot;pe&quot; - published event.  For objects: multiple such could be dirtied and thus published as
          * separate events.  For actions invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the {@link WrapperFactory}.
          */
-        PUBLISHED_EVENT("pe");
+        PUBLISHED_EVENT;
 
-        private final String abbr;
-        SequenceName(final String abbr) {
-            this.abbr = abbr;
+        @Programmatic
+        public String id() {
+            return Interaction.Sequence.class.getName() + "#" + name();
         }
-        public String abbr() { return abbr; }
     }
 
 
-    private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
+    private final Map<String, AtomicInteger> maxBySequence = Maps.newHashMap();
 
     /**
-     * Generates numbers in a named sequence
-     *
-     * @param sequenceAbbr - should be {@link SequenceName#abbr()}.
+     * Generates numbers in a named sequence.  The name of the sequence can be arbitrary, though note that the
+     * framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by
+     * the {@link Sequence} enum.
      */
     @Programmatic
-    public int next(String sequenceAbbr) {
-        AtomicInteger next = sequenceByName.get(sequenceAbbr);
+    public int next(final String sequenceId) {
+        AtomicInteger next = maxBySequence.get(sequenceId);
         if(next == null) {
             next = new AtomicInteger(0);
-            sequenceByName.put(sequenceAbbr, next);
+            maxBySequence.put(sequenceId, next);
         } else {
             next.incrementAndGet();
         }
@@ -320,19 +331,26 @@ public class Interaction implements HasTransactionId {
 
         private final String memberIdentifier;
         private final Object target;
+        private final Interaction interaction;
         private final InteractionType interactionType;
 
         public Execution(
+                final Interaction interaction,
                 final InteractionType interactionType,
                 final String memberIdentifier,
                 final Object target) {
+            this.interaction = interaction;
             this.interactionType = interactionType;
             this.memberIdentifier = memberIdentifier;
             this.target = target;
         }
         //endregion
 
-        //region > via constructor: interactionType, memberId, target
+        //region > via constructor: interaction, interactionType, memberId, target
+
+        public Interaction getInteraction() {
+            return interaction;
+        }
 
         public InteractionType getInteractionType() {
             return interactionType;
@@ -530,10 +548,11 @@ public class Interaction implements HasTransactionId {
         private final List<Object> args;
 
         public ActionInvocation(
+                final Interaction interaction,
                 final String memberId,
                 final Object target,
                 final List<Object> args) {
-            super(InteractionType.ACTION_INVOCATION, memberId, target);
+            super(interaction, InteractionType.ACTION_INVOCATION, memberId, target);
             this.args = args;
         }
 
@@ -547,10 +566,11 @@ public class Interaction implements HasTransactionId {
         private final Object newValue;
 
         public PropertyModification(
+                final Interaction interaction,
                 final String memberId,
                 final Object target,
                 final Object newValue) {
-            super(InteractionType.PROPERTY_EDIT, memberId, target);
+            super(interaction, InteractionType.PROPERTY_EDIT, memberId, target);
             this.newValue = newValue;
         }
 
