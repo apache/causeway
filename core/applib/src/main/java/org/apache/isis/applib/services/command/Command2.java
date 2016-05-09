@@ -19,24 +19,17 @@ package org.apache.isis.applib.services.command;
 import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 
 /**
- * An extension to {@link org.apache.isis.applib.services.command.Command} that makes the
- * relationship with {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} bi-directional.
+ * @deprecated - the extensions to {@link Command} in this interface have been replaced by functionality in {@link InteractionContext}.
  */
 @Deprecated
 public interface Command2 extends Command {
 
     /**
-     * The current (most recently pushed) {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
-     *
-     * <p>
-     *     Deprecation note: this will throw an exception if the most recently pushed event was a
-     *     {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a
-     *     {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
-     * </p>
-     *
-     * @deprecated - use {@link Command3#peekActionDomainEvent()} instead.
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.  NB: this method will in any case throw an exception if the most recently pushed event was a {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
      */
     @Programmatic
     @Deprecated
@@ -45,12 +38,7 @@ public interface Command2 extends Command {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * <p>
-     * Push a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
-     * onto the stack of events held by the command.
-     * </p>
-     *
-     * @deprecated - use {@link org.apache.isis.applib.services.command.Command3#pushActionDomainEvent(org.apache.isis.applib.services.eventbus.ActionDomainEvent)} instead.
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
      */
     @Deprecated
     @Programmatic
@@ -59,34 +47,14 @@ public interface Command2 extends Command {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
-     * <p>
-     * Pops the top-most {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
-     * from the stack of events held by the command.
-     * </p>
-     *
-     * <p>
-     *     Deprecation note: this will throw an exception if the most recently pushed event was a
-     *     {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a
-     *     {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
-     * </p>
-     *
-     * @deprecated - use {@link Command3#popActionDomainEvent()} instead.
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.  NB: this method will in any case throw an exception if the most recently pushed event was a {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
      */
     @Deprecated
     @Programmatic
     ActionInteractionEvent<?> popActionInteractionEvent();
 
     /**
-     * Returns the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}s in the order that they
-     * were {@link #pushActionInteractionEvent(org.apache.isis.applib.services.eventbus.ActionInteractionEvent) pushed}.
-     *
-     * <p>
-     *     Deprecation note: this will throw an exception if any of the list are
-     *     {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a
-     *     {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
-     * </p>
-     *
-     * @deprecated - use {@link Command3#flushActionDomainEvents()} instead.
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.  NB: this method will in any case throw an exception if any of the list are {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
      */
     @Deprecated
     @Programmatic

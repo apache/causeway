@@ -25,6 +25,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
@@ -128,24 +129,19 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     private Command command;
 
     /**
-     * The {@link org.apache.isis.applib.services.command.Command} for this action.
-     *
-     * <p>
-     * Set when in {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTING} and {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED}, but not for earlier phases.
-     *
-     * <p>
-     * The command is set by the framework based on the configured
-     * {@link org.apache.isis.applib.services.command.CommandContext}) service).  Ths command may or may not be
-     * persisted, depending on which implementation of
-     * {@link org.apache.isis.applib.services.command.spi.CommandService} service is configured.
+     * @deprecated - use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
      */
+    @Deprecated
     public Command getCommand() {
         return command;
     }
 
     /**
      * Not API - set by the framework.
+     *
+     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
      */
+    @Deprecated
     public void setCommand(Command command) {
         this.command = command;
     }
@@ -157,6 +153,10 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     }
 
     private ActionSemantics.Of actionSemantics;
+
+    /**
+     * @deprecated - use {@link #getSemantics()} instead.
+     */
     @Deprecated
     public ActionSemantics.Of getActionSemantics() {
         return actionSemantics;
@@ -241,7 +241,6 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
      *     Only available for the {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED}
      *     {@link #getEventPhase() phase}.
      * </p>
-     * @return
      */
     public Object getReturnValue() {
         return returnValue;
@@ -249,7 +248,6 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
 
     /**
      * Not API - set by the framework
-     * @param returnValue
      */
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;

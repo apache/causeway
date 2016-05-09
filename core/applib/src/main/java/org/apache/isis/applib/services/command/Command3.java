@@ -20,36 +20,37 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 
 /**
- * An extension to {@link Command} that makes the
- * relationship with {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} bi-directional.
+ * @deprecated - the extensions to {@link Command} in this interface have been replaced by functionality in {@link InteractionContext}.
  */
+@Deprecated
 public interface Command3 extends Command2 {
 
     /**
-     * @deprecated - use {@link Interaction#getCurrentExecution()} instead.
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
      */
     @Deprecated
     @Programmatic
     ActionDomainEvent<?> peekActionDomainEvent();
 
     /**
-     * @deprecated - use {@link Interaction#push(java.sql.Timestamp)} instead.
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
      */
     @Deprecated
     @Programmatic
     void pushActionDomainEvent(ActionDomainEvent<?> event);
 
     /**
-     * @deprecated - use {@link Interaction#pop(java.sql.Timestamp)} instead.
+     * @deprecated - replaced by equivalent functionality in {@link Interaction}.
      */
     @Deprecated
     @Programmatic
     ActionDomainEvent<?> popActionDomainEvent();
 
     /**
-     * @deprecated - use {@link Interaction#getExecutions()} and {@link Interaction#clear()} instead.
+     * @deprecated - use {@link Interaction#getCurrentExecution()}, {@link Interaction#getPriorExecution()}  and {@link Interaction#getExecutions()} instead.
      */
     @Deprecated
     @Programmatic
