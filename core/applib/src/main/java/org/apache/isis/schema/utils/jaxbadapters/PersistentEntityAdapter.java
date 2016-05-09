@@ -22,7 +22,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
-import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
 public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
@@ -30,9 +29,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
     @Override
     public Object unmarshal(final OidDto oidDto) throws Exception {
 
-        final String objectType = oidDto.getObjectType();
-        final String identifier = oidDto.getObjectIdentifier();
-        final Bookmark bookmark = new Bookmark(objectType, identifier);
+        final Bookmark bookmark = Bookmark.from(oidDto);
 
         return bookmarkService.lookup(bookmark, BookmarkService2.FieldResetPolicy.DONT_RESET);
     }
@@ -43,21 +40,13 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
             return null;
         }
         final Bookmark bookmark = getBookmarkService().bookmarkFor(domainObject);
-        final OidDto oidDto = new OidDto();
-        oidDto.setObjectIdentifier(bookmark.getIdentifier());
-        oidDto.setObjectState(convert(bookmark.getObjectState()));
-        oidDto.setObjectType(bookmark.getObjectType());
-        return oidDto;
+        return bookmark.toOidDto();
     }
 
-    private BookmarkObjectState convert(final Bookmark.ObjectState objectState) {
-        switch (objectState) {
-            case VIEW_MODEL:return BookmarkObjectState.VIEW_MODEL;
-            case TRANSIENT:return BookmarkObjectState.TRANSIENT;
-            case PERSISTENT:return BookmarkObjectState.PERSISTENT;
-        }
-        throw new IllegalArgumentException("Not recognized: " + objectState.name());
+    private static String coalesce(final String first, final String second) {
+        return first != null? first: second;
     }
+
 
     protected BookmarkService getBookmarkService() {
         return bookmarkService;

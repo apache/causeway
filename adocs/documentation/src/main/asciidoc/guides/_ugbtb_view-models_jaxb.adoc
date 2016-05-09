@@ -177,7 +177,7 @@ namespace:
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
                         namespaceURI = "http://isis.apache.org/schema/common",
-                        prefix = "common"
+                        prefix = "com"
                 )
         },
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED

@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
  * Replaces {@link PublishingService}.
  *
  * <p>
- *     Note that re-publishing is not
+ *     Note that re-publishing is not part of this SPI.
  * </p>
  */
 public interface PublisherService {

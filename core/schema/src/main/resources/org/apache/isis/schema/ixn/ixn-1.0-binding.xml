@@ -47,7 +47,7 @@
             <jaxb:package name="org.apache.isis.schema.common.v1"/>
         </jaxb:schemaBindings>
         <jaxb:bindings>
-            <namespace:prefix name="common" />
+            <namespace:prefix name="com" />
         </jaxb:bindings>
     </jaxb:bindings>
     <!-- since ixn-1.0.xsd does an xs:import of cmd-1.0.xsd, we need to specify common's package bindings -->

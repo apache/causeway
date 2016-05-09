@@ -280,9 +280,7 @@ public final class InteractionDtoUtils {
         executionDto.setSequence(sequence);
         executionDto.setId(transactionId + "." + sequence);
 
-        final OidDto target = new OidDto();
-        target.setObjectType(targetBookmark.getObjectType());
-        target.setObjectIdentifier(target.getObjectIdentifier());
+        final OidDto target = targetBookmark.toOidDto();
         executionDto.setTarget(target);
 
         executionDto.setTitle(targetTitle);

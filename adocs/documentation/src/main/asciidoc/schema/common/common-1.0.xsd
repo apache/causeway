@@ -47,10 +47,24 @@
 
     <xs:complexType name="oidDto">
         <xs:sequence>
-            <xs:element name="objectType" type="xs:string"/>
-            <xs:element name="objectIdentifier" type="xs:string"/>
+            <xs:element name="objectType" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Deprecated, use the 'objectType' attribute instead.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="objectIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Deprecated, use the 'id' attribute instead.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
-        <xs:attribute name="objectState" type="bookmarkObjectState" default="persistent"/>
+        <xs:attribute name="objectState" type="bookmarkObjectState">
+            <xs:annotation>
+                <xs:documentation>In previous versions of this schema the 'objectState' attribute was defaulted, but is now assumed to be 'persistent'</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="id" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="oidsDto">

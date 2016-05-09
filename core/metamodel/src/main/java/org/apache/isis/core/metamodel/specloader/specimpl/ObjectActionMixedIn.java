@@ -146,9 +146,10 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
+
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final VisibilityContext<?> ic =
-                mixinAction.createVisibleInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
@@ -157,24 +158,26 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public Consent isUsable(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
+
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         final UsabilityContext<?> ic =
-                mixinAction.createUsableInteractionContext(
-                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
+                mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
-
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter mixedInAdapter) {
-        return mixinAction.getDefaults(mixinAdapterFor(mixedInAdapter));
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixedInAdapter);
+        return mixinAction.getDefaults(mixinAdapter);
     }
 
     @Override
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinAction.getChoices(mixinAdapterFor(mixedInAdapter), interactionInitiatedBy);
+        final ObjectAdapter mixinAdapter = mixinAdapterFor(mixedInAdapter);
+        return mixinAction.getChoices(mixinAdapter, interactionInitiatedBy);
     }
 
     protected ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
@@ -190,8 +193,8 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         final ObjectAdapter targetObject = mixinAdapterFor(mixinType, mixedInAdapter);
 
-        final ValidityContext<?> ic =  mixinAction.createActionInvocationInteractionContext(
-                targetObject, proposedArguments, interactionInitiatedBy);
+        final ValidityContext<?> ic =
+                mixinAction.createActionInvocationInteractionContext(targetObject, proposedArguments, interactionInitiatedBy);
         ic.setMixedIn(mixedInAdapter);
 
         InteractionUtils.isValidResultSet(this, ic, resultSet);

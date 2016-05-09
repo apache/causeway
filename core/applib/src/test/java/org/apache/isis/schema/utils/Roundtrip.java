@@ -163,8 +163,8 @@ public class Roundtrip {
 
         // then
         assertThat(recreated.getExecution().getMemberIdentifier(), Matchers.is(interactionDto.getExecution().getMemberIdentifier()));
-        assertThat(recreated.getExecution().getTarget().getObjectType(), Matchers.is(interactionDto.getExecution().getTarget().getObjectType()));
-        assertThat(recreated.getExecution().getTarget().getObjectIdentifier(), Matchers.is(interactionDto.getExecution().getTarget().getObjectIdentifier()));
+        assertThat(recreated.getExecution().getTarget().getType(), Matchers.is(interactionDto.getExecution().getTarget().getType()));
+        assertThat(recreated.getExecution().getTarget().getId(), Matchers.is(interactionDto.getExecution().getTarget().getId()));
 
         final ActionInvocationDto invocationDto = (ActionInvocationDto) recreated.getExecution();
 
@@ -343,8 +343,8 @@ public class Roundtrip {
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("aReference"));
         assertThat(InteractionDtoUtils.getParameterType(invocationDto, param), Matchers.is(ValueType.REFERENCE));
         assertThat(InteractionDtoUtils.isNull(invocationDto, param), is(false));
-        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, OidDto.class).getObjectType(), is("ORD"));
-        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, OidDto.class).getObjectIdentifier(), is("12345"));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, OidDto.class).getType(), is("ORD"));
+        assertThat(InteractionDtoUtils.getParameterArgValue(invocationDto, param, OidDto.class).getId(), is("12345"));
 
         param++;
         assertThat(InteractionDtoUtils.getParameterName(invocationDto, param), is("nullReference"));

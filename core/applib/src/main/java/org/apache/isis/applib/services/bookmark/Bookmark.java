@@ -39,18 +39,29 @@ public class Bookmark implements Serializable {
     private static final char SEPARATOR = ':';
 
     public OidDto toOidDto() {
-        OidDto oidDto = new OidDto();
-        oidDto.setObjectState(getObjectState().toBookmarkState());
-        oidDto.setObjectType(getObjectType());
-        oidDto.setObjectIdentifier(getIdentifier());
+        final OidDto oidDto = new OidDto();
+
+        oidDto.setType(getObjectType());
+        oidDto.setId(getIdentifier());
+
+        // persistent is assumed if not specified...
+        final BookmarkObjectState bookmarkState = getObjectState().toBookmarkState();
+        oidDto.setObjectState(bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
+
         return oidDto;
     }
 
     public static Bookmark from(final OidDto oidDto) {
         final BookmarkObjectState bookmarkObjectState = oidDto.getObjectState();
         final ObjectState objectState = ObjectState.from(bookmarkObjectState);
-        final Bookmark bookmark = new Bookmark(objectState.getCode() + oidDto.getObjectType(), oidDto.getObjectIdentifier());
+        final String objectType = coalesce(oidDto.getType(), oidDto.getObjectType());
+        final String objectId = coalesce(oidDto.getId(), oidDto.getObjectIdentifier());
+        final Bookmark bookmark = new Bookmark(objectState.getCode() + objectType, objectId);
         return bookmark;
+    }
+
+    private static String coalesce(final String first, final String second) {
+        return first != null? first: second;
     }
 
 
@@ -91,14 +102,16 @@ public class Bookmark implements Serializable {
 
         public static ObjectState from(final BookmarkObjectState objectState) {
             switch (objectState) {
-            case PERSISTENT:
-                return ObjectState.PERSISTENT;
             case TRANSIENT:
                 return ObjectState.TRANSIENT;
             case VIEW_MODEL:
                 return ObjectState.VIEW_MODEL;
+            case PERSISTENT:
+                return ObjectState.PERSISTENT;
+            default:
+                // persistent is assumed if not specified
+                return ObjectState.PERSISTENT;
             }
-            throw new IllegalArgumentException("BookmarkObjectState " + objectState + "' not recognized");
         }
 
         public BookmarkObjectState toBookmarkState() {
