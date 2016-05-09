@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -52,6 +54,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForDisabledAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForHiddenAnnotationOnProperty;
@@ -77,8 +80,10 @@ import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.Mus
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForRegExAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -112,6 +117,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
+        processCommand(processMethodContext);
+        processPublishing(processMethodContext);
         processMaxLength(processMethodContext);
         processMustSatisfy(processMethodContext);
         processNotPersisted(processMethodContext);
@@ -277,6 +284,55 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         FacetUtil.addFacet(facet);
     }
+
+    void processCommand(final ProcessMethodContext processMethodContext) {
+
+        final Class<?> cls = processMethodContext.getCls();
+        final Method method = processMethodContext.getMethod();
+        final Property property = Annotations.getAnnotation(method, Property.class);
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+
+        final FacetHolder holder = facetHolder;
+
+        //
+        // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
+        //
+        if(HasTransactionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasTransactionId
+            // (ie commands, audit entries, published events).
+            return;
+        }
+
+        // check for @Property(command=...)
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(property, configuration, holder);
+
+        FacetUtil.addFacet(commandFacet);
+    }
+
+    void processPublishing(final ProcessMethodContext processMethodContext) {
+
+        final Method method = processMethodContext.getMethod();
+        final Property property = Annotations.getAnnotation(method, Property.class);
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        //
+        // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
+        // and for commands, see above
+        //
+        if(HasTransactionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasTransactionId
+            // (ie commands, audit entries, published events).
+            return;
+        }
+
+        // check for @Property(publishing=...)
+        final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
+                .create(property, configuration, holder);
+
+        FacetUtil.addFacet(facet);
+    }
+
+
 
     void processMaxLength(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();

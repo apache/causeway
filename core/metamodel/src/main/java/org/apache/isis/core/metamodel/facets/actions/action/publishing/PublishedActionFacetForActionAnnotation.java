@@ -57,7 +57,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                     default:
                         final PublishingPayloadFactoryForAction publishingPayloadFactory = newPayloadFactory(action);
                         return action != null
-                                ? new PublishedActionFacetForActionAnnotation(publishingPayloadFactory, holder)
+                                ? new PublishedActionFacetForActionAnnotationAsConfigured(publishingPayloadFactory, holder)
                                 : new PublishedActionFacetFromConfiguration(publishingPayloadFactory, holder);
                 }
             case DISABLED:

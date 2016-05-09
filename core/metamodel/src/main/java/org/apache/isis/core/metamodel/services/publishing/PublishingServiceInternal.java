@@ -34,9 +34,11 @@ public interface PublishingServiceInternal {
     @Programmatic
     void publishAction(
             final Interaction.Execution execution,
-            final ObjectAction objectAction,
-            final IdentifiedHolder identifiedHolder,
+            final ObjectAction objectAction, final IdentifiedHolder identifiedHolder,
             final ObjectAdapter targetAdapter,
             final List<ObjectAdapter> parameterAdapters,
             final ObjectAdapter resultAdapter);
+
+    @Programmatic
+    void publishProperty(final Interaction.Execution execution);
 }

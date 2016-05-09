@@ -150,8 +150,8 @@ public @interface Action {
      * Whether the action invocation should be published.
      *
      * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService} is
-     * registered with the framework.
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
+     * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */
     Publishing publishing() default Publishing.AS_CONFIGURED;

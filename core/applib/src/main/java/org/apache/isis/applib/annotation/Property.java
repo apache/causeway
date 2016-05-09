@@ -94,6 +94,43 @@ public @interface Property {
 
     // //////////////////////////////////////
 
+    /**
+     * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     */
+    CommandReification command() default CommandReification.AS_CONFIGURED;
+
+    /**
+     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
+     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
+     */
+    CommandPersistence commandPersistence() default CommandPersistence.PERSISTED;
+
+    /**
+     * How the command/property edit should be executed.
+     *
+     * <p>
+     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
+     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
+     * will be set to this value.
+     * </p>
+     */
+    CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
+
+
+    // //////////////////////////////////////
+
+    /**
+     * Whether the property edit should be published.
+     *
+     * <p>
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
+     * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
+     * </p>
+     */
+    Publishing publishing() default Publishing.AS_CONFIGURED;
+
+    // //////////////////////////////////////
+
 
     /**
      * The maximum entry length of a field.

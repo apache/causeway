@@ -460,11 +460,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             return;
         }
 
-        if(Command.ACTION_IDENTIFIER_FOR_EDIT.equals(command.getMemberIdentifier())) {
-            // special case for edit properties, don't overwrite
-            return;
-        }
-
         if (command.getMemento() != null) {
             // guard here to prevent subsequent contributed/mixin actions from
             // trampling over the command's memento and execution context

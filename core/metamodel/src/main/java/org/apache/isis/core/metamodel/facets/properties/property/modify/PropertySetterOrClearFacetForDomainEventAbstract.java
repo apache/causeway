@@ -39,10 +39,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
@@ -272,11 +274,14 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                         : new RuntimeException(executionExceptionIfAny);
             }
 
-            //
-            // at this point in ActionInvocationFacetFDEA, the action is optionally published via the
-            // PublishingServiceInternal.  However, we currently do not support the concept of publishing simple
-            // property modifications.
-            //
+
+
+
+            final PublishedPropertyFacet publishedPropertyFacet = getIdentified().getFacet(PublishedPropertyFacet.class);
+            if (publishedPropertyFacet != null) {
+                getPublishingServiceInternal().publishProperty(priorExecution);
+            }
+
         }
 
     }
@@ -318,6 +323,10 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         return lookupService(ClockService.class);
     }
 
+    private PublishingServiceInternal getPublishingServiceInternal() {
+        return lookupService(PublishingServiceInternal.class);
+    }
+
     private <T> T lookupService(final Class<T> serviceClass) {
         T service = lookupServiceIfAny(serviceClass);
         if(service == null) {
@@ -328,5 +337,6 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
     private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
         return getServicesInjector().lookupService(serviceClass);
     }
+
 
 }

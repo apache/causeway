@@ -113,11 +113,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @Override
     @Programmatic
     public void publishObjects() {
+        publishObjectsToPublishingService();
+    }
 
-        if(publishingServiceIfAny == null) {
-            return;
-        }
-
+    private void publishObjectsToPublishingService() {
         final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter =
                 enlistedObjectsServiceInternal.getChangeKindByEnlistedAdapter();
 
@@ -149,6 +148,25 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         if(publishedObjectFacet == null) {
             return;
         }
+
+        publishObjectToPublishingService(
+                enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
+    }
+
+    private void publishObjectToPublishingService(
+            final ObjectAdapter enlistedAdapter,
+            final ChangeKind changeKind,
+            final String currentUser,
+            final Timestamp timestamp,
+            final ObjectStringifier stringifier) {
+
+        if(publishingServiceIfAny == null) {
+            return;
+        }
+
+        final PublishedObjectFacet publishedObjectFacet =
+                enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+
         final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
 
         final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
@@ -178,8 +196,14 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter
         );
 
-        publishActionToPublisherServices(execution);
+        publishToPublisherServices(execution);
+    }
 
+    @Override
+    public void publishProperty(
+            final Interaction.Execution execution) {
+
+        publishToPublisherServices(execution);
     }
 
     private void publishActionToPublishingService(
@@ -308,7 +332,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
-    private void publishActionToPublisherServices(final Interaction.Execution<?,?> execution) {
+    private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
 
         if(publisherServices == null || publisherServices.isEmpty()) {
             return;

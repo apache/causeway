@@ -68,10 +68,12 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 public interface Command extends HasTransactionId {
 
     /**
-     * The value for {@link #getTargetAction()} if this command represents an edit of an object's property
-     * (rather than an action).
+     * @deprecated - in previous versions this was the value for {@link #getTargetAction()} if this command represents an edit of an object's property (rather than an action); now though the property's name is used (ie same as actions).
      */
+    @Deprecated
     String ACTION_IDENTIFIER_FOR_EDIT = "(edit)";
+
+
 
     //region > user (property)
     /**
@@ -162,10 +164,10 @@ public interface Command extends HasTransactionId {
     //region > targetAction (property)
 
     /**
-     * The human-friendly name of the action invoked on the target object.
+     * The human-friendly name of the action invoked/property edited on the target object.
      *
      * <p>
-     *     If the command represents an edit of a property, then holds the value &quot;{@value ACTION_IDENTIFIER_FOR_EDIT}&quot;.
+     *     NB: in earlier versions, if the command represented an edit of a property, then it held the special value &quot;{@value ACTION_IDENTIFIER_FOR_EDIT}&quot;.  This is NO LONGER the case; it simply holds the member.
      * </p>
      */
     String getTargetAction();
@@ -174,7 +176,8 @@ public interface Command extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
+     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>) or property edited
+     * (in the <tt>PropertySetterOrClearFacet</tt>).
      */
     void setTargetAction(String targetAction);
 

@@ -21,7 +21,7 @@
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns="http://isis.apache.org/schema/cmd"
-           xmlns:common="http://isis.apache.org/schema/common">
+           xmlns:com="http://isis.apache.org/schema/common">
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
 
@@ -50,7 +50,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="targets" type="common:oidsDto">
+                <xs:element name="targets" type="com:oidsDto">
                     <xs:annotation>
                         <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).
                         </xs:documentation>
@@ -84,7 +84,7 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
-        <xs:attribute  name="interactionType" type="common:interactionType">
+        <xs:attribute  name="interactionType" type="com:interactionType">
             <xs:annotation>
                 <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
                 </xs:documentation>
@@ -119,7 +119,7 @@
         <xs:complexContent>
             <xs:extension base="memberDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="common:valueWithTypeDto"/>
+                    <xs:element name="newValue" type="com:valueWithTypeDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -141,7 +141,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="common:valueWithTypeDto">
+            <xs:extension base="com:valueWithTypeDto">
                 <xs:attribute name="name" use="required" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>

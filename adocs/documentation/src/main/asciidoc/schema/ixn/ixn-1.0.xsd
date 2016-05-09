@@ -22,7 +22,7 @@
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns="http://isis.apache.org/schema/ixn"
            xmlns:cmd="http://isis.apache.org/schema/cmd"
-           xmlns:common="http://isis.apache.org/schema/common"
+           xmlns:com="http://isis.apache.org/schema/common"
 >
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
@@ -77,7 +77,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="target" type="common:oidDto" minOccurs="1" maxOccurs="1">
+            <xs:element name="target" type="com:oidDto" minOccurs="1" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property edited.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
                     </xs:documentation>
@@ -126,7 +126,7 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
-        <xs:attribute  name="interactionType" type="common:interactionType">
+        <xs:attribute  name="interactionType" type="com:interactionType">
             <xs:annotation>
                 <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
                 </xs:documentation>
@@ -144,7 +144,7 @@
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
-                    <xs:element name="returned" type="common:valueWithTypeDto" minOccurs="0" maxOccurs="1">
+                    <xs:element name="returned" type="com:valueWithTypeDto" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
                             <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberExecutionDto') will be populated.
                             </xs:documentation>
@@ -159,7 +159,7 @@
         <xs:complexContent>
             <xs:extension base="memberExecutionDto">
                 <xs:sequence>
-                    <xs:element name="newValue" type="common:valueWithTypeDto"/>
+                    <xs:element name="newValue" type="com:valueWithTypeDto"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -167,7 +167,7 @@
 
     <xs:complexType name="metricsDto">
         <xs:sequence>
-            <xs:element name="timings" type="common:periodDto">
+            <xs:element name="timings" type="com:periodDto">
                 <xs:annotation>
                     <xs:documentation>The time taken to perform the member interaction (invoke the action, or edit the property).
                     </xs:documentation>
@@ -185,21 +185,21 @@
 
     <xs:complexType name="objectCountsDto">
         <xs:sequence>
-            <xs:element name="numberObjectsLoaded" type="common:differenceDto">
+            <xs:element name="loaded" type="com:differenceDto">
                 <xs:annotation>
                     <xs:documentation>The number of objects loaded.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="numberObjectsDirtied" type="common:differenceDto">
+            <xs:element name="dirtied" type="com:differenceDto">
                 <xs:annotation>
                     <xs:documentation>The number of objects dirtied (ie updated).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="numberObjectPropertiesModified" type="common:differenceDto">
+            <xs:element name="propertiesModified" type="com:differenceDto">
                 <xs:annotation>
-                    <xs:documentation>The number of individual properties of objects that were modified (eg as per individual calls to AuditingService).
+                    <xs:documentation>The number of individual properties of objects that were modified (each such change would correspond to a separate call to AuditingService if configured).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
