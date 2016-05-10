@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainService;
@@ -113,30 +114,36 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @Override
     @Programmatic
     public void publishObjects() {
-        publishObjectsToPublishingService();
+
+        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
+        // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
+        final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
+        changeKindByEnlistedAdapter.putAll(enlistedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
+
+        publishObjectsToPublishingService(changeKindByEnlistedAdapter);
+        publishObjectsToPublisherServices(changeKindByEnlistedAdapter);
     }
 
-    private void publishObjectsToPublishingService() {
-        final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter =
-                enlistedObjectsServiceInternal.getChangeKindByEnlistedAdapter();
+    private void publishObjectsToPublishingService(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+
+        if(publishingServiceIfAny == null) {
+            return;
+        }
 
         final String currentUser = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
         final ObjectStringifier stringifier = objectStringifier();
 
-        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
-        // creates further entities which would be enlisted; taking copy of the keys avoids ConcurrentModificationException
-        final List<ObjectAdapter> enlistedAdapters =
-                Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
+        for (final Map.Entry<ObjectAdapter, ChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
+            final ObjectAdapter enlistedAdapter = adapterAndChange.getKey();
+            final ChangeKind changeKind = adapterAndChange.getValue();
 
-        for (final ObjectAdapter enlistedAdapter : enlistedAdapters) {
-            final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
-
-            publishObject(enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
+            publishObjectToPublishingService(
+                    enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
         }
     }
 
-    private void publishObject(
+    private void publishObjectToPublishingService(
             final ObjectAdapter enlistedAdapter,
             final ChangeKind changeKind,
             final String currentUser,
@@ -148,24 +155,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         if(publishedObjectFacet == null) {
             return;
         }
-
-        publishObjectToPublishingService(
-                enlistedAdapter, changeKind, currentUser, timestamp, stringifier);
-    }
-
-    private void publishObjectToPublishingService(
-            final ObjectAdapter enlistedAdapter,
-            final ChangeKind changeKind,
-            final String currentUser,
-            final Timestamp timestamp,
-            final ObjectStringifier stringifier) {
-
-        if(publishingServiceIfAny == null) {
-            return;
-        }
-
-        final PublishedObjectFacet publishedObjectFacet =
-                enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
 
         final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
 
@@ -182,6 +171,53 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         payload.withStringifier(stringifier);
         publishingServiceIfAny.publish(metadata, payload);
     }
+
+    private void publishObjectsToPublisherServices(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+
+        final List<Bookmark> created = Lists.newArrayList();
+        final List<Bookmark> updated = Lists.newArrayList();
+        final List<Bookmark> deleted = Lists.newArrayList();
+
+        for (final Map.Entry<ObjectAdapter, ChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
+            final ObjectAdapter enlistedAdapter = adapterAndChange.getKey();
+
+            final PublishedObjectFacet publishedObjectFacet =
+                    enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+
+            if(publishedObjectFacet == null) {
+                continue;
+            }
+
+            final ChangeKind changeKind = adapterAndChange.getValue();
+
+            final RootOid rootOid = (RootOid) enlistedAdapter.getOid();
+            final Bookmark bookmark = rootOid.asBookmark();
+
+            switch (changeKind) {
+            case CREATE:
+                created.add(bookmark);
+                break;
+            case UPDATE:
+                updated.add(bookmark);
+                break;
+            case DELETE:
+                deleted.add(bookmark);
+                break;
+            default:
+                // shouldn't happen
+                throw new RuntimeException("ChangeKind '" + changeKind + "' not recognized");
+            }
+        }
+
+        if(created.isEmpty() && updated.isEmpty() && deleted.isEmpty()) {
+            return;
+        }
+
+        for (PublisherService publisherService : publisherServices) {
+            publisherService.publish(created, updated, deleted);
+        }
+    }
+
 
     @Programmatic
     public void publishAction(

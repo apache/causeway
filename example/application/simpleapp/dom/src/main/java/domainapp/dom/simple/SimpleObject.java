@@ -24,6 +24,7 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -55,7 +56,9 @@ import org.apache.isis.applib.util.ObjectContracts;
                         + "WHERE name.indexOf(:name) >= 0 ")
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
-@DomainObject
+@DomainObject(
+        publishing = Publishing.ENABLED
+)
 public class SimpleObject implements Comparable<SimpleObject> {
 
     public static final int NAME_LENGTH = 40;

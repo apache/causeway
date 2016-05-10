@@ -45,7 +45,9 @@
         <profile>
             <id>xsd-to-java</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skip.xsd-to-java</name>
+                </property>
             </activation>
 
             <build>
@@ -68,19 +70,22 @@
                         <artifactId>maven-jaxb2-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>generate-ixn-xsd</id>
+                                <id>generate-chg-xsd</id>
                                 <phase>generate-sources</phase>
                                 <goals>
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <schemaDirectory>src/main/resources/org/apache/isis/schema/ixn</schemaDirectory>
+                                    <schemaDirectory>src/main/resources/org/apache/isis/schema</schemaDirectory>
                                     <schemaIncludes>
-                                        <schemaInclude>ixn-1.0.xsd</schemaInclude>
+                                        <schemaInclude>common/common-1.0.xsd</schemaInclude>
+                                        <schemaInclude>cmd/cmd-1.0.xsd</schemaInclude>
+                                        <schemaInclude>ixn/ixn-1.0.xsd</schemaInclude>
+                                        <schemaInclude>chg/chg-1.0.xsd</schemaInclude>
                                     </schemaIncludes>
-                                    <bindingDirectory>src/main/resources/org/apache/isis/schema/ixn</bindingDirectory>
+                                    <bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
                                     <bindingIncludes>
-                                        <bindingInclude>ixn-1.0-binding.xml</bindingInclude>
+                                        <bindingInclude>bindings.xml</bindingInclude>
                                     </bindingIncludes>
                                     <args>
                                         <arg>-extension</arg>

@@ -18,7 +18,10 @@
  */
 package org.apache.isis.applib.services.publish;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;
 
 /**
@@ -38,7 +41,7 @@ public interface PublisherService {
     @Programmatic
     void publish(final Interaction.Execution<?, ?> execution);
 
-
+    void publish(final List<Bookmark> created, final List<Bookmark> updated, final List<Bookmark> deleted);
 }
 
 

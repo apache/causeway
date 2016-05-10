@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -76,6 +77,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     private final InteractionContext interactionContext;
 
     private final ClockService clockService;
+    private final UserService userService;
 
 
     // ////////////////////////////////////////////////////////////////
@@ -110,6 +112,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.interactionContext = lookupService(InteractionContext.class);
 
         this.clockService = lookupService(ClockService.class);
+        this.userService = lookupService(UserService.class);
     }
 
     public PersistenceSessionTransactionManagement getPersistenceSession() {
@@ -382,14 +385,13 @@ public class IsisTransactionManager implements SessionScopedComponent {
             final Interaction interaction) {
 
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
-        final String userName = getAuthenticationSession().getUserName();
+        final String userName = userService.getUser().getName();
 
         command.setTimestamp(timestamp);
         command.setUser(userName);
         command.setTransactionId(transactionId);
 
         interaction.setTransactionId(transactionId);
-
     }
 
 

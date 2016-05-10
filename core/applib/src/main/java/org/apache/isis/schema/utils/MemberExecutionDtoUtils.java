@@ -95,26 +95,26 @@ public final class MemberExecutionDtoUtils {
     }
 
     public static DifferenceDto numberObjectsLoadedFor(final ObjectCountsDto objectCountsDto) {
-        DifferenceDto differenceDto = objectCountsDto.getNumberObjectsLoaded();
+        DifferenceDto differenceDto = objectCountsDto.getLoaded();
         if(differenceDto == null) {
             differenceDto = new DifferenceDto();
-            objectCountsDto.setNumberObjectsLoaded(differenceDto);
+            objectCountsDto.setLoaded(differenceDto);
         }
         return differenceDto;
     }
     public static DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto) {
-        DifferenceDto differenceDto = objectCountsDto.getNumberObjectsDirtied();
+        DifferenceDto differenceDto = objectCountsDto.getDirtied();
         if(differenceDto == null) {
             differenceDto = new DifferenceDto();
-            objectCountsDto.setNumberObjectsDirtied(differenceDto);
+            objectCountsDto.setDirtied(differenceDto);
         }
         return differenceDto;
     }
     public static DifferenceDto numberObjectPropertiesModifiedFor(final ObjectCountsDto objectCountsDto) {
-        DifferenceDto differenceDto = objectCountsDto.getNumberObjectPropertiesModified();
+        DifferenceDto differenceDto = objectCountsDto.getPropertiesModified();
         if(differenceDto == null) {
             differenceDto = new DifferenceDto();
-            objectCountsDto.setNumberObjectPropertiesModified(differenceDto);
+            objectCountsDto.setPropertiesModified(differenceDto);
         }
         return differenceDto;
     }
