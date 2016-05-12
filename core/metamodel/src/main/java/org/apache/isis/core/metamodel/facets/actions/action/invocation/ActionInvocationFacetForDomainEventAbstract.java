@@ -297,7 +297,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             final Exception executionExceptionIfAny = priorExecution.getThrew();
 
-            // TODO: should also sync DTO's threw here...
+            // TODO: should also sync DTO's 'threw' attribute here...?
 
             if(executionExceptionIfAny != null) {
                 throw executionExceptionIfAny instanceof RuntimeException
@@ -316,6 +316,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             // update Command (if required)
             setCommandResultIfEntity(command, returnedAdapter);
 
+            // publish (if not a contributed association, query-only mixin)
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             if (publishedActionFacet != null) {
 

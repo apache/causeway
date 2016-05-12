@@ -41,4 +41,15 @@ public interface PublishingServiceInternal {
 
     @Programmatic
     void publishProperty(final Interaction.Execution execution);
+
+
+    interface Block<T> {
+        T exec();
+    }
+
+    /**
+     * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
+     */
+    @Programmatic
+    <T> T withPublishingSuppressed(final Block<T> block);
 }

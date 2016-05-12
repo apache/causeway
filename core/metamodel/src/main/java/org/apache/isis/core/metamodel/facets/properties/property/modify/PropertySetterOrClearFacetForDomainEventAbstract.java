@@ -269,7 +269,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             // handle any exceptions
             final Interaction.Execution priorExecution = interaction.getPriorExecution();
 
-            // TODO: should also sync DTO's threw here...
+            // TODO: should also sync DTO's 'threw' attribute here...?
 
             final Exception executionExceptionIfAny = priorExecution.getThrew();
             if(executionExceptionIfAny != null) {
@@ -279,8 +279,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             }
 
 
-
-
+            // publish (if not a contributed association, query-only mixin)
             final PublishedPropertyFacet publishedPropertyFacet = getIdentified().getFacet(PublishedPropertyFacet.class);
             if (publishedPropertyFacet != null) {
                 getPublishingServiceInternal().publishProperty(priorExecution);

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.google.common.base.Function;
@@ -43,13 +44,13 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
+import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.applib.services.user.UserService;
@@ -76,9 +77,12 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
+@RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
-    private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
+    //region > static helper functions
+    private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY =
+            new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
             if(adapter == null) {
                 return null;
@@ -98,24 +102,17 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
 
     };
+    //endregion
 
-    @Programmatic
-    public static EventType eventTypeFor(ChangeKind changeKind) {
-        if(changeKind == ChangeKind.UPDATE) {
-            return EventType.OBJECT_UPDATED;
-        }
-        if(changeKind == ChangeKind.CREATE) {
-            return EventType.OBJECT_CREATED;
-        }
-        if(changeKind == ChangeKind.DELETE) {
-            return EventType.OBJECT_DELETED;
-        }
-        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
-    }
-
+    //region > publishObjects
     @Override
     @Programmatic
     public void publishObjects() {
+
+        if(suppress) {
+            return;
+        }
+
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
         final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
@@ -203,7 +200,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         return new PublishedObjectsDefault(transactionUuid, userName, timestamp, changeKindByPublishedAdapter);
     }
 
+    //endregion
 
+    //region > publishAction
 
     @Programmatic
     public void publishAction(
@@ -214,16 +213,12 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             final List<ObjectAdapter> parameterAdapters,
             final ObjectAdapter resultAdapter) {
 
+        if(suppress) {
+            return;
+        }
         publishActionToPublishingService(
                 objectAction, identifiedHolder, targetAdapter, parameterAdapters, resultAdapter
         );
-
-        publishToPublisherServices(execution);
-    }
-
-    @Override
-    public void publishProperty(
-            final Interaction.Execution execution) {
 
         publishToPublisherServices(execution);
     }
@@ -333,10 +328,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         return NOT_DESTROYED_ELSE_EMPTY.apply(adapter);
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-
     private EventMetadata newEventMetadata(
             final String currentUser,
             final Timestamp timestamp,
@@ -354,6 +345,38 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                 enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
     }
 
+    private static EventType eventTypeFor(ChangeKind changeKind) {
+        if(changeKind == ChangeKind.UPDATE) {
+            return EventType.OBJECT_UPDATED;
+        }
+        if(changeKind == ChangeKind.CREATE) {
+            return EventType.OBJECT_CREATED;
+        }
+        if(changeKind == ChangeKind.DELETE) {
+            return EventType.OBJECT_DELETED;
+        }
+        throw new IllegalArgumentException("unknown ChangeKind '" + changeKind + "'");
+    }
+    //endregion
+
+    //region > publishProperty
+
+    @Override
+    public void publishProperty(
+            final Interaction.Execution execution) {
+
+        if(suppress) {
+            return;
+        }
+
+        publishToPublisherServices(execution);
+    }
+
+
+    //endregion
+
+    //region > helper: publishToPublisherServices
+
     private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
 
         if(publisherServices == null || publisherServices.isEmpty()) {
@@ -365,6 +388,27 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
     }
 
+    //endregion
+
+    //region > suppress
+
+    // this service is request scoped
+    boolean suppress;
+
+    @Programmatic
+    @Override
+    public <T> T withPublishingSuppressed(final Block<T> block) {
+        try {
+            suppress = true;
+            return block.exec();
+        } finally {
+            suppress = false;
+        }
+    }
+
+    //endregion
+
+    //region > injected services
     @Inject
     private List<PublisherService> publisherServices;
 
@@ -389,9 +433,13 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @Inject
     private UserService userService;
 
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
 
     private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+    //endregion
 
 }

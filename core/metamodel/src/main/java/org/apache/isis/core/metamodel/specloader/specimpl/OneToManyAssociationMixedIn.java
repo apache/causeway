@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
@@ -147,7 +148,13 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return mixinAction.executeInternal(mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+        return getPublishingServiceInternal().withPublishingSuppressed(
+                new PublishingServiceInternal.Block<ObjectAdapter>() {
+                    @Override public ObjectAdapter exec() {
+                        return mixinAction.executeInternal(
+                                mixinAdapter, mixedInAdapter, new ObjectAdapter[0], interactionInitiatedBy);
+                    }
+                });
     }
 
     @Override
@@ -206,6 +213,10 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     //endregion
+
+    private PublishingServiceInternal getPublishingServiceInternal() {
+        return getServicesInjector().lookupService(PublishingServiceInternal.class);
+    }
 
 
 }
