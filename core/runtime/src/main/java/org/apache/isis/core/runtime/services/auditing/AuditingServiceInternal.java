@@ -36,9 +36,9 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.runtime.services.enlist.AdapterAndProperty;
-import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
-import org.apache.isis.core.runtime.services.enlist.PreAndPostValues;
+import org.apache.isis.core.runtime.services.changes.AdapterAndProperty;
+import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.changes.PreAndPostValues;
 
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditingService3}.  Is a no-op if there is no injected service.
@@ -55,7 +55,7 @@ public class AuditingServiceInternal {
     @Programmatic
     public void audit() {
         final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
-                enlistedObjectsServiceInternal.getChangedObjectProperties();
+                changedObjectsServiceInternal.getChangedObjectProperties();
 
         try {
             if(!canAudit()) {
@@ -71,7 +71,7 @@ public class AuditingServiceInternal {
 
         } finally {
             // not needed in production, but is required for integration testing
-            enlistedObjectsServiceInternal.clearChangedObjectProperties();
+            changedObjectsServiceInternal.clearChangedObjectProperties();
         }
     }
 
@@ -113,7 +113,7 @@ public class AuditingServiceInternal {
     private AuditingService3 auditingServiceIfAny;
 
     @Inject
-    private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
+    private ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
     @Inject
     UserService userService;

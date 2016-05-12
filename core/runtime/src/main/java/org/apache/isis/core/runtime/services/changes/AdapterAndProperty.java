@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services.enlist;
+package org.apache.isis.core.runtime.services.changes;
 
 import java.util.Map;
 

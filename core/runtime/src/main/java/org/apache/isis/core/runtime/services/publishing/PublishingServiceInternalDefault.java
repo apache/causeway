@@ -41,7 +41,9 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.changes.ChangedObjects;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
@@ -65,7 +67,8 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.changes.ChangedObjectsDefault;
+import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -118,7 +121,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
         final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
-        changeKindByEnlistedAdapter.putAll(enlistedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
+        changeKindByEnlistedAdapter.putAll(changedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
 
         publishObjectsToPublishingService(changeKindByEnlistedAdapter);
         publishObjectsToPublisherServices(changeKindByEnlistedAdapter);
@@ -172,51 +175,31 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         publishingServiceIfAny.publish(metadata, payload);
     }
 
-    private void publishObjectsToPublisherServices(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+    private void publishObjectsToPublisherServices(
+            final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
 
-        final List<Bookmark> created = Lists.newArrayList();
-        final List<Bookmark> updated = Lists.newArrayList();
-        final List<Bookmark> deleted = Lists.newArrayList();
-
-        for (final Map.Entry<ObjectAdapter, ChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
-            final ObjectAdapter enlistedAdapter = adapterAndChange.getKey();
-
-            final PublishedObjectFacet publishedObjectFacet =
-                    enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-
-            if(publishedObjectFacet == null) {
-                continue;
-            }
-
-            final ChangeKind changeKind = adapterAndChange.getValue();
-
-            final RootOid rootOid = (RootOid) enlistedAdapter.getOid();
-            final Bookmark bookmark = rootOid.asBookmark();
-
-            switch (changeKind) {
-            case CREATE:
-                created.add(bookmark);
-                break;
-            case UPDATE:
-                updated.add(bookmark);
-                break;
-            case DELETE:
-                deleted.add(bookmark);
-                break;
-            default:
-                // shouldn't happen
-                throw new RuntimeException("ChangeKind '" + changeKind + "' not recognized");
-            }
-        }
-
-        if(created.isEmpty() && updated.isEmpty() && deleted.isEmpty()) {
+        if(changeKindByEnlistedAdapter.isEmpty()) {
             return;
         }
 
+        final ChangedObjects changedObjects = newEnlistedObjects(changeKindByEnlistedAdapter);
+
         for (PublisherService publisherService : publisherServices) {
-            publisherService.publish(created, updated, deleted);
+            publisherService.publish(changedObjects);
         }
     }
+
+    private ChangedObjects newEnlistedObjects(final Map<ObjectAdapter, ChangeKind> changeKindByEnlistedAdapter) {
+
+        final Command command = commandContext.getCommand();
+        final UUID transactionUuid = command.getTransactionId();
+
+        final String userName = userService.getUser().getName();
+        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+
+        return new ChangedObjectsDefault(transactionUuid, userName, timestamp, changeKindByEnlistedAdapter);
+    }
+
 
 
     @Programmatic
@@ -386,7 +369,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     private PublishingService publishingServiceIfAny;
 
     @Inject
-    private EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
+    private ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
     @Inject
     private InteractionDtoServiceInternal interactionDtoServiceInternal;

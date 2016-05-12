@@ -35,13 +35,15 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 public class CommandDefault implements Command3 {
 
+    //region > constructor
+
     public CommandDefault() {
         setExecutor(Executor.OTHER);
     }
-    
-    // //////////////////////////////////////
-    // actionIdentifier (property)
-    // //////////////////////////////////////
+
+    //endregion
+
+    //region > actionIdentifier (property)
 
     private String actionIdentifier;
     public String getMemberIdentifier() {
@@ -53,9 +55,9 @@ public class CommandDefault implements Command3 {
         this.actionIdentifier = actionIdentifier;
     }
 
-    // //////////////////////////////////////
-    // targetClass (property)
-    // //////////////////////////////////////
+    //endregion
+
+    //region > targetClass (property)
 
     private String targetClass;
     public String getTargetClass() {
@@ -67,10 +69,10 @@ public class CommandDefault implements Command3 {
         this.targetClass = targetClass;
     }
 
-    // //////////////////////////////////////
-    // targetAction (property)
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > targetAction (property)
+
     private String targetAction;
     public String getTargetAction() {
         return targetAction;
@@ -81,12 +83,10 @@ public class CommandDefault implements Command3 {
         this.targetAction = targetAction;
     }
 
+    //endregion
 
+    //region > arguments (property)
 
-    // //////////////////////////////////////
-    // arguments (property)
-    // //////////////////////////////////////
-    
     private String arguments;
     public String getArguments() {
         return arguments;
@@ -97,11 +97,10 @@ public class CommandDefault implements Command3 {
         this.arguments = arguments;
     }
     
-    
-    // //////////////////////////////////////
-    // memento (property)
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > memento (property)
+
     private String memento;
     
     @Override
@@ -113,11 +112,10 @@ public class CommandDefault implements Command3 {
         this.memento = memento;
     }
     
+    //endregion
 
-    // //////////////////////////////////////
-    // target (property)
-    // //////////////////////////////////////
-    
+    //region > target (property)
+
     private Bookmark target;
     public Bookmark getTarget() {
         return target;
@@ -127,10 +125,9 @@ public class CommandDefault implements Command3 {
         this.target = target;
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // timestamp (property)
-    // //////////////////////////////////////
+    //region > timestamp (property)
 
     private Timestamp timestamp;
     public Timestamp getTimestamp() {
@@ -142,12 +139,10 @@ public class CommandDefault implements Command3 {
         this.timestamp = timestamp;
     }
 
-    
-    // //////////////////////////////////////
-    // startedAt (property)
-    // //////////////////////////////////////
-    
-    
+    //endregion
+
+    //region > startedAt (property)
+
     private Timestamp startedAt;
     @Override
     public Timestamp getStartedAt() {
@@ -158,11 +153,10 @@ public class CommandDefault implements Command3 {
         this.startedAt = startedAt;
     }
 
-    
-    // //////////////////////////////////////
-    // completedAt (property)
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > completedAt (property)
+
     private Timestamp completedAt;
 
     @Override
@@ -175,9 +169,9 @@ public class CommandDefault implements Command3 {
         this.completedAt = completed;
     }
 
-    // //////////////////////////////////////
-    // user (property)
-    // //////////////////////////////////////
+    //endregion
+
+    //region > user (property)
 
     private String user;
     public String getUser() {
@@ -189,11 +183,9 @@ public class CommandDefault implements Command3 {
         this.user = user;
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // actionInteractionEvent (property)
-    // //////////////////////////////////////
-
+    //region > actionInteractionEvent (peek/pop/flush)
 
     @Deprecated
     @Override
@@ -234,9 +226,9 @@ public class CommandDefault implements Command3 {
     }
 
 
-    // //////////////////////////////////////
-    // actionDomainEvent (property)
-    // //////////////////////////////////////
+    //endregion
+
+    //region > actionDomainEvent (peek/pop/flush)
 
     private final LinkedList<ActionDomainEvent<?>> actionDomainEvents = Lists.newLinkedList();
 
@@ -266,10 +258,9 @@ public class CommandDefault implements Command3 {
         return events;
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // executor (property)
-    // //////////////////////////////////////
+    //region > executor (property)
 
     private Executor executor;
     
@@ -286,9 +277,9 @@ public class CommandDefault implements Command3 {
         this.executor = nature;
     }
 
-    // //////////////////////////////////////
-    // executionType (property)
-    // //////////////////////////////////////
+    //endregion
+
+    //region > executionType (property)
 
     private ExecuteIn executionType;
 
@@ -306,9 +297,9 @@ public class CommandDefault implements Command3 {
     }
 
 
-    // //////////////////////////////////////
-    // parent (property)
-    // //////////////////////////////////////
+    //endregion
+
+    //region > parent (property)
 
     private Command parent;
     
@@ -323,10 +314,10 @@ public class CommandDefault implements Command3 {
     }
 
     
-    // //////////////////////////////////////
-    // result (property)
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > result (property)
+
     private Bookmark result;
     
     @Override
@@ -338,10 +329,9 @@ public class CommandDefault implements Command3 {
         this.result = result;
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // exceptionStackTrace (property)
-    // //////////////////////////////////////
+    //region > exceptionStackTrace (property)
 
     private String exceptionStackTrace;
     
@@ -354,10 +344,10 @@ public class CommandDefault implements Command3 {
         this.exceptionStackTrace = exceptionStackTrace;
     }
     
-    // //////////////////////////////////////
-    // transactionId (property)
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > transactionId (property)
+
     private UUID transactionId;
     
     @Override
@@ -370,10 +360,9 @@ public class CommandDefault implements Command3 {
     }
     
 
-    
-    // //////////////////////////////////////
-    // persistence
-    // //////////////////////////////////////
+    //endregion
+
+    //region > persistence
 
     private Persistence persistence;
     
@@ -387,10 +376,10 @@ public class CommandDefault implements Command3 {
         this.persistence = persistence; 
     }
 
-    // //////////////////////////////////////
-    // persistHint
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > persistHint
+
     private boolean persistHint;
     
     public boolean isPersistHint() {
@@ -402,9 +391,9 @@ public class CommandDefault implements Command3 {
     }
 
 
-    // //////////////////////////////////////
-    // next
-    // //////////////////////////////////////
+    //endregion
+
+    //region > next
 
     private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
 
@@ -421,14 +410,16 @@ public class CommandDefault implements Command3 {
         return next.get();
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // toString
-    // //////////////////////////////////////
+    //region > toString
 
     @Override
     public String toString() {
         return ObjectContracts.toString(this, "startedAt","user","memberIdentifier","target","transactionId");
     }
+
+    //endregion
+
 
 }

@@ -51,21 +51,9 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="created" type="com:oidsDto">
+                <xs:element name="completedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
                     <xs:annotation>
-                        <xs:documentation>The list of objects created within the transaction.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="updated" type="com:oidsDto">
-                    <xs:annotation>
-                        <xs:documentation>The list of objects updated within the transaction.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="deleted" type="com:oidsDto">
-                    <xs:annotation>
-                        <xs:documentation>The list of objects deleted within the transaction.
+                        <xs:documentation>The point in time that these changes were completed.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
@@ -75,8 +63,35 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="objects" type="objectsDto"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+    <xs:complexType name="objectsDto">
+        <xs:annotation>
+            <xs:documentation>A set of changes to domain objects.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="created" type="com:oidsDto">
+                <xs:annotation>
+                    <xs:documentation>The list of objects created within the transaction.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="updated" type="com:oidsDto">
+                <xs:annotation>
+                    <xs:documentation>The list of objects updated within the transaction.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="deleted" type="com:oidsDto">
+                <xs:annotation>
+                    <xs:documentation>The list of objects deleted within the transaction.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 
 </xs:schema>

@@ -39,6 +39,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.MetaModelService2;
+import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 import static org.apache.isis.applib.annotation.Optionality.MANDATORY;
@@ -66,7 +68,17 @@ public abstract class DomainChangeJdoAbstract {
     public static enum ChangeType {
         COMMAND,
         AUDIT_ENTRY,
-        PUBLISHED_EVENT;
+        /**
+         * As per {@link PublishingService}.
+         *
+         * @deprecated - replaced by {@link #PUBLISHED_INTERACTION} (because {@link PublishingService} has been replaced by {@link PublisherService}).
+         */
+        @Deprecated
+        PUBLISHED_EVENT,
+        /**
+         * As per {@link PublisherService}.
+         */
+        PUBLISHED_INTERACTION;
         @Override
         public String toString() {
             return name().replace("_", " ");
@@ -78,7 +90,7 @@ public abstract class DomainChangeJdoAbstract {
     
     private final ChangeType type;
     /**
-     * Distinguishes <tt>CommandJdo</tt>s, <tt>AuditEntryJdo</tt>s and <tt>PublishedEventJdo</tt>s      * when these are shown mixed together in a (standalone) table.
+     * Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
      */
     @Property
     @PropertyLayout(

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services.enlist;
+package org.apache.isis.core.runtime.services.changes;
 
 import java.util.Collections;
 import java.util.Map;
@@ -42,7 +42,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
-public class EnlistedObjectsServiceInternal {
+public class ChangedObjectsServiceInternal {
 
     // used for auditing
     private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();

@@ -50,7 +50,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
-import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -192,7 +192,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final InteractionContext interactionContext;
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
-    private final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
+    private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
 
     private final UUID transactionId;
@@ -224,7 +224,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
         this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
-        this.enlistedObjectsServiceInternal = lookupService(EnlistedObjectsServiceInternal.class);
+        this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
 
 
         this.transactionId = transactionId;
@@ -407,7 +407,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final Command command = commandContext.getCommand();
 
             // ensure that any changed objects means that the command should be persisted
-            final boolean hasChangedAdapters = enlistedObjectsServiceInternal.hasChangedAdapters();
+            final boolean hasChangedAdapters = changedObjectsServiceInternal.hasChangedAdapters();
             if(hasChangedAdapters && command.getMemberIdentifier() != null) {
                 command.setPersistHint(true);
             }

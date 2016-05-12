@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,8 +40,10 @@ import com.google.common.io.Resources;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.chg.v1.ChangesDto;
+import org.apache.isis.schema.chg.v1.ObjectsDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
+import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 public final class ChangesDtoUtils {
 
@@ -96,44 +99,6 @@ public final class ChangesDtoUtils {
     }
     //endregion
 
-    //region > newChangesDto
-
-    public static ChangesDto newChangesDto(
-            final String transactionId,
-            final String userName,
-            final List<Bookmark> created,
-            final List<Bookmark> updated, final List<Bookmark> deleted) {
-
-        final ChangesDto changesDto = new ChangesDto();
-
-        changesDto.setMajorVersion("1");
-        changesDto.setMinorVersion("0");
-
-        changesDto.setTransactionId(transactionId);
-
-        changesDto.setCreated(new OidsDto());
-        changesDto.setUpdated(new OidsDto());
-        changesDto.setDeleted(new OidsDto());
-
-        changesDto.setTransactionId(transactionId);
-        changesDto.setUser(userName);
-
-        changesDto.getCreated().getOid().addAll(asList(created));
-        changesDto.getUpdated().getOid().addAll(asList(updated));
-        changesDto.getDeleted().getOid().addAll(asList(deleted));
-
-        return changesDto;
-    }
-
-    private static Collection<OidDto> asList(final List<Bookmark> bookmarks) {
-        final List<OidDto> oids = Lists.newArrayList();
-        for (Bookmark bookmark : bookmarks) {
-            oids.add(bookmark.toOidDto());
-        }
-        return oids;
-    }
-
-    //endregion
 
 
     //region > debugging (dump)

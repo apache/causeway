@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 
 @RequestScoped
 @DomainService(nature = NatureOfService.DOMAIN)
@@ -45,12 +45,12 @@ public class MetricsServiceDefault implements MetricsService, InstanceLifecycleL
 
     @Override
     public int numberObjectsDirtied() {
-        return enlistedObjectsServiceInternal.numberObjectsDirtied();
+        return changedObjectsServiceInternal.numberObjectsDirtied();
     }
 
     @Override
     public int numberObjectPropertiesModified() {
-        return enlistedObjectsServiceInternal.numberObjectPropertiesModified();
+        return changedObjectsServiceInternal.numberObjectPropertiesModified();
     }
 
     @Programmatic
@@ -61,7 +61,7 @@ public class MetricsServiceDefault implements MetricsService, InstanceLifecycleL
 
 
     @Inject
-    EnlistedObjectsServiceInternal enlistedObjectsServiceInternal;
+    ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
 
 }

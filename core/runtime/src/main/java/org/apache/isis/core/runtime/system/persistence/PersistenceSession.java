@@ -122,7 +122,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Transact
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
-import org.apache.isis.core.runtime.services.enlist.EnlistedObjectsServiceInternal;
+import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.services.metrics.MetricsServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
@@ -2050,10 +2050,10 @@ public class PersistenceSession implements
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
-        final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal =
-                getServicesInjector().lookupService(EnlistedObjectsServiceInternal.class);
+        final ChangedObjectsServiceInternal changedObjectsServiceInternal =
+                getServicesInjector().lookupService(ChangedObjectsServiceInternal.class);
 
-        enlistedObjectsServiceInternal.enlistDeleting(adapter);
+        changedObjectsServiceInternal.enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
@@ -2243,10 +2243,10 @@ public class PersistenceSession implements
             postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
 
 
-            final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal =
-                    getServicesInjector().lookupService(EnlistedObjectsServiceInternal.class);
+            final ChangedObjectsServiceInternal changedObjectsServiceInternal =
+                    getServicesInjector().lookupService(ChangedObjectsServiceInternal.class);
 
-            enlistedObjectsServiceInternal.enlistCreated(adapter);
+            changedObjectsServiceInternal.enlistCreated(adapter);
 
         } else {
             // updating;
@@ -2291,10 +2291,10 @@ public class PersistenceSession implements
         postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
 
 
-        final EnlistedObjectsServiceInternal enlistedObjectsServiceInternal =
-                getServicesInjector().lookupService(EnlistedObjectsServiceInternal.class);
+        final ChangedObjectsServiceInternal changedObjectsServiceInternal =
+                getServicesInjector().lookupService(ChangedObjectsServiceInternal.class);
 
-        enlistedObjectsServiceInternal.enlistUpdating(adapter);
+        changedObjectsServiceInternal.enlistUpdating(adapter);
 
         ensureRootObject(pojo);
     }

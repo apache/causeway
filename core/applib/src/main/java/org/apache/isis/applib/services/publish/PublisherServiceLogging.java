@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.publish;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -28,9 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.changes.ChangedObjects;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.schema.chg.v1.ChangesDto;
@@ -63,20 +60,13 @@ public class PublisherServiceLogging implements PublisherService {
     }
 
     @Override
-    public void publish(
-            final List<Bookmark> created,
-            final List<Bookmark> updated,
-            final List<Bookmark> deleted) {
+    public void publish(final ChangedObjects changedObjects) {
 
         if(!LOG.isDebugEnabled()) {
             return;
         }
 
-        final Command command = commandContext.getCommand();
-        final String transactionId = command.getTransactionId().toString();
-        final String userName = userService.getUser().getName();
-
-        final ChangesDto changesDto = ChangesDtoUtils.newChangesDto(transactionId, userName, created, updated, deleted);
+        final ChangesDto changesDto = changedObjects.getDto();
 
         LOG.debug(ChangesDtoUtils.toXml(changesDto));
     }

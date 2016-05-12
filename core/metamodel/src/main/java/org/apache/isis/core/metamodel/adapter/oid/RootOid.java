@@ -35,6 +35,8 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.schema.common.v1.BookmarkObjectState;
+import org.apache.isis.schema.common.v1.OidDto;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -221,12 +223,29 @@ public class RootOid implements TypedOid, Serializable {
     }
     //endregion
 
-    //region > bookmark
+    //region > asBookmark, asOidDto
     public Bookmark asBookmark() {
         final String objectType = state.asBookmarkObjectState().getCode() + getObjectSpecId().asString();
         final String identifier = getIdentifier();
         return new Bookmark(objectType, identifier);
     }
+
+    public OidDto asOidDto() {
+
+        final OidDto oidDto = new OidDto();
+
+        oidDto.setType(getObjectSpecId().asString());
+        oidDto.setId(getIdentifier());
+
+        final Bookmark.ObjectState objectState = state.asBookmarkObjectState();
+        final BookmarkObjectState bookmarkState = objectState.toBookmarkState();
+        // persistent is assumed if not specified...
+        oidDto.setObjectState(
+                bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
+
+        return oidDto;
+    }
+
     //endregion
 
     //region > equals, hashCode
@@ -268,6 +287,7 @@ public class RootOid implements TypedOid, Serializable {
     public String toString() {
         return enString(new OidMarshaller());
     }
+
 
     //endregion
 

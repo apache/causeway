@@ -16,31 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publish;
+package org.apache.isis.applib.services.changes;
+
+import java.sql.Timestamp;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.changes.ChangedObjects;
+import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUsername;
+import org.apache.isis.schema.chg.v1.ChangesDto;
 
-/**
- * Replaces {@link PublishingService}.
- *
- * <p>
- *     Note that re-publishing is not part of this SPI.
- * </p>
- */
-public interface PublisherService {
-
-    /**
-     * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
-     * XML representation of the execution.  The easiest way to do this is using {@link org.apache.isis.schema.utils.InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
-     * some flexibility here, though.
-     */
-    @Programmatic
-    void publish(final Interaction.Execution<?, ?> execution);
+public interface ChangedObjects extends HasTransactionId, HasUsername {
 
     @Programmatic
-    void publish(final ChangedObjects changedObjects);
+    Timestamp getCompletedAt();
+
+    @Programmatic
+    String getUser();
+
+    @Programmatic
+    ChangesDto getDto();
 }
-
-

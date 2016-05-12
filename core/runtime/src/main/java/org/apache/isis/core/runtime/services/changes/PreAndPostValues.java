@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services.enlist;
+package org.apache.isis.core.runtime.services.changes;
 
 import java.util.Map;
 
@@ -59,7 +59,7 @@ public class PreAndPostValues {
     private PreAndPostValues(Object pre, Object post) {
         this.pre = pre;
         this.post = post;
-        this.preString = EnlistedObjectsServiceInternal.asString(pre);
+        this.preString = ChangedObjectsServiceInternal.asString(pre);
     }
 
     /**
@@ -87,7 +87,7 @@ public class PreAndPostValues {
 
     public void setPost(Object post) {
         this.post = post;
-        this.postString = EnlistedObjectsServiceInternal.asString(post);
+        this.postString = ChangedObjectsServiceInternal.asString(post);
     }
 
     @Override
