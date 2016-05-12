@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.publish;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.changes.ChangedObjects;
 
 /**
  * Replaces {@link PublishingService}.
@@ -40,7 +39,7 @@ public interface PublisherService {
     void publish(final Interaction.Execution<?, ?> execution);
 
     @Programmatic
-    void publish(final ChangedObjects changedObjects);
+    void publish(final PublishedObjects publishedObjects);
 }
 
 

@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.changes.ChangedObjects;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.schema.chg.v1.ChangesDto;
@@ -60,13 +59,13 @@ public class PublisherServiceLogging implements PublisherService {
     }
 
     @Override
-    public void publish(final ChangedObjects changedObjects) {
+    public void publish(final PublishedObjects publishedObjects) {
 
         if(!LOG.isDebugEnabled()) {
             return;
         }
 
-        final ChangesDto changesDto = changedObjects.getDto();
+        final ChangesDto changesDto = publishedObjects.getDto();
 
         LOG.debug(ChangesDtoUtils.toXml(changesDto));
     }

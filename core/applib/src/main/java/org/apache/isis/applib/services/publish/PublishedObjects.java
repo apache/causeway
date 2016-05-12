@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.changes;
+package org.apache.isis.applib.services.publish;
 
 import java.sql.Timestamp;
 
@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.schema.chg.v1.ChangesDto;
 
-public interface ChangedObjects extends HasTransactionId, HasUsername {
+public interface PublishedObjects extends HasTransactionId, HasUsername {
 
     @Programmatic
     Timestamp getCompletedAt();
@@ -35,4 +35,13 @@ public interface ChangedObjects extends HasTransactionId, HasUsername {
 
     @Programmatic
     ChangesDto getDto();
+
+    @Programmatic
+    int numberCreated();
+
+    @Programmatic
+    int numberUpdated();
+
+    @Programmatic
+    int numberDeleted();
 }

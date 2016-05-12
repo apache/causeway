@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.publishedobject;
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.annotation.PublishedObject;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
@@ -28,4 +31,18 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  */
 public interface PublishedObjectFacet extends SingleValueFacet<PublishedObject.PayloadFactory> {
 
+    class Predicates {
+        private Predicates(){}
+
+        public static Predicate<ObjectAdapter> isPublished() {
+            return new Predicate<ObjectAdapter>() {
+                @Override
+                public boolean apply(final ObjectAdapter objectAdapter) {
+                    final PublishedObjectFacet publishedObjectFacet =
+                            objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+                    return publishedObjectFacet != null;
+                }
+            };
+        }
+    }
 }

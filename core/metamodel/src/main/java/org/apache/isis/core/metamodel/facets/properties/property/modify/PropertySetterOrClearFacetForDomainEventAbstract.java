@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -188,8 +189,11 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
             final Object argValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
+            final String targetMember = CommandUtil.targetMemberNameFor(owningProperty);
+            final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
+
             final Interaction.PropertyEdit execution =
-                    new Interaction.PropertyEdit(interaction, propertyId, target, argValue);
+                    new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMember, targetClass);
             final Interaction.MemberExecutor<Interaction.PropertyEdit> executor =
                     new Interaction.MemberExecutor<Interaction.PropertyEdit>() {
                         @Override

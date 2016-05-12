@@ -17,18 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.services.changes;
+package org.apache.isis.core.runtime.services.publish;
 
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimaps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.services.changes.ChangedObjects;
+import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.schema.chg.v1.ChangesDto;
 import org.apache.isis.schema.chg.v1.ObjectsDto;
 import org.apache.isis.schema.common.v1.OidDto;
@@ -38,14 +45,15 @@ import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCal
 /**
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
-public class ChangedObjectsDefault implements ChangedObjects {
+public class PublishedObjectsDefault implements PublishedObjects {
 
+    //region > constructor, fields
     private UUID transactionUuid;
     private final String userName;
     private final Timestamp completedAt;
     private final Map<ObjectAdapter, PublishedObject.ChangeKind> changesByAdapter;
 
-    public ChangedObjectsDefault(
+    public PublishedObjectsDefault(
             final UUID transactionUuid,
             final String userName,
             final Timestamp completedAt,
@@ -55,6 +63,8 @@ public class ChangedObjectsDefault implements ChangedObjects {
         this.completedAt = completedAt;
         this.changesByAdapter = changesByAdapter;
     }
+    //endregion
+
 
     //region > transactionId, completedAt, user
     @Programmatic
@@ -91,70 +101,102 @@ public class ChangedObjectsDefault implements ChangedObjects {
     }
     //endregion
 
+    //region > dto
+    /**
+     * lazily computed
+     */
     private ChangesDto dto;
 
     @Override
     public ChangesDto getDto() {
         return dto != null ? dto : (dto = newDto());
     }
+    //endregion
+
+    //region > numberCreated, numberUpdated, numberDeleted
+
+    @Override
+    public int numberCreated() {
+        return numAdaptersOfKind(PublishedObject.ChangeKind.CREATE);
+    }
+
+    @Override
+    public int numberUpdated() {
+        return numAdaptersOfKind(PublishedObject.ChangeKind.UPDATE);
+    }
+
+    @Override
+    public int numberDeleted() {
+        return numAdaptersOfKind(PublishedObject.ChangeKind.DELETE);
+    }
+
+    private int numAdaptersOfKind(final PublishedObject.ChangeKind kind) {
+        final Collection<ObjectAdapter> objectAdapters = adaptersByChange().get(kind);
+        return objectAdapters != null ? objectAdapters.size() : 0;
+    }
+
+
+    /**
+     * Lazily populated
+     */
+    private Map<PublishedObject.ChangeKind, Collection<ObjectAdapter>> adaptersByChange;
+
+    private Map<PublishedObject.ChangeKind, Collection<ObjectAdapter>> adaptersByChange() {
+        return adaptersByChange != null? adaptersByChange : (adaptersByChange = invert(changesByAdapter));
+    }
+
+    private static <T, S> Map<T, Collection<S>> invert(final Map<S, T> valueByKey) {
+        return new TreeMap<>(
+                Multimaps.invertFrom(
+                        Multimaps.forMap(valueByKey),
+                        ArrayListMultimap.<T, S>create()
+                ).asMap()
+        );
+    }
+
+    //endregion
 
 
     //region > newDto, newObjectsDto, newChangesDto
 
     private ChangesDto newDto() {
-        final ObjectsDto objectsDto = newObjectsDto(changesByAdapter);
-        return newChangesDto(objectsDto, transactionUuid, userName, completedAt);
+        final ObjectsDto objectsDto = newObjectsDto();
+        return newChangesDto(objectsDto);
     }
 
-    protected ObjectsDto newObjectsDto(
-            final Map<ObjectAdapter, PublishedObject.ChangeKind> changeKindByEnlistedAdapter) {
+    protected ObjectsDto newObjectsDto() {
+
         final ObjectsDto objectsDto = new ObjectsDto();
 
-        final OidsDto createdOids = new OidsDto();
-        final OidsDto updatedOids = new OidsDto();
-        final OidsDto deletedOids = new OidsDto();
+        objectsDto.setCreated(oidsDtoFor(PublishedObject.ChangeKind.CREATE));
+        objectsDto.setUpdated(oidsDtoFor(PublishedObject.ChangeKind.UPDATE));
+        objectsDto.setDeleted(oidsDtoFor(PublishedObject.ChangeKind.DELETE));
 
-        for (final Map.Entry<ObjectAdapter, PublishedObject.ChangeKind> adapterAndChange : changeKindByEnlistedAdapter.entrySet()) {
-            final ObjectAdapter enlistedAdapter = adapterAndChange.getKey();
-
-            final PublishedObjectFacet publishedObjectFacet =
-                    enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-
-            if(publishedObjectFacet == null) {
-                continue;
-            }
-
-            final RootOid rootOid = (RootOid) enlistedAdapter.getOid();
-            final OidDto oidDto = rootOid.asOidDto();
-
-            final PublishedObject.ChangeKind changeKind = adapterAndChange.getValue();
-            switch (changeKind) {
-            case CREATE:
-                createdOids.getOid().add(oidDto);
-                break;
-            case UPDATE:
-                updatedOids.getOid().add(oidDto);
-                break;
-            case DELETE:
-                deletedOids.getOid().add(oidDto);
-                break;
-            default:
-                // shouldn't happen
-                throw new RuntimeException("ChangeKind '" + changeKind + "' not recognized");
-            }
-        }
-
-        objectsDto.setCreated(createdOids);
-        objectsDto.setUpdated(updatedOids);
-        objectsDto.setDeleted(deletedOids);
         return objectsDto;
     }
 
-    protected ChangesDto newChangesDto(
-            final ObjectsDto objectsDto,
-            final UUID transactionUuid,
-            final String userName,
-            final Timestamp timestamp) {
+    private OidsDto oidsDtoFor(final PublishedObject.ChangeKind kind) {
+        final OidsDto oidsDto = new OidsDto();
+
+        final Map<PublishedObject.ChangeKind, Collection<ObjectAdapter>> adaptersByChange = adaptersByChange();
+
+        final Collection<ObjectAdapter> adapters = adaptersByChange.get(kind);
+        if(adapters != null) {
+            final ImmutableList<OidDto> oidDtos = FluentIterable.from(adapters)
+                    .transform(new Function<ObjectAdapter, OidDto>() {
+                        @Override
+                        public OidDto apply(final ObjectAdapter objectAdapter) {
+                            final RootOid rootOid = (RootOid) objectAdapter.getOid();
+                            return rootOid.asOidDto();
+                        }
+                    })
+                    .toList();
+            oidsDto.getOid().addAll(oidDtos);
+        }
+        return oidsDto;
+    }
+
+    protected ChangesDto newChangesDto(final ObjectsDto objectsDto) {
         final String transactionId = transactionUuid.toString();
         final ChangesDto changesDto = new ChangesDto();
 
@@ -163,16 +205,12 @@ public class ChangedObjectsDefault implements ChangedObjects {
 
         changesDto.setTransactionId(transactionId);
         changesDto.setUser(userName);
-        changesDto.setCompletedAt(
-                JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp));
+        changesDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
         changesDto.setObjects(objectsDto);
         return changesDto;
     }
 
 
-
     //endregion
-
-
 
 }

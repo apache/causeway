@@ -246,18 +246,19 @@ public class ChangedObjectsServiceInternal {
         return changeKindByEnlistedAdapter;
     }
 
-
-    static String asString(Object object) {
-        return object != null? object.toString(): null;
-    }
-
     @Programmatic
     public int numberObjectsDirtied() {
-        return changedObjectProperties.size();
+        return changeKindByEnlistedAdapter.size();
     }
 
     @Programmatic
     public int numberObjectPropertiesModified() {
         return changedObjectProperties.size();
     }
+
+
+    static String asString(Object object) {
+        return object != null? object.toString(): null;
+    }
+
 }

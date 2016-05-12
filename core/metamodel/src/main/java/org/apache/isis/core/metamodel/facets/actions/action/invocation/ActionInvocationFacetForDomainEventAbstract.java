@@ -196,8 +196,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);
             final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(argumentAdapterList);
 
+            final String targetMember = CommandUtil.targetMemberNameFor(owningAction);
+            final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
+
             final Interaction.ActionInvocation execution =
-                    new Interaction.ActionInvocation(interaction, actionId, targetPojo, argumentPojos);
+                    new Interaction.ActionInvocation(interaction, actionId, targetPojo, argumentPojos, targetMember,
+                            targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
 

@@ -316,6 +316,8 @@ public class Interaction implements HasTransactionId {
 
         private final String memberIdentifier;
         private final Object target;
+        private final String targetMember;
+        private final String targetClass;
         private final Interaction interaction;
         private final InteractionType interactionType;
 
@@ -323,15 +325,19 @@ public class Interaction implements HasTransactionId {
                 final Interaction interaction,
                 final InteractionType interactionType,
                 final String memberIdentifier,
-                final Object target) {
+                final Object target,
+                final String targetMember,
+                final String targetClass) {
             this.interaction = interaction;
             this.interactionType = interactionType;
             this.memberIdentifier = memberIdentifier;
             this.target = target;
+            this.targetMember = targetMember;
+            this.targetClass = targetClass;
         }
         //endregion
 
-        //region > via constructor: interaction, interactionType, memberId, target
+        //region > via constructor: interaction, interactionType, memberId, target, targetMember, targetClass
 
         public Interaction getInteraction() {
             return interaction;
@@ -347,6 +353,20 @@ public class Interaction implements HasTransactionId {
 
         public Object getTarget() {
             return target;
+        }
+
+        /**
+         * A human-friendly description of the class of the target object.
+         */
+        public String getTargetClass() {
+            return targetClass;
+        }
+
+        /**
+         * The human-friendly name of the action invoked/property edited on the target object.
+         */
+        public String getTargetMember() {
+            return targetMember;
         }
 
         //endregion
@@ -609,8 +629,10 @@ public class Interaction implements HasTransactionId {
                 final Interaction interaction,
                 final String memberId,
                 final Object target,
-                final List<Object> args) {
-            super(interaction, InteractionType.ACTION_INVOCATION, memberId, target);
+                final List<Object> args,
+                final String targetMember,
+                final String targetClass) {
+            super(interaction, InteractionType.ACTION_INVOCATION, memberId, target, targetMember, targetClass);
             this.args = args;
         }
 
@@ -627,8 +649,10 @@ public class Interaction implements HasTransactionId {
                 final Interaction interaction,
                 final String memberId,
                 final Object target,
-                final Object newValue) {
-            super(interaction, InteractionType.PROPERTY_EDIT, memberId, target);
+                final Object newValue,
+                final String targetMember,
+                final String targetClass) {
+            super(interaction, InteractionType.PROPERTY_EDIT, memberId, target, targetMember, targetClass);
             this.newValue = newValue;
         }
 

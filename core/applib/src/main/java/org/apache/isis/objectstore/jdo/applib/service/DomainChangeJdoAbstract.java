@@ -181,20 +181,29 @@ public abstract class DomainChangeJdoAbstract {
     private String targetAction;
     
     /**
-     * The action invoked which caused the domain object to be changed..
-     * 
+     * The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
+     *
      * <p>
-     * Populated only for <tt>CommandJdo</tt>s.
-     * 
+     *     Populated for commands and for published events that represent action invocations or property edits.
+     * </p>
+     *
      * <p>
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
+     * </p>
+     *
+     * <p>
+     *     NB: commands and published events applied only to actions, hence the name of this field.  In a future release
+     *     the name of this field may change to &quot;TargetMember&quot;.  Note that the {@link PropertyLayout} already uses
+     *     &quot;Member&quot; this as a name hint.
+     * </p>
+     *
      */
     @Property(
             optionality = OPTIONAL
     )
     @PropertyLayout(
-            named="Action",
+            named="Member",
             hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
     )
     @MemberOrder(name="Target", sequence = "20")
