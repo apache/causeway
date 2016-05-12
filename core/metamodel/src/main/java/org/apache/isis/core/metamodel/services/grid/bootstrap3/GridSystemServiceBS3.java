@@ -40,6 +40,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -173,8 +174,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final Map<String, OneToManyAssociation> oneToManyAssociationById =
                 ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
         final Map<String, ObjectAction> objectActionById =
-                ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
-
+                ObjectMember.Util.mapById(
+                        FluentIterable
+                            .from(objectSpec.getObjectActions(Contributed.INCLUDED))
+                            .filter(Filters.asPredicate(ObjectAction.Filters.notBulkOnly()))
+                            .toList());
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 

@@ -56,7 +56,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         
         final Boolean persistent = objectAdapter.representsPersistent();
         if (!persistent) {
-            throw new IllegalArgumentException("Object '" + objectAdapter.titleString(null) + "' is not persistent.");
+            throw new IllegalArgumentException(String.format(
+                    "Object '%s' is not persistent.", objectAdapter.titleString(null)));
         }
 
         // check visibility and whether enabled
