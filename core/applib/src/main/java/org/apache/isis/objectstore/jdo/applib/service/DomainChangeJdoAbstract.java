@@ -339,23 +339,23 @@ public abstract class DomainChangeJdoAbstract {
     // //////////////////////////////////////
 
     public static Comparator<DomainChangeJdoAbstract> compareByTimestampDescThenType(){
-        return ObjectContracts.compareBy("timestamp desc,type");
+        return ObjectContracts.compareBy("timestamp desc","type");
     }
 
     public static Comparator<DomainChangeJdoAbstract> compareByTargetThenTimestampDescThenType(){
-        return ObjectContracts.compareBy("targetStr,timestamp desc,type");
+        return ObjectContracts.compareBy("targetStr","timestamp desc","type");
     }
     
     public static Comparator<DomainChangeJdoAbstract> compareByTargetThenUserThenTimestampDescThenType(){
-        return ObjectContracts.compareBy("targetStr,user,timestamp desc,type");
+        return ObjectContracts.compareBy("targetStr","user","timestamp desc","type");
     }
     
     public static Comparator<DomainChangeJdoAbstract> compareByUserThenTimestampDescThenType(){
-        return ObjectContracts.compareBy("user,timestamp desc,type");
+        return ObjectContracts.compareBy("user","timestamp desc","type");
     }
     
     public static Comparator<DomainChangeJdoAbstract> compareByUserThenTargetThenTimestampDescThenType(){
-        return ObjectContracts.compareBy("user,targetStr,timestamp desc,type");
+        return ObjectContracts.compareBy("user","targetStr","timestamp desc","type");
     }
 
     // //////////////////////////////////////
