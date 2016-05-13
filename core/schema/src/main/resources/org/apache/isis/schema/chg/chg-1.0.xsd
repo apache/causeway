@@ -73,6 +73,12 @@
             <xs:documentation>A set of changes to domain objects.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
+            <xs:element name="loaded" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>The number of objects loaded within the transaction.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="created" type="com:oidsDto">
                 <xs:annotation>
                     <xs:documentation>The list of objects created within the transaction.
@@ -88,6 +94,12 @@
             <xs:element name="deleted" type="com:oidsDto">
                 <xs:annotation>
                     <xs:documentation>The list of objects deleted within the transaction.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="propertiesModified" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>The number of object properties modified within the transaction.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

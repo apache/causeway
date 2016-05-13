@@ -45,8 +45,8 @@ public interface CommandDtoServiceInternal {
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to invoke an action on a
-     * target object (or possibly many targets, for bulk actions).  The action can be a mixin action or a
-     * contributed action.
+     * target object (or possibly many targets, for bulk actions), or to edit a property.  If an action, it can also
+     * be either mixin action or a contributed action.
      */
     @Programmatic
     CommandDto asCommandDto(
@@ -56,7 +56,7 @@ public interface CommandDtoServiceInternal {
 
     /**
      * Returns a JAXB DTO (hence convertible to XML) that represents the intention to edit (set or clear) a property on
-     * a target (or possibly many targets, for symmetry with actions).  The property can be a mixin or contributed.
+     * a target (or possibly many targets, for symmetry with actions).
      */
     @Programmatic
     CommandDto asCommandDto(
@@ -76,4 +76,4 @@ public interface CommandDtoServiceInternal {
             final PropertyDto propertyDto,
             final ObjectAdapter valueAdapter);
 
-    }
+}

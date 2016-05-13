@@ -41,10 +41,17 @@ public interface CommandService {
     void startTransaction(final Command command, final UUID transactionId);
     
     /**
-     * &quot;Complete&quot; the command, typically meaning to indicate that the command is completed, and to 
-     * persist it if its {@link Command#getPersistence()} and {@link Command#isPersistHint() persistence hint} 
+     * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour 
+     * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.Command.ExecuteIn#BACKGROUND}.
+     */
+    @Programmatic
+    boolean persistIfPossible(Command command);
+
+    /**
+     * &quot;Complete&quot; the command, typically meaning to indicate that the command is completed, and to
+     * persist it if its {@link Command#getPersistence()} and {@link Command#isPersistHint() persistence hint}
      * indicate that it should be.
-     * 
+     *
      * <p>
      * However, not every implementation necessarily {@link #persistIfPossible(Command) supports persistence}.
      *
@@ -55,11 +62,4 @@ public interface CommandService {
     @Programmatic
     void complete(final Command command);
 
-    /**
-     * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour 
-     * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.Command.ExecuteIn#BACKGROUND}.
-     */
-    @Programmatic
-    boolean persistIfPossible(Command command);
-    
 }

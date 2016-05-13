@@ -56,13 +56,26 @@ xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommand-Service`]
 |xref:rgsvc.adoc#_rgsvc_api_CommandContext[`o.a.i.applib.` +
 `services.command` +
 `CommandContext`]
-|Request-scoped access the current action that is being invoked, represented as a command object
+|Request-scoped access to capture the users's __intention__ to invoke an action or to edit a property.
 |`CommandContext` +
 ``o.a.i.core`` +
 ``isis-core-applib``
 |API is also a concrete class. +
 depends on: +
-xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used
+xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used.
+
+The xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
+
+
+|xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`o.a.i.applib.` +
+`services.iactn` +
+`InteractionContext`]
+|(`1.13.0-SNAPSHOT`) Request-scoped access to the current member execution (action invocation or property edit),
+represented as the `Interaction` context.
+|`InteractionContext` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class.
 
 
 
@@ -137,6 +150,7 @@ include::_rgsvc_api_AcceptHeaderService.adoc[leveloffset=+1]
 include::_rgsvc_api_ActionInvocationContext.adoc[leveloffset=+1]
 include::_rgsvc_api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_api_CommandContext.adoc[leveloffset=+1]
+include::_rgsvc_api_InteractionContext.adoc[leveloffset=+1]
 include::_rgsvc_api_MessageService.adoc[leveloffset=+1]
 include::_rgsvc_api_SessionManagementService.adoc[leveloffset=+1]
 include::_rgsvc_api_TitleService.adoc[leveloffset=+1]

@@ -51,16 +51,22 @@ public class PublishedObjectsDefault implements PublishedObjects {
     private UUID transactionUuid;
     private final String userName;
     private final Timestamp completedAt;
+    private final int numberLoaded;
+    private final int numberObjectPropertiesModified;
     private final Map<ObjectAdapter, PublishedObject.ChangeKind> changesByAdapter;
 
     public PublishedObjectsDefault(
             final UUID transactionUuid,
             final String userName,
             final Timestamp completedAt,
+            final int numberLoaded,
+            final int numberObjectPropertiesModified,
             final Map<ObjectAdapter, PublishedObject.ChangeKind> changesByAdapter) {
         this.transactionUuid = transactionUuid;
         this.userName = userName;
         this.completedAt = completedAt;
+        this.numberLoaded = numberLoaded;
+        this.numberObjectPropertiesModified = numberObjectPropertiesModified;
         this.changesByAdapter = changesByAdapter;
     }
     //endregion
@@ -90,14 +96,8 @@ public class PublishedObjectsDefault implements PublishedObjects {
     }
 
     @Override
-    public String getUser() {
-        return userName;
-    }
-
-    @Programmatic
-    @Override
     public String getUsername() {
-        return getUser();
+        return userName;
     }
     //endregion
 
@@ -113,21 +113,31 @@ public class PublishedObjectsDefault implements PublishedObjects {
     }
     //endregion
 
-    //region > numberCreated, numberUpdated, numberDeleted
+    //region > numberLoaded, numberCreated, numberUpdated, numberDeleted, numberObjectPropertiesModified
 
     @Override
-    public int numberCreated() {
+    public int getNumberLoaded() {
+        return numberLoaded;
+    }
+
+    @Override
+    public int getNumberCreated() {
         return numAdaptersOfKind(PublishedObject.ChangeKind.CREATE);
     }
 
     @Override
-    public int numberUpdated() {
+    public int getNumberUpdated() {
         return numAdaptersOfKind(PublishedObject.ChangeKind.UPDATE);
     }
 
     @Override
-    public int numberDeleted() {
+    public int getNumberDeleted() {
         return numAdaptersOfKind(PublishedObject.ChangeKind.DELETE);
+    }
+
+    @Override
+    public int getNumberPropertiesModified() {
+        return numberObjectPropertiesModified;
     }
 
     private int numAdaptersOfKind(final PublishedObject.ChangeKind kind) {
@@ -172,6 +182,9 @@ public class PublishedObjectsDefault implements PublishedObjects {
         objectsDto.setUpdated(oidsDtoFor(PublishedObject.ChangeKind.UPDATE));
         objectsDto.setDeleted(oidsDtoFor(PublishedObject.ChangeKind.DELETE));
 
+        objectsDto.setLoaded(getNumberLoaded());
+        objectsDto.setPropertiesModified(getNumberPropertiesModified());
+
         return objectsDto;
     }
 
@@ -206,6 +219,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
         changesDto.setTransactionId(transactionId);
         changesDto.setUser(userName);
         changesDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
+
         changesDto.setObjects(objectsDto);
         return changesDto;
     }

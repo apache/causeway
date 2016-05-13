@@ -46,6 +46,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventType;
@@ -182,14 +183,20 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             return;
         }
 
-        final PublishedObjects publishedObjects = newPublishedObjects(changeKindByPublishedAdapter);
+        final int numberLoaded = metricsService.numberObjectsLoaded();
+        final int numberObjectPropertiesModified = metricsService.numberObjectPropertiesModified();
+        final PublishedObjects publishedObjects = newPublishedObjects(numberLoaded, numberObjectPropertiesModified,
+                changeKindByPublishedAdapter);
 
         for (PublisherService publisherService : publisherServices) {
             publisherService.publish(publishedObjects);
         }
     }
 
-    private PublishedObjects newPublishedObjects(final Map<ObjectAdapter, ChangeKind> changeKindByPublishedAdapter) {
+    private PublishedObjects newPublishedObjects(
+            final int numberLoaded,
+            final int numberObjectPropertiesModified,
+            final Map<ObjectAdapter, ChangeKind> changeKindByPublishedAdapter) {
 
         final Command command = commandContext.getCommand();
         final UUID transactionUuid = command.getTransactionId();
@@ -197,7 +204,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final String userName = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        return new PublishedObjectsDefault(transactionUuid, userName, timestamp, changeKindByPublishedAdapter);
+        return new PublishedObjectsDefault(transactionUuid, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
     }
 
     //endregion
@@ -432,6 +439,9 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private MetricsService metricsService;
 
     protected OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();

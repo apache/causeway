@@ -79,6 +79,9 @@ public interface Command extends HasTransactionId {
 
     public Bookmark getResult();                    // <16>
     public String getException();                   // <17>
+
+    @Deprecated
+    int next(final String sequenceAbbr);            // <18>
 }
 ----
 <1> `getUser()` - is the user that initiated the action.
@@ -98,7 +101,8 @@ public interface Command extends HasTransactionId {
 <15> `getParent()` - for actions created through the `BackgroundService`, captures the parent action
 <16> `getResult()` - bookmark to object returned by action, if any
 <17> `getException()` - exception stack trace if action threw exception
-
+<18> (as of `1.13.0-SNAPSHOT`) no longer used by the framework; see instead
+xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] and `Interaction#next()`.
 
 
 

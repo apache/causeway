@@ -31,10 +31,14 @@ import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
+import org.apache.isis.applib.services.publish.PublisherService;
 
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
+ *
+ * @deprecated - not supported by {@link PublisherService}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

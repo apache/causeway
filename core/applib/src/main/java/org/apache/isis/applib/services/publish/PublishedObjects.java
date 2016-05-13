@@ -31,17 +31,21 @@ public interface PublishedObjects extends HasTransactionId, HasUsername {
     Timestamp getCompletedAt();
 
     @Programmatic
-    String getUser();
-
-    @Programmatic
     ChangesDto getDto();
 
     @Programmatic
-    int numberCreated();
+    int getNumberLoaded();
 
     @Programmatic
-    int numberUpdated();
+    int getNumberCreated();
 
     @Programmatic
-    int numberDeleted();
+    int getNumberUpdated();
+
+    @Programmatic
+    int getNumberDeleted();
+
+    @Programmatic
+    int getNumberPropertiesModified();
+
 }

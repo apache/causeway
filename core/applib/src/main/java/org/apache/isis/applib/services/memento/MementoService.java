@@ -19,6 +19,9 @@ package org.apache.isis.applib.services.memento;
 import java.util.Set;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 
 /**
  * This service provides a mechanism by which a serializable memento of arbitrary state can be created.  Most
@@ -29,20 +32,43 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
  * {@link org.apache.isis.applib.annotation.DomainService} and is implemented in the core runtime, it is automatically
  * registered and available for use; no configuration is required.
  * </p>
+ *
+ * @deprecated - for view models, use JAXB annotations and the {@link JaxbService}; for action invocations and such like, use {@link InteractionContext} and {@link CommandContext}.
  */
+@Deprecated
 public interface MementoService {
 
+    /**
+     * @deprecated - because {@link MementoService} is deprecated.
+     */
+    @Deprecated
     public static interface Memento {
 
+        /**
+         * @deprecated - because {@link MementoService} is deprecated.
+         */
+        @Deprecated
         @Programmatic
         public Memento set(String name, Object value);
 
+        /**
+         * @deprecated - because {@link MementoService} is deprecated.
+         */
+        @Deprecated
         @Programmatic
         public <T> T get(String name, Class<T> cls);
-        
+
+        /**
+         * @deprecated - because {@link MementoService} is deprecated.
+         */
+        @Deprecated
         @Programmatic
         public String asString();
 
+        /**
+         * @deprecated - because {@link MementoService} is deprecated.
+         */
+        @Deprecated
         public Set<String> keySet();
     }
     
@@ -52,7 +78,10 @@ public interface MementoService {
      * <p>
      * Typically followed by {@link Memento#set(String, Object)} for each of the data values to
      * add to the {@link Memento}, then {@link Memento#asString()} to convert to a string format.
+     *
+     * @deprecated - because {@link MementoService} is deprecated.
      */
+    @Deprecated
     @Programmatic
     public Memento create();
 
@@ -62,7 +91,10 @@ public interface MementoService {
      * <p>
      * Typically followed by {@link Memento#get(String, Class)} for each of the data values held
      * in the {@link Memento}. 
+     *
+     * @deprecated - because {@link MementoService} is deprecated.
      */
+    @Deprecated
     @Programmatic
     public Memento parse(final String str);
 
@@ -74,7 +106,10 @@ public interface MementoService {
      * The intention here is that a {@link Memento} implementation should be able to accept most/all common value types
      * (int, String, Date, BigDecimal etc), but will require entities to be converted into a serializable format,
      * specifically, as a {@link Bookmark}.
+     *
+     * @deprecated - because {@link MementoService} is deprecated.
      */
+    @Deprecated
     @Programmatic
     public boolean canSet(Object input);
 

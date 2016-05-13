@@ -6,9 +6,18 @@
 
 
 
-The `MementoService` was originally introduced to simplify the implementation of xref:ugbtb.adoc#_ugbtb_view-models[ViewModel]s which are required by the framework to return string representation of all of their backing state, moreover which is safe for use within a URL.
+The `MementoService` was originally introduced to simplify the implementation of
+xref:ugbtb.adoc#_ugbtb_view-models[ViewModel]s which are required by the framework to return string representation of
+all of their backing state, moreover which is safe for use within a URL.
 
-However, it can also be used to create a memento of arbitrary objects. Indeed, it is used internally by the core implementation of xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`] to capture the state of action invocations so that they can be executed by a background process.
+However, it can also be used to create a memento of arbitrary objects.  (Prior to `1.13.0-SNAPSHOT) it is used
+internally by the core implementation of xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`] to capture
+the state of action invocations so that they can be executed by a background process.
+
+[NOTE]
+====
+As of `1.13.0-SNAPSHOT` this service is deprecated.
+====
 
 
 
@@ -19,35 +28,34 @@ The API defined by `MementoService` is:
 
 [source,java]
 ----
+@Deprecated
 public interface MementoService {
+    @Deprecated
     public static interface Memento {
-        @Programmatic
         public Memento set(String name, Object value);
-        @Programmatic
         public <T> T get(String name, Class<T> cls);
-        @Programmatic
         public String asString();
         public Set<String> keySet();
     }
-    @Programmatic
     public Memento create();
-    @Programmatic
     public Memento parse(final String str);
-    @Programmatic
     public boolean canSet(Object input);
 }
 ----
 
-The core framework provides a default implementation of this API, namely `o.a.i.core.runtime.services.memento.MementoServiceDefault`.  The string returned (from `Memento#asString()`) is a base-64 URL encoded representation of the underlying format (an XML string).
+The core framework provides a default implementation of this API, namely
+`o.a.i.c.r.services.memento.MementoServiceDefault`.  The string returned (from `Memento#asString()`) is a base-64 URL
+encoded representation of the underlying format (an XML string).
 
 [NOTE]
 ====
-In fact, the `MementoServiceDefault` implementation does provide a mechanism to disable the URL encoding, but this is not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
-
-However, you are of course free to write some other implementation of `MementoService`, perhaps based on `MementoServiceDefault` code if you wish.
+In fact, the `MementoServiceDefault` implementation does provide a mechanism to disable the URL encoding, but this is
+not part of the `MementoService` public API. Note also that the encoding method is not pluggable.
 ====
 
-The types of objects that are supported by the `MementoService` are implementation-specific, but would typically include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary entities). Nulls can also be set.
+The types of objects that are supported by the `MementoService` are implementation-specific, but would typically
+include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary
+entities). Nulls can also be set.
 
 In the case of the default implementation provided by the core framework, the types supported are:
 
@@ -88,14 +96,14 @@ public class ExternalEntity implements ViewModel {
     private String hostname;
     private int port;
     private String id;
-    public String viewModelMemento() {              // <1>
+    public String viewModelMemento() {                      // <1>
         return mementoService.create()
                 .set("hostname", hostname)
                 .set("port", port)
                 .set("id", id)
                 .asString();
     }
-    public void viewModelInit(String mementoStr) {  // <2>
+    public void viewModelInit(String mementoStr) {          // <2>
         Memento memento = mementoService.parse(mementoStr);
         hostname = memento.get("hostname", String.class);
         port = memento.get("port", int.class);
@@ -114,7 +122,10 @@ public class ExternalEntity implements ViewModel {
 
 == Related Services
 
-The memento service is used by the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service and also xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`]. These both use a memento to capture a representation of an action invocation.
+(Prior to `1.13.0-SNAPSHOT`), the memento service is used by the
+xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service and also
+xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`]. These both use a memento to capture a
+representation of an action invocation.
 
 
 

@@ -6,25 +6,37 @@
 
 
 
-The `CommandService` service supports the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service such that `Command` objects (that reify the invocation of an action on a domain object into an object) can be persisted.
+The `CommandService` service supports the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service such
+that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
 
-Persistent `Command`s support several use cases:
+Persistent ``Command``s support several use cases:
 
-* they enable profiling of the running application (which actions are invoked then most often, what is their response time)
+* they enable profiling of the running application (which actions are invoked then most often, what is their response
+time) ++
++
+However, note that (as of `1.13.0-SNAPSHOT`) much more powerful profiling capabilities are provided by
+xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]; these can be logged using the
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].
+
 * they act as a parent to any background commands that might be invoked through the xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`]
+
 * if xref:rgsvc.adoc#_rgsvc_spi_AuditingService[auditing] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
+
 * if xref:rgsvc.adoc#_rgsvc_spi_PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique  xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
+
 * the associated xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation attribute also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
 
+== Screencast
 
-This link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
 
 [NOTE]
 ====
 Note that this screencast shows an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
+
 
 
 == SPI
@@ -34,18 +46,24 @@ The `CommandService` service defines the following very simple API:
 [source,java]
 ----
 public interface CommandService {
-    @Programmatic
-    Command create();
-    @Programmatic
-    void startTransaction(Command command, final UUID transactionId);
-    @Programmatic
-    void complete(Command command);
-    @Programmatic
-    boolean persistIfPossible(Command command);
+    Command create();                                               // <1>
+    @Deprecated
+    void startTransaction(Command command, UUID transactionId);     // <2>
+    boolean persistIfPossible(Command command);                     // <3>
+    void complete(Command command);                                 // <4>
 }
 ----
-
-where `Command` is defined as defined by the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service.
+<1> Instantiate the appropriate instance of the `Command` (as defined by the
+xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service).  Its members will be populated automatically by
+the framework.
+<2> (as of `1.13.0-SNAPSHOT`) is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
+`user` and `transactionId` fields, so there is no need for the service implementation to initialize any of these.  In
+particular, the ``Command`` will already have been initialized with the provided `transactionId` argument.
+<3> Set the hint that the `Command` should be persisted if possible (when completed, see below).
+<4> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()`
+flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.  +
++
+The framework will automatically have set the `completedAt` property of the `Command`.
 
 
 == Implementation

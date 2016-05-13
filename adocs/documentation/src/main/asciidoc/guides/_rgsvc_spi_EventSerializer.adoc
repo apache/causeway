@@ -7,6 +7,12 @@
 
 The `EmailSerializer` service is a supporting service intended for use by (any implementation of) xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].  Its responsibility is to combine the `EventMetadata` and the `EventPayload` into some serialized form (such as JSON, XML or a string) that can then be published.
 
+[WARNING]
+====
+This service is deprecated, replaced with xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]
+(`1.13.0-SNAPSHOT`).
+====
+
 See xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] for further discussion.
 
 
@@ -18,6 +24,7 @@ The SPI defined by this service is:
 
 [source,java]
 ----
+@Deprecated
 public interface EventSerializer {
     Object serialize(                   // <1>
             EventMetadata metadata,     // <2>

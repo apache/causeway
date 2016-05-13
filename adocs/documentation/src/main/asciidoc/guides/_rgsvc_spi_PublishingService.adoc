@@ -158,7 +158,7 @@ implementation of this service. Assuming that an `AppManifest` is being used to
 xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
 the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-The modules also provide services that contribute to the UI.  If contributions are not required in the UI, these can be
+The module also provides services that contribute to the UI.  If contributions are not required in the UI, these can be
 suppressed either using security or by implementing a
 xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
 

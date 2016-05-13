@@ -30,17 +30,13 @@ The table below summarizes the persistence layer SPIs defined by Apache Isis.  I
 |`AuditingService` +
 ``o.ia.m.audit`` +
 ``isis-module-audit``
-|related services:
-`AuditingService-` +
-`Contributions`,
-`AuditingService-` +
-`Repository`
+|
 
 
 |xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`o.a.i.applib.` +
 `services.publish` +
 `EventSerializer`]
-|Creates a representation of either an action invocation or a changed object being published through the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|(deprecated in `1.13.0-SNAPSHOT`) Creates a representation of either an action invocation or a changed object being published through the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
 |`RestfulObjects-` +
 `SpecEventSerializer` +
 ``o.ia.m.publishing`` +
@@ -49,25 +45,29 @@ The table below summarizes the persistence layer SPIs defined by Apache Isis.  I
 
 
 
+|xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`o.a.i.applib.` +
+`services.publish` +
+`PublisherService`]
+|(`1.13.0-SNAPSHOT`) Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
+|`PublisherServiceLogging` +
+also +
+``PublisherService-`` +
+``UsingActiveMq`` +
+``o.ia.m.publishmq`` +
+``isis-module-publishmq``
+
+|
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`o.a.i.applib.` +
 `services.publish` +
 `PublishingService`]
-|Publish any action invocations and changed objects, typically for interchange with an external system in a different bounded context.
-|`PublishingServiceMq` +
-``o.ia.m.publishmq`` +
-``isis-module-publishmq``, +
-also +
-`PublishingService` +
+|(deprecated in `1.13.0-SNAPSHOT`) Publish any action invocations and changed objects, typically for interchange with an external system in a different bounded context.
+|`PublishingService` +
 ``o.ia.m.publishing`` +
 ``isis-module-publishing``
 
-|related services:
-`PublishingService-` ++
-``Contributions``,
-`PublishingService-` ++
-``Repository``.  +
-depends on: +
-`EventSerializer`
+|
 
 
 
@@ -92,11 +92,12 @@ Key:
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`
 
 
-Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:rgant.adoc#_rgant-DomainService[`@DomainService`].  The one exception is xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`], which must be registered explicitly in `isis.properties`; this makes the service extensible (for new exceptions to be recognized).
+Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:rgant.adoc#_rgant-DomainService[`@DomainService`].
 
 
 
 include::_rgsvc_spi_AuditingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_EventSerializer.adoc[leveloffset=+1]
+include::_rgsvc_spi_PublisherService.adoc[leveloffset=+1]
 include::_rgsvc_spi_PublishingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_UserRegistrationService.adoc[leveloffset=+1]
