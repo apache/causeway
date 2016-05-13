@@ -19,29 +19,53 @@
 package org.apache.isis.applib.annotation;
 
 import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.PublisherService;
+import org.apache.isis.applib.services.publish.PublishingService;
 
+/**
+ * @deprecated - supports the deprecated {@link PublishingService}; use instead {@link PublisherService} (which ignores {@link DomainObject#publishingPayloadFactory()} but is otherwise more flexible.
+ */
+@Deprecated
 public interface PublishingPayloadFactoryForObject {
 
+    /**
+     * @deprecated - because {@link PublishingService} is deprecated.
+     */
+    @Deprecated
     @Programmatic
     public EventPayload payloadFor(Object changedObject, PublishingChangeKind publishingChangeKind);
 
     /**
      * Adapter to subclass if have an existing {@link org.apache.isis.applib.annotation.PublishedObject.PayloadFactory}.
+     *
+     * @deprecated
      */
     @Deprecated
     public static class Adapter implements PublishingPayloadFactoryForObject {
 
         private final PublishedObject.PayloadFactory payloadFactory;
 
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public Adapter(final PublishedObject.PayloadFactory payloadFactory) {
             this.payloadFactory = payloadFactory;
         }
 
+        /**
+         * @deprecated
+         */
+        @Deprecated
         @Override
         public EventPayload payloadFor(final Object changedObject, final PublishingChangeKind publishingChangeKind) {
             return payloadFactory.payloadFor(changedObject, PublishingChangeKind.from(publishingChangeKind));
         }
 
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public PublishedObject.PayloadFactory getPayloadFactory() {
             return payloadFactory;
         }

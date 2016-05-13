@@ -7,7 +7,7 @@
 
 
 This service simply provides access to the home page object (if any) that is returned from the domain service
-action annotated with xref:rgant.adoc#_rgant_HomePage[`@HomePage`].
+action annotated with xref:rgant.adoc#_rgant-HomePage[`@HomePage`].
 
 It is originally introduced to support the default implementation of
 xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`], but was factored out to support alternative implementations

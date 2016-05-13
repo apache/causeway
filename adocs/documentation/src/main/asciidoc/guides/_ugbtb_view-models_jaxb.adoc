@@ -16,8 +16,8 @@ most powerful of all the various ways of writing view models:
 
 * their entire state (collections as well as properties) is automatically managed from interaction to interaction. +
 +
-In contrast, using xref:rgant.adoc#_rgant_ViewModel[`@ViewModel`] (or its
-xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] equivalent) will only manage the state of
+In contrast, using xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] (or its
+xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] equivalent) will only manage the state of
 properties, but not collections.  And if using the xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`]
 interface, then the programmer must write all the state management (lots of boilerplate).
 

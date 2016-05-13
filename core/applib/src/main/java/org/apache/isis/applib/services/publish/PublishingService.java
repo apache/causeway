@@ -29,14 +29,9 @@ import org.apache.isis.applib.annotation.Programmatic;
  * annotation, and an action is marked to be published using the
  * {@link org.apache.isis.applib.annotation.PublishedAction} annotation.
  *
- * <p>
- * There are currently two implementations, <tt>PublishingServiceJdo</tt> (part of the
- * <tt>o.a.i.module:isis-module-publishing-jdo</tt>) and the demo
- * {@link org.apache.isis.applib.services.publish.PublishingService.Stderr}.
- *
- * <p>
- * To use either service, must include on the classpath and also register the service (eg in <tt>isis.properties</tt>).
+ * @deprecated - use the {@link PublisherService} instead.
  */
+@Deprecated
 public interface PublishingService {
 
     /**
@@ -49,10 +44,27 @@ public interface PublishingService {
     @Programmatic
     void publish(EventMetadata metadata, EventPayload payload);
     
+    /**
+     * @deprecated  - not every implementation will use an {@link EventSerializer}, so this ought not to have been
+     * defined in the interface.
+     */
+    @Programmatic
+    @Deprecated
+    void setEventSerializer(EventSerializer eventSerializer);
+
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     class Stderr implements PublishingService {
 
         private EventSerializer eventSerializer = new EventSerializer.Simple();
 
+        /**
+         * @deprecated
+         */
+        @Deprecated
         @Hidden
         @Override
         public void publish(EventMetadata metadata, EventPayload payload) {
@@ -60,18 +72,16 @@ public interface PublishingService {
             System.err.println(serializedEvent);
         }
 
+        /**
+         * @deprecated
+         */
+        @Deprecated
         @Override
         public void setEventSerializer(EventSerializer eventSerializer) {
             this.eventSerializer = eventSerializer;
         }
     }
 
-    /**
-     * @deprecated  - not every implementation will use an {@link EventSerializer}, so this ought not to have been defined in the interface.
-     */
-    @Programmatic
-    @Deprecated
-    void setEventSerializer(EventSerializer eventSerializer);
 }
 
 

@@ -49,18 +49,18 @@ corresponding domain event.
 * link:https://issues.apache.org/jira/browse/ISIS-1329[ISIS-1329] - Extend hint support for "show all"
 * link:https://issues.apache.org/jira/browse/ISIS-1327[ISIS-1327] - Change the view mode of the select2 (value drop down) to be a simple text field.
 * link:https://issues.apache.org/jira/browse/ISIS-1324[ISIS-1324] - Allow multiple different views of same collection in a layout (xref:rgfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts])
-* link:https://issues.apache.org/jira/browse/ISIS-1323[ISIS-1323] - Deprecate @CollectionLayout#renderType, since is duplicated by xref:rgant.adoc#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+* link:https://issues.apache.org/jira/browse/ISIS-1323[ISIS-1323] - Deprecate @CollectionLayout#renderType, since is duplicated by xref:rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 * link:https://issues.apache.org/jira/browse/ISIS-1322[ISIS-1322] - Mixins not exposing the mixedin object in events (for subscribers to veto).
 * link:https://issues.apache.org/jira/browse/ISIS-1321[ISIS-1321] - Extend xref:rgsvc.adoc#_rgsvc_api_MetaModelService[`MetaModelService`] to allow CSV of metamodel to be downloaded.
 * link:https://issues.apache.org/jira/browse/ISIS-1320[ISIS-1320] - Move xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] to applib (and simplify)
 * link:https://issues.apache.org/jira/browse/ISIS-1312[ISIS-1312] - Improve xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbServiceDefault#xsd(...)`] to correctly reference the Isis common schema imports.
 * link:https://issues.apache.org/jira/browse/ISIS-1300[ISIS-1300] - Allow the enablement of the WicketSource plugin to be configurable, and disabled by default
-* link:https://issues.apache.org/jira/browse/ISIS-1299[ISIS-1299] - xref:rgant.adoc#_rgant_ViewModel[`@ViewModel`] and xref:rgant.adoc#_rgant_XmlRootElement[`@XmlRootElement`] view models should automatically support isCloneable.
+* link:https://issues.apache.org/jira/browse/ISIS-1299[ISIS-1299] - xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] and xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`] view models should automatically support isCloneable.
 * link:https://issues.apache.org/jira/browse/ISIS-1298[ISIS-1298] - Fix deprecated annotation use for ViewModel.Cloneable#clone
 * link:https://issues.apache.org/jira/browse/ISIS-1295[ISIS-1295] - Run integration tests using thread-local, to allow "complete" tests that also exercise, eg Quartz jobs.
 * link:https://issues.apache.org/jira/browse/ISIS-1240[ISIS-1240] - Derive icon from service when not provided
 * link:https://issues.apache.org/jira/browse/ISIS-1239[ISIS-1239] - For wicket ui, use a cookie or similar to remember the hint from last time (xref:rgfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts])
-* link:https://issues.apache.org/jira/browse/ISIS-1228[ISIS-1228] - Reorganizing/splitting out xref:rgant.adoc#_rgant_DomainObjectContainer[`@DomainObjectContainer`] service.
+* link:https://issues.apache.org/jira/browse/ISIS-1228[ISIS-1228] - Reorganizing/splitting out xref:rgant.adoc#_rgant-DomainObjectContainer[`@DomainObjectContainer`] service.
 * link:https://issues.apache.org/jira/browse/ISIS-1048[ISIS-1048] - Make view model URLs more secure, eg through a private key (xref:rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`]).
 * link:https://issues.apache.org/jira/browse/ISIS-1037[ISIS-1037] - Support layout.xml as well as layout.json (xref:rgfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts])
 * link:https://issues.apache.org/jira/browse/ISIS-806[ISIS-806] - In Wicket viewer, shouldn't be possible to invoke an action if editing a form.

@@ -135,13 +135,13 @@ include::_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] annotations or using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotations or using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic (XML) layouts].
 |x||||||||x|
 
 
 
 |link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:rgant.adoc#_rgant_Action_invokeOn[`@Action#invokeOn()`], and using the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience.
+Invoking (no-arg) action on multiple objects at once (using xref:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`], and using the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience.
 |||x||||||x|
 
 
@@ -161,7 +161,7 @@ Using the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`], xref:rgcms.a
 
 
 |link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
-Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`IconUiEvent`] as per the xref:rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`IconUiEvent`] as per the xref:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
 ||||||x||||
 
 
@@ -221,7 +221,7 @@ Demonstrates how the end-user can copy and share URLs for domain objects - inclu
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ugvw.adoc[Wicket viewer], and how the developer can ensure that xref:rgant.adoc#_rgant_DomainObjectLayout_bookmarking[domain objects] and (xref:rgant.adoc#_rgant_Action_semantics[query-only]) xref:rgant.adoc#_rgant_ActionLayout_bookmarking[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:ugvw.adoc[Wicket viewer], and how the developer can ensure that xref:rgant.adoc#_rgant-DomainObjectLayout_bookmarking[domain objects] and (xref:rgant.adoc#_rgant-Action_semantics[query-only]) xref:rgant.adoc#_rgant-ActionLayout_bookmarking[actions] can be bookmarked.
 |||x|||||||
 
 
@@ -267,7 +267,7 @@ Using a domain event xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[sub
 
 
 |link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
-Using the xref:rgant.adoc#_rgant_Title[`@Title`] annotation (instead of the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+Using the xref:rgant.adoc#_rgant-Title[`@Title`] annotation (instead of the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
 |x||||||||x|
 
 
@@ -280,7 +280,7 @@ Using the xref:rgant.adoc#_rgant_Title[`@Title`] annotation (instead of the xref
 
 
 |link:https://www.youtube.com/watch?v=yi52Gbd3lmY[027^] +
-How to write an xref:ugtst.adoc#_ugtst_integ-test-support[integration test] for an xref:rgant.adoc#_rgant_Mixin[mixin].
+How to write an xref:ugtst.adoc#_ugtst_integ-test-support[integration test] for an xref:rgant.adoc#_rgant-Mixin[mixin].
 ||x||||||||
 
 
@@ -303,7 +303,7 @@ Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from
 
 
 |link:https://www.youtube.com/watch?v=AXuxULuRtm0[029^] +
-Using the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] module to remove boilerplate from your domain object (xref:rgant.adoc#_rgant_ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters).
+Using the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] module to remove boilerplate from your domain object (xref:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout#named()`] annotation attribute on action parameters).
 |||||x|||x||
 
 
@@ -324,7 +324,7 @@ How to validate action parameters using a supporting xref:rgcms.adoc#_rgcms_meth
 
 
 |link:https://www.youtube.com/watch?v=1Vlzob89pYI[031^] +
-How to validate action parameters using the xref:rgant.adoc#_rgant_Parameter_mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
+How to validate action parameters using the xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
 |||||||||x|
 
 
@@ -383,7 +383,7 @@ include::_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
-How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rgant.adoc#_rgant_PropertyLayout_hidden[`@PropertyLayout#hidden()`]).
+How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:rgant.adoc#_rgant-PropertyLayout_hidden[`@PropertyLayout#hidden()`]).
 ||||x||||||
 
 
@@ -428,7 +428,7 @@ Using BigDecimal as a property within a domain object, also demonstrating the "s
 
 
 |link:https://www.youtube.com/watch?v=n9Oy0m2bplw[042^] +
-How to use the xref:rgant.adoc#_rgant_Digits[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.
+How to use the xref:rgant.adoc#_rgant-Digits[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.
 |||||||||x|
 
 
@@ -447,7 +447,7 @@ How to use the supporting xref:rgcms.adoc#_rgcms_methods_prefixes_default[`defau
 
 
 |link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
-How to use xref:rgant.adoc#_rgant_DomainObject_bounded[`@DomainObject#bounded()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+How to use xref:rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
 |||||||||x|
 
 
@@ -483,7 +483,7 @@ extension.
 
 
 |link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
-Using the xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`] annotation to exclude methods from a domain object
+Using the xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`] annotation to exclude methods from a domain object
 (eg implementing methods of an interface as defined by the (non-ASF)
 http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2 ] wicket extension) that would
 otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
@@ -552,7 +552,7 @@ How to rename a menu (on the top-level menubar) as rendered in the xref:ugvw.ado
 
 
 |link:https://www.youtube.com/watch?v=mgHqRxQrp28[058^] +
-How to rename various elements (collections, title) of the xref:rgant.adoc#_rgant_HomePage[home page] view model,
+How to rename various elements (collections, title) of the xref:rgant.adoc#_rgant-HomePage[home page] view model,
 for an improved initial page.
 ||||||||||x
 

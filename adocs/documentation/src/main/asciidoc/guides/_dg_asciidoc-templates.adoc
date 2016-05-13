@@ -141,9 +141,9 @@ a hyperlink to a bookmark within the reference guide for annotations, where:
 
 for example:
 
-pass:[<pre>xref:rgant.adoc#_rgant_aaa_main[Core annotations\]</pre>]
+pass:[<pre>xref:rgant.adoc#_rgant-aaa_main[Core annotations\]</pre>]
 
-|xref:rgant.adoc#_rgant_aaa_main[Core annotations]
+|xref:rgant.adoc#_rgant-aaa_main[Core annotations]
 
 
 

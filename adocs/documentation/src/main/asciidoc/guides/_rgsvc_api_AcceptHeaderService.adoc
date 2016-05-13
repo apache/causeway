@@ -49,7 +49,7 @@ The diagram below illustrated this:
 
 image::{_imagesdir}reference-services-api/acceptheaderservice.png[width="700px",link="{_imagesdir}reference-services-api/acceptheaderservice.png"]
 
-The REST request is submitted to a domain service with a xref:rgant.adoc#_rgant_DomainService_nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
+The REST request is submitted to a domain service with a xref:rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
 HTTP `Accept` header.  Based on this it delegates to the appropriate underlying domain service (with a nature of
 `DOMAIN` so that they are not exposed in the REST API at all).
 

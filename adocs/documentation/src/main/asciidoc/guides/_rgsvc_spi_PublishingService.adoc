@@ -6,7 +6,13 @@
 
 
 
-The `PublishingService2` API (the `PublishingService2` subinterface has been added in `1.13.0-SNAPSHOT`) is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
+The `PublishingService` API is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
+
+
+[WARNING]
+====
+This service is deprecated, replaced with xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`).
+====
 
 
 
@@ -16,20 +22,17 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface PublishingService2 {
+@Deprecated
+public interface PublishingService {
     public void publish(
         EventMetadata metadata,                                 // <1>
         EventPayload payload);                                  // <2>
-    public void republish(Command);                             // <3>
-    @Deprecated
-    void setEventSerializer(EventSerializer eventSerializer);   // <4>
+    void setEventSerializer(EventSerializer eventSerializer);   // <3>
 }
 ----
 <1> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`], date/time etc
 <2> for published actions, an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, an `EventPayloadForObjectChanged` (or subclass thereof)
-<3> (`1.13.0-SNAPSHOT`) allow a `Command` representing an action to be republished by the application (eg if an error occurred).  Note that this relies upon the `Command#getMemento()` to
-return serialized xref:rgcms.adoc#_rgcms_schema-aim[action invocation memento].
-<4> injects in the xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
+<3> injects in the xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
 
 
 Typically implementations will use the injected `EventSerializer` to convert the metadata and payload into a form to be published:
@@ -47,36 +50,19 @@ The serialized form returned by `EventSerializer` must be in a form that the `Pu
 
 == Implementation
 
-The framework provides no default implementations of this service.  There are however two implementations available in
-the (non-ASF) link:http://isisaddons.org[Isis Addons].
-
-=== isis-module-publishing
-
 The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an
 implementation (`org.isisaddons.module.publishing.dom.PublishingService`) that persists each
 event as a `PublishedEvent` entity.  This holds the serialized form of the event metadata and payload as translated
 into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`,
-namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional
+namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the
+link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional
 JSON nodes.
 
 The `PublishedEvent` entity also has a `state` field taking the values either "QUEUED" or "PROCESSED".  The intention
 here is that an event bus can poll this table to grab pending events and dispatch them to downstream systems.  When
 ``PublishedEvent``s are persisted initially they always take the value "QUEUED".
 
-=== isis-module-publishmq
-
-The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module provides an
-implementation (`org.isisaddons.module.publismq.dom.servicespi.PublishingServiceUsingActiveMq`) that publishes each 
-action invocation as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.  These are converted into
-a canonical XML form (the xref:rgcms.adoc#_rgcms_schema-aim[ActionInvocationMemento] schema) using the
-`ActionInvocationMementoDtoUtils` class; the idea
-being that subscribers on the ActiveMQ message queue can then query back for further information, for example using
-the xref:ugvro.adoc#[RestfulObjects viewer].
-
-[NOTE]
-====
-At the time of writing this implementation does not publish changed object events.
-====
+The framework provides no default implementations of this service.
 
 
 
@@ -89,7 +75,14 @@ To indicate that a changed object should be published is to annotate it with the
 
 It is also possible to "fine-tune" the `EventPayload` using the `#publishingFactory()` attribute (for both annotations).  By default the `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the action invocation provides details of the action arguments and result (if any) of that action.  However, the payload does not (by default) include any information about the new state of these objects. It is therefore the responsibility of the subscriber to call back to Apache Isis to determine any information that has not been published.
 
-Although the representations (if using the Restful Object serializer and Restful Objects viewer) does include hrefs for the objects, this nevertheless requires an additional network call to obtain this information).
+[NOTE]
+====
+The replacement xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] does __not__ support the concept of "payload factories" (but is otherwise more flexible).
+====
+
+
+Although the representations (if using the Restful Object serializer and Restful Objects viewer) does include hrefs
+for the objects, this nevertheless requires an additional network call to obtain this information).
 
 In some circumstances, then, it may make more sense to eagerly "push" information about the change to the subscriber by including that state within the payload.
 
@@ -99,8 +92,8 @@ For actions, we implement the `PublishingPayloadFactoryForAction` (in `o.a.i.app
 
 [source,java]
 ----
+@Deprecated
 public interface PublishingPayloadFactoryForAction {
-    @Programmatic
     public EventPayload payloadFor(
             Identifier actionIdentifier,
             Object target,
@@ -115,9 +108,8 @@ For objects, the interface to implement is `PublishingPayloadFactoryForObject`:
 
 [source,java]
 ----
+@Deprecated
 public interface PublishingPayloadFactoryForObject {
-
-    @Programmatic
     public EventPayload payloadFor(
         Object changedObject,
         PublishingChangeKind publishingChangeKind);     // <1>
@@ -161,10 +153,10 @@ public class ToDoItemChangedPayloadFactory implements PublishingPayloadFactoryFo
 
 There is no default implementation of this service provided by the core Apache Isis framework.
 
-Both the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishing[publishing] module and the
-http://github.com/isisaddons/isis-module-publishmq[publishmq] module provide implementations of this service.
-Assuming that an `AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
-then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+The (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishing[publishing] module provides an
+implementation of this service. Assuming that an `AppManifest` is being used to
+xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
+the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 The modules also provide services that contribute to the UI.  If contributions are not required in the UI, these can be
 suppressed either using security or by implementing a
@@ -176,13 +168,31 @@ xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
 
 == Related Services
 
-The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`].
+The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from
+Apache Isis to some other system. Here the only events published are those that action invocations (for actions
+annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects
+annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`].
 
-The xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
+The xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] is intended as a replacement for this service.  The
+use case for `PublisherService` is the same: coarse-grained publishing of events for system-to-system interactions.  It
+is in most respects more flexible though: events are published both for action invocations (annotated with
+xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and also for property edits (annotated with
+xref:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`].  It also publishes changed objects (for objects
+annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]).  However, rather than
+publishing one event for every changed objects, it publishes a single event that identifies all objects created,
+updated or deleted.
 
-All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] interface.
+Another significant difference between `PublishingService` and `PublisherService` is in the content of the events
+themselves.  While the former uses the xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] to create an
+ad-hoc serialization of the action being invoked, the latter uses the xref:rgcms.adoc#_rgcms_schema[DTOs/XML schemas]
+as a formal specification of the nature of the interaction (action invocation, property edit or changed objects).
 
-
+The xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] meanwhile differs from both `PublishingService` and
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] in that it is intended for fine-grained
+publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation
+is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable,
+for example.  (That said, it is possible to obtain a serialization of the action invocation/property edit causing the
+current event to be raised using xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service).
 
 
 == Design Notes

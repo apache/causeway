@@ -18,9 +18,9 @@ Tabs and tabgroups are only supported using xref:ugfun.adoc#_ugfun_object-layout
 
 == `@MemberOrder`
 
-The xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
+The xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
 
-The annotation defines two attributes, xref:rgant.adoc#_rgant_MemberOrder_name[`name()`] and xref:rgant.adoc#_rgant_MemberOrder_sequence[`sequence()`].  Their usage depends on the member type:
+The annotation defines two attributes, xref:rgant.adoc#_rgant-MemberOrder_name[`name()`] and xref:rgant.adoc#_rgant-MemberOrder_sequence[`sequence()`].  Their usage depends on the member type:
 
 * for properties, the `name()` is used to group properties together into a member group (also called a property group
 or a fieldset.  The `sequence()` then orders properties within these groups. If no `name()` is specified then the
@@ -67,7 +67,7 @@ public class ToDoItem {
 
 This defines three property (or member) groups, "General", "Detail" and "Misc"; "General" is the default if no `name` attribute is specified. Properties in the same member group are rendered together, as a fieldset.
 
-In addition, actions can optionally be associated (rendered close to) either properties or actions. This is done by overloading the ``@MemberOrder``'s xref:rgant.adoc#_rgant_MemberOrder_name[`name()`] attribute, holding the value of the property or collection.
+In addition, actions can optionally be associated (rendered close to) either properties or actions. This is done by overloading the ``@MemberOrder``'s xref:rgant.adoc#_rgant-MemberOrder_name[`name()`] attribute, holding the value of the property or collection.
 
 For example:
 
@@ -94,7 +94,7 @@ public class ToDoItem {
 will associate the `completed()` and `notYetCompleted()` actions with the `complete` property, and will associate the `add()` and `remove()` actions with the `dependencies` collection.
 
 
-The value of xref:rgant.adoc#_rgant_MemberOrder_sequence[`sequence()`] is a string.  The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.
+The value of xref:rgant.adoc#_rgant-MemberOrder_sequence[`sequence()`] is a string.  The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.
 
 Even better is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 -- which allows for an indefinite amount of future insertion.  It also allows subclasses to insert their class members as required.
 
@@ -103,7 +103,7 @@ Even better is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1
 
 == `@MemberGroupLayout`
 
-The xref:rgant.adoc#_rgant_MemberGroupLayout[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.  The annotation also specifies the relative width of the columns.
+The xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.  The annotation also specifies the relative width of the columns.
 
 The property groups/fieldsets in this case are those that are inferred from the `@MemberOrder#name()` attribute.
 
@@ -111,7 +111,7 @@ The property groups/fieldsets in this case are those that are inferred from the 
 ====
 It is also possible to combine `@MemberOrder` with dynamic layouts, either using xref:ugfun.adoc#_ugfun_object-layout_xml[XML] or xref:ugfun.adoc#_ugfun_object-layout_dynamic[JSON].  The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.  The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
 
-When dynamic layouts are used this way, the xref:rgant.adoc#_rgant_MemberGroupLayout[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] annotation (and the other layout annotations, xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] and xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`]) are all still honoured.
+When dynamic layouts are used this way, the xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation (and the other layout annotations, xref:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) are all still honoured.
 ====
 
 For example:

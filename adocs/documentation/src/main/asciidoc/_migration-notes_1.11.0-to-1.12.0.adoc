@@ -18,10 +18,10 @@ The major new feature in 1.12.0 is xref:ugfun.adoc#_ugfun_object-layout_dynamic_
 much enhanced support for custom layouts.
 
 The new `Xxx.layout.xml` file is optional; without it domain objects will
-continue to be rendered as before, using metadata from annotations (xref:rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`],
-xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`], xref:rgant.adoc#_rgant_CollectionLayout[`@CollectionLayout`], 
-xref:rgant.adoc#_rgant_ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] and
-xref:rgant.adoc#_rgant_MemberGroupLayout[`@MemberGroupLayout`]), and also from any xref:ugfun.adoc#_ugfun_object-layout_dynamic[`Xxx.layout.json`]
+continue to be rendered as before, using metadata from annotations (xref:rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`],
+xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`],
+xref:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] and
+xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]), and also from any xref:ugfun.adoc#_ugfun_object-layout_dynamic[`Xxx.layout.json`]
 file that might already exist.  There is therefore no requirement to move to the new more flexible XML-based layout.
 
 If you do want to start using the new format, then you will find that 1.12.0 provides a mixin action (available in
@@ -60,8 +60,8 @@ of these members by subscribing to their respective domain events.
 
 == JAXB view models are editable
 
-All xref:rgant.adoc#_rgant_XmlRootElement[`@XmlRootElement`] view models are now implicitly editable.  Therefore any
-view models that should be read-only should have editing attribute disabled using xref:rgant.adoc#_rgant_DomainObject_editing[`@DomainObject#editing()`] (or use a xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to veto editability).
+All xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`] view models are now implicitly editable.  Therefore any
+view models that should be read-only should have editing attribute disabled using xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`] (or use a xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to veto editability).
 
 
 

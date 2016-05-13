@@ -541,7 +541,7 @@ msgstr "<i>Quantité</i>"
 
 For this to work, the `namedEscaped()` attribute must be specified using either the
 xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic layout] json file, or using an annotation such as
-xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] or xref:rgant.adoc#_rgant_ParameterLayout[`@ParameterLayout`].
+xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] or xref:rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`].
 
 For example:
 

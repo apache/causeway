@@ -21,7 +21,7 @@ page "no results". When clicking the back button in the browser the user sees
   null response or invoking a void action.  But how to implement this?_
 
 One way to implement this idea is to provide a custom implementation of the xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`] SPI domain service.  The default implementation will either return
-the current object (if not null), else the home page (as defined by xref:rgant.adoc#_rgant_HomePage[`@HomePage`]) if
+the current object (if not null), else the home page (as defined by xref:rgant.adoc#_rgant-HomePage[`@HomePage`]) if
 one exists.
 
 The following custom implementation refines this to use the breadcrumbs (available in the Wicket viewer) to return the

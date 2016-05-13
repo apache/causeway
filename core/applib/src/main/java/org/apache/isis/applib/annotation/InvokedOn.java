@@ -28,6 +28,9 @@ public enum InvokedOn {
     public boolean isObject() { return this == OBJECT; }
     public boolean isCollection() { return this == COLLECTION; }
 
+    /**
+     * @deprecated - because the {@link Bulk} annotation is deprecated.
+     */
     @Deprecated
     public static InvokedOn from(final Bulk.InteractionContext.InvokedAs invokedAs) {
         if (invokedAs == null) return null;
@@ -37,6 +40,9 @@ public enum InvokedOn {
         throw new IllegalArgumentException("Unrecognized bulk interactionContext invokedAs: " + invokedAs);
     }
 
+    /**
+     * @deprecated - because the {@link Bulk} annotation is deprecated.
+     */
     @Deprecated
     public static Bulk.InteractionContext.InvokedAs from(final InvokedOn invokedOn) {
         if (invokedOn == null) return null;

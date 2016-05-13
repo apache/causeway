@@ -15,9 +15,9 @@ One way to implement is to use the xref:rgsvc.adoc#_rgsvc_api_EventBusService[ev
 
 * Set up a xref:rgcsm.adoc#_rgcsm_classes_domainevent[domain event] xref:rgcsm.adoc#_rgcsm_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
 
-* if the change is made through an action, you can use xref:rgant.adoc#_rgant_Action_domainEvent[`@Action#domainEvent()`].
+* if the change is made through an action, you can use xref:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`].
 
-if if the change is made through an edit, you can use xref:rgant.adoc#_rgant_Property_domainEvent[`@Property#domainEvent()`].
+if if the change is made through an edit, you can use xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`].
 
 You'll need some way to know which fields should be spell checked.  Two ways spring to mind:
 
