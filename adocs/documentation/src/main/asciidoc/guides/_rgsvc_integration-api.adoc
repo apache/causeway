@@ -103,6 +103,15 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 
 
 
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+
 include::_rgsvc_api_BookmarkService.adoc[leveloffset=+1]
 include::_rgsvc_api_DeepLinkService.adoc[leveloffset=+1]
 include::_rgsvc_api_EmailService.adoc[leveloffset=+1]

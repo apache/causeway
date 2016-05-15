@@ -6,4 +6,37 @@
 
 
 
-NOTE: TODO
+The `InteractionDtoServiceInternal` internal domain service (`1.13.0-SNAPSHOT`) is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:rgcms.adoc#_rgcms_schema-ixn["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service).
+
+
+== SPI & Implementation
+
+The SPI of the service is:
+
+[source,java]
+----
+public interface InteractionDtoServiceInternal {
+    ActionInvocationDto asActionInvocationDto(          // <1>
+            ObjectAction objectAction,
+            ObjectAdapter targetAdapter,
+            List<ObjectAdapter> argumentAdapters);
+    PropertyEditDto asPropertyEditDto(                  // <2>
+            OneToOneAssociation property,
+            ObjectAdapter targetAdapter,
+            ObjectAdapter newValueAdapterIfAny);
+    ActionInvocationDto updateResult(                   // <3>
+            ActionInvocationDto actionInvocationDto,
+            ObjectAction objectAction,
+            Object resultPojo);
+}
+----
+<1> called by the framework when invoking an action, to create a DTO capturing the details of the action invocation (target, arguments etc).
+<2> called by the framework when editing a property, to create a DTO (for the xref:rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) capturing the details of the property edit (target, new value etc).
+<3> called by the framework to attach the result of an action invocation to the aforementioned DTO.
+
+The service is implemented by `o.a.i.core.runtime.services.ixn.InteractionDtoServiceInternalDefault`.
+
+
+== Related Services
+
+The design of this service is similar to that of xref:rgsvc.adoc#_rgsvc_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`], used to create the `CommandDto` (from the xref:rgcms.adoc#_rgcms_schema-cmd["cmd" schema]).

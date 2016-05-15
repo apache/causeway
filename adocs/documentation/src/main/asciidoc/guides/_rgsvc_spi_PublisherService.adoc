@@ -48,11 +48,12 @@ The full API of `PublishedObjects` itself is:
 [source,java]
 ----
 public interface PublishedObjects extends HasTransactionId, HasUsername {
-    UUID getTransactionId();        // <1>
-    String getUsername();           // <2>
-    Timestamp getCompletedAt();     // <3>
-    ChangesDto getDto();            // <4>
-    int getNumberLoaded();          // <5>
+    UUID getTransactionId();                                    // <1>
+    String getUsername();                                       // <2>
+    Timestamp getCompletedAt();                                 // <3>
+    ChangesDto getDto();                                        // <4>
+
+    int getNumberLoaded();                                      // <5>
     int getNumberCreated();
     int getNumberUpdated();
     int getNumberDeleted();

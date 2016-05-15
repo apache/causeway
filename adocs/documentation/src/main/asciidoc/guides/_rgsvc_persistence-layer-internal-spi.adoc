@@ -70,6 +70,8 @@ xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
 
 Key:
 
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
 * `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
 * `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 

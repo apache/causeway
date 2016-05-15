@@ -430,6 +430,8 @@ public class IsisTransaction implements TransactionScopedComponent {
             setAbortCause(new IsisTransactionManagerException(ex));
             completeCommandAndInteractionAndClearDomainEvents();
             throw ex;
+        } finally {
+            changedObjectsServiceInternal.clearChangedObjectProperties();
         }
     }
 

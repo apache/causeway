@@ -35,6 +35,13 @@ Subtypes of a given type (eg xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[
 |===
 
 
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
 
 
 include::_rgsvc_spi_ClassDiscoveryService.adoc[leveloffset=+1]

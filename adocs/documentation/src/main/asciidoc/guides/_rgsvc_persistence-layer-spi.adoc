@@ -90,6 +90,8 @@ Key:
 
 * `o.a.i` is an abbreviation for `org.apache.isis`
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 
 
 Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:rgant.adoc#_rgant-DomainService[`@DomainService`].

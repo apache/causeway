@@ -57,6 +57,10 @@ Impl'n (g: a:)
 
 Key:
 
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 * `o.a.i.v.ro` is an abbreviation for `org.apache.isis.viewer.restfulobjects`
 
 

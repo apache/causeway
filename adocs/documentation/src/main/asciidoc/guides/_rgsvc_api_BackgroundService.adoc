@@ -8,7 +8,7 @@
 The `BackgroundService2` domain service, and also the companion
 xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands
 to be persisted such that they may be invoked in the background.  (The `BackgroundService2` and
-`BackgroundCommandService2` extensions to these services introduced in `1.13.0-SNAPSHOT`).
+`BackgroundCommandService2` extensions to these services have been introduced in `1.13.0-SNAPSHOT`).
 
 The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way,
 and persisting it rather than executing it directly.

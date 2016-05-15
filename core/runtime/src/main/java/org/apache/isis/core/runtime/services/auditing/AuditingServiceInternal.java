@@ -57,21 +57,15 @@ public class AuditingServiceInternal {
         final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
                 changedObjectsServiceInternal.getChangedObjectProperties();
 
-        try {
-            if(!canAudit()) {
-                return;
-            }
+        if(!canAudit()) {
+            return;
+        }
 
-            final String currentUser = userService.getUser().getName();
-            final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();
+        final String currentUser = userService.getUser().getName();
+        final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();
 
-            for (Map.Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
-                auditChangedProperty(currentTime, currentUser, auditEntry);
-            }
-
-        } finally {
-            // not needed in production, but is required for integration testing
-            changedObjectsServiceInternal.clearChangedObjectProperties();
+        for (Map.Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
+            auditChangedProperty(currentTime, currentUser, auditEntry);
         }
     }
 

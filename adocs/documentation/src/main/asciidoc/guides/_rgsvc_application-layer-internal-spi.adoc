@@ -35,11 +35,25 @@ Impl'n (g: a:)
 |xref:rgsvc.adoc#_rgsvc_api_CommandDtoServiceInternal[`o.a.i.c.` +
 `m.s.command` +
 `CommandDtoServiceInternal`]
-|(`1.13.0-SNAPSHOT`) Creates memento of current action invocation, for use either as a reified command or for implementations of the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|(`1.13.0-SNAPSHOT`) Creates memento of current action invocation, for use as a serializable XML reified command.  The
+most notable usage of this is to allow the execution of the `Command` to be deferred to run in the background (via
+xref:rgant.adoc#_rgant-Action_command[`@Action#commandExecuteIn()`] or
+xref:rgant.adoc#_rgant-Property_command[`@Property#commandExecuteIn()`].
 |`CommandDtoService-` +
 `InternalServiceDefault` +
 ``o.a.i.c.r.s.command`` +
 ``isis-core-runtime``
+|
+
+
+|xref:rgsvc.adoc#_rgsvc_api_InteractionDtoServiceInternal[`o.a.i.c.` +
+`m.s.ixn` +
+`InteractionDtoServiceInternal`]
+|(`1.13.0-SNAPSHOT`) Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|`CommandDtoService-` +
+`InternalServiceDefault` +
+``o.a.i.c.m.s.command`` +
+``isis-core-metamodel``
 |
 
 
@@ -49,6 +63,8 @@ Impl'n (g: a:)
 
 Key:
 
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
 * `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
 * `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 

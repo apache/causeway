@@ -110,15 +110,24 @@ public class Interaction implements HasTransactionId {
     }
 
     /**
-     * Implemented by the framework (and modelled after {@link Callable}), is the implementation
+     * <b>NOT API</b>: intended only to be implemented by the framework.
+     *
+     * <p>
+     * (Modelled after {@link Callable}), is the implementation
      * by which the framework actually performs the interaction.
-     * @param <T>
      */
     public interface MemberExecutor<T extends Execution> {
         Object execute(final T currentExecution);
     }
 
-
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     *
+     * <p>
+     * Use the provided {@link MemberExecutor} to invoke an action, with the provided
+     * {@link ActionInvocation} capturing the details of said action.
+     * </p>
+     */
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
             final ActionInvocation actionInvocation) {
@@ -128,6 +137,14 @@ public class Interaction implements HasTransactionId {
         return executeInternal(memberExecutor, actionInvocation);
     }
 
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     *
+     * <p>
+     * Use the provided {@link MemberExecutor} to edit a property, with the provided
+     * {@link PropertyEdit} capturing the details of said property edit.
+     * </p>
+     */
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
             final PropertyEdit propertyEdit) {
@@ -165,15 +182,7 @@ public class Interaction implements HasTransactionId {
     }
 
     /**
-     * The current (most recently pushed) {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent}.
-     *
-     * <p>
-     *     Note that the {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent} itself is mutable,
-     *     as its {@link AbstractDomainEvent#getEventPhase()} phase} changes from
-     *     {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTING executing} to
-     *     {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED executed}.  The
-     *     event returned from this method will always be in one or other of these phases.
-     * </p>
+     * The current (most recently pushed) {@link Execution}.
      */
     @Programmatic
     public Execution getCurrentExecution() {
@@ -233,7 +242,7 @@ public class Interaction implements HasTransactionId {
     }
 
     /**
-     * Returns a (list of) graph(es) indicating the domain events in the order that they were pushed.
+     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
      *
      * <p>
      *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
@@ -310,7 +319,7 @@ public class Interaction implements HasTransactionId {
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
      * being made by way of the {@link WrapperFactory}).
      */
-    public static class Execution<T extends MemberExecutionDto, E extends AbstractDomainEvent<?>> {
+    public static abstract class Execution<T extends MemberExecutionDto, E extends AbstractDomainEvent<?>> {
 
         //region > fields, constructor
 
@@ -321,7 +330,7 @@ public class Interaction implements HasTransactionId {
         private final Interaction interaction;
         private final InteractionType interactionType;
 
-        public Execution(
+        protected Execution(
                 final Interaction interaction,
                 final InteractionType interactionType,
                 final String memberIdentifier,
@@ -383,6 +392,9 @@ public class Interaction implements HasTransactionId {
             return parent;
         }
 
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
         public void setParent(final Execution<?,?> parent) {
             this.parent = parent;
             if(parent != null) {
@@ -407,7 +419,7 @@ public class Interaction implements HasTransactionId {
          * this action invocation/property edit.
          *
          * <p>
-         *     This event field is called by the framework before the action invocation/property edit itself;
+         *     This event field is set by the framework before the action invocation/property edit itself;
          *     if read by the executing action/property edit method it will be in the
          *     {@link AbstractDomainEvent.Phase#EXECUTING executing} phase.
          * </p>
@@ -529,7 +541,7 @@ public class Interaction implements HasTransactionId {
         enum When {
             BEFORE {
                 @Override
-                public void syncMetrics(
+                void syncMetrics(
                         final Execution<?, ?> execution,
                         final Timestamp timestamp,
                         final int numberObjectsLoaded,
@@ -551,7 +563,7 @@ public class Interaction implements HasTransactionId {
 
             },
             AFTER {
-                @Override public void syncMetrics(
+                @Override void syncMetrics(
                         final Execution<?, ?> execution,
                         final Timestamp timestamp,
                         final int numberObjectsLoaded,
@@ -600,7 +612,7 @@ public class Interaction implements HasTransactionId {
             }
             //endregion
 
-            public abstract void syncMetrics(
+            abstract void syncMetrics(
                     final Execution<?,?> teExecution,
                     final Timestamp timestamp,
                     final int numberObjectsLoaded,

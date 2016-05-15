@@ -40,7 +40,7 @@ public interface MetaModelService2 {
 
 == Implementation
 
-The framework provides a default implementation of this service (`org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault`).
+The framework provides a default implementation of this service, `o.a.i.c.m.services.metamodel.MetaModelServiceDefault`.
 
 
 == Registering the Service
