@@ -32,6 +32,7 @@ The reference guides are:
 * xref:rgcfg.adoc#[Configuration Properties]
 * xref:rgcms.adoc#[Classes, Methods and Schema]
 * xref:rgmvn.adoc#[Apache Isis Maven plugin]
+* xref:rgfis.adoc#[Framework Internal Services]
 
 The remaining guides are:
 

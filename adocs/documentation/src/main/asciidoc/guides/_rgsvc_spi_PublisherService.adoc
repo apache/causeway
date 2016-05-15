@@ -130,10 +130,10 @@ To support these use cases several other services are involved:
 * the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] is used to obtain the `Interaction` from which
 the member executions are published.
 
-* the (internal) xref:rgsvc.adoc#_rgsvc_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain
+* the (internal) xref:rgfis.adoc#_rgfis_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain
 service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:rgsvc.adoc#_rgsvc_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters
+* the (internal) xref:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters
 these down to those changed objects that are also published (as per
 xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 

@@ -36,6 +36,7 @@ The reference guides are:
 * xref:rgcfg.adoc#[Configuration Properties]
 * xref:rgcms.adoc#[Classes, Methods and Schema]
 * xref:rgmvn.adoc#[Apache Isis Maven plugin]
+* xref:rgfis.adoc#[Framework Internal Services]
 
 The remaining guides are:
 
@@ -47,15 +48,12 @@ for Apache Isis and contribute back to the project)
 
 include::_rgsvc_intro.adoc[leveloffset=+1]
 include::_rgsvc_presentation-layer-spi.adoc[leveloffset=+1]
-include::_rgsvc_presentation-layer-internal-spi.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-spi.adoc[leveloffset=+1]
-include::_rgsvc_application-layer-internal-spi.adoc[leveloffset=+1]
 include::_rgsvc_core-domain-api.adoc[leveloffset=+1]
 include::_rgsvc_integration-api.adoc[leveloffset=+1]
 include::_rgsvc_metadata-api.adoc[leveloffset=+1]
 include::_rgsvc_testing.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-api.adoc[leveloffset=+1]
 include::_rgsvc_persistence-layer-spi.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-internal-spi.adoc[leveloffset=+1]
 include::_rgsvc_bootstrapping-spi.adoc[leveloffset=+1]

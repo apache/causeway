@@ -1,4 +1,4 @@
-[[_rgsvc_spi_ChangedObjectsServiceInternal]]
+[[_rgfis_spi_ChangedObjectsServiceInternal]]
 = `ChangedObjectsServiceInternal` (`1.13.0-SNAPSHOT`)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -8,8 +8,8 @@
 The `ChangedObjectsServiceInternal` class (`1.13.0-SNAPSHOT`) is an (internal) request-scoped domain service that is
 responsible for collecting the details of all changes to domain objects within an interaction.  This is then used by
 various other  (internal) domain services, notably
-xref:rgsvc.adoc#_rgsvc_spi_AuditingServiceInternal[`AuditingServiceInternal`] and
-xref:rgsvc.adoc#_rgsvc_spi_PublishingServiceInternal[`PublishingServiceInternal`].
+xref:rgfis.adoc#_rgfis_spi_AuditingServiceInternal[`AuditingServiceInternal`] and
+xref:rgfis.adoc#_rgfis_spi_PublishingServiceInternal[`PublishingServiceInternal`].
 
 
 
@@ -38,9 +38,9 @@ public class ChangedObjectsServiceInternal {
 ----
 <1> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
 <2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`]).
-<3> Used by xref:rgsvc.adoc#_rgsvc_spi_PublishingServiceInternal[`PublishingServiceInternal`] to obtain details of and
+<3> Used by xref:rgfis.adoc#_rgfis_spi_PublishingServiceInternal[`PublishingServiceInternal`] to obtain details of and
 counters of all objects changed within the transaction.
-<4> Used by xref:rgsvc.adoc#_rgsvc_spi_AuditingServiceInternal[`AuditingServiceInternal`] to obtain all pairs of
+<4> Used by xref:rgfis.adoc#_rgfis_spi_AuditingServiceInternal[`AuditingServiceInternal`] to obtain all pairs of
 pre/post values of changed properties
 <5> Called by the framework to for clean up after auditing and publishing has completed.
 
@@ -64,6 +64,6 @@ so no further configuration is required.
 
 == Related Classes
 
-Both the xref:rgsvc.adoc#_rgsvc_spi_AuditingServiceInternal[`AuditingServiceInternal`] and
-xref:rgsvc.adoc#_rgsvc_spi_PublishingServiceInternal[`PublishingServiceInternal`] (internal) domain services query
+Both the xref:rgfis.adoc#_rgfis_spi_AuditingServiceInternal[`AuditingServiceInternal`] and
+xref:rgfis.adoc#_rgfis_spi_PublishingServiceInternal[`PublishingServiceInternal`] (internal) domain services query
 this object.

@@ -7,11 +7,11 @@
 
 
 The `ContentMappingService` supports the (default implementation of the)
-xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`ContentNegotiationService`] allowing the
+xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] allowing the
 xref:ugvro.adoc#[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified
 by the HTTP `Accept` header.
 
-See xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
+See xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
 
 
 [NOTE]
@@ -99,4 +99,4 @@ public class ContentMappingServiceForToDoItem implements ContentMappingService {
 
 == Related Services
 
-This service is a companion to the default implementation of the xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`ContentNegotiationService`].
+This service is a companion to the default implementation of the xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`].

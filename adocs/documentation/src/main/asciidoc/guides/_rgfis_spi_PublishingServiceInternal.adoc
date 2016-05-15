@@ -1,4 +1,4 @@
-[[_rgsvc_spi_PublishingServiceInternal]]
+[[_rgfis_spi_PublishingServiceInternal]]
 = `PublishingServiceInternal` (`1.13.0-SNAPSHOT`)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -13,7 +13,7 @@ For published action invocations/ property edits, it provides an API for those m
 
 For published objects, it provides an API for the framework to call at the end of the interaction; it obtains details
 of the changed objects (from the
-xref:rgsvc.adoc#_rgsvc_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`]) and filters them to just
+xref:rgfis.adoc#_rgfis_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`]) and filters them to just
 those objects that are to be published; these are then passed through to any configured `PublisherService` or
 `PublishingService` implementations.
 
@@ -67,10 +67,10 @@ so no further configuration is required.
 == Related Classes
 
 The service delegates between the (internal)
-xref:rgsvc.adoc#_rgsvc_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service to the
+xref:rgfis.adoc#_rgfis_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service to the
 configured xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] and
  xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
 
-The (internal) xref:rgsvc.adoc#_rgsvc_spi_AuditingServiceInternal[`AuditingServiceInternal`] performs a similar
+The (internal) xref:rgfis.adoc#_rgfis_spi_AuditingServiceInternal[`AuditingServiceInternal`] performs a similar
 function for the xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`], also collating details of the
 changed objects from `ChangedObjectsServiceInternal`.

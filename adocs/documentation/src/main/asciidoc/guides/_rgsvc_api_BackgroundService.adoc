@@ -14,7 +14,7 @@ The `BackgroundService2` is responsible for capturing a memento representing the
 and persisting it rather than executing it directly.
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can
-capture the action to invoke and its arguments.  (As of `1.13.0-SNAPSHOT`), this is done using xref:rgsvc.adoc#_rgsvc_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (in previous releases it used (a private copy of) xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`]).
+capture the action to invoke and its arguments.  (As of `1.13.0-SNAPSHOT`), this is done using xref:rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (in previous releases it used (a private copy of) xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`]).
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion
 `BackgroundCommandService2`.  One such implementation of `BackgroundCommandService` is provided by (non-ASF)
@@ -126,7 +126,7 @@ The `CommandContext` service is responsible for providing a parent `Command` wit
 
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way. The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides implementations of both (see xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] and xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`]).
 
-The xref:rgsvc.adoc#_rgsvc_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (`1.13.0-SNAPSHOT`) is used to obtain
+The xref:rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (`1.13.0-SNAPSHOT`) is used to obtain
 a memento of the command such that it can be persisted.  (In earlier versions, xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] was used for this purpose).
 
 

@@ -41,8 +41,9 @@ allowing you to easily mock out these services in your unit tests.
 
 
 The framework also defines a number of "internal" services.  These are not part of the framework's formal API, in that
-they use classes that are outside of the applib.  These are documented here, but should be thought of as part of the
-internal design of the framework, and are liable to change from release to release.
+they use classes that are outside of the applib.  These internal framework services should be thought of as part of the
+internal design of the framework, and are liable to change from release to release.  The internal framework services 
+are documented in the xref:rgfis.adoc#[Framework Internal Services] guide.
 
 
 
@@ -200,12 +201,12 @@ xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]). +
 (Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
 * As each execution progresses, and objects that are modified are "enlisted" into the (internal)
-xref:rgsvc.adoc#_rgsvc_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service.  Metrics as
+xref:rgfis.adoc#_rgfis_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service.  Metrics as
 to which objects are merely loaded into memory are also captured using the
 xref:rgsvc.adoc#_rgsvc_api_MetricsService[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:rgsvc.adoc#_rgsvc_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service.  This is only done for
+xref:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service.  This is only done for
 actions/properties annotated appropriate (with xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] or
 xref:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`]).  +
 +
@@ -214,13 +215,13 @@ xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] (deprecated) a
 registered xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]s (there may be more than one).
 
 * At the end of all executions, details of all changed objects are published, again through the (internal)
-xref:rgsvc.adoc#_rgsvc_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublishingService`
+xref:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublishingService`
 or `PublisherService` implementations.  Only domain objects specified to be published with
 xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] are published.
 
 * Also at the end of all executions, details of all changed properties are passed to any registered
 xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] by way of the (internal)
-xref:rgsvc.adoc#_rgsvc_spi_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
+xref:rgfis.adoc#_rgfis_spi_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
 
 Implementations of xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] can use the `Command#getMemento()`
 method to obtain a XML equivalent of that `Command`, reified using the xref:rgcms.adoc#_rgcms_schema-cmd[`cmd.xsd`]

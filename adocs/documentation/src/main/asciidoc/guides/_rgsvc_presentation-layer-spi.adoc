@@ -183,9 +183,6 @@ Key:
 
 
 
-There are also a number of presentation layer SPIs that use internal classes.  These can be found in the xref:rgsvc.adoc#_rgsvc_presentation-layer-internal-spi[next chapter].
-
-
 
 
 include::_rgsvc_spi_ContentMappingService.adoc[leveloffset=+1]

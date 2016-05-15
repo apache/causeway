@@ -1,4 +1,4 @@
-[[_rgsvc_spi_ContentNegotiationService]]
+[[_rgfis_spi_ContentNegotiationService]]
 = `ContentNegotiationService`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -85,10 +85,6 @@ eg `ObjectAdapter`, `ObjectAndProperty`, `ObjectAndCollection` etc
 In all cases, returning `null` will result in the regular RO spec representation being returned.
 
 
-[WARNING]
-====
-This is an "internal" SPI, meaning that it uses types that are not part of the Isis applib.  We do not guarantee that link:http://semver.org[semantic versioning] will be honoured for these APIs.
-====
 
 
 
@@ -168,7 +164,7 @@ image::{_imagesdir}reference-services-spi/ContentNegotiationService/accept-json.
 
 
 
-[_rgsvc_spi_ContentNegotiationService_Configuration]]
+[_rgfis_spi_ContentNegotiationService_Configuration]]
 == Configuration
 
 The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
@@ -201,4 +197,4 @@ in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to thi
 
 The default implementation of `ContentNegotiationService` delegates to xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
 
-The `ContentNegotiationService` is itself called by the (default implementation of) xref:rgsvc.adoc#_rgsvc_spi_RepresentationService[`RepresentationService`].
+The `ContentNegotiationService` is itself called by the (default implementation of) xref:rgfis.adoc#_rgfis_spi_RepresentationService[`RepresentationService`].

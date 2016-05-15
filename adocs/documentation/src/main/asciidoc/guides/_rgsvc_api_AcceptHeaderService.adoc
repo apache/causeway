@@ -10,7 +10,7 @@ simply exposes the HTTP `Accept` header to the domain.  Its intended use is to s
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:rgsvc.adoc#_rgsvc_spi_ContentNegotiationService[`ContentNegotiationService`] and
+As an alternative to performing content negotiation within the domain classes, the xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] and
 xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 

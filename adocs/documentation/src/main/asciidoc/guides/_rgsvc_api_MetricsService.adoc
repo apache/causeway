@@ -9,7 +9,7 @@
 The `MetricsService` (`1.13.0-SNAPSHOT`) is a request-scoped domain service that hooks into the JDO/DataNucleus
 ObjectStore to provide a number of counters relating to numbers of object loaded, dirtied etc.
 
-The service is used by the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service (to populate the DTO held by the `Interaction.Execution`) and also by the (internal) xref:rgsvc.adoc#_rgsvc_spi_PublishingServiceInternal[`PublishingServiceInternal`] domain service (to populate
+The service is used by the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service (to populate the DTO held by the `Interaction.Execution`) and also by the (internal) xref:rgfis.adoc#_rgfis_spi_PublishingServiceInternal[`PublishingServiceInternal`] domain service (to populate
 the `PublishedObjects` class.
 
 
