@@ -114,8 +114,7 @@
             <xs:enumeration value="reference"/>
             <xs:enumeration value="void">
                 <xs:annotation>
-                    <xs:documentation>
-                        Not valid to be used as the parameter type of an action; can be used as its return type.
+                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>

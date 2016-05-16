@@ -6,6 +6,87 @@
 
 
 
-The "chg" schema (`1.13.0-SNAPSHOT`) defines the serialized form identifying which objects have been created, updated
-or deleted as the result of invoking an action or editing a property.
+The changes ("chg") schema (`1.13.0-SNAPSHOT`) defines the serialized form identifying which objects have been created,
+updated or deleted as the result of invoking an action or editing a property.  It also captures a number of other
+metrics counts (number of objects loaded, number of object properties modified), useful for profiling.
 
+An instance of the DTO (corresponding to this schema) is used within the
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] SPI, identifying changed objects that are to be
+published (as per xref:rgant.adoc#_rgant_DomainObject_publishing[`@DomainObject#publishing()`] or equivalent).
+
+
+== `changesDto`
+
+The `changesDto` root element is defined as:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/chg"                                  <!--1-->
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/chg"
+           xmlns:com="http://isis.apache.org/schema/common">
+
+    <xs:import namespace="http://isis.apache.org/schema/common"                                 <!--2-->
+               schemaLocation="../common/common-1.0.xsd"/>
+
+    <xs:element name="changesDto">                                                              <!--3-->
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string"                                <!--4-->
+                            minOccurs="0" maxOccurs="1" default="1"/>
+                <xs:element name="minorVersion" type="xs:string"
+                            minOccurs="0" maxOccurs="1" default="0"/>
+
+                <xs:element name="transactionId" type="xs:string"/>                             <!--5-->
+                <xs:element name="completedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1"/> <!--6-->
+                <xs:element name="user" type="xs:string"/>                                      <!--7-->
+                <xs:element name="objects" type="objectsDto"/>                                  <!--8-->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    ...
+</xs:schema>
+----
+<1> the changes schema has a namespace URI of "http://isis.apache.org/schema/chg".  Although URIs are not the same as
+URLs, you will find that the schemas are also downloadable from this location.
+<2> uses complex types defined in the xref:rgcms.adoc#_rgcms_schema_common["common" schema].
+<3> definition of the `changesDto` root element.  The corresponding XML will use this as its top-level element.
+<4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
+<5> unique identifier for the transaction in which this interaction is being executed.  The transaction Id is used to
+correlate back to the xref:rgcms.adoc#_rgcms_schema_command[command] that represented the intention to perform this
+execution, as well as to the xref:rgcms.adoc#_rgcms_schema_interaction[interaction] that executes said command.
+<6> the user that executed the (top-level) action invocation/property edit.
+<7> identifies the objects that have changed.
+
+The `ChangesDto` DTO corresponding to the `changesDto` root element can be marshalled to/from XML using the
+`ChangesDtoUtils` class.
+
+
+
+== `objectsDto`
+
+The `objectsDto` complex type actually identifies the objects created, updated or deleted.  It also captures additional
+metrics counters:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/chg" ... >
+    ...
+    <xs:complexType name="objectsDto">
+        <xs:sequence>
+            <xs:element name="loaded" type="xs:int"/>                                           <!--1-->
+            <xs:element name="created" type="com:oidsDto"/>                                     <!--2-->
+            <xs:element name="updated" type="com:oidsDto"/>
+            <xs:element name="deleted" type="com:oidsDto"/>
+            <xs:element name="propertiesModified" type="xs:int"/>                               <!--3-->
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+----
+<1> the number of objects that were loaded, in total, by the interaction.
+<2> the identities of the objects that were, respectively, created, updated or deleted within the transaction.
+<3> the number of objects' properties changed, in total, by the interaction.
+
+The xref:rgcms.adoc#_rgcms_schema_ixn[interaction] schema also provides metrics on the number of objects loaded/changed,
+but is more granular, each figure relating to a single (sub-)execution within an interaction.

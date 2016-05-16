@@ -50,6 +50,12 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="user" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The name of the user that initiated/created this command.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="targets" type="com:oidsDto">
                     <xs:annotation>
                         <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).
@@ -59,12 +65,6 @@
                 <xs:element name="member" type="memberDto">
                     <xs:annotation>
                         <xs:documentation>The action or property (identifier and parameter arguments) to be invoked on the target object(s).</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="user" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>The name of the user that initiated/created this command.
-                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>

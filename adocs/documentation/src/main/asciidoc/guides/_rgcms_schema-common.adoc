@@ -5,15 +5,20 @@
 :_imagesdir: images/
 
 
+The "common" schema defines a number of complex types that are used by other higher-level schemas.
 
-The main purpose of the common schema is to define the `oidDto` complex type: the object's type and its identifier.
-This is basically a formal XML equivalent to the `Bookmark` object obtained from the
-xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+
+[[_rgcms_schema-common_oidDto]]
+== `oidDto`
+
+The `oidDto` complex type captures an object's type and its identifier.  This is basically a formal XML equivalent to
+the `Bookmark` object obtained from the xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by
 a given Apache Isis application.  With it, we have the ability to lookup any arbitrary object.  Further discussion and
 examples can be found xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_oid[here].
 
+The `oidDto` complex type is defined as:
 
 [source,xml]
 ----
@@ -23,11 +28,10 @@ examples can be found xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_oid[h
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:complexType name="oidDto">                                                          <!--2-->
-        <xs:sequence>
-            <xs:element name="objectType" type="xs:string"/>                                <!--3-->
-            <xs:element name="objectIdentifier" type="xs:string"/>                          <!--4-->
-        </xs:sequence>
-        <xs:attribute name="objectState" type="bookmarkObjectState" default="persistent"/>
+        <xs:sequence/>
+        <xs:attribute name="type" type="xs:string"/>                                        <!--3-->
+        <xs:attribute name="id" type="xs:string"/>                                          <!--4-->
+        <xs:attribute name="objectState" type="bookmarkObjectState"/>
     </xs:complexType>
 
     <xs:simpleType name="bookmarkObjectState">                                              <!--5-->
@@ -37,67 +41,151 @@ examples can be found xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_oid[h
             <xs:enumeration value="viewModel"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="oidsDto">                                                         <!--6-->
+        <xs:sequence>
+            <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
     ...
 </xs:schema>
 ----
-<1> the common schema has a namespace URI of "http://isis.apache.org/schema/common".  Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.  The `objectState` attribute is of type `bookmarkObjectState` and will typically be "transient" or "viewModel"
+<1> the common schema has a namespace URI of "http://isis.apache.org/schema/common".  Although URIs are not the same as
+URLs, you will find that the schemas are also downloadable from this location.
+<2> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.  The
+`objectState` attribute can usually be omitted (indicating a persistent object)
 <3> the object type, corresponding to either the
 xref:rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`] attribute, or to the (JDO)
 xref:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`] annotation (`schema` and/or `table`
 attributes), or to the (JDO) xref:rgant.adoc#_rgant-Discriminator[`@Discriminator`] annotation.  If none
-is specified, then the fully
-qualified class name will be used.
+is specified, then the fully qualified class name will be used.
 <4> the object identifier (aka primary key), converted to string form.
-<5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.  Although "transient" is shown,
-in practice the only types of objects will be "persistent" (entities) or "viewModel".
+<5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.  In previous versions
+of the schema the attribute was defaulted to "persistent"; as of `1.13.0-SNAPSHOT` the "persistent" state is assumed
+of the attribute is omitted.
+<6> Models a list of OIDs.  This is used by the xref:rgcms.adoc#_rgcms_schema_cmd["cmd" schema] to represent the
+intention to perform a bulk actions (against a number of selected objects).
 
-The `oidDto` complex type is used in two specific places by the framework:
+In previous versions of the schema (prior to `1.13.0-SNAPSHOT`) the object type and object identifers of `oidDto` were
+modelled as an element rather than an attribute.  The element form can still be used, but is deprecated.
+
+The `oidDto` complex type is used in a number of places by the framework:
 
 * first, as a means of serializing JAXB view model/DTOs (annotated with
 xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]), that reference domain entities. +
 +
 These references are serialized instead into OIDs
 
-* second, as references to the target of action invocations, as described by the
-xref:rgcms.adoc#_rgcms_schema-aim[action invocation memento] schema. +
+* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property,
+as described by the xref:rgcms.adoc#_rgcms_schema-cmd["cmd" (command)] schema. +
 +
-They are also used to represent references to any action arguments that take domain object entities.
+They are also used to represent references to any action arguments/properties that take domain object entities/view models.
 
-The common schema also defines two further types: the `valueDto` complex type and the `valueType` simple type:
+* third, as references to the target of an interaction capturing the actual execution of an action invocation or
+property edit, as described by the xref:rgcms.adoc#_rgcms_schema-ixn["ixn" (interaction)] schema.
+
+
+[[_rgcms_schema-common_valueDto]]
+== `valueDto` etc
+
+The common schema also defines two types representing values: the `valueDto` complex type, the `valueType` simple type
+and the `valueWithTypeDto` complex type:
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/common"
-           elementFormDefault="qualified"
-           xmlns="http://isis.apache.org/schema/common"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
     ...
-    <xs:complexType name="valueDto">                              <!--1-->
+    <xs:complexType name="valueDto">                                <!--1-->
         <xs:choice minOccurs="0" maxOccurs="1">
             <xs:element name="string" type="xs:string"/>
             <xs:element name="byte" type="xs:byte"/>
             <xs:element name="short" type="xs:short"/>
             ...
-            <xs:element name="localTime" type="xs:time"/>
+            <xs:element name="timestamp" type="xs:dateTime"/>
+            <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
         </xs:choice>
     </xs:complexType>
 
-    <xs:simpleType name="valueType">                              <!--2-->
+    <xs:simpleType name="valueType">                                <!--2-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="string"/>
             <xs:enumeration value="byte"/>
             <xs:enumeration value="short"/>
             ...
-            <xs:enumeration value="isisApplibClob"/>
+            <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>
+            <xs:enumeration value="void"/>                          <!--3-->
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="valueWithTypeDto">                        <--4-->
+        <xs:complexContent>
+            <xs:extension base="valueDto">
+                <xs:attribute name="type" use="required" type="valueType"/>
+                <xs:attribute name="null" use="optional" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> Intended to hold any valid value, eg of an argument to an action or a new value of a property.
+<2> Enumerates the full set of types understood by the framework; note that these also include references to entities
+or view models, and to enums.
+<3> Not valid to be used as the parameter type of an action; can be used as its return type.
+<4> Inherits from `valueDto`, capturing both a value and its corresponding type.  Used for the return value of action
+invocations, and for the new value in property edits.
+
+
+These type definitions are just building blocks, also used within the
+xref:rgcms.adoc#_rgcms_schema-aim[action iInvocation memento] schema.  The first, `valueDto` is The second, `valueType`, enumerates the different types of vales, eg of a
+formal parameter to an action.
+
+
+
+[[_rgcms_schema-common_ancillary]]
+== Ancillary types
+
+The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by
+the xref:rgcms.adoc#_rgcms_schema_cmd["cmd"] and xref:rgcms.adoc#_rgcms_schema_ixn["ixn"] schemas.
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
+    ...
+    <xs:complexType name="enumDto">                                 <!--1-->
+        <xs:sequence>
+            <xs:element name="enumType" type="xs:string"/>
+            <xs:element name="enumName" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="periodDto">                               <!--2-->
+        <xs:sequence>
+            <xs:element name="startedAt" type="xs:dateTime"/>
+            <xs:element name="completedAt" type="xs:dateTime"
+                        minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="differenceDto">                           <!--3-->
+        <xs:sequence/>
+        <xs:attribute name="before" type="xs:int"/>
+        <xs:attribute name="after" type="xs:int"/>
+    </xs:complexType>
+
+    <xs:simpleType name="interactionType">                          <!--4-->
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="action_invocation" />
+            <xs:enumeration value="property_edit" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
 ----
+<1> Models an instance member of an enum (eg `Color.RED`).
+<2> Captures a period of time, eg for capturing metrics/timings.
+<3> Captures a pair of numbers representing a difference.  Used for example to capture metrics (number objects modified before and after).
+<4> Whether this command/interaction with a member is invoking an action, or editing a property.  Used by both the
+xref:rgcms.adoc#_rgcms_schema_cmd["cmd"] and xref:rgcms.adoc#_rgcms_schema_ixn["ixn"] schemas.
 
-These two type definitions are just building blocks, also used within the
-xref:rgcms.adoc#_rgcms_schema-aim[action iInvocation memento] schema.  The first, `valueDto` is intended to hold any valid
-value, eg of an argument to an action.  The second, `valueType`, enumerates the different types of vales, eg of a
-formal parameter to an action.

@@ -6,6 +6,145 @@
 
 
 
-The "cmd" schema (`1.13.0-SNAPSHOT`) defines the serialized form of the __intention__ to invoke an action or to
+The command ("cmd") schema (`1.13.0-SNAPSHOT`) defines the serialized form of the __intention__ to invoke an action or to
 edit a property.
 
+[NOTE]
+====
+Mixin actions are represented as regular actions on the mixed-in object.  In other words, the fact that the actual
+implementation of the action is defined by a mixin is an implementation detail only.
+====
+
+[[_rgcms_schema-cmd_commandDto]]
+== `commandDto`
+
+The `commandDto` root element is defined as:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/cmd"              <!--1-->
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/cmd"
+           xmlns:com="http://isis.apache.org/schema/common">
+
+    <xs:import namespace="http://isis.apache.org/schema/common"             <!--2-->
+               schemaLocation="../common/common-1.0.xsd"/>
+
+    <xs:element name="commandDto">                                          <!--3-->
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string"            <!--4-->
+                        minOccurs="1" maxOccurs="1" default="1"/>
+                <xs:element name="minorVersion" type="xs:string"
+                        minOccurs="1" maxOccurs="1" default="1"/>
+
+                <xs:element name="transactionId" type="xs:string"/>         <!--5-->
+                <xs:element name="user" type="xs:string"/>                  <!--6-->
+                <xs:element name="targets" type="com:oidsDto"/>             <!--7-->
+                <xs:element name="member" type="memberDto"/>                <!--8-->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    ...
+</xs:schema>
+----
+<1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".  Although URIs are not the same as
+URLs, you will find that the schemas are also downloadable from this location.
+<2> uses complex types defined in the xref:rgcms.adoc#_rgcms_schema_common["common" schema].
+<3> definition of the `commandDto` root element.  The corresponding XML will use this as its top-level element.
+<4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
+<5> unique identifier for the transaction in which this command is created.  The transaction Id is used to correlate
+to the xref:rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any
+xref:rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
+<6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
+<7> the target object (or objects) to be invoked.  As of `1.13.0-SNAPSHOT`, a bulk action will create multiple commands,
+each with only a single target, but a future version of the framework may also support a single bulk command against
+this multiple targets (ie all-or-nothing).
+<8> the `memberDto`, defined below, the captures the action/property and arguments/new value.
+
+The `CommandDto` DTO corresponding to the `commandDto` root element can be marshalled to/from XML using the
+`CommandDtoUtils` class.
+
+
+[[_rgcms_schema-cmd_memberDto]]
+== `memberDto` and subtypes
+
+The `memberDto` complex type is an abstract type representing the intention to either invoke an action or to edit a
+property.  The `actionDto` and `propertyDto` are the concrete subtypes:
+
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/cmd" ...>
+    ...
+    <xs:complexType name="memberDto" abstract="true">                       <!--1-->
+        <xs:sequence>
+            <xs:element name="memberIdentifier" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--2-->
+    </xs:complexType>
+
+    <xs:complexType name="actionDto">                                       <!--3-->
+        <xs:complexContent>
+            <xs:extension base="memberDto">
+                <xs:sequence>
+                    <xs:element name="parameters" type="paramsDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="propertyDto">                                     <!--4-->
+        <xs:complexContent>
+            <xs:extension base="memberDto">
+                <xs:sequence>
+                    <xs:element name="newValue" type="com:valueWithTypeDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
+----
+<1> the `memberDto` is an abstract type.   Its primary responsibility is simply to identify the member (action or
+property).
+<2> the `interactionType` attribute indicates whether the member is an action or a property.
+<3> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to
+invoke the action.  The `paramsDto` type is defined xref:rgcms.adoc#_rgcms_schema-cmd_ancillary[below].
+<4> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
+
+
+Note also that there is a corresponding xref:rgcms.adoc#_rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]
+complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the
+return value if an action invocation).
+
+
+
+[[_rgcms_schema-cmd_ancillary]]
+== Ancillary types
+
+The schema also defines a small number of supporting types:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/cmd" ...>
+    ...
+    <xs:complexType name="paramsDto">                                       <!--1-->
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="parameter" type="paramDto"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="paramDto">                                        <!--2-->
+        <xs:complexContent>
+            <xs:extension base="com:valueWithTypeDto">
+                <xs:attribute name="name" use="required" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
+----
+<1> the `paramsDto` is simply the list of parameter/arguments.
+<2> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that
+has a type.  It extends the `valueWithTypeDto` complex type taken from the
+xref:rgcms.adoc#_rgcms_schema-common["common"] schema.
