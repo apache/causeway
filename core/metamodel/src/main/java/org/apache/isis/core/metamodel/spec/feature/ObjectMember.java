@@ -139,7 +139,6 @@ public interface ObjectMember extends ObjectFeature {
     // Debugging
     // /////////////////////////////////////////////////////////////
 
-    String debugData();
 
     /**
      * Thrown if the user is not authorized to access an action or any property/collection of an entity.

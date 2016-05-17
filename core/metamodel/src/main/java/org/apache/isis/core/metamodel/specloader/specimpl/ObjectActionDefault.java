@@ -37,7 +37,6 @@ import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -60,8 +59,8 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -621,14 +620,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //endregion
 
-    //region > debug, toString
-
-    @Override
-    public String debugData() {
-        final DebugString debugString = new DebugString();
-        getFacetedMethod().debugData(debugString);
-        return debugString.toString();
-    }
+    //region > toString
 
     @Override
     public String toString() {

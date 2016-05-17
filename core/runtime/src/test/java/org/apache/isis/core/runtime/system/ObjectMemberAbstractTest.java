@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -273,11 +272,6 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     protected ObjectMemberAbstractImpl(final String id) {
         super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberDependencies(
                 null, null, null));
-    }
-
-    @Override
-    public String debugData() {
-        return null;
     }
 
     /**

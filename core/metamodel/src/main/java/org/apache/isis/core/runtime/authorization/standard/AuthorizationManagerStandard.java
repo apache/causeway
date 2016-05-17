@@ -22,14 +22,12 @@ package org.apache.isis.core.runtime.authorization.standard;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
 
-public class AuthorizationManagerStandard extends AuthorizationManagerAbstract implements DebuggableWithTitle {
+public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
 
     private Authorizor authorizor;
 
@@ -146,20 +144,6 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract i
         baseProgrammingModel.addFactory(facetFactory);
     }
 
-    // //////////////////////////////////////////////////////////
-    // Debugging
-    // //////////////////////////////////////////////////////////
-
-    @Override
-    public String debugTitle() {
-        return "Authorization Manager";
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendTitle("Authorizor Manager");
-        debug.appendln("Authorizer", authorizor);
-    }
 
     // //////////////////////////////////////////////////
     // Dependencies (injected)

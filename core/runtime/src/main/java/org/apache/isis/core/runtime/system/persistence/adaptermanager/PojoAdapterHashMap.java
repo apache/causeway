@@ -28,11 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent {
+public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScopedComponent {
 
     private static class IdentityHashKey {
         private final Object pojo;
@@ -134,28 +132,5 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
 
     //endregion
 
-    //region > Debugging
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        int count = 0;
-        final Map<Object, ObjectAdapter> copyForDebug = Maps.newHashMap(adapterByPojoMap);
-        for (final Map.Entry<Object, ObjectAdapter> entry : copyForDebug.entrySet()) {
-            Object pojo = entry.getKey();
-            final ObjectAdapter object = entry.getValue();
-            debug.append(count++ + 1, 5);
-            debug.append(" '");
-            debug.append(pojo.toString(), 50);
-            debug.append("'    ");
-            debug.appendln(object.toString());
-        }
-    }
-
-    @Override
-    public String debugTitle() {
-        return "POJO Adapter Hashtable";
-    }
-
-    //endregion
 
 }

@@ -37,15 +37,12 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -110,7 +107,7 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 
 public final class ObjectReflectorDefault
-        implements SpecificationLoaderSpi, ApplicationScopedComponent, DebuggableWithTitle {
+        implements SpecificationLoaderSpi, ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
@@ -545,41 +542,6 @@ public final class ObjectReflectorDefault
         }
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Debugging
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendln();
-
-        debug.appendTitle("Specifications");
-        final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications());
-        Collections.sort(specs, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
-        for (final ObjectSpecification spec : specs) {
-            StringBuilder str = new StringBuilder();
-            str.append(spec.isAbstract() ? "A" : ".");
-            str.append(spec.isService() ? "S" : ".");
-            str.append(ChoicesFacetUtils.hasChoices(spec) ? "B" : ".");
-            str.append(spec.isParentedOrFreeCollection() ? "C" : ".");
-            str.append(spec.isNotCollection() ? "O" : ".");
-            str.append(spec.isParseable() ? "P" : ".");
-            str.append(spec.isEncodeable() ? "E" : ".");
-            str.append(spec.isValueOrIsParented() ? "A" : ".");
-            
-            final boolean hasIdentity = !(spec.isParentedOrFreeCollection() || spec.isParented() || spec.isValue());
-            str.append( hasIdentity ? "I" : ".");
-            str.append("  ");
-            str.append(spec.getFullIdentifier());
-            
-            debug.appendPreformatted(spec.getShortIdentifier(), str.toString());
-        }
-    }
-    
-    @Override
-    public String debugTitle() {
-        return "Reflector";
-    }
 
     // /////////////////////////////////////////////////////////////
     // Helpers (were previously injected, but no longer required)

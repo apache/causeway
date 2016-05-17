@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
@@ -139,16 +138,5 @@ public class ObjectData extends Data {
         return fields.toString();
     }
 
-    @Override
-    public void debug(final DebugBuilder debug) {
-        super.debug(debug);
-        for (final String key : fields.keySet()) {
-            final Object value = fields.get(key);
-
-            debug.appendln(key, value);
-
-            // TODO recurse!
-        }
-    }
 
 }

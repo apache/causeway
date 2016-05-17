@@ -34,7 +34,6 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
@@ -281,22 +280,6 @@ public class IsisConfigurationDefault implements IsisConfiguration, Configuratio
         }
 
         return Color.decode(color);
-    }
-
-    @Override
-    public void debugData(final DebugBuilder str) {
-        str.appendln("Resource Stream Source", resourceStreamSource);
-        str.appendln();
-        final Enumeration<?> names = properties.propertyNames();
-        while (names.hasMoreElements()) {
-            final String name = (String) names.nextElement();
-            str.appendln(name, properties.getProperty(name));
-        }
-    }
-
-    @Override
-    public String debugTitle() {
-        return "Properties Configuration";
     }
 
     /**

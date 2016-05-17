@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -113,11 +112,6 @@ public class ObjectAssociationAbstractTest {
             public VisibilityContext<?> createVisibleInteractionContext(
                     final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
                     Where where) {
-                return null;
-            }
-
-            @Override
-            public String debugData() {
                 return null;
             }
 

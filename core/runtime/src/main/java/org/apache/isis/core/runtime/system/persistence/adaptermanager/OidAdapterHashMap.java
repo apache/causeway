@@ -28,15 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
  * A map of the objects' identities and the adapters' of the objects.
  */
-public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, SessionScopedComponent {
+public class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(OidAdapterHashMap.class);
     public static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 100;
@@ -104,28 +102,5 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
 
     //endregion
 
-    //region > debugging
-
-    @Override
-    public String debugTitle() {
-        return "Identity adapter map";
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        int count = 1;
-        final Map<Oid, ObjectAdapter> copyForDebug = Maps.newHashMap(adapterByOidMap);
-        for (final Map.Entry<Oid, ObjectAdapter> entry : copyForDebug.entrySet()) {
-            Oid oid = entry.getKey();
-            final ObjectAdapter adapter = entry.getValue();
-            debug.append(count++, 5);
-            debug.append(" '");
-            debug.append(oid.toString(), 15);
-            debug.append("'    ");
-            debug.appendln(adapter != null ? adapter.toString() : "(MISSING OBJECT ?!)");
-        }
-    }
-
-    //endregion
 
 }

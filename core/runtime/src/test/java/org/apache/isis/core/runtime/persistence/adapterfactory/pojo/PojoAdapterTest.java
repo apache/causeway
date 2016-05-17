@@ -114,7 +114,7 @@ public class PojoAdapterTest {
 
         context.checking(new Expectations() {
             {
-                one(mockVersion).different(mockVersion2);
+                oneOf(mockVersion).different(mockVersion2);
                 will(returnValue(false));
             }
         });
@@ -129,7 +129,7 @@ public class PojoAdapterTest {
         
         context.checking(new Expectations() {
             {
-                one(mockVersion).different(mockVersion2);
+                oneOf(mockVersion).different(mockVersion2);
                 will(returnValue(true));
             }
         });

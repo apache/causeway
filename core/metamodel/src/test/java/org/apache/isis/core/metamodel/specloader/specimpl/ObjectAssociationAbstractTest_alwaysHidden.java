@@ -23,6 +23,7 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -108,11 +108,6 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             public VisibilityContext<?> createVisibleInteractionContext(
                     final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
                     final Where where) {
-                return null;
-            }
-
-            @Override
-            public String debugData() {
                 return null;
             }
 

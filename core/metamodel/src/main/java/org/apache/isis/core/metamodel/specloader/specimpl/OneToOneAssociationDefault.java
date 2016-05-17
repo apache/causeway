@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -356,15 +355,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
 
 
-    //region > debug, toString
-    @Override
-    public String debugData() {
-        final DebugString debugString = new DebugString();
-        debugString.indent();
-        debugString.indent();
-        getFacetedMethod().debugData(debugString);
-        return debugString.toString();
-    }
+    //region > toString
 
     @Override
     public String toString() {

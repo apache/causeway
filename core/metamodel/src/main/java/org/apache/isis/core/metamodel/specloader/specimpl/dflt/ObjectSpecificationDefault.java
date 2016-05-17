@@ -33,8 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,11 +44,9 @@ import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
@@ -71,7 +67,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
-public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
+public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationDefault.class);
 
@@ -444,24 +440,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     // //////////////////////////////////////////////////////////////////////
-    // Debug, toString
+    // toString
     // //////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.blankLine();
-        debug.appendln("Title", getFacet(TitleFacet.class));
-        final IconFacet iconFacet = getFacet(IconFacet.class);
-        if (iconFacet != null) {
-            debug.appendln("Icon", iconFacet);
-        }
-        debug.unindent();
-    }
-
-    @Override
-    public String debugTitle() {
-        return "NO Member Specification";
-    }
 
     @Override
     public String toString() {

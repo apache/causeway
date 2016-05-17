@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -39,11 +38,9 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     public void shutdown() {
     }
 
-    private Collection<ObjectSpecification> allSpecificationsReturn;
-
     @Override
     public Collection<ObjectSpecification> allSpecifications() {
-        return allSpecificationsReturn;
+        return null;
     }
 
     @Override
@@ -74,15 +71,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
 
     @Override
     public void injectInto(final Object candidate) {
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-    }
-
-    @Override
-    public String debugTitle() {
-        return null;
     }
 
     @Override

@@ -23,8 +23,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -69,24 +67,6 @@ public class DeploymentType extends DeploymentCategoryProviderAbstract {
         this.deploymentCategory = category;
         this.name = name;
         deploymentTypes.add(this);
-    }
-
-    public DebuggableWithTitle getDebug() {
-        return new DebuggableWithTitle() {
-
-            @Override
-            public void debugData(final DebugBuilder debug) {
-                debug.appendln("Category", deploymentCategory);
-                debug.appendln();
-                debug.appendln("Name", friendlyName());
-                debug.appendln("Should monitor", shouldMonitor());
-            }
-
-            @Override
-            public String debugTitle() {
-                return "Deployment type";
-            }
-        };
     }
 
     public void initContext(final IsisSessionFactory sessionFactory) {

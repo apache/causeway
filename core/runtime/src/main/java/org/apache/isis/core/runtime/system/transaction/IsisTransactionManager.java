@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
@@ -551,20 +550,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     public void addCommand(final PersistenceCommand command) {
         getTransaction().addCommand(command);
-    }
-
-    
-
-    // //////////////////////////////////////////////////////////////
-    // Hooks
-    // //////////////////////////////////////////////////////////////
-
-    // //////////////////////////////////////////////////////
-    // debugging
-    // //////////////////////////////////////////////////////
-
-    public void debugData(final DebugBuilder debug) {
-        debug.appendln("Transaction", getTransaction());
     }
 
 

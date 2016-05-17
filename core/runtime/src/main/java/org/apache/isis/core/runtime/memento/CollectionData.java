@@ -21,8 +21,6 @@ package org.apache.isis.core.runtime.memento;
 
 import java.io.IOException;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
@@ -37,12 +35,6 @@ public class CollectionData extends Data {
         initialized();
     }
 
-    public CollectionData(final DataInputExtended input) throws IOException {
-        super(input);
-        this.elements = input.readEncodables(Data.class);
-        initialized();
-    }
-
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
         super.encode(output);
@@ -51,16 +43,6 @@ public class CollectionData extends Data {
 
     public void initialized() {
         // nothing to do
-    }
-
-    @Override
-    public void debug(final DebugBuilder debug) {
-        super.debug(debug);
-        for (int i = 0; i < elements.length; i++) {
-            debug.appendln("" + i + 1, elements[i]);
-
-            // TODO recurse!
-        }
     }
 
     @Override

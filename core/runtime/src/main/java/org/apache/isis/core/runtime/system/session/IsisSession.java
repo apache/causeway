@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.system.session;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +28,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -103,12 +99,6 @@ public class IsisSession implements SessionScopedComponent {
      * Closes session.
      */
     public void close() {
-        try {
-            takeSnapshot();
-        } catch(Throwable ex) {
-            LOG.error("Failed to takeSnapshot while closing the session; continuing to avoid memory leakage");
-        }
-
         final PersistenceSession persistenceSession = getPersistenceSession();
         if(persistenceSession != null) {
             persistenceSession.close();
@@ -190,11 +180,6 @@ public class IsisSession implements SessionScopedComponent {
 
     //endregion
 
-    //region > sessionOpenTime
-    protected long getSessionOpenTime() {
-        return accessTime;
-    }
-
     private void setSessionOpenTime(final long accessTime) {
         this.accessTime = accessTime;
     }
@@ -217,59 +202,10 @@ public class IsisSession implements SessionScopedComponent {
     public String toString() {
         final ToString asString = new ToString(this);
         asString.append("context", getId());
-        appendState(asString);
-        return asString.toString();
-    }
-    //endregion
-
-    //region > debugging
-
-    public void debug(final DebugBuilder debug) {
-        debug.appendAsHexln("hash", hashCode());
-        debug.appendln("context id", id);
-        debug.appendln("accessed", DATE_FORMAT.format(new Date(getSessionOpenTime())));
-        debugState(debug);
-    }
-
-    public void takeSnapshot() {
-        if (!LOG.isDebugEnabled()) {
-            return;
-        }
-        final DebugString debug = new DebugString();
-        debug(debug);
-        debug.indent();
-        debug.appendln();
-
-        debug(debug, getPersistenceSession());
-        if (getCurrentTransaction() != null) {
-            debug(debug, getCurrentTransaction().getMessageBroker());
-        }
-        debugSnapshot = debug.toString();
-
-        LOG.debug(debugSnapshot);
-    }
-
-    private void debug(final DebugBuilder debug, final Object object) {
-        if (object instanceof DebuggableWithTitle) {
-            final DebuggableWithTitle d = (DebuggableWithTitle) object;
-            debug.startSection(d.debugTitle());
-            d.debugData(debug);
-            debug.endSection();
-        } else {
-            debug.appendln("no debug for " + object);
-        }
-    }
-
-    public void appendState(final ToString asString) {
         asString.append("authenticationSession", getAuthenticationSession());
         asString.append("persistenceSession", getPersistenceSession());
         asString.append("transaction", getCurrentTransaction());
-    }
-
-    public void debugState(final DebugBuilder debug) {
-        debug.appendln("authenticationSession", getAuthenticationSession());
-        debug.appendln("persistenceSession", getPersistenceSession());
-        debug.appendln("transaction", getCurrentTransaction());
+        return asString.toString();
     }
     //endregion
 

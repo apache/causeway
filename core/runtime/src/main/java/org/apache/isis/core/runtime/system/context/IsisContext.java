@@ -23,20 +23,19 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebugList;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -54,11 +53,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  * application-scoped components and also any transaction-scoped components
  * {@link TransactionScopedComponent} s if a {@link IsisTransaction}
  * {@link IsisSession#getCurrentTransaction() is in progress}.
- * 
- * <p>
- * Somewhat analogous to (the static methods in) <tt>HibernateUtil</tt>.
  */
-public class IsisContext implements DebuggableWithTitle {
+public class IsisContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisContext.class);
 
@@ -535,51 +531,6 @@ public class IsisContext implements DebuggableWithTitle {
         return getCurrentTransaction().getMessageBroker();
     }
 
-    // ///////////////////////////////////////////////////////////
-    // Debug
-    // ///////////////////////////////////////////////////////////
-
-    public static DebuggableWithTitle[] debugSystem() {
-        final DebugList debugList = new DebugList("Apache Isis System");
-        debugList.add("Context", getInstance());
-        debugList.add("Apache Isis session factory", getSessionFactory());
-        debugList.add("  Authentication manager", getSessionFactory().getAuthenticationManager());
-        debugList.add("  Authorization manager", getSessionFactory().getAuthorizationManager());
-        debugList.add("  Persistence session factory", getSessionFactory().getPersistenceSessionFactory());
-
-        debugList.add("Reflector", getSpecificationLoader());
-
-        debugList.add("Deployment type", getDeploymentType().getDebug());
-        debugList.add("Configuration", getConfiguration());
-
-        debugList.add("Services", getServices());
-        return debugList.debug();
-    }
-
-    // TODO: looks to be unused..
-    public static DebuggableWithTitle[] debugSession() {
-        final DebugList debugList = new DebugList("Apache Isis Session");
-        debugList.add("Apache Isis session", getSession());
-        debugList.add("Authentication session", getAuthenticationSession());
-
-        debugList.add("Persistence Session", getPersistenceSession());
-        debugList.add("Transaction Manager", getTransactionManager());
-
-        debugList.add("Service injector", getPersistenceSession().getServicesInjector());
-        debugList.add("Services", getPersistenceSession().getServices());
-        return debugList.debug();
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendln("context ", this);
-        debug.appendTitle("Threads based Contexts");
-        for (final Map.Entry<Thread, IsisSession> entry : sessionsByThread.entrySet()) {
-            final Thread thread = entry.getKey();
-            final IsisSession data = entry.getValue();
-            debug.appendln(thread.toString(), data);
-        }
-    }
 
     /**
      * A template method that executes a piece of code in a session.
@@ -651,22 +602,6 @@ public class IsisContext implements DebuggableWithTitle {
             }
         }
     }
-
-
-
-    // /////////////////////////////////////////////////////////
-    // Debugging
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public String debugTitle() {
-        return "Isis (by thread) " + Thread.currentThread().getName();
-    }
-
-
-
-
-
 
 
 }

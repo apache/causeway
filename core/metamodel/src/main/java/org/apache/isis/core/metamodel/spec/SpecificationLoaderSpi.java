@@ -20,10 +20,9 @@
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
-public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
+public interface SpecificationLoaderSpi extends ApplicationScopedComponent, SpecificationLoader {
 
     void injectInto(final Object candidate);
 

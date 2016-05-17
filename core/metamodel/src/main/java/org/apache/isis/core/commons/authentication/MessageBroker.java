@@ -23,11 +23,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import com.google.common.collect.Lists;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
-public class MessageBroker implements Serializable, DebuggableWithTitle {
+import com.google.common.collect.Lists;
+
+public class MessageBroker implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -97,33 +96,6 @@ public class MessageBroker implements Serializable, DebuggableWithTitle {
         this.applicationError = applicationError;
     }
 
-    //region > debugging
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debugArray(debug, "Messages", messages);
-        debugArray(debug, "Warnings", messages);
-    }
-
-    private void debugArray(final DebugBuilder debug, final String title, final List<String> vector) {
-        debug.appendln(title);
-        debug.indent();
-        if (vector.size() == 0) {
-            debug.appendln("none");
-        } else {
-            for (final String text : vector) {
-                debug.appendln(text);
-            }
-        }
-        debug.unindent();
-    }
-
-    @Override
-    public String debugTitle() {
-        return "Simple Message Broker";
-    }
-
-    //endregion
 
     //region > helpers
 

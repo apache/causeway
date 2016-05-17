@@ -30,8 +30,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -42,7 +40,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class AuthenticationManagerStandard implements AuthenticationManager, DebuggableWithTitle {
+public class AuthenticationManagerStandard implements AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = Maps.newHashMap();
 
@@ -239,24 +237,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     // //////////////////////////////////////////////////////////
     // Debugging
     // //////////////////////////////////////////////////////////
-
-    @Override
-    public String debugTitle() {
-        return "Authentication Manager";
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendTitle("Authenticators");
-        for (final Authenticator authenticator : authenticators) {
-            debug.appendln(authenticator.toString());
-        }
-
-        debug.appendTitle("Users");
-        for (final String userName : userByValidationCode.values()) {
-            debug.appendln(userName);
-        }
-    }
 
     @Override
     public String toString() {

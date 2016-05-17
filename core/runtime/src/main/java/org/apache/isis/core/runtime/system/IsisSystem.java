@@ -38,7 +38,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
@@ -64,7 +63,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 
-public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
+public class IsisSystem implements ApplicationScopedComponent {
 
     public static final Logger LOG = LoggerFactory.getLogger(IsisSystem.class);
 
@@ -423,25 +422,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
     //endregion
 
     //region > debugging
-
-    @Override
-    public DebuggableWithTitle debugSection(final String selectionName) {
-        // DebugInfo deb;
-        if (selectionName.equals("Configuration")) {
-            return getConfiguration();
-        }
-        return null;
-    }
-
-    @Override
-    public String[] debugSectionNames() {
-        final String[] general = new String[] { "Overview", "Authenticator", "Configuration", "Reflector", "Requests", "Contexts" };
-        final String[] contextIds = IsisContext.getInstance().allSessionIds();
-        final String[] combined = new String[general.length + contextIds.length];
-        System.arraycopy(general, 0, combined, 0, general.length);
-        System.arraycopy(contextIds, 0, combined, general.length, contextIds.length);
-        return combined;
-    }
 
     IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();

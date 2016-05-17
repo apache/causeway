@@ -26,8 +26,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.Debuggable;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -35,7 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 /**
  * non-final only so it can be mocked if need be.
  */
-public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolder, Debuggable {
+public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolder {
 
     // //////////////////////////////////////////////////
     // Factory methods
@@ -153,7 +151,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     // ////////////////////////////////////////////////////////////////////
-    // toString, debug
+    // toString
     // ////////////////////////////////////////////////////////////////////
 
     @Override
@@ -161,10 +159,5 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName() + " ]";
     }
 
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        // TODO: reinstate
-        // debug.appendln("Identifier", identifier.toString());
-    }
 
 }

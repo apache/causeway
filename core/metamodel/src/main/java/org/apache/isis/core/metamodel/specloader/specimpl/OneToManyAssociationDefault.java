@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -272,15 +271,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     //endregion
 
-    //region > debug, toString
-    @Override
-    public String debugData() {
-        final DebugString debugString = new DebugString();
-        debugString.indent();
-        debugString.indent();
-        getFacetedMethod().debugData(debugString);
-        return debugString.toString();
-    }
+    //region > toString
 
     @Override
     public String toString() {

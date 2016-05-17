@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -394,12 +393,6 @@ public class Memento implements Serializable {
     @Override
     public String toString() {
         return "[" + (data == null ? null : data.getClassName() + "/" + data.getOid() + data) + "]";
-    }
-
-    public void debug(final DebugBuilder debug) {
-        if (data != null) {
-            data.debug(debug);
-        }
     }
 
     // ///////////////////////////////////////////////////////////////

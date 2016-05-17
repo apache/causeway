@@ -22,12 +22,10 @@ package org.apache.isis.core.runtime.memento;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 public class Data implements Encodable, Serializable {
 
@@ -71,11 +69,6 @@ public class Data implements Encodable, Serializable {
 
     public String getClassName() {
         return className;
-    }
-
-    public void debug(final DebugBuilder debug) {
-        debug.appendln(className);
-        debug.appendln(oid != null ? oid.toString() : "null");
     }
 
     @Override

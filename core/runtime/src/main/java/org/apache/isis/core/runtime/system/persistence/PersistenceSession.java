@@ -51,8 +51,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
@@ -97,7 +95,6 @@ import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -156,7 +153,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 public class PersistenceSession implements
         TransactionalResource,
         SessionScopedComponent,
-        DebuggableWithTitle,
         AdapterManager,
         MessageBrokerService,
         PersistenceSessionService,
@@ -1245,45 +1241,6 @@ public class PersistenceSession implements
 
     //endregion
 
-
-    //region > Debugging
-
-    @Override
-    public String debugTitle() {
-        return "Object Store Persistor";
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendTitle(getClass().getName());
-        debug.appendln();
-
-        debug.appendTitle("OID Generator");
-        debug.appendln();
-
-        debug.appendTitle("Services");
-        for (final Object servicePojo : servicesInjector.getRegisteredServices()) {
-            final String id = ServiceUtil.id(servicePojo);
-            final Class<? extends Object> serviceClass = servicePojo.getClass();
-            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
-            final String serviceClassName = serviceClass.getName();
-            final Oid oidForService = getOidForService(serviceSpecification);
-            final String serviceId = id + (id.equals(serviceClassName) ? "" : " (" + serviceClassName + ")");
-            debug.appendln(oidForService != null ? oidForService.toString() : "[NULL]", serviceId);
-        }
-        debug.appendln();
-
-        debug.appendTitle(pojoAdapterMap.debugTitle());
-        pojoAdapterMap.debugData(debug);
-        debug.appendln();
-
-        debug.appendTitle(oidAdapterMap.debugTitle());
-        oidAdapterMap.debugData(debug);
-
-        debug.appendTitle("Persistor");
-        getTransactionManager().debugData(debug);
-        debug.appendln();
-    }
 
 
     @Override

@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 /**
@@ -42,7 +41,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
  * Thus the {@link IsisConfiguration} held by different components may vary, but
  * with each being a possible superset of the previous.
  */
-public interface IsisConfiguration extends DebuggableWithTitle, Iterable<String>, ApplicationScopedComponent {
+public interface IsisConfiguration extends Iterable<String>, ApplicationScopedComponent {
 
     void injectInto(Object candidate);
 
