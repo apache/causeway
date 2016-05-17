@@ -115,7 +115,7 @@ public class DomainObjectContainerDefault
         if (!spec.containsFacet(ViewModelFacet.class)) {
             throw new IsisException("Type must be a ViewModel: " + ofClass);
         }
-        final ObjectAdapter adapter = doCreateViewModelInstance(spec, memento);
+        final ObjectAdapter adapter = getPersistenceSessionService().createViewModelInstance(spec, memento);
         if(adapter.getOid().isViewModel()) {
             return (T)adapter.getObject();
         } else {
@@ -150,6 +150,8 @@ public class DomainObjectContainerDefault
     /**
      * Returns a new instance of the specified class that has the same persisted
      * state as the specified object.
+     *
+     * @deprecated - use {@link FactoryService#instantiate(Class)}.
      */
     @Programmatic
     @Override
@@ -168,10 +170,6 @@ public class DomainObjectContainerDefault
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         return factoryService.mixin(mixinClass, mixedIn);
-    }
-
-    protected ObjectAdapter doCreateViewModelInstance(final ObjectSpecification spec, final String memento) {
-        return getPersistenceSessionService().createViewModelInstance(spec, memento);
     }
 
     @Programmatic
@@ -371,10 +369,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void persistIfNotAlready(final Object object) {
-        if (isPersistent(object)) {
-            return;
-        }
-        persist(object);
+        repositoryService.persist(object);
     }
 
 
@@ -503,11 +498,6 @@ public class DomainObjectContainerDefault
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
         return repositoryService.allMatches(query);
-    }
-
-    <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = getPersistenceSessionService().allMatchingQuery(query);
-        return ObjectAdapter.Util.unwrapT(allMatching);
     }
 
     // //////////////////////////////////////////////////////////////////
