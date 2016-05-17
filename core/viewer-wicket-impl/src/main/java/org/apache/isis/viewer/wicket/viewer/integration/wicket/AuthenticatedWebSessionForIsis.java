@@ -22,16 +22,16 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
@@ -52,7 +52,7 @@ import static org.hamcrest.Matchers.nullValue;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionProvider, BreadcrumbModelProvider, BookmarkedPagesModelProvider {
+public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -100,7 +100,6 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    @Override
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
@@ -147,14 +146,6 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     // *Provider impl.
     // /////////////////////////////////////////////////
     
-    @Override
-    public void injectInto(final Object candidate) {
-        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
-            cast.setAuthenticationSessionProvider(this);
-        }
-    }
-
     private void log(
             final SessionLoggingService.Type type,
             final String username,

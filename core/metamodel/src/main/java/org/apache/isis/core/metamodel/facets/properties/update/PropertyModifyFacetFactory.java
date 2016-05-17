@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.update;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -29,13 +30,10 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.MODIFY_PREFIX };
-    private ServicesInjector servicesInjector;
 
     public PropertyModifyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -67,8 +65,4 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modifyMethod, property));
     }
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

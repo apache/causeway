@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -46,19 +45,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
     private final Parser<?> parser;
-    private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesInjector dependencyInjector;
     private final AdapterManager adapterManager;
 
     public ParseableFacetUsingParser(
-            final Parser<?> parser, final FacetHolder holder, 
-            final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final ServicesInjector dependencyInjector, final AdapterManager adapterManager) {
+            final Parser<?> parser,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector,
+            final AdapterManager adapterManager) {
         super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
-        this.deploymentCategory = deploymentCategory;
-        this.authenticationSessionProvider = authenticationSessionProvider;
-        this.dependencyInjector = dependencyInjector;
+        this.authenticationSessionProvider = servicesInjector.lookupService(AuthenticationSessionProvider.class);
+        this.dependencyInjector = servicesInjector;
         this.adapterManager = adapterManager;
     }
 

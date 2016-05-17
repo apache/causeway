@@ -21,16 +21,15 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
-import org.apache.wicket.Session;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -142,9 +141,6 @@ public final class EntityActionUtil {
             final List<ObjectAction> associatedActions) {
         final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
-
-        final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
-        AuthenticationSession authSession = asa.getAuthenticationSession();
 
         final ObjectSpecification objectSpecification = entityModel.getTypeOfSpecification();
         @SuppressWarnings({ "unchecked", "deprecation" })

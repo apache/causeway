@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * @deprecated
  */
 @Deprecated
-public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware, ServicesInjectorAware {
+public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
 
@@ -101,10 +101,4 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory
     }
 
 
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

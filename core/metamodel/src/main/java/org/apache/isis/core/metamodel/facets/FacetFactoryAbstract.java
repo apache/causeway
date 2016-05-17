@@ -24,20 +24,18 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware,
-        AuthenticationSessionProviderAware, DeploymentCategoryAware {
+public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware, DeploymentCategoryAware, ServicesInjectorAware {
 
     private final List<FeatureType> featureTypes;
 
-    private SpecificationLoader specificationLoader;
-    private AuthenticationSessionProvider authenticationSessionProvider;
     private DeploymentCategory deploymentCategory;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
@@ -65,6 +63,8 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     // Dependencies (injected)
     // ////////////////////////////////////////////////////////////////
 
+    private SpecificationLoader specificationLoader;
+
     protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
@@ -77,14 +77,12 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
         this.specificationLoader = specificationLookup;
     }
 
-    @Override
-    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
-        this.authenticationSessionProvider = authenticationSessionProvider;
-    }
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
+        return servicesInjector.lookupService(AuthenticationSessionProvider.class);
     }
+
+
 
     @Override
     public void setDeploymentCategory(final DeploymentCategory deploymentCategory) {
@@ -93,6 +91,15 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
 
     protected DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
+    }
+
+
+
+    protected ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
 }

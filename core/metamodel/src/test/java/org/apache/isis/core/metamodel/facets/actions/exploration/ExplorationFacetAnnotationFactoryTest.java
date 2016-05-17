@@ -58,15 +58,17 @@ public class ExplorationFacetAnnotationFactoryTest extends AbstractFacetFactoryT
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
         }});
 
 
         facetFactory = new ExplorationFacetAnnotationFactory();
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Override

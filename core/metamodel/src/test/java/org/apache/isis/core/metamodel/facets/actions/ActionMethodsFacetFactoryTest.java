@@ -121,7 +121,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -146,7 +152,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -172,7 +184,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -198,7 +216,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -221,7 +245,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -245,7 +275,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -276,7 +312,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         facetFactory.setServicesInjector(mockServicesInjector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -308,7 +350,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -339,7 +387,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -364,7 +418,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         class Customer {
             @SuppressWarnings("unused")
@@ -395,7 +455,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -460,7 +526,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -499,7 +571,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         facetFactory.setSpecificationLoader(programmableReflector);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -534,7 +612,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -571,7 +655,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -611,7 +701,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterDefaultsFacetViaMethodFactory facetFactory = new ActionParameterDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -660,7 +756,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterChoicesFacetViaMethodFactory facetFactory = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -724,7 +826,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterAutoCompleteFacetViaMethodFactory facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -763,7 +871,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactoryForParams.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -804,7 +918,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams = new ActionParameterDefaultsFacetViaMethodFactory();

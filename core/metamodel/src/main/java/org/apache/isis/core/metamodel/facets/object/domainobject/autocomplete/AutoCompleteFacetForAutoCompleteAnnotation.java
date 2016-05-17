@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete;
 
 import org.apache.isis.applib.annotation.AutoComplete;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,7 +40,6 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
 
         if(annotation == null) {
@@ -52,7 +50,7 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
         final String actionName = annotation.action();
 
         return new AutoCompleteFacetForAutoCompleteAnnotation(holder, repositoryClass, actionName, deploymentCategory,
-                specificationLoader, servicesInjector, authenticationSessionProvider, adapterManager
+                specificationLoader, servicesInjector, adapterManager
         );
     }
 
@@ -63,10 +61,9 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
         super(holder, repositoryClass, actionName, deploymentCategory, specificationLoader, servicesInjector,
-                authenticationSessionProvider, adapterManager
+                adapterManager
         );
     }
 

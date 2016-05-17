@@ -94,13 +94,8 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract impleme
     }
 
 
-    private ServicesInjector servicesInjector;
     private IsisConfiguration configuration;
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {

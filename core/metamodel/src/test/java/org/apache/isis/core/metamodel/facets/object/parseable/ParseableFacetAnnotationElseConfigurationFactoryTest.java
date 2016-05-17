@@ -65,7 +65,13 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
         isisConfigurationDefault = new IsisConfigurationDefault();
         facetFactory.setConfiguration(isisConfigurationDefault);
 
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
     }

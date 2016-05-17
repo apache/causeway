@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -49,16 +47,6 @@ public interface RuntimeContext extends ApplicationScopedComponent {
     // //////////////////////////////////////
     // session-scoped
     // //////////////////////////////////////
-
-    /**
-     * A mechanism for returning the <tt>current</tt>
-     * {@link AuthenticationSession}.
-     * 
-     * <p>
-     * Note that the scope of {@link RuntimeContext} is global, whereas
-     * {@link AuthenticationSession} may change over time.
-     */
-    public AuthenticationSessionProvider getAuthenticationSessionProvider();
 
     public LocalizationProvider getLocalizationProvider();
 

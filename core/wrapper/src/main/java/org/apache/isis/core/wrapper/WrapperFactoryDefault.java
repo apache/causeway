@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -49,11 +51,10 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
@@ -73,13 +74,12 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  * configuration is required.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware,
+public class WrapperFactoryDefault implements WrapperFactory,
         SpecificationLoaderAware, AdapterManagerAware, PersistenceSessionServiceAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
 
-    private AuthenticationSessionProvider authenticationSessionProvider;
     private SpecificationLoader specificationLoader;
     private AdapterManager adapterManager;
     private PersistenceSessionService persistenceSessionService;
@@ -257,7 +257,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLoader(), getAdapterManager(), getPersistenceSessionService());
+        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, getSpecificationLoader(), getAdapterManager(), getPersistenceSessionService());
     }
 
     @Override
@@ -308,14 +308,6 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     // Listeners
     // /////////////////////////////////////////////////////////////
 
-    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
-    @Programmatic
-    @Override
-    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
-        this.authenticationSessionProvider = authenticationSessionProvider;
-    }
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
@@ -345,6 +337,9 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
         this.persistenceSessionService = persistenceSessionService;
     }
 
+
+    @Inject
+    AuthenticationSessionProvider authenticationSessionProvider;
 
 
 }

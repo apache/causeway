@@ -98,7 +98,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-        implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware,
+        implements IsisConfigurationAware, AdapterManagerAware,
         SpecificationLoaderAware, MetaModelValidatorRefiner, PersistenceSessionServiceAware,
         PostConstructMethodCache {
 
@@ -112,7 +112,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
-    private ServicesInjector servicesInjector;
     private PersistenceSessionService persistenceSessionService;
 
     public DomainObjectAnnotationFacetFactory() {
@@ -209,8 +208,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         Facet facet = autoCompleteValidator.flagIfPresent(
                 AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, facetHolder,
                         getDeploymentCategory(), getSpecificationLoader(),
-                        servicesInjector, getAuthenticationSessionProvider(),
-                        adapterManager
+                        servicesInjector, adapterManager
                 ));
 
         // else check from @DomainObject(auditing=...)
@@ -510,11 +508,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
     }
 
     @Override

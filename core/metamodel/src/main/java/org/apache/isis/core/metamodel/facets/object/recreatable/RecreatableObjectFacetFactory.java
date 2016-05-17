@@ -51,9 +51,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
-        implements ServicesInjectorAware, AdapterManagerAware, MetaModelValidatorRefiner, PostConstructMethodCache {
+        implements AdapterManagerAware, MetaModelValidatorRefiner, PostConstructMethodCache {
 
-    private ServicesInjector servicesInjector;
     private AdapterManager adapterManager;
 
     public RecreatableObjectFacetFactory() {
@@ -129,13 +128,6 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 
 
     // //////////////////////////////////////
-
-
-
-    @Override
-    public void setServicesInjector(ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 
     @Override
     public void setAdapterManager(AdapterManager adapterManager) {

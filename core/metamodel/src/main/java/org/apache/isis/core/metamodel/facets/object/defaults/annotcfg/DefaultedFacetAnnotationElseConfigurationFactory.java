@@ -34,10 +34,9 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
 
-public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, ServicesInjectorAware {
+public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 
     private IsisConfiguration configuration;
-    private ServicesInjector servicesInjector;
 
     public DefaultedFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -53,7 +52,7 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
         // create from annotation, if present
         if (annotation != null) {
-            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, getServicesInjector());
+            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -62,7 +61,7 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
         // otherwise, try to create from configuration, if present
         final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls, getIsisConfiguration());
         if (!Strings.isNullOrEmpty(providerName)) {
-            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, getServicesInjector());
+            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -84,13 +83,5 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
         this.configuration = configuration;
     }
 
-    private ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector dependencyInjector) {
-        this.servicesInjector = dependencyInjector;
-    }
 
 }

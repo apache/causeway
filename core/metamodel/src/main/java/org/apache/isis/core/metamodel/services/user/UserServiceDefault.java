@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -32,17 +34,17 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class UserServiceDefault implements UserService, AuthenticationSessionProviderAware {
+public class UserServiceDefault implements UserService {
 
     @Programmatic
     @Override
     public UserMemento getUser() {
-        final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
+        final AuthenticationSession session =
+                authenticationSessionProvider.getAuthenticationSession();
 
         final UserAndRoleOverrides userAndRoleOverrides = currentOverridesIfAny();
 
@@ -123,18 +125,7 @@ public class UserServiceDefault implements UserService, AuthenticationSessionPro
     }
 
 
-
-    private AuthenticationSessionProvider authenticationSessionProvider;
-
-
-    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
-
-    @Programmatic
-    @Override
-    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
-        this.authenticationSessionProvider = authenticationSessionProvider;
-    }
+    @Inject
+    AuthenticationSessionProvider authenticationSessionProvider;
 
 }

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.*;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -125,7 +124,8 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             // Parser
             final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
-                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getDeploymentCategory(context), getAuthenticationSessionProvider(), getDependencyInjector(), getAdapterMap()));
+                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder,
+                        getDependencyInjector(), getAdapterMap()));
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, getDependencyInjector()));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, getDependencyInjector()));
                 if(parser instanceof Parser2) {
@@ -185,11 +185,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     }
 
     public ServicesInjector getDependencyInjector() {
-        return context.getDependencyInjector();
-    }
-
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return context.getAuthenticationSessionProvider();
+        return context.getServicesInjector();
     }
 
 }

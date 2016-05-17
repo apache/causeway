@@ -82,7 +82,6 @@ public abstract class RuntimeContextAbstract implements RuntimeContext {
     }
 
     protected void injectSubcomponentsInto(final Object candidate) {
-        getAuthenticationSessionProvider().injectInto(candidate);
         getDeploymentCategoryProvider().injectInto(candidate);
         getTransactionStateProvider().injectInto(candidate);
         getServicesInjector().injectInto(candidate);

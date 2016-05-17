@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String VALIDATE_PREFIX = "validate";
 
@@ -62,9 +62,4 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         }
     }
 
-    private ServicesInjector servicesInjector;
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

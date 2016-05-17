@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -32,8 +33,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -48,12 +47,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * class is being processed}, the {@link ObjectMember member}s for the
  * {@link ObjectSpecification spec} are not known.
  */
-public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String DISABLED_PREFIX = "disabled";
 
     private static final String[] PREFIXES = { DISABLED_PREFIX, };
-    private ServicesInjector servicesInjector;
 
     public DisabledObjectFacetViaMethodFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
@@ -91,10 +89,5 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
         if (facet != null) {
             facet.copyOnto(member);
         }
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
     }
 }

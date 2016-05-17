@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -30,10 +31,8 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
 
@@ -76,11 +75,4 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
     }
 
 
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-
-        this.servicesInjector = servicesInjector;
-    }
 }

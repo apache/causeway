@@ -23,18 +23,15 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -50,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * panel using other {@link ComponentType}s.
  */
 public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T>
-        implements PersistenceSessionProvider, AuthenticationSessionProvider, DeploymentCategoryProvider {
+        implements PersistenceSessionProvider, DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -138,9 +135,8 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
      * 
      * @return
      */
-    @Override
     public AuthenticationSession getAuthenticationSession() {
-        return ((AuthenticationSessionProvider) Session.get()).getAuthenticationSession();
+        return IsisContext.getAuthenticationSession();
     }
 
     @Override
@@ -168,10 +164,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     
     @Override
     public void injectInto(final Object candidate) {
-        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
-            cast.setAuthenticationSessionProvider(this);
-        }
         if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
             final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
             cast.setDeploymentCategory(this.getDeploymentCategory());

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -35,15 +36,13 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
 /**
  * TODO: should probably split out into two {@link FacetFactory}s, one for
  * <tt>addTo()</tt>/<tt>removeFrom()</tt> and one for <tt>validateAddTo()</tt>/
  * <tt>validateRemoveFrom()</tt>.
  */
-public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String[] PREFIXES = {};
 
@@ -194,13 +193,4 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         FacetUtil.addFacet(facet);
     }
 
-    // ///////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ///////////////////////////////////////////////////////
-
-    private ServicesInjector servicesInjector;
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

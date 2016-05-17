@@ -89,8 +89,6 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -99,7 +97,7 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, IsisConfigurationAware, AdapterManagerAware, MetaModelValidatorRefiner,
+public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, MetaModelValidatorRefiner,
         TransactionStateProviderAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
@@ -116,7 +114,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     private final MetaModelValidatorForDeprecatedAnnotation prototypeValidator = new MetaModelValidatorForDeprecatedAnnotation(Prototype.class);
 
 
-    private ServicesInjector servicesInjector;
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
     private TransactionStateProvider transactionStateProvider;
@@ -218,7 +215,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getDeploymentCategory(), configuration, getServicesInjector(),
+                                getDeploymentCategory(), configuration, servicesInjector,
                                 getAuthenticationSessionProvider(), getAdapterManager(),
                                 transactionStateProvider
                         ), processMethodContext);
@@ -228,7 +225,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getDeploymentCategory(), configuration, getServicesInjector(),
+                                getDeploymentCategory(), configuration, servicesInjector,
                                 getAuthenticationSessionProvider(), getAdapterManager(),
                                 transactionStateProvider
                         ), processMethodContext);
@@ -237,7 +234,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), configuration, getServicesInjector(),
+                        getDeploymentCategory(), configuration, servicesInjector,
                         getAuthenticationSessionProvider(),
                         getAdapterManager(), transactionStateProvider
                 );
@@ -246,7 +243,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), configuration, getServicesInjector(), getAuthenticationSessionProvider(),
+                        getDeploymentCategory(), configuration, servicesInjector, getAuthenticationSessionProvider(),
                         getAdapterManager(), transactionStateProvider
                 );
             }
@@ -546,11 +543,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
-
-    @Override
     public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
 
@@ -575,10 +567,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
     private AdapterManager getAdapterManager() {
         return adapterManager;
-    }
-
-    private ServicesInjector getServicesInjector() {
-        return servicesInjector;
     }
 
     @Override

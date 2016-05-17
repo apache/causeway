@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -29,7 +28,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -52,7 +50,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider,
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider,
         DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;
@@ -137,10 +135,8 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      * 
      * @return
      */
-    @Override
     public AuthenticationSession getAuthenticationSession() {
-        final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
-        return asa.getAuthenticationSession();
+        return IsisContext.getAuthenticationSession();
     }
 
     @Override
@@ -177,10 +173,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     
     @Override
     public void injectInto(final Object candidate) {
-        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
-            cast.setAuthenticationSessionProvider(this);
-        }
         if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
             final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
             cast.setDeploymentCategory(this.getDeploymentCategory());

@@ -22,10 +22,8 @@ package org.apache.isis.core.metamodel.facets.object.parseable.annotcfg;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Parseable;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParserUtil;
@@ -47,12 +45,23 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
         return annotation.parserClass();
     }
 
-    public ParseableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
-        this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder, deploymentCategory, authenticationSessionProvider, adapterManager, dependencyInjector);
+    public ParseableFacetAnnotation(
+            final Class<?> annotatedClass,
+            final IsisConfiguration configuration,
+            final FacetHolder holder,
+            final AdapterManager adapterManager,
+            final ServicesInjector dependencyInjector) {
+        this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder,
+                adapterManager, dependencyInjector);
     }
 
-    private ParseableFacetAnnotation(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
-        super(candidateParserName, candidateParserClass, holder, deploymentCategory, authenticationSessionProvider, dependencyInjector, adapterManager);
+    private ParseableFacetAnnotation(
+            final String candidateParserName,
+            final Class<?> candidateParserClass,
+            final FacetHolder holder,
+            final AdapterManager adapterManager,
+            final ServicesInjector dependencyInjector) {
+        super(candidateParserName, candidateParserClass, holder, dependencyInjector, adapterManager);
     }
 
 }

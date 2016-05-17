@@ -80,7 +80,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner, IsisConfigurationAware {
+public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation postsCollectionAddedToEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsCollectionAddedToEvent.class);
     private final MetaModelValidatorForDeprecatedAnnotation postsCollectionRemovedFromEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsCollectionRemovedFromEvent.class);
@@ -92,7 +92,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
-    private ServicesInjector servicesInjector;
     private IsisConfiguration configuration;
 
     public CollectionAnnotationFacetFactory() {
@@ -397,8 +396,4 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         disabledValidator.setConfiguration(configuration);
     }
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

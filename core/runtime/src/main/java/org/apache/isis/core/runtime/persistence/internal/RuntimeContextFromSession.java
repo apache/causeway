@@ -26,9 +26,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -48,6 +46,7 @@ import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAbstract;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
+import org.apache.isis.core.runtime.services.authsess.AuthenticationSessionProviderDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -60,7 +59,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  */
 public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
-    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final PersistenceSessionService persistenceSessionService;
     private final MessageBrokerService messageBrokerService;
     private final LocalizationProviderAbstract localizationProvider;
@@ -75,14 +73,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
         super(deploymentCategory, configuration, servicesInjector, specificationLoader);
-
-        this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
-
-            @Override
-            public AuthenticationSession getAuthenticationSession() {
-                return IsisContext.getAuthenticationSession();
-            }
-        };
 
         this.persistenceSessionService = new PersistenceSessionServiceAbstract() {
 
@@ -222,11 +212,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     // //////////////////////////////////////////////////////////////////
     // Components
     // //////////////////////////////////////////////////////////////////
-
-    @Override
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
 
     @Override
     public LocalizationProviderAbstract getLocalizationProvider() {

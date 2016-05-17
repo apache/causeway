@@ -26,9 +26,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
-
-    private ServicesInjector servicesInjector;
+public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract  {
 
     public MixinFacetForMixinAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -50,8 +48,4 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract im
         facetHolder.addFacet(mixinFacet);
     }
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

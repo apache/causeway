@@ -30,12 +30,8 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, ServicesInjectorAware {
-
-    private ServicesInjector servicesInjector;
+public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     private TranslationService translationService;
 
@@ -137,11 +133,6 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
             translationService = servicesInjector.lookupService(TranslationService.class);
         }
         return translationService;
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
     }
 
 }

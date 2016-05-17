@@ -14,16 +14,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.commons.authentication;
+package org.apache.isis.core.runtime.services.authsess;
 
-public abstract class AuthenticationSessionProviderAbstract implements AuthenticationSessionProvider {
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
+@DomainService(nature = NatureOfService.DOMAIN)
+public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
+
+    @Programmatic
     @Override
-    public void injectInto(final Object candidate) {
-        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
-            cast.setAuthenticationSessionProvider(this);
-        }
+    public AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
     }
-
 }

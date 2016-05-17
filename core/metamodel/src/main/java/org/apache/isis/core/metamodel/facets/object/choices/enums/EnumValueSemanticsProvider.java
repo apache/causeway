@@ -116,7 +116,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     protected String titleString(final Object object, final Localization localization) {
-        final TranslationService translationService = getDependencyInjector().lookupService(TranslationService.class);
+        final TranslationService translationService = getServicesInjector().lookupService(TranslationService.class);
 
         if (titleMethod != null) {
             // sadness: same as in TranslationFactory

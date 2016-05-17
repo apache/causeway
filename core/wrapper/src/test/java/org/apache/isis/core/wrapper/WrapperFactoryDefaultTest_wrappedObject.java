@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper;
+package org.apache.isis.core.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -35,8 +35,6 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -50,6 +48,8 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
@@ -135,12 +134,14 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
-        wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
         wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
 
         context.checking(new Expectations() {
             {
+                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+                will(returnValue(mockAuthenticationSessionProvider));
+
                 allowing(mockSpecificationLoader).loadSpecification(String.class);
                 will(returnValue(mockStringSpec));
 

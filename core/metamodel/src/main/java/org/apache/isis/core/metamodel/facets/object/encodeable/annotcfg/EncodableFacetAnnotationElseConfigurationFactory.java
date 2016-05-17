@@ -33,15 +33,12 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, ServicesInjectorAware, AdapterManagerAware {
+public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware {
 
     private IsisConfiguration configuration;
 
     private AdapterManager adapterManager;
-    private ServicesInjector servicesInjector;
 
     public EncodableFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -97,9 +94,5 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
         this.adapterManager = adapterManager;
     }
 
-    @Override
-    public void setServicesInjector(final ServicesInjector dependencyInjector) {
-        this.servicesInjector = dependencyInjector;
-    }
 
 }

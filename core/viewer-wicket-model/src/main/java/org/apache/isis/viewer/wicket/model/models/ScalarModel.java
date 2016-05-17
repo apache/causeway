@@ -26,8 +26,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Session;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -666,7 +664,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
      * testing.
      */
     protected AuthenticationSession getAuthenticationSession() {
-        return ((AuthenticationSessionProvider) Session.get()).getAuthenticationSession();
+        return getPersistenceSession().getServicesInjector().lookupService(AuthenticationSessionProvider.class).getAuthenticationSession();
     }
 
     public boolean isRequired() {

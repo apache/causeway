@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -28,15 +26,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
+public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
-    private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
-    private ServicesInjector servicesInjector;
 
     /**
      * Lazily created.
@@ -63,7 +58,7 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
 
     public ValueSemanticsProviderContext getContext() {
         if (context == null) {
-            context = new ValueSemanticsProviderContext(getDeploymentCategory(), authenticationSessionProvider, getSpecificationLoader(), adapterManager, servicesInjector);
+            context = new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), adapterManager, servicesInjector);
         }
         return context;
     }
@@ -73,19 +68,11 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
         this.configuration = configuration;
     }
 
-    @Override
-    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
-        this.authenticationSessionProvider = authenticationSessionProvider;
-    }
 
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
-    @Override
-    public void setServicesInjector(final ServicesInjector dependencyInjector) {
-        this.servicesInjector = dependencyInjector;
-    }
 
 }

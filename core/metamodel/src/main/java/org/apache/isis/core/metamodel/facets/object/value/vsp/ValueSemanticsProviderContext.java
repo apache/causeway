@@ -25,28 +25,25 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public class ValueSemanticsProviderContext {
     
     private final DeploymentCategory deploymentCategory;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
-    private final ServicesInjector dependencyInjector;
+    private final ServicesInjector servicesInjector;
 
     public ValueSemanticsProviderContext(
-            final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ServicesInjector dependencyInjector) {
+            final DeploymentCategory deploymentCategory,
+            final SpecificationLoader specificationLookup,
+            final AdapterManager adapterManager,
+            final ServicesInjector servicesInjector) {
         this.deploymentCategory = deploymentCategory;
-        this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
-        this.dependencyInjector = dependencyInjector;
+        this.servicesInjector = servicesInjector;
     }
 
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }
     
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
-
     public SpecificationLoader getSpecificationLoader() {
         return specificationLookup;
     }
@@ -55,7 +52,7 @@ public class ValueSemanticsProviderContext {
         return adapterManager;
     }
 
-    public ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 }

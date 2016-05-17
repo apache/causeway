@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.progmodel.wrapper;
+package org.apache.isis.core.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -41,7 +41,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -55,13 +54,13 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -124,7 +123,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
-        wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
         wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
         wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
         
@@ -165,7 +164,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
-                
+
                 allowing(mockPasswordMember).isOneToOneAssociation();
                 will(returnValue(true));
 

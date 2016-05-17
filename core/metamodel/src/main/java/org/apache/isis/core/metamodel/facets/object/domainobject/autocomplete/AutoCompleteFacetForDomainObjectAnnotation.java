@@ -66,7 +66,7 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
         super(holder, repositoryClass, actionName, deploymentCategory, specificationLoader, servicesInjector,
-                authenticationSessionProvider, adapterManager
+                adapterManager
         );
         this.repositoryClass = repositoryClass;
         this.actionName = actionName;

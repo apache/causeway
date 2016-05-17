@@ -44,14 +44,12 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -73,7 +71,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 public class DomainObjectContainerDefault
         implements DomainObjectContainer,
         PersistenceSessionServiceAware, SpecificationLoaderAware,
-        AuthenticationSessionProviderAware, AdapterManagerAware, ExceptionRecognizer {
+        AdapterManagerAware, ExceptionRecognizer {
 
 
     //region > titleOf
@@ -655,7 +653,6 @@ public class DomainObjectContainerDefault
 
     private PersistenceSessionService persistenceSessionService;
     private SpecificationLoader specificationLoader;
-    private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
 
 
@@ -669,15 +666,6 @@ public class DomainObjectContainerDefault
         this.specificationLoader = specificationLoader;
     }
 
-    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
-
-    @Programmatic
-    @Override
-    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
-        this.authenticationSessionProvider = authenticationSessionProvider;
-    }
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;

@@ -213,11 +213,4 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         optionalValidator.setConfiguration(configuration);
     }
 
-
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

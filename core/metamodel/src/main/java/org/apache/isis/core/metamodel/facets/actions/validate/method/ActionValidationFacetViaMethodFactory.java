@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 /**
  * Sets up {@link ActionValidationFacet}.
  */
-public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
 
@@ -118,12 +118,4 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
     }
 
 
-    // //////////////////////////////////////
-
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

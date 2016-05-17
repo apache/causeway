@@ -16,16 +16,14 @@
  */
 package org.apache.isis.core.commons.authentication;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
+/**
+ * This is implemented by an (internal) domain service
+ */
 public interface AuthenticationSessionProvider {
 
-    void injectInto(final Object candidate);
-
-    /**
-     * Provided by <tt>AuthenticationManager</tt> when used by framework.
-     * 
-     * <p>
-     * Called in multiple places.
-     */
+    @Programmatic
     AuthenticationSession getAuthenticationSession();
 
 }

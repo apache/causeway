@@ -25,9 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class GridFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+public class GridFacetFactory extends FacetFactoryAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridFacetFactory.class);
 
@@ -44,11 +43,5 @@ public class GridFacetFactory extends FacetFactoryAbstract implements ServicesIn
         FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService));
     }
 
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 
 }

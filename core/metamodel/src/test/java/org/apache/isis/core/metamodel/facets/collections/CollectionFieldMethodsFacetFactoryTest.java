@@ -112,7 +112,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -137,7 +143,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -162,7 +174,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -187,7 +205,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         class Customer {
             @SuppressWarnings("unused")
@@ -212,7 +236,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -240,7 +270,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -266,7 +302,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -288,7 +330,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -314,7 +362,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -347,7 +401,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -377,7 +437,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -410,7 +476,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -440,7 +512,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -473,7 +551,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -500,7 +584,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -539,7 +629,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -577,7 +673,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         @SuppressWarnings("hiding")
         class Order {
@@ -607,7 +709,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAccessorFacetViaAccessorFactory facetFactoryForAccessor = new CollectionAccessorFacetViaAccessorFactory();
         facetFactoryForAccessor.setSpecificationLoader(programmableReflector);
         facetFactoryForAccessor.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactoryForAccessor.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactoryForAccessor.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
 
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddToRemoveFromAndValidateFacetFactory();
@@ -707,7 +815,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameOrders");
@@ -727,7 +841,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionOrders");
@@ -747,7 +867,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOrders");
@@ -765,7 +891,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOtherOrders");
@@ -781,7 +913,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOrders");
@@ -801,7 +939,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOtherOrders");
@@ -817,7 +961,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideOrders", new Class[] { UserMemento.class });
@@ -837,7 +987,13 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+        }});
+
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableOrders", new Class[] { UserMemento.class });

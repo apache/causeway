@@ -87,12 +87,11 @@ import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropert
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner, IsisConfigurationAware {
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation postsPropertyChangedEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsPropertyChangedEvent.class);
     private final MetaModelValidatorForDeprecatedAnnotation propertyInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(PropertyInteraction.class);
@@ -105,7 +104,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
 
-    private ServicesInjector servicesInjector;
     private IsisConfiguration configuration;
 
     public PropertyAnnotationFacetFactory() {
@@ -469,9 +467,4 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         notPersistedValidator.setConfiguration(configuration);
     }
 
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

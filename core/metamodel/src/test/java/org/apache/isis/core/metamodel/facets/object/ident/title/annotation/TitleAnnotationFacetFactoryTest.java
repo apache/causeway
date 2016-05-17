@@ -32,6 +32,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -69,11 +70,14 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         facetFactory = new TitleAnnotationFacetFactory();
         facetFactory.setAdapterManager(mockAdapterManager);
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
-        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setServicesInjector(mockServicesInjector);
         facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         context.checking(new Expectations() {
             {
+                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+                will(returnValue(mockAuthenticationSessionProvider));
+
                 allowing(mockLocalizationProvider).getLocalization();
                 will(returnValue(new LocalizationDefault()));
             }

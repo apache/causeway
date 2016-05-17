@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
+public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String TO_STRING = "toString";
     private static final String TITLE = "title";
@@ -93,12 +93,4 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         }
     }
 
-    // //////////////////////////////////////
-
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

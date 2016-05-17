@@ -24,8 +24,6 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -45,8 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
 /**
  * Processes the {@link Value} annotation.
@@ -74,12 +70,10 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
-public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
+public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware {
 
     private IsisConfiguration configuration;
-    private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
-    private ServicesInjector servicesInjector;
 
     public ValueFacetAnnotationOrConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -118,7 +112,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     }
 
     protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
-        return new ValueSemanticsProviderContext(getDeploymentCategory(), getAuthenticationSessionProvider(), getSpecificationLoader(), getAdapterManager(), getServicesInjector());
+        return new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), getAdapterManager(), servicesInjector);
     }
 
     // ////////////////////////////////////////////////////////////////////
@@ -134,14 +128,6 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         this.configuration = configuration;
     }
 
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
-
-    @Override
-    public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
-        this.authenticationSessionProvider = authenticationSessionProvider;
-    }
 
     public AdapterManager getAdapterManager() {
         return adapterManager;
@@ -150,15 +136,6 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
-    }
-
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector dependencyInjector) {
-        this.servicesInjector = dependencyInjector;
     }
 
 }

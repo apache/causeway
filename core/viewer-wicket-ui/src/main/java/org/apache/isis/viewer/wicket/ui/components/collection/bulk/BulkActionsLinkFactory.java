@@ -25,7 +25,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 
@@ -233,8 +232,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
     ///////////////////////////////////////////////////////
 
     public AuthenticationSession getAuthenticationSession() {
-        final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
-        return asa.getAuthenticationSession();
+        return getServicesInjector().lookupService(AuthenticationSessionProvider.class).getAuthenticationSession();
     }
 
     protected MessageBroker getMessageBroker() {

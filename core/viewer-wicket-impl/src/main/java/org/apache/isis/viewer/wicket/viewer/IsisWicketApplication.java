@@ -60,8 +60,6 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
@@ -141,7 +139,7 @@ import net.ftlines.wicketsource.WicketSource;
  */
 public class IsisWicketApplication
         extends AuthenticatedWebApplication
-        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider,
+        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor,
         DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;
@@ -808,11 +806,6 @@ public class IsisWicketApplication
     }
 
 
-    // /////////////////////////////////////////////////
-    // Authentication Session
-    // /////////////////////////////////////////////////
-
-    @Override
     public AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
@@ -824,10 +817,6 @@ public class IsisWicketApplication
 
     @Override
     public void injectInto(final Object candidate) {
-        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
-            cast.setAuthenticationSessionProvider(this);
-        }
     }
 
     @Override
