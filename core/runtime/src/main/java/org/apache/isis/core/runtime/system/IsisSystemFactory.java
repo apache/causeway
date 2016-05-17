@@ -19,18 +19,82 @@
 
 package org.apache.isis.core.runtime.system;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
+import com.google.inject.Inject;
+
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 /**
  * Pluggable mechanism for creating {@link IsisSystem}s.
  */
-public interface IsisSystemFactory extends ApplicationScopedComponent {
+public class IsisSystemFactory implements ApplicationScopedComponent {
 
-    IsisSystem createSystem(
-            final DeploymentType deploymentType,
-            @Nullable final AppManifest appManifestIfAny);
+
+    /**
+     * @deprecated - renamed to {@link #APP_MANIFEST_NOOP}
+     */
+    @Deprecated
+    public static final AppManifest NOOP = new AppManifest() {
+        @Override public List<Class<?>> getModules() {
+            return null;
+        }
+        @Override public List<Class<?>> getAdditionalServices() {
+            return null;
+        }
+
+        @Override public String getAuthenticationMechanism() {
+            return null;
+        }
+
+        @Override public String getAuthorizationMechanism() {
+            return null;
+        }
+
+        @Override public List<Class<? extends FixtureScript>> getFixtures() {
+            return null;
+        }
+
+        @Override public Map<String, String> getConfigurationProperties() {
+            return null;
+        }
+    };
+
+    /**
+     * Placeholder for no {@link AppManifest}.
+     *
+     * <p>
+     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with
+     *     null in {@link #createSystem(DeploymentType, AppManifest)}.
+     * </p>
+     */
+    public static final AppManifest APP_MANIFEST_NOOP = NOOP;
+
+
+
+    private final InstallerLookup installerLookup;
+
+    @Inject
+    public IsisSystemFactory(final InstallerLookup installerLookup) {
+        this.installerLookup = installerLookup;
+    }
+
+
+    public IsisSystem createSystem(final DeploymentType deploymentType, final AppManifest appManifestIfAny) {
+        IsisComponentProviderUsingInstallers componentProvider =
+                new IsisComponentProviderUsingInstallers(
+                        deploymentType,
+                        appManifestIfAny == NOOP
+                                ? null
+                                : appManifestIfAny, installerLookup);
+        return new IsisSystem(componentProvider);
+    }
 
 }

@@ -31,7 +31,6 @@ import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.IsisSystemFactory;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 
 public class IsisInjectModule extends AbstractModule {
 
@@ -104,26 +103,19 @@ public class IsisInjectModule extends AbstractModule {
         requireBinding(DeploymentType.class);
         requireBinding(IsisConfigurationBuilder.class);
         requireBinding(InstallerLookup.class);
-        bind(AppManifest.class).toInstance(IsisSystemThatUsesInstallersFactory.APP_MANIFEST_NOOP);
+        bind(AppManifest.class).toInstance(IsisSystemFactory.APP_MANIFEST_NOOP);
     }
 
-    @SuppressWarnings("unused")
-    @Provides
-    @Inject
-    @Singleton
-    private IsisSystemFactory provideIsisSystemFactory(final InstallerLookup installerLookup) {
-        final IsisSystemThatUsesInstallersFactory systemFactory = new IsisSystemThatUsesInstallersFactory(installerLookup);
-        systemFactory.init();
-        return systemFactory;
-    }
 
     @Provides
     @Inject
     @Singleton
     protected IsisSystem provideIsisSystem(
             final DeploymentType deploymentType,
-            final IsisSystemFactory systemFactory,
+            final InstallerLookup installerLookup,
             final AppManifest appManifestIfAny) {
+
+        final IsisSystemFactory systemFactory = new IsisSystemFactory(installerLookup);
         final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
