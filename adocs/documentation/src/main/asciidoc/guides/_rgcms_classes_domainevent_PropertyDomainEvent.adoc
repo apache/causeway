@@ -15,3 +15,31 @@ The class has a couple of responsibilities (in addition to those it inherits):
 
 
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's property.
+
+
+== API
+
+The API of the class is:
+
+[source,java]
+----
+public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
+
+    public static class Default                                 // <1>
+        extends PropertyDomainEvent<Object, Object> { ... }
+    public static class Noop                                    // <2>
+        extends PropertyDomainEvent<Object, Object> { ... }
+    public static class Doop                                    // <3>
+        extends PropertyDomainEvent<Object, Object> { ... }
+
+    public T getOldValue();                                     // <4>
+    public T getNewValue();                                     // <5>
+}
+----
+<1> The `Default` nested static class is the default for the xref:rgant.adoc#_rgant_Property_domainEvent[`@Property#domainEvent()`]
+annotation attribute.  Whether this raises an event or not depends upon the
+`isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault` configuration property.
+<2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
+<3> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
+<4> The pre-modification value of the property; populated at validate and subsequent phases.
+<5> The proposed (post-modification) value of the property; populated at validate and subsequent phases

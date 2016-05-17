@@ -7,26 +7,35 @@
 
 
 
-The `publishing()` attribute determines whether and how an action invocation is published via the registered implementation of a xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`]).  This attribute is also supported for xref:rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects are published as events.
+The `publishing()` attribute determines whether and how an action invocation is published via the registered
+implementation of a xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`]) or
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`).  This attribute is also
+supported for xref:rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects
+are published as events, and for xref:rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`], where it controls
+whether property edits are published as events.
 
 A common use case is to notify external "downstream" systems of changes in the state of the Isis application.
-The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.actions` is used to determine the whether the action is published:
+The default value for the attribute is `AS_CONFIGURED`, meaning that the
+xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.actions` is used to determine
+the whether the action is published:
 
 * `all` +
 +
-all actions are published
+all action invocations are published
 
 * `ignoreSafe` (or `ignoreQueryOnly`) +
 +
-actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
+invocations of actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
 
 * `none` +
 +
-no actions are published
+no action invocations are published
 
 If there is no configuration property in `isis.properties` then publishing is automatically enabled.
 
-This default can be overridden on an action-by-action basis; if `publishing()` is set to `ENABLED` then the action invocation is published irrespective of the configured value; if set to `DISABLED` then the action invocation is _not_ published, again irrespective of the configured value.
+This default can be overridden on an action-by-action basis; if `publishing()` is set to `ENABLED` then the action
+invocation is published irrespective of the configured value; if set to `DISABLED` then the action invocation is
+_not_ published, again irrespective of the configured value.
 
 For example:
 
@@ -44,9 +53,19 @@ public class Order {
 
 == `publishingPayloadFactory()`
 
-The (optional) related `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to be published by the publishing factory.
+The (optional) related `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to
+be published by the publishing factory.
 
-Rather than simply broadcast that the action was invoked, the payload factory allows a "fatter" payload to be instantiated that can eagerly push commonly-required information to all subscribers. For at least some subscribers this should avoid the necessity to query back for additional information.
+Rather than simply broadcast that the action was invoked, the payload factory allows a "fatter" payload to be
+instantiated that can eagerly push commonly-required information to all subscribers. For at least some subscribers
+this should avoid the necessity to query back for additional information.
+
+[WARNING]
+====
+Be aware that this attribute is only honoured by the deprecated ( in `1.13.0-SNAPSHOT`)
+xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
+is ignored by the replacement xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`],
+====
 
 
 

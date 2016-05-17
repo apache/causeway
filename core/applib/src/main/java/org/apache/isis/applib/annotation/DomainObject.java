@@ -35,10 +35,7 @@ import org.apache.isis.applib.services.publish.PublisherService;
 
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
- *
- * @deprecated - not supported by {@link PublisherService}.
  */
-@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -75,10 +72,9 @@ public @interface DomainObject {
      *     If not specified then a default implementation will be used.
      * </p>
      *
-     * <p>
-     *     TODO: ??? factor out PayloadFactory.Default so similar to design similar to @Action(domainEvent=...)
-     * </p>
+     * @deprecated - not supported by {@link PublisherService}.
      */
+    @Deprecated
     Class<? extends PublishingPayloadFactoryForObject> publishingPayloadFactory() default PublishingPayloadFactoryForObject.class;
 
 

@@ -12,8 +12,10 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 ====
 
 
+[[_rgcfg_configuring-core_domain-events]]
+== Domain Events
 
-.Core Configuration Properties
+.Core Configuration Properties for Domain Events
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -21,20 +23,6 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 (default value)
 |Description
 
-|`isis.objects.` +
-`editing`
-|`true`,`false` +
-(`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rgcfg.adoc#_rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
-
-
-|`isis.persistor.` +
-`disableConcurrencyChecking`
-|`true`,`false` +
-(`false`)
-| Disables concurrency checking globally.  +
-
-Only intended for "emergency use" as a workaround while pending fix/patch to Apache Isis itself.  (Note that there is no "datanucleus" in the property).
 
 |`isis.reflector.facet.` +
 `actionAnnotation.` +
@@ -51,18 +39,30 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 |Whether an event should be posted if xref:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
-`cssClass.patterns`
-|regex:css1, regex2:css2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
+`propertyAnnotation.` +
+`domainEvent.postForDefault`
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
 
-See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
-|`isis.reflector.facet.` +
-`cssClassFa.patterns`
-|regex:fa-icon,regex2:fa-icon2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
 
-See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+|===
+
+
+[[_rgcfg_configuring-core_lifecycle-events]]
+== Lifecycle Events
+
+
+
+.Core Configuration Properties for Lifecycle Events
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -120,6 +120,26 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
+
+
+|===
+
+
+
+
+[[_rgcfg_configuring-core_ui-events]]
+== UI Events
+
+
+.Core Configuration Properties for UI Events
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `cssClassUiEvent.postForDefault`
@@ -141,61 +161,24 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 (`true`)
 |Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
-|`isis.reflector.facet.` +
-`filterVisibility`
-|`true`,`false` +
-(`true`)
-|Whether objects should be filtered for visibility. +
-
-See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for further discussion.
-
-|`isis.reflector.facet.` +
-`propertyAnnotation.` +
-`domainEvent.postForDefault`
-|`true`,`false` +
-(`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
-
-|`isis.reflector.facets`
-|`FQCN`
-|Fully qualified class names of a custom implementation of `ProgrammingModel` interface. +
-
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
-
-|`isis.reflector.facets.` +
-`exclude`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
-
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
-
-|`isis.reflector.facets.` +
-`include`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 
-|`isis.reflector.` +
-`layoutMetadataReaders`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic layout]s. +
-
-See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+|===
 
 
 
-|`isis.reflector.validator`
-|`FQCN`
-|Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
 
-See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
+[[_rgcfg_configuring-core_services]]
+== Services
 
-|`isis.reflector.validator.` +
-`allowDeprecated`
-|`true`,`false` +
-(`true`)
-| Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
+
+.Core Configuration Properties for Services
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
 
 
 |`isis.services`
@@ -216,9 +199,14 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 |`isis.services.` +
 `command.actions`
 | `all`, `ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically reified into commands (for actions annotated with xref:rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+|Whether action invocations should be automatically reified into commands (for actions annotated with xref:rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
+
+|`isis.services.` +
+`command.properties`
+| `all`, `none` (`all`)
+|(`1.13.0-SNAPSHOT`) Whether property edits should be automatically reified into commands (for properties annotated with xref:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
 |`isis.services.` +
@@ -238,7 +226,7 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 |`isis.services.` +
 `ContentNegotiation-` +
 `ServiceXRoDomainType` +
-.prettyPrint
+.`prettyPrint`
 | `true`,`false` +
 (depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
@@ -325,10 +313,16 @@ This implementation provides a default set of recognizers to convert RDBMS const
 (`all`)
 |Whether changed objects should be automatically published (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
+
 |`isis.services.` +
 `publish.actions`
-| `all`, `ignoreSafe`, `none` (`all`)
+| `all`, `ignoreSafe`, `none` (`none`)
 |Whether actions should be automatically published (for actions annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+
+|`isis.services.` +
+`publish.properties`
+| `all`, `none` (`none`)
+|(`1.13.0-SNAPSHOT`) Whether properties should be automatically published (for properties annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
 
 
 |`isis.services.` +
@@ -346,6 +340,104 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 |Whether to force the `TranslationService` into either read or write mode. +
 
 See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+
+
+|===
+
+
+
+[[_rgcfg_configuring-core_other]]
+== Other Config Properties
+
+
+.Other Core Configuration Properties
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.objects.` +
+`editing`
+|`true`,`false` +
+(`true`)
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rgcfg.adoc#_rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
+
+
+|`isis.persistor.` +
+`disableConcurrencyChecking`
+|`true`,`false` +
+(`false`)
+| Disables concurrency checking globally.  +
+
+Only intended for "emergency use" as a workaround while pending fix/patch to Apache Isis itself.  (Note that there is no "datanucleus" in the property).
+
+
+|`isis.reflector.facet.` +
+`cssClass.patterns`
+|regex:css1, regex2:css2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
+
+See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+
+|`isis.reflector.facet.` +
+`cssClassFa.patterns`
+|regex:fa-icon,regex2:fa-icon2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
+
+See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+
+|`isis.reflector.facet.` +
+`filterVisibility`
+|`true`,`false` +
+(`true`)
+|Whether objects should be filtered for visibility. +
+
+See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for further discussion.
+
+|`isis.reflector.facets`
+|`FQCN`
+|Fully qualified class names of a custom implementation of `ProgrammingModel` interface. +
+
+See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+
+|`isis.reflector.facets.` +
+`exclude`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
+
+See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+
+|`isis.reflector.facets.` +
+`include`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
+See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+
+
+|`isis.reflector.` +
+`layoutMetadataReaders`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic layout]s. +
+
+See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+
+
+
+|`isis.reflector.validator`
+|`FQCN`
+|Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
+
+See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
+
+|`isis.reflector.validator.` +
+`allowDeprecated`
+|`true`,`false` +
+(`true`)
+| Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
+
+
 
 |`isis.viewers.` +
 `paged.parented`
@@ -398,14 +490,21 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the Wicket viewer, and by the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is _not_ "skip rules").  However the Restful Objects viewer does _not_ currently support filtering.
+Filtering is supported by the xref:ugvw.adoc#[Wicket viewer] and the xref:ugvro.adoc#[Restful Objects viewer], and also
+by the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution
+mode is __not__ "skip rules").
 
 [NOTE]
 ====
-In order for the framework to perform this filtering of collections, be aware that the framework takes a _copy_ of the original collection, filters on the collection, and returns that filtered collection rather than the original.
+In order for the framework to perform this filtering of collections, be aware that the framework takes a _copy_ of the
+original collection, filters on the collection, and returns that filtered collection rather than the original.
 
-There are no major side-effects from this algorithm, other than the fact that the referenced objects will (most likely) need to be resolved in order to determine if they are visible.  This could conceivably have a performance impact in some cases.
+There are no major side-effects from this algorithm, other than the fact that the referenced objects will (most likely)
+need to be resolved in order to determine if they are visible.  This could conceivably have a performance impact in
+some cases.
 ====
+
+
 
 
 [[_rgcfg_configuring-core_isis-objects-editing]]
