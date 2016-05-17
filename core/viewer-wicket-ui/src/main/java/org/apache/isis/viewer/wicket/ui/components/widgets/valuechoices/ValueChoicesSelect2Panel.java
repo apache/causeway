@@ -106,7 +106,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         addPositioningCssTo(labelIfRegular, entityActions);
 
-        addFeedbackTo(labelIfRegular, select2Field);
+        addFeedbackOnlyTo(labelIfRegular, select2Field);
+        addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);

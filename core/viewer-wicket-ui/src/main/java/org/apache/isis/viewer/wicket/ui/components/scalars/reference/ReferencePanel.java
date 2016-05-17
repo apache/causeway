@@ -111,7 +111,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         labelIfCompact.add(entitySimpleLink);
         
         addOrReplace(labelIfCompact);
-        
+
         return labelIfCompact;
     }
 
@@ -150,8 +150,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         addPositioningCssTo(labelIfRegular, entityActions);
 
         addOrReplace(labelIfRegular);
-        
-        addFeedbackTo(labelIfRegular, entityLink);
+        addFeedbackOnlyTo(labelIfRegular, entityLink);
+        addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);

@@ -177,30 +177,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return componentIfRegular;
     }
 
-    private boolean guiForceBuilt = false;
-    /**
-     * Bit of a hack, but is an API to force the eager building of this component such that focus can be placed on it.
-     *
-     * <p>
-     *     This is used in {@link org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract}
-     *     when creating the action prompt parameters panel.
-     * </p>
-     */
-    public void forceBuildGui() {
-        buildGui();
-        guiForceBuilt = true;
-    }
     @Override
     protected void onBeforeRender() {
 
         if ((!hasBeenRendered() || alwaysRebuildGui())) {
-            if(!guiForceBuilt) {
-                // skip building, as was forced previously
-                buildGui();
-            } else {
-                // reset flag, so preserve original behaviour before the 'forced' hack.
-                guiForceBuilt = false;
-            }
+            buildGui();
         }
 
         final ScalarModel scalarModel = getModel();
@@ -303,9 +284,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected abstract Component addComponentForCompact();
 
-    protected void addFeedbackTo(MarkupContainer markupContainer, Component component) {
+    protected void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
+    }
 
+    protected void addEditPropertyTo(final MarkupContainer markupContainer) {
         final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
         if (disableReasonIfAny == null && scalarModel.isViewMode()) {
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
@@ -338,9 +321,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         } else {
             Components.permanentlyHide(markupContainer, ID_EDIT_PROPERTY);
         }
-
     }
-
 
     /**
      * Optional hook.

@@ -132,8 +132,9 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         if(describedAs != null) {
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
-        
-        addFeedbackTo(labelIfRegular, textField);
+
+        addFeedbackOnlyTo(labelIfRegular, textField);
+        addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);

@@ -19,16 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
-
 import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -40,6 +39,9 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Enti
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
@@ -93,7 +95,8 @@ public class BooleanPanel extends ScalarPanelAbstract {
         addPositioningCssTo(labelIfRegular, entityActions);
 
         addOrReplace(labelIfRegular);
-        addFeedbackTo(labelIfRegular, checkBox);
+        addFeedbackOnlyTo(labelIfRegular, checkBox);
+        addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);

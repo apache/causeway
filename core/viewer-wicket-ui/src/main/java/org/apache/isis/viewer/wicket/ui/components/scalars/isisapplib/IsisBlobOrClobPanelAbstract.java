@@ -114,7 +114,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, labelIfRegular);
         
         addOrReplace(labelIfRegular);
-        addFeedbackTo(labelIfRegular, fileUploadField);
+        addFeedbackOnlyTo(labelIfRegular, fileUploadField);
+        addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
