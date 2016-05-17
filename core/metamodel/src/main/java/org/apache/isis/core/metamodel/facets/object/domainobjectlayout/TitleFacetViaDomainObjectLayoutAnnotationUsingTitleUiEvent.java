@@ -55,7 +55,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                 titleUiEventClass,
                 TitleUiEvent.Noop.class,
                 TitleUiEvent.Default.class,
-                "isis.reflector.facet.domainObjectLayoutAnnotation.titleEvent.postForDefault",
+                "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault",
                 configuration)) {
             return null;
         }
