@@ -23,7 +23,7 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 public abstract class ActionParameterValidationFacetAbstract extends FacetAbstract implements ActionParameterValidationFacet {
@@ -38,10 +38,10 @@ public abstract class ActionParameterValidationFacetAbstract extends FacetAbstra
 
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
-        if (!(context instanceof ActionArgumentContext)) {
+        if (!(context instanceof ActionArgValidityContext)) {
             return null;
         }
-        final ActionArgumentContext actionArgumentContext = (ActionArgumentContext) context;
-        return invalidReason(actionArgumentContext.getTarget(), actionArgumentContext.getProposed());
+        final ActionArgValidityContext actionArgValidityContext = (ActionArgValidityContext) context;
+        return invalidReason(actionArgValidityContext.getTarget(), actionArgValidityContext.getProposed());
     }
 }

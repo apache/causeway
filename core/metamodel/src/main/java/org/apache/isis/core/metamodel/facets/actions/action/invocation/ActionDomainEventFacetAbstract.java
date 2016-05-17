@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionInteractionContext;
-import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
+import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
@@ -127,7 +127,7 @@ public abstract class ActionDomainEventFacetAbstract
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
 
-        final ActionInvocationContext aic = (ActionInvocationContext) ic;
+        final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,

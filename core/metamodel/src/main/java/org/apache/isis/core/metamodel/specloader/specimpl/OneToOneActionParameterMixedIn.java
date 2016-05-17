@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefault implements ObjectActionParameterMixedIn {
@@ -53,7 +53,7 @@ public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefau
     }
 
     @Override
-    public ActionArgumentContext createProposedArgumentInteractionContext(
+    public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] proposedArguments,
             final int position,
@@ -61,10 +61,10 @@ public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefau
 
         final ObjectAdapter targetObject = mixinAdapterFor(mixedInAdapter);
 
-        final ActionArgumentContext actionArgumentContext = new ActionArgumentContext(
+        final ActionArgValidityContext actionArgValidityContext = new ActionArgValidityContext(
                 targetObject, mixedInAction.mixinAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
-        actionArgumentContext.setMixedIn(mixedInAdapter);
-        return actionArgumentContext;
+        actionArgValidityContext.setMixedIn(mixedInAdapter);
+        return actionArgValidityContext;
     }
 
 }

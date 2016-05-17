@@ -26,7 +26,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -69,7 +69,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     String getName();
 
     // internal API
-    ActionArgumentContext createProposedArgumentInteractionContext(
+    ActionArgValidityContext createProposedArgumentInteractionContext(
             final ObjectAdapter targetObject,
             final ObjectAdapter[] args,
             final int position,

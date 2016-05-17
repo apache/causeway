@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
+import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -332,11 +332,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         InteractionUtils.isValidResultSet(this, ic, resultSet);
     }
 
-    ActionInvocationContext createActionInvocationInteractionContext(
+    ActionValidityContext createActionInvocationInteractionContext(
             final ObjectAdapter targetObject,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ActionInvocationContext(targetObject, this, getIdentifier(), proposedArguments,
+        return new ActionValidityContext(targetObject, this, getIdentifier(), proposedArguments,
                 interactionInitiatedBy);
     }
 

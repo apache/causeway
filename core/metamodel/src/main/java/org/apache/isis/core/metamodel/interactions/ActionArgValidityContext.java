@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.events.ActionInvocationEvent;
+import org.apache.isis.applib.events.ActionArgumentEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -30,22 +30,28 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link ActionInvocationEvent}.
+ * {@link ActionArgumentEvent}.
  */
-public class ActionInvocationContext extends ValidityContext<ActionInvocationEvent> implements ActionInteractionContext {
+public class ActionArgValidityContext extends ValidityContext<ActionArgumentEvent> implements ProposedHolder, ActionInteractionContext {
 
     private final ObjectAction objectAction;
     private final ObjectAdapter[] args;
+    private final int position;
+    private final ObjectAdapter proposed;
 
-    public ActionInvocationContext(
+    public ActionArgValidityContext(
             final ObjectAdapter targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
             final ObjectAdapter[] args,
+            final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
+        super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, targetAdapter, id, interactionInitiatedBy);
         this.objectAction = objectAction;
+
         this.args = args;
+        this.position = position;
+        this.proposed = args[position];
     }
 
     @Override
@@ -57,9 +63,18 @@ public class ActionInvocationContext extends ValidityContext<ActionInvocationEve
         return args;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     @Override
-    public ActionInvocationEvent createInteractionEvent() {
-        return new ActionInvocationEvent(unwrap(getTarget()), getIdentifier(), unwrap(getArgs()));
+    public ObjectAdapter getProposed() {
+        return proposed;
+    }
+
+    @Override
+    public ActionArgumentEvent createInteractionEvent() {
+        return new ActionArgumentEvent(unwrap(getTarget()), getIdentifier(), unwrap(getArgs()), getPosition());
     }
 
 }

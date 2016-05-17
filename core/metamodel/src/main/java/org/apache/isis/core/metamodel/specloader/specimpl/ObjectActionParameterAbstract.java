@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterA
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
@@ -447,12 +447,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     //region > Validation
 
     @Override
-    public ActionArgumentContext createProposedArgumentInteractionContext(
+    public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ObjectAdapter objectAdapter,
             final ObjectAdapter[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ActionArgumentContext(
+        return new ActionArgValidityContext(
                 objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
