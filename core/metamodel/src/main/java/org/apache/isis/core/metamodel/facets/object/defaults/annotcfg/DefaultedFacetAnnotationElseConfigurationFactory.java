@@ -23,18 +23,17 @@ import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
-public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
+public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
 
     private IsisConfiguration configuration;
 
@@ -78,10 +77,15 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
         return configuration;
     }
 
+
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         this.configuration = configuration;
     }
+
 
 
 }

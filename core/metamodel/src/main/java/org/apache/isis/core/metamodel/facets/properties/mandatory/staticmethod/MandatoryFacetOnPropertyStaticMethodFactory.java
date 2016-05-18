@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
@@ -40,7 +42,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * @deprecated
  */
 @Deprecated
-public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.OPTIONAL_PREFIX };
 
@@ -100,9 +102,13 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
     }
 
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         validator.setConfiguration(configuration);
     }
+
 
 
 }

@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -89,6 +88,8 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -97,7 +98,7 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, MetaModelValidatorRefiner,
+public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, MetaModelValidatorRefiner,
         TransactionStateProviderAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
@@ -542,10 +543,14 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
     // ///////////////////////////////////////////////////////////////
 
-    @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
-        this.configuration = configuration;
 
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
+
+        this.configuration = configuration;
         actionSemanticsValidator.setConfiguration(configuration);
         actionInteractionValidator.setConfiguration(configuration);
         postsActionInvokedEventValidator.setConfiguration(configuration);
@@ -559,6 +564,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         disabledValidator.setConfiguration(configuration);
         prototypeValidator.setConfiguration(configuration);
     }
+
 
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {

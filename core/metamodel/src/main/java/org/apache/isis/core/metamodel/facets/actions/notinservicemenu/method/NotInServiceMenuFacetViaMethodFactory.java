@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -30,6 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
@@ -37,7 +39,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * @deprecated
  */
 @Deprecated
-public class NotInServiceMenuFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+public class NotInServiceMenuFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     public static final String NOT_IN_SERVICE_MENU_PREFIX = "notInServiceMenu";
 
@@ -72,8 +74,12 @@ public class NotInServiceMenuFacetViaMethodFactory extends MethodPrefixBasedFace
     }
 
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         validator.setConfiguration(configuration);
     }
+
 
 }

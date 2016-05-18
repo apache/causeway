@@ -25,8 +25,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -42,7 +40,7 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class BookmarkServiceDefault implements BookmarkService2, ConfigurationServiceAware,
+public class BookmarkServiceDefault implements BookmarkService2,
         PersistenceSessionServiceAware {
 
     private PersistenceSessionService persistenceSessionService;
@@ -132,20 +130,12 @@ public class BookmarkServiceDefault implements BookmarkService2, ConfigurationSe
     // //////////////////////////////////////
 
 
-    private ConfigurationService configurationService;
 
-    @Programmatic
-    @Override
-    public void setConfigurationService(final ConfigurationService configurationService) {
-        this.configurationService = configurationService;
-    }
 
     @Override
     public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
         this.persistenceSessionService = persistenceSessionService;
     }
-
-    // //////////////////////////////////////
 
 
     @javax.inject.Inject

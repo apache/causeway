@@ -20,10 +20,10 @@
 package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 
 import java.util.Properties;
+
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Resolve;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,11 +32,13 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
-        implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+        implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation renderValidator = new MetaModelValidatorForDeprecatedAnnotation(Render.class);
     private final MetaModelValidatorForDeprecatedAnnotation resolveValidator = new MetaModelValidatorForDeprecatedAnnotation(Resolve.class);
@@ -96,10 +98,15 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         metaModelValidator.add(resolveValidator);
     }
 
+
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         renderValidator.setConfiguration(configuration);
         resolveValidator.setConfiguration(configuration);
     }
+
 
 }

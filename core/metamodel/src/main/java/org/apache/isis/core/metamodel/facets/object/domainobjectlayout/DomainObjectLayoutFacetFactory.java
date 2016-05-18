@@ -19,17 +19,15 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware,
-        IsisConfigurationAware {
+public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
 
 
     public DomainObjectLayoutFacetFactory() {
@@ -98,7 +96,12 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract impleme
 
 
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         this.configuration = configuration;
     }
+
+
 }

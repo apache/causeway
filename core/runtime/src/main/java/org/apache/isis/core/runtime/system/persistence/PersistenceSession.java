@@ -89,8 +89,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
@@ -156,7 +155,7 @@ public class PersistenceSession implements
         AdapterManager,
         MessageBrokerService,
         PersistenceSessionService,
-        ConfigurationService,
+        ConfigurationServiceInternal,
         IsisLifecycleListener2.PersistenceSessionLifecycleManagement,
         IsisTransactionManager.PersistenceSessionTransactionManagement,
         PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement {
@@ -409,10 +408,6 @@ public class PersistenceSession implements
         if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
             final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
             cast.setPersistenceSessionService(this);
-        }
-        if (ConfigurationServiceAware.class.isAssignableFrom(candidate.getClass())) {
-            final ConfigurationServiceAware cast = ConfigurationServiceAware.class.cast(candidate);
-            cast.setConfigurationService(this);
         }
     }
     //endregion

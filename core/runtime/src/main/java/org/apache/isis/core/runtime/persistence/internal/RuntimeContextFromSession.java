@@ -70,7 +70,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
-        super(configuration, servicesInjector, specificationLoader);
+        super(servicesInjector, specificationLoader);
 
         this.persistenceSessionService = new PersistenceSessionServiceAbstract() {
 

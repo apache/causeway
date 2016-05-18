@@ -40,6 +40,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -149,6 +150,7 @@ public class IsisSystem implements ApplicationScopedComponent {
             // services
             ServicesInjectorDefault servicesInjector = isisComponentProvider.provideServiceInjector();
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
+            servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
             servicesInjector.validateServices();
 
             // authentication, authorization

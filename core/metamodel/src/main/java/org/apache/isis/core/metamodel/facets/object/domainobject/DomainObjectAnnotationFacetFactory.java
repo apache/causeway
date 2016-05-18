@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.Nullable;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
@@ -82,10 +81,10 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -98,7 +97,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-        implements IsisConfigurationAware, AdapterManagerAware,
+        implements AdapterManagerAware,
         SpecificationLoaderAware, MetaModelValidatorRefiner, PersistenceSessionServiceAware,
         PostConstructMethodCache {
 
@@ -493,8 +492,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     // //////////////////////////////////////
 
+
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         this.configuration = configuration;
 
         publishedObjectValidator.setConfiguration(configuration);
@@ -504,6 +507,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         immutableValidator.setConfiguration(configuration);
         objectTypeValidator.setConfiguration(configuration);
     }
+
 
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {

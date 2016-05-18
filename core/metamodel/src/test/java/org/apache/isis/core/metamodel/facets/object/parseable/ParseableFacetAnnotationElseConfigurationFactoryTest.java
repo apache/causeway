@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ParseableFacetAnnotationElseConfigurationFactoryTest extends AbstractFacetFactoryTest {
@@ -62,7 +63,6 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
 
         facetFactory = new ParseableFacetAnnotationElseConfigurationFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
-        facetFactory.setConfiguration(isisConfigurationDefault);
 
         facetFactory.setServicesInjector(mockServicesInjector);
         context.checking(new Expectations(){{
@@ -71,6 +71,9 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(isisConfigurationDefault));
         }});
 
     }

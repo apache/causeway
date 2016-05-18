@@ -22,9 +22,8 @@ package org.apache.isis.core.runtime.services;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 
-public interface ServicesInstaller extends Installer, IsisConfigurationAware {
+public interface ServicesInstaller extends Installer {
 
     void init();
 

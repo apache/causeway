@@ -35,8 +35,6 @@ public interface RuntimeContext extends ApplicationScopedComponent {
     // application-scoped
     // //////////////////////////////////////
 
-    public ConfigurationService getConfigurationService();
-
     public ServicesInjector getServicesInjector();
 
     public SpecificationLoader getSpecificationLoader();

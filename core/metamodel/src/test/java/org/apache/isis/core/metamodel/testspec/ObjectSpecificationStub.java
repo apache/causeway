@@ -29,6 +29,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -40,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
@@ -72,8 +74,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
+        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(Collections.emptyList());
+        servicesInjector.addFallbackIfRequired(
+                ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
         runtimeContext = new RuntimeContextNoRuntime(
-                new ServicesInjectorDefault(Collections.emptyList()), null);
+                servicesInjector, null);
     }
 
     @Override

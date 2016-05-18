@@ -19,11 +19,10 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
-public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract implements IsisConfigurationAware {
+public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract {
 
     public static final String ISIS_REFLECTOR_ALLOW_DEPRECATED_KEY = "isis.reflector.validator.allowDeprecated";
     public static final boolean ISIS_REFLECTOR_ALLOW_DEPRECATED_DEFAULT = true;
@@ -75,7 +74,6 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
         validationFailures.addAll(failures);
     }
 
-    @Override
     public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }

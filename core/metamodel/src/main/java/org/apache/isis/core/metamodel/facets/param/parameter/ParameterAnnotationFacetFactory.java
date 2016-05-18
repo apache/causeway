@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,18 +39,18 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
-import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForMaxLengthAnnotationOnParameter;
+import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware, ServicesInjectorAware {
+public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation maxLengthValidator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
@@ -110,10 +110,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
         final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
-        final Class<?>[] parameterTypes = method.getParameterTypes();
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
 
-        boolean mustSatisfyAnnotationFound = false;
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
@@ -205,12 +203,17 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         metaModelValidator.add(optionalValidator);
     }
 
+
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         maxLengthValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);
         optionalValidator.setConfiguration(configuration);
     }
+
 
 }

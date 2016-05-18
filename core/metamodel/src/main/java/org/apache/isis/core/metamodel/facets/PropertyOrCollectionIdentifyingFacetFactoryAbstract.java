@@ -22,15 +22,16 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         extends MethodPrefixBasedFacetFactoryAbstract
-        implements PropertyOrCollectionIdentifyingFacetFactory, AdapterManagerAware, IsisConfigurationAware {
+        implements PropertyOrCollectionIdentifyingFacetFactory, AdapterManagerAware {
 
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
@@ -73,8 +74,12 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
     }
 
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         this.configuration = configuration;
     }
+
 
 }

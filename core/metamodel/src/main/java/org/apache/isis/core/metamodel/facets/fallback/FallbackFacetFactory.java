@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,13 +35,15 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s
  * required by the Apache Isis framework itself.
  * 
  */
-public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
+public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     public final static int PAGE_SIZE_STANDALONE_DEFAULT = 25;
     public final static int PAGE_SIZE_PARENTED_DEFAULT = 12;
@@ -171,13 +174,18 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
         return null;
     }
 
-    @Override
-    public void setConfiguration(IsisConfiguration configuration) {
-        this.configuration = configuration;
-    }
-    
+
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
+        this.configuration = configuration;
+    }
+
 
 }

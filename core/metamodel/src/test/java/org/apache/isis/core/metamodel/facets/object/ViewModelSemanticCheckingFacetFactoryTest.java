@@ -27,6 +27,8 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -43,6 +45,9 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     @Mock
     private IsisConfiguration mockConfiguration;
+
+    @Mock
+    private ServicesInjector mockServicesInjector;
 
     private ViewModelSemanticCheckingFacetFactory facetFactory;
 
@@ -64,7 +69,11 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             will(returnValue(true));
         }});
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
-        facetFactory.setConfiguration(mockConfiguration);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(mockConfiguration));
+        }});
     }
 
     @Test

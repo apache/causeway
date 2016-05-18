@@ -29,7 +29,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
@@ -55,15 +54,14 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     public RuntimeContextNoRuntime(
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
-        this(DeploymentCategory.PRODUCTION, new IsisConfigurationDefault(null), servicesInjector, specificationLoader);
+        this(new IsisConfigurationDefault(null), servicesInjector, specificationLoader);
     }
 
     public RuntimeContextNoRuntime(
-            final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault isisConfiguration,
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
-        super(isisConfiguration, servicesInjector, specificationLoader);
+        super(servicesInjector, specificationLoader);
         persistenceSessionService = new PersistenceSessionServiceAbstract() {
 
             @Override

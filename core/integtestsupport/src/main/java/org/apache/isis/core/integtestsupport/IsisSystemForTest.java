@@ -241,7 +241,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             );
 
             final ServicesInstaller installer = new ServicesInstallerFromConfigurationAndAnnotation();
-            installer.setConfiguration(configuration);
+
+            //installer.setConfiguration(configuration);
+
             final List<Object> serviceList = installer.getServices();
             this.services.addAll(serviceList);
 

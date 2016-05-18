@@ -20,12 +20,13 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
@@ -36,7 +37,7 @@ import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
  * 
  */
 @Deprecated
-public class AuditableAnnotationInJdoApplibFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+public class AuditableAnnotationInJdoApplibFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Auditable.class);
 
@@ -53,7 +54,6 @@ public class AuditableAnnotationInJdoApplibFacetFactory extends FacetFactoryAbst
         }
         final AuditableFacetAnnotationInJdoApplib facet = new AuditableFacetAnnotationInJdoApplib(processClassContext.getFacetHolder());
         FacetUtil.addFacet(validator.flagIfPresent(facet));
-        return;
     }
 
 
@@ -63,9 +63,13 @@ public class AuditableAnnotationInJdoApplibFacetFactory extends FacetFactoryAbst
     }
 
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         validator.setConfiguration(configuration);
     }
+
 
 
 }

@@ -63,6 +63,7 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -77,7 +78,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     @Before
     public void setUp() throws Exception {
         facetFactory = new DomainObjectAnnotationFacetFactory();
-        facetFactory.setConfiguration(mockConfiguration);
+
         facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {{
@@ -86,6 +87,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(mockConfiguration));
         }});
     }
 

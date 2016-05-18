@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotation;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFacetFactoryTest {
@@ -75,7 +76,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
 
         isisConfigurationDefault = new IsisConfigurationDefault();
-        facetFactory.setConfiguration(isisConfigurationDefault);
 
         facetFactory.setServicesInjector(mockServicesInjector);
         context.checking(new Expectations(){{
@@ -84,6 +84,9 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(isisConfigurationDefault));
         }});
     }
 

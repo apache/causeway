@@ -25,7 +25,6 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -43,6 +42,8 @@ import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**
  * Processes the {@link Value} annotation.
@@ -70,7 +71,7 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
-public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware {
+public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
@@ -123,10 +124,15 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         return configuration;
     }
 
+
     @Override
-    public void setConfiguration(final IsisConfiguration configuration) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
         this.configuration = configuration;
     }
+
 
 
     public AdapterManager getAdapterManager() {

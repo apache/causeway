@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-public interface ConfigurationService {
+public interface ConfigurationServiceInternal {
 
     void injectInto(final Object candidate);
 

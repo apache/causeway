@@ -25,19 +25,19 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.config.ConfigurationProperty;
+import org.apache.isis.applib.services.config.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class ConfigurationServiceDefault
-        implements org.apache.isis.applib.services.config.ConfigurationService,
-                   org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware {
-
+public class ConfigurationServiceDefault implements ConfigurationService {
 
     private Map<String, String> properties;
 
@@ -60,7 +60,7 @@ public class ConfigurationServiceDefault
     @Programmatic
     @Override
     public String getProperty(final String name) {
-        return getConfigurationService().getProperty(name);
+        return configurationServiceInternal.getProperty(name);
     }
 
     @Programmatic
@@ -73,21 +73,12 @@ public class ConfigurationServiceDefault
     @Programmatic
     @Override
     public List<String> getPropertyNames() {
-        return getConfigurationService().getPropertyNames();
+        return configurationServiceInternal.getPropertyNames();
     }
 
 
 
-    private org.apache.isis.core.metamodel.runtimecontext.ConfigurationService configurationService;
-
-    protected org.apache.isis.core.metamodel.runtimecontext.ConfigurationService getConfigurationService() {
-        return configurationService;
-    }
-
-    @Programmatic
-    @Override
-    public void setConfigurationService(final org.apache.isis.core.metamodel.runtimecontext.ConfigurationService configurationService) {
-        this.configurationService = configurationService;
-    }
+    @Inject
+    ConfigurationServiceInternal configurationServiceInternal;
 
 }

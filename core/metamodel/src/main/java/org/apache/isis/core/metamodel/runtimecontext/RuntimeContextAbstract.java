@@ -19,29 +19,20 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 public abstract class RuntimeContextAbstract implements RuntimeContext {
 
-    private final IsisConfigurationDefault configuration;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoaderSpi specificationLoader;
 
     public RuntimeContextAbstract(
-            final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
-        this.configuration = configuration;
         this.servicesInjector = servicesInjector;
         this.specificationLoader = specificationLoader;
     }
 
-
-    @Override
-    public ConfigurationService getConfigurationService() {
-        return configuration;
-    }
 
     @Override
     public ServicesInjector getServicesInjector() {
@@ -66,7 +57,6 @@ public abstract class RuntimeContextAbstract implements RuntimeContext {
     protected void injectSubcomponentsInto(final Object candidate) {
         getTransactionStateProvider().injectInto(candidate);
         getServicesInjector().injectInto(candidate);
-        getConfigurationService().injectInto(candidate);
         getLocalizationProvider().injectInto(candidate);
         getPersistenceSessionService().injectInto(candidate);
         getMessageBrokerService().injectInto(candidate);
