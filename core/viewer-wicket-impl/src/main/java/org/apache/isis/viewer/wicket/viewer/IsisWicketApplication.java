@@ -70,7 +70,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassCla
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
@@ -139,8 +138,7 @@ import net.ftlines.wicketsource.WicketSource;
  */
 public class IsisWicketApplication
         extends AuthenticatedWebApplication
-        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor,
-        DeploymentCategoryProvider {
+        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     private static final long serialVersionUID = 1L;
     
@@ -811,15 +809,6 @@ public class IsisWicketApplication
     }
 
 
-    // /////////////////////////////////////////////////
-    // *Provider impl.
-    // /////////////////////////////////////////////////
-
-    @Override
-    public void injectInto(final Object candidate) {
-    }
-
-    @Override
     public DeploymentCategory getDeploymentCategory() {
         return deploymentType.getDeploymentCategory();
     }

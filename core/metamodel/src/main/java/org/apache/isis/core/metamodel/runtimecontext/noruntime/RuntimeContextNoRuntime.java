@@ -25,9 +25,6 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
@@ -66,7 +63,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             final IsisConfigurationDefault isisConfiguration,
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
-        super(deploymentCategory, isisConfiguration, servicesInjector, specificationLoader);
+        super(isisConfiguration, servicesInjector, specificationLoader);
         persistenceSessionService = new PersistenceSessionServiceAbstract() {
 
             @Override

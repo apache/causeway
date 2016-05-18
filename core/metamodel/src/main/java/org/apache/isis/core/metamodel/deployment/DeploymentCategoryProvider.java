@@ -19,9 +19,10 @@
 
 package org.apache.isis.core.metamodel.deployment;
 
+/**
+ * Implemented by an internal domain service.
+ */
 public interface DeploymentCategoryProvider {
-
-    void injectInto(final Object candidate);
 
     DeploymentCategory getDeploymentCategory();
 }

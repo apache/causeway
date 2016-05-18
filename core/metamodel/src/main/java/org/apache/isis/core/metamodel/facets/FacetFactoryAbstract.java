@@ -25,18 +25,16 @@ import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware, DeploymentCategoryAware, ServicesInjectorAware {
+public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware, ServicesInjectorAware {
 
     private final List<FeatureType> featureTypes;
-
-    private DeploymentCategory deploymentCategory;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
         this.featureTypes = ImmutableList.copyOf(featureTypes);
@@ -84,13 +82,8 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
 
 
 
-    @Override
-    public void setDeploymentCategory(final DeploymentCategory deploymentCategory) {
-        this.deploymentCategory = deploymentCategory;
-    }
-
     protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
+        return servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
     }
 
 

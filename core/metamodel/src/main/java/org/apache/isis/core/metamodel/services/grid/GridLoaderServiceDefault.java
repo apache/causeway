@@ -40,16 +40,15 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
+import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCategoryAware {
+public class GridLoaderServiceDefault implements GridLoaderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridLoaderServiceDefault.class);
 
@@ -78,7 +77,7 @@ public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCa
 
     @Override
     public boolean supportsReloading() {
-        return !deploymentCategory.isProduction();
+        return !deploymentCategoryProvider.getDeploymentCategory().isProduction();
     }
 
     @Override
@@ -187,13 +186,8 @@ public class GridLoaderServiceDefault implements GridLoaderService, DeploymentCa
 
     //region > injected dependencies
 
-
-    private DeploymentCategory deploymentCategory;
-
-    @Override
-    public void setDeploymentCategory(final DeploymentCategory deploymentCategory) {
-        this.deploymentCategory = deploymentCategory;
-    }
+    @Inject
+    DeploymentCategoryProvider deploymentCategoryProvider;
 
     @Inject
     DomainObjectContainer container;

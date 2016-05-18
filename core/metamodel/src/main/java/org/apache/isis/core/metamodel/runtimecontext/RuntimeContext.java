@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 
@@ -35,8 +34,6 @@ public interface RuntimeContext extends ApplicationScopedComponent {
     // //////////////////////////////////////
     // application-scoped
     // //////////////////////////////////////
-
-    public DeploymentCategoryProvider getDeploymentCategoryProvider();
 
     public ConfigurationService getConfigurationService();
 

@@ -57,7 +57,6 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
             will(returnValue(mockAuthenticationSession));
         }});
 
@@ -70,9 +69,9 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
         }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
     }
 

@@ -69,11 +69,11 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
             will(returnValue(mockAuthenticationSession));
         }});
 
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
+
         isisConfigurationDefault = new IsisConfigurationDefault();
         facetFactory.setConfiguration(isisConfigurationDefault);
 
@@ -82,9 +82,9 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
         }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
     }
 
     @Override

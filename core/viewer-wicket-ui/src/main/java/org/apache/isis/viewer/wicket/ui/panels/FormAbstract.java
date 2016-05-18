@@ -27,8 +27,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -39,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 
 public abstract class FormAbstract<T> extends Form<T>
         implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor,
-        DeploymentCategoryProvider, PersistenceSessionProvider {
+        PersistenceSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -112,22 +110,9 @@ public abstract class FormAbstract<T> extends Form<T>
         return IsisContext.getAuthenticationSession();
     }
 
-    @Override
     public DeploymentCategory getDeploymentCategory() {
         return IsisContext.getDeploymentType().getDeploymentCategory();
     }
 
-
-    // /////////////////////////////////////////////////
-    // *Provider impl.
-    // /////////////////////////////////////////////////
-    
-    @Override
-    public void injectInto(final Object candidate) {
-        if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
-            final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
-            cast.setDeploymentCategory(this.getDeploymentCategory());
-        }
-    }
 
 }

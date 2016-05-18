@@ -61,13 +61,15 @@ public class ExplorationFacetAnnotationFactoryTest extends AbstractFacetFactoryT
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
         }});
 
 
         facetFactory = new ExplorationFacetAnnotationFactory();
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 

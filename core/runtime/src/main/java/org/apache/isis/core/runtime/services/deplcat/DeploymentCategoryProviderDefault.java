@@ -14,15 +14,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.deployment;
+package org.apache.isis.core.runtime.services.deplcat;
 
-public abstract class DeploymentCategoryProviderAbstract implements DeploymentCategoryProvider {
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
-    public void injectInto(final Object candidate) {
-        if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
-            final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
-            cast.setDeploymentCategory(this.getDeploymentCategory());
-        }
+@DomainService(nature = NatureOfService.DOMAIN)
+public class DeploymentCategoryProviderDefault implements DeploymentCategoryProvider {
+
+    @Programmatic
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
     }
-
 }

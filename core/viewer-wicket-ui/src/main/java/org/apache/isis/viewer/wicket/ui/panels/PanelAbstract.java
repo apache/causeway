@@ -27,10 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -50,8 +47,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider,
-        DeploymentCategoryProvider {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel
+            implements IHeaderContributor, PersistenceSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -139,7 +136,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         return IsisContext.getAuthenticationSession();
     }
 
-    @Override
     public DeploymentCategory getDeploymentCategory() {
         return IsisContext.getDeploymentType().getDeploymentCategory();
     }
@@ -171,14 +167,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     // *Provider impl.
     // /////////////////////////////////////////////////
     
-    @Override
-    public void injectInto(final Object candidate) {
-        if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
-            final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
-            cast.setDeploymentCategory(this.getDeploymentCategory());
-        }
-    }
-
     /**
      * Helper method that looks up a domain service by type
      *

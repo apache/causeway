@@ -56,17 +56,18 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
         context.checking(new Expectations() {{
+            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+            will(returnValue(mockAuthenticationSession));
+
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
-            will(returnValue(mockAuthenticationSession));
         }});
 
 
         facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setServicesInjector(mockServicesInjector);
         context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);

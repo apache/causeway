@@ -53,8 +53,8 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -114,7 +114,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public abstract class GridSystemServiceAbstract<G extends Grid>
-        implements GridSystemService<G>, SpecificationLoaderAware, DeploymentCategoryAware {
+        implements GridSystemService<G>, SpecificationLoaderAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridSystemServiceAbstract.class);
 
@@ -173,8 +173,8 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
             }
         } else {
 
-            if(!deploymentCategory.isProduction()) {
-                container.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
+            if(!deploymentCategoryProvider.getDeploymentCategory().isProduction()) {
+                messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
             LOG.error("Grid metadata errors:\n\n" + jaxbService.toXml(grid) + "\n\n");
         }
@@ -695,14 +695,11 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
     @Inject
     protected DomainObjectContainer container;
 
+    @Inject
+    protected MessageService messageService;
 
-    protected DeploymentCategory deploymentCategory;
-
-    @Programmatic
-    @Override
-    public void setDeploymentCategory(final DeploymentCategory deploymentCategory) {
-        this.deploymentCategory = deploymentCategory;
-    }
+    @Inject
+    DeploymentCategoryProvider deploymentCategoryProvider;
 
 
 }

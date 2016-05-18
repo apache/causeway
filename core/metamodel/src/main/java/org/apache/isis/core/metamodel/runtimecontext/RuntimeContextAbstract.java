@@ -20,39 +20,21 @@
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 public abstract class RuntimeContextAbstract implements RuntimeContext {
 
-    private final DeploymentCategory deploymentCategory;
     private final IsisConfigurationDefault configuration;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoaderSpi specificationLoader;
 
     public RuntimeContextAbstract(
-            final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
-        this.deploymentCategory = deploymentCategory;
         this.configuration = configuration;
         this.servicesInjector = servicesInjector;
         this.specificationLoader = specificationLoader;
-    }
-
-
-    @Override
-    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return new DeploymentCategoryProviderAbstract() {
-
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                return deploymentCategory;
-            }
-        };
     }
 
 
@@ -82,7 +64,6 @@ public abstract class RuntimeContextAbstract implements RuntimeContext {
     }
 
     protected void injectSubcomponentsInto(final Object candidate) {
-        getDeploymentCategoryProvider().injectInto(candidate);
         getTransactionStateProvider().injectInto(candidate);
         getServicesInjector().injectInto(candidate);
         getConfigurationService().injectInto(candidate);

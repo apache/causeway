@@ -27,6 +27,7 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -59,6 +60,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected ServicesInjector mockServicesInjector;
     protected TranslationService mockTranslationService;
     protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     protected ProgrammableReflector programmableReflector;
     protected ProgrammableMethodRemover methodRemover;
@@ -91,6 +93,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         methodRemover = new ProgrammableMethodRemover();
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
+        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
         mockServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
 

@@ -21,10 +21,15 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import org.jmock.Expectations;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
@@ -46,11 +51,26 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
     public void setUp() throws Exception {
         super.setUp();
-        facetFactory = new ActionAnnotationFacetFactory();
+        this.facetFactory =  new ActionAnnotationFacetFactory();;
+
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+    }
+
+    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
+        context.checking(new Expectations() {{
+
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
+        }});
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -155,13 +175,14 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactoryForChoices.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
-        facetFactoryForChoices.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForChoices);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
         facetFactoryForDisable.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
         facetFactoryForDisable.setServicesInjector(mockServicesInjector);
-        facetFactoryForDisable.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+
 
         class Customer {
             @SuppressWarnings("unused")

@@ -56,17 +56,18 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractF
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
             will(returnValue(mockAuthenticationSession));
         }});
 
         facetFactory = new ChoicesFacetFromBoundedMarkerInterfaceFactory();
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setServicesInjector(mockServicesInjector);
+
         context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
         }});
 
     }

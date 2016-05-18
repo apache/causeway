@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
@@ -120,16 +121,23 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }});
     }
 
-    public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
-        final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
+    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
         context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
         }});
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+    }
+
+    public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
+        final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
+
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -150,17 +158,10 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAccessorMethod));
     }
 
-    public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
+   public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+       injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -188,15 +189,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -224,15 +218,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -255,19 +243,13 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testSetterFacetIsInstalledForModifyMethodAndMethodRemoved() {
 
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
-        facetFactoryForModify.setSpecificationLoader(programmableReflector);
 
-        facetFactoryForModify.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForModify);
 
-        }});
-
-        facetFactoryForModify.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final PropertySetAndClearFacetFactory facetFactoryForSetter = new PropertySetAndClearFacetFactory();
-        facetFactoryForSetter.setSpecificationLoader(programmableReflector);
+
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForSetter);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -299,25 +281,12 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
 
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
-        facetFactoryForModify.setSpecificationLoader(programmableReflector);
-        facetFactoryForModify.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactoryForModify.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForModify);
 
 
         final DisabledFacetOnPropertyInferredFactory disabledFacetOnPropertyInferredFactory = new DisabledFacetOnPropertyInferredFactory();
@@ -353,24 +322,14 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLoader(programmableReflector);
 
         facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
-        facetFactoryForModify.setSpecificationLoader(programmableReflector);
-        facetFactoryForModify.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForModify);
 
-        facetFactoryForModify.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -406,15 +365,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testClearFacet() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -442,15 +395,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testClearFacetViaSetterIfNoExplicitClearMethod() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -476,15 +423,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testChoicesFacetFoundAndMethodRemoved() {
         final PropertyChoicesFacetViaMethodFactory facetFactory = new PropertyChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -515,13 +456,17 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final PropertyAutoCompleteFacetMethodFactory facetFactory = new PropertyAutoCompleteFacetMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
+
         context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            final DeploymentCategory deploymentCategory = DeploymentCategory.PRODUCTION;
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
         }});
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -550,15 +495,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDefaultFacetFoundAndMethodRemoved() {
         final PropertyDefaultFacetViaMethodFactory facetFactory = new PropertyDefaultFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -587,16 +526,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testValidateFacetFoundAndMethodRemoved() {
         final PropertyValidateFacetViaMethodFactory facetFactory = new PropertyValidateFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -625,16 +557,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDisableFacetFoundAndMethodRemoved() {
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -663,16 +587,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -701,15 +618,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenFacetFoundAndMethodRemoved() {
         final HideForContextFacetViaMethodFactory facetFactory = new HideForContextFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -738,15 +648,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenFacetWithNoArgFoundAndMethodRemoved() {
         final HideForContextFacetViaMethodFactory facetFactory = new HideForContextFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -775,15 +679,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPropertyFoundOnSuperclass() {
         final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -808,40 +705,17 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
         final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
 
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         final HideForContextFacetViaMethodFactory facetFactoryForHide = new HideForContextFacetViaMethodFactory();
-        facetFactoryForHide.setSpecificationLoader(programmableReflector);
-        facetFactoryForHide.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactoryForHide.setDeploymentCategory(DeploymentCategory.PRODUCTION);
-
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForHide);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setSpecificationLoader(programmableReflector);
-        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
-        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForDisable);
 
-        facetFactoryForDisable.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
 
         class Customer {
@@ -937,15 +811,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameFirstName");
@@ -963,15 +831,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionFirstName");
@@ -989,15 +851,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideFirstName");
@@ -1012,15 +868,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideLastName");
@@ -1034,15 +884,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectFirstName");
@@ -1058,15 +902,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
-
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectLastName");
@@ -1081,15 +918,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideFirstName", new Class[] { UserMemento.class });
@@ -1108,15 +939,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
 
-        }});
+        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableFirstName", new Class[] { UserMemento.class });

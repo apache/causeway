@@ -24,14 +24,13 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Whether running on client or server side etc.
  */
-public class DeploymentType extends DeploymentCategoryProviderAbstract {
+public class DeploymentType {
 
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 
@@ -77,7 +76,6 @@ public class DeploymentType extends DeploymentCategoryProviderAbstract {
         return (this == SERVER) && isProduction();
     }
 
-    @Override
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }

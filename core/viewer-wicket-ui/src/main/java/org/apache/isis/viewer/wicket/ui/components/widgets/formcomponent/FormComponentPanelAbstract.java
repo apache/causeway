@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -47,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * panel using other {@link ComponentType}s.
  */
 public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T>
-        implements PersistenceSessionProvider, DeploymentCategoryProvider {
+        implements PersistenceSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -139,7 +138,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         return IsisContext.getAuthenticationSession();
     }
 
-    @Override
     public DeploymentCategory getDeploymentCategory() {
         return IsisContext.getDeploymentType().getDeploymentCategory();
     }
@@ -157,17 +155,5 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         return getPersistenceSession().getServices();
     }
 
-
-    // /////////////////////////////////////////////////
-    // *Provider impl.
-    // /////////////////////////////////////////////////
-    
-    @Override
-    public void injectInto(final Object candidate) {
-        if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
-            final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
-            cast.setDeploymentCategory(this.getDeploymentCategory());
-        }
-    }
 
 }
