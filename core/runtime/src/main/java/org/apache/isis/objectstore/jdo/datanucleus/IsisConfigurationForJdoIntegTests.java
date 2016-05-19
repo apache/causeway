@@ -25,12 +25,19 @@ import org.datanucleus.PropertyNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
+/**
+ * If instantiated by the integration testing framework, this object will be registered as the implementation of
+ * the {@link ConfigurationServiceInternal} (internal) domain service, using
+ * {@link org.apache.isis.core.metamodel.services.ServicesInjectorDefault#addFallbackIfRequired(Class, Object)}.
+ */
 public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault {
 
     @SuppressWarnings("unused")
@@ -89,11 +96,13 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         add("isis.services.eventbus.allowLateRegistration", "true");
     }
 
+    @Programmatic
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
         add(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 
+    @Programmatic
     public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
         put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
@@ -103,6 +112,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
      * Typically integration tests should set the {@link RegisterEntities} package prefix(es); this method makes it
      * easy to do so.
      */
+    @Programmatic
     public final IsisConfigurationForJdoIntegTests addRegisterEntitiesPackagePrefix(final String... packagePrefix) {
         final String commaSeparated = Joiner.on(',').join(packagePrefix);
         add(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
@@ -113,6 +123,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
      * Typically integration tests should set the {@link RegisterEntities} package prefix(es); this method makes it
      * easy to do so.
      */
+    @Programmatic
     public final IsisConfigurationForJdoIntegTests putRegisterEntitiesPackagePrefix(final String... packagePrefix) {
         final String commaSeparated = Joiner.on(',').join(packagePrefix);
         put(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);

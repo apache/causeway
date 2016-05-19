@@ -34,6 +34,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
@@ -52,7 +53,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        ContextForMojo context = new ContextForMojo(mavenProject, getLog());
+        final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
 
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
@@ -63,14 +64,25 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final IsisSystem isisSystem = new IsisSystem(componentProvider);
         try {
             isisSystem.init();
+            IsisContext.doInSession(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        doExecute(context, isisSystem);
+                    } catch (IOException e) {
+                        ;
+                        // ignore
+                    } catch (MojoFailureException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
 
-            try {
-                doExecute(context, isisSystem);
-            } catch (IOException e) {
-                ;
-                // ignore
+        } catch(RuntimeException e) {
+            if(e.getCause() instanceof MojoFailureException) {
+                throw (MojoFailureException)e.getCause();
             }
-
+            throw e;
         } finally {
             isisSystem.shutdown();
         }

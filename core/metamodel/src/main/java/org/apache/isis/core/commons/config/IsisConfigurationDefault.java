@@ -38,6 +38,17 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 
+/**
+ * This object will typically be registered as the implementation of the {@link ConfigurationServiceInternal}
+ * (internal) domain service, using
+ * {@link org.apache.isis.core.metamodel.services.ServicesInjectorDefault#addFallbackIfRequired(Class, Object)}.
+ *
+ * <p>
+ *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> will be used instead.
+ * </p>
+ *
+ * @see
+ */
 public class IsisConfigurationDefault implements IsisConfiguration, ConfigurationServiceInternal {
     
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);
