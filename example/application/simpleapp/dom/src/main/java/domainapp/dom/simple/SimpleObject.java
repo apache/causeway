@@ -109,6 +109,12 @@ public class SimpleObject implements Comparable<SimpleObject> {
         setName(name);
         return this;
     }
+    public String default0UpdateName() {
+        return getName();
+    }
+    public TranslatableString validate0UpdateName(final String name) {
+        return validateName(name);
+    }
 
 
 
