@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -338,7 +338,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             + specification.getFullIdentifier() + "]";
     }
 
-    protected SpecificationLoaderSpi getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

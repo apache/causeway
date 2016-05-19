@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.exploration.MultiUserExplorationSession;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -500,7 +500,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     // Dependencies (from singleton)
     // //////////////////////////////////////////////////////////////////
 
-    private SpecificationLoaderSpi getSpecificationLoader() {
+    private SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

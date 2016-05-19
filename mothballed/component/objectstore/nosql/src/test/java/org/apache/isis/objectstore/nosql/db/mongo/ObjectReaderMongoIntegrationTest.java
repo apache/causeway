@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
@@ -272,7 +272,7 @@ public class ObjectReaderMongoIntegrationTest {
         });
     }
 
-    protected SpecificationLoaderSpi getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

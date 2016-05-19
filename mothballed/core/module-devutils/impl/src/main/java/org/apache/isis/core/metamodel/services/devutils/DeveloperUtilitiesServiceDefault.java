@@ -42,11 +42,11 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.*;
 
-public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesService, SpecificationLoaderSpiAware, AdapterManagerAware {
+public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesService, SpecificationLoaderAware, AdapterManagerAware {
 
 
     private final MimeType mimeTypeTextCsv;
@@ -205,12 +205,12 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
 
     // //////////////////////////////////////
 
-    private SpecificationLoaderSpi specificationLoader;
+    private SpecificationLoader specificationLoader;
     private AdapterManager adapterManager;
 
     @Programmatic
     @Override
-    public void setSpecificationLoaderSpi(SpecificationLoaderSpi specificationLoader) {
+    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
 

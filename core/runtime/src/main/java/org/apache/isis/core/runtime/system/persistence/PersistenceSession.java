@@ -98,7 +98,7 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -181,7 +181,7 @@ public class PersistenceSession implements
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfigurationDefault configuration;
-    private final SpecificationLoaderSpi specificationLoader;
+    private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
 
     private final ServicesInjectorSpi servicesInjector;
@@ -217,7 +217,7 @@ public class PersistenceSession implements
     public PersistenceSession(
             final IsisConfigurationDefault configuration,
             final ServicesInjectorSpi servicesInjector,
-            final SpecificationLoaderSpi specificationLoader,
+            final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledFlag fixturesInstalledFlag) {
@@ -1239,7 +1239,7 @@ public class PersistenceSession implements
 
     //region > dependencies (from constructor)
 
-    protected SpecificationLoaderSpi getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
     protected AuthenticationSession getAuthenticationSession() {

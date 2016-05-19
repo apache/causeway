@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAb
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
@@ -69,7 +69,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
-            final SpecificationLoaderSpi specificationLoader) {
+            final SpecificationLoader specificationLoader) {
         super(servicesInjector, specificationLoader);
 
         this.persistenceSessionService = new PersistenceSessionServiceAbstract() {

@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -635,7 +635,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 		return IsisContext.getOidMarshaller();
 	}
 
-    protected SpecificationLoaderSpi getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

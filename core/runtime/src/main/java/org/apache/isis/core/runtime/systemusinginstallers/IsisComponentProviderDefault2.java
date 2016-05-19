@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFr
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
@@ -225,7 +225,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     }
 
     @Override
-    public SpecificationLoaderSpi provideSpecificationLoaderSpi(
+    public SpecificationLoader provideSpecificationLoader(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
@@ -258,7 +258,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     public PersistenceSessionFactory providePersistenceSessionFactory(
             DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final SpecificationLoaderSpi specificationLoader) {
+            final SpecificationLoader specificationLoader) {
         DataNucleusPersistenceMechanismInstaller installer =
                 new DataNucleusPersistenceMechanismInstaller(configuration);
         return installer.createPersistenceSessionFactory(

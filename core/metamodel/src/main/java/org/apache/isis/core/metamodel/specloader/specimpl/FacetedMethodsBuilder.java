@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.Reader
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader2;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
@@ -129,7 +129,7 @@ public class FacetedMethodsBuilder {
     private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
-    private final SpecificationLoaderSpi specificationLoader;
+    private final SpecificationLoader specificationLoader;
 
     private final List<LayoutMetadataReader> layoutMetadataReaders;
     private final Map<LayoutMetadataReader, LayoutMetadataReader2.Support> supportByReader;
@@ -608,7 +608,7 @@ public class FacetedMethodsBuilder {
     // Dependencies
     // ////////////////////////////////////////////////////////////////////////////
 
-    private SpecificationLoaderSpi getSpecificationLoader() {
+    private SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
 

@@ -42,7 +42,7 @@ public final class MetaModelValidatorVisiting extends MetaModelValidatorAbstract
         
     @Override
     public final void validate(ValidationFailures validationFailures) {
-        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoaderSpi().allSpecifications();
+        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
         for (final ObjectSpecification objSpec : objectSpecs) {
             if(!visitor.visit(objSpec, validationFailures)) {
                 break;

@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationFeature.class
 )
-public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository, SpecificationLoaderSpiAware,
+public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository, SpecificationLoaderAware,
         ServicesInjectorAware {
 
     //region > caches
@@ -515,11 +515,11 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     @Inject
     DomainObjectContainer container;
 
-    private SpecificationLoaderSpi specificationLoader;
+    private SpecificationLoader specificationLoader;
 
     @Programmatic
     @Override
-    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
 

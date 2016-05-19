@@ -23,11 +23,11 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class MetaModelValidatorAbstract implements MetaModelValidator {
 
-    private SpecificationLoaderSpi specificationLoaderSpi;
+    private SpecificationLoader specificationLoaderSpi;
 
     // ////////////////////////////////////////////////////////////////////
     // init, shutdown
@@ -44,12 +44,12 @@ public abstract class MetaModelValidatorAbstract implements MetaModelValidator {
     // Dependencies (due to *Aware)
     // ////////////////////////////////////////////////////////////////////
 
-    public SpecificationLoaderSpi getSpecificationLoaderSpi() {
+    public SpecificationLoader getSpecificationLoader() {
         return specificationLoaderSpi;
     }
 
     @Override
-    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         this.specificationLoaderSpi = specificationLoader;
     }
 

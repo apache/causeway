@@ -58,9 +58,8 @@ import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -98,7 +97,7 @@ import static org.hamcrest.Matchers.notNullValue;
  * <p>
  * In addition, the {@link RuntimeContext} can optionally be injected, but will
  * default to {@link RuntimeContextNoRuntime} if not provided prior to
- * {@link SpecificationLoaderSpi#init(RuntimeContext) initialization}. The purpose of {@link RuntimeContext} is to
+ * {@link SpecificationLoader#init(RuntimeContext) initialization}. The purpose of {@link RuntimeContext} is to
  * allow the metamodel to be used standalone, for example in a Maven plugin. The
  * {@link RuntimeContextNoRuntime} implementation will through an exception for
  * any methods (such as finding an {@link ObjectAdapter adapter}) because there
@@ -108,8 +107,8 @@ import static org.hamcrest.Matchers.notNullValue;
  * to its <tt>IsisContext</tt>.
  */
 
-public final class ObjectReflectorDefault
-        implements SpecificationLoaderSpi, ApplicationScopedComponent {
+public class ObjectReflectorDefault
+        implements SpecificationLoader, ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
@@ -531,9 +530,9 @@ public final class ObjectReflectorDefault
     @Override
     public void injectInto(final Object candidate) {
         final Class<?> candidateClass = candidate.getClass();
-        if (SpecificationLoaderSpiAware.class.isAssignableFrom(candidateClass)) {
-            final SpecificationLoaderSpiAware cast = SpecificationLoaderSpiAware.class.cast(candidate);
-            cast.setSpecificationLoaderSpi(this);
+        if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
+            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
+            cast.setSpecificationLoader(this);
         }
         if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
             final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);

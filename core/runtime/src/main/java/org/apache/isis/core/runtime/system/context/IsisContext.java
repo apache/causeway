@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -406,7 +406,7 @@ public class IsisContext {
      * 
      * @see IsisSessionFactory#getSpecificationLoader()
      */
-    public static SpecificationLoaderSpi getSpecificationLoader() {
+    public static SpecificationLoader getSpecificationLoader() {
         return getSessionFactory().getSpecificationLoader();
     }
 

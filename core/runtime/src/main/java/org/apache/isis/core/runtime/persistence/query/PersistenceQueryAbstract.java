@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
@@ -128,7 +128,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////
 
-    protected static SpecificationLoaderSpi getSpecificationLoader() {
+    protected static SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

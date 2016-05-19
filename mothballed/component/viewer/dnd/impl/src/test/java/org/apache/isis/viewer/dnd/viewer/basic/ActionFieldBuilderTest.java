@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -64,7 +64,7 @@ public class ActionFieldBuilderTest {
     @Mock
     protected TemplateImageLoader mockTemplateImageLoader;
     @Mock
-    protected SpecificationLoaderSpi mockSpecificationLoader;
+    protected SpecificationLoader mockSpecificationLoader;
     @Mock
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
     @Mock

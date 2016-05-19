@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.objectstore.nosql.keys.KeyCreatorDefault;
@@ -46,7 +46,7 @@ public class NoSqlKeyCreatorTest {
     @Mock
     private OidMarshaller mockOidMarshaller;
     @Mock
-    private SpecificationLoaderSpi mockSpecificationLoader;
+    private SpecificationLoader mockSpecificationLoader;
     @Mock
     private ObjectSpecification mockSpecification;
 
@@ -64,7 +64,7 @@ public class NoSqlKeyCreatorTest {
                 return mockOidMarshaller;
             }
             @Override
-            protected SpecificationLoaderSpi getSpecificationLoader() {
+            protected SpecificationLoader getSpecificationLoader() {
                 return mockSpecificationLoader;
             }
         };

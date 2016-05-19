@@ -97,10 +97,10 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
         context.checking(new Expectations() {
             {
-                allowing(mockSpecificationLoaderSpi).loadSpecification(cls);
+                allowing(mockSpecificationLoader).loadSpecification(cls);
                 will(returnValue(mockTypeSpec));
 
-                allowing(mockSpecificationLoaderSpi).loadSpecification(returnType);
+                allowing(mockSpecificationLoader).loadSpecification(returnType);
                 will(returnValue(mockReturnTypeSpec));
             }
         });
@@ -109,7 +109,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     @Before
     public void setUp() throws Exception {
         facetFactory = new CollectionAnnotationFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
     }
 
     @After
@@ -122,7 +122,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         private void addGetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
                     mockConfiguration,
-                    mockSpecificationLoaderSpi, mockAuthenticationSessionProvider,
+                    mockSpecificationLoader, mockAuthenticationSessionProvider,
                     mockAdapterManager
             ) {
                 @Override

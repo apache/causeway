@@ -66,10 +66,10 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
     void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(cls);
+            allowing(mockSpecificationLoader).loadSpecification(cls);
             will(returnValue(mockTypeSpec));
 
-            allowing(mockSpecificationLoaderSpi).loadSpecification(returnType);
+            allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
         }});
     }
@@ -77,7 +77,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
     @Before
     public void setUp() throws Exception {
         facetFactory = new ParameterAnnotationFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 

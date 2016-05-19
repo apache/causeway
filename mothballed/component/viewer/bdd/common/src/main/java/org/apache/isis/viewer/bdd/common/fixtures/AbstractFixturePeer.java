@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -57,7 +57,7 @@ public abstract class AbstractFixturePeer {
         return IsisContext.getServices();
     }
 
-    public SpecificationLoaderSpi getSpecificationLoader() {
+    public SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

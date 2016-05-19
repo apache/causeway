@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInterna
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -164,8 +164,8 @@ public class IsisSystem implements ApplicationScopedComponent {
             final Collection<MetaModelRefiner> metaModelRefiners =
                     refiners(authenticationManager, authorizationManager,
                             new PersistenceSessionFactoryMetamodelRefiner());
-            final SpecificationLoaderSpi specificationLoader =
-                    isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, servicesInjector, metaModelRefiners);
+            final SpecificationLoader specificationLoader =
+                    isisComponentProvider.provideSpecificationLoader(deploymentType, servicesInjector, metaModelRefiners);
 
             // persistenceSessionFactory
             final PersistenceSessionFactory persistenceSessionFactory =

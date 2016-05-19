@@ -19,10 +19,12 @@ package org.apache.isis.core.metamodel.spec;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
-public interface SpecificationLoader {
+public interface SpecificationLoader extends ApplicationScopedComponent {
 
     ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
 
@@ -83,6 +85,17 @@ public interface SpecificationLoader {
 
     void invalidateCache(Class<?> domainClass);
 
+
+
+
+    void injectInto(final Object candidate);
+
+    void init(final RuntimeContext runtimeContext);
+    void shutdown();
+
+    boolean isInitialized();
+
+    void validateAndAssert();
 
 
 }

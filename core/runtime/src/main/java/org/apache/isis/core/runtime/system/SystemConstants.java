@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.system;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -45,7 +45,7 @@ public final class SystemConstants {
 
 
     /**
-     * Key used to lookup {@link SpecificationLoaderSpi specification Loader} in
+     * Key used to lookup {@link SpecificationLoader specification Loader} in
      * {@link IsisConfiguration}, and root for any
      * {@link ObjectReflectorInstaller reflector}-specific configuration keys.
      *

@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.Au
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -56,7 +56,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    protected SpecificationLoaderSpi mockSpecificationLoaderSpi;
+    protected SpecificationLoader mockSpecificationLoader;
     @Mock
     protected AdapterManager mockAdapterManager;
     @Mock

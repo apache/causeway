@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -42,7 +42,7 @@ public final class JavaReflectorHelper  {
 
     private JavaReflectorHelper(){}
     
-    public static SpecificationLoaderSpi createObjectReflector(
+    public static SpecificationLoader createObjectReflector(
             final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,

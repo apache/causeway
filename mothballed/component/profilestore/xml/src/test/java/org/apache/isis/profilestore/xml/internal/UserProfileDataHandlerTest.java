@@ -38,7 +38,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -61,7 +61,7 @@ public class UserProfileDataHandlerTest {
     @Mock
     private TemplateImageLoader mockTemplateImageLoader;
     @Mock
-    private SpecificationLoaderSpi mockSpecificationLoader;
+    private SpecificationLoader mockSpecificationLoader;
     @Mock
     private AuthenticationManager mockAuthenticationManager;
     @Mock

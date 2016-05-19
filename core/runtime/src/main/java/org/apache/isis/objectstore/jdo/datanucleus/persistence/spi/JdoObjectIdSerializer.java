@@ -35,7 +35,7 @@ import org.datanucleus.identity.DatastoreId;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
@@ -216,7 +216,7 @@ public final class JdoObjectIdSerializer {
         return correspondingClass;
     }
 
-    private static SpecificationLoaderSpi getSpecificationLoader() {
+    private static SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 }

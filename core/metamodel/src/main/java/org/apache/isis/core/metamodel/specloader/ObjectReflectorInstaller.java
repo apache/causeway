@@ -24,16 +24,16 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 /**
- * Installs a {@link SpecificationLoaderSpi} during system start up.
+ * Installs a {@link SpecificationLoader} during system start up.
  */
 public interface ObjectReflectorInstaller extends Installer {
 
     static String TYPE = "reflector";
 
-    SpecificationLoaderSpi createReflector(
+    SpecificationLoader createReflector(
             final DeploymentCategory deploymentCategory,
             final Collection<MetaModelRefiner> metaModelRefiners, final ServicesInjectorSpi servicesInjector);
 

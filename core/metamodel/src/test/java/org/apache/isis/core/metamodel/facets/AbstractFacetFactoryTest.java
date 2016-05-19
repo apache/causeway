@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import junit.framework.TestCase;
@@ -67,7 +69,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected AuthenticationSession mockAuthenticationSession;
 
     protected IsisConfigurationDefault stubConfiguration;
-    protected ProgrammableReflector programmableReflector;
+    protected SpecificationLoader mockSpecificationLoader;
     protected ProgrammableMethodRemover methodRemover;
 
     protected FacetHolder facetHolder;
@@ -92,8 +94,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        programmableReflector = new ProgrammableReflector();
-
         facetHolder = new IdentifiedHolderImpl(
                 Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
@@ -108,6 +108,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         mockTranslationService = context.mock(TranslationService.class);
         stubConfiguration = new IsisConfigurationDefault();
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
+
+        mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
         context.checking(new Expectations() {{
 
@@ -131,9 +133,16 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }});
     }
 
+    protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoader).loadSpecification(with(any(Class.class)));
+            will(returnValue(objectSpecification));
+        }});
+    }
+
     @Override
     protected void tearDown() throws Exception {
-        programmableReflector = null;
+        mockSpecificationLoader = null;
         methodRemover = null;
         facetedMethod = null;
         super.tearDown();

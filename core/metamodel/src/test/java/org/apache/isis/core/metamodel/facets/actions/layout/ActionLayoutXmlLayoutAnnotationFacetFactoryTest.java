@@ -48,7 +48,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
         context.checking(new Expectations() {
             {
-                allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(MixinFacet.class);
@@ -100,7 +100,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
         context.checking(new Expectations() {
             {
-                allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(MixinFacet.class);
@@ -135,7 +135,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
             context.checking(new Expectations() {
                 {
-                    allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                    allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                     will(returnValue(mockObjSpec));
 
                     allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -171,7 +171,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
             context.checking(new Expectations() {
                 {
-                    allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                    allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                     will(returnValue(mockObjSpec));
 
                     allowing(mockObjSpec).getFacet(DomainServiceFacet.class);

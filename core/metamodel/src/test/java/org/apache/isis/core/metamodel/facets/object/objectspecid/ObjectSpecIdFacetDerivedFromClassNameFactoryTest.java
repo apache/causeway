@@ -38,7 +38,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
     @Before
     public void setUp() throws Exception {
         facetFactory = new ObjectSpecIdFacetDerivedFromClassNameFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
     }
 
     public static class Customer {

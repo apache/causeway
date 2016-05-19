@@ -104,10 +104,10 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
     void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(cls);
+            allowing(mockSpecificationLoader).loadSpecification(cls);
             will(returnValue(mockTypeSpec));
 
-            allowing(mockSpecificationLoaderSpi).loadSpecification(returnType);
+            allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
         }});
     }
@@ -115,7 +115,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     @Before
     public void setUp() throws Exception {
         facetFactory = new PropertyAnnotationFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 
@@ -129,7 +129,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         private void addGetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
                     mockConfiguration,
-                    mockSpecificationLoaderSpi, mockAuthenticationSessionProvider,
+                    mockSpecificationLoader, mockAuthenticationSessionProvider,
                     mockAdapterManager
             ) {
                 @Override

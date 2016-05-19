@@ -57,7 +57,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {{
@@ -75,7 +75,9 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -96,7 +98,9 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionReturnTypeWhenVoid() {
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -113,7 +117,9 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionReturnTypeWhenNotVoid() {
-        programmableReflector.setLoadSpecificationStringReturn(stringSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(stringSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(stringSpec);
+
 
         class Customer {
             @SuppressWarnings("unused")
@@ -131,7 +137,8 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionOnType() {
-        programmableReflector.setLoadSpecificationStringReturn(customerSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(customerSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(customerSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -149,7 +156,9 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionsPickedUpFromSuperclass() {
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -171,17 +180,20 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
+
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForChoices.setSpecificationLoader(programmableReflector);
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForChoices.setSpecificationLoader(mockSpecificationLoader);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForChoices);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setSpecificationLoader(programmableReflector);
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForDisable.setSpecificationLoader(mockSpecificationLoader);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         facetFactoryForDisable.setServicesInjector(mockServicesInjector);
 
 

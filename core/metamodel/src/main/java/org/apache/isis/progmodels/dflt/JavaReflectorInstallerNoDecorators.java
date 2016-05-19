@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -68,7 +68,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
     //region > createReflector, doCreateReflector
 
     @Override
-    public SpecificationLoaderSpi createReflector(
+    public SpecificationLoader createReflector(
             final DeploymentCategory deploymentCategory,
             final Collection<MetaModelRefiner> metaModelRefiners,
             final ServicesInjectorSpi servicesInjector) {
@@ -183,7 +183,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
 
     @Override
     public List<Class<?>> getTypes() {
-        return listOf(SpecificationLoaderSpi.class);
+        return listOf(SpecificationLoader.class);
     }
 
     //endregion

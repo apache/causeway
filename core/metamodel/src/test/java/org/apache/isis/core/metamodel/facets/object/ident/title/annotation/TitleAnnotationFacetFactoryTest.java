@@ -66,11 +66,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Before
     public void setUp() throws Exception {
 
-        context.allowing(mockSpecificationLoaderSpi);
+        context.allowing(mockSpecificationLoader);
 
         facetFactory = new TitleAnnotationFacetFactory();
         facetFactory.setAdapterManager(mockAdapterManager);
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {

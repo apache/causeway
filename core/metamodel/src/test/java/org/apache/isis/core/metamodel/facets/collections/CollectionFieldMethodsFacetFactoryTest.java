@@ -124,7 +124,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract ffa) {
 
-        ffa.setSpecificationLoader(programmableReflector);
+        ffa.setSpecificationLoader(mockSpecificationLoader);
         ffa.setServicesInjector(mockServicesInjector);
 
     }

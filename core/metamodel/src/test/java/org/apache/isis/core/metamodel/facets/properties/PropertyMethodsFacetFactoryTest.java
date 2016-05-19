@@ -93,7 +93,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 
@@ -242,7 +242,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testModifyMethodWithNoSetterInstallsNotPersistedFacetButDoesNotInstallADisabledFacets() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
@@ -253,7 +253,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
         final DisabledFacetOnPropertyInferredFactory disabledFacetOnPropertyInferredFactory = new DisabledFacetOnPropertyInferredFactory();
-        disabledFacetOnPropertyInferredFactory.setSpecificationLoader(programmableReflector);
+        disabledFacetOnPropertyInferredFactory.setSpecificationLoader(mockSpecificationLoader);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -282,7 +282,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
@@ -417,7 +417,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     
     public void testAutoCompleteFacetFoundAndMethodRemoved() {
         final PropertyAutoCompleteFacetMethodFactory facetFactory = new PropertyAutoCompleteFacetMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations(){{

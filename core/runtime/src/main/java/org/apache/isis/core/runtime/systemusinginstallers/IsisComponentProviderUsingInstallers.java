@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
@@ -159,7 +159,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
 
     @Override
-    public SpecificationLoaderSpi provideSpecificationLoaderSpi(
+    public SpecificationLoader provideSpecificationLoader(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners) {
@@ -172,7 +172,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final SpecificationLoaderSpi specificationLoader) {
+            final SpecificationLoader specificationLoader) {
         return persistenceMechanismInstaller.createPersistenceSessionFactory(
                     deploymentType,
                 servicesInjector);

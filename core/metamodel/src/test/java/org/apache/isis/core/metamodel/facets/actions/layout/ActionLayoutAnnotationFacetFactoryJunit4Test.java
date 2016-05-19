@@ -49,7 +49,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
     }
 
     public static class Contributing extends ActionLayoutAnnotationFacetFactoryJunit4Test {
@@ -68,7 +68,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -102,7 +102,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -137,7 +137,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -175,7 +175,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -211,7 +211,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -248,7 +248,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -286,7 +286,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -324,7 +324,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -362,7 +362,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-                allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);

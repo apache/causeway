@@ -136,7 +136,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 
@@ -146,7 +146,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -165,12 +166,14 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals("An Action With Named Annotation", namedFacet.value());
     }
 
+
     public void testPicksUpDebugPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -196,7 +199,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -222,7 +226,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -245,7 +250,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -268,7 +274,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -299,7 +306,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -330,7 +338,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -361,7 +370,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -398,7 +408,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
         final Method choicesMethod = findMethod(Customer.class, "choicesSomeAction", new Class[] {});
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
@@ -416,7 +427,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -481,7 +493,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method nameMethod = findMethod(CustomerStatic.class, "nameSomeAction");
@@ -499,8 +512,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionSomeAction");
@@ -523,7 +538,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideSomeAction", new Class[] {});
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
 
@@ -536,8 +552,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOtherAction", new Class[] {});
@@ -554,7 +572,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method protectMethod = findMethod(CustomerStatic.class, "protectSomeAction", new Class[] {});
@@ -572,8 +591,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOtherAction", new Class[] {});
@@ -591,7 +612,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method hideMethod = findMethod(CustomerStatic.class, "hideSomeAction", new Class[] { UserMemento.class });
@@ -609,10 +631,11 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method disableMethod = findMethod(CustomerStatic.class, "disableSomeAction", new Class[] { UserMemento.class });
@@ -633,7 +656,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -682,7 +706,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -746,7 +771,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -780,13 +806,14 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+//        mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams = new ActionParameterChoicesFacetViaMethodFactory();
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForParams);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+//        mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -827,13 +854,15 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams = new ActionParameterDefaultsFacetViaMethodFactory();
 
         injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForParams);
 
-        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")

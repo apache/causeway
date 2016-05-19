@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
@@ -50,7 +50,7 @@ public interface IsisComponentProvider {
 
     FixturesInstaller provideFixturesInstaller();
 
-    SpecificationLoaderSpi provideSpecificationLoaderSpi(
+    SpecificationLoader provideSpecificationLoader(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners)
@@ -59,6 +59,6 @@ public interface IsisComponentProvider {
     PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final SpecificationLoaderSpi specificationLoader);
+            final SpecificationLoader specificationLoader);
 
 }

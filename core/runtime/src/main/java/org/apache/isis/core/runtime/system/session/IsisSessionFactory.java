@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
@@ -68,7 +68,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
-    private final SpecificationLoaderSpi specificationLoaderSpi;
+    private final SpecificationLoader specificationLoaderSpi;
     private final ServicesInjectorSpi servicesInjector;
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
@@ -79,7 +79,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             final DeploymentType deploymentType,
             final IsisConfiguration configuration,
             final ServicesInjectorSpi servicesInjector,
-            final SpecificationLoaderSpi specificationLoader,
+            final SpecificationLoader specificationLoader,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,
             final PersistenceSessionFactory persistenceSessionFactory) {
@@ -165,9 +165,9 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}
-     * {@link SpecificationLoaderSpi}.
+     * {@link SpecificationLoader}.
      */
-    public SpecificationLoaderSpi getSpecificationLoader() {
+    public SpecificationLoader getSpecificationLoader() {
         return specificationLoaderSpi;
     }
 

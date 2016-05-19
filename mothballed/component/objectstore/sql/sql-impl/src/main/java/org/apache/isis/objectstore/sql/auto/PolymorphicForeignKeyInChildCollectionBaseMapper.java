@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -214,7 +214,7 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
 
         final Results rs = connector.select(sql.toString());
 
-        final SpecificationLoaderSpi reflector = IsisContext.getSpecificationLoader();
+        final SpecificationLoader reflector = IsisContext.getSpecificationLoader();
         final JdbcPolymorphicObjectReferenceMapping idMapping =
             (JdbcPolymorphicObjectReferenceMapping) idMappingAbstract;
 

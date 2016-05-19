@@ -19,16 +19,16 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class RuntimeContextAbstract implements RuntimeContext {
 
     private final ServicesInjector servicesInjector;
-    private final SpecificationLoaderSpi specificationLoader;
+    private final SpecificationLoader specificationLoader;
 
     public RuntimeContextAbstract(
             final ServicesInjector servicesInjector,
-            final SpecificationLoaderSpi specificationLoader) {
+            final SpecificationLoader specificationLoader) {
         this.servicesInjector = servicesInjector;
         this.specificationLoader = specificationLoader;
     }
@@ -40,7 +40,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext {
     }
 
     @Override
-    public SpecificationLoaderSpi getSpecificationLoader() {
+    public SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
 

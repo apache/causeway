@@ -44,7 +44,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     @Before
     public void setUp() throws Exception {
         facetFactory = new NotContributedFacetDerivedFromDomainServiceFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoader);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -96,7 +96,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -132,7 +132,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -165,7 +165,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -197,7 +197,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
+            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);

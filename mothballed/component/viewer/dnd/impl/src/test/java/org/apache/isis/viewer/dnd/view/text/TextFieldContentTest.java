@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -56,7 +56,7 @@ public class TextFieldContentTest {
     @Mock
     protected TemplateImageLoader mockTemplateImageLoader;
     @Mock
-    protected SpecificationLoaderSpi mockSpecificationLoader;
+    protected SpecificationLoader mockSpecificationLoader;
     @Mock
     private UserProfileLoader mockUserProfileLoader;
     @Mock

@@ -24,7 +24,7 @@ public class CssClassFaFacetOnTypeAnnotationFactoryTest extends AbstractFacetFac
     // public void testCssClassFaAnnotationPickedUpOnClass() {
     //
     // final CssClassFaFacetOnTypeAnnotationFactory facetFactory = new CssClassFaFacetOnTypeAnnotationFactory();
-    // facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+    // facetFactory.setSpecificationLoader(mockSpecificationLoader);
     //
     // @CssClassFa("fa-foo")
     // class Customer {
@@ -47,7 +47,7 @@ public class CssClassFaFacetOnTypeAnnotationFactoryTest extends AbstractFacetFac
     // public void testCssClassFaAnnotationPickedUpOnClassPositionRight() {
     //
     // final CssClassFaFacetOnTypeAnnotationFactory facetFactory = new CssClassFaFacetOnTypeAnnotationFactory();
-    // facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+    // facetFactory.setSpecificationLoader(mockSpecificationLoader);
     //
     // @CssClassFa(value = "fa-foo", position = ActionLayout.CssClassFaPosition.RIGHT)
     // class Customer {
