@@ -19,22 +19,26 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import java.util.Collection;
-import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.junit.Assert;
+import org.junit.Test;
 
-/**
- * Installs a {@link SpecificationLoader} during system start up.
- */
-public interface ObjectReflectorInstaller extends Installer {
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-    static String TYPE = "reflector";
+public class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
 
-    SpecificationLoader createReflector(
-            final DeploymentCategory deploymentCategory,
-            final Collection<MetaModelRefiner> metaModelRefiners, final ServicesInjectorSpi servicesInjector);
+    @Override
+    protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
+        return reflector.loadSpecification(String.class);
+    }
+
+    @Test
+    public void testType() throws Exception {
+        Assert.assertTrue(specification.isNotCollection());
+    }
+
+    @Test
+    public void testName() throws Exception {
+        Assert.assertEquals(String.class.getName(), specification.getFullIdentifier());
+    }
 
 }

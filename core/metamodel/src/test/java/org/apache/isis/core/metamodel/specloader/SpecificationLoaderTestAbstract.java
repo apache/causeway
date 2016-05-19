@@ -56,7 +56,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
-public abstract class ObjectReflectorDefaultTestAbstract {
+public abstract class SpecificationLoaderTestAbstract {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
@@ -109,8 +109,8 @@ public abstract class ObjectReflectorDefaultTestAbstract {
             ignoring(mockServicesInjector).isRegisteredService(with(any(Class.class)));
         }});
 
-        final ObjectReflectorDefault reflector =
-                new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
+        final SpecificationLoader reflector =
+                new SpecificationLoader(DeploymentCategory.PRODUCTION,
                         mockConfiguration,
                         new ProgrammingModelFacetsJava5(),
                         new MetaModelValidatorDefault(),
@@ -124,14 +124,14 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         specification = loadSpecification(reflector);
     }
 
-    protected abstract ObjectSpecification loadSpecification(ObjectReflectorDefault reflector);
+    protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
 
     @Test
     public void testLayoutMetadataReaderEmptyList() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("illegal argument, expected: is not an empty collection");
 
-        new ObjectReflectorDefault(DeploymentCategory.PRODUCTION ,
+        new SpecificationLoader(DeploymentCategory.PRODUCTION ,
                 mockConfiguration,
                 new ProgrammingModelFacetsJava5(),
                 new MetaModelValidatorDefault(),
@@ -144,7 +144,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("illegal argument, expected: is not null");
 
-        new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
+        new SpecificationLoader(DeploymentCategory.PRODUCTION,
                 mockConfiguration,
                 new ProgrammingModelFacetsJava5(),
                 new MetaModelValidatorDefault(),

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @Deprecated
 public class ActionDomainEventFacetForPostsActionInvokedEventAnnotation extends ActionDomainEventFacetAbstract {

@@ -1,22 +1,19 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
-
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
@@ -44,6 +41,8 @@ import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -58,14 +57,11 @@ import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -80,7 +76,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Builds the meta-model.
- * 
+ *
  * <p>
  * The implementation provides for a degree of pluggability:
  * <ul>
@@ -93,7 +89,7 @@ import static org.hamcrest.Matchers.notNullValue;
  * conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
  * </ul>
- * 
+ *
  * <p>
  * In addition, the {@link RuntimeContext} can optionally be injected, but will
  * default to {@link RuntimeContextNoRuntime} if not provided prior to
@@ -106,12 +102,11 @@ import static org.hamcrest.Matchers.notNullValue;
  * injects an implementation of {@link RuntimeContext} that acts like a bridge
  * to its <tt>IsisContext</tt>.
  */
+public class SpecificationLoader implements ApplicationScopedComponent {
 
-public class ObjectReflectorDefault
-        implements SpecificationLoader, ApplicationScopedComponent {
+    private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
 
-    private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
-
+    //region > constructor, fields
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final DeploymentCategory deploymentCategory;
@@ -124,24 +119,7 @@ public class ObjectReflectorDefault
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private final List<LayoutMetadataReader> layoutMetadataReaders;
 
-    /**
-     * Can optionally be injected, but will default (to
-     * {@link RuntimeContextNoRuntime}) otherwise.
-     *
-     * <p>
-     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is
-     * being used standalone (eg for a code-generator).
-     */
-    private RuntimeContext runtimeContext;
-
-    private boolean initialized = false;
-    private ValidationFailures validationFailures;
-
-    // /////////////////////////////////////////////////////////////
-    // Constructor
-    // /////////////////////////////////////////////////////////////
-
-    public ObjectReflectorDefault(
+    public SpecificationLoader(
             final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
@@ -174,9 +152,21 @@ public class ObjectReflectorDefault
         LOG.info("finalizing reflector factory " + this);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // init, shutdown
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > init
+
+    /**
+     * Can optionally be injected, but will default (to
+     * {@link RuntimeContextNoRuntime}) otherwise.
+     *
+     * <p>
+     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is
+     * being used standalone (eg for a code-generator).
+     */
+    private RuntimeContext runtimeContext;
+
+    private boolean initialized = false;
 
     /**
      * Initializes and wires up, and primes the cache based on any service
@@ -184,39 +174,16 @@ public class ObjectReflectorDefault
      * @param runtimeContext
      */
     public void init(final RuntimeContext runtimeContext) {
-
-        initialize(runtimeContext);
-
-        cacheBySpecId();
-        
-        initialized = true;
-    }
-
-    public void validateAndAssert() {
-        ValidationFailures validationFailures = validate();
-        validationFailures.assertNone();
-
-        cacheBySpecId();
-    }
-
-    public ValidationFailures validate() {
-        if(validationFailures == null) {
-            validationFailures = new ValidationFailures();
-            metaModelValidator.validate(validationFailures);
-        }
-        return validationFailures;
-    }
-
-    public void initialize(final RuntimeContext runtimeContext) {
         this.runtimeContext = runtimeContext;
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("initialising " + this);
+            LOG.debug("initialising {}", this);
         }
 
         // default subcomponents
-        if (this.runtimeContext == null) {
-            servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
+        if (runtimeContext == null) {
+            servicesInjector.addFallbackIfRequired(
+                    ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
             this.runtimeContext = new RuntimeContextNoRuntime(servicesInjector, this);
         }
 
@@ -235,10 +202,12 @@ public class ObjectReflectorDefault
 
         loadSpecificationsForServices();
         loadSpecificationsForMixins();
+        cacheBySpecId();
+        initialized = true;
     }
 
     private void loadSpecificationsForServices() {
-        for (final Class<?> serviceClass : getServiceClasses()) {
+        for (final Class<?> serviceClass : allServiceClasses()) {
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
             if(domainService != null) {
                 if(domainService.nature() == NatureOfService.VIEW || domainService.nature() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
@@ -247,7 +216,6 @@ public class ObjectReflectorDefault
             }
         }
     }
-
 
     private void loadSpecificationsForMixins() {
         final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
@@ -269,73 +237,110 @@ public class ObjectReflectorDefault
             specById.put(objectSpecId, objSpec);
         }
 
-        getCache().setCacheBySpecId(specById);
+        cache.setCacheBySpecId(specById);
     }
 
-    @Override
     public boolean isInitialized() {
         return initialized;
     }
+
+
+    /**
+     * Set using {@link #init(RuntimeContext)}.
+     */
+    public RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
+
+    //endregion
+
+    //region > shutdown
 
     public void shutdown() {
         LOG.info("shutting down " + this);
 
         initialized = false;
-        
-        getCache().clear();
+
+        cache.clear();
     }
 
+    //endregion
 
-    @Override
+    //region > invalidateCache
+
     public void invalidateCache(final Class<?> cls) {
-        
-        if(!getCache().isInitialized()) {
+
+        if(!cache.isInitialized()) {
             // could be called by JRebel plugin, before we are up-and-running
             // just ignore.
             return;
         }
         final Class<?> substitutedType = classSubstitutor.getClass(cls);
-        
+
         if(substitutedType.isAnonymousClass()) {
             // JRebel plugin might call us... just ignore 'em.
             return;
         }
-        
+
         ObjectSpecification spec = loadSpecification(substitutedType);
         while(spec != null) {
             final Class<?> type = spec.getCorrespondingClass();
-            getCache().remove(type.getName());
+            cache.remove(type.getName());
             if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
                 // umm.  Some specs do not have an ObjectSpecIdFacet...
                 recache(spec);
             }
-            spec = spec.superclass(); 
+            spec = spec.superclass();
         }
     }
 
 
     private void recache(final ObjectSpecification newSpec) {
-        getCache().recache(newSpec);
+        cache.recache(newSpec);
     }
 
-    
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // install, load, allSpecifications, lookup
-    // /////////////////////////////////////////////////////////////
+    //region > validation
+
+    private ValidationFailures validationFailures;
+
+    public void validateAndAssert() {
+        ValidationFailures validationFailures = validate();
+        validationFailures.assertNone();
+
+        cacheBySpecId();
+    }
+
+    public ValidationFailures validate() {
+        if(validationFailures == null) {
+            validationFailures = new ValidationFailures();
+            metaModelValidator.validate(validationFailures);
+        }
+        return validationFailures;
+    }
+
+    //endregion
+
+
+    //region > loadSpecification, loadSpecifications
 
     /**
-     * API: Return the specification for the specified class of object.
+     * Return the specification for the specified class of object.
+     *
+     * <p>
+     * It is possible for this method to return <tt>null</tt>, for example if
+     * the configured {@link org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor}
+     * has filtered out the class.
      */
-    @Override
-    public final ObjectSpecification loadSpecification(final String className) {
+    public ObjectSpecification loadSpecification(final String className) {
         ensureThatArg(className, is(notNullValue()), "specification class name must be specified");
 
         try {
             final Class<?> cls = loadBuiltIn(className);
             return internalLoadSpecification(cls);
         } catch (final ClassNotFoundException e) {
-            final ObjectSpecification spec = getCache().get(className);
+            final ObjectSpecification spec = cache.get(className);
             if (spec == null) {
                 throw new IsisException("No such class available: " + className);
             }
@@ -344,21 +349,20 @@ public class ObjectReflectorDefault
     }
 
     /**
-     * API: Return specification.
+     * @see #loadSpecification(String)
      */
-    @Override
     public ObjectSpecification loadSpecification(final Class<?> type) {
         final ObjectSpecification spec = internalLoadSpecification(type);
         if(spec == null) {
             return null;
         }
-        if(getCache().isInitialized()) {
+        if(cache.isInitialized()) {
             // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
             // don't have an ObjectSpecId; hence the guard.
             if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
                 ObjectSpecId specId = spec.getSpecId();
-                if (getCache().getByObjectType(specId) == null) {
-                    getCache().recache(spec);
+                if (cache.getByObjectType(specId) == null) {
+                    cache.recache(spec);
                 }
             }
         }
@@ -374,12 +378,11 @@ public class ObjectReflectorDefault
         return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType, nature) : null;
     }
 
-
     private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type, final NatureOfService nature) {
         Assert.assertNotNull(type);
         final String typeName = type.getName();
 
-        final SpecificationCacheDefault specificationCache = getCache();
+        final SpecificationCacheDefault specificationCache = cache;
         synchronized (specificationCache) {
             final ObjectSpecification spec = specificationCache.get(typeName);
             if (spec != null) {
@@ -407,7 +410,6 @@ public class ObjectReflectorDefault
      * Loads the specifications of the specified types except the one specified
      * (to prevent an infinite loop).
      */
-    @Override
     public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
         boolean anyLoadedAsNull = false;
         for (final Class<?> typeToLoad : typesToLoad) {
@@ -423,7 +425,6 @@ public class ObjectReflectorDefault
     /**
      * Loads the specifications of the specified types.
      */
-    @Override
     public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return loadSpecifications(typesToLoad, null);
     }
@@ -463,39 +464,28 @@ public class ObjectReflectorDefault
     }
 
     /**
-     * Return all the loaded specifications.
+     * Typically does not need to be called, but is available for {@link FacetFactory}s to force
+     * early introspection of referenced specs in certain circumstances.
+     *
+     * <p>
+     * Originally introduced to support {@link AutoCompleteFacet}.
      */
-    @Override
-    public Collection<ObjectSpecification> allSpecifications() {
-        return getCache().allSpecifications();
-    }
-
-    @Override
-    public boolean loaded(final Class<?> cls) {
-        return loaded(cls.getName());
-    }
-
-    @Override
-    public boolean loaded(final String fullyQualifiedClassName) {
-        return getCache().get(fullyQualifiedClassName) != null;
-    }
-
-    public ObjectSpecification introspectIfRequired(final ObjectSpecification spec) {
+    private ObjectSpecification introspectIfRequired(final ObjectSpecification spec) {
 
         final ObjectSpecificationAbstract specSpi = (ObjectSpecificationAbstract)spec;
-        final IntrospectionState introspectionState = specSpi.getIntrospectionState();
+        final ObjectSpecificationAbstract.IntrospectionState introspectionState = specSpi.getIntrospectionState();
 
         // REVIEW: can't remember why this is done in multiple passes, could it be simplified?
-        if (introspectionState == IntrospectionState.NOT_INTROSPECTED) {
+        if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.NOT_INTROSPECTED) {
 
-            specSpi.setIntrospectionState(IntrospectionState.BEING_INTROSPECTED);
+            specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.BEING_INTROSPECTED);
             introspect(specSpi);
 
-        } else if (introspectionState == IntrospectionState.BEING_INTROSPECTED) {
+        } else if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.BEING_INTROSPECTED) {
 
             introspect(specSpi);
 
-        } else if (introspectionState == IntrospectionState.INTROSPECTED) {
+        } else if (introspectionState == ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED) {
             // nothing to do
         }
         return spec;
@@ -504,30 +494,75 @@ public class ObjectReflectorDefault
     private void introspect(final ObjectSpecificationAbstract specSpi) {
         specSpi.introspectTypeHierarchyAndMembers();
         specSpi.updateFromFacetValues();
-        specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+        specSpi.setIntrospectionState(ObjectSpecificationAbstract.IntrospectionState.INTROSPECTED);
 
     }
 
-    @Override
+    //endregion
+
+    //region > allSpecifications
+    /**
+     * Return all the loaded specifications.
+     */
+    public Collection<ObjectSpecification> allSpecifications() {
+        return cache.allSpecifications();
+    }
+
+    //endregion
+
+    //region > getServiceClasses, isServiceClass
+
+    public List<Class<?>> allServiceClasses() {
+        List<Class<?>> serviceClasses = Lists
+                .transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
+                    public Class<?> apply(Object o) {
+                        return o.getClass();
+                    }
+                });
+        // take a copy, to allow eg I18nFacetFactory to add in default implementations of missing services.
+        return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
+    }
+
+    public boolean isServiceClass(Class<?> cls) {
+        return this.servicesInjector.isRegisteredService(cls);
+    }
+
+    //endregion
+
+    //region > loaded
+    /**
+     * Whether this class has been loaded.
+     */
+    public boolean loaded(final Class<?> cls) {
+        return loaded(cls.getName());
+    }
+
+    /**
+     * @see #loaded(Class).
+     */
+    public boolean loaded(final String fullyQualifiedClassName) {
+        return cache.get(fullyQualifiedClassName) != null;
+    }
+
+    //endregion
+
+    //region > lookupBySpecId
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
-        final ObjectSpecification objectSpecification = getCache().getByObjectType(objectSpecId);
+        final ObjectSpecification objectSpecification = cache.getByObjectType(objectSpecId);
         if(objectSpecification == null) {
             // fallback
             return loadSpecification(objectSpecId.asString());
         }
         return objectSpecification;
     }
+    //endregion
 
 
-    // ////////////////////////////////////////////////////////////////////
-    // injectInto
-    // ////////////////////////////////////////////////////////////////////
 
     /**
      * Injects self into candidate if required, and instructs its subcomponents
      * to do so also.
      */
-    @Override
     public void injectInto(final Object candidate) {
         final Class<?> candidateClass = candidate.getClass();
         if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
@@ -543,61 +578,6 @@ public class ObjectReflectorDefault
             cast.setServicesInjector(this.servicesInjector);
         }
     }
-
-
-    // /////////////////////////////////////////////////////////////
-    // Helpers (were previously injected, but no longer required)
-    // /////////////////////////////////////////////////////////////
-
-    /**
-     * Provides access to the registered {@link Facet}s.
-     */
-    public FacetProcessor getFacetProcessor() {
-        return facetProcessor;
-    }
-
-    private SpecificationCacheDefault getCache() {
-        return cache;
-    }
-
-    // ////////////////////////////////////////////////////////////////////
-    // Dependencies (injected by setter due to *Aware)
-    // ////////////////////////////////////////////////////////////////////
-
-    /**
-     * Injected in {@link #initialize(RuntimeContext)}.
-     */
-    public RuntimeContext getRuntimeContext() {
-        return runtimeContext;
-    }
-
-
-    // ////////////////////////////////////////////////////////////////////
-    // Dependencies (setters, optional)
-    // ////////////////////////////////////////////////////////////////////
-
-    public List<Class<?>> getServiceClasses() {
-        List<Class<?>> serviceClasses = Lists.transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
-            public Class<?> apply(Object o) {
-                return o.getClass();
-            }
-        });
-        // take a copy, to allow eg I18nFacetFactory to add in default implementations of missing services.
-        return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
-    }
-
-    public boolean isServiceClass(Class<?> cls) {
-        return this.servicesInjector.isRegisteredService(cls);
-    }
-
-    // ////////////////////////////////////////////////////////////////////
-    // Dependencies (injected from constructor)
-    // ////////////////////////////////////////////////////////////////////
-
-    protected MetaModelValidator getMetaModelValidator() {
-        return metaModelValidator;
-    }
-
 
 
 

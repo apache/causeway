@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * TODO: roll-up in the future (introduced only so that API does not break)

@@ -27,10 +27,10 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ObjectReflectorDefaultTest_array extends ObjectReflectorDefaultTestAbstract {
+public class SpecificationLoaderTest_array extends SpecificationLoaderTestAbstract {
 
     @Override
-    protected ObjectSpecification loadSpecification(final ObjectReflectorDefault reflector) {
+    protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
         return reflector.loadSpecification(ReflectorTestPojo[].class);
     }
 

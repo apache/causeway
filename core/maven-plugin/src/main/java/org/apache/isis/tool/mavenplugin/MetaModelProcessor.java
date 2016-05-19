@@ -25,7 +25,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 interface MetaModelProcessor {
 
@@ -44,6 +44,6 @@ interface MetaModelProcessor {
         void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
     }
 
-    void process(final Context context, final ObjectReflectorDefault specificationLoader) throws MojoFailureException;
+    void process(final Context context, final SpecificationLoader specificationLoader) throws MojoFailureException;
 
 }

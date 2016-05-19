@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class RuntimeContextAbstract implements RuntimeContext {
 

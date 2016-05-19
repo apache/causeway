@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.runtime.runner;
 
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.logging.LoggingConstants;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -36,7 +35,7 @@ public final class Constants {
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
 
     public static final String REFLECTOR_OPT = "l";
-    public static final String REFLECTOR_LONG_OPT = ObjectReflectorInstaller.TYPE;
+    public static final String REFLECTOR_LONG_OPT = SpecificationLoaderInstaller.TYPE;
 
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";

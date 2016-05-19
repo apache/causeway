@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CreatedLifecycleEventFacetForDomainObjectAnnotation extends SingleClassValueFacetAbstract implements CreatedLifecycleEventFacet {
 

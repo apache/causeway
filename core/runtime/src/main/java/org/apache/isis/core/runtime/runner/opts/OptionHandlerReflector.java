@@ -25,7 +25,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerRepository;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -51,7 +51,7 @@ public class OptionHandlerReflector extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Object[] reflectors = installerRepository.getInstallers(ObjectReflectorInstaller.class);
+        final Object[] reflectors = installerRepository.getInstallers(SpecificationLoaderInstaller.class);
         final Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(REFLECTOR_LONG_OPT).withDescription("reflector to use (ignored if type is prototype or client): " + availableInstallers(reflectors) + "; or class name").create(REFLECTOR_OPT);
         options.addOption(option);
 

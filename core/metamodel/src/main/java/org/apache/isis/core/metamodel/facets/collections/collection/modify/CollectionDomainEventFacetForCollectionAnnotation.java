@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionDomainEventFacetForCollectionAnnotation extends CollectionDomainEventFacetAbstract {
 

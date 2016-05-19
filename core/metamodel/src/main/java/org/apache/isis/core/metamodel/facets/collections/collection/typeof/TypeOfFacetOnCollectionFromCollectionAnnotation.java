@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacetAbstract {
 

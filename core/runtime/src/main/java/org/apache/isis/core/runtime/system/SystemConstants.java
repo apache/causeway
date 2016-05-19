@@ -22,8 +22,8 @@ package org.apache.isis.core.runtime.system;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -47,12 +47,12 @@ public final class SystemConstants {
     /**
      * Key used to lookup {@link SpecificationLoader specification Loader} in
      * {@link IsisConfiguration}, and root for any
-     * {@link ObjectReflectorInstaller reflector}-specific configuration keys.
+     * {@link SpecificationLoaderInstaller reflector}-specific configuration keys.
      *
      * @deprecated
      */
     @Deprecated
-    public final static String REFLECTOR_KEY = ConfigurationConstants.ROOT + ObjectReflectorInstaller.TYPE;
+    public final static String REFLECTOR_KEY = ConfigurationConstants.ROOT + SpecificationLoaderInstaller.TYPE;
     
     /**
      * Default for {@link #REFLECTOR_KEY}

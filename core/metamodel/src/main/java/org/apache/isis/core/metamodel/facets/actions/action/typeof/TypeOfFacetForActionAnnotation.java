@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetForActionAnnotation extends TypeOfFacetAbstract {
 

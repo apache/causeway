@@ -28,8 +28,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
@@ -51,7 +51,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
     private final InstallerLookup installerLookup;
 
-    private ObjectReflectorInstaller reflectorInstaller;
+    private SpecificationLoaderInstaller reflectorInstaller;
     private PersistenceMechanismInstaller persistenceMechanismInstaller;
 
     public IsisComponentProviderUsingInstallers(

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 
 /**

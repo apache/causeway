@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 public class FacetedMethodsBuilderContext {

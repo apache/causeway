@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.applib.annotation.Programmatic;
 

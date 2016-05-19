@@ -19,12 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 

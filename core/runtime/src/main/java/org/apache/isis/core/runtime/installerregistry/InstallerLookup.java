@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.IsisInstallerRegistry;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.about.ComponentDetails;
@@ -152,8 +152,8 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
 
 
     //region > metamodel
-    public ObjectReflectorInstaller reflectorInstaller(final String requested) {
-        return getInstaller(ObjectReflectorInstaller.class, requested, SystemConstants.REFLECTOR_KEY, SystemConstants.REFLECTOR_DEFAULT);
+    public SpecificationLoaderInstaller reflectorInstaller(final String requested) {
+        return getInstaller(SpecificationLoaderInstaller.class, requested, SystemConstants.REFLECTOR_KEY, SystemConstants.REFLECTOR_DEFAULT);
     }
     //endregion
 

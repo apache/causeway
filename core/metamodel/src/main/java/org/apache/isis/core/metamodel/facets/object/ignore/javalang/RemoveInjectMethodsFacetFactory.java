@@ -36,7 +36,7 @@ public class RemoveInjectMethodsFacetFactory extends FacetFactoryAbstract  {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final List<Class<?>> serviceClasses = getSpecificationLoader().getServiceClasses();
+        final List<Class<?>> serviceClasses = getSpecificationLoader().allServiceClasses();
         for (Class<? extends Object> serviceClass : serviceClasses) {
             Method[] methods = processClassContext.getCls().getMethods();
             for (Method method : methods) {

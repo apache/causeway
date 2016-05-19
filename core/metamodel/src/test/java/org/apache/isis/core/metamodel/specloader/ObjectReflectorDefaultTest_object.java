@@ -33,14 +33,14 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet;
 
-public class ObjectReflectorDefaultTest_object extends ObjectReflectorDefaultTestAbstract {
+public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
 
     public static class TestDomainObject {
 
     }
 
     @Override
-    protected ObjectSpecification loadSpecification(final ObjectReflectorDefault reflector) {
+    protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
         return reflector.loadSpecification(TestDomainObject.class);
     }
 
