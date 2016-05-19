@@ -36,21 +36,18 @@ import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class FactoryServiceDefault
-        implements FactoryService,
-            PersistenceSessionServiceAware, SpecificationLoaderAware {
+public class FactoryServiceDefault implements FactoryService, PersistenceSessionServiceAware {
 
 
     @Programmatic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T instantiate(final Class<T> domainClass) {
-        final ObjectSpecification spec = specificationLookup.loadSpecification(domainClass);
+        final ObjectSpecification spec = specificationLoader.loadSpecification(domainClass);
         final ObjectAdapter adapter = doCreateTransientInstance(spec);
         return (T) adapter.getObject();
     }
@@ -67,7 +64,7 @@ public class FactoryServiceDefault
     @Programmatic
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(mixinClass);
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(mixinClass);
         final MixinFacet mixinFacet = objectSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             throw new NonRecoverableException("Class '" + mixinClass.getName() + " is not a mixin");
@@ -94,6 +91,9 @@ public class FactoryServiceDefault
     }
 
     @Inject
+    SpecificationLoader specificationLoader;
+
+    @Inject
     ServiceRegistry serviceRegistry;
 
     private PersistenceSessionService persistenceSessionService;
@@ -103,9 +103,5 @@ public class FactoryServiceDefault
         this.persistenceSessionService = persistenceSessionService;
     }
 
-    private SpecificationLoader specificationLookup;
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
-    }
+
 }

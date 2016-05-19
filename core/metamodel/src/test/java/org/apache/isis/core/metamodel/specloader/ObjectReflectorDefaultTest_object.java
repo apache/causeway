@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValid
 public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
 
     public static class TestDomainObject {
-
     }
 
     @Override

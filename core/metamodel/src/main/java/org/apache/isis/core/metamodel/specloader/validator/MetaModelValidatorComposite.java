@@ -29,12 +29,6 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
     private final List<MetaModelValidator> validators = Lists.newArrayList();
 
-    @Override
-    public void validate(final ValidationFailures validationFailures)  {
-        for (final MetaModelValidator validator : validators) {
-            validator.validate(validationFailures);
-        }
-    }
 
     public MetaModelValidatorComposite add(final MetaModelValidator validator) {
         validators.add(validator);
@@ -50,13 +44,23 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         return this;
     }
 
+
     @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        super.setSpecificationLoader(specificationLoader);
+    public void init(final SpecificationLoader specificationLoader) {
+        super.init(specificationLoader);
         for (final MetaModelValidator validator : validators) {
-            validator.setSpecificationLoader(specificationLoader);
+            validator.init(specificationLoader);
         }
     }
+
+
+    @Override
+    public void validate(final ValidationFailures validationFailures)  {
+        for (final MetaModelValidator validator : validators) {
+            validator.validate(validationFailures);
+        }
+    }
+
 
     public static MetaModelValidatorComposite asComposite(final MetaModelValidator baseMetaModelValidator) {
         final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();

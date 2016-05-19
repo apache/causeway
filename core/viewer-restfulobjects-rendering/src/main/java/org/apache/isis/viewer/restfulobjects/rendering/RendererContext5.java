@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**

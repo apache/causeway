@@ -48,8 +48,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -266,8 +266,8 @@ public abstract class IsisComponentProvider {
         return authorizationManager;
     }
 
-    public ServicesInjectorDefault provideServiceInjector() {
-        return new ServicesInjectorDefault(services);
+    public ServicesInjector provideServiceInjector() {
+        return new ServicesInjector(services);
     }
 
     public FixturesInstaller provideFixturesInstaller()  {
@@ -276,7 +276,7 @@ public abstract class IsisComponentProvider {
 
     public SpecificationLoader provideSpecificationLoader(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjector,
+            final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners)  throws IsisSystemException {
 
         final SpecificationLoaderInstaller reflectorInstaller = new JavaReflectorInstaller(getConfiguration());
@@ -287,7 +287,7 @@ public abstract class IsisComponentProvider {
 
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjector) {
+            final ServicesInjector servicesInjector) {
         final PersistenceMechanismInstaller persistenceMechanismInstaller =
                 new DataNucleusPersistenceMechanismInstaller(getConfiguration());
 

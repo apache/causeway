@@ -23,8 +23,6 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
 public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract  {
 

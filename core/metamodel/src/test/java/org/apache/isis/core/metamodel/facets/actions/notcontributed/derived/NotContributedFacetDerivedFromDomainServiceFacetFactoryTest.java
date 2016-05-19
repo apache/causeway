@@ -44,7 +44,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     @Before
     public void setUp() throws Exception {
         facetFactory = new NotContributedFacetDerivedFromDomainServiceFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Test

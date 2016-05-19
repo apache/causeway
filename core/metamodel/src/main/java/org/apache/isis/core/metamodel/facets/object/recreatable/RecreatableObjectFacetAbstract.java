@@ -22,14 +22,13 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
 

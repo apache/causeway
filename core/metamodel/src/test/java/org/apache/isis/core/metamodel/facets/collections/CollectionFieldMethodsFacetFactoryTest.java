@@ -23,7 +23,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
 import org.jmock.Expectations;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -34,7 +36,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -73,7 +74,8 @@ import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFac
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -117,22 +119,18 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
             allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
             will(returnValue(stubConfiguration));
+
+            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            will(returnValue(mockSpecificationLoader));
+
         }});
-
-    }
-
-
-    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract ffa) {
-
-        ffa.setSpecificationLoader(mockSpecificationLoader);
-        ffa.setServicesInjector(mockServicesInjector);
 
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -156,7 +154,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -180,7 +178,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -204,8 +202,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
-
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -229,8 +226,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
-
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -257,7 +253,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testAddToFacetIsInstalledViaAccessorIfNoExplicitAddToMethodExists() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -282,7 +278,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testCannotInferTypeOfFacetIfNoExplicitAddToOrRemoveFromMethods() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -303,7 +299,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testRemoveFromFacetIsInstalledViaAccessorIfNoExplicitRemoveFromMethodExists() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -328,7 +324,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testAddToFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -360,7 +356,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testCanInferTypeOfFacetFromExplicitAddToMethod() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -389,7 +385,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testRemoveFromFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -421,7 +417,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testCanInferTypeOfFacetFromExplicitRemoveFromMethod() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -450,7 +446,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testClearFacetIsInstalledAndMethodRemoved() {
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -482,7 +478,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testClearFacetIsInstalledViaAccessorIfNoExplicitClearMethod() {
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -507,7 +503,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testValidateAddToFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -544,7 +540,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testValidateRemoveFromFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -581,7 +577,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testMethodFoundInSuperclass() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -610,11 +606,11 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testMethodFoundInSuperclassButHelpeMethodsFoundInSubclasses() {
         final CollectionAccessorFacetViaAccessorFactory facetFactoryForAccessor = new CollectionAccessorFacetViaAccessorFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForAccessor);
+        facetFactoryForAccessor.setServicesInjector(mockServicesInjector);
 
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddToRemoveFromAndValidateFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForHelpers);
+        facetFactoryForHelpers.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -708,7 +704,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameOrders");
@@ -727,7 +723,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionOrders");
@@ -746,7 +742,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOrders");
@@ -763,7 +759,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOtherOrders");
@@ -778,7 +774,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOrders");
@@ -797,7 +793,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOtherOrders");
@@ -812,7 +808,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideOrders", new Class[] { UserMemento.class });
@@ -831,7 +827,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableOrders", new Class[] { UserMemento.class });

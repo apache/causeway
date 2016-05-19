@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.Specifi
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * @deprecated

@@ -109,7 +109,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     @Before
     public void setUp() throws Exception {
         facetFactory = new CollectionAnnotationFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @After

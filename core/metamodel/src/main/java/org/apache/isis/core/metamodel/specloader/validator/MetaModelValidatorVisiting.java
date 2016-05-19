@@ -25,14 +25,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
-    public static interface Visitor {
+    public interface Visitor {
         /**
          * @return <tt>true</tt> continue visiting specs.
          */
-        public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures);
+        boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures);
     }
-    public static interface SummarizingVisitor extends Visitor {
-        public void summarize(ValidationFailures validationFailures);
+    public interface SummarizingVisitor extends Visitor {
+        void summarize(ValidationFailures validationFailures);
     }
     
     private final Visitor visitor;
@@ -42,7 +42,7 @@ public final class MetaModelValidatorVisiting extends MetaModelValidatorAbstract
         
     @Override
     public final void validate(ValidationFailures validationFailures) {
-        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
+        final Collection<ObjectSpecification> objectSpecs = specificationLoader.allSpecifications();
         for (final ObjectSpecification objSpec : objectSpecs) {
             if(!visitor.visit(objSpec, validationFailures)) {
                 break;

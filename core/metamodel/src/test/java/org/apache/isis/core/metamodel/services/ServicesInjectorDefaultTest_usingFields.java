@@ -20,10 +20,13 @@
 package org.apache.isis.core.metamodel.services;
 
 import java.util.Arrays;
+
 import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -43,7 +46,7 @@ public class ServicesInjectorDefaultTest_usingFields {
     private SomeDomainService2 service2;
     private SomeDomainService3 service3;
     
-    private ServicesInjectorSpi injector;
+    private ServicesInjector injector;
 
 
     static class SomeDomainService3 { }
@@ -81,7 +84,7 @@ public class ServicesInjectorDefaultTest_usingFields {
         service1 = new SomeDomainService1();
         service3 = new SomeDomainService3();
         service2 = new SomeDomainService2();
-        injector = new ServicesInjectorDefault(Arrays.asList(container, service1, service3, service2));
+        injector = new ServicesInjector(Arrays.asList(container, service1, service3, service2));
     }
 
     @Test

@@ -29,7 +29,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -114,7 +114,7 @@ public class SwaggerSpecResource {
         @Inject
         SwaggerService swaggerService;
 
-        ServicesInjectorSpi getServicesInjector() {
+        ServicesInjector getServicesInjector() {
             return getPersistenceSession().getServicesInjector();
         }
 

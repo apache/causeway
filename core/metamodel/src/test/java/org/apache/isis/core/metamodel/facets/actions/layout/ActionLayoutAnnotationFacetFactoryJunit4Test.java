@@ -49,7 +49,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     public static class Contributing extends ActionLayoutAnnotationFacetFactoryJunit4Test {

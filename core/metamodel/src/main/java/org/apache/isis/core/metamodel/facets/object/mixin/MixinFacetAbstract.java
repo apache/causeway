@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements MixinFacet {
 

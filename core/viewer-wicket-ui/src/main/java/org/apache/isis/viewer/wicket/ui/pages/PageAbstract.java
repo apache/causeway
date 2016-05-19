@@ -60,7 +60,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -429,7 +429,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // System components
     // ///////////////////////////////////////////////////
 
-    protected ServicesInjectorSpi getServicesInjector() {
+    protected ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

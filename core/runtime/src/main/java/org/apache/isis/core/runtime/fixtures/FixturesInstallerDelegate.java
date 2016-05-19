@@ -22,14 +22,16 @@ package org.apache.isis.core.runtime.fixtures;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -271,7 +273,7 @@ public class FixturesInstallerDelegate {
         return persistenceSession != null ? persistenceSession : IsisContext.getPersistenceSession();
     }
 
-    private ServicesInjectorSpi getServicesInjector() {
+    private ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

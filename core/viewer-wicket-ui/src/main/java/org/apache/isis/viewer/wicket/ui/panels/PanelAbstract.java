@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -150,7 +150,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
         return IsisContext.getPersistenceSession();
     }
 
-    protected ServicesInjectorSpi getServicesInjector() {
+    protected ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

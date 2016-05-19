@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.value;
 import org.apache.isis.applib.adapters.Parser2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MaxLengthFacetUsingParser2 extends MaxLengthFacetAbstract{
 

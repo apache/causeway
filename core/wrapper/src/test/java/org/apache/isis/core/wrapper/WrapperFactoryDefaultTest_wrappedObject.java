@@ -29,6 +29,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
@@ -36,6 +38,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -50,13 +53,16 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.services.command.CommandDtoServiceInternalDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
@@ -85,6 +91,12 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private MessageBrokerService mockMessageBrokerService;
     @Mock
     private ServicesInjector mockServicesInjector;
+    @Mock
+    private CommandContext mockCommandContext;
+    @Mock
+    private Command mockCommand;
+    @Mock
+    private CommandDtoServiceInternal mockCommandDtoServiceInternal;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
     @Mock
@@ -122,35 +134,82 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Before
     public void setUp() {
 
+
         objectMemberDependencies = new ObjectMemberDependencies(
                 mockSpecificationLoader, mockServicesInjector,
                 mockPersistenceSessionService);
-        
+
         employeeRepository = new EmployeeRepositoryImpl();
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
-        employeeDO.setEmployeeRepository(employeeRepository); 
-
-        wrapperFactory = createWrapperFactory();
-        wrapperFactory.setAdapterManager(mockAdapterManager);
-        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
-        wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
+        employeeDO.setEmployeeRepository(employeeRepository);
 
         context.checking(new Expectations() {
             {
+                allowing(mockEmployeeAdapter).getOid();
+                will(returnValue(RootOid.create(ObjectSpecId.of("EMP"), "1")));
+
+                allowing(mockEmployeeSpec).getCorrespondingClass();
+                will(returnValue(Employee.class));
+
+                allowing(mockStringSpec).getCorrespondingClass();
+                will(returnValue(String.class));
+
+                allowing(mockServicesInjector).lookupService(CommandContext.class);
+                will(returnValue(mockCommandContext));
+
+                allowing(mockCommandContext).getCommand();
+                will(returnValue(mockCommand));
+
+                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
+                will(returnValue(new CommandDtoServiceInternalDefault()));
+
                 allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
+
+                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+                will(returnValue(DeploymentCategory.PRODUCTION));
+
+                allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+                will(returnValue(mockSpecificationLoader));
 
                 allowing(mockSpecificationLoader).loadSpecification(String.class);
                 will(returnValue(mockStringSpec));
 
                 allowing(mockStringSpec).getShortIdentifier();
                 will(returnValue(String.class.getName()));
+
+                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+                will(returnValue(DeploymentCategory.PRODUCTION));
+
+                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+                will(returnValue(session));
+
+                allowing(mockAdapterManager).getAdapterFor(employeeDO);
+                will(returnValue(mockEmployeeAdapter));
+
+                allowing(mockAdapterManager).adapterFor(employeeDO);
+                will(returnValue(mockEmployeeAdapter));
+
+                allowing(mockEmployeeAdapter).getSpecification();
+                will(returnValue(mockEmployeeSpec));
+
+                allowing(mockSpecificationLoader).loadSpecification(Employee.class);
+                will(returnValue(mockEmployeeSpec));
+
+                allowing(mockEmployeeSpec).getMember(methodOf(Employee.class, "getEmployeeRepository"));
+                will(returnValue(null));
             }
         });
-        
-        
+
+
+        wrapperFactory = createWrapperFactory();
+        wrapperFactory.setAdapterManager(mockAdapterManager);
+        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
+        wrapperFactory.specificationLoader = mockSpecificationLoader;
+        wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
+
         final Method employeeGetNameMethod = methodOf(Employee.class, "getName");
         final Method employeeSetNameMethod = methodOf(Employee.class, "setName", String.class);
         final Method employeeModifyNameMethod = methodOf(Employee.class, "modifyName", String.class);
@@ -162,27 +221,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 facetedMethodForProperty(
                         employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod),
                 objectMemberDependencies);
-        
+
         context.checking(new Expectations() {
             {
-                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
-
-                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-                will(returnValue(session));
-
-                allowing(mockAdapterManager).getAdapterFor(employeeDO);
-                will(returnValue(mockEmployeeAdapter));
-
-                allowing(mockEmployeeAdapter).getSpecification();
-                will(returnValue(mockEmployeeSpec));
-
-                allowing(mockSpecificationLoader).loadSpecification(Employee.class);
-                will(returnValue(mockEmployeeSpec));
-
-                allowing(mockEmployeeSpec).getMember(methodOf(Employee.class, "getEmployeeRepository"));
-                will(returnValue(null));
-
                 allowing(mockEmployeeSpec).getMember(employeeGetNameMethod);
                 will(returnValue(employeeNameMember));
 
@@ -191,13 +232,13 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
                 allowing(mockEmployeeSpec).getMember(employeeModifyNameMethod);
                 will(returnValue(employeeNameMember));
-                
+
                 allowing(mockEmployeeSpec).getMember(employeeClearNameMethod);
                 will(returnValue(employeeNameMember));
-                
+
                 allowing(mockEmployeeAdapter).getObject();
                 will(returnValue(employeeDO));
-                
+
                 allowing(mockEmployeeAdapter).representsPersistent();
                 will(returnValue(true));
             }
@@ -236,7 +277,22 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void shouldBeAbleToReadVisibleProperty() {
 
         allowingEmployeeHasSmithAdapter();
-        
+
+        context.checking(new Expectations() {{
+            oneOf(mockConfiguration).getBoolean("isis.reflector.facet.filterVisibility", true);
+            will(returnValue(true));
+
+            allowing(mockAdapterForStringSmith).getSpecification();
+            will(returnValue(mockStringSpec));
+
+            ignoring(mockStringSpec);
+
+            allowing(mockAdapterForStringSmith).isDestroyed();
+            will(returnValue(false));
+
+            allowing(mockPersistenceSessionService).adapterFor("Smith");
+            will(returnValue(mockAdapterForStringSmith));
+        }});
 
         // then
         assertThat(employeeWO.getName(), is(employeeDO.getName()));
@@ -263,9 +319,23 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
+                allowing(mockAdapterForStringJones).titleString(null);
 
-                oneOf(mockAdapterManager).adapterFor("Jones");
+                ignoring(mockCommand);
+
+                oneOf(mockConfiguration).getBoolean("isis.reflector.facet.filterVisibility", true);
+                will(returnValue(true));
+
+                allowing(mockAdapterForStringJones).isDestroyed();
+                will(returnValue(false));
+
+                allowing(mockAdapterForStringJones).getSpecification();
+                will(returnValue(mockStringSpec));
+
+                allowing(mockPersistenceSessionService).adapterFor("Jones");
                 will(returnValue(mockAdapterForStringJones));
+
+                ignoring(mockStringSpec);
             }
         });
 

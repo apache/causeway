@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.swagger;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +32,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class SwaggerServiceDefault implements SwaggerService, SpecificationLoaderAware {
+public class SwaggerServiceDefault implements SwaggerService {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(SwaggerServiceDefault.class);
@@ -70,14 +70,8 @@ public class SwaggerServiceDefault implements SwaggerService, SpecificationLoade
         return swaggerSpec;
     }
 
-    //region > injected dependencies
-    private SpecificationLoader specificationLoader;
 
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLoader = specificationLookup;
-    }
-
-    //endregion
+    @Inject
+    SpecificationLoader specificationLoader;
 
 }

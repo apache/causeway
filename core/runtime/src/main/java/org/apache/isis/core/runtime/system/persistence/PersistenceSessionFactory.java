@@ -29,32 +29,36 @@ import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
-public class PersistenceSessionFactory
-        implements ApplicationScopedComponent, FixturesInstalledFlag {
+/**
+ *
+ * Factory for {@link PersistenceSession}.
+ *
+ * <p>
+ * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; all public methods
+ * must be annotated using {@link Programmatic}.
+ * </p>
+ */
+public class PersistenceSessionFactory implements ApplicationScopedComponent, FixturesInstalledFlag {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory.class);
 
     //region > constructor
 
-    private final DeploymentType deploymentType;
     private final IsisConfigurationDefault configuration;
 
-    public PersistenceSessionFactory(
-            final DeploymentType deploymentType,
-            final IsisConfigurationDefault isisConfiguration) {
-        this.deploymentType = deploymentType;
+    public PersistenceSessionFactory(final IsisConfigurationDefault isisConfiguration) {
         this.configuration = isisConfiguration;
     }
 
@@ -64,10 +68,10 @@ public class PersistenceSessionFactory
 
     private DataNucleusApplicationComponents applicationComponents;
 
-    public final void init() {
+    @Programmatic
+    public void init() {
         this.applicationComponents = createDataNucleusApplicationComponents(configuration);
     }
-
 
     private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
             final IsisConfiguration configuration) {
@@ -161,8 +165,9 @@ public class PersistenceSessionFactory
     /**
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
+    @Programmatic
     public PersistenceSession createPersistenceSession(
-            final ServicesInjectorSpi servicesInjector,
+            final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession) {
 
@@ -184,11 +189,13 @@ public class PersistenceSessionFactory
 
     private Boolean fixturesInstalled;
 
+    @Programmatic
     @Override
     public Boolean isFixturesInstalled() {
         return fixturesInstalled;
     }
 
+    @Programmatic
     @Override
     public void setFixturesInstalled(final Boolean fixturesInstalled) {
         this.fixturesInstalled = fixturesInstalled;

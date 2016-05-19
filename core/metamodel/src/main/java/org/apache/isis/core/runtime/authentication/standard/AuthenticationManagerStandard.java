@@ -28,6 +28,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -155,6 +156,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * Use either this or alternatively {@link #setAuthenticators(List) inject}
      * the full list of {@link Authenticator}s.
      */
+    @Programmatic
     public final void addAuthenticator(final Authenticator authenticator) {
         authenticators.add(authenticator);
     }
@@ -173,10 +175,12 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * Use either this or programmatically
      * {@link #addAuthenticator(Authenticator)}.
      */
+    @Programmatic
     public void setAuthenticators(final List<Authenticator> authenticators) {
         this.authenticators = authenticators;
     }
 
+    @Programmatic
     public List<Authenticator> getAuthenticators() {
         return Collections.unmodifiableList(authenticators);
     }
@@ -205,6 +209,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
+    @Programmatic
     public List<Registrar> getRegistrars() {
         return asAuthenticators(getAuthenticators());
     }
@@ -218,17 +223,12 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // RandomCodeGenerator
     // //////////////////////////////////////////////////////////
 
-    /**
-     * The {@link RandomCodeGenerator} in use.
-     */
-    public RandomCodeGenerator getRandomCodeGenerator() {
-        return randomCodeGenerator;
-    }
 
     /**
      * For injection; will {@link #defaultRandomCodeGeneratorIfNecessary()
      * default} otherwise.
      */
+    @Programmatic
     public void setRandomCodeGenerator(final RandomCodeGenerator randomCodeGenerator) {
         ensureThatArg(randomCodeGenerator, is(notNullValue()), "randomCodeGenerator cannot be null");
         this.randomCodeGenerator = randomCodeGenerator;

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInterna
 /**
  * This object will typically be registered as the implementation of the {@link ConfigurationServiceInternal}
  * (internal) domain service, using
- * {@link org.apache.isis.core.metamodel.services.ServicesInjectorDefault#addFallbackIfRequired(Class, Object)}.
+ * {@link org.apache.isis.core.metamodel.services.ServicesInjector#addFallbackIfRequired(Class, Object)}.
  *
  * <p>
  *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> will be used instead.

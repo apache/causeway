@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSat
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 

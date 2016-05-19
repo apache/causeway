@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -801,7 +801,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(serviceClass == DomainObjectContainer.class) {
             return (T) getContainer();
         }
-        final ServicesInjectorSpi servicesInjector = getPersistenceSession().getServicesInjector();
+        final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
         final T service = servicesInjector.lookupService(serviceClass);
         if(service == null) {
             throw new RuntimeException("Could not find a service of type: " + serviceClass.getName());
@@ -811,7 +811,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     @Override
     public <T> void replaceService(final T originalService, final T replacementService) {
-        final ServicesInjectorSpi servicesInjector = getPersistenceSession().getServicesInjector();
+        final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
         servicesInjector.replaceService(originalService, replacementService);
     }
 

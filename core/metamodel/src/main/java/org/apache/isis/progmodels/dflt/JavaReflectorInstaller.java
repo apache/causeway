@@ -37,10 +37,10 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 public class JavaReflectorInstaller extends InstallerAbstract implements SpecificationLoaderInstaller {
@@ -71,7 +71,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements Specifi
     public SpecificationLoader createReflector(
             final DeploymentCategory deploymentCategory,
             final Collection<MetaModelRefiner> metaModelRefiners,
-            final ServicesInjectorSpi servicesInjector) {
+            final ServicesInjector servicesInjector) {
 
         final ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
         final MetaModelValidator mmv = createMetaModelValidator(getConfiguration());

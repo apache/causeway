@@ -35,17 +35,15 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
@@ -84,14 +82,14 @@ public class IsisSystem implements ApplicationScopedComponent {
 
     //region > constructors
 
-    private final IsisComponentProvider isisComponentProvider;
+    private final IsisComponentProvider componentProvider;
 
-    public IsisSystem(IsisComponentProvider isisComponentProvider) {
-        this.deploymentType = isisComponentProvider.getDeploymentType();
+    public IsisSystem(IsisComponentProvider componentProvider) {
+        this.deploymentType = componentProvider.getDeploymentType();
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
 
-        this.isisComponentProvider = isisComponentProvider;
+        this.componentProvider = componentProvider;
     }
 
     //endregion
@@ -146,31 +144,35 @@ public class IsisSystem implements ApplicationScopedComponent {
 
             // configuration
             // TODO: HACKY
-            final IsisConfigurationDefault configuration = (IsisConfigurationDefault) isisComponentProvider.getConfiguration();
+            final IsisConfigurationDefault configuration = componentProvider.getConfiguration();
 
             // services
-            ServicesInjectorDefault servicesInjector = isisComponentProvider.provideServiceInjector();
+            ServicesInjector servicesInjector = componentProvider.provideServiceInjector();
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
             servicesInjector.validateServices();
 
-            // authentication, authorization
-            final AuthenticationManager authenticationManager =
-                    isisComponentProvider.provideAuthenticationManager();
-            final AuthorizationManager authorizationManager =
-                    isisComponentProvider.provideAuthorizationManager();
+            // authentication
+            final AuthenticationManager authenticationManager = componentProvider.provideAuthenticationManager();
+            servicesInjector.addFallbackIfRequired(AuthenticationManager.class, authenticationManager);
+
+            // authorization
+            final AuthorizationManager authorizationManager = componentProvider.provideAuthorizationManager();
+            servicesInjector.addFallbackIfRequired(AuthorizationManager.class, authorizationManager);
 
             // specificationLoader
             final Collection<MetaModelRefiner> metaModelRefiners =
                     refiners(authenticationManager, authorizationManager,
                             new PersistenceSessionFactoryMetamodelRefiner());
             final SpecificationLoader specificationLoader =
-                    isisComponentProvider.provideSpecificationLoader(deploymentType, servicesInjector, metaModelRefiners);
+                    componentProvider.provideSpecificationLoader(deploymentType, servicesInjector, metaModelRefiners);
+            servicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 
             // persistenceSessionFactory
             final PersistenceSessionFactory persistenceSessionFactory =
-                    isisComponentProvider.providePersistenceSessionFactory(
+                    componentProvider.providePersistenceSessionFactory(
                             deploymentType, servicesInjector);
+            servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
             // runtimeContext
             final RuntimeContextFromSession runtimeContext =
@@ -273,7 +275,7 @@ public class IsisSystem implements ApplicationScopedComponent {
 
     private void installFixturesIfRequired() throws IsisSystemException {
 
-        fixtureInstaller = isisComponentProvider.provideFixturesInstaller();
+        fixtureInstaller = componentProvider.provideFixturesInstaller();
 
         IsisContext.openSession(new InitialisationSession());
         fixtureInstaller.installFixtures();
@@ -326,7 +328,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         return getServicesInjector().lookupService(serviceClass);
     }
 
-    private ServicesInjectorSpi getServicesInjector() {
+    private ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 
@@ -390,7 +392,7 @@ public class IsisSystem implements ApplicationScopedComponent {
      * effectively be immutable).
      */
     public IsisConfiguration getConfiguration() {
-        return isisComponentProvider.getConfiguration();
+        return componentProvider.getConfiguration();
     }
     //endregion
 

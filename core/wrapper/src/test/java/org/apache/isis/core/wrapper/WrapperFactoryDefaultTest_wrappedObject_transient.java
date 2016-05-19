@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -97,6 +98,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private Identifier mockPasswordIdentifier;
 
+    @Mock
+    private ServicesInjector mockServicesInjector;
 
     @Mock
     protected ObjectAdapter mockPasswordAdapter;
@@ -125,14 +128,20 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
         wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
-        wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
-        
+        wrapperFactory.specificationLoader = mockSpecificationLoader;
+
         context.checking(new Expectations() {
             {
+                allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+                will(returnValue(mockSpecificationLoader));
+
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
                 will(returnValue(DeploymentCategory.PRODUCTION));
 
                 allowing(mockAdapterManager).getAdapterFor(employeeDO);
+                will(returnValue(mockEmployeeAdapter));
+
+                allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(passwordValue);

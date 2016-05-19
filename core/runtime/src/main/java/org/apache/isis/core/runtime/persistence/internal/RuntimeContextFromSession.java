@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstrac
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;

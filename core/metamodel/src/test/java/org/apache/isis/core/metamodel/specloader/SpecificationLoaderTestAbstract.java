@@ -49,8 +49,7 @@ import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidator
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -59,7 +58,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 public abstract class SpecificationLoaderTestAbstract {
 
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -73,9 +72,11 @@ public abstract class SpecificationLoaderTestAbstract {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private ServicesInjectorSpi mockServicesInjector;
+    private ServicesInjector mockServicesInjector;
     @Mock
     private GridService mockGridService;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
 
     // is loaded by subclasses
     protected ObjectSpecification specification;
@@ -99,6 +100,9 @@ public abstract class SpecificationLoaderTestAbstract {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            will(returnValue(mockSpecificationLoader));
+
             allowing(mockServicesInjector).lookupService(GridService.class);
             will(returnValue(mockGridService));
 
@@ -107,6 +111,8 @@ public abstract class SpecificationLoaderTestAbstract {
             ignoring(mockServicesInjector).getRegisteredServices();
 
             ignoring(mockServicesInjector).isRegisteredService(with(any(Class.class)));
+
+            ignoring(mockSpecificationLoader).allServiceClasses();
         }});
 
         final SpecificationLoader reflector =
@@ -118,7 +124,7 @@ public abstract class SpecificationLoaderTestAbstract {
                                 new LayoutMetadataReaderFromJson()), mockServicesInjector);
         runtimeContext =
                 new RuntimeContextNoRuntime(
-                        new ServicesInjectorDefault(Collections.emptyList()), reflector);
+                        new ServicesInjector(Collections.emptyList()), reflector);
         reflector.init(runtimeContext);
         
         specification = loadSpecification(reflector);

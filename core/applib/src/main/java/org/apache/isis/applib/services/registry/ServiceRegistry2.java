@@ -17,10 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.applib.services.registry;
 
-public interface ServicesInjectorAware {
+import java.util.List;
 
-    public void setServicesInjector(ServicesInjector servicesInjector);
+import org.apache.isis.applib.annotation.Programmatic;
 
+public interface ServiceRegistry2 extends ServiceRegistry {
+
+    @Programmatic
+    List<Object> getRegisteredServices();
 }

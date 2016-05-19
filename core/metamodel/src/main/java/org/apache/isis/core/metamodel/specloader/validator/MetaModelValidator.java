@@ -20,13 +20,14 @@
 package org.apache.isis.core.metamodel.specloader.validator;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public interface MetaModelValidator extends SpecificationLoaderAware, ApplicationScopedComponent {
+public interface MetaModelValidator extends ApplicationScopedComponent {
 
-    public void init();
-    public void shutdown();
+    void init(final SpecificationLoader specificationLoader);
+    void shutdown();
 
-    public void validate(ValidationFailures validationFailures);
+    void validate(ValidationFailures validationFailures);
+
 
 }

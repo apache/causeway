@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
 

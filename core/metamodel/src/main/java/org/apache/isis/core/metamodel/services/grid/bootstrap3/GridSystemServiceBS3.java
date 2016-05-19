@@ -85,7 +85,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     public Grid defaultGrid(final Class<?> domainClass) {
         final BS3Grid bs3Grid = new BS3Grid();
 
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
         bs3Grid.setDomainClass(domainClass);
 
         final BS3Row headerRow = new BS3Row();
@@ -167,7 +167,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Class<?> domainClass) {
 
 
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
                 ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));

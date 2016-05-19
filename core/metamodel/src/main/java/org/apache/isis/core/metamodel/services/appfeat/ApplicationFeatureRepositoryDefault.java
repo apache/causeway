@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -50,23 +51,19 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         repositoryFor = ApplicationFeature.class
 )
-public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository, SpecificationLoaderAware,
-        ServicesInjectorAware {
+public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     //region > caches
     SortedMap<ApplicationFeatureId, ApplicationFeature> packageFeatures = Maps.newTreeMap();
@@ -86,7 +83,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     private Collection<ObjectSpecification> primeMetaModel() {
-        final List<Object> services = servicesInjector.getRegisteredServices();
+        final List<Object> services = serviceRegistry.getRegisteredServices();
         for (final Object service : services) {
             specificationLoader.loadSpecification(service.getClass());
         }
@@ -321,7 +318,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
      * </p>
      */
     private boolean isSuperClassOfService(final ObjectSpecification spec) {
-        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+        final List<Object> registeredServices = serviceRegistry.getRegisteredServices();
 
         final Class<?> specClass = spec.getCorrespondingClass();
 
@@ -512,23 +509,15 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     //endregion
 
     //region  > services (injected)
+
+    @Inject
+    ServiceRegistry2 serviceRegistry;
+
     @Inject
     DomainObjectContainer container;
 
-    private SpecificationLoader specificationLoader;
-
-    @Programmatic
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    }
-
-    private ServicesInjector servicesInjector;
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
+    @Inject
+    SpecificationLoader specificationLoader;
 
     @Inject
     ApplicationFeatureFactory applicationFeatureFactory;

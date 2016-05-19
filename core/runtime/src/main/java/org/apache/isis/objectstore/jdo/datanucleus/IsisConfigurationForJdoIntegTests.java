@@ -36,7 +36,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 /**
  * If instantiated by the integration testing framework, this object will be registered as the implementation of
  * the {@link ConfigurationServiceInternal} (internal) domain service, using
- * {@link org.apache.isis.core.metamodel.services.ServicesInjectorDefault#addFallbackIfRequired(Class, Object)}.
+ * {@link org.apache.isis.core.metamodel.services.ServicesInjector#addFallbackIfRequired(Class, Object)}.
  */
 public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault {
 

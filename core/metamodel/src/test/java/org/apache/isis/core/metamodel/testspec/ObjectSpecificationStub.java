@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -74,7 +74,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
-        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(Collections.emptyList());
+        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList());
         servicesInjector.addFallbackIfRequired(
                 ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
         runtimeContext = new RuntimeContextNoRuntime(

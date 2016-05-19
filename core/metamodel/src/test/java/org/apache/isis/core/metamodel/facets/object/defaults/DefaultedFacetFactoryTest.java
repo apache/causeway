@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -40,7 +40,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
         super.setUp();
 
         facetFactory = new DefaultedFacetAnnotationElseConfigurationFactory();
-        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(Collections.emptyList());
+        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList());
         servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, isisConfigurationDefault = new IsisConfigurationDefault());
         facetFactory.setServicesInjector(servicesInjector);
     }

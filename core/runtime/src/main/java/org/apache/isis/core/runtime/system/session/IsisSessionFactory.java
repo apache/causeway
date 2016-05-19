@@ -29,8 +29,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -69,7 +68,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoaderSpi;
-    private final ServicesInjectorSpi servicesInjector;
+    private final ServicesInjector servicesInjector;
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
@@ -78,7 +77,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     public IsisSessionFactory(
             final DeploymentType deploymentType,
             final IsisConfiguration configuration,
-            final ServicesInjectorSpi servicesInjector,
+            final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,

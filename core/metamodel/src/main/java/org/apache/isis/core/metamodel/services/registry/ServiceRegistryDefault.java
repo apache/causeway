@@ -19,19 +19,20 @@
 
 package org.apache.isis.core.metamodel.services.registry;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class ServiceRegistryDefault
-        implements ServiceRegistry, ServicesInjectorAware {
+public class ServiceRegistryDefault implements ServiceRegistry2, ServicesInjectorAware {
 
 
     @Programmatic
@@ -53,6 +54,11 @@ public class ServiceRegistryDefault
         return servicesInjector.lookupServices(service);
     }
 
+    @Programmatic
+    @Override
+    public List<Object> getRegisteredServices() {
+        return servicesInjector.getRegisteredServices();
+    }
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
@@ -66,7 +72,7 @@ public class ServiceRegistryDefault
     private ServicesInjector servicesInjector;
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
-
         this.servicesInjector = servicesInjector;
     }
+
 }

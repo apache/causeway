@@ -30,12 +30,11 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 
-public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware, ServicesInjectorAware {
+public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInjectorAware {
 
     private final List<FeatureType> featureTypes;
 
@@ -60,24 +59,21 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
 
-    // ////////////////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ////////////////////////////////////////////////////////////////
+    //region > dependencies (injected)
 
-    private SpecificationLoader specificationLoader;
+    protected ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
+    //endregion
+
+    //region > dependencies (looked up from services injector)
 
     protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+        return servicesInjector.lookupService(SpecificationLoader.class);
     }
-
-    /**
-     * Injected
-     */
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLoader = specificationLookup;
-    }
-
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return servicesInjector.lookupService(AuthenticationSessionProvider.class);
@@ -93,11 +89,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
         return (IsisConfigurationDefault)configurationServiceInternal;
     }
 
-    protected ServicesInjector servicesInjector;
+    //endregion
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 
 }

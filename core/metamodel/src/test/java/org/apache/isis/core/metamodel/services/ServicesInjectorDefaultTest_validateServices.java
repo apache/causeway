@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class ServicesInjectorDefaultTest_validateServices {
 
-    ServicesInjectorDefault servicesInjector;
+    ServicesInjector servicesInjector;
 
     public static class DomainServiceWithSomeId {
         public String getId() { return "someId"; }
@@ -58,7 +58,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDuplicateId());
 
-            servicesInjector = new ServicesInjectorDefault(serviceList, null);
+            servicesInjector = new ServicesInjector(serviceList, null);
 
             // when
             servicesInjector.validateServices();
@@ -70,7 +70,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDifferentId());
 
-            servicesInjector = new ServicesInjectorDefault(serviceList, null);
+            servicesInjector = new ServicesInjector(serviceList, null);
 
             // when
             servicesInjector.validateServices();

@@ -20,7 +20,7 @@
 package org.apache.isis.core.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -34,6 +34,6 @@ public interface PersistenceMechanismInstaller extends Installer {
 
     PersistenceSessionFactory createPersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjector);
+            final ServicesInjector servicesInjector);
 
 }

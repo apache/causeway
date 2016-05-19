@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionDomainEventFacetDefault extends CollectionDomainEventFacetAbstract {

@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetV
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -70,8 +71,6 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         facetFactory = new TitleAnnotationFacetFactory();
         facetFactory.setAdapterManager(mockAdapterManager);
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
-        facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {
             {
@@ -83,17 +82,20 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
                 allowing(mockLocalizationProvider).getLocalization();
                 will(returnValue(new LocalizationDefault()));
-            }
-        });
-        context.checking(new Expectations() {
-            {
+
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
                 will(returnValue(DeploymentCategory.PRODUCTION));
 
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
+
+                allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+                will(returnValue(mockSpecificationLoader));
             }
         });
+
+        facetFactory.setServicesInjector(mockServicesInjector);
+
     }
 
     @After

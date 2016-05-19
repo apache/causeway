@@ -93,15 +93,15 @@ import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -184,7 +184,7 @@ public class PersistenceSession implements
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
 
-    private final ServicesInjectorSpi servicesInjector;
+    private final ServicesInjector servicesInjector;
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
      */
@@ -216,7 +216,7 @@ public class PersistenceSession implements
      */
     public PersistenceSession(
             final IsisConfigurationDefault configuration,
-            final ServicesInjectorSpi servicesInjector,
+            final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
@@ -1247,9 +1247,9 @@ public class PersistenceSession implements
     }
 
     /**
-     * The configured {@link ServicesInjectorSpi}.
+     * The configured {@link ServicesInjector}.
      */
-    public ServicesInjectorSpi getServicesInjector() {
+    public ServicesInjector getServicesInjector() {
         return servicesInjector;
     }
 

@@ -19,17 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware {
+public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements AdapterManagerAware {
 
     private AdapterManager adapterManager;
 

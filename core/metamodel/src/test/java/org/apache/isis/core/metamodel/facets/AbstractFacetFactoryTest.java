@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -121,6 +121,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            will(returnValue(mockSpecificationLoader));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));

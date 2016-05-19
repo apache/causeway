@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
@@ -44,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthFacetOnPropertyAnnotation;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -82,7 +82,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
     FactoryService mockFactoryService;
 
     @Mock
-    ServicesInjector mockServicesInjector;
+    ServiceRegistry2 mockServiceRegistry;
 
     ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
@@ -90,7 +90,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
     public void setUp() throws Exception {
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault();
         applicationFeatureRepository.container = mockContainer;
-        applicationFeatureRepository.setServicesInjector(mockServicesInjector);
+        applicationFeatureRepository.serviceRegistry = mockServiceRegistry;
 
         final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
         applicationFeatureRepository.applicationFeatureFactory = applicationFeatureFactory;
@@ -176,7 +176,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockActThatIsHidden).getSemantics();
                 will(returnValue(ActionSemantics.Of.SAFE));
 
-                allowing(mockServicesInjector).getRegisteredServices();
+                allowing(mockServiceRegistry).getRegisteredServices();
                 will(returnValue(Lists.newArrayList()));
             }});
 

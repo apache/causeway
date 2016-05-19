@@ -19,40 +19,20 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class MetaModelValidatorAbstract implements MetaModelValidator {
 
-    private SpecificationLoader specificationLoaderSpi;
+    protected SpecificationLoader specificationLoader;
 
-    // ////////////////////////////////////////////////////////////////////
-    // init, shutdown
-    // ////////////////////////////////////////////////////////////////////
-
-    public void init() {
-        ensureThatState(specificationLoaderSpi, is(notNullValue()));
-    }
-
-    public void shutdown() {
-    }
-
-    // ////////////////////////////////////////////////////////////////////
-    // Dependencies (due to *Aware)
-    // ////////////////////////////////////////////////////////////////////
-
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoaderSpi;
+    @Override
+    public void init(final SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
     }
 
     @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoaderSpi = specificationLoader;
+    public void shutdown() {
     }
 
-    
-    
+
 }

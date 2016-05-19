@@ -32,5 +32,4 @@ public interface ServiceRegistry {
     @Programmatic
     <T> Iterable<T> lookupServices(Class<T> service);
 
-
 }

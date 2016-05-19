@@ -104,17 +104,15 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFace
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public abstract class GridSystemServiceAbstract<G extends Grid>
-        implements GridSystemService<G>, SpecificationLoaderAware {
+public abstract class GridSystemServiceAbstract<G extends Grid> implements GridSystemService<G> {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridSystemServiceAbstract.class);
 
@@ -203,7 +201,7 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
             final Class<?> domainClass) {
 
 
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
                 ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
@@ -398,7 +396,7 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
 
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
 
         grid.visit(new Grid.VisitorAdapter() {
 
@@ -680,11 +678,8 @@ public abstract class GridSystemServiceAbstract<G extends Grid>
 
     // //////////////////////////////////////
 
-    protected SpecificationLoader specificationLookup;
-
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
-    }
+    @Inject
+    protected SpecificationLoader specificationLoader;
 
     @Inject
     protected TranslationService translationService;

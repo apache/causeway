@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.core.metamodel.services;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface SpecificationLoaderAware {
+public interface ServicesInjectorAware {
 
     @Programmatic
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup);
+    void setServicesInjector(ServicesInjector servicesInjector);
 
 }

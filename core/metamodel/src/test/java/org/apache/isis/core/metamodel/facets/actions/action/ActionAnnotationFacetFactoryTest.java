@@ -146,7 +146,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
         actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 

@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -688,7 +688,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return new ActionModel(this);
     }
 
-    protected ServicesInjectorSpi getServicesInjector() {
+    protected ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

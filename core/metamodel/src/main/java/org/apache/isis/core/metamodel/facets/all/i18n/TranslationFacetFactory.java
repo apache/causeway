@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
@@ -121,7 +122,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
     // //////////////////////////////////////
 
     /**
-     * Looks up from {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}.
+     * Looks up from {@link ServicesInjector}.
      *
      * <p>
      *     There is guaranteed to be an instance because <code>TranslationServicePo</code> (in runtime) is annotated

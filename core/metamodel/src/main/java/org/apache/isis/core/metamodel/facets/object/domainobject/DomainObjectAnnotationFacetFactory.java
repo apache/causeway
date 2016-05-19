@@ -83,10 +83,9 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -97,7 +96,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         implements AdapterManagerAware,
-        SpecificationLoaderAware, MetaModelValidatorRefiner, PersistenceSessionServiceAware,
+        MetaModelValidatorRefiner, PersistenceSessionServiceAware,
         PostConstructMethodCache {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);

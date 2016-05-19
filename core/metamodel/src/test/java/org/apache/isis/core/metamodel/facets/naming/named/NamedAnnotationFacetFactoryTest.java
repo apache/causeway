@@ -46,7 +46,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnClass() {
 
         final NamedFacetOnTypeAnnotationFactory facetFactory = new NamedFacetOnTypeAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         @Named("some name")
         class Customer {
@@ -67,7 +66,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnProperty() {
 
         final NamedFacetOnMemberFactory facetFactory = new NamedFacetOnMemberFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -91,7 +89,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     public void testNamedAnnotationPickedUpOnCollection() {
         final NamedFacetOnMemberFactory facetFactory = new NamedFacetOnMemberFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -115,7 +112,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     public void testNamedAnnotationPickedUpOnAction() {
         final NamedFacetOnMemberFactory facetFactory = new NamedFacetOnMemberFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -139,7 +135,6 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnActionParameter() {
 
         final NamedFacetOnParameterAnnotationFactory facetFactory = new NamedFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         class Customer {
             @SuppressWarnings("unused")

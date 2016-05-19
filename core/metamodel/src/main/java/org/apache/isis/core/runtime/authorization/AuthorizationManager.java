@@ -20,17 +20,25 @@
 package org.apache.isis.core.runtime.authorization;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * Authorises the user in the current session view and use members of an object.
+ *
+ * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; all public methods
+ * must be annotated using {@link Programmatic}.
  */
 public interface AuthorizationManager extends ApplicationScopedComponent {
 
-    public void init();
-    public void shutdown();
+    @Programmatic
+    void init();
+
+    @Programmatic
+    void shutdown();
 
     /**
      * Returns true when the user represented by the specified session is
@@ -38,6 +46,7 @@ public interface AuthorizationManager extends ApplicationScopedComponent {
      * member identifier. Normally the view of the specified field, or the
      * display of the action will be suppress if this returns false.
      */
+    @Programmatic
     boolean isVisible(AuthenticationSession session, ObjectAdapter target, Identifier identifier);
 
     /**
@@ -46,5 +55,6 @@ public interface AuthorizationManager extends ApplicationScopedComponent {
      * Normally the specified field will be not appear editable if this returns
      * false.
      */
+    @Programmatic
     boolean isUsable(AuthenticationSession session, ObjectAdapter target, Identifier identifier);
 }

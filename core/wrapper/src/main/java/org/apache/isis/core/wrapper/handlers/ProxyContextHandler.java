@@ -43,8 +43,15 @@ public class ProxyContextHandler {
     public ProxyContextHandler(final ProxyCreator proxyCreator) {
         this.proxyCreator = proxyCreator;
     }
-    
-    public <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final PersistenceSessionService persistenceSessionService) {
+
+    public <T> T proxy(
+            final T domainObject,
+            final WrapperFactory wrapperFactory,
+            final ExecutionMode mode,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLoader specificationLookup,
+            final AdapterManager adapterManager,
+            final PersistenceSessionService persistenceSessionService) {
 
         Ensure.ensureThatArg(wrapperFactory, is(not(nullValue())));
         Ensure.ensureThatArg(authenticationSessionProvider, is(not(nullValue())));

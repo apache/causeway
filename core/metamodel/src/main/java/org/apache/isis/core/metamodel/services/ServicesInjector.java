@@ -1,22 +1,19 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
-
 package org.apache.isis.core.metamodel.services;
 
 import java.lang.reflect.Field;
@@ -44,22 +41,31 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 
 /**
- * Must be a thread-safe.
+ * The repository of services, also able to inject into any object.
+ *
+ * <p>
+ *    Implementation is (and must be) a thread-safe.
+ * </p>
+ *
  */
-public class ServicesInjectorDefault implements ServicesInjectorSpi {
+public class ServicesInjector implements ApplicationScopedComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServicesInjectorDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServicesInjector.class);
 
+    //region > constructor, fields
     /**
      * This is mutable internally, but only ever exposed (in {@link #getRegisteredServices()}) as immutable.
      */
@@ -75,23 +81,37 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private final InjectorMethodEvaluator injectorMethodEvaluator;
 
-    public ServicesInjectorDefault(final List<Object> services) {
+    public ServicesInjector(final List<Object> services) {
         this(services, null);
     }
 
     /**
-     * For testing.  
+     * For testing.
      */
-    public ServicesInjectorDefault(final List<Object> services, final InjectorMethodEvaluator injectorMethodEvaluator) {
+    public ServicesInjector(final List<Object> services, final InjectorMethodEvaluator injectorMethodEvaluator) {
         this.services.addAll(services);
-        this.injectorMethodEvaluator = injectorMethodEvaluator != null ? injectorMethodEvaluator : new InjectorMethodEvaluatorDefault();
+        this.injectorMethodEvaluator =
+                injectorMethodEvaluator != null
+                        ? injectorMethodEvaluator
+                        : new InjectorMethodEvaluatorDefault();
 
         autowireServicesAndContainer();
     }
 
+    //endregion
+
     //region > replaceServices
 
-    @Override
+    /**
+     * Update an individual service.
+     *
+     * <p>
+     * There should already be a service {@link #getRegisteredServices() registered} of the specified type.
+     *
+     * @return <tt>true</tt> if a service of the specified type was found and updated, <tt>false</tt> otherwise.
+     * @param existingService
+     * @param replacementService
+     */
     public <T> void replaceService(final T existingService, final T replacementService) {
 
         if(!services.remove(existingService)) {
@@ -107,7 +127,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         autowireServicesAndContainer();
     }
 
-    @Override
     public boolean isRegisteredService(final Class<?> cls) {
         // lazily construct cache
         if(serviceByConcreteType.isEmpty()) {
@@ -119,7 +138,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         return serviceByConcreteType.containsKey(cls);
     }
 
-    @Override
     public <T> void addFallbackIfRequired(final Class<T> serviceClass, final T serviceInstance) {
         if(!contains(services, serviceClass)) {
             // add to beginning;
@@ -138,7 +156,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
      * <p>
      * TODO: there seems to be some duplication/overlap with {@link ServiceInitializer}.
      */
-    @Override
     public void validateServices() {
         validate(getRegisteredServices());
     }
@@ -216,7 +233,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     }
 
 
-    @Override
+    /**
+     * All registered services, as an immutable {@link List}.
+     */
     public List<Object> getRegisteredServices() {
         return Collections.unmodifiableList(services);
     }
@@ -240,14 +259,22 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     //region > injectServicesInto
 
-    @Override
+    /**
+     * Provided by the <tt>ServicesInjector</tt> when used by framework.
+     *
+     * <p>
+     * Called in multiple places from metamodel and facets.
+     */
     public void injectServicesInto(final Object object) {
         Assert.assertNotNull("no services", services);
 
         injectServices(object, Collections.unmodifiableList(services));
     }
 
-    @Override
+    /**
+     * As per {@link #injectServicesInto(Object)}, but for all objects in the
+     * list.
+     */
     public void injectServicesInto(final List<Object> objects) {
         for (final Object object : objects) {
             injectServicesInto(object);
@@ -261,7 +288,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     /**
      * That is, injecting this injector...
      */
-    @Override
     public void injectInto(final Object candidate) {
         if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {
             final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
@@ -295,7 +321,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         for (final Field field : injectFields) {
             autowire(object, field, services);
         }
-        
+
         // recurse up the object's class hierarchy
         final Class<?> superclass = cls.getSuperclass();
         if(superclass != null) {
@@ -323,13 +349,13 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
                 final Class<?> listType = (Class<?>) listParameterizedType.getActualTypeArguments()[0];
                 final List<Object> listOfServices =
                         Collections.unmodifiableList(
-                            Lists.newArrayList(
-                                Iterables.filter(services, new Predicate<Object>() {
-                                    @Override
-                                    public boolean apply(final Object input) {
-                                        return input != null && listType.isAssignableFrom(input.getClass());
-                                    }
-                                })));
+                                Lists.newArrayList(
+                                        Iterables.filter(services, new Predicate<Object>() {
+                                            @Override
+                                            public boolean apply(final Object input) {
+                                                return input != null && listType.isAssignableFrom(input.getClass());
+                                            }
+                                        })));
                 invokeInjectorField(field, object, listOfServices);
             }
         }
@@ -355,7 +381,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
                 return methodName.startsWith(prefix);
             }
         });
-        
+
         for (final Method prefixedMethod : prefixedMethods) {
             autowire(object, prefixedMethod, services);
         }
@@ -414,7 +440,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
             LOG.debug("injected " + parameter + " into " + new ToString(target));
         }
     }
-    
+
     private void autowireServicesAndContainer() {
         injectServicesInto(this.services);
     }
@@ -424,14 +450,35 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     //region > lookupService, lookupServices
 
-    @Override
+    /**
+     * Returns the first registered domain service implementing the requested type.
+     *
+     * <p>
+     * Typically there will only ever be one domain service implementing a given type,
+     * (eg {@link PublishingService}), but for some services there can be more than one
+     * (eg {@link ExceptionRecognizer}).
+     *
+     * @see #lookupServices(Class)
+     */
+    @Programmatic
     public <T> T lookupService(final Class<T> serviceClass) {
         final List<T> services = lookupServices(serviceClass);
         return !services.isEmpty() ? services.get(0) : null;
     }
 
+    /**
+     * Returns all domain services implementing the requested type, in the order
+     * that they were registered in <tt>isis.properties</tt>.
+     *
+     * <p>
+     * Typically there will only ever be one domain service implementing a given type,
+     * (eg {@link PublishingService}), but for some services there can be more than one
+     * (eg {@link ExceptionRecognizer}).
+     *
+     * @see #lookupService(Class)
+     */
     @SuppressWarnings("unchecked")
-    @Override
+    @Programmatic
     public <T> List<T> lookupServices(final Class<T> serviceClass) {
         locateAndCache(serviceClass);
         return Collections.unmodifiableList((List<T>) servicesAssignableToType.get(serviceClass));
@@ -439,7 +486,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private void locateAndCache(final Class<?> serviceClass) {
         if(servicesAssignableToType.containsKey(serviceClass)) {
-           return; 
+            return;
         }
 
         final List<Object> matchingServices = Lists.newArrayList();

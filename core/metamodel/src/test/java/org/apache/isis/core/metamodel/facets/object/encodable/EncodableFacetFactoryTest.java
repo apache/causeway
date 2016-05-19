@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.Encodabl
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,7 +45,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = new EncodableFacetAnnotationElseConfigurationFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
 
-        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(Collections.emptyList());
+        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList());
         servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, isisConfigurationDefault = new IsisConfigurationDefault());
         facetFactory.setServicesInjector(servicesInjector);
 

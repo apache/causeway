@@ -46,13 +46,12 @@ import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class LayoutServiceDefault implements LayoutService, SpecificationLoaderAware {
+public class LayoutServiceDefault implements LayoutService {
 
     private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
 
@@ -69,7 +68,7 @@ public class LayoutServiceDefault implements LayoutService, SpecificationLoaderA
     protected Grid toGrid(final Class<?> domainClass, final Style style) {
 
         if (style == Style.CURRENT) {
-            final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+            final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
             final GridFacet facet = objectSpec.getFacet(GridFacet.class);
             return facet != null? facet.getGrid(): null;
         }
@@ -95,7 +94,7 @@ public class LayoutServiceDefault implements LayoutService, SpecificationLoaderA
 
     @Programmatic
     public byte[] toZip(final Style style) {
-        final Collection<ObjectSpecification> allSpecs = specificationLookup.allSpecifications();
+        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
         final Collection<ObjectSpecification> domainObjectSpecs = Collections2
                 .filter(allSpecs, new Predicate<ObjectSpecification>(){
                     @Override
@@ -138,18 +137,10 @@ public class LayoutServiceDefault implements LayoutService, SpecificationLoaderA
     }
 
 
-    ////////////////////////////////////////////////////////
 
 
-    //region > injected dependencies
-
-    private SpecificationLoader specificationLookup;
-
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
-    }
-
+    @Inject
+    SpecificationLoader specificationLoader;
 
     @Inject
     JaxbService jaxbService;

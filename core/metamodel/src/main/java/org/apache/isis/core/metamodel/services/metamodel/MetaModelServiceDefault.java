@@ -40,18 +40,17 @@ import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class MetaModelServiceDefault implements MetaModelService2, SpecificationLoaderAware {
+public class MetaModelServiceDefault implements MetaModelService2 {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
@@ -198,14 +197,11 @@ public class MetaModelServiceDefault implements MetaModelService2, Specification
         return sortOf(domainType);
     }
 
-    // //////////////////////////////////////
 
-    private SpecificationLoader specificationLookup;
 
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
-    }
+
+    @Inject
+    SpecificationLoader specificationLookup;
 
     @Inject
     GridService gridService;

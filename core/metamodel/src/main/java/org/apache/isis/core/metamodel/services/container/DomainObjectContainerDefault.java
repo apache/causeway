@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
 
@@ -65,13 +66,10 @@ import org.apache.isis.core.metamodel.services.container.query.QueryFindByPatter
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
-        implements DomainObjectContainer,
-        PersistenceSessionServiceAware, SpecificationLoaderAware,
-        AdapterManagerAware, ExceptionRecognizer {
+        implements DomainObjectContainer, PersistenceSessionServiceAware, AdapterManagerAware, ExceptionRecognizer {
 
 
     //region > titleOf
@@ -109,7 +107,7 @@ public class DomainObjectContainerDefault
     @SuppressWarnings("unchecked")
     @Override
     public <T> T newViewModelInstance(Class<T> ofClass, String memento) {
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(ofClass);
+        final ObjectSpecification spec = specificationLoader.loadSpecification(ofClass);
         if (!spec.containsFacet(ViewModelFacet.class)) {
             throw new IsisException("Type must be a ViewModel: " + ofClass);
         }
@@ -652,19 +650,8 @@ public class DomainObjectContainerDefault
     //region > framework dependencies
 
     private PersistenceSessionService persistenceSessionService;
-    private SpecificationLoader specificationLoader;
     private AdapterManager adapterManager;
 
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    @Programmatic
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    }
 
 
     protected AdapterManager getAdapterManager() {
@@ -693,31 +680,34 @@ public class DomainObjectContainerDefault
 
     //region > service dependencies
 
-    @javax.inject.Inject
+    @Inject
+    SpecificationLoader specificationLoader;
+
+    @Inject
     org.apache.isis.applib.services.config.ConfigurationService configurationService;
 
-    @javax.inject.Inject
+    @Inject
     FactoryService factoryService;
 
-    @javax.inject.Inject
+    @Inject
     MessageService messageService;
 
-    @javax.inject.Inject
+    @Inject
     RepositoryService repositoryService;
 
-    @javax.inject.Inject
+    @Inject
     ServiceRegistry serviceRegistry;
 
-    @javax.inject.Inject
+    @Inject
     TransactionService transactionService;
 
-    @javax.inject.Inject
+    @Inject
     TitleService titleService;
 
-    @javax.inject.Inject
+    @Inject
     UserService userService;
 
-    @javax.inject.Inject
+    @Inject
     WrapperFactory wrapperFactory;
 
     //endregion

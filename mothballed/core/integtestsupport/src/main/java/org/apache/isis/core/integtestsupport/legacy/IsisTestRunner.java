@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.integtestsupport.legacy.components.IsisSystemUsingInstallersWithinJunit;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
@@ -204,7 +204,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         return IsisContext.getPersistenceSession();
     }
 
-    private static ServicesInjectorSpi getServicesInjector() {
+    private static ServicesInjector getServicesInjector() {
         return getPersistenceSession().getServicesInjector();
     }
 

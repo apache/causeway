@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.Mus
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithMustSatisfyAnnotations;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithoutMustSatisfyAnnotations;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;

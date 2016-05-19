@@ -56,7 +56,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.wrapper.handlers.ProxyContextHandler;
@@ -75,14 +74,11 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  */
 @DomainService(nature = NatureOfService.DOMAIN)
 public class WrapperFactoryDefault implements WrapperFactory,
-        SpecificationLoaderAware, AdapterManagerAware, PersistenceSessionServiceAware {
+        AdapterManagerAware, PersistenceSessionServiceAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
 
-    private SpecificationLoader specificationLoader;
-    private AdapterManager adapterManager;
-    private PersistenceSessionService persistenceSessionService;
 
     private final ProxyContextHandler proxyContextHandler;
 
@@ -257,7 +253,8 @@ public class WrapperFactoryDefault implements WrapperFactory,
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, getSpecificationLoader(), getAdapterManager(), getPersistenceSessionService());
+        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLoader,
+                getAdapterManager(), getPersistenceSessionService());
     }
 
     @Override
@@ -304,10 +301,10 @@ public class WrapperFactoryDefault implements WrapperFactory,
         dispatcher.dispatch(interactionEvent);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Listeners
-    // /////////////////////////////////////////////////////////////
 
+
+    private AdapterManager adapterManager;
+    private PersistenceSessionService persistenceSessionService;
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
@@ -319,14 +316,6 @@ public class WrapperFactoryDefault implements WrapperFactory,
     }
 
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-    @Programmatic
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        this.specificationLoader = specificationLookup;
-    }
 
     protected PersistenceSessionService getPersistenceSessionService() {
         return persistenceSessionService;
@@ -341,5 +330,7 @@ public class WrapperFactoryDefault implements WrapperFactory,
     @Inject
     AuthenticationSessionProvider authenticationSessionProvider;
 
+    @Inject
+    SpecificationLoader specificationLoader;
 
 }

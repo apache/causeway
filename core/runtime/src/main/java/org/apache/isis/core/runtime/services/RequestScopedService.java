@@ -20,7 +20,7 @@
 package org.apache.isis.core.runtime.services;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 /**
@@ -35,7 +35,7 @@ public interface RequestScopedService {
 
     /**
      * Indicates to the proxy that a new request is starting, so should instantiate a new instance of the underlying
-     * service and bind to the thread, and inject into that service using the provided {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}.
+     * service and bind to the thread, and inject into that service using the provided {@link ServicesInjector}.
      *
      * <p>
      *     This is done before the <code>@PostConstruct</code>, see {@link #__isis_postConstruct()}.
@@ -49,7 +49,7 @@ public interface RequestScopedService {
      * underlying instance for current thread.
      *
      * <p>
-     *     This is done after the request has started, see {@link #__isis_startRequest(org.apache.isis.core.metamodel.runtimecontext.ServicesInjector)}.
+     *     This is done after the request has started, see {@link #__isis_startRequest(ServicesInjector)}.
      * </p>
      */
     @Programmatic

@@ -20,21 +20,22 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
+
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * Installs a {@link SpecificationLoader} during system start up.
  */
 public interface SpecificationLoaderInstaller extends Installer {
 
-    static String TYPE = "reflector";
+    String TYPE = "reflector";
 
     SpecificationLoader createReflector(
             final DeploymentCategory deploymentCategory,
             final Collection<MetaModelRefiner> metaModelRefiners,
-            final ServicesInjectorSpi servicesInjector);
+            final ServicesInjector servicesInjector);
 
 }

@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -46,13 +46,11 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -89,6 +87,7 @@ import static org.hamcrest.Matchers.notNullValue;
  * conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
  * </ul>
+ * </p>
  *
  * <p>
  * In addition, the {@link RuntimeContext} can optionally be injected, but will
@@ -101,7 +100,14 @@ import static org.hamcrest.Matchers.notNullValue;
  * framework (that is, when there <i>is</i> a runtime), then the framework
  * injects an implementation of {@link RuntimeContext} that acts like a bridge
  * to its <tt>IsisContext</tt>.
- */
+ * </p>
+ *
+ * <p>
+ * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; all public methods
+ * must be annotated using {@link Programmatic}.
+ * </p>
+ *
+*/
 public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
@@ -113,7 +119,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
-    private final ServicesInjectorSpi servicesInjector;
+    private final ServicesInjector servicesInjector;
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
@@ -125,7 +131,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders,
-            final ServicesInjectorSpi servicesInjector) {
+            final ServicesInjector servicesInjector) {
 
         ensureThatArg(deploymentCategory, is(notNullValue()));
         ensureThatArg(configuration, is(notNullValue()));
@@ -140,8 +146,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         this.programmingModel = programmingModel;
 
-
         this.metaModelValidator = metaModelValidator;
+
         this.facetProcessor = new FacetProcessor(configuration, programmingModel);
         this.layoutMetadataReaders = layoutMetadataReaders;
     }
@@ -170,9 +176,10 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     /**
      * Initializes and wires up, and primes the cache based on any service
-     * classes (provided by the {@link ServicesInjectorSpi}).
+     * classes (provided by the {@link ServicesInjector}).
      * @param runtimeContext
      */
+    @Programmatic
     public void init(final RuntimeContext runtimeContext) {
         this.runtimeContext = runtimeContext;
 
@@ -182,12 +189,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         // default subcomponents
         if (runtimeContext == null) {
-            servicesInjector.addFallbackIfRequired(
-                    ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
             this.runtimeContext = new RuntimeContextNoRuntime(servicesInjector, this);
         }
-
-        injectInto(metaModelValidator);
 
         // wire subcomponents into each other
         this.runtimeContext.injectInto(facetProcessor);
@@ -198,7 +201,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         // initialize subcomponents
         programmingModel.init();
         facetProcessor.init();
-        metaModelValidator.init();
+        metaModelValidator.init(this);
 
         loadSpecificationsForServices();
         loadSpecificationsForMixins();
@@ -240,6 +243,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cache.setCacheBySpecId(specById);
     }
 
+    @Programmatic
     public boolean isInitialized() {
         return initialized;
     }
@@ -248,6 +252,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * Set using {@link #init(RuntimeContext)}.
      */
+    @Programmatic
     public RuntimeContext getRuntimeContext() {
         return runtimeContext;
     }
@@ -256,6 +261,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > shutdown
 
+    @Programmatic
     public void shutdown() {
         LOG.info("shutting down " + this);
 
@@ -268,6 +274,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > invalidateCache
 
+    @Programmatic
     public void invalidateCache(final Class<?> cls) {
 
         if(!cache.isInitialized()) {
@@ -305,6 +312,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private ValidationFailures validationFailures;
 
+    @Programmatic
     public void validateAndAssert() {
         ValidationFailures validationFailures = validate();
         validationFailures.assertNone();
@@ -312,6 +320,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         cacheBySpecId();
     }
 
+    @Programmatic
     public ValidationFailures validate() {
         if(validationFailures == null) {
             validationFailures = new ValidationFailures();
@@ -333,6 +342,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      * the configured {@link org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor}
      * has filtered out the class.
      */
+    @Programmatic
     public ObjectSpecification loadSpecification(final String className) {
         ensureThatArg(className, is(notNullValue()), "specification class name must be specified");
 
@@ -351,6 +361,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * @see #loadSpecification(String)
      */
+    @Programmatic
     public ObjectSpecification loadSpecification(final Class<?> type) {
         final ObjectSpecification spec = internalLoadSpecification(type);
         if(spec == null) {
@@ -410,6 +421,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      * Loads the specifications of the specified types except the one specified
      * (to prevent an infinite loop).
      */
+    @Programmatic
     public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
         boolean anyLoadedAsNull = false;
         for (final Class<?> typeToLoad : typesToLoad) {
@@ -425,6 +437,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * Loads the specifications of the specified types.
      */
+    @Programmatic
     public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return loadSpecifications(typesToLoad, null);
     }
@@ -504,6 +517,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * Return all the loaded specifications.
      */
+    @Programmatic
     public Collection<ObjectSpecification> allSpecifications() {
         return cache.allSpecifications();
     }
@@ -512,6 +526,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > getServiceClasses, isServiceClass
 
+    @Programmatic
     public List<Class<?>> allServiceClasses() {
         List<Class<?>> serviceClasses = Lists
                 .transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
@@ -523,6 +538,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
     }
 
+    @Programmatic
     public boolean isServiceClass(Class<?> cls) {
         return this.servicesInjector.isRegisteredService(cls);
     }
@@ -533,6 +549,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * Whether this class has been loaded.
      */
+    @Programmatic
     public boolean loaded(final Class<?> cls) {
         return loaded(cls.getName());
     }
@@ -540,6 +557,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * @see #loaded(Class).
      */
+    @Programmatic
     public boolean loaded(final String fullyQualifiedClassName) {
         return cache.get(fullyQualifiedClassName) != null;
     }
@@ -547,6 +565,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //endregion
 
     //region > lookupBySpecId
+    @Programmatic
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
         final ObjectSpecification objectSpecification = cache.getByObjectType(objectSpecId);
         if(objectSpecification == null) {
@@ -563,16 +582,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      * Injects self into candidate if required, and instructs its subcomponents
      * to do so also.
      */
+    @Programmatic
     public void injectInto(final Object candidate) {
         final Class<?> candidateClass = candidate.getClass();
-        if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
-            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
-            cast.setSpecificationLoader(this);
-        }
-        if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
-            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
-            cast.setSpecificationLoader(this);
-        }
         if (ServicesInjectorAware.class.isAssignableFrom(candidateClass)) {
             final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
             cast.setServicesInjector(this.servicesInjector);

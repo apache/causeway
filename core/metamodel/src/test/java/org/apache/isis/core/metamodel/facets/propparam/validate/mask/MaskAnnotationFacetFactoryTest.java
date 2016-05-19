@@ -52,7 +52,6 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnClass() {
         final MaskFacetOnTypeAnnotationFactory facetFactory = new MaskFacetOnTypeAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
 
         @Mask("###")
         class Customer {
@@ -68,7 +67,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -90,7 +89,8 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
+
 
         class Customer {
             @SuppressWarnings("unused")
@@ -110,7 +110,8 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForNonStringsProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
+
 
         class Customer {
             @SuppressWarnings("unused")
@@ -128,7 +129,8 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForPrimitiveOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
+        facetFactory.setServicesInjector(mockServicesInjector);
+
 
         class Customer {
             @SuppressWarnings("unused")

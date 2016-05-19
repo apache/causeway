@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 
 public class DefaultedFacetFromConfiguration extends DefaultedFacetAbstract {

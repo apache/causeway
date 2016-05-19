@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;

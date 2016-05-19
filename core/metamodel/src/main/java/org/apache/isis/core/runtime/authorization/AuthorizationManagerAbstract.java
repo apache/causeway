@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.authorization;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 
@@ -34,6 +35,7 @@ public abstract class AuthorizationManagerAbstract implements AuthorizationManag
         this.configuration = configuration;
     }
 
+    @Programmatic
     public IsisConfiguration getConfiguration() {
         return configuration;
     }

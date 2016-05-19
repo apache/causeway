@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -135,7 +135,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
     @Override
     public SpecificationLoader provideSpecificationLoader(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjector,
+            final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
 
         final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();

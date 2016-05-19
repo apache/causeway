@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
@@ -40,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 
 public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractFacetFactoryTest {
@@ -53,30 +53,31 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory();;
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactory);
-    }
-
-    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
-        facetFactory.setSpecificationLoader(mockSpecificationLoader);
-        facetFactory.setServicesInjector(mockServicesInjector);
-
         context.checking(new Expectations() {{
 
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            will(returnValue(mockSpecificationLoader));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
+
+            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            will(returnValue(mockSpecificationLoader));
+
         }});
+
+        facetFactory.setServicesInjector(mockServicesInjector);
 
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
@@ -99,7 +100,6 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
     public void testActionReturnTypeWhenVoid() {
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
@@ -117,9 +117,8 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionReturnTypeWhenNotVoid() {
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(stringSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(stringSpec);
 
+        allowing_specificationLoader_loadSpecification_any_willReturn(stringSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -137,7 +136,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionOnType() {
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(customerSpec);
+
         allowing_specificationLoader_loadSpecification_any_willReturn(customerSpec);
 
         class Customer {
@@ -157,7 +156,6 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
     public void testActionsPickedUpFromSuperclass() {
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
@@ -180,20 +178,17 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     }
 
     public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+
         allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForChoices.setSpecificationLoader(mockSpecificationLoader);
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForChoices.setServicesInjector(mockServicesInjector);
 
-        injectServicesIntoAndAllowingServiceInjectorLookups(facetFactoryForChoices);
+        facetFactoryForChoices.setServicesInjector(mockServicesInjector);
+
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setSpecificationLoader(mockSpecificationLoader);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         facetFactoryForDisable.setServicesInjector(mockServicesInjector);
 
 

@@ -45,7 +45,7 @@ public class ServicesInjectorDefaultTest {
     @Mock
     private SomeDomainObject mockDomainObject;
 
-    private ServicesInjectorDefault injector;
+    private ServicesInjector injector;
 
     public static interface Service1 {
     }
@@ -70,7 +70,7 @@ public class ServicesInjectorDefaultTest {
     public void setUp() throws Exception {
         final Object[] services = { mockContainer, mockService1, mockService2 };
 
-        injector = new ServicesInjectorDefault(Arrays.asList(services), new InjectorMethodEvaluatorDefault());
+        injector = new ServicesInjector(Arrays.asList(services), new InjectorMethodEvaluatorDefault());
     }
 
     @After

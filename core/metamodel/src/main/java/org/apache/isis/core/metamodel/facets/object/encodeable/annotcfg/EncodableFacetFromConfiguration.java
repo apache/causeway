@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {
 
