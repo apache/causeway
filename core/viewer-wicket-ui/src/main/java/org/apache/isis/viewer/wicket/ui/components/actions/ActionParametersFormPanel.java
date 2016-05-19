@@ -202,8 +202,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             // so can submit with invalid content (eg mandatory params missing)
             cancelButton.setDefaultFormProcessing(false);
             add(cancelButton);
-            
-            cancelButton.setVisible(false);
         }
 
         /**
