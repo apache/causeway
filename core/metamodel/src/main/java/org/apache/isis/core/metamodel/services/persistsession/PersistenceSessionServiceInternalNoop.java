@@ -8,21 +8,13 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class PersistenceSessionServiceInternalNoop extends PersistenceSessionServiceInternalAbstract {
+public class PersistenceSessionServiceInternalNoop implements PersistenceSessionServiceInternal {
 
-    @Override
-    public void injectInto(final Object candidate) {
-        if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
-            final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
-            cast.setAdapterManager(this);
-        }
-    }
 
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {

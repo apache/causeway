@@ -5,7 +5,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class TransactionStateProviderInternalNoop extends TransactionStateProviderInternalAbstract {
+public class TransactionStateProviderInternalNoop implements TransactionStateProviderInternal {
+
     @Override
     public TransactionState getTransactionState() {
         throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");

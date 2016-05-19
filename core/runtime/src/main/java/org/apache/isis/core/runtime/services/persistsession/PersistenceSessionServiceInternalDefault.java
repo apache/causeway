@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternalAbstract;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
@@ -39,7 +39,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
 )
-public class PersistenceSessionServiceInternalDefault extends PersistenceSessionServiceInternalAbstract {
+public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override
     public ObjectAdapter getAdapterFor(Oid oid) {

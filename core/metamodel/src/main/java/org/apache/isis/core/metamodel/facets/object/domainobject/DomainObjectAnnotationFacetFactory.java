@@ -43,8 +43,6 @@ import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.Nullable;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -94,9 +92,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-        implements AdapterManagerAware,
-        MetaModelValidatorRefiner,
-        PostConstructMethodCache {
+        implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
     private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
@@ -106,8 +102,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
 
 
-    private AdapterManager adapterManager;
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -203,7 +197,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         Facet facet = autoCompleteValidator.flagIfPresent(
                 AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, facetHolder,
                         getDeploymentCategory(), getSpecificationLoader(),
-                        servicesInjector, adapterManager
+                        servicesInjector, persistenceSessionServiceInternal
                 ));
 
         // else check from @DomainObject(auditing=...)
@@ -211,7 +205,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             facet = AutoCompleteFacetForDomainObjectAnnotation.create(
                     domainObject, facetHolder, getDeploymentCategory(),
                     getSpecificationLoader(), servicesInjector,
-                    getAuthenticationSessionProvider(), adapterManager
+                    getAuthenticationSessionProvider(), persistenceSessionServiceInternal
             );
         }
 
@@ -295,7 +289,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
-                domainObject, getSpecificationLoader(), adapterManager, servicesInjector,
+                domainObject, getSpecificationLoader(), persistenceSessionServiceInternal, servicesInjector,
                 facetHolder, postConstructMethodCache);
         FacetUtil.addFacet(recreatableObjectFacet);
 
@@ -503,14 +497,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         this.persistenceSessionServiceInternal =
                 servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+
     }
-
-
-    @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
-
 
 
     // //////////////////////////////////////
@@ -520,5 +508,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
     }
+
+
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

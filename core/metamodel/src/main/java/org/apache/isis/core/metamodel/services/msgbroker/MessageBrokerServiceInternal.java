@@ -20,9 +20,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 public interface MessageBrokerServiceInternal {
 
-    @Programmatic
-    void injectInto(final Object candidate);
-
     /**
      * Provided by <tt>MessageBroker</tt> when used by framework.
      *

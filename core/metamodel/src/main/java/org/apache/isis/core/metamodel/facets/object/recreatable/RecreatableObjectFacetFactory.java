@@ -31,8 +31,6 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.Nullable;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -43,15 +41,15 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
-        implements AdapterManagerAware, MetaModelValidatorRefiner, PostConstructMethodCache {
-
-    private AdapterManager adapterManager;
+        implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     public RecreatableObjectFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -127,18 +125,19 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 
     // //////////////////////////////////////
 
-    @Override
-    public void setAdapterManager(AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
-
-
-
-    // //////////////////////////////////////
-
     private final Map<Class, Nullable<Method>> postConstructMethods = Maps.newHashMap();
 
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
     }
+
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+    }
+
+    PersistenceSessionServiceInternal adapterManager;
+
 }

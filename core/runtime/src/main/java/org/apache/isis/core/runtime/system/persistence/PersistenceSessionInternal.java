@@ -59,7 +59,6 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -91,7 +90,6 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -391,20 +389,6 @@ public class PersistenceSessionInternal implements
         setState(State.CLOSED);
     }
 
-    //endregion
-
-    //region > Injectable
-    @Override
-    public void injectInto(final Object candidate) {
-        if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
-            final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
-            cast.setAdapterManager(this);
-        }
-        if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
-            final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
-            cast.setMessageBrokerService(this);
-        }
-    }
     //endregion
 
     //region > QuerySubmitter impl, findInstancesInTransaction

@@ -19,18 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract implements AdapterManagerAware {
+public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract {
 
-    private AdapterManager adapterManager;
 
     public PropertyDefaultFacetDerivedFromTypeFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -53,7 +52,7 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), getAdapterManager());
+            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), adapterManager);
             FacetUtil.addFacet(propertyFacet);
         }
     }
@@ -67,13 +66,13 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
     // Injected
     // ////////////////////////////////////////////////////////////////////
 
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterMap) {
-        this.adapterManager = adapterMap;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
+
+    PersistenceSessionServiceInternal adapterManager;
 
 }

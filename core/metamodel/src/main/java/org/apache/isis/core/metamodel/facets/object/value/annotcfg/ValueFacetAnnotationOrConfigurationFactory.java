@@ -24,8 +24,6 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,6 +39,8 @@ import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
  * Processes the {@link Value} annotation.
@@ -68,9 +68,8 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
-public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements AdapterManagerAware {
+public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract  {
 
-    private AdapterManager adapterManager;
 
     public ValueFacetAnnotationOrConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -109,21 +108,18 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     }
 
     protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
-        return new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), getAdapterManager(), servicesInjector);
+        return new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), adapterManager, servicesInjector);
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // Injected
-    // ////////////////////////////////////////////////////////////////////
 
 
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
+
+    PersistenceSessionServiceInternal adapterManager;
 
 }

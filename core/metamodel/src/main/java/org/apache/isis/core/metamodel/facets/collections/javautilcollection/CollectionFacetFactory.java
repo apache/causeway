@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -29,12 +27,13 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultTo
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
-public class CollectionFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
+public class CollectionFacetFactory extends FacetFactoryAbstract {
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
-    private AdapterManager adapterManager;
 
     public CollectionFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -65,7 +64,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Adap
             facetHolder.addFacet(typeOfFacet);
         }
 
-        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, getAdapterManager());
+        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterManager);
 
         facetHolder.addFacet(collectionFacet);
     }
@@ -74,7 +73,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Adap
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, getAdapterManager());
+        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, adapterManager);
         facetHolder.addFacet(collectionFacet);
 
         final TypeOfFacet typeOfFacet =
@@ -91,13 +90,13 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Adap
     // Dependencies (injected)
     // //////////////////////////////////////////////////////////////
 
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
+
+    PersistenceSessionServiceInternal adapterManager;
 
 }

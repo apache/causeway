@@ -178,10 +178,9 @@ public class IsisSystem implements ApplicationScopedComponent {
             final RuntimeContext runtimeContext = new RuntimeContext(servicesInjector);
 
             // wire up components and components into services...
-            runtimeContext.injectInto(specificationLoader);
-
             for (Object service : servicesInjector.getRegisteredServices()) {
-                runtimeContext.injectInto(service);
+                // inject itself into each service (if implements ServiceInjectorAware).
+                servicesInjector.injectInto(service);
             }
 
             // instantiate

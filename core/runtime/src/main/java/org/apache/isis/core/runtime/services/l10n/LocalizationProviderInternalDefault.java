@@ -21,14 +21,14 @@ package org.apache.isis.core.runtime.services.l10n;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternalAbstract;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
 )
-public class LocalizationProviderInternalDefault extends LocalizationProviderInternalAbstract {
+public class LocalizationProviderInternalDefault implements LocalizationProviderInternal {
 
     @Override
     public Localization getLocalization() {

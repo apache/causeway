@@ -20,33 +20,42 @@
 package org.apache.isis.core.metamodel.specloader.facetprocessor;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.*;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
+import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
+import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
+import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class FacetProcessor implements RuntimeContextAware {
+public class FacetProcessor implements ServicesInjectorAware {
 
-    private final IsisConfiguration configuration;
     private final ProgrammingModel programmingModel;
-
-    private RuntimeContext runtimeContext;
 
     /**
      * Class<FacetFactory> => FacetFactory
@@ -113,13 +122,9 @@ public class FacetProcessor implements RuntimeContextAware {
      */
     private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
-    public FacetProcessor(
-            final IsisConfiguration configuration,
-            final ProgrammingModel programmingModel) {
-        ensureThatState(configuration, is(notNullValue()));
+    public FacetProcessor(final ProgrammingModel programmingModel) {
         ensureThatState(programmingModel, is(notNullValue()));
 
-        this.configuration = configuration;
         this.programmingModel = programmingModel;
     }
 
@@ -128,7 +133,6 @@ public class FacetProcessor implements RuntimeContextAware {
     // //////////////////////////////////////////////////
 
     public void init() {
-        ensureThatState(runtimeContext, is(notNullValue()));
         final List<FacetFactory> facetFactoryList = programmingModel.getList();
         for (final FacetFactory facetFactory : facetFactoryList) {
             registerFactory(facetFactory);
@@ -151,13 +155,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * processing.
      */
     public void injectDependenciesInto(final FacetFactory factory) {
-
-        // cascades all the subcomponents also
-        getRuntimeContext().injectInto(factory);
-    }
-
-    public FacetFactory getFactoryByFactoryType(final Class<? extends FacetFactory> factoryType) {
-        return factoryByFactoryType.get(factoryType);
+        servicesInjector.injectInto(factory);
     }
 
     /**
@@ -467,18 +465,11 @@ public class FacetProcessor implements RuntimeContextAware {
 
     //region > dependencies
 
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
-    }
+    private ServicesInjector servicesInjector;
 
-    /**
-     * Injected so can propogate to any {@link #registerFactory(FacetFactory)
-     * registered} {@link FacetFactory} s that are also
-     * {@link RuntimeContextAware}.
-     */
     @Override
-    public void setRuntimeContext(final RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
     //endregion

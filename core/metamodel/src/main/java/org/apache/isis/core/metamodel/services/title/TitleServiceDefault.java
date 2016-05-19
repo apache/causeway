@@ -19,22 +19,21 @@
 
 package org.apache.isis.core.metamodel.services.title;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class TitleServiceDefault
-        implements TitleService, AdapterManagerAware, LocalizationProviderAware {
+public class TitleServiceDefault implements TitleService {
 
     @Programmatic
     @Override
@@ -66,24 +65,11 @@ public class TitleServiceDefault
 
     // //////////////////////////////////////
 
-    private AdapterManager adapterManager;
+    @Inject
+    PersistenceSessionServiceInternal adapterManager;
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
-
-    @Programmatic
-    @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
-
-    private LocalizationProviderInternal localizationProviderInternal;
-    @Override
-    public void setLocalizationProvider(final LocalizationProviderInternal localizationProviderInternal) {
-        this.localizationProviderInternal = localizationProviderInternal;
-    }
-
+    @javax.inject.Inject
+    LocalizationProviderInternal localizationProviderInternal;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

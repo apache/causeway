@@ -22,7 +22,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 
 public interface LayoutMetadataReader {
 
-    public static class ReaderException extends IsisException {
+    class ReaderException extends IsisException {
 
         private static final long serialVersionUID = 1L;
 
@@ -48,5 +48,5 @@ public interface LayoutMetadataReader {
         }
     }
 
-    public Properties asProperties(Class<?> domainClass) throws ReaderException;
+    Properties asProperties(Class<?> domainClass) throws ReaderException;
 }

@@ -28,9 +28,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface PersistenceSessionServiceInternal extends AdapterManager {
 
-    @Programmatic
-    void injectInto(final Object candidate);
-
     //region > instantiate
 
     /**

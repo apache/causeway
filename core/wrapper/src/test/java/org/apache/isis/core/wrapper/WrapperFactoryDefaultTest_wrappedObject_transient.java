@@ -125,9 +125,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
         wrapperFactory = createWrapperFactory();
-        wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
-        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionServiceInternal);
+        wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
         wrapperFactory.specificationLoader = mockSpecificationLoader;
 
         context.checking(new Expectations() {

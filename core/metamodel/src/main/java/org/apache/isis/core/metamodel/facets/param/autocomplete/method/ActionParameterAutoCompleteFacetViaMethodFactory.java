@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -36,12 +34,12 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = {"autoComplete"};
-
-    private AdapterManager adapterManager;
 
     public ActionParameterAutoCompleteFacetViaMethodFactory() {
         super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -88,7 +86,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, paramAsHolder,
                             getDeploymentCategory(), getSpecificationLoader(),
-                            getAuthenticationSessionProvider(), getAdapterManager()));
+                            getAuthenticationSessionProvider(), adapterManager));
         }
     }
 
@@ -108,13 +106,13 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
+
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
-    private AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
+    PersistenceSessionServiceInternal adapterManager;
 
 }

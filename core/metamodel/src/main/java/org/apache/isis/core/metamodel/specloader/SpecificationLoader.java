@@ -132,7 +132,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         this.metaModelValidator = metaModelValidator;
 
-        this.facetProcessor = new FacetProcessor(configuration, programmingModel);
+        this.facetProcessor = new FacetProcessor(programmingModel);
         this.layoutMetadataReaders = layoutMetadataReaders;
     }
 
@@ -169,9 +169,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
 
         // wire subcomponents into each other
-        this.runtimeContext.injectInto(facetProcessor);
+        facetProcessor.setServicesInjector(servicesInjector);
         for (final LayoutMetadataReader layoutMetadataReader : layoutMetadataReaders) {
-            this.runtimeContext.injectInto(layoutMetadataReader);
+            servicesInjector.injectInto(layoutMetadataReader);
         }
 
         // initialize subcomponents
@@ -424,7 +424,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
         final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
-        final PersistenceSessionServiceInternal persistenceSessionServiceInternal = getRuntimeContext().getPersistenceSessionService();
+        final PersistenceSessionServiceInternal persistenceSessionServiceInternal =
+                servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
 
         final ObjectSpecificationDependencies specContext =
                 new ObjectSpecificationDependencies(deploymentCategory, servicesInjector, this, facetProcessor);

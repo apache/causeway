@@ -26,12 +26,11 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class MessageServiceDefault implements MessageService, MessageBrokerServiceAware{
+public class MessageServiceInternalDefault implements MessageService {
 
     @Programmatic
     @Override
@@ -74,12 +73,8 @@ public class MessageServiceDefault implements MessageService, MessageBrokerServi
 
 
 
-    private MessageBrokerServiceInternal messageBrokerServiceInternal;
-
-    @Override
-    public void setMessageBrokerService(final MessageBrokerServiceInternal messageBrokerServiceInternal) {
-        this.messageBrokerServiceInternal = messageBrokerServiceInternal;
-    }
+    @javax.inject.Inject
+    MessageBrokerServiceInternal messageBrokerServiceInternal;
 
     @javax.inject.Inject
     TranslationService translationService;

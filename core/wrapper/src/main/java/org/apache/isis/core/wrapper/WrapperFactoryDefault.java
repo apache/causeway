@@ -51,8 +51,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
@@ -72,7 +70,7 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  * configuration is required.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-public class WrapperFactoryDefault implements WrapperFactory, AdapterManagerAware {
+public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
@@ -251,7 +249,8 @@ public class WrapperFactoryDefault implements WrapperFactory, AdapterManagerAwar
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLoader, getAdapterManager(), persistenceSessionServiceInternal);
+        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLoader,
+                persistenceSessionServiceInternal);
     }
 
     @Override
@@ -297,20 +296,6 @@ public class WrapperFactoryDefault implements WrapperFactory, AdapterManagerAwar
         }
         dispatcher.dispatch(interactionEvent);
     }
-
-
-
-    private AdapterManager adapterManager;
-
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
-    @Programmatic
-    @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
-
 
 
     @Inject

@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetV
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationDefault;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 
@@ -70,7 +71,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         context.allowing(mockSpecificationLoader);
 
         facetFactory = new TitleAnnotationFacetFactory();
-        facetFactory.setAdapterManager(mockAdapterManager);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {
             {
@@ -91,6 +92,9 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
                 allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
                 will(returnValue(mockSpecificationLoader));
+
+                allowing(mockServicesInjector).lookupService(PersistenceSessionServiceInternal.class);
+                will(returnValue(mockAdapterManager));
             }
         });
 

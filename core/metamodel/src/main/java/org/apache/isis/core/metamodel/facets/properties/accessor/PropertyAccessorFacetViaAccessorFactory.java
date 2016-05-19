@@ -29,6 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
@@ -54,7 +56,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
                         getDeploymentCategory(), getConfiguration(),
                         getSpecificationLoader(),
                         getAuthenticationSessionProvider(),
-                        getAdapterManager()
+                        adapterManager
                 ));
     }
 
@@ -106,5 +108,13 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
+
+
+    @Override public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+    }
+
+    PersistenceSessionServiceInternal adapterManager;
 
 }

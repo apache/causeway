@@ -39,16 +39,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class RepositoryServiceInternalDefault
-        implements RepositoryService,
-        AdapterManagerAware {
+public class RepositoryServiceInternalDefault implements RepositoryService {
 
 
 
@@ -75,7 +71,7 @@ public class RepositoryServiceInternalDefault
     @Programmatic
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = adapterManager.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         return adapter.representsPersistent();
     }
 
@@ -85,7 +81,7 @@ public class RepositoryServiceInternalDefault
         if (isPersistent(object)) {
             return;
         }
-        final ObjectAdapter adapter = adapterManager.adapterFor(unwrapped(object));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
@@ -120,7 +116,7 @@ public class RepositoryServiceInternalDefault
         if (object == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = adapterManager.adapterFor(unwrapped(object));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
         if (!isPersistent(object)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
@@ -252,12 +248,6 @@ public class RepositoryServiceInternalDefault
 
     @javax.inject.Inject
     TransactionService transactionService;
-
-    private AdapterManager adapterManager;
-    @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;

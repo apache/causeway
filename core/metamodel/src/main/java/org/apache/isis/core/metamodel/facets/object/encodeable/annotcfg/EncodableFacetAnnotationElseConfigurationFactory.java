@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Encodable;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -31,10 +29,10 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements AdapterManagerAware {
-
-    private AdapterManager adapterManager;
+public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
 
     public EncodableFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -77,11 +75,13 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
     // ////////////////////////////////////////////////////////////////////
 
 
-
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
+
+    PersistenceSessionServiceInternal adapterManager;
 
 
 }

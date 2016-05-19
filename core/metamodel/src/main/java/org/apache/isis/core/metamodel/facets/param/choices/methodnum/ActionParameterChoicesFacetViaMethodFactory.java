@@ -26,25 +26,23 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = {};
-
-    private AdapterManager adapterManager;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -97,7 +95,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
             FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder,
-                    getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), getAdapterManager()
+                    getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager
             ));
         }
     }
@@ -149,13 +147,13 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
+
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
-    private AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
+    PersistenceSessionServiceInternal adapterManager;
 
 }

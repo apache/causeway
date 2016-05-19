@@ -4,7 +4,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class MessageBrokerServiceInternalNoop extends MessageBrokerServiceInternalAbstract {
+public class MessageBrokerServiceInternalNoop implements MessageBrokerServiceInternal {
 
     @Override
     public void informUser(final String message) {

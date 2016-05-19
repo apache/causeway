@@ -22,21 +22,20 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.AUTO_COMPLETE_PREFIX };
 
-    private AdapterManager adapterManager;
 
     public PropertyAutoCompleteFacetMethodFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -63,7 +62,7 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
 
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property,
-                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), getAdapterManager()
+                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager
         ));
     }
 
@@ -71,13 +70,13 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
 
+
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
+    PersistenceSessionServiceInternal adapterManager;
 
 }

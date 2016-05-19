@@ -24,28 +24,26 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = {};
-
-    private AdapterManager adapterManager;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -95,7 +93,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder, getAdapterManager()));
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder, adapterManager));
         }
     }
 
@@ -135,14 +133,13 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
+
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
-    private AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
-
+    PersistenceSessionServiceInternal adapterManager;
 
 }

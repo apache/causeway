@@ -205,8 +205,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
 
         wrapperFactory = createWrapperFactory();
-        wrapperFactory.setAdapterManager(mockAdapterManager);
-        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionServiceInternal);
+        wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
         wrapperFactory.specificationLoader = mockSpecificationLoader;
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
 

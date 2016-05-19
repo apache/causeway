@@ -22,14 +22,14 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternalAbstract;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
 )
-public class MessageBrokerServiceInternalDefault extends MessageBrokerServiceInternalAbstract {
+public class MessageBrokerServiceInternalDefault implements MessageBrokerServiceInternal {
 
     @Override
     public void informUser(final String message) {

@@ -23,22 +23,21 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CHOICES_PREFIX };
 
-    private AdapterManager adapterManager;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -84,7 +83,7 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
         final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action,
-                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), getAdapterManager());
+                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager);
         FacetUtil.addFacet(facet);
     }
 
@@ -105,12 +104,13 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
     // Dependencies
     // ///////////////////////////////////////////////////////////////
 
+
     @Override
-    public void setAdapterManager(final AdapterManager adapterMap) {
-        this.adapterManager = adapterMap;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
+    PersistenceSessionServiceInternal adapterManager;
+
 }

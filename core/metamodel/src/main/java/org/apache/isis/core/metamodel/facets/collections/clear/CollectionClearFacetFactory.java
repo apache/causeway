@@ -22,22 +22,21 @@ package org.apache.isis.core.metamodel.facets.collections.clear;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CLEAR_PREFIX };
 
-    private AdapterManager adapterManager;
 
     public CollectionClearFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -66,7 +65,7 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaClearMethod(clearMethodIfAny, collection);
         } else {
-            return new CollectionClearFacetViaAccessor(accessorMethod, collection, getAdapterManager());
+            return new CollectionClearFacetViaAccessor(accessorMethod, collection, adapterManager);
         }
     }
 
@@ -74,14 +73,14 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
+
+    PersistenceSessionServiceInternal adapterManager;
 
 
 }

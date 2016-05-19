@@ -20,8 +20,8 @@ package org.apache.isis.core.runtime.services.transtate;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternalAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -32,7 +32,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
 )
-public class TransactionStateProviderInternalDefault extends TransactionStateProviderInternalAbstract {
+public class TransactionStateProviderInternalDefault implements TransactionStateProviderInternal {
 
     @Override
     public TransactionState getTransactionState() {

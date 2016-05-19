@@ -54,8 +54,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -68,7 +66,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
-        implements DomainObjectContainer, AdapterManagerAware, ExceptionRecognizer {
+        implements DomainObjectContainer, ExceptionRecognizer {
 
 
     //region > titleOf
@@ -110,7 +108,7 @@ public class DomainObjectContainerDefault
         if (!spec.containsFacet(ViewModelFacet.class)) {
             throw new IsisException("Type must be a ViewModel: " + ofClass);
         }
-        final ObjectAdapter adapter = getPersistenceSessionService().createViewModelInstance(spec, memento);
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.createViewModelInstance(spec, memento);
         if(adapter.getOid().isViewModel()) {
             return (T)adapter.getObject();
         } else {
@@ -173,12 +171,12 @@ public class DomainObjectContainerDefault
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(persistentObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(persistentObject));
         if (!isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
 
-        getPersistenceSessionService().remove(adapter);
+        persistenceSessionServiceInternal.remove(adapter);
     }
 
     @Programmatic
@@ -240,7 +238,7 @@ public class DomainObjectContainerDefault
     @Deprecated
     @Override
     public void resolve(final Object parent) {
-        getPersistenceSessionService().resolve(unwrapped(parent));
+        persistenceSessionServiceInternal.resolve(unwrapped(parent));
     }
 
     /**
@@ -258,7 +256,7 @@ public class DomainObjectContainerDefault
     @Deprecated
     @Override
     public void resolve(final Object parent, final Object field) {
-        getPersistenceSessionService().resolve(unwrapped(parent), field);
+        persistenceSessionServiceInternal.resolve(unwrapped(parent), field);
     }
 
     /**
@@ -292,7 +290,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void commit() {
-        getPersistenceSessionService().commit();
+        persistenceSessionServiceInternal.commit();
     }
 
     //endregion
@@ -308,7 +306,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public String validate(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         final InteractionResult validityResult =
                 adapter.getSpecification().isValidResult(adapter, InteractionInitiatedBy.FRAMEWORK);
         return validityResult.getReason();
@@ -322,7 +320,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public boolean isViewModel(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         return adapter.getSpecification().isViewModel();
     }
     //endregion
@@ -333,7 +331,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
         return adapter.representsPersistent();
     }
 
@@ -343,7 +341,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void persist(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
@@ -355,7 +353,7 @@ public class DomainObjectContainerDefault
         if (isPersistent(domainObject)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
-        getPersistenceSessionService().makePersistent(adapter);
+        persistenceSessionServiceInternal.makePersistent(adapter);
     }
 
     /**
@@ -531,7 +529,7 @@ public class DomainObjectContainerDefault
         // NB: this impl does NOT delegate to RepositoryService, because this implementation incorrectly always performs a flush
         // irrespective of the autoflush setting.  (The RepositoryService corrects that error).
         flush(); // auto-flush any pending changes
-        final ObjectAdapter firstMatching = getPersistenceSessionService().firstMatchingQuery(query);
+        final ObjectAdapter firstMatching = persistenceSessionServiceInternal.firstMatchingQuery(query);
         return (T) ObjectAdapter.Util.unwrap(firstMatching);
     }
 
@@ -646,29 +644,6 @@ public class DomainObjectContainerDefault
     }
     //endregion
 
-    //region > framework dependencies
-
-    private AdapterManager adapterManager;
-
-
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
-
-    @Programmatic
-    @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
-
-    protected PersistenceSessionServiceInternal getPersistenceSessionService() {
-        return persistenceSessionServiceInternal;
-    }
-
-
-
-
-    //endregion
 
     //region > service dependencies
 

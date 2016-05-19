@@ -5,7 +5,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.profiles.Localization;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class LocalizationProviderInternalNoop extends LocalizationProviderInternalAbstract {
+public class LocalizationProviderInternalNoop implements LocalizationProviderInternal {
 
     private final Localization defaultLocalization = new LocalizationDefault();
 

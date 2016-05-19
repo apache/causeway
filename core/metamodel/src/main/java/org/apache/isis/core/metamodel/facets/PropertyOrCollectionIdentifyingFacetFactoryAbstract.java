@@ -21,14 +21,14 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         extends MethodPrefixBasedFacetFactoryAbstract
-        implements PropertyOrCollectionIdentifyingFacetFactory, AdapterManagerAware {
+        implements PropertyOrCollectionIdentifyingFacetFactory {
 
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
@@ -51,17 +51,14 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
     // //////////////////////////////////////
 
 
-    private AdapterManager adapterManager;
-
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
 
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
+    PersistenceSessionServiceInternal adapterManager;
 
 
 

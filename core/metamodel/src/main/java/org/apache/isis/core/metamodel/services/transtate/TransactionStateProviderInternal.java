@@ -24,9 +24,6 @@ import org.apache.isis.core.metamodel.transactions.TransactionState;
 
 public interface TransactionStateProviderInternal {
 
-    @Programmatic
-    void injectInto(final Object candidate);
-
     @Programmatic TransactionState getTransactionState();
 
 }

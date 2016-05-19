@@ -53,7 +53,6 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -77,7 +76,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     private final ProxyContextHandler proxy;
@@ -123,7 +121,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ExecutionMode mode,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
             final PersistenceSessionServiceInternal persistenceSessionServiceInternal,
             final ProxyContextHandler proxy) {
         super(delegate, wrapperFactory, mode);
@@ -131,9 +128,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         this.proxy = proxy;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
         this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
         this.executionMode = mode;
+
 
         try {
             titleMethod = delegate.getClass().getMethod("title", new Class[]{});
@@ -651,7 +648,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private ObjectAdapter adapterFor(final Object obj) {
-        return obj != null ? getAdapterManager().adapterFor(obj) : null;
+        return obj != null ? getPersistenceSessionService().adapterFor(obj) : null;
     }
 
     private Object underlying(final Object arg) {
@@ -791,10 +788,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     protected AuthenticationSession getAuthenticationSession() {
         return getAuthenticationSessionProvider().getAuthenticationSession();
-    }
-
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
     }
 
     protected PersistenceSessionServiceInternal getPersistenceSessionService() {

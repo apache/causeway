@@ -42,8 +42,6 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -89,16 +87,16 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
-import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, MetaModelValidatorRefiner,
-        TransactionStateProviderAware {
+public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
+            implements MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
     private final MetaModelValidatorForDeprecatedAnnotation actionInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionInteraction.class);
@@ -114,8 +112,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     private final MetaModelValidatorForDeprecatedAnnotation prototypeValidator = new MetaModelValidatorForDeprecatedAnnotation(Prototype.class);
 
 
-    private AdapterManager adapterManager;
-    private TransactionStateProviderInternal transactionStateProviderInternal;
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
@@ -215,7 +211,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
                                 getDeploymentCategory(), getConfiguration(), servicesInjector,
-                                getAuthenticationSessionProvider(), getAdapterManager(),
+                                getAuthenticationSessionProvider(), adapterManager,
                                 transactionStateProviderInternal
                         ), processMethodContext);
             } else
@@ -225,7 +221,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                                 getDeploymentCategory(), getConfiguration(), servicesInjector,
-                                getAuthenticationSessionProvider(), getAdapterManager(),
+                                getAuthenticationSessionProvider(), adapterManager,
                                 transactionStateProviderInternal
                         ), processMethodContext);
             } else
@@ -233,17 +229,18 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), getConfiguration(), servicesInjector,
-                        getAuthenticationSessionProvider(),
-                        getAdapterManager(), transactionStateProviderInternal
+                        getDeploymentCategory(), getConfiguration(),
+                        servicesInjector, getAuthenticationSessionProvider(),
+                        adapterManager, transactionStateProviderInternal
                 );
             } else
             // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), getConfiguration(), servicesInjector, getAuthenticationSessionProvider(),
-                        getAdapterManager(), transactionStateProviderInternal
+                        getDeploymentCategory(), getConfiguration(),
+                        servicesInjector, getAuthenticationSessionProvider(),
+                        adapterManager, transactionStateProviderInternal
                 );
             }
             FacetUtil.addFacet(actionInvocationFacet);
@@ -559,20 +556,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
         prototypeValidator.setConfiguration(configuration);
+
+        this.transactionStateProviderInternal =
+                servicesInjector.lookupService(TransactionStateProviderInternal.class);
+
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
 
-    @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
-    }
+    private TransactionStateProviderInternal transactionStateProviderInternal;
+    PersistenceSessionServiceInternal adapterManager;
 
-    private AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
-
-    @Override
-    public void setTransactionStateProvider(final TransactionStateProviderInternal transactionStateProviderInternal) {
-        this.transactionStateProviderInternal = transactionStateProviderInternal;
-    }
 }

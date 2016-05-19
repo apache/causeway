@@ -29,8 +29,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -40,16 +38,17 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware, MetaModelValidatorRefiner {
+public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private static final String TITLE_METHOD_NAME = "title";
 
-    private AdapterManager adapterManager;
 
     public TitleAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -142,11 +141,6 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     }
 
 
-    @Override
-    public void setAdapterManager(final AdapterManager adapterMap) {
-        this.adapterManager = adapterMap;
-    }
-
     /**
      * Violation if there is a class that has both a <tt>title()</tt> method and also any non-inherited method 
      * annotated with <tt>@Title</tt>.
@@ -194,4 +188,14 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
 
         }));
     }
+
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+    }
+
+    PersistenceSessionServiceInternal adapterManager;
+
 }

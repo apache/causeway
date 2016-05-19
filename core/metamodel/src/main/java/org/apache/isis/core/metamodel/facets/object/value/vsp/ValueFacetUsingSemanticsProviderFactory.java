@@ -19,15 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements AdapterManagerAware {
+public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract  {
 
-    private AdapterManager adapterManager;
 
     /**
      * Lazily created.
@@ -48,7 +47,6 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
     // ////////////////////////////////////////////////////
 
 
-
     public ValueSemanticsProviderContext getContext() {
         if (context == null) {
             context = new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), adapterManager, servicesInjector);
@@ -56,10 +54,13 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
         return context;
     }
 
+
     @Override
-    public void setAdapterManager(final AdapterManager adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
+    PersistenceSessionServiceInternal adapterManager;
 
 }

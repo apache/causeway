@@ -25,9 +25,6 @@ import org.apache.isis.applib.profiles.Localization;
 public interface LocalizationProviderInternal {
 
     @Programmatic
-    void injectInto(final Object candidate);
-
-    @Programmatic
     Localization getLocalization();
 
 }
