@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -69,22 +70,19 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
     private final ServiceInstantiator serviceInstantiator;
 
-    public ServicesInstallerFromConfiguration() {
-        this(new ServiceInstantiator());
+    public ServicesInstallerFromConfiguration(final IsisConfigurationDefault isisConfiguration) {
+        this(new ServiceInstantiator(), isisConfiguration);
     }
 
-    ServicesInstallerFromConfiguration(final ServiceInstantiator serviceInstantiator) {
-        super(NAME);
+    ServicesInstallerFromConfiguration(
+            final ServiceInstantiator serviceInstantiator,
+            final IsisConfigurationDefault isisConfiguration) {
+        super(NAME, isisConfiguration);
         this.serviceInstantiator = serviceInstantiator;
     }
 
     // //////////////////////////////////////
 
-
-    @Override
-    public void setIgnoreFailures(boolean ignoreFailures) {
-        // no-op
-    }
 
     public void init() {
         initIfRequired();

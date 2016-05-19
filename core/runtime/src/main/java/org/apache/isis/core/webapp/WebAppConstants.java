@@ -21,7 +21,6 @@ package org.apache.isis.core.webapp;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 
@@ -33,18 +32,16 @@ public final class WebAppConstants {
      */
     public static final String DEPLOYMENT_TYPE_KEY = "deploymentType";
     /**
-     * Deployment type to use if there is none {@link DEPLOYMENT_TYPE_KEY
-     * specified}.
+     * Deployment type to use if there is none {@link #DEPLOYMENT_TYPE_KEY specified}.
      */
     public static final String DEPLOYMENT_TYPE_DEFAULT = DeploymentType.SERVER.name();
 
     /**
-     * Key under which the list of {@link IsisConfigurationBuilderPrimer}s is
-     * bound as a servlet context attribute (
-     * <tt>ServletContext#getAttribute(String)</tt>); used to pass from the
-     * <tt>webserver</tt> module to this.
+     * Key under which the {@link org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder} is
+     * bound as a servlet context attribute (<tt>ServletContext#getAttribute(String)</tt>); used to pass
+     * from the <tt>webserver</tt> module to this.
      */
-    public static final String CONFIGURATION_PRIMERS_KEY = "isis.configurationPrimers";
+    public static final String CONFIGURATION_BUILDER_KEY = "isis.configurationBuilder";
 
     /**
      * Key under which the {@link IsisSystem} is bound as a servlet context

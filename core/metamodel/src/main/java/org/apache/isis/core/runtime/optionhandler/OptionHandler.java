@@ -22,11 +22,14 @@ package org.apache.isis.core.runtime.optionhandler;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 
-public interface OptionHandler extends IsisConfigurationBuilderPrimer {
+public interface OptionHandler  {
 
-    public void addOption(Options options);
+    void addOption(Options options);
 
-    public boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options);
+    boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options);
+
+    void prime(IsisConfigurationBuilder isisConfigurationBuilder);
+
 }

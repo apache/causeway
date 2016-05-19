@@ -19,13 +19,16 @@
 
 package org.apache.isis.core.runtime.authentication;
 
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
 
 public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime extends AuthenticationManagerStandardInstallerAbstract {
 
-    public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(final String name) {
-        super(name);
+    public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(
+            final String name,
+            final IsisConfigurationDefault isisConfiguration) {
+        super(name, isisConfiguration);
     }
 
     @Override

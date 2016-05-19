@@ -28,8 +28,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesInstallerAbstract  {
@@ -43,33 +42,21 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesIns
     private final ServicesInstallerFromAnnotation servicesInstallerFromAnnotation;
 
 
-    public ServicesInstallerFromConfigurationAndAnnotation() {
-        this(new ServiceInstantiator());
+    public ServicesInstallerFromConfigurationAndAnnotation(final IsisConfigurationDefault isisConfiguration) {
+        this(new ServiceInstantiator(), isisConfiguration);
     }
 
-    public ServicesInstallerFromConfigurationAndAnnotation(final ServiceInstantiator serviceInstantiator) {
-        super(NAME);
+    public ServicesInstallerFromConfigurationAndAnnotation(
+            final ServiceInstantiator serviceInstantiator,
+            final IsisConfigurationDefault isisConfiguration) {
+        super(NAME, isisConfiguration);
 
         this.serviceInstantiator = serviceInstantiator;
-        servicesInstallerFromConfiguration = new ServicesInstallerFromConfiguration(serviceInstantiator);
-        servicesInstallerFromAnnotation = new ServicesInstallerFromAnnotation(serviceInstantiator);
+        servicesInstallerFromConfiguration = new ServicesInstallerFromConfiguration(serviceInstantiator,
+                isisConfiguration);
+        servicesInstallerFromAnnotation = new ServicesInstallerFromAnnotation(serviceInstantiator, isisConfiguration);
     }
 
-    public void setIgnoreFailures(boolean ignoreFailures) {
-        this.serviceInstantiator.setIgnoreFailures(ignoreFailures);
-    }
-
-    @Override
-    public void setConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
-        servicesInstallerFromConfiguration.setConfigurationBuilder(isisConfigurationBuilder);
-        servicesInstallerFromAnnotation.setConfigurationBuilder(isisConfigurationBuilder);
-    }
-
-    @Override
-    public void setConfiguration(IsisConfiguration configuration) {
-        servicesInstallerFromConfiguration.setConfiguration(configuration);
-        servicesInstallerFromAnnotation.setConfiguration(configuration);
-    }
 
     public void init() {
         servicesInstallerFromConfiguration.init();

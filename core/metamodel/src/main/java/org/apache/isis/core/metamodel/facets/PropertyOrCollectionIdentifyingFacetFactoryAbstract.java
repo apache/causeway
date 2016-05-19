@@ -65,21 +65,7 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         this.adapterManager = adapterManager;
     }
 
-    // //////////////////////////////////////
 
-    private IsisConfiguration configuration;
-
-    protected IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
-    }
 
 
 }

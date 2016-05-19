@@ -32,9 +32,7 @@ public interface ServicesInstaller extends Installer {
      * distinguish from the '--services' flag meaning a particular set of
      * services to use (whereas this flag means how to locate them).
      */
-    static String TYPE = "services-installer";
+    String TYPE = "services-installer";
 
     List<Object> getServices();
-
-    void setIgnoreFailures(boolean ignoreFailures);
 }

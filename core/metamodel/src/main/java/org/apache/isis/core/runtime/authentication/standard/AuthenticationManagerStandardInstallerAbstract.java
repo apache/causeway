@@ -21,21 +21,23 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.components.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 
 public abstract class AuthenticationManagerStandardInstallerAbstract extends InstallerAbstract implements AuthenticationManagerInstaller {
 
-    public AuthenticationManagerStandardInstallerAbstract(final String name) {
-        super(AuthenticationManagerInstaller.TYPE, name);
+    public AuthenticationManagerStandardInstallerAbstract(
+            final String name,
+            final IsisConfigurationDefault isisConfiguration) {
+        super(AuthenticationManagerInstaller.TYPE, name, isisConfiguration);
     }
 
     @Override
     public final AuthenticationManager createAuthenticationManager() {
         final AuthenticationManagerStandard authenticationManager = createAuthenticationManagerStandard();
-        for (final Authenticator authenticator : createAuthenticators(getConfiguration())) {
+        for (final Authenticator authenticator : createAuthenticators()) {
             authenticationManager.addAuthenticator(authenticator);
         }
         return authenticationManager;
@@ -50,7 +52,7 @@ public abstract class AuthenticationManagerStandardInstallerAbstract extends Ins
      * 
      * @return
      */
-    protected abstract List<Authenticator> createAuthenticators(final IsisConfiguration configuration);
+    protected abstract List<Authenticator> createAuthenticators();
 
     @Override
     public List<Class<?>> getTypes() {

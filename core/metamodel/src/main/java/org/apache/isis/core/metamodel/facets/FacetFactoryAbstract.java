@@ -24,9 +24,12 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -80,13 +83,15 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
         return servicesInjector.lookupService(AuthenticationSessionProvider.class);
     }
 
-
-
     protected DeploymentCategory getDeploymentCategory() {
         return servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
     }
 
-
+    protected IsisConfiguration getConfiguration() {
+        final ConfigurationServiceInternal configurationServiceInternal = servicesInjector
+                .lookupService(ConfigurationServiceInternal.class);
+        return (IsisConfigurationDefault)configurationServiceInternal;
+    }
 
     protected ServicesInjector servicesInjector;
 

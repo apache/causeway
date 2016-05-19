@@ -19,5 +19,10 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+
 public class JavaReflectorInstaller extends JavaReflectorInstallerNoDecorators {
+    public JavaReflectorInstaller(final IsisConfigurationDefault isisConfiguration) {
+        super(isisConfiguration);
+    }
 }

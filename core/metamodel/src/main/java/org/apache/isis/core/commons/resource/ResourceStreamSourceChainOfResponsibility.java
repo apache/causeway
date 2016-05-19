@@ -40,6 +40,9 @@ public class ResourceStreamSourceChainOfResponsibility extends ResourceStreamSou
     }
 
     public void addResourceStreamSource(final ResourceStreamSource rss) {
+        if(rss == null) {
+            return;
+        }
         this.resourceStreamSources.add(rss);
     }
 

@@ -23,8 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.components.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -34,14 +33,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
- * <ul>
- * <li><tt>persistor_datanucleus.properties</tt>
- * <li><tt>persistor.properties</tt>
- * <li><tt>isis.properties</tt>
- * </ul>
- * 
- * <p>
  * With respect to configuration, all properties under {@value #DATANUCLEUS_CONFIG_PREFIX} prefix are passed
  * through verbatim to the DataNucleus runtime. For example:
  * <table>
@@ -59,18 +50,25 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 
+    /**
+     * @deprecated - this will be ignored...
+     */
+    @Deprecated
     public DataNucleusPersistenceMechanismInstaller() {
-        super(PersistenceMechanismInstaller.TYPE, NAME);
+        super(PersistenceMechanismInstaller.TYPE, NAME, null);
+    }
+
+    public DataNucleusPersistenceMechanismInstaller(final IsisConfigurationDefault isisConfiguration) {
+        super(PersistenceMechanismInstaller.TYPE, NAME, isisConfiguration);
     }
 
     //region > createPersistenceSessionFactory
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final IsisConfigurationDefault configuration,
             final ServicesInjectorSpi servicesInjector) {
 
-        return new PersistenceSessionFactory(deploymentType, configuration);
+        return new PersistenceSessionFactory(deploymentType, getConfiguration());
     }
     //endregion
 

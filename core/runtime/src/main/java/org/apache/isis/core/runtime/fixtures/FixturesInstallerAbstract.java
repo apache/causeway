@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.components.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 
 public abstract class FixturesInstallerAbstract extends InstallerAbstract implements FixturesInstaller {
 
@@ -31,8 +32,8 @@ public abstract class FixturesInstallerAbstract extends InstallerAbstract implem
 
     private LogonFixture logonFixture;
 
-    public FixturesInstallerAbstract(final String name) {
-        super(FixturesInstaller.TYPE, name);
+    public FixturesInstallerAbstract(final String name, final IsisConfigurationDefault isisConfiguration) {
+        super(FixturesInstaller.TYPE, name, isisConfiguration);
     }
 
     @Override

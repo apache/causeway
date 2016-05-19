@@ -458,10 +458,6 @@ public class IsisConfigurationDefault implements IsisConfiguration, Configuratio
     // ////////////////////////////////////////////////////////////////////
 
     @Override
-    public void injectInto(final Object candidate) {
-    }
-
-    @Override
     public Map<String,String> asMap() {
         final Map<String, String> map = Maps.newHashMap();
         for(String propertyName: this) {

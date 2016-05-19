@@ -240,7 +240,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     Joiner.on(",").join(packagePrefixes)
             );
 
-            final ServicesInstaller installer = new ServicesInstallerFromConfigurationAndAnnotation();
+            final ServicesInstaller installer = new ServicesInstallerFromConfigurationAndAnnotation(configuration);
 
             //installer.setConfiguration(configuration);
 

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.fixtures.domainservice.ObjectLoaderFixture;
@@ -41,8 +42,8 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     private static final String EXPLORATION_OBJECTS = ConfigurationConstants.ROOT + "exploration-objects";
 
-    public FixturesInstallerFromConfiguration() {
-        super("configuration");
+    public FixturesInstallerFromConfiguration(final IsisConfigurationDefault isisConfiguration) {
+        super("configuration", isisConfiguration);
     }
 
     @Override
@@ -65,9 +66,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
             if (!fixtureLoaded) {
                 LOG.debug("No fixtures loaded from configuration");
             }
-        } catch (final IllegalArgumentException e) {
-            throw new IsisException(e);
-        } catch (final SecurityException e) {
+        } catch (final IllegalArgumentException | SecurityException e) {
             throw new IsisException(e);
         }
     }

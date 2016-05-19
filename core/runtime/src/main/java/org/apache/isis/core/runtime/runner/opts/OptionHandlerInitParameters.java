@@ -27,7 +27,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 
@@ -55,7 +55,7 @@ public class OptionHandlerInitParameters extends OptionHandlerAbstract {
     }
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         Map<String,String> additionalProperties = asMap(servletContext);
         LOG.info("priming configuration builder: " + additionalProperties.size() + " properties to prime");
         addConfigurationProperties(isisConfigurationBuilder, additionalProperties);

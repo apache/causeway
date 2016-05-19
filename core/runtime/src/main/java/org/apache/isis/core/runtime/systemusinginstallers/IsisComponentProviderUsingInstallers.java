@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -130,6 +129,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         // eagerly calculate
         authenticationManager = authenticationInstaller.createAuthenticationManager();
         authorizationManager = authorizationInstaller.createAuthorizationManager();
+
         services = servicesInstaller.getServices();
 
         ensureInitialized();
@@ -174,7 +174,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
             final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
         return persistenceMechanismInstaller.createPersistenceSessionFactory(
-                    deploymentType, getConfiguration(),
+                    deploymentType,
                 servicesInjector);
     }
 

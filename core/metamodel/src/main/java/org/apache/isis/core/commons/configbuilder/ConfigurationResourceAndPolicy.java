@@ -16,11 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.commons.configbuilder;
 
-package org.apache.isis.core.commons.config;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 
-public interface IsisConfigurationBuilderPrimer {
+class ConfigurationResourceAndPolicy {
 
-    void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder);
+    private final String configurationResource;
+    private final NotFoundPolicy notFoundPolicy;
 
+    public ConfigurationResourceAndPolicy(
+            final String configurationResource,
+            final NotFoundPolicy notFoundPolicy) {
+        this.configurationResource = configurationResource;
+        this.notFoundPolicy = notFoundPolicy;
+    }
+
+    public String getConfigurationResource() {
+        return configurationResource;
+    }
+    public NotFoundPolicy getNotFoundPolicy() {
+        return notFoundPolicy;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s{%s}", configurationResource, notFoundPolicy);
+    }
 }

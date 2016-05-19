@@ -26,7 +26,7 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
@@ -34,8 +34,6 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 
 import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
 import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
 
 public class OptionHandlerAppManifest extends OptionHandlerAbstract {
 
@@ -64,7 +62,7 @@ public class OptionHandlerAppManifest extends OptionHandlerAbstract {
     }
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         if (appManifestClassName == null) {
             return;
         }

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.security.shiro.authorization;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor;
@@ -27,13 +27,13 @@ public class ShiroAuthorizationManagerInstaller extends AuthorizationManagerStan
 
     public static String NAME = "shiro";
 
-    public ShiroAuthorizationManagerInstaller() {
-        super(NAME);
+    public ShiroAuthorizationManagerInstaller(final IsisConfigurationDefault isisConfiguration) {
+        super(NAME, isisConfiguration);
     }
 
     @Override
-    protected Authorizor createAuthorizor(final IsisConfiguration configuration) {
-        return new ShiroAuthenticatorOrAuthorizor(configuration);
+    protected Authorizor createAuthorizor() {
+        return new ShiroAuthenticatorOrAuthorizor(getConfiguration());
     }
 
 }

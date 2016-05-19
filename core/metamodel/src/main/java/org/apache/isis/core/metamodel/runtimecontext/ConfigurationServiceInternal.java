@@ -22,8 +22,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public interface ConfigurationServiceInternal {
 
-    void injectInto(final Object candidate);
-
     /**
      * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
      * {@link IsisConfiguration}.

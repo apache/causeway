@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -133,7 +132,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     private Map<Pattern, String> getFaIconByPattern() {
         if (faIconByPattern == null) {
             // build lazily
-            final String cssClassFaPatterns = configuration.getString("isis.reflector.facet.cssClassFa.patterns");
+            final String cssClassFaPatterns = getConfiguration().getString("isis.reflector.facet.cssClassFa.patterns");
             this.faIconByPattern = buildFaIconByPattern(cssClassFaPatterns);
         }
         return faIconByPattern;
@@ -172,14 +171,11 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         metaModelValidator.add(validator);
     }
 
-    private IsisConfiguration configuration;
 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
+        final IsisConfiguration configuration = getConfiguration();
         validator.setConfiguration(configuration);
     }
 

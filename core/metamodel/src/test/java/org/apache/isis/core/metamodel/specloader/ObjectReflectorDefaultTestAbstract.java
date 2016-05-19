@@ -78,9 +78,6 @@ public abstract class ObjectReflectorDefaultTestAbstract {
 
         context.checking(new Expectations() {
             {
-                allowing(mockConfiguration).injectInto(with(anything()));
-                will(InjectIntoJMockAction.injectInto());
-                
                 ignoring(mockConfiguration);
             }
         });

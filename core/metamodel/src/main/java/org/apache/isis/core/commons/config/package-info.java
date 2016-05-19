@@ -32,7 +32,7 @@
  * 
  * <p>
  * The {@link org.apache.isis.core.commons.config.ConfigurationBuilder} is used
- * by {@link org.apache.isis.core.commons.config.InstallerAbstract}, an
+ * by {@link org.apache.isis.core.commons.components.InstallerAbstract}, an
  * implementation of {@link org.apache.isis.core.commons.components.Installer} 
  * that allows the configuration to be added to as each component is
  * installed. 

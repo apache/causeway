@@ -34,10 +34,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
@@ -58,10 +56,6 @@ import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * The installers correspond more-or-less to the configurable top-level
@@ -110,7 +104,7 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
                     continue;
                 }
                 try {
-                    final Installer object = (Installer) InstanceUtil.createInstance(className);
+                    final Installer object = (Installer) InstanceUtil.createInstance(className, isisConfiguration);
                     LOG.debug("created component installer: " + object.getName() + " - " + className);
                     installerList.add(object);
                 } catch (final UnavailableClassException e) {

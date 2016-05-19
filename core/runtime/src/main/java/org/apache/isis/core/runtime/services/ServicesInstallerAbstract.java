@@ -19,13 +19,15 @@
 
 package org.apache.isis.core.runtime.services;
 
-import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.components.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 
 public abstract class ServicesInstallerAbstract extends InstallerAbstract implements ServicesInstaller {
 
-    public ServicesInstallerAbstract(final String name) {
-        super(ServicesInstaller.TYPE, name);
+    public ServicesInstallerAbstract(
+            final String name,
+            final IsisConfigurationDefault isisConfiguration) {
+        super(ServicesInstaller.TYPE, name, isisConfiguration);
     }
-
 
 }

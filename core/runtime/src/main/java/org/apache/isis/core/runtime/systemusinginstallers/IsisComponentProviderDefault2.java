@@ -95,7 +95,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
         }
 
         putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
-        this.fixturesInstaller = createFixturesInstaller(configuration);
+        this.fixturesInstaller = new FixturesInstallerFromConfiguration(configuration);
 
         // integration tests ignore appManifest for authentication and authorization.
         this.authenticationManager = createAuthenticationManager(configuration);
@@ -110,10 +110,9 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
 
     //region > appManifest
 
-    private List<Object> createServices(final IsisConfiguration configuration) {
+    private List<Object> createServices(final IsisConfigurationDefault configuration) {
         final ServicesInstallerFromConfigurationAndAnnotation servicesInstaller =
-                new ServicesInstallerFromConfigurationAndAnnotation();
-        servicesInstaller.setConfiguration(configuration);
+                new ServicesInstallerFromConfigurationAndAnnotation(configuration);
         return servicesInstaller.getServices();
     }
 
@@ -121,7 +120,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     @Override
     protected void doPutConfigurationProperty(final String key, final String value) {
         // bit hacky :-(
-        IsisConfigurationDefault configurationDefault = (IsisConfigurationDefault) this.configuration;
+        IsisConfigurationDefault configurationDefault = this.configuration;
         configurationDefault.put(key, value);
     }
 
@@ -139,16 +138,15 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
 
     private static List<Object> elseDefault(
             final List<Object> servicesOverride,
-            final IsisConfiguration configuration) {
+            final IsisConfigurationDefault configuration) {
         return servicesOverride != null
                 ? servicesOverride
                 : createDefaultServices(configuration);
     }
 
     private static List<Object> createDefaultServices(
-            final IsisConfiguration configuration) {
-        final ServicesInstallerFromConfiguration servicesInstaller = new ServicesInstallerFromConfiguration();
-        servicesInstaller.setConfiguration(configuration);
+            final IsisConfigurationDefault configuration) {
+        final ServicesInstallerFromConfiguration servicesInstaller = new ServicesInstallerFromConfiguration( configuration);
         return servicesInstaller.getServices();
     }
 
@@ -172,12 +170,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
         return metaModelValidator != null
                 ? metaModelValidator
                 : new MetaModelValidatorDefault();
-    }
-
-    private static FixturesInstaller createFixturesInstaller(final IsisConfiguration configuration) {
-        final FixturesInstallerFromConfiguration fixturesInstallerFromConfiguration = new FixturesInstallerFromConfiguration();
-        fixturesInstallerFromConfiguration.setConfiguration(configuration);
-        return fixturesInstallerFromConfiguration;
     }
 
     /**
@@ -268,9 +260,9 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
             final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
         DataNucleusPersistenceMechanismInstaller installer =
-                new DataNucleusPersistenceMechanismInstaller();
+                new DataNucleusPersistenceMechanismInstaller(configuration);
         return installer.createPersistenceSessionFactory(
-                deploymentType, configuration, servicesInjector
+                deploymentType, servicesInjector
         );
     }
 

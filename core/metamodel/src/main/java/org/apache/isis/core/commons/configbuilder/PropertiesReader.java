@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.config;
+package org.apache.isis.core.commons.configbuilder;
 
 import java.io.IOException;
 import java.io.InputStream;

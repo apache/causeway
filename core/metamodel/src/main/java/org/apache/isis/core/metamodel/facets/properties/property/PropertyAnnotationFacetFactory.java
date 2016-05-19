@@ -104,8 +104,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
 
-    private IsisConfiguration configuration;
-
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
@@ -179,7 +177,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 PropertyDomainEvent.Noop.class,
                 PropertyDomainEvent.Default.class,
                 "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(propertyDomainEventFacet);
         }
 
@@ -302,7 +300,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(property, configuration, holder);
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(property, getConfiguration(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -325,7 +323,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for @Property(publishing=...)
         final PublishedPropertyFacet facet = PublishedPropertyFacetForPropertyAnnotation
-                .create(property, configuration, holder);
+                .create(property, getConfiguration(), holder);
 
         FacetUtil.addFacet(facet);
     }

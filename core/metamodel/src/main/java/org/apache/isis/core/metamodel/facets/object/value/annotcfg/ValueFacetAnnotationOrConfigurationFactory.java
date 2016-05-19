@@ -24,7 +24,6 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -42,8 +41,6 @@ import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**
  * Processes the {@link Value} annotation.
@@ -73,7 +70,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  */
 public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
-    private IsisConfiguration configuration;
     private AdapterManager adapterManager;
 
     public ValueFacetAnnotationOrConfigurationFactory() {
@@ -93,16 +89,16 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         // create from annotation, if present
         final Value annotation = Annotations.getAnnotation(cls, Value.class);
         if (annotation != null) {
-            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
+            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, configuration);
+        final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, getConfiguration());
         if (!Strings.isNullOrEmpty(semanticsProviderName)) {
-            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
+            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;
             }
@@ -119,20 +115,6 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     // ////////////////////////////////////////////////////////////////////
     // Injected
     // ////////////////////////////////////////////////////////////////////
-
-    public IsisConfiguration getIsisConfiguration() {
-        return configuration;
-    }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
-    }
-
 
 
     public AdapterManager getAdapterManager() {

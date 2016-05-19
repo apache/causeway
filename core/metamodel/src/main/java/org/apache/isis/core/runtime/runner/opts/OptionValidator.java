@@ -17,9 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.config;
+package org.apache.isis.core.runtime.runner.opts;
 
-public interface IsisConfigurationBuilderAware {
+import com.google.common.base.Optional;
 
-    void setConfigurationBuilder(IsisConfigurationBuilder configurationLoader);
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
+public interface OptionValidator {
+    Optional<String> validate(final DeploymentCategory deploymentCategory);
 }

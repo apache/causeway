@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.runner.opts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
@@ -36,7 +36,7 @@ public abstract class OptionHandlerFixtureAbstract extends OptionHandlerAbstract
     protected String fixtureClassName;
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         if (fixtureClassName == null) {
             return;
         }

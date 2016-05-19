@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,12 +29,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
 
-    private IsisConfiguration configuration;
 
     public DefaultedFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -51,14 +47,14 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
         // create from annotation, if present
         if (annotation != null) {
-            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, servicesInjector);
+            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getConfiguration(), holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls, getIsisConfiguration());
+        final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls, getConfiguration());
         if (!Strings.isNullOrEmpty(providerName)) {
             final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, servicesInjector);
             if (facet.isValid()) {
@@ -68,24 +64,6 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
         return null;
     }
-
-    // ////////////////////////////////////////////////////////////////////
-    // Injected
-    // ////////////////////////////////////////////////////////////////////
-
-    public IsisConfiguration getIsisConfiguration() {
-        return configuration;
-    }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
-    }
-
 
 
 }

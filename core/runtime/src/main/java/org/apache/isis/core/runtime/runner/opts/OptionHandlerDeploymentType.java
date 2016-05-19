@@ -19,21 +19,21 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
+
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_OPT;
 
 public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract {
 
@@ -79,7 +79,7 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
     }
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         final String type = deploymentType.nameLowerCase();
         isisConfigurationBuilder.addConfigurationResource(type + ".properties", NotFoundPolicy.CONTINUE);
 

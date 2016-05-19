@@ -30,15 +30,12 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 
 public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
-    private IsisConfiguration configuration;
 
     public ViewModelSemanticCheckingFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -50,7 +47,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
     public void process(final ProcessClassContext processClassContext) {
 
         // disable by default
-        final boolean enable = configuration.getBoolean(
+        final boolean enable = getConfiguration().getBoolean(
                                     "isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", false);
         if(!enable) {
             return;
@@ -176,15 +173,6 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(validator);
-    }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
     }
 
 

@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
 public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware {
 
-    private IsisConfiguration configuration;
     private AdapterManager adapterManager;
 
     /**
@@ -53,9 +52,6 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
     // ////////////////////////////////////////////////////
 
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
 
     public ValueSemanticsProviderContext getContext() {
         if (context == null) {
@@ -63,16 +59,6 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
         }
         return context;
     }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
-    }
-
 
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {

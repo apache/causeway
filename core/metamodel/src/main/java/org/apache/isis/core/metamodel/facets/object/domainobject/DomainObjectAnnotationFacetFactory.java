@@ -81,7 +81,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -109,7 +108,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
 
 
-    private IsisConfiguration configuration;
     private AdapterManager adapterManager;
     private PersistenceSessionService persistenceSessionService;
 
@@ -157,7 +155,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         // else check for @DomainObject(auditing=....)
         if(auditableFacet == null) {
-            auditableFacet = AuditableFacetForDomainObjectAnnotation.create(domainObject, configuration, holder);
+            auditableFacet = AuditableFacetForDomainObjectAnnotation.create(domainObject, getConfiguration(), holder);
         }
 
         // then add
@@ -190,7 +188,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         // else check from @DomainObject(publishing=...)
         if(publishedObjectFacet == null) {
             publishedObjectFacet=
-                    PublishedObjectFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder);
+                    PublishedObjectFacetForDomainObjectAnnotation.create(domainObject, getConfiguration(), facetHolder);
         }
 
         // then add
@@ -258,7 +256,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         // else check from @DomainObject(editing=...)
         if(facet == null) {
-            facet = ImmutableFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder);
+            facet = ImmutableFacetForDomainObjectAnnotation.create(domainObject, getConfiguration(), facetHolder);
         }
 
         // then add
@@ -339,7 +337,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectCreatedEvent.Noop.class,
                 ObjectCreatedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -356,7 +354,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectLoadedEvent.Noop.class,
                 ObjectLoadedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -373,7 +371,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectPersistingEvent.Noop.class,
                 ObjectPersistingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -390,7 +388,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectPersistedEvent.Noop.class,
                 ObjectPersistedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -407,7 +405,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectRemovingEvent.Noop.class,
                 ObjectRemovingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -424,7 +422,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectUpdatedEvent.Noop.class,
                 ObjectUpdatedEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -441,7 +439,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectUpdatingEvent.Noop.class,
                 ObjectUpdatingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
-                this.configuration)) {
+                getConfiguration())) {
             FacetUtil.addFacet(facet);
         }
     }
@@ -496,9 +494,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
+        IsisConfiguration configuration = getConfiguration();
 
         publishedObjectValidator.setConfiguration(configuration);
         auditedValidator.setConfiguration(configuration);

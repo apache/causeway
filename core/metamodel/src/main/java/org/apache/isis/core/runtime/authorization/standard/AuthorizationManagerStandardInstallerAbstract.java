@@ -21,31 +21,33 @@ package org.apache.isis.core.runtime.authorization.standard;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.components.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 
-public abstract class AuthorizationManagerStandardInstallerAbstract extends InstallerAbstract implements AuthorizationManagerInstaller {
+public abstract class AuthorizationManagerStandardInstallerAbstract
+        extends InstallerAbstract
+        implements AuthorizationManagerInstaller {
 
-    public AuthorizationManagerStandardInstallerAbstract(final String name) {
-        super(AuthorizationManagerInstaller.TYPE, name);
+    public AuthorizationManagerStandardInstallerAbstract(
+            final String name,
+            final IsisConfigurationDefault isisConfiguration) {
+        super(AuthorizationManagerInstaller.TYPE, name, isisConfiguration);
     }
 
     @Override
     public AuthorizationManager createAuthorizationManager() {
         final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard(getConfiguration());
-        final Authorizor authorizor = createAuthorizor(getConfiguration());
+        final Authorizor authorizor = createAuthorizor();
         authorizationManager.setAuthorizor(authorizor);
         return authorizationManager;
     }
 
     /**
      * Hook method
-     * 
-     * @return
      */
-    protected abstract Authorizor createAuthorizor(final IsisConfiguration configuration);
+    protected abstract Authorizor createAuthorizor();
 
     @Override
     public List<Class<?>> getTypes() {

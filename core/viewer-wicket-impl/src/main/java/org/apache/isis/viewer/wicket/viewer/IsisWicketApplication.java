@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -61,25 +59,17 @@ import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
+import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -245,15 +235,17 @@ public class IsisWicketApplication
 
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
-            determineDeploymentTypeIfRequired();
+            final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
+            isisConfigurationBuilder.addDefaultConfigurationResources();
+
+            final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
+
+            deploymentType = determineDeploymentType(configuration.getString("isis.deploymentType"));
 
             RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
             IRequestCycleListener requestCycleListenerForIsis = newWebRequestCycleForIsis();
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
-
-            final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-            final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
             final IsisInjectModule isisModule = newIsisModule(deploymentType, configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
@@ -397,8 +389,9 @@ public class IsisWicketApplication
 
         determiningDeploymentType = true;
         try {
-            final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-            final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+            final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
+
+            final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration();
             String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
             deploymentType = determineDeploymentType(deploymentTypeFromConfig);
         } finally {
@@ -428,49 +421,12 @@ public class IsisWicketApplication
 
     // //////////////////////////////////////
 
-    private IsisConfigurationBuilder createConfigBuilder() {
-        return createConfigBuilder(getServletContext());
-    }
+    private IsisConfigurationBuilder isisConfigurationBuilder;
 
-    protected IsisConfigurationBuilder createConfigBuilder(final ServletContext servletContext) {
-
-        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
-        final ResourceStreamSourceForWebInf rssWebInf = new ResourceStreamSourceForWebInf(servletContext);
-        final ResourceStreamSourceContextLoaderClassPath rssContextLoaderClassPath = ResourceStreamSourceContextLoaderClassPath.create();
-        final ResourceStreamSourceCurrentClassClassPath rssCurrentClassPath = new ResourceStreamSourceCurrentClassClassPath();
-        final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(rssWebInf, rssContextLoaderClassPath, rssCurrentClassPath);
-
-        if ( configLocation != null ) {
-            LOG.info( "Config override location: " + configLocation );
-            compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
-        } else {
-            LOG.info( "Config override location: No override location configured!" );
-        }
-
-        final IsisConfigurationBuilder configurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
-
-        primeConfigurationBuilder(configurationBuilder, servletContext);
-        configurationBuilder.addDefaultConfigurationResources();
-
-        return configurationBuilder;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        LOG.info("loading properties from option handlers");
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = Lists.newArrayList();
-        final List<IsisConfigurationBuilderPrimer> primers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
-        if(primers != null) {
-            isisConfigurationBuilderPrimers.addAll(primers);
-        }
-        // also support loading from init parameters (specifically, to support simplericity's jetty-console)
-        isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
-        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
-            }
-            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
-        }
+    protected IsisConfigurationBuilder obtainConfigBuilder() {
+        return isisConfigurationBuilder != null
+                    ? isisConfigurationBuilder
+                    : (isisConfigurationBuilder = IsisWebAppBootstrapper.obtainConfigBuilderFrom(getServletContext()));
     }
 
     // //////////////////////////////////////
@@ -693,7 +649,9 @@ public class IsisWicketApplication
         return deploymentType.getConfigurationType();
     }
     
-    protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationDefault isisConfiguration) {
+    protected IsisInjectModule newIsisModule(
+            final DeploymentType deploymentType,
+            final IsisConfigurationDefault isisConfiguration) {
         return new IsisInjectModule(deploymentType, isisConfiguration);
     }
 

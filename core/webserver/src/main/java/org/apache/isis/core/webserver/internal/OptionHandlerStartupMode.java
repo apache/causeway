@@ -24,7 +24,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
@@ -56,7 +56,7 @@ public final class OptionHandlerStartupMode implements OptionHandler {
     }
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         if (startupMode != null) {
             isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, startupMode.name());
         }

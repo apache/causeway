@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 
@@ -37,13 +37,13 @@ import org.apache.isis.core.runtime.authentication.standard.Authenticator;
  */
 public class BypassAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
-    public BypassAuthenticationManagerInstaller() {
-        super("bypass");
+    public BypassAuthenticationManagerInstaller(final IsisConfigurationDefault isisConfiguration) {
+        super("bypass", isisConfiguration);
     }
 
     @Override
-    protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
-        return Lists.<Authenticator> newArrayList(new AuthenticatorBypass(configuration));
+    protected List<Authenticator> createAuthenticators() {
+        return Lists.<Authenticator> newArrayList(new AuthenticatorBypass(getConfiguration()));
     }
 
 }

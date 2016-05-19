@@ -28,7 +28,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
@@ -52,7 +52,7 @@ public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
     }
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
     }
 

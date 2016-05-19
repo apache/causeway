@@ -19,26 +19,58 @@
 
 package org.apache.isis.core.webserver;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Formatter;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
-import org.apache.isis.core.runtime.runner.IsisRunner;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
+import org.apache.isis.core.runtime.optionhandler.OptionHandler;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerAdditionalProperty;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerAppManifest;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerConfiguration;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixture;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromEnvironmentVariable;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerHelp;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerSystemProperties;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerVersion;
+import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webserver.internal.OptionHandlerDeploymentTypeWebServer;
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
 import org.apache.isis.core.webserver.internal.OptionHandlerStartupMode;
 
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY;
+
 public class WebServer {
 
-    public static enum StartupMode {
+    private static final Logger LOG = LoggerFactory.getLogger(WebServer.class);
+    private static final String SRC_MAIN_WEBAPP = "src/main/webapp";
+
+    public enum StartupMode {
         FOREGROUND, BACKGROUND;
 
         public static StartupMode lookup(final String value) {
@@ -55,37 +87,18 @@ public class WebServer {
         public boolean isForeground() {
             return this == FOREGROUND;
         }
-
         public boolean isBackground() {
             return this == BACKGROUND;
         }
-
     }
+
 
     private Server jettyServer;
 
     public static void main(final String[] args) {
-//        System.out.println("press any key to start...");
-//        readLine();
-//        final String[] args2 = ArrayExtensions.append(args, "--" + Constants.NO_SPLASH_LONG_OPT);
         new WebServer().run(args);
     }
 
-    private static void readLine() {
-        try{
-            BufferedReader br =
-                    new BufferedReader(new InputStreamReader(System.in));
-
-            br.readLine();
-        } catch(IOException io){
-            io.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Originally introduced to allow the WebServer to be used by tests.
-     */
     public void run(final int port) {
         String[] args = new String[0];
         args = OptionHandlerStartupMode.appendArg(args, StartupMode.BACKGROUND);
@@ -93,34 +106,111 @@ public class WebServer {
         run(args);
     }
 
+    private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
+
     public void run(final String[] args) {
-        final IsisRunner runner = new IsisRunner(args, new OptionHandlerDeploymentTypeWebServer());
-        addOptionHandlersAndValidators(runner);
-        if (!runner.parseAndValidate()) {
+
+        // setup logging immediately
+        loggingConfigurer.configureLogging(guessConfigDirectory(), args);
+
+        // set up the configuration
+        final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilder();
+        isisConfigurationBuilder.addResourceStreamSources(resourceStreamSources());
+
+        if(!isisConfigurationBuilder.parseAndPrimeWith(standardHandlers(), args)) {
             return;
         }
-        runner.setConfigurationBuilder(new IsisConfigurationBuilderDefault());
-        runner.primeConfigurationWithCommandLineOptions();
-        runner.loadInitialProperties();
-        
-        final WebServerBootstrapper bootstrapper = new WebServerBootstrapper(runner);
-        bootstrapper.bootstrap(null);
-        jettyServer = bootstrapper.getJettyServer();
+
+        // create and start
+        jettyServer = createJettyServerAndBindConfig(isisConfigurationBuilder);
+
+        final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration();
+        final String startupModeStr = configuration.getString(
+                EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT);
+        final StartupMode startupMode = StartupMode.lookup(startupModeStr);
+
+        start(jettyServer, startupMode);
     }
 
-    private void addOptionHandlersAndValidators(IsisRunner runner) {
+    private static List<OptionHandler> standardHandlers() {
+        return Lists.newArrayList(
+                   new OptionHandlerConfiguration(),
+                new OptionHandlerFixture(),
+                new OptionHandlerAppManifest(),
+                new OptionHandlerAdditionalProperty(),
+                new OptionHandlerFixtureFromEnvironmentVariable(),
+                new OptionHandlerSystemProperties(),
+                new OptionHandlerHelp(),
+                new OptionHandlerVersion(),
+                new OptionHandlerPort(),
+                new OptionHandlerDeploymentTypeWebServer()
+        );
+    }
 
-        // adjustments
-        runner.addOptionHandler(new OptionHandlerPort());
+    // REVIEW: hacky...
+    private static String guessConfigDirectory() {
+        return new File(ConfigurationConstants.WEBINF_FULL_DIRECTORY).exists() ?
+                ConfigurationConstants.WEBINF_FULL_DIRECTORY :
+                ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY;
+    }
 
-        // unused
-        // runner.addOptionHandler(new OptionHandlerAddress());
 
-        // too obscure
-        // runner.addOptionHandler(new OptionHandlerResourceBase());
+    private Server createJettyServerAndBindConfig(final IsisConfigurationBuilder configurationBuilder) {
 
-        // REVIEW: clashes with -a flag.
-        //runner.addOptionHandler(new OptionHandlerStartupMode());
+        // the Isis system is actually bootstrapped by the ServletContextInitializer in the web.xml
+        final IsisConfiguration configuration = configurationBuilder.peekConfiguration();
+        final int port = configuration.getInteger(
+                EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
+        final String webappContextPath = configuration.getString(
+                EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT);
+
+        LOG.info("Running Jetty on port '{}' to serve the web application", port);
+
+        final Server jettyServer = new Server(port);
+        final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
+        jettyServer.setHandler(context);
+
+        context.setAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY, configurationBuilder);
+
+        return jettyServer;
+    }
+
+    private static void start(final Server jettyServer, final StartupMode startupMode) {
+        long start = System.currentTimeMillis();
+        try {
+            jettyServer.start();
+            LOG.info("Started the application in {}ms", System.currentTimeMillis() - start);
+            if (startupMode.isForeground()) {
+                System.in.read();
+                System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
+                jettyServer.stop();
+                jettyServer.join();
+            }
+        } catch (final Exception ex) {
+            throw new IsisException("Unable to start Jetty server", ex);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private void copyDeploymentTypeIntoInitParams(final WebAppContext context) {
+        Map<String, String> initParams = context.getInitParams();
+        Map<String, String> convertedInitParams = ObjectExtensions.asT(initParams);
+        initParams.clear();
+        initParams.putAll(convertedInitParams);
+    }
+
+
+    /**
+     * Set of locations to search for config files.
+     */
+    private static List<ResourceStreamSource> resourceStreamSources() {
+        final List<ResourceStreamSource> rssList = Lists.newArrayList();
+        rssList.addAll(Arrays.asList(
+                ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
+                ResourceStreamSourceFileSystem.create(ConfigurationConstants.WEBINF_FULL_DIRECTORY),
+                ResourceStreamSourceContextLoaderClassPath.create(),
+                ResourceStreamSourceContextLoaderClassPath.create(ConfigurationConstants.WEBINF_DIRECTORY)));
+        return rssList;
     }
 
     public void stop() {

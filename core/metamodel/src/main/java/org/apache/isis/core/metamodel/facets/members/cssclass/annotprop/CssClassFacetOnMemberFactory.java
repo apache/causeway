@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -92,15 +91,11 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
 
 
     //region > injected
-    private IsisConfiguration configuration;
-
 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
+        final IsisConfiguration configuration = getConfiguration();
         validator.setConfiguration(configuration);
     }
 

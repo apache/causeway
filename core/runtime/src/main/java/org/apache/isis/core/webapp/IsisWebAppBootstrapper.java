@@ -19,28 +19,22 @@
 
 package org.apache.isis.core.webapp;
 
-import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
-import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
@@ -82,47 +76,26 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         try {
             final ServletContext servletContext = servletContextEvent.getServletContext();
 
-            final String webappDir = servletContext.getRealPath("/");
             final String webInfDir = servletContext.getRealPath("/WEB-INF");
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
-            final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
-            final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(
-                    ResourceStreamSourceContextLoaderClassPath.create(), 
-                    new ResourceStreamSourceForWebInf(servletContext)) ;
-
-            if ( configLocation != null ) {
-                LOG.info( "Config override location: " + configLocation );
-                compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
-            } else {
-                LOG.info( "Config override location: No override location configured" );
-            }
-            
-            // will load either from WEB-INF, from the classpath or from config directory.
-            final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
-
-            primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
-
+            final IsisConfigurationBuilder isisConfigurationBuilder = obtainIsisConfigurationBuilder(servletContext);
             isisConfigurationBuilder.addDefaultConfigurationResources();
 
-            final DeploymentType deploymentType = determineDeploymentType(isisConfigurationBuilder, servletContext);
-
+            final DeploymentType deploymentType = determineDeploymentType(servletContext, isisConfigurationBuilder);
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
 
+            final String webappDir = servletContext.getRealPath("/");
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
-
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
-            IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
-
-            final InstallerLookup installerLookup = new InstallerLookup(isisConfiguration);
+            final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
 
             injector = createGuiceInjector(isisConfiguration, deploymentType);
-
             final IsisSystem system = injector.getInstance(IsisSystem.class);
 
-
             servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);
+
         } catch (final RuntimeException e) {
             LOG.error("startup failed", e);
             throw e;
@@ -130,27 +103,53 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         LOG.info("server started");
     }
 
+    protected IsisConfigurationBuilder obtainIsisConfigurationBuilder(final ServletContext servletContext) {
+        return obtainConfigBuilderFrom(servletContext);
+    }
+
+    /**
+     * publis so can also be used by Wicket viewer.
+     */
+    public static IsisConfigurationBuilder obtainConfigBuilderFrom(final ServletContext servletContext) {
+        final IsisConfigurationBuilder isisConfigurationBuilder = lookupIsisConfigurationBuilder(servletContext);
+        isisConfigurationBuilder.primeWith(new OptionHandlerInitParameters(servletContext));
+
+        addResourceStreamSources(servletContext, isisConfigurationBuilder);
+        return isisConfigurationBuilder;
+    }
+
+    public static IsisConfigurationBuilder lookupIsisConfigurationBuilder(final ServletContext servletContext) {
+        IsisConfigurationBuilder isisConfigurationBuilder =
+                (IsisConfigurationBuilder) servletContext.getAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY);
+        if(isisConfigurationBuilder == null) {
+            isisConfigurationBuilder = new IsisConfigurationBuilder();
+        }
+        return isisConfigurationBuilder;
+    }
+
+    private static void addResourceStreamSources(
+            final ServletContext servletContext,
+            final IsisConfigurationBuilder isisConfigurationBuilder) {
+
+        isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
+        isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());
+        isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
+
+        // will load either from WEB-INF, from the classpath or from config directory.
+        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
+        if ( configLocation != null ) {
+            LOG.info( "Config override location: " + configLocation );
+            isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
+        } else {
+            LOG.info( "Config override location: No override location configured" );
+        }
+    }
+
     private Injector createGuiceInjector(
             final IsisConfigurationDefault isisConfiguration,
             final DeploymentType deploymentType) {
         final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfiguration);
         return Guice.createInjector(isisModule);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        LOG.info("loading properties from option handlers");
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = Lists.newArrayList();
-        final List<IsisConfigurationBuilderPrimer> primers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
-        if(primers != null) {
-            isisConfigurationBuilderPrimers.addAll(primers);
-        }
-        // also support loading from init parameters (specifically, to support simplericity's jetty-console)
-        isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
-        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
-            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
-        }
     }
 
     /**
@@ -162,27 +161,42 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      * <p>
      * If no setting is found, defaults to {@link WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
-    private DeploymentType determineDeploymentType(
-            final IsisConfigurationBuilder isisConfigurationBuilder,
-            final ServletContext servletContext) {
-        String deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
-        if (deploymentTypeStr == null) {
-            deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
-        }
-        if (deploymentTypeStr == null) {
-            deploymentTypeStr = isisConfigurationBuilder.getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-        }
-        if (deploymentTypeStr == null) {
-            deploymentTypeStr = WebAppConstants.DEPLOYMENT_TYPE_DEFAULT;
-        }
+    protected DeploymentType determineDeploymentType(
+            final ServletContext servletContext,
+            final IsisConfigurationBuilder isisConfigurationBuilder) {
+        String deploymentTypeStr = determineDeploymentTypeStr(servletContext, isisConfigurationBuilder);
         return DeploymentType.lookup(deploymentTypeStr);
     }
 
-    private static void addConfigurationResourcesForDeploymentType(
-            final IsisConfigurationBuilder configurationLoader,
+    private String determineDeploymentTypeStr(
+            final ServletContext servletContext,
+            final IsisConfigurationBuilder isisConfigurationBuilder) {
+
+        String deploymentTypeStr;
+
+        deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
+        if (deploymentTypeStr != null) {
+            return deploymentTypeStr;
+        }
+
+        deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        if (deploymentTypeStr != null) {
+            return deploymentTypeStr;
+        }
+
+        deploymentTypeStr = isisConfigurationBuilder.peekConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        if (deploymentTypeStr != null) {
+            return deploymentTypeStr;
+        }
+
+        return WebAppConstants.DEPLOYMENT_TYPE_DEFAULT;
+    }
+
+    protected void addConfigurationResourcesForDeploymentType(
+            final IsisConfigurationBuilder isisConfigurationBuilder,
             final DeploymentType deploymentType) {
         final String resourceName = deploymentType.name().toLowerCase() + ".properties";
-        configurationLoader.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE);
+        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE);
     }
 
 

@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.runner.opts;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 
@@ -49,7 +49,7 @@ public class OptionHandlerQuiet extends OptionHandlerAbstract {
     }
 
     @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+    public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         // TODO need to do what, exactly???
     }
 

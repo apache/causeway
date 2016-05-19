@@ -49,47 +49,13 @@ public interface Installer extends ApplicationScopedComponent {
      * Because all implementations of a given subinterface of {@link Installer}
      * should return the same value for this method, by convention these
      * subinterfaces define a constant which the implementation can just return.
-     * 
-     * <p>
-     * Used, with {@link #getName()}, to determine the config files and config
-     * keys for this installer.
-     * 
-     * @see #getConfigurationResources()
      */
     String getType();
 
     /**
      * The name (qualified by type).
-     * 
-     * <p>
-     * Used, with {@link #getType()}, to determine the config files and config
-     * keys for this installer.
-     * 
-     * @see #getConfigurationResources()
      */
     String getName();
 
-    /**
-     * The configuration resources (files) to merge in configuration properties.
-     * 
-     * <p>
-     * For example, would return list of [<tt>persistor.properties</tt>, and
-     * <tt>persistor_in-memory.properties</tt>] for the in-memory object store.
-     * 
-     * <p>
-     * The implementation should look under keys prefixed either
-     * <tt>isis.persistor</tt> or <tt>isis.persistor.in-memory</tt>.
-     * 
-     * <p>
-     * Note that we use an '_' underscore to join the {@link #getType() type}
-     * and {@link #getName() name} in the filenames, but a '.' (period) for the
-     * keys.
-     */
-    List<String> getConfigurationResources();
-
-    /**
-     * The (classes of) the types that this installer makes available in the
-     * {@link #getModule() module}.
-     */
     List<Class<?>> getTypes();
 }

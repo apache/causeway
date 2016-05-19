@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.commons.config;
+package org.apache.isis.core.commons.jmx;
 
 import java.lang.management.ManagementFactory;
 
@@ -55,16 +55,10 @@ public class JmxBeanServer {
             final ObjectName objectName = new ObjectName("Isis:name=" + name);
             server.registerMBean(object, objectName);
             LOG.info(name + " JMX mbean registered: " + object);
-        } catch (final MalformedObjectNameException e) {
-            throw new RuntimeException(e);
-        } catch (final NullPointerException e) {
+        } catch (final MalformedObjectNameException | NullPointerException | MBeanRegistrationException | NotCompliantMBeanException e) {
             throw new RuntimeException(e);
         } catch (final InstanceAlreadyExistsException e) {
             LOG.info(name + " JMX mbean already registered: " + object);
-        } catch (final MBeanRegistrationException e) {
-            throw new RuntimeException(e);
-        } catch (final NotCompliantMBeanException e) {
-            throw new RuntimeException(e);
         }
 
     }

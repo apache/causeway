@@ -151,7 +151,6 @@ public class FacetProcessor implements RuntimeContextAware {
      * processing.
      */
     public void injectDependenciesInto(final FacetFactory factory) {
-        getIsisConfiguration().injectInto(factory);
 
         // cascades all the subcomponents also
         getRuntimeContext().injectInto(factory);

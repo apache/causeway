@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -44,7 +43,6 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Paged.class);
 
-    private IsisConfiguration configuration;
 
     public PagedFacetOnCollectionFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -86,17 +84,13 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
 
     // //////////////////////////////////////
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
 
 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
-        this.configuration = configuration;
+        final IsisConfiguration configuration = getConfiguration();
+
         validator.setConfiguration(configuration);
     }
 

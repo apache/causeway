@@ -17,30 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.config;
+package org.apache.isis.core.commons.configbuilder;
+
+import org.junit.Test;
+
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 public class ConfigurationBuilderResourceStreamsConfigResourceAndPolicyTest {
 
     @Test
     public void toStringWhenNull() throws Exception {
-        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy = new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy(null, null);
+        final ConfigurationResourceAndPolicy configurationResourceAndPolicy = new ConfigurationResourceAndPolicy(null, null);
         assertThat(configurationResourceAndPolicy.toString(), is("null{null}"));
     }
 
     @Test
     public void toStringWhenConfigResourceNotNull() throws Exception {
-        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy = new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties", null);
+        final ConfigurationResourceAndPolicy configurationResourceAndPolicy = new ConfigurationResourceAndPolicy("foo.properties", null);
         assertThat(configurationResourceAndPolicy.toString(), is("foo.properties{null}"));
     }
 
     @Test
     public void toStringWhenAllSpecified() throws Exception {
-        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy = new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties", NotFoundPolicy.CONTINUE);
+        final ConfigurationResourceAndPolicy configurationResourceAndPolicy = new ConfigurationResourceAndPolicy("foo.properties", NotFoundPolicy.CONTINUE);
         assertThat(configurationResourceAndPolicy.toString(), is("foo.properties{CONTINUE}"));
     }
 

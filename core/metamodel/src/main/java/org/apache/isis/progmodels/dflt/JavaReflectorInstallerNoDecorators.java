@@ -28,8 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.components.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -44,26 +45,27 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implements ObjectReflectorInstaller {
 
+    //region > constants
+
     private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorInstallerNoDecorators.class);
 
     public static final String PROPERTY_BASE = ConfigurationConstants.ROOT;
 
-    // /////////////////////////////////////////////////////
-    // Constructor
-    // /////////////////////////////////////////////////////
+    //endregion
 
-    public JavaReflectorInstallerNoDecorators() {
-        this("java");
+    //region > constructor
+
+    public JavaReflectorInstallerNoDecorators(final IsisConfigurationDefault isisConfiguration) {
+        this("java", isisConfiguration);
     }
 
-    public JavaReflectorInstallerNoDecorators(final String name) {
-        super(ObjectReflectorInstaller.TYPE, name);
+    public JavaReflectorInstallerNoDecorators(final String name, final IsisConfigurationDefault isisConfiguration) {
+        super(ObjectReflectorInstaller.TYPE, name, isisConfiguration);
         
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////
-    // createReflector, doCreateReflector
-    // /////////////////////////////////////////////////////
+    //region > createReflector, doCreateReflector
 
     @Override
     public SpecificationLoaderSpi createReflector(
@@ -80,6 +82,9 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
                 servicesInjector);
     }
 
+    //endregion
+
+    //region > createProgrammingModel
 
     /**
      * Hook method to allow subclasses to specify a different implementations
@@ -116,6 +121,10 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         excludeFacetFactories(configuration, programmingModel);
     }
 
+    //endregion
+
+    //region > includeFacetFactories, excludeFacetFactories
+
     /**
      * Factored out of {@link #createProgrammingModel(IsisConfiguration)}
      * so that subclasses that choose to override can still support
@@ -134,7 +143,9 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
     }
 
+    //endregion
 
+    //region > createMetaModelValidator
 
     /**
      * Hook method to allow subclasses to specify a different implementation of
@@ -150,6 +161,10 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
     }
 
+    //endregion
+
+    //region > createLayoutMetadataReaders
+
     protected List<LayoutMetadataReader> createLayoutMetadataReaders(final IsisConfiguration configuration) {
         final List<LayoutMetadataReader> layoutMetadataReaders = Lists.newArrayList();
         final String[] layoutMetadataReaderClassNames = configuration.getList(ReflectorConstants.LAYOUT_METADATA_READER_LIST, ReflectorConstants.LAYOUT_METADATA_READER_LIST_DEFAULT);
@@ -162,15 +177,15 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         return layoutMetadataReaders;
     }
 
+    //endregion
 
-
-
-    // /////////////////////////////////////////////////////
-    // Guice
-    // /////////////////////////////////////////////////////
+    //region > getTypes
 
     @Override
     public List<Class<?>> getTypes() {
         return listOf(SpecificationLoaderSpi.class);
     }
+
+    //endregion
+
 }

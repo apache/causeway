@@ -20,23 +20,24 @@ package org.apache.isis.security.shiro.authentication;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor;
 
-import com.google.common.collect.Lists;
-
-public class ShiroAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
+public class ShiroAuthenticationManagerInstaller
+        extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     public static String NAME = "shiro";
 
-    public ShiroAuthenticationManagerInstaller() {
-        super(NAME);
+    public ShiroAuthenticationManagerInstaller(final IsisConfigurationDefault isisConfiguration) {
+        super(NAME, isisConfiguration);
     }
 
     @Override
-    protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
-        return Lists.<Authenticator> newArrayList(new ShiroAuthenticatorOrAuthorizor(configuration));
+    protected List<Authenticator> createAuthenticators() {
+        return Lists.<Authenticator> newArrayList(new ShiroAuthenticatorOrAuthorizor(getConfiguration()));
     }
 }

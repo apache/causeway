@@ -72,7 +72,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -91,7 +90,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
-    private IsisConfiguration configuration;
 
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
@@ -174,7 +172,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
                 collectionDomainEventFacet.getEventType(),
                 CollectionDomainEvent.Noop.class,
                 CollectionDomainEvent.Default.class,
-                "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault", this.configuration)) {
+                "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault", getConfiguration())) {
             FacetUtil.addFacet(collectionDomainEventFacet);
         }
 
@@ -386,7 +384,8 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.lookupService(ConfigurationServiceInternal.class);
+        final IsisConfiguration configuration = getConfiguration();
+
         postsCollectionAddedToEventValidator.setConfiguration(configuration);
         postsCollectionRemovedFromEventValidator.setConfiguration(configuration);
         collectionInteractionValidator.setConfiguration(configuration);

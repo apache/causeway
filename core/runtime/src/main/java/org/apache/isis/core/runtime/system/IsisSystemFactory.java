@@ -22,8 +22,6 @@ package org.apache.isis.core.runtime.system;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import com.google.inject.Inject;
 
 import org.apache.isis.applib.AppManifest;
@@ -76,7 +74,6 @@ public class IsisSystemFactory implements ApplicationScopedComponent {
      * </p>
      */
     public static final AppManifest APP_MANIFEST_NOOP = NOOP;
-
 
 
     private final InstallerLookup installerLookup;

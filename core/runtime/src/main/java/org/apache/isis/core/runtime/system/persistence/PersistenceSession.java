@@ -89,7 +89,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
@@ -155,11 +154,11 @@ public class PersistenceSession implements
         AdapterManager,
         MessageBrokerService,
         PersistenceSessionService,
-        ConfigurationServiceInternal,
         IsisLifecycleListener2.PersistenceSessionLifecycleManagement,
         IsisTransactionManager.PersistenceSessionTransactionManagement,
         PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement {
 
+    //region > constants
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
     /**
@@ -174,7 +173,7 @@ public class PersistenceSession implements
      * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
      */
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
-
+    //endregion
 
     //region > constructor, fields, finalize()
 
@@ -257,6 +256,7 @@ public class PersistenceSession implements
     }
 
     //endregion
+
 
     //region > open
 
@@ -1237,14 +1237,6 @@ public class PersistenceSession implements
     //endregion
 
 
-
-    @Override
-    public String toString() {
-        return new ToString(this).toString();
-    }
-
-    //endregion
-
     //region > dependencies (from constructor)
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
@@ -1264,7 +1256,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > sub components
+    //region > transactionManager
 
 
     /**
@@ -2331,23 +2323,17 @@ public class PersistenceSession implements
     }
 
 
-
     //endregion
 
-    //region > ConfigurationService delegate
+    //region > toString
 
     @Override
-    public String getProperty(final String name) {
-        return configuration.getProperty(name);
+    public String toString() {
+        return new ToString(this).toString();
     }
 
-    @Override
-    public List<String> getPropertyNames() {
-        return configuration.getPropertyNames();
-    }
 
     //endregion
-
 
 }
 
