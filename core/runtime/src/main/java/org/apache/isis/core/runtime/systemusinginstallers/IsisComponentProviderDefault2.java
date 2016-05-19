@@ -121,7 +121,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     @Override
     protected void doPutConfigurationProperty(final String key, final String value) {
         // bit hacky :-(
-        IsisConfigurationDefault configurationDefault = this.configuration;
+        IsisConfigurationDefault configurationDefault = (IsisConfigurationDefault) this.configuration;
         configurationDefault.put(key, value);
     }
 

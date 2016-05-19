@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -107,7 +109,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         reflectorInstaller = this.installerLookup.reflectorInstaller(
                 configProperty(SystemConstants.REFLECTOR_KEY));
 
-
         // ensure we were able to load all components via InstallerLookup (fail fast)
         ensureThatState(authenticationInstaller, is(not(nullValue())),
                 "authenticationInstaller could not be looked up");
@@ -150,7 +151,8 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
     }
 
     protected void doPutConfigurationProperty(final String key, final String value) {
-        this.installerLookup.putConfigurationProperty(key, value);
+        IsisConfigurationDefault configuration = (IsisConfigurationDefault) this.installerLookup.getConfiguration();
+        configuration.put(key, value);
     }
     //endregion
 

@@ -105,12 +105,39 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         configuration = new IsisConfigurationDefault(resourceStreamSource);
     }
 
-    /**
-     * May be overridden by subclasses if required.
-     */
     public void addDefaultConfigurationResources() {
         addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, NotFoundPolicy.FAIL_FAST);
-        addConfigurationResource(ConfigurationConstants.WEB_CONFIG_FILE, NotFoundPolicy.CONTINUE);
+        addConfigurationResource(ConfigurationConstants.WEB_CONFIG_FILE, NotFoundPolicy.CONTINUE); //web.properties
+        addConfigurationResource("war.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("viewer_wicket.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("viewer_restful.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("viewer_restfulobjects.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("persistor_datanucleus.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("persistor.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("authentication_shiro.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("authentication_bypass.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("authentication.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("authorization_shiro.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("authorization_bypass.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("authorization.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("reflector_java.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("reflector.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("fixtures-installer_configuration.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("fixtures-installer_noop.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("fixtures-installer.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("services-installer_annotation.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("services-installer_configuration.properties", NotFoundPolicy.CONTINUE);
+
+        addConfigurationResource("services-installer_configuration-and-annotation.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("services-installer.properties", NotFoundPolicy.CONTINUE);
+
     }
 
     // ////////////////////////////////////////////////////////////
@@ -174,6 +201,10 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
      */
     @Override
     public synchronized IsisConfigurationDefault getConfiguration() {
+        if(!locked) {
+            lockConfiguration();
+            dumpResourcesToLog();
+        }
         return configuration;
      }
 

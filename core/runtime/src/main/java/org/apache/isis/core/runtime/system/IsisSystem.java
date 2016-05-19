@@ -145,7 +145,8 @@ public class IsisSystem implements ApplicationScopedComponent {
         try {
 
             // configuration
-            final IsisConfigurationDefault configuration = isisComponentProvider.getConfiguration();
+            // TODO: HACKY
+            final IsisConfigurationDefault configuration = (IsisConfigurationDefault) isisComponentProvider.getConfiguration();
 
             // services
             ServicesInjectorDefault servicesInjector = isisComponentProvider.provideServiceInjector();

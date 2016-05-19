@@ -64,6 +64,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
@@ -77,7 +78,6 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.webapp.IsisWebAppBootstrapperUtil;
 import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -253,8 +253,9 @@ public class IsisWicketApplication
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
             final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-    
-            final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
+            final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
+
+            final IsisInjectModule isisModule = newIsisModule(deploymentType, configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
             injector.injectMembers(this);
@@ -264,7 +265,6 @@ public class IsisWicketApplication
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
             
-            final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
             getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
@@ -452,7 +452,6 @@ public class IsisWicketApplication
         primeConfigurationBuilder(configurationBuilder, servletContext);
         configurationBuilder.addDefaultConfigurationResources();
 
-        IsisWebAppBootstrapperUtil.addConfigurationResourcesForViewers(configurationBuilder, servletContext);
         return configurationBuilder;
     }
 
@@ -694,8 +693,8 @@ public class IsisWicketApplication
         return deploymentType.getConfigurationType();
     }
     
-    protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
-        return new IsisInjectModule(deploymentType, isisConfigurationBuilder);
+    protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationDefault isisConfiguration) {
+        return new IsisInjectModule(deploymentType, isisConfiguration);
     }
 
     // //////////////////////////////////////

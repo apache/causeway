@@ -25,8 +25,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -36,31 +36,13 @@ public class IsisInjectModule extends AbstractModule {
 
     private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
-    private final IsisConfigurationBuilder isisConfigurationBuilder;
+    private final IsisConfiguration isisConfiguration;
 
-    private static InstallerLookup defaultInstallerLookup() {
-        return new InstallerLookup();
-    }
-
-    private static IsisConfigurationBuilderDefault defaultConfigurationBuilder() {
-        return new IsisConfigurationBuilderDefault();
-    }
-
-    public IsisInjectModule(final DeploymentType deploymentType) {
-        this(deploymentType, defaultConfigurationBuilder(), defaultInstallerLookup());
-    }
-
-    public IsisInjectModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
-        this(deploymentType, isisConfigurationBuilder, defaultInstallerLookup());
-    }
-
-    public IsisInjectModule(final DeploymentType deploymentType, final InstallerLookup installerLookup) {
-        this(deploymentType, defaultConfigurationBuilder(), installerLookup);
-    }
-
-    public IsisInjectModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
-        this.installerLookup = installerLookup;
-        this.isisConfigurationBuilder = isisConfigurationBuilder;
+    public IsisInjectModule(
+            final DeploymentType deploymentType,
+            final IsisConfigurationDefault isisConfiguration) {
+        this.installerLookup = new InstallerLookup(isisConfiguration);
+        this.isisConfiguration = isisConfiguration;
         this.deploymentType = deploymentType;
     }
 
@@ -80,8 +62,8 @@ public class IsisInjectModule extends AbstractModule {
     @SuppressWarnings("unused")
     @Provides
     @Singleton
-    private IsisConfigurationBuilder providesConfigurationBuilder() {
-        return isisConfigurationBuilder;
+    private IsisConfiguration providesConfiguration() {
+        return isisConfiguration;
     }
 
     /**
@@ -91,17 +73,14 @@ public class IsisInjectModule extends AbstractModule {
     @Provides
     @Singleton
     @Inject
-    private InstallerLookup providesInstallerLookup(final IsisConfigurationBuilder configBuilder) {
-        // wire up and initialize installer lookup
-        configBuilder.injectInto(installerLookup);
-        installerLookup.init();
+    private InstallerLookup providesInstallerLookup() {
         return installerLookup;
     }
 
     @Override
     protected void configure() {
         requireBinding(DeploymentType.class);
-        requireBinding(IsisConfigurationBuilder.class);
+        requireBinding(IsisConfiguration.class);
         requireBinding(InstallerLookup.class);
         bind(AppManifest.class).toInstance(IsisSystemFactory.APP_MANIFEST_NOOP);
     }
@@ -117,6 +96,7 @@ public class IsisInjectModule extends AbstractModule {
 
         final IsisSystemFactory systemFactory = new IsisSystemFactory(installerLookup);
         final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
+
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
         system.init();

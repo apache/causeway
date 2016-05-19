@@ -24,7 +24,6 @@ import java.util.Map;
 
 import com.google.inject.Injector;
 
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
@@ -78,7 +77,6 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         // TODO get and use the address
 
         jettyServer = new Server(port);
-        Connector[] connectors = jettyServer.getConnectors();
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
 
         copyConfigurationPrimersIntoServletContext(context);

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +34,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -90,15 +87,19 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * even if it has not been registered in <tt>installer-registry.properties</tt>
  * : just specify the {@link Installer}'s fully qualified class name.
  */
-public class InstallerLookup implements InstallerRepository, ApplicationScopedComponent, IsisConfigurationBuilderAware, SystemDependencyInjector {
+public class InstallerLookup implements InstallerRepository, ApplicationScopedComponent, SystemDependencyInjector {
 
     private static final Logger LOG = LoggerFactory.getLogger(InstallerLookup.class);
+
+    private final IsisConfigurationDefault isisConfiguration;
 
     //region > Constructor
 
     private final List<Installer> installerList = Lists.newArrayList();
 
-    public InstallerLookup() {
+    public InstallerLookup(final IsisConfigurationDefault isisConfiguration) {
+        this.isisConfiguration = isisConfiguration;
+
         final InputStream in = getInstallerRegistryStream(IsisInstallerRegistry.INSTALLER_REGISTRY_FILE);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try {
@@ -135,11 +136,14 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
 
     //endregion
 
+    //region > Configuration
+    public IsisConfigurationDefault getConfiguration() {
+        return isisConfiguration;
+    }
+    //endregion
+
     //region > InstallerRepository impl.
-    /**
-     * This method (and only this method) may be called prior to {@link #init()
-     * initialization}.
-     */
+
     @Override
     public Installer[] getInstallers(final Class<?> cls) {
         final List<Installer> list = new ArrayList<Installer>();
@@ -152,19 +156,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     }
     //endregion
 
-    //region > init, shutdown
-    public void init() {
-        ensureDependenciesInjected();
-    }
-
-    private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(isisConfigurationBuilder, is(not(nullValue())));
-    }
-
-    public void shutdown() {
-        // nothing to do.
-    }
-    //endregion
 
     //region > metamodel
     public ObjectReflectorInstaller reflectorInstaller(final String requested) {
@@ -216,7 +207,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         Assert.assertNotNull("No name specified", implName);
         for (final Installer installer : installerList) {
             if (cls.isAssignableFrom(installer.getClass()) && installer.getName().equals(implName)) {
-                mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);
                 return (T) installer;
             }
@@ -229,23 +219,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         try {
             final Installer installer = ObjectExtensions.asT(InstanceUtil.createInstance(implClassName));
             if (installer != null) {
-                mergeConfigurationFor(installer);
-                injectDependenciesInto(installer);
-            }
-            return installer;
-        } catch (final InstanceCreationException e) {
-            throw new InstanceCreationException("Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
-        } catch (final UnavailableClassException e) {
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Installer> T getInstaller(final Class<T> installerCls) {
-        try {
-            final T installer = (T) (InstanceUtil.createInstance(installerCls));
-            if (installer != null) {
-                mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);
             }
             return installer;
@@ -292,28 +265,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     }
     //endregion
 
-    //region > Configuration
-    /**
-     * Returns a <i>snapshot</i> of the current {@link IsisConfiguration}.
-     *
-     * <p>
-     * The {@link IsisConfiguration} could subsequently be appended to if
-     * further {@link Installer}s are loaded.
-     */
-    public IsisConfigurationDefault getConfiguration() {
-        return isisConfigurationBuilder.getConfiguration();
-    }
-
-    public void mergeConfigurationFor(final Installer installer) {
-        for (final String installerConfigResource : installer.getConfigurationResources()) {
-            isisConfigurationBuilder.addConfigurationResource(installerConfigResource, NotFoundPolicy.CONTINUE);
-        }
-    }
-
-    public void putConfigurationProperty(final String key, final String value) {
-        isisConfigurationBuilder.put(key, value);
-    }
-    //endregion
 
     //region > SystemDependencyInjector, Injectable
     @Override
@@ -331,25 +282,8 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
             final InstallerLookupAware cast = InstallerLookupAware.class.cast(candidate);
             cast.setInstallerLookup(this);
         }
-        isisConfigurationBuilder.injectInto(candidate);
     }
     //endregion
 
-    //region > Dependencies (injected)
-
-    /**
-     * A mutable representation of the {@link IsisConfiguration configuration},
-     * injected prior to {@link #init()}.
-     *
-     * @see #setConfigurationBuilder(IsisConfigurationBuilder)
-     */
-    private IsisConfigurationBuilder isisConfigurationBuilder;
-
-    @Override
-    @Inject
-    public void setConfigurationBuilder(final IsisConfigurationBuilder configurationLoader) {
-        this.isisConfigurationBuilder = configurationLoader;
-    }
-    //endregion
 
 }

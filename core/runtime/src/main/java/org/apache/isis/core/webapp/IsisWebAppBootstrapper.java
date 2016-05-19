@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -106,21 +107,20 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
             final DeploymentType deploymentType = determineDeploymentType(isisConfigurationBuilder, servletContext);
 
-            addConfigurationResourcesForWebApps(isisConfigurationBuilder);
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
-            IsisWebAppBootstrapperUtil.addConfigurationResourcesForViewers(isisConfigurationBuilder, servletContext);
 
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
+
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
-            final InstallerLookup installerLookup = new InstallerLookup();
+            IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
 
-            injector = createGuiceInjector(isisConfigurationBuilder, deploymentType, installerLookup);
+            final InstallerLookup installerLookup = new InstallerLookup(isisConfiguration);
+
+            injector = createGuiceInjector(isisConfiguration, deploymentType);
 
             final IsisSystem system = injector.getInstance(IsisSystem.class);
 
-            isisConfigurationBuilder.lockConfiguration();
-            isisConfigurationBuilder.dumpResourcesToLog();
 
             servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);
         } catch (final RuntimeException e) {
@@ -131,10 +131,9 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     private Injector createGuiceInjector(
-            final IsisConfigurationBuilder isisConfigurationBuilder,
-            final DeploymentType deploymentType,
-            final InstallerLookup installerLookup) {
-        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
+            final IsisConfigurationDefault isisConfiguration,
+            final DeploymentType deploymentType) {
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfiguration);
         return Guice.createInjector(isisModule);
     }
 
@@ -163,7 +162,9 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      * <p>
      * If no setting is found, defaults to {@link WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
-    private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+    private DeploymentType determineDeploymentType(
+            final IsisConfigurationBuilder isisConfigurationBuilder,
+            final ServletContext servletContext) {
         String deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
@@ -184,10 +185,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         configurationLoader.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE);
     }
 
-    private static void addConfigurationResourcesForWebApps(final IsisConfigurationBuilder configurationLoader) {
-        configurationLoader.addConfigurationResource("web.properties", NotFoundPolicy.CONTINUE);
-        configurationLoader.addConfigurationResource("war.properties", NotFoundPolicy.CONTINUE);
-    }
 
     // /////////////////////////////////////////////////////
     // Destroy

@@ -22,22 +22,38 @@ package org.apache.isis.core.runtime.runner;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.apache.commons.cli.*;
+
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
-import org.apache.isis.core.runtime.runner.opts.*;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerAdditionalProperty;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerAppManifest;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerConfiguration;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerDeploymentType;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixture;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromEnvironmentVariable;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerHelp;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerSystemProperties;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerVersion;
 import org.apache.isis.core.runtime.runner.opts.OptionValidator;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -49,13 +65,14 @@ public class IsisRunner {
 
     private final String[] args;
     private final OptionHandlerDeploymentType optionHandlerDeploymentType;
-    private final InstallerLookup installerLookup;
 
     private final List<OptionHandler> optionHandlers = Lists.newArrayList();
     private final List<OptionValidator> validators = Lists.newArrayList();
-    private IsisConfigurationBuilder isisConfigurationBuilder;
 
-    private Injector globalInjector;;
+    private IsisConfigurationBuilder isisConfigurationBuilder;
+    private InstallerLookup installerLookup;
+
+    private Injector globalInjector;
 
     // ///////////////////////////////////////////////////////////////////////////////////////
     // Construction and adjustments
@@ -67,9 +84,8 @@ public class IsisRunner {
 
         // setup logging immediately
         loggingConfigurer.configureLogging(determineConfigDirectory(), args);
-        this.installerLookup = new InstallerLookup();
 
-        addStandardOptionHandlersAndValidators(this.installerLookup);
+        addStandardOptionHandlersAndValidators();
     }
 
     // REVIEW is this something that IsisConfigBuilder should know about?
@@ -121,6 +137,8 @@ public class IsisRunner {
      */
     public void setConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
         this.isisConfigurationBuilder = isisConfigurationBuilder;
+        this.installerLookup = new InstallerLookup(isisConfigurationBuilder.getConfiguration());
+
     }
 
     // ///////////////////////////////////////////////////////////////////////////////////////
@@ -201,15 +219,18 @@ public class IsisRunner {
 
         final DeploymentType deploymentType = optionHandlerDeploymentType.getDeploymentType();
 
-        this.globalInjector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
+        IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
+
+        this.globalInjector = createGuiceInjector(deploymentType, isisConfiguration);
 
         bootstrapper.bootstrap(globalInjector);
-        isisConfigurationBuilder.lockConfiguration();
-        isisConfigurationBuilder.dumpResourcesToLog();
     }
 
-    private Injector createGuiceInjector(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup, final List<OptionHandler> optionHandlers) {
-        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
+    private Injector createGuiceInjector(
+            final DeploymentType deploymentType,
+            final IsisConfigurationDefault isisConfiguration) {
+        final IsisInjectModule isisModule =
+                new IsisInjectModule(deploymentType, isisConfiguration);
         return Guice.createInjector(isisModule);
     }
 
@@ -221,7 +242,7 @@ public class IsisRunner {
         return Collections.unmodifiableList(optionHandlers);
     }
 
-    private void addStandardOptionHandlersAndValidators(final InstallerLookup installerLookup) {
+    private void addStandardOptionHandlersAndValidators() {
         addOptionHandler(optionHandlerDeploymentType);
         addOptionHandler(new OptionHandlerConfiguration());
 
