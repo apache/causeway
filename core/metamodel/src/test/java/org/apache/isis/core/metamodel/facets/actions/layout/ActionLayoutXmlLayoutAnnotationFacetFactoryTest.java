@@ -140,6 +140,9 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
                     allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
                     will(returnValue(null));
+
+                    allowing(mockObjSpec).getFacet(MixinFacet.class);
+                    will(returnValue(null));
                 }
             });
 
@@ -172,6 +175,9 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
                     will(returnValue(mockObjSpec));
 
                     allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+                    will(returnValue(null));
+
+                    allowing(mockObjSpec).getFacet(MixinFacet.class);
                     will(returnValue(null));
                 }
             });

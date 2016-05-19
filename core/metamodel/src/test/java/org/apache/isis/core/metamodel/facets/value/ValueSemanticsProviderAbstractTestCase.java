@@ -19,14 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.apache.isis.core.unittestsupport.jmocking.JMockActions.returnArgument;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
 import java.util.Locale;
 
 import org.jmock.Expectations;
@@ -44,15 +36,23 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.apache.isis.core.unittestsupport.jmocking.JMockActions.returnArgument;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
@@ -70,7 +70,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected ValueSemanticsProviderContext mockContext;
     @Mock
-    protected ServicesInjector mockDependencyInjector;
+    protected ServicesInjector mockServicesInjector;
     @Mock
     protected AdapterManager mockAdapterManager;
     @Mock
@@ -95,10 +95,12 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                 allowing(mockConfiguration).getString("isis.locale");
                 will(returnValue(null));
 
-                allowing(mockDependencyInjector).injectServicesInto(with(any(Object.class)));
+                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+                will(returnValue(mockAuthenticationSessionProvider));
+
+                allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
 
                 never(mockAuthenticationSessionProvider);
-
                 never(mockAdapterManager);
             }
         });
@@ -120,9 +122,10 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     protected void setValue(final ValueSemanticsProviderAndFacetAbstract<?> value) {
         this.valueSemanticsProvider = value;
-        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(value, mockFacetHolder, mockAdapterManager, mockDependencyInjector);
+        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(value, mockFacetHolder, mockAdapterManager,
+                mockServicesInjector);
         this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder,
-                mockDependencyInjector, mockAdapterManager);
+                mockServicesInjector, mockAdapterManager);
     }
 
     protected ValueSemanticsProviderAndFacetAbstract<?> getValue() {

@@ -16,9 +16,6 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata.json;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
@@ -26,23 +23,55 @@ import java.util.TreeSet;
 
 import com.google.common.base.Objects;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.commons.lang.ClassExtensions;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class LayoutMetadataReaderFromJsonTest_read {
-    
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    private ServicesInjector mockServicesInjector;
+
+    @Mock
+    private GridService mockGridService;
+
     private LayoutMetadataReaderFromJson reader;
 
     @Before
     public void setUp() throws Exception {
         reader = new LayoutMetadataReaderFromJson();
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(GridService.class);
+            will(returnValue(mockGridService));
+        }});
+
+        reader.setServicesInjector(mockServicesInjector);
     }
     
     @Test
     public void happyCase() throws Exception {
+
+        context.checking(new Expectations() {{
+            ignoring(mockGridService);
+        }});
+
         final Properties properties = reader.asProperties(ExampleDomainObject.class);
         assertThat(properties, is(not(nullValue())));
         

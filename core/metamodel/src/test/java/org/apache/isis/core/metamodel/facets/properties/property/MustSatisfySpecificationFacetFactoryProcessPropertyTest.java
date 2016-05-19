@@ -30,12 +30,14 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithMustSatisfyAnnotations;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithoutMustSatisfyAnnotations;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -53,6 +55,8 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
 
     @Mock
     private ServicesInjector mockServicesInjector;
+    @Mock
+    private IsisConfigurationDefault mockConfiguration;
 
     @Mock
     private TranslationService mockTranslationService;
@@ -71,22 +75,21 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
-        }});
-        context.checking(new Expectations() {{
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(mockConfiguration));
+
             allowing(mockServicesInjector).injectServicesInto(with(any(List.class)));
+
+            allowing(mockFacetedMethod).getIdentifier();
+            will(returnValue(Identifier.actionIdentifier(Customer.class, "foo")));
+
         }});
 
         domainObjectClassWithoutAnnotation = DomainObjectWithoutMustSatisfyAnnotations.class;
         domainObjectClassWithAnnotation = DomainObjectWithMustSatisfyAnnotations.class;
         firstNameMethodWithout = domainObjectClassWithoutAnnotation.getMethod("getFirstName");
         firstNameMethodWith = domainObjectClassWithAnnotation.getMethod("getFirstName");
-
-        context.checking(new Expectations() {
-            {
-                allowing(mockFacetedMethod).getIdentifier();
-                will(returnValue(Identifier.actionIdentifier(Customer.class, "foo")));
-            }
-        });
 
         facetFactory = new PropertyAnnotationFacetFactory();
         facetFactory.setServicesInjector(mockServicesInjector);

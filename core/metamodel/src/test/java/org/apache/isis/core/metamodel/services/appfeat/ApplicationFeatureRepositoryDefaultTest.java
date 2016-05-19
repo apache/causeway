@@ -36,6 +36,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
@@ -78,6 +79,9 @@ public class ApplicationFeatureRepositoryDefaultTest {
     DomainObjectContainer mockContainer;
 
     @Mock
+    FactoryService mockFactoryService;
+
+    @Mock
     ServicesInjector mockServicesInjector;
 
     ApplicationFeatureRepositoryDefault applicationFeatureRepository;
@@ -87,7 +91,11 @@ public class ApplicationFeatureRepositoryDefaultTest {
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault();
         applicationFeatureRepository.container = mockContainer;
         applicationFeatureRepository.setServicesInjector(mockServicesInjector);
-        applicationFeatureRepository.applicationFeatureFactory = new ApplicationFeatureFactory();
+
+        final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
+        applicationFeatureRepository.applicationFeatureFactory = applicationFeatureFactory;
+        applicationFeatureFactory.factoryService = mockFactoryService;
+
 
 
         mockActThatIsHidden = context.mock(ObjectAction.class, "mockActThatIsHidden");
@@ -263,8 +271,9 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
             // then
             final ApplicationFeature newlyCreatedParent = new ApplicationFeature();
+
             context.checking(new Expectations() {{
-                oneOf(mockContainer).newTransientInstance(ApplicationFeature.class);
+                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
                 will(returnValue(newlyCreatedParent));
             }});
 

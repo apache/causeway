@@ -30,11 +30,13 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithMustSatisfyAnnotations;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithoutMustSatisfyAnnotations;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -54,6 +56,8 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
     @Mock
     private TranslationService mockTranslationService;
 
+    private IsisConfigurationDefault stubConfiguration;
+
 
     private Class<DomainObjectWithoutMustSatisfyAnnotations> domainObjectClassWithoutAnnotation;
     private Class<DomainObjectWithMustSatisfyAnnotations> domainObjectClassWithAnnotation;
@@ -67,11 +71,15 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
     @Before
     public void setUp() throws Exception {
 
+        stubConfiguration = new IsisConfigurationDefault();
+
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
-        }});
-        context.checking(new Expectations() {{
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(stubConfiguration));
+
             allowing(mockServicesInjector).injectServicesInto(with(any(List.class)));
         }});
 

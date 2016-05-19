@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
@@ -55,6 +56,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     @Before
     public void setUp() throws Exception {
         facetFactory = new DomainObjectLayoutFacetFactory();
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @After
@@ -100,6 +102,11 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     public static class Bookmarking extends DomainObjectLayoutFactoryTest {
 
         public static class ForDomainObjectLayout extends Bookmarking {
+
+            @Before
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
+            }
 
             @Test
             public void whenSpecified() {
@@ -174,6 +181,11 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         ObjectAdapter mockAdapter;
 
         public static class ForDomainObjectLayout extends CssClass {
+
+            @Before
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
+            }
 
             @Before
             public void setUp() throws Exception {
@@ -254,9 +266,10 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         public static class ForDomainObjectLayout extends CssClassFa {
 
             @Before
-            public void setUp() throws Exception {
-                super.setUp();
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
             }
+
 
             @Test
             public void whenSpecified() {
@@ -334,8 +347,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         public static class ForDomainObjectLayout extends DescribedAs {
 
             @Before
-            public void setUp() throws Exception {
-                super.setUp();
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
             }
 
             @Test
@@ -412,8 +425,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         public static class ForDomainObjectLayout extends Named {
 
             @Before
-            public void setUp() throws Exception {
-                super.setUp();
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
             }
 
             @Test
@@ -490,8 +503,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         public static class ForDomainObjectLayout extends Paged {
 
             @Before
-            public void setUp() throws Exception {
-                super.setUp();
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
             }
 
             @Test
@@ -568,8 +581,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         public static class ForDomainObjectLayout extends Plural {
 
             @Before
-            public void setUp() throws Exception {
-                super.setUp();
+            public void setUp2() throws Exception {
+                context.ignoring(mockConfiguration);
             }
 
             @Test

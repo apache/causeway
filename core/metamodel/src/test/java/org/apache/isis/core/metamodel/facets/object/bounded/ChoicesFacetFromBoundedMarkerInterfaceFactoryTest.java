@@ -40,9 +40,6 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractF
 
     private ChoicesFacetFromBoundedMarkerInterfaceFactory facetFactory;
 
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -57,18 +54,17 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractF
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
-        }});
 
-        facetFactory = new ChoicesFacetFromBoundedMarkerInterfaceFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
         }});
+
+        facetFactory = new ChoicesFacetFromBoundedMarkerInterfaceFactory();
+        facetFactory.setServicesInjector(mockServicesInjector);
+
 
     }
 

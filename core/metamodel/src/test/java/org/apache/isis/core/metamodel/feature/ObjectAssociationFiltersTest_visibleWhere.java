@@ -20,6 +20,9 @@ package org.apache.isis.core.metamodel.feature;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import com.google.common.collect.Lists;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -104,14 +107,14 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     @Before
     public void setUp() throws Exception {
         context.checking(new Expectations(){{
-            one(mockObjectAssociation).getFacet(with(subclassOf(HiddenFacet.class)));
-            will(returnValue(mockHiddenFacet));
-            
             allowing(mockHiddenFacet).where();
             will(returnValue(where));
 
             allowing(mockHiddenFacet).when();
             will(returnValue(when));
+
+            allowing(mockObjectAssociation).getFacets(with(any(Filter.class)));
+            will(returnValue(Lists.newArrayList(mockHiddenFacet)));
         }});
     }
 

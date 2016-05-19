@@ -31,9 +31,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -49,7 +52,6 @@ import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoR
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.unittestsupport.jmocking.InjectIntoJMockAction;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -67,7 +69,13 @@ public abstract class ObjectReflectorDefaultTestAbstract {
     @Mock
     private IsisConfiguration mockConfiguration;
     @Mock
+    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    @Mock
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
     private ServicesInjectorSpi mockServicesInjector;
+    @Mock
+    private GridService mockGridService;
 
     // is loaded by subclasses
     protected ObjectSpecification specification;
@@ -76,11 +84,30 @@ public abstract class ObjectReflectorDefaultTestAbstract {
     @Before
     public void setUp() throws Exception {
 
-        context.checking(new Expectations() {
-            {
-                ignoring(mockConfiguration);
-            }
-        });
+        context.checking(new Expectations() {{
+            ignoring(mockConfiguration);
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(new IsisConfigurationDefault(null)));
+
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
+
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).lookupService(GridService.class);
+            will(returnValue(mockGridService));
+
+            ignoring(mockGridService).existsFor(with(any(Class.class)));
+
+            ignoring(mockServicesInjector).getRegisteredServices();
+
+            ignoring(mockServicesInjector).isRegisteredService(with(any(Class.class)));
+        }});
 
         final ObjectReflectorDefault reflector =
                 new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
@@ -89,10 +116,6 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(
                                 new LayoutMetadataReaderFromJson()), mockServicesInjector);
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
-            will(returnValue(new IsisConfigurationDefault(null)));
-        }});
         runtimeContext =
                 new RuntimeContextNoRuntime(
                         new ServicesInjectorDefault(Collections.emptyList()), reflector);

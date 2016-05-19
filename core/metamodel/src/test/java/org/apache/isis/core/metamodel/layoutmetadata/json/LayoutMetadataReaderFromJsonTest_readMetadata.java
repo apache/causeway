@@ -16,29 +16,58 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata.json;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
-
 public class LayoutMetadataReaderFromJsonTest_readMetadata {
-    
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    private ServicesInjector mockServicesInjector;
+
+    @Mock
+    private GridService mockGridService;
+
+
     private LayoutMetadataReaderFromJson reader;
 
     @Before
     public void setUp() throws Exception {
         reader = new LayoutMetadataReaderFromJson();
+
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(GridService.class);
+            will(returnValue(mockGridService));
+        }});
+
+        reader.setServicesInjector(mockServicesInjector);
     }
     
     @Test
     public void happyCase() throws Exception {
+
+        context.checking(new Expectations() {{
+            ignoring(mockGridService);
+        }});
+
         final LayoutMetadata metadata = reader.asLayoutMetadata(ExampleDomainObject.class);
         assertThat(metadata, is(not(nullValue())));
         assertThat(metadata.getColumns(), is(not(nullValue())));

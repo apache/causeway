@@ -27,13 +27,16 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -61,7 +64,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected TranslationService mockTranslationService;
     protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    protected AuthenticationSession mockAuthenticationSession;
 
+    protected IsisConfigurationDefault stubConfiguration;
     protected ProgrammableReflector programmableReflector;
     protected ProgrammableMethodRemover methodRemover;
 
@@ -86,28 +91,44 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
         programmableReflector = new ProgrammableReflector();
-        facetHolder = new IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
+
+        facetHolder = new IdentifiedHolderImpl(
+                Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
+        facetedMethodParameter = new FacetedMethodParameter(
+                facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
+
         methodRemover = new ProgrammableMethodRemover();
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
         mockServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
+        stubConfiguration = new IsisConfigurationDefault();
+        mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
         context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-        }});
 
-        context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(stubConfiguration));
+
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
+
+            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+            will(returnValue(mockAuthenticationSession));
         }});
-
-
     }
 
     @Override

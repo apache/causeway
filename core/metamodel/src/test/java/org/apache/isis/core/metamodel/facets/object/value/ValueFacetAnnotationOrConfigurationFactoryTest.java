@@ -19,31 +19,23 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.jmock.Expectations;
-
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotation;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFacetFactoryTest {
@@ -51,43 +43,13 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ValueFacetAnnotationOrConfigurationFactory facetFactory;
-    private IsisConfigurationDefault isisConfigurationDefault;
-
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-
-
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
-        context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-        }});
-
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
-
-        isisConfigurationDefault = new IsisConfigurationDefault();
-
         facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
-            will(returnValue(isisConfigurationDefault));
-        }});
     }
 
     @Override
@@ -462,9 +424,16 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     }
 
     public void testSemanticsProviderNameCanBePickedUpFromConfiguration() {
+
+        // given
         final String className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+
+        stubConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+
+        // when
         facetFactory.process(new ProcessClassContext(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+
+        // then
         final ValueFacetAbstract facet = (ValueFacetAbstract) facetedMethod.getFacet(ValueFacet.class);
         assertNotNull(facet);
         // should also be a ParserFacet, since the VSP implements Parser
@@ -506,9 +475,18 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     }
 
     public void testNonAnnotatedValueCanPickUpSemanticsProviderFromConfiguration() {
+
+        // given
         final String className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+
+        stubConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+
+
+        // when
         facetFactory.process(new ProcessClassContext(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+
+
+        // then
         final ValueFacetAbstract facet = (ValueFacetAbstract) facetedMethod.getFacet(ValueFacet.class);
         assertNotNull(facet);
         // should also be a ParserFacet, since the VSP implements Parser

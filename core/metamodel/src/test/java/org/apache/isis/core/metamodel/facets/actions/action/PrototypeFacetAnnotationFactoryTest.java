@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import org.jmock.Expectations;
 
 import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -42,17 +41,9 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
     private ActionAnnotationFacetFactory facetFactory;
 
-    private TranslationService mockTranslationService;
-
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
 
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
         context.checking(new Expectations() {{
@@ -64,17 +55,14 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
-        }});
 
-
-        facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
         }});
 
+        facetFactory = new ActionAnnotationFacetFactory();
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Override

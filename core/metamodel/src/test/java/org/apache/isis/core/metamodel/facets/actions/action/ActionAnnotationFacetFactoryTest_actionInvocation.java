@@ -71,6 +71,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
         }});
+
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {

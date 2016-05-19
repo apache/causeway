@@ -94,7 +94,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -129,8 +128,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
-        facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
@@ -144,9 +141,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
+
         }});
 
         actionMethod = findMethod(Customer.class, "someAction");
+
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @After
@@ -201,6 +202,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // expect
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
+
+            context.checking(new Expectations() {{
+                allowing(mockConfiguration).getBoolean("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
+                will(returnValue(true));
+            }});
+
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
@@ -325,6 +332,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // expect
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
+
+            context.checking(new Expectations() {{
+                allowing(mockConfiguration).getBoolean("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
+                will(returnValue(true));
+            }});
+
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
@@ -1162,7 +1175,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             assertNotNull(facet);
             final PublishedActionFacetFromConfiguration facetImpl = (PublishedActionFacetFromConfiguration) facet;
             final PublishedAction.PayloadFactory payloadFactory = facetImpl.value();
-            assertThat(payloadFactory, is(nullValue()));
+            assertThat(payloadFactory, is(instanceOf(PublishedActionPayloadFactoryDefault.class)));
         }
 
         @Test(expected=IllegalStateException.class)

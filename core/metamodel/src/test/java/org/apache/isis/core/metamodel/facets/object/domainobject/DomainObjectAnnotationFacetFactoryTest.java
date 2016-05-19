@@ -81,16 +81,6 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
-            will(returnValue(mockConfiguration));
-        }});
     }
 
     @After

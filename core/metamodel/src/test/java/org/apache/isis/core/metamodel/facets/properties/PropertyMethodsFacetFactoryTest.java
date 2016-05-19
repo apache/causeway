@@ -24,8 +24,6 @@ import java.lang.reflect.Method;
 import org.jmock.Expectations;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -84,54 +82,19 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private ServicesInjector mockServicesInjector;
-    private TranslationService mockTranslationService;
-
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-
     public void setUp() throws Exception {
         super.setUp();
-        mockServicesInjector = context.mock(ServicesInjector.class);
-        mockTranslationService = context.mock(TranslationService.class);
-
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
-        }});
-
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
-        context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
-            will(returnValue(mockAuthenticationSession));
-        }});
     }
 
     private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-        }});
     }
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {

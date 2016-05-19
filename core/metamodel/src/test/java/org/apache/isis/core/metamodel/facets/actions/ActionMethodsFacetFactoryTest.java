@@ -33,6 +33,7 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -78,6 +79,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParam
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
@@ -94,23 +96,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private ServicesInjector mockServicesInjector;
     private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    private ConfigurationServiceInternal stubConfigurationServiceInternal;
     private TranslationService mockTranslationService;
-
-    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
-        facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-        }});
-    }
 
     public void setUp() throws Exception {
         super.setUp();
@@ -119,22 +106,40 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
+        stubConfigurationServiceInternal = new IsisConfigurationDefault(null);
 
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
+
         context.checking(new Expectations() {{
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
             will(returnValue(mockAuthenticationSession));
-        }});
 
-        context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
+
+            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(stubConfigurationServiceInternal));
+
+            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
         }});
+
     }
+
+    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract facetFactory) {
+        facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
+    }
+
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
@@ -605,6 +610,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
+
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });

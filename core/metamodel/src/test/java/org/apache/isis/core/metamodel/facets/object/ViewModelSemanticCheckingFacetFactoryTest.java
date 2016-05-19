@@ -23,9 +23,10 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -44,7 +45,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private IsisConfiguration mockConfiguration;
+    private IsisConfigurationDefault mockConfiguration;
 
     @Mock
     private ServicesInjector mockServicesInjector;
@@ -67,6 +68,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         context.checking(new Expectations() {{
             allowing(mockConfiguration).getBoolean(with(equalTo("isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable")), with(any(boolean.class)));
             will(returnValue(true));
+
         }});
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
 
@@ -74,6 +76,8 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
             will(returnValue(mockConfiguration));
         }});
+
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Test

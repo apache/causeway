@@ -190,6 +190,11 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
+            context.checking(new Expectations() {{
+                oneOf(mockConfiguration).getBoolean("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
+                will(returnValue(true));
+            }});
+
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
@@ -355,6 +360,10 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
+            context.checking(new Expectations() {{
+                oneOf(mockConfiguration).getBoolean("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
+                will(returnValue(true));
+            }});
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
@@ -522,6 +531,10 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // given
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");
+
+            // expecting
+            context.ignoring(mockServicesInjector);
+
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);

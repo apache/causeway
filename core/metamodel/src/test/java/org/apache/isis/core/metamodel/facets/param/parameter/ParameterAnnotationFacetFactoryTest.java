@@ -32,8 +32,6 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -81,15 +79,6 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
         facetFactory = new ParameterAnnotationFacetFactory();
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
         facetFactory.setServicesInjector(mockServicesInjector);
-
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-        }});
-
     }
 
     @After
@@ -159,6 +148,10 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
 
             // given
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
+
+            // expecting
+            context.ignoring(mockServicesInjector);
+
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);

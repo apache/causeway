@@ -24,57 +24,23 @@ import org.jmock.Expectations;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ParseableFacetAnnotationElseConfigurationFactoryTest extends AbstractFacetFactoryTest {
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ParseableFacetAnnotationElseConfigurationFactory facetFactory;
-    private IsisConfigurationDefault isisConfigurationDefault;
 
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-
-
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
-        context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-        }});
-
         facetFactory = new ParseableFacetAnnotationElseConfigurationFactory();
-        isisConfigurationDefault = new IsisConfigurationDefault();
-
         facetFactory.setServicesInjector(mockServicesInjector);
-        context.checking(new Expectations(){{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
-            will(returnValue(isisConfigurationDefault));
-        }});
 
     }
 
@@ -223,7 +189,7 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
 
     public void testParserNameCanBePickedUpFromConfiguration() {
         final String className = "org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAnnotationElseConfigurationFactoryTest$MyParseableWithParserSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className) + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
+        stubConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className) + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(MyParseableWithParserSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final ParseableFacetAbstract facet = (ParseableFacetAbstract) facetedMethod.getFacet(ParseableFacet.class);
         assertNotNull(facet);
@@ -241,7 +207,7 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
 
     public void testNonAnnotatedParseableCanPickUpParserFromConfiguration() {
         final String className = "org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAnnotationElseConfigurationFactoryTest$NonAnnotatedParseableParserSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className) + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
+        stubConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className) + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(NonAnnotatedParseableParserSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final ParseableFacetAbstract facet = (ParseableFacetAbstract) facetedMethod.getFacet(ParseableFacet.class);
         assertNotNull(facet);

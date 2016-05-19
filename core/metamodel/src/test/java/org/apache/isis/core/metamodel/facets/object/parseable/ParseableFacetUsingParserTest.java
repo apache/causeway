@@ -50,7 +50,7 @@ public class ParseableFacetUsingParserTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private ServicesInjector mockDependencyInjector;
+    private ServicesInjector mockServicesInjector;
     @Mock
     private AdapterManager mockAdapterManager;
 
@@ -67,7 +67,10 @@ public class ParseableFacetUsingParserTest {
                 allowing(mockFacetHolder).containsFacet(ValueFacet.class);
                 will(returnValue(Boolean.FALSE));
 
-                allowing(mockDependencyInjector).injectServicesInto(with(any(Object.class)));
+                allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
+
+                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+                will(returnValue(mockAuthenticationSessionProvider));
             }
         });
 
@@ -107,7 +110,7 @@ public class ParseableFacetUsingParserTest {
             }
         };
         parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder,
-                mockDependencyInjector, mockAdapterManager);
+                mockServicesInjector, mockAdapterManager);
     }
 
     @Ignore

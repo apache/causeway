@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -289,8 +290,11 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) {
-                }));
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) { }));
+
+                allowing(mockObjSpec).getFacet(MixinFacet.class);
+                will(returnValue(null));
+
             }});
 
             expectNoMethodsRemoved();
@@ -324,8 +328,11 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) {
-                }));
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) { }));
+
+                allowing(mockObjSpec).getFacet(MixinFacet.class);
+                will(returnValue(null));
+
             }});
 
             expectNoMethodsRemoved();
@@ -344,7 +351,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
         @Test
         public void onDomainObjectIsIgnored() {
 
-
             // given
             @DomainObject
             class Customer {
@@ -360,6 +366,9 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+                will(returnValue(null));
+
+                allowing(mockObjSpec).getFacet(MixinFacet.class);
                 will(returnValue(null));
             }});
 

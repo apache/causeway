@@ -72,6 +72,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenF
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -94,27 +95,17 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
 
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
+
         context.checking(new Expectations() {{
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-
             will(returnValue(mockAuthenticationSession));
-        }});
 
-        context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
-        }});
-    }
 
-
-    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract ffa) {
-        ffa.setSpecificationLoader(programmableReflector);
-        ffa.setServicesInjector(mockServicesInjector);
-
-        context.checking(new Expectations(){{
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
@@ -123,7 +114,19 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
+
+            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            will(returnValue(stubConfiguration));
         }});
+
+    }
+
+
+    private void injectServicesIntoAndAllowingServiceInjectorLookups(final FacetFactoryAbstract ffa) {
+
+        ffa.setSpecificationLoader(programmableReflector);
+        ffa.setServicesInjector(mockServicesInjector);
+
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
