@@ -33,14 +33,13 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class FactoryServiceDefault implements FactoryService, PersistenceSessionServiceAware {
+public class FactoryServiceInternalDefault implements FactoryService {
 
 
     @Programmatic
@@ -96,12 +95,8 @@ public class FactoryServiceDefault implements FactoryService, PersistenceSession
     @Inject
     ServiceRegistry serviceRegistry;
 
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 
 }

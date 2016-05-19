@@ -22,16 +22,15 @@ package org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract implements
-        PersistenceSessionServiceAware {
+public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract {
 
     private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
@@ -59,7 +58,9 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
     }
 
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        super.setServicesInjector(servicesInjector);
+        this.persistenceSessionServiceInternal = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
+
 }

@@ -81,9 +81,8 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -96,7 +95,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         implements AdapterManagerAware,
-        MetaModelValidatorRefiner, PersistenceSessionServiceAware,
+        MetaModelValidatorRefiner,
         PostConstructMethodCache {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
@@ -501,6 +500,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         boundedValidator.setConfiguration(configuration);
         immutableValidator.setConfiguration(configuration);
         objectTypeValidator.setConfiguration(configuration);
+
+        this.persistenceSessionServiceInternal =
+                servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
     }
 
 
@@ -509,10 +511,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         this.adapterManager = adapterManager;
     }
 
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
 
 
     // //////////////////////////////////////

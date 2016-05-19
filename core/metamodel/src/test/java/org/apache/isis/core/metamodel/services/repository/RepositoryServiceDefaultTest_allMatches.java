@@ -39,14 +39,14 @@ public class RepositoryServiceDefaultTest_allMatches {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private RepositoryServiceDefault repositoryService;
+    private RepositoryServiceInternalDefault repositoryService;
 
     @Mock
     private TransactionService mockTransactionService;
 
     @Before
     public void setUp() throws Exception {
-        repositoryService = new RepositoryServiceDefault() {
+        repositoryService = new RepositoryServiceInternalDefault() {
             @Override <T> List<T> submitQuery(final Query<T> query) {
                 return null;
             }

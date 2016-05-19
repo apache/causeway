@@ -54,7 +54,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -73,8 +72,7 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  * configuration is required.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-public class WrapperFactoryDefault implements WrapperFactory,
-        AdapterManagerAware, PersistenceSessionServiceAware {
+public class WrapperFactoryDefault implements WrapperFactory, AdapterManagerAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
@@ -253,8 +251,7 @@ public class WrapperFactoryDefault implements WrapperFactory,
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLoader,
-                getAdapterManager(), getPersistenceSessionService());
+        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLoader, getAdapterManager(), persistenceSessionServiceInternal);
     }
 
     @Override
@@ -304,7 +301,6 @@ public class WrapperFactoryDefault implements WrapperFactory,
 
 
     private AdapterManager adapterManager;
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
@@ -317,20 +313,13 @@ public class WrapperFactoryDefault implements WrapperFactory,
 
 
 
-    protected PersistenceSessionServiceInternal getPersistenceSessionService() {
-        return persistenceSessionServiceInternal;
-    }
-    @Programmatic
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
-
-
     @Inject
     AuthenticationSessionProvider authenticationSessionProvider;
 
     @Inject
     SpecificationLoader specificationLoader;
+
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

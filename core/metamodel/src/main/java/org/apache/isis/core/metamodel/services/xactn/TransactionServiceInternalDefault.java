@@ -23,12 +23,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class TransactionServiceDefault implements TransactionService, PersistenceSessionServiceAware {
+public class TransactionServiceInternalDefault implements TransactionService {
 
 
     @Override
@@ -42,10 +41,8 @@ public class TransactionServiceDefault implements TransactionService, Persistenc
         persistenceSessionServiceInternal.beginTran();
     }
 
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
 }

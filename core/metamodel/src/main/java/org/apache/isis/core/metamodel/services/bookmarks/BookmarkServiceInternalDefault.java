@@ -26,7 +26,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 /**
@@ -40,12 +39,8 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class BookmarkServiceDefault implements BookmarkService2,
-        PersistenceSessionServiceAware {
+public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-
-    // //////////////////////////////////////
 
     @Programmatic
     @Override
@@ -62,7 +57,6 @@ public class BookmarkServiceDefault implements BookmarkService2,
         return lookup(bookmarkHolder, FieldResetPolicy.RESET);
     }
 
-    // //////////////////////////////////////
 
     @Programmatic
     @Override
@@ -85,7 +79,6 @@ public class BookmarkServiceDefault implements BookmarkService2,
         return lookup(bookmark, FieldResetPolicy.RESET);
     }
 
-    // //////////////////////////////////////
 
     @SuppressWarnings("unchecked")
     @Programmatic
@@ -104,7 +97,6 @@ public class BookmarkServiceDefault implements BookmarkService2,
         return (T) lookup(bookmark, FieldResetPolicy.RESET, cls);
     }
 
-    // //////////////////////////////////////
 
     @Programmatic
     @Override
@@ -119,7 +111,6 @@ public class BookmarkServiceDefault implements BookmarkService2,
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
 
-    // //////////////////////////////////////
 
     @Programmatic
     @Override
@@ -127,16 +118,10 @@ public class BookmarkServiceDefault implements BookmarkService2,
         return persistenceSessionServiceInternal.bookmarkFor(cls, identifier);
     }
 
-    // //////////////////////////////////////
 
 
-
-
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
-
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     @javax.inject.Inject
     private WrapperFactory wrapperFactory;

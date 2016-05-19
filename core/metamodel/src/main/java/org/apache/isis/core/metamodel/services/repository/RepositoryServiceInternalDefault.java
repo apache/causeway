@@ -42,14 +42,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class RepositoryServiceDefault
+public class RepositoryServiceInternalDefault
         implements RepositoryService,
-            PersistenceSessionServiceAware, AdapterManagerAware {
+        AdapterManagerAware {
 
 
 
@@ -254,17 +253,13 @@ public class RepositoryServiceDefault
     @javax.inject.Inject
     TransactionService transactionService;
 
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
-
     private AdapterManager adapterManager;
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
+
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

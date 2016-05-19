@@ -60,16 +60,15 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
-        implements DomainObjectContainer, PersistenceSessionServiceAware, AdapterManagerAware, ExceptionRecognizer {
+        implements DomainObjectContainer, AdapterManagerAware, ExceptionRecognizer {
 
 
     //region > titleOf
@@ -649,9 +648,7 @@ public class DomainObjectContainerDefault
 
     //region > framework dependencies
 
-    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     private AdapterManager adapterManager;
-
 
 
     protected AdapterManager getAdapterManager() {
@@ -668,11 +665,6 @@ public class DomainObjectContainerDefault
         return persistenceSessionServiceInternal;
     }
 
-    @Programmatic
-    @Override
-    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
-    }
 
 
 
@@ -709,6 +701,9 @@ public class DomainObjectContainerDefault
 
     @Inject
     WrapperFactory wrapperFactory;
+
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     //endregion
 

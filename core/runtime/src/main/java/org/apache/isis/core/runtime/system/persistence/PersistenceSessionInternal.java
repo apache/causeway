@@ -89,12 +89,11 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceAware;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceAware;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -404,10 +403,6 @@ public class PersistenceSessionInternal implements
         if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
             final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
             cast.setMessageBrokerService(this);
-        }
-        if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
-            final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
-            cast.setPersistenceSessionService(this);
         }
     }
     //endregion

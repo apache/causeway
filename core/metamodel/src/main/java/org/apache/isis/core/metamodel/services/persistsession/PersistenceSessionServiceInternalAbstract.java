@@ -26,10 +26,6 @@ public abstract class PersistenceSessionServiceInternalAbstract implements Persi
             final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
             cast.setAdapterManager(this);
         }
-        if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
-            final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
-            cast.setPersistenceSessionService(this);
-        }
     }
 
 }
