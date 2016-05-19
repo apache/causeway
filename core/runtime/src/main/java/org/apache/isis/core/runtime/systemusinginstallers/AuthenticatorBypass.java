@@ -16,33 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.runtime.systemusinginstallers;
 
-package org.apache.isis.core.runtime.fixtures;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
-import org.apache.isis.applib.fixtures.InstallableFixture;
-import org.apache.isis.applib.fixtures.LogonFixture;
+class AuthenticatorBypass extends AuthenticatorAbstract {
 
-/**
- * A particular mechanism to install fixtures.
- */
-public interface FixturesInstaller {
+    public AuthenticatorBypass(final IsisConfiguration configuration) {
+        super(configuration);
+    }
 
-    /**
-     * NB: this has the suffix '-installer' because in the command line we must
-     * distinguish from the '--fixture' flag meaning a particular fixture to be
-     * installed.
-     */
-    static String TYPE = "fixtures-installer";
+    @Override
+    public boolean isValid(final AuthenticationRequest request) {
+        return true;
+    }
 
-    void installFixtures();
-
-    /**
-     * The {@link InstallableFixture} (if any) that is an instance of
-     * {@link LogonFixture}.
-     * 
-     * <p>
-     * If there is more than one {@link LogonFixture}, then the last one
-     * installed is returned.
-     */
-    LogonFixture getLogonFixture();
+    @Override
+    public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return true;
+    }
 }

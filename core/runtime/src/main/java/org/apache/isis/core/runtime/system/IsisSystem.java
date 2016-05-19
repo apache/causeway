@@ -156,9 +156,9 @@ public class IsisSystem implements ApplicationScopedComponent {
 
             // authentication, authorization
             final AuthenticationManager authenticationManager =
-                    isisComponentProvider.provideAuthenticationManager(deploymentType);
+                    isisComponentProvider.provideAuthenticationManager();
             final AuthorizationManager authorizationManager =
-                    isisComponentProvider.provideAuthorizationManager(deploymentType);
+                    isisComponentProvider.provideAuthorizationManager();
 
             // specificationLoader
             final Collection<MetaModelRefiner> metaModelRefiners =
@@ -170,7 +170,7 @@ public class IsisSystem implements ApplicationScopedComponent {
             // persistenceSessionFactory
             final PersistenceSessionFactory persistenceSessionFactory =
                     isisComponentProvider.providePersistenceSessionFactory(
-                            deploymentType, servicesInjector, specificationLoader);
+                            deploymentType, servicesInjector);
 
             // runtimeContext
             final RuntimeContextFromSession runtimeContext =
@@ -274,9 +274,6 @@ public class IsisSystem implements ApplicationScopedComponent {
     private void installFixturesIfRequired() throws IsisSystemException {
 
         fixtureInstaller = isisComponentProvider.provideFixturesInstaller();
-        if (isNoop(fixtureInstaller)) {
-            return;
-        }
 
         IsisContext.openSession(new InitialisationSession());
         fixtureInstaller.installFixtures();
@@ -289,10 +286,6 @@ public class IsisSystem implements ApplicationScopedComponent {
         } finally {
             IsisContext.closeSession();
         }
-    }
-
-    private boolean isNoop(final FixturesInstaller candidate) {
-        return candidate == null || (fixtureInstaller instanceof Noop);
     }
 
     /**

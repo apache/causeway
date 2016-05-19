@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.InstallableFixture;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -40,24 +39,18 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
-import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
-public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract {
+public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
 
     private final ProgrammingModel programmingModel;
     private final MetaModelValidator metaModelValidator;
@@ -70,61 +63,27 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
             final IsisConfiguration configurationOverride,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride) {
-        super(deploymentType, appManifestIfAny);
+        super(deploymentType, appManifestIfAny, elseDefault(configurationOverride));
 
-        this.configuration = elseDefault(configurationOverride);
+        this.services = appManifestIfAny != null
+                ? new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration()).getServices()
+                : servicesOverride != null
+                    ? servicesOverride
+                    : new ServicesInstallerFromConfiguration(getConfiguration()).getServices();
 
-        final String fixtureClassNamesCsv;
-        if(appManifest != null) {
-
-            putAppManifestKey(appManifest);
-            findAndRegisterTypes(appManifest);
-            specifyServicesAndRegisteredEntitiesUsing(appManifest);
-
-            List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
-            fixtureClassNamesCsv = classNamesFrom(fixtureClasses);
-
-            overrideConfigurationUsing(appManifest);
-
-            this.services = createServices(configuration);
-
-        } else {
-            fixtureClassNamesCsv = classNamesFrom(fixturesOverride);
-
-            this.services = elseDefault(servicesOverride, configuration);
-        }
+        final String fixtureClassNamesCsv = classNamesFrom(
+                        appManifestIfAny != null ? appManifestIfAny.getFixtures() : fixturesOverride);
 
         putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
-        this.fixturesInstaller = new FixturesInstallerFromConfiguration(configuration);
 
         // integration tests ignore appManifest for authentication and authorization.
-        this.authenticationManager = createAuthenticationManager(configuration);
-        this.authorizationManager = createAuthorizationManager(configuration);
+        this.authenticationManager = createAuthenticationManager();
+        this.authorizationManager = createAuthorizationManager();
 
-        this.programmingModel = elseDefault(programmingModelOverride, configuration);
+        this.programmingModel = elseDefault(programmingModelOverride);
         this.metaModelValidator = elseDefault(metaModelValidatorOverride);
 
     }
-
-
-
-    //region > appManifest
-
-    private List<Object> createServices(final IsisConfigurationDefault configuration) {
-        final ServicesInstallerFromConfigurationAndAnnotation servicesInstaller =
-                new ServicesInstallerFromConfigurationAndAnnotation(configuration);
-        return servicesInstaller.getServices();
-    }
-
-
-    @Override
-    protected void doPutConfigurationProperty(final String key, final String value) {
-        // bit hacky :-(
-        IsisConfigurationDefault configurationDefault = this.configuration;
-        configurationDefault.put(key, value);
-    }
-
-    //endregion
 
     /**
      * Default will read <tt>isis.properties</tt> (and other optional property files) from the &quot;config&quot;
@@ -136,33 +95,19 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
                 : new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
     }
 
-    private static List<Object> elseDefault(
-            final List<Object> servicesOverride,
-            final IsisConfigurationDefault configuration) {
-        return servicesOverride != null
-                ? servicesOverride
-                : createDefaultServices(configuration);
+    private ProgrammingModel elseDefault(final ProgrammingModel programmingModel) {
+        return programmingModel != null ? programmingModel : createDefaultProgrammingModel();
     }
 
-    private static List<Object> createDefaultServices(
-            final IsisConfigurationDefault configuration) {
-        final ServicesInstallerFromConfiguration servicesInstaller = new ServicesInstallerFromConfiguration( configuration);
-        return servicesInstaller.getServices();
-    }
+    // TODO: this is duplicating logic in JavaReflectorInstaller; need to unify.
+    private ProgrammingModel createDefaultProgrammingModel() {
 
-
-    private static ProgrammingModel elseDefault(final ProgrammingModel programmingModel, final IsisConfiguration configuration) {
-        return programmingModel != null
-                ? programmingModel
-                : createDefaultProgrammingModel(configuration);
-    }
-
-    // TODO: this is duplicating logic in JavaReflectorInstallerNoDecorators; need to unify.
-    private static ProgrammingModel createDefaultProgrammingModel(final IsisConfiguration configuration) {
         final ProgrammingModelFacetsJava5 programmingModel = new ProgrammingModelFacetsJava5();
 
+        final IsisConfigurationDefault configuration = getConfiguration();
         ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
         ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
+
         return programmingModel;
     }
 
@@ -173,56 +118,19 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     }
 
     /**
-     * The standard authentication manager, configured with the default authenticator (allows all requests through).
+     * The standard authentication manager, configured with the 'bypass' authenticator (allows all requests through).
      */
-    private static AuthenticationManager createAuthenticationManager(final IsisConfiguration configuration) {
-        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(configuration);
-        Authenticator authenticator = new AuthenticatorBypass(configuration);
-        authenticationManager.addAuthenticator(authenticator);
+    private AuthenticationManager createAuthenticationManager() {
+        final AuthenticationManagerStandard authenticationManager =
+                new AuthenticationManagerStandard(getConfiguration());
+        authenticationManager.addAuthenticator(new AuthenticatorBypass(getConfiguration()));
         return authenticationManager;
     }
 
-    private static class AuthenticatorBypass extends AuthenticatorAbstract {
-
-        public AuthenticatorBypass(final IsisConfiguration configuration) {
-            super(configuration);
-        }
-
-        @Override
-        public boolean isValid(final AuthenticationRequest request) {
-            return true;
-        }
-
-        @Override
-        public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
-            return true;
-        }
-
+    private AuthorizationManager createAuthorizationManager() {
+        return new AuthorizationManagerStandard(getConfiguration());
     }
 
-
-    /**
-     * The standard authorization manager, allowing all access.
-     */
-    private static AuthorizationManager createAuthorizationManager(final IsisConfiguration configuration) {
-        return new AuthorizationManagerStandard(configuration);
-    }
-
-
-    @Override
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
-    }
-
-    @Override
-    public IsisConfigurationDefault getConfiguration() {
-        return configuration;
-    }
-
-    @Override
-    public FixturesInstaller provideFixturesInstaller()  {
-        return fixturesInstaller;
-    }
 
     @Override
     public SpecificationLoader provideSpecificationLoader(
@@ -242,28 +150,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
                         layoutMetadataReaders,
                         metaModelValidator,
                         servicesInjector);
-    }
-
-    @Override
-    public AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) {
-        return authenticationManager;
-    }
-
-    @Override
-    public AuthorizationManager provideAuthorizationManager(DeploymentType deploymentType) {
-        return authorizationManager;
-    }
-
-    @Override
-    public PersistenceSessionFactory providePersistenceSessionFactory(
-            DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjector,
-            final SpecificationLoader specificationLoader) {
-        DataNucleusPersistenceMechanismInstaller installer =
-                new DataNucleusPersistenceMechanismInstaller(configuration);
-        return installer.createPersistenceSessionFactory(
-                deploymentType, servicesInjector
-        );
     }
 
 }

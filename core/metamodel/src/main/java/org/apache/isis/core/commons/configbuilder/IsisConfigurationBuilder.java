@@ -346,14 +346,14 @@ public final class IsisConfigurationBuilder {
      * Log a summary of resources found or not found.
      */
     public void dumpResourcesToLog() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Configuration resources FOUND:");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Configuration resources FOUND:");
             for (String resource : configurationResourcesFound) {
-                LOG.info("*  " + resource);
+                LOG.debug("*  {}", resource);
             }
-            LOG.info("Configuration resources NOT FOUND (but not needed):");
+            LOG.debug("Configuration resources NOT FOUND (but not needed):");
             for (String resource : configurationResourcesNotFound) {
-                LOG.info("*  " + resource);
+                LOG.debug("*  {}", resource);
             }
         }
     }

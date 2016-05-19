@@ -155,12 +155,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
 
     // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
-    private final AppManifest appManifestForComponentProvider;
-    private final IsisConfiguration configurationForComponentProvider;
-    private final List<Object> servicesForComponentProvider;
-    private final List<InstallableFixture> fixturesForComponentProvider;
-    private final MetaModelValidator metaModelValidatorForComponentProvider;
-    private final ProgrammingModel programmingModelForComponentProvider;
+    private final AppManifest appManifestIfAny;
+    private final IsisConfiguration configurationOverride;
+    private final List<Object> servicesIfAny;
+    private final List<InstallableFixture> fixturesIfAny;
+    private final MetaModelValidator metaModelValidatorOverride;
+    private final ProgrammingModel programmingModelOverride;
 
     // populated at #setupSystem
     private IsisComponentProvider componentProvider;
@@ -335,15 +335,15 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             final List<InstallableFixture> fixturesIfAny,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride,
-            final AuthenticationRequest authenticationRequest,
+            final AuthenticationRequest authenticationRequestIfAny,
             final List<Listener> listeners) {
-        this.appManifestForComponentProvider = appManifestIfAny;
-        this.configurationForComponentProvider = configurationOverride;
-        this.servicesForComponentProvider = servicesIfAny;
-        this.fixturesForComponentProvider = fixturesIfAny;
-        this.programmingModelForComponentProvider = programmingModelOverride;
-        this.metaModelValidatorForComponentProvider = metaModelValidatorOverride;
-        this.authenticationRequestIfAny = authenticationRequest;
+        this.appManifestIfAny = appManifestIfAny;
+        this.configurationOverride = configurationOverride;
+        this.servicesIfAny = servicesIfAny;
+        this.fixturesIfAny = fixturesIfAny;
+        this.programmingModelOverride = programmingModelOverride;
+        this.metaModelValidatorOverride = metaModelValidatorOverride;
+        this.authenticationRequestIfAny = authenticationRequestIfAny;
         this.listeners = listeners;
     }
 
@@ -398,12 +398,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
             componentProvider = new IsisComponentProviderDefault(
                     DeploymentType.UNIT_TESTING,
-                    appManifestForComponentProvider,
-                    servicesForComponentProvider,
-                    fixturesForComponentProvider,
-                    configurationForComponentProvider,
-                    programmingModelForComponentProvider,
-                    metaModelValidatorForComponentProvider
+                    appManifestIfAny,
+                    servicesIfAny,
+                    fixturesIfAny,
+                    configurationOverride,
+                    programmingModelOverride,
+                    metaModelValidatorOverride
             );
 
             isisSystem = new IsisSystem(componentProvider);

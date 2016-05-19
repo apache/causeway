@@ -43,15 +43,15 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.IsisInstallerRegistry;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.about.ComponentDetails;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
@@ -81,7 +81,7 @@ import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInj
  * even if it has not been registered in <tt>installer-registry.properties</tt>
  * : just specify the {@link Installer}'s fully qualified class name.
  */
-public class InstallerLookup implements InstallerRepository, ApplicationScopedComponent, SystemDependencyInjector {
+public class InstallerLookup implements ApplicationScopedComponent, SystemDependencyInjector {
 
     private static final Logger LOG = LoggerFactory.getLogger(InstallerLookup.class);
 
@@ -136,32 +136,12 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     }
     //endregion
 
-    //region > InstallerRepository impl.
-
-    @Override
-    public Installer[] getInstallers(final Class<?> cls) {
-        final List<Installer> list = new ArrayList<Installer>();
-        for (final Installer comp : installerList) {
-            if (cls.isAssignableFrom(comp.getClass())) {
-                list.add(comp);
-            }
-        }
-        return list.toArray(new Installer[list.size()]);
-    }
-    //endregion
-
-
-    //region > metamodel
-    public SpecificationLoaderInstaller reflectorInstaller(final String requested) {
-        return getInstaller(SpecificationLoaderInstaller.class, requested, SystemConstants.REFLECTOR_KEY, SystemConstants.REFLECTOR_DEFAULT);
-    }
-    //endregion
-
     //region > framework
 
     public AuthenticationManagerInstaller authenticationManagerInstaller(final String requested) {
         return getInstaller(
-                AuthenticationManagerInstaller.class, requested,
+                AuthenticationManagerInstaller.class,
+                requested,
                 SystemConstants.AUTHENTICATION_INSTALLER_KEY,
                 SystemConstants.AUTHENTICATION_DEFAULT);
     }
@@ -173,31 +153,11 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
                 SystemConstants.AUTHORIZATION_DEFAULT);
     }
 
-    public FixturesInstaller fixturesInstaller(final String requested) {
-        return getInstaller(
-                FixturesInstaller.class, requested,
-                SystemConstants.FIXTURES_INSTALLER_KEY,
-                SystemConstants.FIXTURES_INSTALLER_DEFAULT);
-    }
-
-    public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested) {
-        return getInstaller(
-                PersistenceMechanismInstaller.class, requested,
-                SystemConstants.OBJECT_PERSISTOR_KEY,
-                SystemConstants.OBJECT_PERSISTOR_DEFAULT);
-    }
-
-    public ServicesInstaller servicesInstaller(final String requestedImplementationName) {
-        return getInstaller(
-                ServicesInstaller.class, requestedImplementationName,
-                SystemConstants.SERVICES_INSTALLER_KEY,
-                SystemConstants.SERVICES_INSTALLER_DEFAULT);
-    }
     //endregion
 
     //region > framework - generic
     @SuppressWarnings("unchecked")
-    public <T extends Installer> T getInstaller(final Class<T> cls, final String implName) {
+    private <T extends Installer> T getInstaller(final Class<T> cls, final String implName) {
         Assert.assertNotNull("No name specified", implName);
         for (final Installer installer : installerList) {
             if (cls.isAssignableFrom(installer.getClass()) && installer.getName().equals(implName)) {
@@ -217,7 +177,8 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
             }
             return installer;
         } catch (final InstanceCreationException e) {
-            throw new InstanceCreationException("Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
+            throw new InstanceCreationException(
+                    "Specification error in " + IsisInstallerRegistry.INSTALLER_REGISTRY_FILE, e);
         } catch (final UnavailableClassException e) {
             return null;
         }
@@ -258,7 +219,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         return in;
     }
     //endregion
-
 
     //region > SystemDependencyInjector, Injectable
     @Override

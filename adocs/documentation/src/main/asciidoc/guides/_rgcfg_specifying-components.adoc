@@ -82,6 +82,8 @@ The mechanism to discover and load domain services:
 
 This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
+This property is also IGNORED completely in 1.13.0+; the `configuration-and-annotation` implementation is always used.
+
 
 |===
 
