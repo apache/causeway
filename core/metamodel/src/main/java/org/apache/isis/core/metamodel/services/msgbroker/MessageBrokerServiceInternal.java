@@ -14,10 +14,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.msgbroker;
 
-public interface MessageBrokerService {
+import org.apache.isis.applib.annotation.Programmatic;
 
+public interface MessageBrokerServiceInternal {
+
+    @Programmatic
     void injectInto(final Object candidate);
 
     /**
@@ -26,6 +29,7 @@ public interface MessageBrokerService {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void informUser(String message);
 
     /**
@@ -34,6 +38,7 @@ public interface MessageBrokerService {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void warnUser(String message);
 
     /**
@@ -42,6 +47,7 @@ public interface MessageBrokerService {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void raiseError(String message);
 
 

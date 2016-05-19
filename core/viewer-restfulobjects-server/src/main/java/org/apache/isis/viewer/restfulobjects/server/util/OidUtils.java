@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.util;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
@@ -55,7 +55,7 @@ public final class OidUtils {
             final String oidStrUnencoded) {
         RootOid rootOid = RootOid.deString(oidStrUnencoded, getOidMarshaller());
 
-        final PersistenceSession persistenceSession = rendererContext.getPersistenceSession();
+        final PersistenceSessionInternal persistenceSession = rendererContext.getPersistenceSession();
 
         return persistenceSession.adapterForAny(rootOid);
     }

@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 /**
@@ -43,7 +43,7 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 public class BookmarkServiceDefault implements BookmarkService2,
         PersistenceSessionServiceAware {
 
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     // //////////////////////////////////////
 
@@ -73,7 +73,7 @@ public class BookmarkServiceDefault implements BookmarkService2,
             return null;
         }
         try {
-            return persistenceSessionService.lookup(bookmark, fieldResetPolicy);
+            return persistenceSessionServiceInternal.lookup(bookmark, fieldResetPolicy);
         } catch(ObjectNotFoundException ex) {
             return null;
         }
@@ -112,7 +112,7 @@ public class BookmarkServiceDefault implements BookmarkService2,
         if(domainObject == null) {
             return null;
         }
-        return persistenceSessionService.bookmarkFor(unwrapped(domainObject));
+        return persistenceSessionServiceInternal.bookmarkFor(unwrapped(domainObject));
     }
 
     private Object unwrapped(Object domainObject) {
@@ -124,7 +124,7 @@ public class BookmarkServiceDefault implements BookmarkService2,
     @Programmatic
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return persistenceSessionService.bookmarkFor(cls, identifier);
+        return persistenceSessionServiceInternal.bookmarkFor(cls, identifier);
     }
 
     // //////////////////////////////////////
@@ -133,8 +133,8 @@ public class BookmarkServiceDefault implements BookmarkService2,
 
 
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
-        this.persistenceSessionService = persistenceSessionService;
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
 

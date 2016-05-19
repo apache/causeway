@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 public class StandaloneData extends Data {
 
@@ -127,7 +127,7 @@ public class StandaloneData extends Data {
         }
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

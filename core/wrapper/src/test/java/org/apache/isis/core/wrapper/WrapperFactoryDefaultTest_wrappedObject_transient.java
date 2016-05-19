@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -84,7 +84,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private IsisConfiguration mockConfiguration;
     @Mock
-    private PersistenceSessionService mockPersistenceSessionService;
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
 
@@ -127,7 +127,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
-        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
+        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionServiceInternal);
         wrapperFactory.specificationLoader = mockSpecificationLoader;
 
         context.checking(new Expectations() {

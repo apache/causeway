@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -67,21 +67,21 @@ public abstract class ChoicesFacetFromBoundedAbstract
 
     private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final PersistenceSessionService persistenceSessionService;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     public ChoicesFacetFromBoundedAbstract(
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final PersistenceSessionService persistenceSessionService) {
+            final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.persistenceSessionService = persistenceSessionService;
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
-    public PersistenceSessionService getPersistenceSessionService() {
-        return persistenceSessionService;
+    public PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
     }
 
     @Override

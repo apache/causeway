@@ -51,8 +51,8 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -86,9 +86,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private PersistenceSessionService mockPersistenceSessionService;
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
-    private MessageBrokerService mockMessageBrokerService;
+    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
     @Mock
     private ServicesInjector mockServicesInjector;
     @Mock
@@ -137,7 +137,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         objectMemberDependencies = new ObjectMemberDependencies(
                 mockSpecificationLoader, mockServicesInjector,
-                mockPersistenceSessionService);
+                mockPersistenceSessionServiceInternal);
 
         employeeRepository = new EmployeeRepositoryImpl();
 
@@ -206,7 +206,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
-        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
+        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionServiceInternal);
         wrapperFactory.specificationLoader = mockSpecificationLoader;
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
 
@@ -290,7 +290,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
             allowing(mockAdapterForStringSmith).isDestroyed();
             will(returnValue(false));
 
-            allowing(mockPersistenceSessionService).adapterFor("Smith");
+            allowing(mockPersistenceSessionServiceInternal).adapterFor("Smith");
             will(returnValue(mockAdapterForStringSmith));
         }});
 
@@ -332,7 +332,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAdapterForStringJones).getSpecification();
                 will(returnValue(mockStringSpec));
 
-                allowing(mockPersistenceSessionService).adapterFor("Jones");
+                allowing(mockPersistenceSessionServiceInternal).adapterFor("Jones");
                 will(returnValue(mockAdapterForStringJones));
 
                 ignoring(mockStringSpec);

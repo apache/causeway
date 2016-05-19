@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -79,7 +79,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FeatureType featureType;
     private final SpecificationLoader specificationLookup;
     private final ServicesInjector servicesInjector;
-    private final PersistenceSessionService persistenceSessionService;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     //endregion
 
     protected ObjectMemberAbstract(
@@ -96,7 +96,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
         this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
         this.servicesInjector = objectMemberDependencies.getServicesInjector();
-        this.persistenceSessionService = objectMemberDependencies.getPersistenceSessionService();
+        this.persistenceSessionServiceInternal = objectMemberDependencies.getPersistenceSessionService();
     }
 
     //region > Identifiers
@@ -384,8 +384,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return servicesInjector;
     }
 
-    public PersistenceSessionService getPersistenceSessionService() {
-        return persistenceSessionService;
+    public PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
     }
 
     public CollectionTypeRegistry getCollectionTypeRegistry() {

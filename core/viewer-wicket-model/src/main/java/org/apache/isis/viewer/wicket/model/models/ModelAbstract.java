@@ -24,7 +24,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -50,7 +50,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
         return IsisContext.getAuthenticationSession();
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

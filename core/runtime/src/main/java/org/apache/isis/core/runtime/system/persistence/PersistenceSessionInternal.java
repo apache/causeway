@@ -89,10 +89,10 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -148,18 +148,18 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
  * identities} for each and every POJO that is being used by the framework.
  */
-public class PersistenceSession implements
+public class PersistenceSessionInternal implements
         TransactionalResource,
         SessionScopedComponent,
         AdapterManager,
-        MessageBrokerService,
-        PersistenceSessionService,
+        MessageBrokerServiceInternal,
+        PersistenceSessionServiceInternal,
         IsisLifecycleListener2.PersistenceSessionLifecycleManagement,
         IsisTransactionManager.PersistenceSessionTransactionManagement,
         PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement {
 
     //region > constants
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionInternal.class);
 
     /**
      * @see #isFixturesInstalled()
@@ -214,7 +214,7 @@ public class PersistenceSession implements
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(
+    public PersistenceSessionInternal(
             final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
@@ -987,7 +987,7 @@ public class PersistenceSession implements
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have a
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link PersistenceSession} as the object is implicitly 'in use'.
+     * the {@link PersistenceSessionInternal} as the object is implicitly 'in use'.
      *
      * <p>
      * If the object has any associations then each of these, where they aren't
@@ -1018,7 +1018,7 @@ public class PersistenceSession implements
                 makePersistentTransactionAssumed(adapter);
 
                 // clear out the map of transient -> persistent
-                PersistenceSession.this.persistentByTransient.clear();
+                PersistenceSessionInternal.this.persistentByTransient.clear();
             }
 
         });
@@ -1296,7 +1296,7 @@ public class PersistenceSession implements
 
     /**
      * @deprecated
-     * @return - simply returns this {@link PersistenceSession}.
+     * @return - simply returns this {@link PersistenceSessionInternal}.
      */
     @Deprecated
     public AdapterManager getAdapterManager() {
@@ -1671,7 +1671,7 @@ public class PersistenceSession implements
      *
      * <p>
      * Note that there is no management of {@link Version}s here. That is
-     * because the {@link PersistenceSession} is expected to manage this.
+     * because the {@link PersistenceSessionInternal} is expected to manage this.
      *
      * @param hintRootOid - allow a different persistent root oid to be provided.
      */

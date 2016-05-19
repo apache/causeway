@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
@@ -35,7 +35,7 @@ public abstract class AbstractIsisSessionTemplate {
     public void execute(final AuthenticationSession authSession, final Object context) {
         try {
             IsisContext.openSession(authSession);
-            PersistenceSession persistenceSession = getPersistenceSession();
+            PersistenceSessionInternal persistenceSession = getPersistenceSession();
             persistenceSession.getServicesInjector().injectServicesInto(this);
             doExecute(context);
         } finally {
@@ -58,7 +58,7 @@ public abstract class AbstractIsisSessionTemplate {
      * transaction handling.
      */
     protected void doExecute(final Object context) {
-        final PersistenceSession persistenceSession = getPersistenceSession();
+        final PersistenceSessionInternal persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
         transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
@@ -90,11 +90,11 @@ public abstract class AbstractIsisSessionTemplate {
     
     // //////////////////////////////////////
     
-    protected PersistenceSession getPersistenceSession() {
+    protected PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-    protected IsisTransactionManager getTransactionManager(PersistenceSession persistenceSession) {
+    protected IsisTransactionManager getTransactionManager(PersistenceSessionInternal persistenceSession) {
         return persistenceSession.getTransactionManager();
     }
 

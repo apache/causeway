@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 
 /**
  * @deprecated
@@ -49,10 +49,10 @@ public class ActionInvocationFacetForPostsActionInvokedEventAnnotation
             final ServicesInjector servicesInjector,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager,
-            final TransactionStateProvider transactionStateProvider) {
+            final TransactionStateProviderInternal transactionStateProviderInternal) {
         super(eventType, method, onType, returnType, holder,
                 deploymentCategory, isisConfiguration, servicesInjector, authenticationSessionProvider, adapterManager,
-                transactionStateProvider);
+                transactionStateProviderInternal);
     }
 
     @Override

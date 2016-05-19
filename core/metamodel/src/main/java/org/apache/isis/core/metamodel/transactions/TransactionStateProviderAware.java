@@ -20,10 +20,11 @@
 package org.apache.isis.core.metamodel.transactions;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 
 public interface TransactionStateProviderAware {
 
     @Programmatic
-    public void setTransactionStateProvider(TransactionStateProvider transactionStateProvider);
+    public void setTransactionStateProvider(TransactionStateProviderInternal transactionStateProviderInternal);
 
 }

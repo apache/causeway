@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 /**
  * For {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory} implementations that can cache the
- * {@link PersistenceSession#isFixturesInstalled()} so is only called once per
+ * {@link PersistenceSessionInternal#isFixturesInstalled()} so is only called once per
  * application scope.
  */
 public interface FixturesInstalledFlag {

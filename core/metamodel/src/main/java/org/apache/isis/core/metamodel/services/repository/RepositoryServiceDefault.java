@@ -41,8 +41,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -98,7 +98,7 @@ public class RepositoryServiceDefault
         if (isPersistent(object)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
-        persistenceSessionService.makePersistent(adapter);
+        persistenceSessionServiceInternal.makePersistent(adapter);
     }
     
     @Programmatic
@@ -126,7 +126,7 @@ public class RepositoryServiceDefault
             throw new RepositoryException("Object not persistent: " + adapter);
         }
 
-        persistenceSessionService.remove(adapter);
+        persistenceSessionServiceInternal.remove(adapter);
     }
     
     @Override
@@ -174,7 +174,7 @@ public class RepositoryServiceDefault
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = persistenceSessionService.allMatchingQuery(query);
+        final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
     }
 
@@ -227,7 +227,7 @@ public class RepositoryServiceDefault
         if(autoFlush) {
             transactionService.flushTransaction();
         }
-        final ObjectAdapter firstMatching = persistenceSessionService.firstMatchingQuery(query);
+        final ObjectAdapter firstMatching = persistenceSessionServiceInternal.firstMatchingQuery(query);
         return (T) ObjectAdapter.Util.unwrap(firstMatching);
     }
 
@@ -254,11 +254,11 @@ public class RepositoryServiceDefault
     @javax.inject.Inject
     TransactionService transactionService;
 
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
-        this.persistenceSessionService = persistenceSessionService;
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
     private AdapterManager adapterManager;

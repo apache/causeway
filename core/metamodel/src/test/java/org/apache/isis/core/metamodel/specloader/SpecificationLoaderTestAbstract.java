@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import java.util.Collections;
-
 import com.google.common.collect.Lists;
 
 import org.jmock.Expectations;
@@ -33,7 +31,6 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -48,8 +45,11 @@ import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFr
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -66,7 +66,7 @@ public abstract class SpecificationLoaderTestAbstract {
     private RuntimeContext runtimeContext;
 
     @Mock
-    private IsisConfiguration mockConfiguration;
+    private IsisConfigurationDefault mockConfiguration;
     @Mock
     private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     @Mock
@@ -77,6 +77,14 @@ public abstract class SpecificationLoaderTestAbstract {
     private GridService mockGridService;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock
+    private TransactionStateProviderInternal mockTransactionStateProviderInternal;
+    @Mock
+    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
+    @Mock
+    private LocalizationProviderInternal mockLocalizationProviderInternal;
 
     // is loaded by subclasses
     protected ObjectSpecification specification;
@@ -113,6 +121,12 @@ public abstract class SpecificationLoaderTestAbstract {
             ignoring(mockServicesInjector).isRegisteredService(with(any(Class.class)));
 
             ignoring(mockSpecificationLoader).allServiceClasses();
+
+            ignoring(mockPersistenceSessionServiceInternal);
+            ignoring(mockTransactionStateProviderInternal);
+            ignoring(mockMessageBrokerServiceInternal);
+            ignoring(mockLocalizationProviderInternal);
+
         }});
 
         final SpecificationLoader reflector =
@@ -122,9 +136,17 @@ public abstract class SpecificationLoaderTestAbstract {
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(
                                 new LayoutMetadataReaderFromJson()), mockServicesInjector);
-        runtimeContext =
-                new RuntimeContextNoRuntime(
-                        new ServicesInjector(Collections.emptyList()), reflector);
+        final ServicesInjector servicesInjector =
+                new ServicesInjector(Lists.newArrayList(
+                        mockPersistenceSessionServiceInternal,
+                        mockLocalizationProviderInternal,
+                        mockMessageBrokerServiceInternal,
+                        mockTransactionStateProviderInternal,
+                        mockGridService,
+                        mockConfiguration,
+                        mockSpecificationLoader,
+                        mockDeploymentCategoryProvider));
+        runtimeContext = new RuntimeContext(servicesInjector);
         reflector.init(runtimeContext);
         
         specification = loadSpecification(reflector);

@@ -26,11 +26,11 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 
 public class ObjectFactory {
 
-    private final PersistenceSession persistenceSession;
+    private final PersistenceSessionInternal persistenceSession;
     private final ServicesInjector servicesInjector;
 
     public ObjectFactory(
-            final PersistenceSession persistenceSession,
+            final PersistenceSessionInternal persistenceSession,
             final ServicesInjector servicesInjector) {
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;

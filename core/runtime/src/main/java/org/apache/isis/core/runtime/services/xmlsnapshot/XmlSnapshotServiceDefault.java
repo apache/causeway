@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshotBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
@@ -90,7 +90,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     
     // //////////////////////////////////////
 
-    protected PersistenceSession gerPersistenceSession() {
+    protected PersistenceSessionInternal gerPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

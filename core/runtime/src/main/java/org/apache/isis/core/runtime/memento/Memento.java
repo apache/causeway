@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -403,7 +403,7 @@ public class Memento implements Serializable {
         return IsisContext.getSpecificationLoader();
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

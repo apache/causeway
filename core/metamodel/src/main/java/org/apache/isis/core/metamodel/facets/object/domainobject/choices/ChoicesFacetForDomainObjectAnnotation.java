@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
@@ -34,7 +34,7 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
             final FacetHolder facetHolder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final PersistenceSessionService persistenceSessionService) {
+            final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
         if(domainObject == null) {
             return null;
@@ -43,15 +43,15 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
         final boolean bounded = domainObject.bounded();
         return bounded
                 ? new ChoicesFacetForDomainObjectAnnotation(
-                    facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionService)
+                    facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal)
                 : null;
     }
 
     private ChoicesFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
-            final AuthenticationSessionProvider authenticationSessionProvider, final PersistenceSessionService persistenceSessionService) {
-        super(holder, deploymentCategory, authenticationSessionProvider, persistenceSessionService);
+            final AuthenticationSessionProvider authenticationSessionProvider, final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+        super(holder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal);
     }
 
 }

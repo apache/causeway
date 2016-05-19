@@ -32,8 +32,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -56,7 +56,7 @@ public class FactoryServiceDefault implements FactoryService, PersistenceSession
      * Factored out as a potential hook method for subclasses.
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
-        return persistenceSessionService.createTransientInstance(spec);
+        return persistenceSessionServiceInternal.createTransientInstance(spec);
     }
 
 
@@ -96,11 +96,11 @@ public class FactoryServiceDefault implements FactoryService, PersistenceSession
     @Inject
     ServiceRegistry serviceRegistry;
 
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
-        this.persistenceSessionService = persistenceSessionService;
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
 

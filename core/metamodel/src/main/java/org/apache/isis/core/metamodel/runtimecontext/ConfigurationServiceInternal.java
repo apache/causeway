@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 public interface ConfigurationServiceInternal {
 
     /**
-     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
+     * Provided by {@link RuntimeContextDefault} itself, cloned properties from
      * {@link IsisConfiguration}.
      * 
      * <p>
@@ -32,7 +32,7 @@ public interface ConfigurationServiceInternal {
     String getProperty(String name);
 
     /**
-     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
+     * Provided by {@link RuntimeContextDefault} itself, cloned properties from
      * {@link IsisConfiguration}.
      * 
      * <p>

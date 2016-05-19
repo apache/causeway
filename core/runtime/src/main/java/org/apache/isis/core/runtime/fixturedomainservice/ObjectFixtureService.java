@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 public class ObjectFixtureService {
 
@@ -231,7 +231,7 @@ public class ObjectFixtureService {
     // from context
     // //////////////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
+    protected PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

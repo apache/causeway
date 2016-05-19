@@ -20,9 +20,9 @@
 package org.apache.isis.viewer.wicket.model.isis;
 
 
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 public interface PersistenceSessionProvider {
 
-    PersistenceSession getPersistenceSession();
+    PersistenceSessionInternal getPersistenceSession();
 }

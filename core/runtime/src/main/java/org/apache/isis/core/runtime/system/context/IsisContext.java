@@ -35,13 +35,13 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -475,7 +475,7 @@ public class IsisContext {
      * 
      * @see IsisSession#getPersistenceSession()
      */
-    public static PersistenceSession getPersistenceSession() {
+    public static PersistenceSessionInternal getPersistenceSession() {
         return getSession().getPersistenceSession();
     }
 
@@ -490,7 +490,7 @@ public class IsisContext {
      * Convenience methods
      * 
      * @see IsisSession#getPersistenceSession()
-     * @see PersistenceSession#getTransactionManager()
+     * @see PersistenceSessionInternal#getTransactionManager()
      */
     public static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
@@ -514,10 +514,10 @@ public class IsisContext {
      * 
      * <p>
      * Transactions are managed using the {@link IsisTransactionManager}
-     * obtainable from the {@link IsisSession's} {@link PersistenceSession}.
+     * obtainable from the {@link IsisSession's} {@link PersistenceSessionInternal}.
      * 
      * @see IsisSession#getCurrentTransaction()
-     * @see PersistenceSession#getTransactionManager()
+     * @see PersistenceSessionInternal#getTransactionManager()
      */
     public static IsisTransaction getCurrentTransaction() {
         return getSession().getCurrentTransaction();

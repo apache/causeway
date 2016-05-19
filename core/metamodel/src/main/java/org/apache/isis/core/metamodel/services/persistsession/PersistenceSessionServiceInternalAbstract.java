@@ -14,11 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.persistsession;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 
-public abstract class PersistenceSessionServiceAbstract implements PersistenceSessionService {
+public abstract class PersistenceSessionServiceInternalAbstract implements PersistenceSessionServiceInternal {
 
     @Override
     public void injectInto(final Object candidate) {

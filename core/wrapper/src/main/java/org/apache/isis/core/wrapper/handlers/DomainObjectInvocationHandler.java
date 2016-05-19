@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -78,7 +78,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
-    private final PersistenceSessionService persistenceSessionService;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     private final ProxyContextHandler proxy;
     private final ExecutionMode executionMode;
@@ -124,7 +124,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final AuthenticationSessionProvider authenticationSessionProvider,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
-            final PersistenceSessionService persistenceSessionService,
+            final PersistenceSessionServiceInternal persistenceSessionServiceInternal,
             final ProxyContextHandler proxy) {
         super(delegate, wrapperFactory, mode);
 
@@ -132,7 +132,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
-        this.persistenceSessionService = persistenceSessionService;
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
         this.executionMode = mode;
 
         try {
@@ -797,8 +797,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return adapterManager;
     }
 
-    protected PersistenceSessionService getPersistenceSessionService() {
-        return persistenceSessionService;
+    protected PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
     }
 
 

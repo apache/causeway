@@ -467,11 +467,6 @@ public class FacetProcessor implements RuntimeContextAware {
 
     //region > dependencies
 
-    private IsisConfiguration getIsisConfiguration() {
-        return configuration;
-    }
-
-
     private RuntimeContext getRuntimeContext() {
         return runtimeContext;
     }

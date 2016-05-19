@@ -17,10 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.persistsession;
 
-public interface MessageBrokerServiceAware {
+import org.apache.isis.applib.annotation.Programmatic;
 
-    public void setMessageBrokerService(final MessageBrokerService messageBrokerService);
+public interface PersistenceSessionServiceAware {
+
+    @Programmatic
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal);
 
 }

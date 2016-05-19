@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -59,7 +59,7 @@ public class TitleFacetViaTitleAnnotationTest {
     private AdapterManager mockAdapterManager;
     
     @Mock
-    private LocalizationProvider mockLocalizationProvider;
+    private LocalizationProviderInternal mockLocalizationProviderInternal;
 
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 

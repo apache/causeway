@@ -53,8 +53,8 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -304,7 +304,7 @@ public class WrapperFactoryDefault implements WrapperFactory,
 
 
     private AdapterManager adapterManager;
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
@@ -317,13 +317,13 @@ public class WrapperFactoryDefault implements WrapperFactory,
 
 
 
-    protected PersistenceSessionService getPersistenceSessionService() {
-        return persistenceSessionService;
+    protected PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
     }
     @Programmatic
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
-        this.persistenceSessionService = persistenceSessionService;
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
 

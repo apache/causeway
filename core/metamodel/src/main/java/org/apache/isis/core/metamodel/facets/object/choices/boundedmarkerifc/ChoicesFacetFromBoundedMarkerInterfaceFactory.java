@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract implements
         PersistenceSessionServiceAware {
 
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     public ChoicesFacetFromBoundedMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -50,7 +50,8 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
             final FacetHolder holder) {
         return implementsMarker
                 ? new ChoicesFacetFromBoundedMarkerInterface(
-                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(), persistenceSessionService) : null;
+                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(),
+                persistenceSessionServiceInternal) : null;
     }
 
     public boolean recognizes(final Method method) {
@@ -58,7 +59,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
     }
 
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
-        this.persistenceSessionService = persistenceSessionService;
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 }

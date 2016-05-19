@@ -81,8 +81,8 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -108,7 +108,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
 
     private AdapterManager adapterManager;
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -231,12 +231,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
                     getDeploymentCategory(),
                     getAuthenticationSessionProvider(),
-                    persistenceSessionService));
+                    persistenceSessionServiceInternal));
 
         // else check from @DomainObject(bounded=...)
         if(facet == null) {
             facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(),
-                    getAuthenticationSessionProvider(), persistenceSessionService);
+                    getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
         }
 
         // then add
@@ -510,8 +510,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     }
 
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
-        this.persistenceSessionService = persistenceSessionService;
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
 

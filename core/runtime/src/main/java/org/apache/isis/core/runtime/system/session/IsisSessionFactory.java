@@ -35,7 +35,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -114,7 +114,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      * Creates and {@link IsisSession#open() open}s the {@link IsisSession}.
      */
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
-        final PersistenceSession persistenceSession =
+        final PersistenceSessionInternal persistenceSession =
                 persistenceSessionFactory.createPersistenceSession(
                         servicesInjector, getSpecificationLoader(), authenticationSession);
         ensureThatArg(persistenceSession, is(not(nullValue())));
@@ -124,7 +124,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     protected IsisSession newIsisSession(
             final AuthenticationSession authenticationSession,
-            final PersistenceSession persistenceSession) {
+            final PersistenceSessionInternal persistenceSession) {
         return new IsisSession(this, authenticationSession, persistenceSession);
     }
 
@@ -190,7 +190,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     /**
      * The {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory} that will be used to create
-     * {@link PersistenceSession} {@link IsisSession#getPersistenceSession()
+     * {@link PersistenceSessionInternal} {@link IsisSession#getPersistenceSession()
      * within} the {@link IsisSession}.
      */
     public PersistenceSessionFactory getPersistenceSessionFactory() {

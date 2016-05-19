@@ -40,6 +40,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
@@ -49,14 +50,13 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
@@ -175,10 +175,7 @@ public class IsisSystem implements ApplicationScopedComponent {
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
             // runtimeContext
-            final RuntimeContextFromSession runtimeContext =
-                    new RuntimeContextFromSession(
-                            deploymentType.getDeploymentCategory(), configuration,
-                            servicesInjector, specificationLoader);
+            final RuntimeContext runtimeContext = new RuntimeContext(servicesInjector);
 
             // wire up components and components into services...
             runtimeContext.injectInto(specificationLoader);
@@ -332,7 +329,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         return getPersistenceSession().getServicesInjector();
     }
 
-    private PersistenceSession getPersistenceSession() {
+    private PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

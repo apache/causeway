@@ -17,22 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.msgbroker;
 
-import java.util.Locale;
-import java.util.TimeZone;
+public interface MessageBrokerServiceAware {
 
-import org.apache.isis.applib.profiles.Localization;
+    public void setMessageBrokerService(final MessageBrokerServiceInternal messageBrokerServiceInternal);
 
-public final class LocalizationDefault implements Localization {
-
-    @Override
-    public Locale getLocale() {
-        return Locale.getDefault();
-    }
-
-    @Override
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
-    }
 }

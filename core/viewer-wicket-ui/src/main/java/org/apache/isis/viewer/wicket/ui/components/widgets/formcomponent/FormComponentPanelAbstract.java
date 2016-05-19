@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -146,7 +146,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     // ///////////////////////////////////////////////////////////////////
 
     @Override
-    public PersistenceSession getPersistenceSession() {
+    public PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

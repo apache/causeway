@@ -14,15 +14,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.transtate;
 
-public abstract class MessageBrokerServiceAbstract implements MessageBrokerService {
+import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
+
+public abstract class TransactionStateProviderInternalAbstract implements TransactionStateProviderInternal {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
-            final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
-            cast.setMessageBrokerService(this);
+        if (TransactionStateProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final TransactionStateProviderAware cast = TransactionStateProviderAware.class.cast(candidate);
+            cast.setTransactionStateProvider(this);
         }
     }
 

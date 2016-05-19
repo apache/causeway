@@ -14,16 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.transactions;
+package org.apache.isis.core.metamodel.services.l10n;
 
-public abstract class TransactionStateProviderAbstract implements
-        TransactionStateProvider {
+public abstract class LocalizationProviderInternalAbstract implements LocalizationProviderInternal {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (TransactionStateProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final TransactionStateProviderAware cast = TransactionStateProviderAware.class.cast(candidate);
-            cast.setTransactionStateProvider(this);
+        if (LocalizationProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final LocalizationProviderAware cast = LocalizationProviderAware.class.cast(candidate);
+            cast.setLocalizationProvider(this);
         }
     }
 

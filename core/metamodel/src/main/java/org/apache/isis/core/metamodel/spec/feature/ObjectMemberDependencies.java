@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -24,17 +24,17 @@ public class ObjectMemberDependencies {
 
     private final SpecificationLoader specificationLoader;
     private final ServicesInjector servicesInjector;
-    private final PersistenceSessionService persistenceSessionService;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     public ObjectMemberDependencies(
             final SpecificationLoader specificationLoader,
             final ServicesInjector servicesInjector,
-            final PersistenceSessionService persistenceSessionService) {
+            final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
         this.specificationLoader = specificationLoader;
 
         this.servicesInjector = servicesInjector;
-        this.persistenceSessionService = persistenceSessionService;
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
     public SpecificationLoader getSpecificationLoader() {
@@ -45,7 +45,7 @@ public class ObjectMemberDependencies {
         return servicesInjector;
     }
     
-    public PersistenceSessionService getPersistenceSessionService() {
-        return persistenceSessionService;
+    public PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
     }
 }

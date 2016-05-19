@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.adapter.mgr;
 import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -36,14 +37,16 @@ public interface AdapterManager extends AdapterManagerBase {
      *            - must not be <tt>null</tt>
      * @return adapter, or <tt>null</tt> if doesn't exist.
      */
+    @Programmatic
     ObjectAdapter getAdapterFor(Oid oid);
 
 
 
-    public enum ConcurrencyChecking {
+    enum ConcurrencyChecking {
         NO_CHECK,
         CHECK;
 
+        @Programmatic
         public boolean isChecking() {
             return this == CHECK;
         }
@@ -112,7 +115,8 @@ public interface AdapterManager extends AdapterManagerBase {
     /**
      * Looks up or creates a collection adapter.
      */
-    public ObjectAdapter adapterFor(
+    @Programmatic
+    ObjectAdapter adapterFor(
             final Object pojo,
             final ObjectAdapter parentAdapter,
             OneToManyAssociation collection);
@@ -121,11 +125,13 @@ public interface AdapterManager extends AdapterManagerBase {
     /**
      * Enable RecreatableObjectFacet to 'temporarily' map an existing pojo to an oid.
      */
+    @Programmatic
     ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo);
 
     /**
      * Enable RecreatableObjectFacet to remove a 'temporarily' mapped an adapter for a pojo.
      */
+    @Programmatic
     void removeAdapter(ObjectAdapter adapter);
 
 

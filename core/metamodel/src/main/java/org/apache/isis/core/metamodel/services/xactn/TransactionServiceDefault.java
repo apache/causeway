@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.services.xactn;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -33,19 +33,19 @@ public class TransactionServiceDefault implements TransactionService, Persistenc
 
     @Override
     public void flushTransaction() {
-        persistenceSessionService.flush();
+        persistenceSessionServiceInternal.flush();
     }
 
     @Override
     public void nextTransaction() {
-        persistenceSessionService.commit();
-        persistenceSessionService.beginTran();
+        persistenceSessionServiceInternal.commit();
+        persistenceSessionServiceInternal.beginTran();
     }
 
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
-        this.persistenceSessionService = persistenceSessionService;
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 }

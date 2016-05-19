@@ -43,7 +43,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 /**
  *
- * Factory for {@link PersistenceSession}.
+ * Factory for {@link PersistenceSessionInternal}.
  *
  * <p>
  * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; all public methods
@@ -166,7 +166,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
     @Programmatic
-    public PersistenceSession createPersistenceSession(
+    public PersistenceSessionInternal createPersistenceSession(
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession) {
@@ -175,7 +175,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
         final PersistenceManagerFactory persistenceManagerFactory =
                 applicationComponents.getPersistenceManagerFactory();
 
-        return new PersistenceSession(
+        return new PersistenceSessionInternal(
                 configuration, servicesInjector, specificationLoader,
                 authenticationSession, persistenceManagerFactory,
                 fixturesInstalledFlag);

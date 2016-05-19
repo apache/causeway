@@ -31,7 +31,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 @Path("/swagger")
 public class SwaggerSpecResource {
@@ -118,7 +118,7 @@ public class SwaggerSpecResource {
             return getPersistenceSession().getServicesInjector();
         }
 
-        PersistenceSession getPersistenceSession() {
+        PersistenceSessionInternal getPersistenceSession() {
             return IsisContext.getPersistenceSession();
         }
     }

@@ -93,7 +93,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
-import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
@@ -115,7 +115,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
 
     private AdapterManager adapterManager;
-    private TransactionStateProvider transactionStateProvider;
+    private TransactionStateProviderInternal transactionStateProviderInternal;
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
@@ -216,7 +216,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
                                 getDeploymentCategory(), getConfiguration(), servicesInjector,
                                 getAuthenticationSessionProvider(), getAdapterManager(),
-                                transactionStateProvider
+                                transactionStateProviderInternal
                         ), processMethodContext);
             } else
             // deprecated (but more recently)
@@ -226,7 +226,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                                 getDeploymentCategory(), getConfiguration(), servicesInjector,
                                 getAuthenticationSessionProvider(), getAdapterManager(),
-                                transactionStateProvider
+                                transactionStateProviderInternal
                         ), processMethodContext);
             } else
             // current
@@ -235,7 +235,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                         getDeploymentCategory(), getConfiguration(), servicesInjector,
                         getAuthenticationSessionProvider(),
-                        getAdapterManager(), transactionStateProvider
+                        getAdapterManager(), transactionStateProviderInternal
                 );
             } else
             // default
@@ -243,7 +243,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                         getDeploymentCategory(), getConfiguration(), servicesInjector, getAuthenticationSessionProvider(),
-                        getAdapterManager(), transactionStateProvider
+                        getAdapterManager(), transactionStateProviderInternal
                 );
             }
             FacetUtil.addFacet(actionInvocationFacet);
@@ -572,7 +572,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     }
 
     @Override
-    public void setTransactionStateProvider(final TransactionStateProvider transactionStateProvider) {
-        this.transactionStateProvider = transactionStateProvider;
+    public void setTransactionStateProvider(final TransactionStateProviderInternal transactionStateProviderInternal) {
+        this.transactionStateProviderInternal = transactionStateProviderInternal;
     }
 }

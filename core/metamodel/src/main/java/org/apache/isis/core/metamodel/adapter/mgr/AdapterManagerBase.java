@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.adapter.mgr;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface AdapterManagerBase {
@@ -34,6 +35,7 @@ public interface AdapterManagerBase {
      *            - must not be <tt>null</tt>
      * @return adapter, or <tt>null</tt> if doesn't exist.
      */
+    @Programmatic
     ObjectAdapter getAdapterFor(Object pojo);
 
 
@@ -41,6 +43,7 @@ public interface AdapterManagerBase {
     /**
      * Looks up or creates a standalone (value) or root adapter.
      */
+    @Programmatic
     ObjectAdapter adapterFor(Object domainObject);
 
 

@@ -38,7 +38,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -46,11 +45,9 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -87,19 +84,6 @@ import static org.hamcrest.Matchers.notNullValue;
  * conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
  * </ul>
- * </p>
- *
- * <p>
- * In addition, the {@link RuntimeContext} can optionally be injected, but will
- * default to {@link RuntimeContextNoRuntime} if not provided prior to
- * {@link SpecificationLoader#init(RuntimeContext) initialization}. The purpose of {@link RuntimeContext} is to
- * allow the metamodel to be used standalone, for example in a Maven plugin. The
- * {@link RuntimeContextNoRuntime} implementation will through an exception for
- * any methods (such as finding an {@link ObjectAdapter adapter}) because there
- * is no runtime session. In the case of the metamodel being used by the
- * framework (that is, when there <i>is</i> a runtime), then the framework
- * injects an implementation of {@link RuntimeContext} that acts like a bridge
- * to its <tt>IsisContext</tt>.
  * </p>
  *
  * <p>
@@ -162,14 +146,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > init
 
-    /**
-     * Can optionally be injected, but will default (to
-     * {@link RuntimeContextNoRuntime}) otherwise.
-     *
-     * <p>
-     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is
-     * being used standalone (eg for a code-generator).
-     */
     private RuntimeContext runtimeContext;
 
     private boolean initialized = false;
@@ -189,7 +165,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         // default subcomponents
         if (runtimeContext == null) {
-            this.runtimeContext = new RuntimeContextNoRuntime(servicesInjector, this);
+            this.runtimeContext = new RuntimeContext(servicesInjector);
         }
 
         // wire subcomponents into each other
@@ -448,13 +424,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
         final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
-        final PersistenceSessionService persistenceSessionService = getRuntimeContext().getPersistenceSessionService();
+        final PersistenceSessionServiceInternal persistenceSessionServiceInternal = getRuntimeContext().getPersistenceSessionService();
 
         final ObjectSpecificationDependencies specContext =
                 new ObjectSpecificationDependencies(deploymentCategory, servicesInjector, this, facetProcessor);
 
         final ObjectMemberDependencies objectMemberDependencies =
-                new ObjectMemberDependencies(this, servicesInjector, persistenceSessionService);
+                new ObjectMemberDependencies(this, servicesInjector, persistenceSessionServiceInternal);
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
@@ -575,22 +551,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return objectSpecification;
     }
     //endregion
-
-
-
-    /**
-     * Injects self into candidate if required, and instructs its subcomponents
-     * to do so also.
-     */
-    @Programmatic
-    public void injectInto(final Object candidate) {
-        final Class<?> candidateClass = candidate.getClass();
-        if (ServicesInjectorAware.class.isAssignableFrom(candidateClass)) {
-            final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
-            cast.setServicesInjector(this.servicesInjector);
-        }
-    }
-
 
 
 }

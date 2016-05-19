@@ -16,12 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.runtime.services.l10n;
 
-package org.apache.isis.core.metamodel.transactions;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternalAbstract;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
-public interface TransactionStateProvider {
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
+)
+public class LocalizationProviderInternalDefault extends LocalizationProviderInternalAbstract {
 
-    void injectInto(final Object candidate);
-
-    public TransactionState getTransactionState();
+    @Override
+    public Localization getLocalization() {
+        return IsisContext.getLocalization();
+    }
 }

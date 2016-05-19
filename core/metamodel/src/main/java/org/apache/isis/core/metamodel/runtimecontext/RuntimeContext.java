@@ -19,41 +19,86 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 
-/**
- * Decouples the metamodel from a runtime.
- * 
- */
-public interface RuntimeContext extends ApplicationScopedComponent {
+public class RuntimeContext implements ApplicationScopedComponent {
 
-    void injectInto(Object candidate);
 
-    // //////////////////////////////////////
-    // application-scoped
-    // //////////////////////////////////////
+    //region > constructor, fields
 
-    public ServicesInjector getServicesInjector();
+    private final ServicesInjector servicesInjector;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    private final MessageBrokerServiceInternal messageBrokerServiceInternal;
+    private final LocalizationProviderInternal localizationProvider;
+    private final TransactionStateProviderInternal transactionStateProvider;
 
-    public SpecificationLoader getSpecificationLoader();
+    public RuntimeContext(
+            final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
 
-    // //////////////////////////////////////
-    // session-scoped
-    // //////////////////////////////////////
+        this.persistenceSessionServiceInternal =
+                servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+        this.messageBrokerServiceInternal =
+                servicesInjector.lookupService(MessageBrokerServiceInternal.class);
+        this.localizationProvider =
+                servicesInjector.lookupService(LocalizationProviderInternal.class);
+        this.transactionStateProvider =
+                servicesInjector.lookupService(TransactionStateProviderInternal.class);
 
-    public LocalizationProvider getLocalizationProvider();
+    }
 
-    public MessageBrokerService getMessageBrokerService();
+    //endregion
 
-    // //////////////////////////////////////
-    // request-scoped
-    // //////////////////////////////////////
+    @Programmatic
+    public LocalizationProviderInternal getLocalizationProvider() {
+        return localizationProvider;
+    }
 
-    public PersistenceSessionService getPersistenceSessionService();
+    @Programmatic
+    public PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
+    }
 
-    public TransactionStateProvider getTransactionStateProvider();
+    @Programmatic
+    public MessageBrokerServiceInternal getMessageBrokerService() {
+        return messageBrokerServiceInternal;
+    }
+
+
+    @Programmatic
+    public TransactionStateProviderInternal getTransactionStateProvider() {
+        return transactionStateProvider;
+    }
+
+
+    @Programmatic
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
+
+
+    @Programmatic
+    public void injectInto(final Object candidate) {
+        if (RuntimeContextAware.class.isAssignableFrom(candidate.getClass())) {
+            final RuntimeContextAware cast = RuntimeContextAware.class.cast(candidate);
+            cast.setRuntimeContext(this);
+        }
+        injectSubcomponentsInto(candidate);
+    }
+
+    protected void injectSubcomponentsInto(final Object candidate) {
+        getTransactionStateProvider().injectInto(candidate);
+        getServicesInjector().injectInto(candidate);
+        getLocalizationProvider().injectInto(candidate);
+        getPersistenceSessionService().injectInto(candidate);
+        getMessageBrokerService().injectInto(candidate);
+    }
+
 
 }

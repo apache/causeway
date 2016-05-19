@@ -60,8 +60,8 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -649,7 +649,7 @@ public class DomainObjectContainerDefault
 
     //region > framework dependencies
 
-    private PersistenceSessionService persistenceSessionService;
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     private AdapterManager adapterManager;
 
 
@@ -664,14 +664,14 @@ public class DomainObjectContainerDefault
         this.adapterManager = adapterManager;
     }
 
-    protected PersistenceSessionService getPersistenceSessionService() {
-        return persistenceSessionService;
+    protected PersistenceSessionServiceInternal getPersistenceSessionService() {
+        return persistenceSessionServiceInternal;
     }
 
     @Programmatic
     @Override
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
-        this.persistenceSessionService = persistenceSessionService;
+    public void setPersistenceSessionService(final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
 
 

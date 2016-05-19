@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.cmd.v1.ActionDto;
@@ -80,7 +80,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     
     protected void doExecute(Object context) {
 
-        final PersistenceSession persistenceSession = getPersistenceSession();
+        final PersistenceSessionInternal persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
         final List<Command> backgroundCommands = Lists.newArrayList();
         transactionManager.executeWithinTransaction(new TransactionalClosure() {

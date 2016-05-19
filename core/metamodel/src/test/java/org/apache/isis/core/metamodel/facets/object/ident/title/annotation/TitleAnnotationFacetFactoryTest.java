@@ -44,8 +44,8 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationDefault;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 
@@ -60,7 +60,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     private ObjectAdapter mockObjectAdapter;
     @Allowing
     @Mock
-    private LocalizationProvider mockLocalizationProvider;
+    private LocalizationProviderInternal mockLocalizationProviderInternal;
     @Mock
     private AuthenticationSession mockAuthenticationSession;
 
@@ -80,7 +80,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
                 will(returnValue(mockDeploymentCategoryProvider));
 
-                allowing(mockLocalizationProvider).getLocalization();
+                allowing(mockLocalizationProviderInternal).getLocalization();
                 will(returnValue(new LocalizationDefault()));
 
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
@@ -181,7 +181,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProvider.getLocalization());
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProviderInternal.getLocalization());
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 
@@ -257,7 +257,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProvider.getLocalization());
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProviderInternal.getLocalization());
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 

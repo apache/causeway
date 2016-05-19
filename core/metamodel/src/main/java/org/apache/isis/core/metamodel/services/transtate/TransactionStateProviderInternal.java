@@ -17,10 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.transtate;
 
-public interface LocalizationProviderAware {
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.transactions.TransactionState;
 
-    void setLocalizationProvider(LocalizationProvider localizationProvider);
+public interface TransactionStateProviderInternal {
+
+    @Programmatic
+    void injectInto(final Object candidate);
+
+    @Programmatic TransactionState getTransactionState();
 
 }

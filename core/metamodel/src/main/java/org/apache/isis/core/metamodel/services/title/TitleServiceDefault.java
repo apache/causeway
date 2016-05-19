@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
+import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -42,7 +42,7 @@ public class TitleServiceDefault
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
         final boolean destroyed = objectAdapter.isDestroyed();
         if(!destroyed) {
-            return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
+            return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProviderInternal.getLocalization());
         } else {
             return "[DELETED]";
         }
@@ -78,10 +78,10 @@ public class TitleServiceDefault
         this.adapterManager = adapterManager;
     }
 
-    private LocalizationProvider localizationProvider;
+    private LocalizationProviderInternal localizationProviderInternal;
     @Override
-    public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
-        this.localizationProvider = localizationProvider;
+    public void setLocalizationProvider(final LocalizationProviderInternal localizationProviderInternal) {
+        this.localizationProviderInternal = localizationProviderInternal;
     }
 
 

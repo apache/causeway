@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -70,15 +69,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private Persistability persistable;
     private boolean isEncodeable;
 
-    private RuntimeContextNoRuntime runtimeContext;
+    private RuntimeContext runtimeContext;
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
         ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList());
         servicesInjector.addFallbackIfRequired(
                 ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
-        runtimeContext = new RuntimeContextNoRuntime(
-                servicesInjector, null);
+        runtimeContext = new RuntimeContext(servicesInjector);
     }
 
     @Override

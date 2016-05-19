@@ -31,7 +31,7 @@ import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @Provider
@@ -57,7 +57,7 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
         marshaller.setAdapter(PersistentEntityAdapter.class, new PersistentEntityAdapter() {
             @Override
             protected BookmarkService getBookmarkService() {
-                final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
+                final PersistenceSessionInternal persistenceSession = IsisContext.getPersistenceSession();
                 final ServicesInjector servicesInjector = persistenceSession.getServicesInjector();
                 return servicesInjector.lookupService(BookmarkService.class);
             }

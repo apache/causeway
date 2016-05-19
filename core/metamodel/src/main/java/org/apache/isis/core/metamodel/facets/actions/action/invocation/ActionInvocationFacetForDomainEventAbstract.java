@@ -78,7 +78,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
-import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -97,7 +97,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private final ServicesInjector servicesInjector;
     private final IsisConfiguration configuration;
-    private final TransactionStateProvider transactionStateProvider;
+    private final TransactionStateProviderInternal transactionStateProviderInternal;
     private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
@@ -112,7 +112,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ServicesInjector servicesInjector,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager,
-            final TransactionStateProvider transactionStateProvider) {
+            final TransactionStateProviderInternal transactionStateProviderInternal) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
@@ -123,7 +123,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
         this.configuration = configuration;
-        this.transactionStateProvider = transactionStateProvider;
+        this.transactionStateProviderInternal = transactionStateProviderInternal;
         this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
 
     }
@@ -593,6 +593,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     public TransactionState getTransactionState() {
-        return transactionStateProvider.getTransactionState();
+        return transactionStateProviderInternal.getTransactionState();
     }
 }

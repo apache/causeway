@@ -14,10 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
@@ -25,13 +26,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface PersistenceSessionService extends AdapterManager {
+public interface PersistenceSessionServiceInternal extends AdapterManager {
 
+    @Programmatic
     void injectInto(final Object candidate);
 
-    // ///////////////////////////////////////////
-    // Instantiate
-    // ///////////////////////////////////////////
+    //region > instantiate
 
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
@@ -39,14 +39,15 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
+    @Programmatic
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
+    //endregion
 
-    // ///////////////////////////////////////////
-    // retrieve
-    // ///////////////////////////////////////////
+    //region > retrieve
 
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
@@ -54,6 +55,7 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void resolve(Object parent);
 
     /**
@@ -62,6 +64,7 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void resolve(Object parent, Object field);
 
     /**
@@ -71,17 +74,20 @@ public interface PersistenceSessionService extends AdapterManager {
      * Called by <tt>BookmarkServicesDefault</tt>.
      * @return
      */
+    @Programmatic
     Object lookup(Bookmark bookmark, final BookmarkService2.FieldResetPolicy fieldResetPolicy);
 
+    @Programmatic
     Bookmark bookmarkFor(Object domainObject);
 
+    @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
+    //endregion
 
-    // ///////////////////////////////////////////
-    // beginTran, flush, commit
-    // ///////////////////////////////////////////
+    //region > beginTran, flush, commit
 
+    @Programmatic
     void beginTran();
 
     /**
@@ -90,6 +96,7 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     boolean flush();
 
     /**
@@ -98,8 +105,13 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void commit();
 
+
+    //endregion
+
+    //region > makePersistent, remove
 
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.
@@ -108,6 +120,7 @@ public interface PersistenceSessionService extends AdapterManager {
      * Called by <tt>DomainObjectContainerDefault</tt> and also by
      * <tt>DomainObjectInvocationHandler#handleSaveMethod()</tt>.
      */
+    @Programmatic
     void makePersistent(ObjectAdapter adapter);
 
     /**
@@ -117,9 +130,12 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     void remove(ObjectAdapter adapter);
 
+    //endregion
 
+    //region > allMatchingQuery, firstMatchingQuery
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      *
@@ -127,6 +143,7 @@ public interface PersistenceSessionService extends AdapterManager {
      * Called by <tt>DomainObjectContainerDefault</tt> and also by the choices
      * facets.
      */
+    @Programmatic
     <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
 
     /**
@@ -135,6 +152,9 @@ public interface PersistenceSessionService extends AdapterManager {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
+    @Programmatic
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
+
+    //endregion
 
 }

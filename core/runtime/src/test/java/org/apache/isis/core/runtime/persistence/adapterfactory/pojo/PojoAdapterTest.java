@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -61,7 +61,7 @@ public class PojoAdapterTest {
     @Mock
     private AuthenticationSession mockAuthenticationSession;
     @Mock
-    private PersistenceSession mockPersistenceSession;
+    private PersistenceSessionInternal mockPersistenceSession;
     @Mock
     private Localization mockLocalization;
     

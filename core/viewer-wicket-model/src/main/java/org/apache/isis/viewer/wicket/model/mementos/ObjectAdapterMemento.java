@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
 
 public class ObjectAdapterMemento implements Serializable {
 
@@ -460,7 +460,7 @@ public class ObjectAdapterMemento implements Serializable {
     // Dependencies (from context)
     //////////////////////////////////////////////////
 
-    private static PersistenceSession getPersistenceSession() {
+    private static PersistenceSessionInternal getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

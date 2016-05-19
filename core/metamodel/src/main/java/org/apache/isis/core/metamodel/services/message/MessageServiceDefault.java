@@ -25,8 +25,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceAware;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -36,7 +36,7 @@ public class MessageServiceDefault implements MessageService, MessageBrokerServi
     @Programmatic
     @Override
     public void informUser(final String message) {
-        messageBrokerService.informUser(message);
+        messageBrokerServiceInternal.informUser(message);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MessageServiceDefault implements MessageService, MessageBrokerServi
     @Programmatic
     @Override
     public void warnUser(final String message) {
-        messageBrokerService.warnUser(message);
+        messageBrokerServiceInternal.warnUser(message);
     }
 
     @Override
@@ -58,13 +58,13 @@ public class MessageServiceDefault implements MessageService, MessageBrokerServi
     @Programmatic
     @Override
     public void raiseError(final String message) {
-        messageBrokerService.raiseError(message);
+        messageBrokerServiceInternal.raiseError(message);
     }
 
     @Override
     public String raiseError(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         final String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
-        messageBrokerService.raiseError(translatedMessage);
+        messageBrokerServiceInternal.raiseError(translatedMessage);
         return translatedMessage;
     }
 
@@ -74,11 +74,11 @@ public class MessageServiceDefault implements MessageService, MessageBrokerServi
 
 
 
-    private MessageBrokerService messageBrokerService;
+    private MessageBrokerServiceInternal messageBrokerServiceInternal;
 
     @Override
-    public void setMessageBrokerService(final MessageBrokerService messageBrokerService) {
-        this.messageBrokerService = messageBrokerService;
+    public void setMessageBrokerService(final MessageBrokerServiceInternal messageBrokerServiceInternal) {
+        this.messageBrokerServiceInternal = messageBrokerServiceInternal;
     }
 
     @javax.inject.Inject

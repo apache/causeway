@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.l10n;
 
-import org.apache.isis.applib.annotation.Programmatic;
+public interface LocalizationProviderAware {
 
-public interface PersistenceSessionServiceAware {
-
-    @Programmatic
-    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService);
+    void setLocalizationProvider(LocalizationProviderInternal localizationProviderInternal);
 
 }
