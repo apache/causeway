@@ -62,17 +62,11 @@ public abstract class SpecificationLoaderTestAbstract {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
-    private IsisConfigurationDefault mockConfiguration;
-    @Mock
     private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private ServicesInjector mockServicesInjector;
-    @Mock
     private GridService mockGridService;
-    @Mock
-    private SpecificationLoader mockSpecificationLoader;
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
@@ -82,41 +76,22 @@ public abstract class SpecificationLoaderTestAbstract {
     @Mock
     private LocalizationProviderInternal mockLocalizationProviderInternal;
 
+    ServicesInjector stubServicesInjector;
+    IsisConfigurationDefault stubConfiguration;
+
     // is loaded by subclasses
     protected ObjectSpecification specification;
 
-    
+
     @Before
     public void setUp() throws Exception {
 
         context.checking(new Expectations() {{
-            ignoring(mockConfiguration);
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(new IsisConfigurationDefault(null)));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getSpecificationLoader();
-            will(returnValue(mockSpecificationLoader));
-
-            allowing(mockServicesInjector).lookupService(GridService.class);
-            will(returnValue(mockGridService));
-
             ignoring(mockGridService).existsFor(with(any(Class.class)));
-
-            ignoring(mockServicesInjector).getRegisteredServices();
-
-            ignoring(mockServicesInjector).isRegisteredService(with(any(Class.class)));
-
-            ignoring(mockSpecificationLoader).allServiceClasses();
 
             ignoring(mockPersistenceSessionServiceInternal);
             ignoring(mockTransactionStateProviderInternal);
@@ -125,27 +100,33 @@ public abstract class SpecificationLoaderTestAbstract {
 
         }});
 
-        final ServicesInjector servicesInjector =
+        stubConfiguration = new IsisConfigurationDefault(null);
+
+        stubServicesInjector =
                 new ServicesInjector(Lists.newArrayList(
+                        mockAuthenticationSessionProvider,
+                        stubConfiguration,
+                        mockDeploymentCategoryProvider,
                         mockPersistenceSessionServiceInternal,
                         mockLocalizationProviderInternal,
                         mockMessageBrokerServiceInternal,
                         mockTransactionStateProviderInternal,
                         mockGridService,
-                        mockConfiguration,
-                        mockSpecificationLoader,
                         mockDeploymentCategoryProvider));
 
-        final SpecificationLoader reflector =
+        final SpecificationLoader specificationLoader =
                 new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                        mockConfiguration,
+                        stubConfiguration,
                         new ProgrammingModelFacetsJava5(),
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(
-                                new LayoutMetadataReaderFromJson()), servicesInjector);
-        reflector.init();
+                                new LayoutMetadataReaderFromJson()), stubServicesInjector);
+
+        stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
+
+        specificationLoader.init();
         
-        specification = loadSpecification(reflector);
+        specification = loadSpecification(specificationLoader);
     }
 
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
@@ -156,11 +137,11 @@ public abstract class SpecificationLoaderTestAbstract {
         expectedException.expectMessage("illegal argument, expected: is not an empty collection");
 
         new SpecificationLoader(DeploymentCategory.PRODUCTION ,
-                mockConfiguration,
+                stubConfiguration,
                 new ProgrammingModelFacetsJava5(),
                 new MetaModelValidatorDefault(),
                 Lists.<LayoutMetadataReader>newArrayList(),
-                mockServicesInjector);
+                stubServicesInjector);
     }
 
     @Test
@@ -169,11 +150,11 @@ public abstract class SpecificationLoaderTestAbstract {
         expectedException.expectMessage("illegal argument, expected: is not null");
 
         new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                mockConfiguration,
+                stubConfiguration,
                 new ProgrammingModelFacetsJava5(),
                 new MetaModelValidatorDefault(),
                 null,
-                mockServicesInjector);
+                stubServicesInjector);
     }
 
     @Test

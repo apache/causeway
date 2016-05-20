@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system;
 
+import com.google.common.collect.Lists;
+
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -82,8 +84,11 @@ public class ObjectMemberAbstractTest {
     private AuthenticationSession mockAuthenticationSession;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    ServicesInjector mockServicesInjector;
+
+    //    @Mock
+//    ServicesInjector mockServicesInjector;
+    ServicesInjector stubServicesInjector;
+
     @Mock
     private ObjectSpecification mockSpecForCustomer;
 
@@ -93,6 +98,10 @@ public class ObjectMemberAbstractTest {
     @Before
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+
+        stubServicesInjector = new ServicesInjector(Lists.<Object>newArrayList(
+                mockSpecificationLoader, mockSpecificationLoader
+        ));
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
@@ -109,7 +118,7 @@ public class ObjectMemberAbstractTest {
                                 .withPojo(mockPersistable)
                                 .build();
 
-        testMember = new ObjectMemberAbstractImpl("id");
+        testMember = new ObjectMemberAbstractImpl("id", stubServicesInjector);
 
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).lookupBySpecId(ObjectSpecId.of("CUS"));
@@ -271,8 +280,8 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         }
     }
 
-    protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, null);
+    protected ObjectMemberAbstractImpl(final String id, final ServicesInjector servicesInjector) {
+        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, servicesInjector);
     }
 
     /**

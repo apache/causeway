@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system;
 
+import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -28,7 +30,6 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -70,9 +71,7 @@ public class OneToManyAssociationDefaultTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private SpecificationLoader mockSpecificationLookup;
-    @Mock
-    private AdapterManager mockAdapterManager;
+    private SpecificationLoader mockSpecificationLoader;
     @Mock
     private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
     @Mock
@@ -81,25 +80,33 @@ public class OneToManyAssociationDefaultTest {
     private FacetedMethod mockPeer;
     @Mock
     private NamedFacet mockNamedFacet;
-    @Mock
-    private ServicesInjector mockServicesInjector;
+
     @Mock
     private CollectionAddToFacet mockCollectionAddToFacet;
+
+    private ServicesInjector stubServicesInjector;
 
     private OneToManyAssociation association;
 
     @Before
     public void setUp() {
+        stubServicesInjector = new ServicesInjector(Lists.newArrayList(
+                mockAuthenticationSessionProvider,
+                mockSpecificationLoader,
+                mockMessageBrokerServiceInternal,
+                mockPersistenceSessionServiceInternal
+        ));
+
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationDefault(mockPeer, mockServicesInjector);
+        association = new OneToManyAssociationDefault(mockPeer, stubServicesInjector);
     }
 
     private void allowingSpecLoaderToReturnSpecs() {
         context.checking(new Expectations() {
             {
-                allowing(mockSpecificationLookup).loadSpecification(Order.class);
+                allowing(mockSpecificationLoader).loadSpecification(Order.class);
             }
         });
     }

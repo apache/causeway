@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesF
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -61,6 +62,8 @@ public class ObjectAssociationAbstractTest {
     private ServicesInjector mockServicesInjector;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
 
     public static class Customer {
@@ -78,6 +81,8 @@ public class ObjectAssociationAbstractTest {
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
+            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
         objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, mockServicesInjector) {

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system;
 
+import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -58,27 +60,34 @@ public class ObjectActionLayoutXmlDefaultTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private SpecificationLoader mockSpecificationLookup;
+    private SpecificationLoader mockSpecificationLoader;
     @Mock
     private AdapterManager mockAdapterManager;
-    @Mock
-    private ServicesInjector mockServicesInjector;
     @Mock
     private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
+    private ServicesInjector stubServicesInjector;
+
     @Before
     public void setUp() throws Exception {
 
+        stubServicesInjector =
+                new ServicesInjector(Lists.newArrayList(
+                        mockAuthenticationSessionProvider,
+                        mockSpecificationLoader,
+                        mockPersistenceSessionServiceInternal,
+                        mockMessageBrokerServiceInternal));
+
         context.checking(new Expectations() {
             {
-                one(mockFacetedMethod).getIdentifier();
+                oneOf(mockFacetedMethod).getIdentifier();
                 will(returnValue(Identifier.actionIdentifier("Customer", "reduceheadcount")));
             }
         });
 
-        action = new ObjectActionDefault(mockFacetedMethod, mockServicesInjector);
+        action = new ObjectActionDefault(mockFacetedMethod, stubServicesInjector);
     }
 
 
