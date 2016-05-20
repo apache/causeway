@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
@@ -59,7 +59,7 @@ public class IsisSession implements SessionScopedComponent {
     private final IsisSessionFactory isisSessionFactory;
 
     private final AuthenticationSession authenticationSession;
-    private PersistenceSessionInternal persistenceSession; // only non-final so can be
+    private PersistenceSession persistenceSession; // only non-final so can be
     // replaced in tests.
     private final int id;
     private long accessTime;
@@ -69,7 +69,7 @@ public class IsisSession implements SessionScopedComponent {
     public IsisSession(
             final IsisSessionFactory sessionFactory,
             final AuthenticationSession authenticationSession,
-            final PersistenceSessionInternal persistenceSession) {
+            final PersistenceSession persistenceSession) {
 
         // global context
         ensureThatArg(sessionFactory, is(not(nullValue())), "execution context factory is required");
@@ -99,7 +99,7 @@ public class IsisSession implements SessionScopedComponent {
      * Closes session.
      */
     public void close() {
-        final PersistenceSessionInternal persistenceSession = getPersistenceSession();
+        final PersistenceSession persistenceSession = getPersistenceSession();
         if(persistenceSession != null) {
             persistenceSession.close();
         }
@@ -172,9 +172,9 @@ public class IsisSession implements SessionScopedComponent {
 
     //region > Persistence Session
     /**
-     * The {@link PersistenceSessionInternal} within this {@link IsisSession}.
+     * The {@link PersistenceSession} within this {@link IsisSession}.
      */
-    public PersistenceSessionInternal getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
 

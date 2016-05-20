@@ -55,7 +55,7 @@ import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
@@ -324,7 +324,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         return getPersistenceSession().getServicesInjector();
     }
 
-    private PersistenceSessionInternal getPersistenceSession() {
+    private PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

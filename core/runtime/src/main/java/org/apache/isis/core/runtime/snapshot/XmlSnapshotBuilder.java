@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
  * Builds an {@link XmlSnapshot} using a fluent use through a builder:
@@ -93,7 +93,7 @@ public class XmlSnapshotBuilder {
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////
 
-    private static PersistenceSessionInternal getPersistenceSession() {
+    private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 }

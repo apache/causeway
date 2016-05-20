@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
 
@@ -192,7 +192,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     // //////////////////////////////////////
 
-    protected PersistenceSessionInternal getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

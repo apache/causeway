@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -514,7 +514,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return getPersistenceSessionStatic().getServicesInjector();
     }
 
-    private static PersistenceSessionInternal getPersistenceSessionStatic() {
+    private static PersistenceSession getPersistenceSessionStatic() {
         return IsisContext.getPersistenceSession();
     }
 

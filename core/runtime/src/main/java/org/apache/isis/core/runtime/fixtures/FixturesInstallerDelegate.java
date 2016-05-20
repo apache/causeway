@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
@@ -53,7 +53,7 @@ public class FixturesInstallerDelegate {
     protected final List<Object> fixtures = new ArrayList<Object>();
     private final SwitchUserServiceImpl switchUserService = new SwitchUserServiceImpl();
 
-    private final PersistenceSessionInternal persistenceSession;
+    private final PersistenceSession persistenceSession;
 
     /**
      * The requested {@link LogonFixture}, if any.
@@ -70,7 +70,7 @@ public class FixturesInstallerDelegate {
     // /////////////////////////////////////////////////////////
 
     /**
-     * The {@link PersistenceSessionInternal} used will be that from
+     * The {@link PersistenceSession} used will be that from
      * {@link IsisContext#getPersistenceSession() IsisContext}.
      */
     public FixturesInstallerDelegate() {
@@ -78,12 +78,12 @@ public class FixturesInstallerDelegate {
     }
 
     /**
-     * For testing, supply own {@link PersistenceSessionInternal} rather than lookup
+     * For testing, supply own {@link PersistenceSession} rather than lookup
      * from context.
      * 
      * @param persistenceSession
      */
-    public FixturesInstallerDelegate(final PersistenceSessionInternal persistenceSession) {
+    public FixturesInstallerDelegate(final PersistenceSession persistenceSession) {
         this.persistenceSession = persistenceSession;
     }
     
@@ -148,7 +148,7 @@ public class FixturesInstallerDelegate {
     /**
      * Hook - default does nothing.
      */
-    protected void preInstallFixtures(final PersistenceSessionInternal persistenceSession) {
+    protected void preInstallFixtures(final PersistenceSession persistenceSession) {
     }
 
     // ///////////////////////////////////////
@@ -239,7 +239,7 @@ public class FixturesInstallerDelegate {
     /**
      * Hook - default does nothing.
      */
-    protected void postInstallFixtures(final PersistenceSessionInternal persistenceSession) {
+    protected void postInstallFixtures(final PersistenceSession persistenceSession) {
     }
 
     // /////////////////////////////////////////////////////////
@@ -265,11 +265,11 @@ public class FixturesInstallerDelegate {
      * persistor or the persistor specified in the constructor.
      * 
      * <p>
-     * Note: if a {@link PersistenceSessionInternal persistor} was specified via the
+     * Note: if a {@link PersistenceSession persistor} was specified via the
      * constructor, this is not cached (to do so would cause the usage of tests
      * that use the singleton to break).
      */
-    private PersistenceSessionInternal getPersistenceSession() {
+    private PersistenceSession getPersistenceSession() {
         return persistenceSession != null ? persistenceSession : IsisContext.getPersistenceSession();
     }
 

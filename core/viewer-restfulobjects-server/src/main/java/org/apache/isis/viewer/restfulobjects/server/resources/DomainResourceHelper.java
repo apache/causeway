@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
@@ -89,7 +89,7 @@ public class DomainResourceHelper {
         }
 
         @Override
-        public PersistenceSessionInternal getPersistenceSession() {
+        public PersistenceSession getPersistenceSession() {
             return rendererContext.getPersistenceSession();
         }
 

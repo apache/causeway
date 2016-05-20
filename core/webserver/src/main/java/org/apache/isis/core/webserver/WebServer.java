@@ -52,7 +52,6 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixture;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromEnvironmentVariable;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerHelp;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerSystemProperties;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerVersion;
 import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webserver.internal.OptionHandlerDeploymentTypeWebServer;
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
@@ -141,7 +140,6 @@ public class WebServer {
                 new OptionHandlerFixtureFromEnvironmentVariable(),
                 new OptionHandlerSystemProperties(),
                 new OptionHandlerHelp(),
-                new OptionHandlerVersion(),
                 new OptionHandlerPort(),
                 new OptionHandlerDeploymentTypeWebServer()
         );

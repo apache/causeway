@@ -33,11 +33,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapterBuilder {
 
-    private PersistenceSessionInternal persistenceSession;
+    private PersistenceSession persistenceSession;
 
     private PojoAdapterBuilder(){
     }
@@ -166,7 +166,7 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(PersistenceSessionInternal persistenceSession) {
+    public PojoAdapterBuilder with(PersistenceSession persistenceSession) {
         this.persistenceSession = persistenceSession;
         return this;
     }

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -475,7 +475,7 @@ public class IsisContext {
      * 
      * @see IsisSession#getPersistenceSession()
      */
-    public static PersistenceSessionInternal getPersistenceSession() {
+    public static PersistenceSession getPersistenceSession() {
         return getSession().getPersistenceSession();
     }
 
@@ -490,7 +490,7 @@ public class IsisContext {
      * Convenience methods
      * 
      * @see IsisSession#getPersistenceSession()
-     * @see PersistenceSessionInternal#getTransactionManager()
+     * @see PersistenceSession#getTransactionManager()
      */
     public static IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
@@ -514,10 +514,10 @@ public class IsisContext {
      * 
      * <p>
      * Transactions are managed using the {@link IsisTransactionManager}
-     * obtainable from the {@link IsisSession's} {@link PersistenceSessionInternal}.
+     * obtainable from the {@link IsisSession's} {@link PersistenceSession}.
      * 
      * @see IsisSession#getCurrentTransaction()
-     * @see PersistenceSessionInternal#getTransactionManager()
+     * @see PersistenceSession#getTransactionManager()
      */
     public static IsisTransaction getCurrentTransaction() {
         return getSession().getCurrentTransaction();

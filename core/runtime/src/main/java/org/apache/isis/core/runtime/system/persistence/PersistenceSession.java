@@ -91,7 +91,6 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -145,18 +144,17 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
  * identities} for each and every POJO that is being used by the framework.
  */
-public class PersistenceSessionInternal implements
+public class PersistenceSession implements
         TransactionalResource,
         SessionScopedComponent,
         AdapterManager,
         MessageBrokerServiceInternal,
-        PersistenceSessionServiceInternal,
         IsisLifecycleListener2.PersistenceSessionLifecycleManagement,
         IsisTransactionManager.PersistenceSessionTransactionManagement,
         PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement {
 
     //region > constants
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionInternal.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
     /**
      * @see #isFixturesInstalled()
@@ -211,7 +209,7 @@ public class PersistenceSessionInternal implements
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSessionInternal(
+    public PersistenceSession(
             final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
@@ -393,13 +391,11 @@ public class PersistenceSessionInternal implements
 
     //region > QuerySubmitter impl, findInstancesInTransaction
 
-    @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
         return CollectionFacetUtils.convertToAdapterList(instances);
     }
 
-    @Override
     public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
         final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
@@ -966,7 +962,7 @@ public class PersistenceSessionInternal implements
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have a
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link PersistenceSessionInternal} as the object is implicitly 'in use'.
+     * the {@link PersistenceSession} as the object is implicitly 'in use'.
      *
      * <p>
      * If the object has any associations then each of these, where they aren't
@@ -997,7 +993,7 @@ public class PersistenceSessionInternal implements
                 makePersistentTransactionAssumed(adapter);
 
                 // clear out the map of transient -> persistent
-                PersistenceSessionInternal.this.persistentByTransient.clear();
+                PersistenceSession.this.persistentByTransient.clear();
             }
 
         });
@@ -1047,12 +1043,10 @@ public class PersistenceSessionInternal implements
     //endregion
 
     //region > ObjectPersistor impl
-    @Override
     public void makePersistent(final ObjectAdapter adapter) {
         makePersistentInTransaction(adapter);
     }
 
-    @Override
     public void remove(final ObjectAdapter adapter) {
         destroyObjectInTransaction(adapter);
     }
@@ -1275,7 +1269,7 @@ public class PersistenceSessionInternal implements
 
     /**
      * @deprecated
-     * @return - simply returns this {@link PersistenceSessionInternal}.
+     * @return - simply returns this {@link PersistenceSession}.
      */
     @Deprecated
     public AdapterManager getAdapterManager() {
@@ -1650,7 +1644,7 @@ public class PersistenceSessionInternal implements
      *
      * <p>
      * Note that there is no management of {@link Version}s here. That is
-     * because the {@link PersistenceSessionInternal} is expected to manage this.
+     * because the {@link PersistenceSession} is expected to manage this.
      *
      * @param hintRootOid - allow a different persistent root oid to be provided.
      */
@@ -2243,45 +2237,37 @@ public class PersistenceSessionInternal implements
     //region > DomainObjectServices impl
 
 
-    @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
         return new DomainObjectContainerResolve().lookup(bookmark, fieldResetPolicy);
     }
 
-    @Override
     public Bookmark bookmarkFor(Object domainObject) {
         return new DomainObjectContainerResolve().bookmarkFor(domainObject);
     }
 
-    @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
         return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
     }
 
 
-    @Override
     public void resolve(final Object parent) {
         new DomainObjectContainerResolve().resolve(parent);
     }
 
-    @Override
     public void resolve(final Object parent, final Object field) {
         new DomainObjectContainerResolve().resolve(parent, field);
     }
 
-    @Override
     public void beginTran() {
         getTransactionManager().startTransaction();
     }
 
-    @Override
     public boolean flush() {
         return getTransactionManager().flushTransaction();
     }
 
-    @Override
     public void commit() {
         getTransactionManager().endTransaction();
     }

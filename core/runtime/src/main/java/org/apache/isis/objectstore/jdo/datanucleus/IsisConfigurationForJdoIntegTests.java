@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 /**
@@ -87,7 +87,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         addDataNucleusProperty("datanucleus.cache.level2.mode","ENABLE_SELECTIVE");
 
         // automatically install any fixtures that might have been registered
-        add(PersistenceSessionInternal.INSTALL_FIXTURES_KEY , "true");
+        add(PersistenceSession.INSTALL_FIXTURES_KEY , "true");
 
         add(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
 
@@ -98,13 +98,13 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
     @Programmatic
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
-        add(PersistenceSessionInternal.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        add(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 
     @Programmatic
     public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
-        put(PersistenceSessionInternal.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 

@@ -89,7 +89,7 @@ This property is also IGNORED completely in 1.13.0+; the `configuration-and-anno
 
 [TIP]
 ====
-The values `"shiro"`, `"bypass"` etc are actually aliases for concrete implementations listed in Apache Isis' `installer-registry.properties` file (in `isis-core-runtime.jar`).  It is -- at least in theory -- possible to specify a fully qualified class name to replace either of the two security components.
+The values `"shiro"`, `"bypass"` etc are actually aliases for concrete implementations.  It is also possible to specify a fully qualified class name to replace either of the two security components, implementing the appropriate interface.
 ====
 
 If the `AppManifest` is _not_ being used then there are number of other configuration properties that also must be specified: `isis.services`, `isis.services.ServicesInstallerFromAnnotation.packagePrefix` and `isis.persistor.datanucleus.RegisterEntities.packagePrefix` and `isis.fixtures`; these are listed in the sections below.
@@ -108,5 +108,5 @@ Viewers are specified by way of the filters and servlets in the xref:ugbtb.adoc#
 </context-param>
 ----
 
-The net effect of this configuration is simply to ensure that the `viewer_wicket.properties` and/or the `viewer_restfulobjects.properties` files are read.
+As of `1.13.0-SNAPSHOT`, this configuration property has no effect: the `viewer_wicket.properties` and `viewer_restulobjects.properties` are always checked.  In previous versions, this context param was used to indicate which of the two config files should be read.
 

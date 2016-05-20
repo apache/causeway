@@ -35,7 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 /**
@@ -152,7 +152,7 @@ public class LocalizerForIsis extends Localizer {
         return getPersistenceSession().getServicesInjector();
     }
 
-    protected PersistenceSessionInternal getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

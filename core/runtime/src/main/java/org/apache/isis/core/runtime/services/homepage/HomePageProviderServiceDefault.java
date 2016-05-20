@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -105,7 +105,7 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
     // for any other value for Where
     protected static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
 
-    protected PersistenceSessionInternal getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

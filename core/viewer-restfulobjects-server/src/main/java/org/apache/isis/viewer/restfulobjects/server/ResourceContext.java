@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
@@ -73,7 +73,7 @@ public class ResourceContext implements RendererContext6 {
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
     private final Localization localization;
-    private final PersistenceSessionInternal persistenceSession;
+    private final PersistenceSession persistenceSession;
 
     private List<List<String>> followLinks;
 
@@ -104,7 +104,7 @@ public class ResourceContext implements RendererContext6 {
             final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession,
             final Localization localization,
-            final PersistenceSessionInternal persistenceSession,
+            final PersistenceSession persistenceSession,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         this.httpHeaders = httpHeaders;
@@ -291,7 +291,7 @@ public class ResourceContext implements RendererContext6 {
     }
 
     @Override
-    public PersistenceSessionInternal getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
 

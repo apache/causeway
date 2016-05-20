@@ -29,7 +29,7 @@ import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -74,7 +74,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
                     final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
                     final ActionPromptHeaderPanel titlePanel =
-                            PersistenceSessionInternal.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                            PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                             new Callable<ActionPromptHeaderPanel>() {
                                 @Override
                                 public ActionPromptHeaderPanel call() throws Exception {

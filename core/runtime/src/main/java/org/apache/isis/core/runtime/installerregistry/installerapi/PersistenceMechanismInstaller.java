@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.installerregistry.installerapi;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * Installs a {@link PersistenceSessionInternal} during system start up.
+ * Installs a {@link PersistenceSession} during system start up.
  */
 public interface PersistenceMechanismInstaller extends Installer {
 

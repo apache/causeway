@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 @DomainService(
@@ -146,7 +146,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         return getPersistenceSession().firstMatchingQuery(query);
     }
 
-    public static PersistenceSessionInternal getPersistenceSession() {
+    public static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 /**
@@ -845,7 +845,7 @@ public final class JsonValueEncoder {
         return testAdapterManager != null? testAdapterManager: getPersistenceSession();
     }
 
-    private static PersistenceSessionInternal getPersistenceSession() {
+    private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

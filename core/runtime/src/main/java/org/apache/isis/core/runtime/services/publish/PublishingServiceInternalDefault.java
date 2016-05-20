@@ -71,7 +71,7 @@ import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInter
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
@@ -98,7 +98,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
             return adapter;
         }
-        protected PersistenceSessionInternal getPersistenceSession() {
+        protected PersistenceSession getPersistenceSession() {
             return IsisContext.getPersistenceSession();
         }
 

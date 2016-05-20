@@ -66,6 +66,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
  */
 public class ServicesInjector implements ApplicationScopedComponent {
 
+
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjector.class);
 
     //region > constructor, fields

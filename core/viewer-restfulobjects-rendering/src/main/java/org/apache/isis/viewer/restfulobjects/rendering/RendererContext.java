@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 
 public interface RendererContext {
@@ -38,7 +38,7 @@ public interface RendererContext {
 
     IsisConfiguration getConfiguration();
     
-    PersistenceSessionInternal getPersistenceSession();
+    PersistenceSession getPersistenceSession();
 
     /**
      * @deprecated - replaced by {@link #getPersistenceSession()}.

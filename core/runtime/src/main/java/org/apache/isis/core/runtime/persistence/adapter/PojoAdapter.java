@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionInternal;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -57,7 +57,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
     private final Localization localization;
-    private final PersistenceSessionInternal persistenceSession;
+    private final PersistenceSession persistenceSession;
 
     /**
      * can be {@link #replacePojo(Object) replace}d.
@@ -79,7 +79,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final AuthenticationSession authenticationSession,
             final Localization localization,
             final SpecificationLoader specificationLoader,
-            final PersistenceSessionInternal persistenceSession) {
+            final PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;
 
@@ -428,7 +428,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      *
      * <p>
      *     Specifically, if an action which has been annotated (is copied by {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet action invocation facet}), and for a parented collection
-     *     (is copied by the {@link PersistenceSessionInternal} when {@link PersistenceSessionInternal#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
+     *     (is copied by the {@link PersistenceSession} when {@link PersistenceSession#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
      * </p>
      */
     @Override
