@@ -28,7 +28,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
@@ -36,7 +37,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 /**
  * If instantiated by the integration testing framework, this object will be registered as the implementation of
  * the {@link ConfigurationServiceInternal} (internal) domain service, using
- * {@link org.apache.isis.core.metamodel.services.ServicesInjector#addFallbackIfRequired(Class, Object)}.
+ * {@link ServicesInjector#addFallbackIfRequired(Class, Object)}.
  */
 public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault {
 

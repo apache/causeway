@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {

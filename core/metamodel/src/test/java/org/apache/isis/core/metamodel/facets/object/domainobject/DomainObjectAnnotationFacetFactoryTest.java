@@ -35,8 +35,6 @@ import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -63,7 +61,6 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectPayloadFactoryDefault;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.services.configinternal;
 
 import java.util.List;
 
@@ -22,22 +22,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public interface ConfigurationServiceInternal {
 
-    /**
-     * Provided by {@link RuntimeContextDefault} itself, cloned properties from
-     * {@link IsisConfiguration}.
-     * 
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
     String getProperty(String name);
 
-    /**
-     * Provided by {@link RuntimeContextDefault} itself, cloned properties from
-     * {@link IsisConfiguration}.
-     * 
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
     List<String> getPropertyNames();
 
 }

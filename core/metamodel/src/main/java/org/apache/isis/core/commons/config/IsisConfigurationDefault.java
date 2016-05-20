@@ -36,12 +36,13 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * This object will typically be registered as the implementation of the {@link ConfigurationServiceInternal}
  * (internal) domain service, using
- * {@link org.apache.isis.core.metamodel.services.ServicesInjector#addFallbackIfRequired(Class, Object)}.
+ * {@link ServicesInjector#addFallbackIfRequired(Class, Object)}.
  *
  * <p>
  *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> will be used instead.

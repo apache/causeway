@@ -38,6 +38,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;

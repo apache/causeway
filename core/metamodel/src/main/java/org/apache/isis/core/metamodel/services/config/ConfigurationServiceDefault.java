@@ -32,8 +32,15 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.config.ConfigurationProperty;
 import org.apache.isis.applib.services.config.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 
+/**
+ * This is the implementation of the applib's {@link ConfigurationService}, different from the internal
+ * {@link ConfigurationServiceInternal} domain service (implemented by {@link IsisConfigurationDefault}).
+ *
+ * TODO: unify these two type hierarchies...
+ */
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
