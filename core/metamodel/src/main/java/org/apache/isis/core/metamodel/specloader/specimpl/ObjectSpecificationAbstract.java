@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -87,18 +88,16 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.Persistability;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
@@ -126,8 +125,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //region > fields
 
+    protected final ServicesInjector servicesInjector;
+
     private final DeploymentCategory deploymentCategory;
-    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
@@ -135,8 +135,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
      */
     protected Properties metadataProperties;
-
-    protected final ObjectMemberDependencies objectMemberDependencies;
 
 
     private final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -180,10 +178,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //region > Constructor
     public ObjectSpecificationAbstract(
-            final Class<?> introspectedClass, 
+            final Class<?> introspectedClass,
             final String shortName,
-            final ObjectSpecificationDependencies objectSpecificationDependencies,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector servicesInjector,
+            final FacetProcessor facetProcessor) {
 
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
@@ -192,12 +190,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
-        this.deploymentCategory = objectSpecificationDependencies.getDeploymentCategory();
-        this.servicesInjector = objectSpecificationDependencies.getServicesInjector();
-        this.specificationLoader = objectSpecificationDependencies.getSpecificationLoader();
-        this.facetProcessor = objectSpecificationDependencies.getFacetProcessor();
+        this.servicesInjector = servicesInjector;
+        this.facetProcessor = facetProcessor;
 
-        this.objectMemberDependencies = objectMemberDependencies;
+        this.deploymentCategory = servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
     }
 
     
@@ -227,10 +224,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
     
     /**
-     * As provided explicitly within the
-     * {@link #ObjectSpecificationAbstract(Class, String, ObjectSpecificationDependencies, ObjectMemberDependencies)}
-     * constructor}.
-     * 
+     * As provided explicitly within the constructor.
+     *
      * <p>
      * Not API, but <tt>public</tt> so that {@link FacetedMethodsBuilder} can
      * call it.
@@ -931,10 +926,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                     final ObjectSpecification returnType) {
                 if (returnType.isNotCollection()) {
                     return new OneToOneAssociationContributee(servicePojo, input, contributeeType,
-                            objectMemberDependencies);
+                            servicesInjector);
                 } else {
                     return new OneToManyAssociationContributee(servicePojo, input, contributeeType,
-                            objectMemberDependencies);
+                            servicesInjector);
                 }
             }
         };
@@ -1023,10 +1018,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final ObjectSpecification returnType = mixinAction.getReturnType();
                 if (returnType.isNotCollection()) {
                     return new OneToOneAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, objectMemberDependencies);
+                            mixinAction, mixedInType, mixinType, servicesInjector);
                 } else {
                     return new OneToManyAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, objectMemberDependencies);
+                            mixinAction, mixedInType, mixinType, servicesInjector);
                 }
             }
         };
@@ -1083,7 +1078,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (contributeeParam != -1) {
                 ObjectActionContributee contributeeAction =
                         new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this,
-                                objectMemberDependencies);
+                                servicesInjector);
                 facetProcessor.processMemberOrder(metadataProperties, contributeeAction);
                 contributeeActions.add(contributeeAction);
             }
@@ -1170,7 +1165,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
 
             ObjectActionMixedIn mixedInAction =
-                    new ObjectActionMixedIn(mixinType, mixinAction, this, objectMemberDependencies);
+                    new ObjectActionMixedIn(mixinType, mixinAction, this, servicesInjector);
             facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
             actions.add(mixedInAction);
         }

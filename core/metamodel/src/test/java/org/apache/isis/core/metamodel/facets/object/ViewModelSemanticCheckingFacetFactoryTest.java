@@ -28,7 +28,6 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
@@ -73,7 +72,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
 
         context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(mockConfiguration));
         }});
 

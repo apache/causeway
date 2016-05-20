@@ -80,8 +80,8 @@ import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionPara
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -98,11 +98,14 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     private ConfigurationServiceInternal stubConfigurationServiceInternal;
     private TranslationService mockTranslationService;
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+
 
     public void setUp() throws Exception {
         super.setUp();
         mockServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
+        mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
@@ -123,20 +126,20 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(stubConfigurationServiceInternal));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
 
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
-            will(returnValue(mockSpecificationLoader));
+            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            will(returnValue(mockPersistenceSessionServiceInternal));
 
         }});
 

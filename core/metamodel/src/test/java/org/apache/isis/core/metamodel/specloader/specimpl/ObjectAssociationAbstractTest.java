@@ -36,8 +36,9 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -56,6 +57,10 @@ public class ObjectAssociationAbstractTest {
 
     @Mock
     private ObjectSpecification objectSpecification;
+    @Mock
+    private ServicesInjector mockServicesInjector;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
 
 
     public static class Customer {
@@ -69,9 +74,13 @@ public class ObjectAssociationAbstractTest {
     @Before
     public void setup() {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
-        
-        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberDependencies(
-                null, null, null)) {
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).getSpecificationLoader();
+            will(returnValue(mockSpecificationLoader));
+        }});
+
+        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, mockServicesInjector) {
 
             @Override
             public ObjectAdapter get(

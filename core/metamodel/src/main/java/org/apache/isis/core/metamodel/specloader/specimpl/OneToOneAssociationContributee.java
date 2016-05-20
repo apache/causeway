@@ -35,9 +35,9 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToOneAssociationContributee extends OneToOneAssociationDefault implements ContributeeMember2 {
 
@@ -56,8 +56,8 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
             final Object servicePojo,
             final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberDependencies);
+            final ServicesInjector servicesInjector) {
+        super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), servicesInjector);
 
         this.servicePojo = servicePojo;
 

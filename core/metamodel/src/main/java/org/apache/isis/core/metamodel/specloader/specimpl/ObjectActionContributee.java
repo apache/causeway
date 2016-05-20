@@ -36,10 +36,10 @@ import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class ObjectActionContributee extends ObjectActionDefault implements ContributeeMember2 {
 
@@ -67,8 +67,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             final ObjectActionDefault serviceAction,
             final int contributeeParam,
             final ObjectSpecification contributeeType,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(serviceAction.getFacetedMethod(), objectMemberDependencies);
+            final ServicesInjector servicesInjector) {
+        super(serviceAction.getFacetedMethod(), servicesInjector);
 
         this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;

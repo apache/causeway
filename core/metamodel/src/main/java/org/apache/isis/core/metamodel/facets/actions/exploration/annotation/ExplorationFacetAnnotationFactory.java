@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -67,7 +66,7 @@ public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        validator.setConfiguration((IsisConfiguration)servicesInjector.lookupService(ConfigurationServiceInternal.class));
+        validator.setConfiguration((IsisConfiguration)servicesInjector.getConfigurationServiceInternal());
     }
 
 }

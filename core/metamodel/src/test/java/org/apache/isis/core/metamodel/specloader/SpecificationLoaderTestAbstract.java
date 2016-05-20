@@ -43,8 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
@@ -62,8 +60,6 @@ public abstract class SpecificationLoaderTestAbstract {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
-
-    private RuntimeContext runtimeContext;
 
     @Mock
     private IsisConfigurationDefault mockConfiguration;
@@ -96,7 +92,7 @@ public abstract class SpecificationLoaderTestAbstract {
         context.checking(new Expectations() {{
             ignoring(mockConfiguration);
 
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(new IsisConfigurationDefault(null)));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
@@ -108,7 +104,7 @@ public abstract class SpecificationLoaderTestAbstract {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
 
             allowing(mockServicesInjector).lookupService(GridService.class);
@@ -129,13 +125,6 @@ public abstract class SpecificationLoaderTestAbstract {
 
         }});
 
-        final SpecificationLoader reflector =
-                new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                        mockConfiguration,
-                        new ProgrammingModelFacetsJava5(),
-                        new MetaModelValidatorDefault(),
-                        Lists.<LayoutMetadataReader>newArrayList(
-                                new LayoutMetadataReaderFromJson()), mockServicesInjector);
         final ServicesInjector servicesInjector =
                 new ServicesInjector(Lists.newArrayList(
                         mockPersistenceSessionServiceInternal,
@@ -146,8 +135,15 @@ public abstract class SpecificationLoaderTestAbstract {
                         mockConfiguration,
                         mockSpecificationLoader,
                         mockDeploymentCategoryProvider));
-        runtimeContext = new RuntimeContext(servicesInjector);
-        reflector.init(runtimeContext);
+
+        final SpecificationLoader reflector =
+                new SpecificationLoader(DeploymentCategory.PRODUCTION,
+                        mockConfiguration,
+                        new ProgrammingModelFacetsJava5(),
+                        new MetaModelValidatorDefault(),
+                        Lists.<LayoutMetadataReader>newArrayList(
+                                new LayoutMetadataReaderFromJson()), servicesInjector);
+        reflector.init();
         
         specification = loadSpecification(reflector);
     }

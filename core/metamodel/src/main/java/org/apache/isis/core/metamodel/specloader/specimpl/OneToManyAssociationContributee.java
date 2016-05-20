@@ -36,10 +36,10 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class OneToManyAssociationContributee extends OneToManyAssociationDefault implements ContributeeMember2 {
 
@@ -57,7 +57,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
 
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector objectMemberDependencies) {
 
         final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
         final SpecificationLoader specificationLookup = objectMemberDependencies.getSpecificationLoader();
@@ -71,10 +71,10 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
             final Object servicePojo,
             final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector servicesInjector) {
         super(serviceAction.getFacetedMethod(),
-                typeOfSpec(serviceAction, objectMemberDependencies),
-                objectMemberDependencies);
+                typeOfSpec(serviceAction, servicesInjector),
+                servicesInjector);
         this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;
 
@@ -83,8 +83,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberDependencies
-                .getSpecificationLoader()) {};
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, servicesInjector.getSpecificationLoader()) {};
 
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);

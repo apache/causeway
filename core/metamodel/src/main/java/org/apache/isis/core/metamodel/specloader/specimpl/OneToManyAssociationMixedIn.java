@@ -40,10 +40,10 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault implements MixedInMember2 {
 
@@ -73,7 +73,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector objectMemberDependencies) {
 
         final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
         final SpecificationLoader specificationLookup = objectMemberDependencies.getSpecificationLoader();
@@ -87,10 +87,10 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector servicesInjector) {
         super(mixinAction.getFacetedMethod(),
-                typeOfSpec(mixinAction, objectMemberDependencies),
-                objectMemberDependencies);
+                typeOfSpec(mixinAction, servicesInjector),
+                servicesInjector);
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -101,7 +101,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberDependencies
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, servicesInjector
                 .getSpecificationLoader()) {};
 
         FacetUtil.addFacet(notPersistedFacet);

@@ -72,7 +72,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     //region > dependencies (looked up from services injector)
 
     protected SpecificationLoader getSpecificationLoader() {
-        return servicesInjector.lookupService(SpecificationLoader.class);
+        return servicesInjector.getSpecificationLoader();
     }
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
@@ -85,7 +85,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
 
     protected IsisConfiguration getConfiguration() {
         final ConfigurationServiceInternal configurationServiceInternal = servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
+                .getConfigurationServiceInternal();
         return (IsisConfigurationDefault)configurationServiceInternal;
     }
 

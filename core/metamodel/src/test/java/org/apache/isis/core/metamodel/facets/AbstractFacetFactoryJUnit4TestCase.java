@@ -39,9 +39,9 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
@@ -58,7 +58,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock
     protected SpecificationLoader mockSpecificationLoader;
     @Mock
-    protected PersistenceSessionServiceInternal mockAdapterManager;
+    protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     protected MethodRemover mockMethodRemover;
     @Mock
@@ -67,6 +67,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected ServicesInjector mockServicesInjector;
     @Mock
     protected TranslationService mockTranslationService;
+    @Mock
+    protected TransactionStateProviderInternal mockTransactionStateProviderInternal;
 
     @Mock
     protected IsisConfigurationDefault mockConfiguration;
@@ -111,11 +113,17 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
 
+            allowing(mockServicesInjector).lookupService(TransactionStateProviderInternal.class);
+            will(returnValue(mockTransactionStateProviderInternal));
+
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(mockConfiguration));
+
+            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            will(returnValue(mockPersistenceSessionServiceInternal));
 
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
@@ -123,7 +131,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
 
         }});

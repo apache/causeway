@@ -49,9 +49,12 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -507,6 +510,36 @@ public class ServicesInjector implements ApplicationScopedComponent {
                 return cls.isAssignableFrom(input.getClass());
             }
         };
+    }
+
+
+    //endregion
+
+    //region > convenience lookups
+
+    private SpecificationLoader specificationLoader;
+
+    @Programmatic
+    public SpecificationLoader getSpecificationLoader() {
+        return specificationLoader != null
+                ? specificationLoader
+                : (specificationLoader = lookupService(SpecificationLoader.class));
+    }
+
+    private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    @Programmatic
+    public PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
+        return persistenceSessionServiceInternal != null
+                ? persistenceSessionServiceInternal
+                : (persistenceSessionServiceInternal = lookupService(PersistenceSessionServiceInternal.class));
+    }
+
+    private ConfigurationServiceInternal configurationServiceInternal;
+    @Programmatic
+    public ConfigurationServiceInternal getConfigurationServiceInternal() {
+        return configurationServiceInternal != null
+                ? configurationServiceInternal
+                : (configurationServiceInternal = lookupService(ConfigurationServiceInternal.class));
     }
 
     //endregion

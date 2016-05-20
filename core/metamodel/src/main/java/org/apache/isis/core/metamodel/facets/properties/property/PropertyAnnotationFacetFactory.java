@@ -85,7 +85,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFace
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -454,8 +453,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
         postsPropertyChangedEventValidator.setConfiguration(configuration);
         propertyInteractionValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);

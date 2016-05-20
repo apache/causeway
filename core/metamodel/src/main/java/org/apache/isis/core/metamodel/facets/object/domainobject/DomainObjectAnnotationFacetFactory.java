@@ -495,8 +495,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         immutableValidator.setConfiguration(configuration);
         objectTypeValidator.setConfiguration(configuration);
 
-        this.persistenceSessionServiceInternal =
-                servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
 
     }
 

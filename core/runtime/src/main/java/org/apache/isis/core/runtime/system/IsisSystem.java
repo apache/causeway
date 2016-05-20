@@ -40,7 +40,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
@@ -174,9 +173,6 @@ public class IsisSystem implements ApplicationScopedComponent {
                             deploymentType, servicesInjector);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
-            // runtimeContext
-            final RuntimeContext runtimeContext = new RuntimeContext(servicesInjector);
-
             // wire up components and components into services...
             for (Object service : servicesInjector.getRegisteredServices()) {
                 // inject itself into each service (if implements ServiceInjectorAware).
@@ -189,14 +185,14 @@ public class IsisSystem implements ApplicationScopedComponent {
                     authenticationManager, authorizationManager, persistenceSessionFactory);
 
             // temporarily make a configuration available
-            // TODO: REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
+            // TODO: REVIEW: would rather inject this
             IsisContext.setConfiguration(configuration);
 
             // set up the "appropriate" IsisContext (usually IsisContextThreadLocal) to hold
             // a reference to the sessionFactory just created
             deploymentType.initContext(sessionFactory);
 
-            specificationLoader.init(runtimeContext);
+            specificationLoader.init();
 
             try {
                 // validate here after all entities have been registered in the persistence session factory

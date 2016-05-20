@@ -47,10 +47,10 @@ import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
@@ -82,6 +82,8 @@ public class ObjectMemberAbstractTest {
     private AuthenticationSession mockAuthenticationSession;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    ServicesInjector mockServicesInjector;
     @Mock
     private ObjectSpecification mockSpecForCustomer;
 
@@ -270,8 +272,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberDependencies(
-                null, null, null));
+        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, null);
     }
 
     /**

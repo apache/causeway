@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithMustSatisfyAnnotations;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithoutMustSatisfyAnnotations;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -76,7 +75,7 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
 
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(mockConfiguration));
 
             allowing(mockServicesInjector).injectServicesInto(with(any(List.class)));

@@ -46,8 +46,6 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetV
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationDefault;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -90,11 +88,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
 
-                allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+                allowing(mockServicesInjector).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
-                allowing(mockServicesInjector).lookupService(PersistenceSessionServiceInternal.class);
-                will(returnValue(mockAdapterManager));
+                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                will(returnValue(mockPersistenceSessionServiceInternal));
             }
         });
 

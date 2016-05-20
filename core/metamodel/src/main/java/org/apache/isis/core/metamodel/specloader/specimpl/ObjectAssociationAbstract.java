@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract implements ObjectAssociation {
 
@@ -39,8 +39,8 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
             final ObjectSpecification specification,
-            final ObjectMemberDependencies dependencies) {
-        super(facetedMethod, featureType, dependencies);
+            final ServicesInjector servicesInjector) {
+        super(facetedMethod, featureType, servicesInjector);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }

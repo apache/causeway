@@ -66,13 +66,13 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
@@ -100,8 +100,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     public ObjectActionDefault(
             final FacetedMethod facetedMethod,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(facetedMethod, FeatureType.ACTION, objectMemberDependencies);
+            final ServicesInjector servicesInjector) {
+        super(facetedMethod, FeatureType.ACTION, servicesInjector);
     }
 
     //endregion

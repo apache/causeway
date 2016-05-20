@@ -50,16 +50,15 @@ import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetI
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
@@ -99,9 +98,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
-            final ObjectSpecificationDependencies specContext,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberDependencies);
+            final ServicesInjector servicesInjector,
+            final FacetProcessor facetProcessor) {
+        super(correspondingClass, determineShortName(correspondingClass),
+                servicesInjector, facetProcessor);
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
     }
@@ -222,9 +222,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-            return new OneToManyAssociationDefault(facetMethod, objectMemberDependencies);
+            return new OneToManyAssociationDefault(facetMethod, servicesInjector);
         } else if (facetMethod.getFeatureType().isProperty()) {
-            return new OneToOneAssociationDefault(facetMethod, objectMemberDependencies);
+            return new OneToOneAssociationDefault(facetMethod, servicesInjector);
         } else {
             return null;
         }
@@ -245,7 +245,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return new ObjectActionDefault(facetedMethod, objectMemberDependencies);
+            return new ObjectActionDefault(facetedMethod, servicesInjector);
         } else {
             return null;
         }
@@ -266,32 +266,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         isService = true;
     }
 
-    private void ensureServiceHasNoAssociations() {
-        final List<ObjectAssociation> associations = getAssociations(Contributed.EXCLUDED);
-        final StringBuilder buf = new StringBuilder();
-        for (final ObjectAssociation association : associations) {
-            final String name = association.getId();
-            // services are allowed to have one association, called 'id'
-            if (!isValidAssociationForService(name)) {
-                appendAssociationName(buf, name);
-            }
-        }
-        if (buf.length() > 0) {
-            throw new ObjectSpecificationException("Service object " + getFullIdentifier() + " should have no fields, but has: " + buf);
-        }
-    }
-
-    /**
-     * Services are allowed to have one association, called 'id'.
-     */
-    private boolean isValidAssociationForService(final String associationId) {
-        return "id".indexOf(associationId) != -1;
-    }
-
-    private void appendAssociationName(final StringBuilder fieldNames, final String name) {
-        fieldNames.append(fieldNames.length() > 0 ? ", " : "");
-        fieldNames.append(name);
-    }
 
 
     // //////////////////////////////////////////////////////////////

@@ -38,9 +38,9 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember2 {
 
@@ -72,8 +72,8 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(mixinAction.getFacetedMethod(), mixinAction.getReturnType(), objectMemberDependencies);
+            final ServicesInjector servicesInjector) {
+        super(mixinAction.getFacetedMethod(), mixinAction.getReturnType(), servicesInjector);
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;

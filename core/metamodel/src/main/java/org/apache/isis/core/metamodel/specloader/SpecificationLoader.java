@@ -45,14 +45,10 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
@@ -146,26 +142,17 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > init
 
-    private RuntimeContext runtimeContext;
-
     private boolean initialized = false;
 
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link ServicesInjector}).
-     * @param runtimeContext
      */
     @Programmatic
-    public void init(final RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
+    public void init() {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("initialising {}", this);
-        }
-
-        // default subcomponents
-        if (runtimeContext == null) {
-            this.runtimeContext = new RuntimeContext(servicesInjector);
         }
 
         // wire subcomponents into each other
@@ -182,6 +169,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         loadSpecificationsForServices();
         loadSpecificationsForMixins();
         cacheBySpecId();
+
         initialized = true;
     }
 
@@ -224,14 +212,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return initialized;
     }
 
-
-    /**
-     * Set using {@link #init(RuntimeContext)}.
-     */
-    @Programmatic
-    public RuntimeContext getRuntimeContext() {
-        return runtimeContext;
-    }
 
     //endregion
 
@@ -423,25 +403,16 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
-        final PersistenceSessionServiceInternal persistenceSessionServiceInternal =
-                servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
-
-        final ObjectSpecificationDependencies specContext =
-                new ObjectSpecificationDependencies(deploymentCategory, servicesInjector, this, facetProcessor);
-
-        final ObjectMemberDependencies objectMemberDependencies =
-                new ObjectMemberDependencies(this, servicesInjector, persistenceSessionServiceInternal);
-
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
-            return new ObjectSpecificationOnStandaloneList(specContext, objectMemberDependencies);
+            return new ObjectSpecificationOnStandaloneList(servicesInjector,
+                    facetProcessor);
         } else {
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
                             this, facetProcessor, layoutMetadataReaders);
-            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext,
-                    objectMemberDependencies);
+            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
+                    servicesInjector, facetProcessor);
         }
     }
 

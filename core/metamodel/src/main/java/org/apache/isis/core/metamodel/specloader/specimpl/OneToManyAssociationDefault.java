@@ -41,24 +41,25 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class OneToManyAssociationDefault extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     public OneToManyAssociationDefault(
             final FacetedMethod facetedMethod,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        this(facetedMethod, getSpecification(objectMemberDependencies.getSpecificationLoader(), facetedMethod.getType()),
-                objectMemberDependencies);
+            final ServicesInjector servicesInjector) {
+        this(facetedMethod,
+                getSpecification(servicesInjector.getSpecificationLoader(), facetedMethod.getType()),
+                servicesInjector);
     }
 
     protected OneToManyAssociationDefault(
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(facetedMethod, FeatureType.COLLECTION, objectSpec, objectMemberDependencies);
+            final ServicesInjector servicesInjector) {
+        super(facetedMethod, FeatureType.COLLECTION, objectSpec, servicesInjector);
     }
 
     @Override

@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSat
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -207,8 +206,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .lookupService(ConfigurationServiceInternal.class);
+        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
         maxLengthValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);

@@ -560,7 +560,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         this.transactionStateProviderInternal =
                 servicesInjector.lookupService(TransactionStateProviderInternal.class);
 
-        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
 

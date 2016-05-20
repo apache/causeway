@@ -62,7 +62,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
     PersistenceSessionServiceInternal adapterManager;

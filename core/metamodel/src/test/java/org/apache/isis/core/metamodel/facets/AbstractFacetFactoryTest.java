@@ -36,8 +36,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -67,6 +68,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
+
+    protected TransactionStateProviderInternal mockTransactionStateProviderInternal;
+    protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
     protected IsisConfigurationDefault stubConfiguration;
     protected SpecificationLoader mockSpecificationLoader;
@@ -109,6 +113,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         stubConfiguration = new IsisConfigurationDefault();
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
+        mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
+        mockTransactionStateProviderInternal = context.mock(TransactionStateProviderInternal.class);
+
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
         context.checking(new Expectations() {{
@@ -116,13 +123,13 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
 
-            allowing(mockServicesInjector).lookupService(ConfigurationServiceInternal.class);
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(stubConfiguration));
 
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+            allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
@@ -133,7 +140,22 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
+
+            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+            will(returnValue(mockPersistenceSessionServiceInternal));
+
+            allowing(mockServicesInjector).lookupService(TransactionStateProviderInternal.class);
+            will(returnValue(mockTransactionStateProviderInternal));
+
+            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+            will(returnValue(mockAuthenticationSession));
+
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+
         }});
+
+
     }
 
     protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -36,8 +37,9 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -55,6 +57,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     @Mock
     private ObjectSpecification mockObjectSpecification;
 
+    @Mock
+    private ServicesInjector mockServicesInjector;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
+
     public static class Customer {
         public String getFirstName() {
             return null;
@@ -64,10 +71,15 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     @Before
     public void setup() {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
-        
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).getSpecificationLoader();
+            will(returnValue(mockSpecificationLoader));
+        }});
+
         objectAssociation = new ObjectAssociationAbstract(
                 facetedMethod, FeatureType.PROPERTY, mockObjectSpecification,
-                new ObjectMemberDependencies(null, null, null)) {
+                mockServicesInjector) {
 
             @Override
             public ObjectAdapter get(

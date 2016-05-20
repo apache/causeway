@@ -70,7 +70,7 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
     PersistenceSessionServiceInternal adapterManager;

@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 
 public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractFacetFactoryTest {
@@ -52,25 +51,6 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     public void setUp() throws Exception {
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory();;
-
-        context.checking(new Expectations() {{
-
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
-            will(returnValue(mockSpecificationLoader));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
-            will(returnValue(mockSpecificationLoader));
-
-        }});
 
         facetFactory.setServicesInjector(mockServicesInjector);
 

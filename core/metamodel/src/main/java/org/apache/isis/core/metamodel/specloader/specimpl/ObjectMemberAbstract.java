@@ -60,7 +60,6 @@ import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
@@ -85,7 +84,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
             final FeatureType featureType,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector servicesInjector) {
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Id must always be set");
@@ -94,9 +93,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.featureType = featureType;
         this.id = id;
 
-        this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
-        this.servicesInjector = objectMemberDependencies.getServicesInjector();
-        this.persistenceSessionServiceInternal = objectMemberDependencies.getPersistenceSessionService();
+        this.servicesInjector = servicesInjector;
+
+        this.specificationLookup = servicesInjector.getSpecificationLoader();
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
     //region > Identifiers

@@ -19,20 +19,19 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 /**
@@ -50,9 +49,9 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     private static final String ICON_NAME = "instances";
 
     public ObjectSpecificationOnStandaloneList(
-            final ObjectSpecificationDependencies objectSpecificationDependencies,
-            final ObjectMemberDependencies objectMemberDependencies) {
-        super(FreeStandingList.class, NAME, objectSpecificationDependencies, objectMemberDependencies);
+            final ServicesInjector servicesInjector,
+            final FacetProcessor facetProcessor) {
+        super(FreeStandingList.class, NAME, servicesInjector, facetProcessor);
     }
 
     // /////////////////////////////////////////////////////////

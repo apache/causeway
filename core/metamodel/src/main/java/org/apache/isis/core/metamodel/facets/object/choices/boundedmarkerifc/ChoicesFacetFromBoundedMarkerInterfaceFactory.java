@@ -60,7 +60,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        this.persistenceSessionServiceInternal = servicesInjector.lookupService(PersistenceSessionServiceInternal.class);
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
 }

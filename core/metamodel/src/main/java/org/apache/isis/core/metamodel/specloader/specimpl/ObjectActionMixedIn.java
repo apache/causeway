@@ -37,10 +37,10 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember2 {
 
@@ -75,7 +75,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final Class<?> mixinType,
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType,
-            final ObjectMemberDependencies objectMemberDependencies) {
+            final ServicesInjector objectMemberDependencies) {
         super(mixinAction.getFacetedMethod(), objectMemberDependencies);
 
         this.mixinType = mixinType;

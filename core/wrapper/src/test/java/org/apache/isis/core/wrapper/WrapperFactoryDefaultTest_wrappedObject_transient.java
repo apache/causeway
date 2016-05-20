@@ -131,7 +131,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         context.checking(new Expectations() {
             {
-                allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+                allowing(mockServicesInjector).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();

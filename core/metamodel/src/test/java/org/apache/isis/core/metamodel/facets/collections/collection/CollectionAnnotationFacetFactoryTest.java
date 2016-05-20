@@ -123,7 +123,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
                     mockConfiguration,
                     mockSpecificationLoader, mockAuthenticationSessionProvider,
-                    mockAdapterManager
+                    mockPersistenceSessionServiceInternal
             ) {
                 @Override
                 public Object getProperty(

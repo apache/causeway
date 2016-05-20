@@ -51,13 +51,12 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -104,8 +103,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private IsisConfiguration mockConfiguration;
 
-    private ObjectMemberDependencies objectMemberDependencies;
-
     @Mock
     private ObjectSpecificationDefault mockEmployeeSpec;
     private ObjectMember employeeNameMember;
@@ -133,11 +130,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
     @Before
     public void setUp() {
-
-
-        objectMemberDependencies = new ObjectMemberDependencies(
-                mockSpecificationLoader, mockServicesInjector,
-                mockPersistenceSessionServiceInternal);
 
         employeeRepository = new EmployeeRepositoryImpl();
 
@@ -171,7 +163,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
                 will(returnValue(DeploymentCategory.PRODUCTION));
 
-                allowing(mockServicesInjector).lookupService(SpecificationLoader.class);
+                allowing(mockServicesInjector).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
                 allowing(mockSpecificationLoader).loadSpecification(String.class);
@@ -219,7 +211,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         employeeNameMember = new OneToOneAssociationDefault(
                 facetedMethodForProperty(
                         employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod),
-                objectMemberDependencies);
+                mockServicesInjector);
 
         context.checking(new Expectations() {
             {
