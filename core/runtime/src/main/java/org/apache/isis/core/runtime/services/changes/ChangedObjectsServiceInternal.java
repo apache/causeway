@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.enterprise.context.RequestScoped;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -34,7 +33,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -44,8 +43,25 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 @RequestScoped
 public class ChangedObjectsServiceInternal {
 
-    // used for auditing
-    private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();
+    /**
+     * Used for auditing: this contains the pre- values of every property of every object enlisted.
+     *
+     * <p>
+     *     When {@link #getChangedObjectProperties()} is called, then this is cleared out and {@link #changedObjectProperties} is non-null, containing
+     *     the actual differences.
+     * </p>
+     */
+    private final Map<AdapterAndProperty, PreAndPostValues> enlistedObjectProperties = Maps.newLinkedHashMap();
+
+    /**
+     * Used for auditing; contains the pre- and post- values of every property of every object that actually changed.
+     *
+     * <p>
+     *  Will be null until {@link #getChangedObjectProperties()} is called, thereafter contains the actual changes.
+     * </p>
+     */
+    private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties;
+
 
     // used for publishing
     private final Map<ObjectAdapter,PublishedObject.ChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
@@ -63,6 +79,10 @@ public class ChangedObjectsServiceInternal {
     @Programmatic
     public void enlistCreated(final ObjectAdapter adapter) {
 
+        if(shouldIgnore(adapter)) {
+            return;
+        }
+
         enlistForPublishing(adapter, PublishedObject.ChangeKind.CREATE);
 
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
@@ -70,14 +90,15 @@ public class ChangedObjectsServiceInternal {
             if(property.isNotPersisted()) {
                 continue;
             }
-            if(changedObjectProperties.containsKey(aap)) {
+            if(enlistedObjectProperties.containsKey(aap)) {
                 // already enlisted, so ignore
                 return;
             }
             PreAndPostValues papv = PreAndPostValues.pre(IsisTransaction.Placeholder.NEW);
-            changedObjectProperties.put(aap, papv);
+            enlistedObjectProperties.put(aap, papv);
         }
     }
+
 
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
@@ -92,6 +113,10 @@ public class ChangedObjectsServiceInternal {
     @Programmatic
     public void enlistUpdating(final ObjectAdapter adapter) {
 
+        if(shouldIgnore(adapter)) {
+            return;
+        }
+
         enlistForPublishing(adapter, PublishedObject.ChangeKind.UPDATE);
 
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
@@ -99,12 +124,12 @@ public class ChangedObjectsServiceInternal {
             if(property.isNotPersisted()) {
                 continue;
             }
-            if(changedObjectProperties.containsKey(aap)) {
+            if(enlistedObjectProperties.containsKey(aap)) {
                 // already enlisted, so ignore
                 return;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-            changedObjectProperties.put(aap, papv);
+            enlistedObjectProperties.put(aap, papv);
         }
     }
 
@@ -122,6 +147,10 @@ public class ChangedObjectsServiceInternal {
     @Programmatic
     public void enlistDeleting(final ObjectAdapter adapter) {
 
+        if(shouldIgnore(adapter)) {
+            return;
+        }
+
         final boolean enlisted = enlistForPublishing(adapter, PublishedObject.ChangeKind.DELETE);
         if(!enlisted) {
             return;
@@ -132,12 +161,12 @@ public class ChangedObjectsServiceInternal {
             if(property.isNotPersisted()) {
                 continue;
             }
-            if(changedObjectProperties.containsKey(aap)) {
+            if(enlistedObjectProperties.containsKey(aap)) {
                 // already enlisted, so ignore
                 return;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-            changedObjectProperties.put(aap, papv);
+            enlistedObjectProperties.put(aap, papv);
         }
     }
 
@@ -186,31 +215,22 @@ public class ChangedObjectsServiceInternal {
         final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
 
         final Set<ObjectAdapter> changedAdapters = Sets.newHashSet(
-                Iterables.filter(
                         Iterables.transform(
                                 changedObjectProperties,
-                                AdapterAndProperty.Functions.GET_ADAPTER),
-                        Predicates.not(IS_COMMAND)));
+                                AdapterAndProperty.Functions.GET_ADAPTER)
+                        );
         return !changedAdapters.isEmpty();
     }
 
-    private static final Predicate<ObjectAdapter> IS_COMMAND = new Predicate<ObjectAdapter>() {
-        @Override
-        public boolean apply(ObjectAdapter input) {
-            return Command.class.isAssignableFrom(input.getSpecification().getCorrespondingClass());
-        }
-    };
-
     @Programmatic
     public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
-        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties =  getAdapterAndPropertyPreAndPostValuesMap();
-
-        return Collections.unmodifiableSet(
-                Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
+        return changedObjectProperties != null
+                    ? changedObjectProperties
+                    : (changedObjectProperties = capturePostValuesAndDrain(enlistedObjectProperties));
     }
 
-    private Map<AdapterAndProperty, PreAndPostValues> getAdapterAndPropertyPreAndPostValuesMap() {
-        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
+    private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
+        final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties1 = Maps.newLinkedHashMap();
 
         while(!changedObjectProperties.isEmpty()) {
 
@@ -229,15 +249,28 @@ public class ChangedObjectsServiceInternal {
                 }
 
                 // if we encounter the same objectProperty again, this will simply overwrite it
-                processedObjectProperties.put(aap, papv);
+                processedObjectProperties1.put(aap, papv);
             }
         }
-        return processedObjectProperties;
+
+        return Collections.unmodifiableSet(
+                Sets.filter(processedObjectProperties1.entrySet(), PreAndPostValues.Predicates.CHANGED));
     }
 
     @Programmatic
     public void clearChangedObjectProperties() {
-        changedObjectProperties.clear();
+        enlistedObjectProperties.clear();
+    }
+
+    private static final Predicate<ObjectAdapter> IS_TRANSACTION_ID = new Predicate<ObjectAdapter>() {
+        @Override
+        public boolean apply(ObjectAdapter input) {
+            return HasTransactionId.class.isAssignableFrom(input.getSpecification().getCorrespondingClass());
+        }
+    };
+
+    protected boolean shouldIgnore(final ObjectAdapter adapter) {
+        return IS_TRANSACTION_ID.apply(adapter);
     }
 
 
@@ -253,12 +286,13 @@ public class ChangedObjectsServiceInternal {
 
     @Programmatic
     public int numberObjectPropertiesModified() {
-        return changedObjectProperties.size();
+        return enlistedObjectProperties.size();
     }
 
 
     static String asString(Object object) {
         return object != null? object.toString(): null;
     }
+
 
 }
