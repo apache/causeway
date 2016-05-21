@@ -22,22 +22,11 @@
 package domainapp.app.services.homepage;
 
 import org.apache.isis.applib.annotation.Action;
-import com.google.common.eventbus.Subscribe;
-
-import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-=======
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.applib.services.layout.Object_downloadLayoutXml;
-import org.apache.isis.applib.services.layout.Object_rebuildMetamodel;
-
-import domainapp.app.services.homepage.HomePageViewModel;
->>>>>>> ISIS-1343: extend ActionI invocation to take the targetAdapter, mixedInAdapter (can be null) and arg array.:example/archetype/simpleapp/src/main/resources/archetype-resources/app/src/main/java/domainapp/app/services/prototyping/HideMixinsForHomePage.java
 
 @DomainService(
         nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY // trick to suppress the actions from the top-level menu

@@ -23,7 +23,6 @@ package domainapp.dom.simple;
 
 import java.util.List;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -54,8 +53,10 @@ public class SimpleObjects {
     //endregion
 
     //region > listAll (action)
+    public static class ListAllEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(
-            semantics = SemanticsOf.SAFE
+            semantics = SemanticsOf.SAFE,
+            domainEvent = ListAllEvent.class
     )
     @ActionLayout(
             bookmarking = BookmarkPolicy.AS_ROOT
@@ -67,8 +68,10 @@ public class SimpleObjects {
     //endregion
 
     //region > findByName (action)
+    public static class FindByNameEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(
-            semantics = SemanticsOf.SAFE
+            semantics = SemanticsOf.SAFE,
+            domainEvent = FindByNameEvent.class
     )
     @ActionLayout(
             bookmarking = BookmarkPolicy.AS_ROOT
@@ -87,18 +90,14 @@ public class SimpleObjects {
     //endregion
 
     //region > create (action)
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {
-        public CreateDomainEvent(final SimpleObjects source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
-    }
-
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(
             domainEvent = CreateDomainEvent.class
     )
     @MemberOrder(sequence = "3")
     public SimpleObject create(
-            final @ParameterLayout(named="Name") String name) {
+            @ParameterLayout(named="Name")
+            final String name) {
         final SimpleObject obj = repositoryService.instantiate(SimpleObject.class);
         obj.setName(name);
         repositoryService.persist(obj);

@@ -25,8 +25,12 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -58,7 +62,9 @@ import org.apache.isis.applib.util.ObjectContracts;
                         + "WHERE name.indexOf(:name) >= 0 ")
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
-@DomainObject
+@DomainObject(
+        publishing = Publishing.ENABLED
+)
 public class SimpleObject implements Comparable<SimpleObject> {
 
     public static final int NAME_LENGTH = 40;
@@ -69,12 +75,15 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
+
     public static class NameDomainEvent extends PropertyDomainEvent<SimpleObject,String> {}
     @javax.jdo.annotations.Column(
             allowsNull="false",
             length = NAME_LENGTH
     )
     @Property(
+        command = CommandReification.ENABLED,
+        publishing = Publishing.ENABLED,
         domainEvent = NameDomainEvent.class
     )
     private String name;
@@ -88,6 +97,28 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public TranslatableString validateName(final String name) {
         return name != null && name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
     }
+
+
+
+    public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {}
+    @Action(
+            command = CommandReification.ENABLED,
+            publishing = Publishing.ENABLED,
+            semantics = SemanticsOf.IDEMPOTENT,
+            domainEvent = UpdateNameDomainEvent.class
+    )
+    @MemberOrder(name="name", sequence = "1") // associate with 'name' property
+    public SimpleObject updateName(@ParameterLayout(named="Name") final String name) {
+        setName(name);
+        return this;
+    }
+    public String default0UpdateName() {
+        return getName();
+    }
+    public TranslatableString validate0UpdateName(final String name) {
+        return validateName(name);
+    }
+
 
 
 
