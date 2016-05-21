@@ -1,7 +1,0 @@
-#Organize Import Order
-#Wed Dec 15 15:36:51 GMT 2010
-0=java
-1=javax
-2=com
-3=org
-4=org.apache.isis
