@@ -197,7 +197,7 @@ public interface ObjectAction extends ObjectMember {
     /**
      * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
      */
-    void setupActionInvocationContext(
+    void setupBulkActionInvocationContext(
             final ObjectAdapter targetAdapter);
 
 

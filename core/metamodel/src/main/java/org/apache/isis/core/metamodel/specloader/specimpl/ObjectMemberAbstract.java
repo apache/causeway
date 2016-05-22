@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
@@ -332,7 +333,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return getPersistenceSessionService().adapterFor(mixinPojo);
     }
 
-    static String determineNameFrom(final ObjectActionDefault mixinAction) {
+    public static String determineNameFrom(final ObjectAction mixinAction) {
         return StringExtensions.asCapitalizedName(suffix(mixinAction));
     }
 
@@ -345,7 +346,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return suffix.replaceAll(" ","");
     }
 
-    static String suffix(final ObjectActionDefault mixinAction) {
+    static String suffix(final ObjectAction mixinAction) {
         return suffix(mixinAction.getOnType().getSingularName());
     }
 

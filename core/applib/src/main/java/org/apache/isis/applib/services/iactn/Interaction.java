@@ -360,6 +360,10 @@ public class Interaction implements HasTransactionId {
             return memberIdentifier;
         }
 
+        /**
+         * The target of the action invocation.  If this interaction is for a mixin action, then will be the
+         * mixed-in target (not the transient mixin itself).
+         */
         public Object getTarget() {
             return target;
         }

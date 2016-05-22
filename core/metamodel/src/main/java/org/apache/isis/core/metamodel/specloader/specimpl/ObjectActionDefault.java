@@ -556,7 +556,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * Internal API
      */
     @Override
-    public void setupActionInvocationContext(final ObjectAdapter targetAdapter) {
+    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
 
         final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
 

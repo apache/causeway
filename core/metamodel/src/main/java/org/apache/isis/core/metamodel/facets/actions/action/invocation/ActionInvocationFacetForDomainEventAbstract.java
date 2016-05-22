@@ -31,6 +31,9 @@ import java.util.concurrent.Callable;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -188,19 +191,21 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             returnedAdapter = getAdapterManager().adapterFor(command);
 
         } else {
-
             // otherwise, go ahead and execute action in the 'foreground'
-            owningAction.setupActionInvocationContext(targetAdapter);
+            final ObjectAdapter mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
+            owningAction.setupBulkActionInvocationContext(mixinElseRegularAdapter);
+
+            final Object mixinElseRegularPojo = ObjectAdapter.Util.unwrap(mixinElseRegularAdapter);
+
             final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);
             final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(argumentAdapterList);
 
-            final String targetMember = CommandUtil.targetMemberNameFor(owningAction);
-            final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
+            final String targetMember = targetNameFor(owningAction, mixedInAdapter);
+            final String targetClass = CommandUtil.targetClassNameFor(mixinElseRegularAdapter);
 
             final Interaction.ActionInvocation execution =
-                    new Interaction.ActionInvocation(interaction, actionId, targetPojo, argumentPojos, targetMember,
+                    new Interaction.ActionInvocation(interaction, actionId, mixinElseRegularPojo, argumentPojos, targetMember,
                             targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
@@ -213,7 +218,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         // update the current execution with the DTO (memento)
                         final ActionInvocationDto invocationDto =
                                 getInteractionDtoServiceInternal().asActionInvocationDto(
-                                        owningAction, targetAdapter, argumentAdapterList);
+                                        owningAction, mixinElseRegularAdapter, argumentAdapterList);
                         currentExecution.setDto(invocationDto);
 
 
@@ -243,7 +248,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         // invoke method
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
 
-                        final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, targetAdapter);
+                        final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
 
                         // ... post the executed event
@@ -333,6 +338,24 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
+    }
+
+    // TODO: could improve this, currently have to go searching for the mixin
+    private static String targetNameFor(ObjectAction owningAction, ObjectAdapter mixedInAdapter) {
+        if(mixedInAdapter != null) {
+            ObjectSpecification onType = owningAction.getOnType();
+            ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
+            List<ObjectAction> objectActions1 = mixedInSpec.getObjectActions(Contributed.INCLUDED);
+            for (ObjectAction objectAction : objectActions1) {
+                if(objectAction instanceof MixedInMember2) {
+                    MixedInMember2 action = (MixedInMember2) objectAction;
+                    if(action.getMixinType() == onType) {
+                        return action.getName();
+                    }
+                }
+            }
+        }
+        return CommandUtil.targetMemberNameFor(owningAction);
     }
 
     private static String trim(String message, final int maxLen) {
