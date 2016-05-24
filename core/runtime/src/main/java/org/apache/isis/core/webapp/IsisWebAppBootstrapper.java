@@ -131,9 +131,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final ServletContext servletContext,
             final IsisConfigurationBuilder isisConfigurationBuilder) {
 
-        isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
-        isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());
-        isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
 
         // will load either from WEB-INF, from the classpath or from config directory.
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
@@ -142,7 +139,13 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
         } else {
             LOG.info( "Config override location: No override location configured" );
+
+            isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
+            isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());
+            isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
         }
+
+
     }
 
     private Injector createGuiceInjector(
