@@ -66,7 +66,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private ObjectSpecId specId;
 
     private Persistability persistable;
-    private boolean isEncodeable;
 
     private ServicesInjector servicesInjector;
 
@@ -268,7 +267,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public boolean isEncodeable() {
-        return isEncodeable;
+        return false;
     }
 
     @Override

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.accessor;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -88,12 +89,14 @@ public class CollectionAccessorFacetViaAccessorFactory
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-        final Class<?>[] collectionClasses = getCollectionTypeRepository().getCollectionType();
-        for (final Class<?> returnType : collectionClasses) {
-            final List<Method> list = methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX, returnType, false, 0);
-            methodListToAppendTo.addAll(list);
-        }
+    public void findAndRemoveCollectionAccessors(
+            final MethodRemover methodRemover,
+            final List<Method> methodListToAppendTo) {
+
+        final List<Method> list =
+                methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX,
+                Collection.class, false, 0);
+        methodListToAppendTo.addAll(list);
     }
 
     @Override

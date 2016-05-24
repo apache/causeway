@@ -94,8 +94,7 @@ public class OneToManyAssociationDefaultTest {
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
                 mockMessageBrokerServiceInternal,
-                mockPersistenceSessionServiceInternal
-        ));
+                mockPersistenceSessionServiceInternal));
 
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();

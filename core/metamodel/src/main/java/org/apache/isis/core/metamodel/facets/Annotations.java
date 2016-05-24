@@ -348,9 +348,7 @@ public final class Annotations  {
             try {
                 final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
                 return isAnnotationPresent(ifaceMethod, annotationClass);
-            } catch (final SecurityException e) {
-                // fall through
-            } catch (final NoSuchMethodException e) {
+            } catch (final SecurityException | NoSuchMethodException e) {
                 // fall through
             }
         }
@@ -389,9 +387,7 @@ public final class Annotations  {
             try {
                 final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
                 return getParameterAnnotations(parentClassMethod);
-            } catch (final SecurityException e) {
-                // fall through
-            } catch (final NoSuchMethodException e) {
+            } catch (final SecurityException | NoSuchMethodException e) {
                 // fall through
             }
         }
@@ -402,9 +398,7 @@ public final class Annotations  {
             try {
                 final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
                 return getParameterAnnotations(ifaceMethod);
-            } catch (final SecurityException e) {
-                // fall through
-            } catch (final NoSuchMethodException e) {
+            } catch (final SecurityException | NoSuchMethodException e) {
                 // fall through
             }
         }

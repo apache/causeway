@@ -19,6 +19,10 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -65,7 +69,20 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
     @Override
     public CollectionSemantics getCollectionSemantics() {
         final Class<?> underlyingClass = getSpecification().getCorrespondingClass();
-        return getCollectionTypeRegistry().semanticsOf(underlyingClass);
+        return semanticsOf(underlyingClass);
+    }
+
+    private static CollectionSemantics semanticsOf(final Class<?> underlyingClass) {
+        if (!Collection.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.ARRAY;
+        }
+        if (List.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.LIST;
+        }
+        if (Set.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.SET;
+        }
+        return CollectionSemantics.OTHER;
     }
 
     //region > visible, usable

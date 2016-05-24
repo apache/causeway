@@ -54,14 +54,13 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 
@@ -72,8 +71,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     //region > fields
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
-
     private final String id;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
@@ -387,10 +384,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     public PersistenceSessionServiceInternal getPersistenceSessionService() {
         return persistenceSessionServiceInternal;
-    }
-
-    public CollectionTypeRegistry getCollectionTypeRegistry() {
-        return collectionTypeRegistry;
     }
 
     protected <T> T lookupService(final Class<T> serviceClass) {

@@ -100,8 +100,7 @@ public class ObjectMemberAbstractTest {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         stubServicesInjector = new ServicesInjector(Lists.<Object>newArrayList(
-                mockSpecificationLoader, mockSpecificationLoader
-        ));
+                mockSpecificationLoader, mockSpecificationLoader));
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();

@@ -73,7 +73,7 @@ public class MethodUtil {
      * </ul>
      * If the returnType is specified as null then the return type is ignored.
      */
-    public static int findMethodIndex(final List<Method> methods, final MethodScope methodScope, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
+    private static int findMethodIndex(final List<Method> methods, final MethodScope methodScope, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
         int idx = -1;
         method: for (int i = 0; i < methods.size(); i++) {
             if (methods.get(i) == null) {
@@ -153,17 +153,22 @@ public class MethodUtil {
      *            ignored
      * @return Method
      */
-    public static List<Method> removeMethods(final List<Method> methods, final MethodScope forClass, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+    public static List<Method> removeMethods(
+            final List<Method> methods,
+            final MethodScope forClass,
+            final String prefix,
+            final Class<?> returnType,
+            final boolean canBeVoid,
+            final int paramCount) {
     
         final List<Method> validMethods = new ArrayList<Method>();
     
         for (int i = 0; i < methods.size(); i++) {
-            if (methods.get(i) == null) {
+            final Method method = methods.get(i);
+            if (method == null) {
                 continue;
             }
-    
-            final Method method = methods.get(i);
-    
+
             if (!inScope(method, forClass)) {
                 continue;
             }
@@ -182,28 +187,6 @@ public class MethodUtil {
         return validMethods;
     }
 
-    /**
-     * From the supplied method array, finds but <i>does not remove</i> methods
-     * that have the required prefix, and adds to the supplied candidates
-     * vector.
-     */
-    public static void findPrefixedInstanceMethods(final Method[] methods, final String prefix, final List<Method> candidates) {
-        for (final Method method : methods) {
-            if (method == null) {
-                continue;
-            }
-    
-            if (MethodExtensions.isStatic(method)) {
-                continue;
-            }
-    
-            final boolean goodPrefix = method.getName().startsWith(prefix);
-            final boolean goodCount = method.getParameterTypes().length == 0;
-    
-            if (goodPrefix && goodCount) {
-                candidates.add(method);
-            }
-        }
-    }
+
 
 }

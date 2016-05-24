@@ -17,28 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services;
+package org.apache.isis.core.metamodel.specloader;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+/**
+ * Defines the types which are considered to be collections.
+ * 
+ * <p>
+ * In this way there are similarities with the way in which value types are
+ * specified using <tt>@Value</tt>. However, we need to maintain a repository of
+ * these collection types once nominated so that when we introspect classes we
+ * look for collections first, and then properties second.
+ */
+public final class CollectionUtils {
 
-import org.apache.isis.core.commons.exceptions.IsisException;
+    private CollectionUtils() {}
 
-public final class ServiceUtil {
-
-    private ServiceUtil() {
+    public static boolean isCollectionType(final Class<?> cls) {
+        return java.util.Collection.class.isAssignableFrom(cls);
     }
 
-    public static String id(final Object object) {
-        final Class<?> cls = object.getClass();
-        try {
-            final Method m = cls.getMethod("getId");
-            return (String) m.invoke(object);
-        } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-            throw new IsisException(e);
-        } catch (final NoSuchMethodException e) {
-            final String id = object.getClass().getName();
-            return id.substring(id.lastIndexOf('.') + 1);
-        }
+    public static boolean isArrayType(final Class<?> cls) {
+        return cls.isArray();
     }
+
+
+
 }
