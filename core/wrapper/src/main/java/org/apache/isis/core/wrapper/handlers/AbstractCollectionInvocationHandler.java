@@ -20,7 +20,6 @@
 package org.apache.isis.core.wrapper.handlers;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -39,7 +38,7 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
     private final T domainObject;
 
     public AbstractCollectionInvocationHandler(final C collectionOrMapToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
-        super(collectionOrMapToProxy, handler.getHeadlessViewer(), handler.getExecutionMode());
+        super(collectionOrMapToProxy, handler.getWrapperFactory(), handler.getExecutionMode());
         this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getDelegate();

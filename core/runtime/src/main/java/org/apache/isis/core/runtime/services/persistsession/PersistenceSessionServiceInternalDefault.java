@@ -27,10 +27,11 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -98,27 +99,46 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
-        return new DomainObjectContainerResolve().lookup(bookmark, fieldResetPolicy);
+        return getPersistenceSession().lookup(bookmark, fieldResetPolicy);
     }
 
     @Override
     public Bookmark bookmarkFor(Object domainObject) {
-        return new DomainObjectContainerResolve().bookmarkFor(domainObject);
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
+        final Oid oid = adapter.getOid();
+        if(oid == null) {
+            // values cannot be bookmarked
+            return null;
+        }
+        if(!(oid instanceof RootOid)) {
+            // must be root
+            return null;
+        }
+        final RootOid rootOid = (RootOid) oid;
+        return rootOid.asBookmark();
     }
 
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(cls);
+        String objectType = objectSpec.getSpecId().asString();
+        return new Bookmark(objectType, identifier);
     }
 
     @Override
     public void resolve(final Object parent) {
-        new DomainObjectContainerResolve().resolve(parent);
+        getPersistenceSession().resolve(parent);
     }
 
+    /**
+     * @deprecated - left over from manual object resolving.
+     */
+    @Deprecated
     @Override
     public void resolve(final Object parent, final Object field) {
-        new DomainObjectContainerResolve().resolve(parent, field);
+        if (field == null) {
+            resolve(parent);
+        }
     }
 
     @Override
@@ -146,12 +166,16 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         return getPersistenceSession().firstMatchingQuery(query);
     }
 
-    public static PersistenceSession getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-    static IsisTransactionManager getTransactionManager() {
+    protected IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
     }
 
 }

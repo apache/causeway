@@ -26,7 +26,7 @@ import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
@@ -38,19 +38,15 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    private final DomainObjectContainerResolve domainObjectContainerResolve;
-
     private boolean resolveObjectChangedEnabled;
 
-    public DelegatingInvocationHandlerDefault(final T delegate, final WrapperFactory headlessViewer, final ExecutionMode executionMode) {
+    public DelegatingInvocationHandlerDefault(final T delegate, final WrapperFactory wrapperFactory, final ExecutionMode executionMode) {
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");
         }
         this.delegate = delegate;
-        this.wrapperFactory = headlessViewer;
+        this.wrapperFactory = wrapperFactory;
         this.executionMode = executionMode;
-
-        this.domainObjectContainerResolve = new DomainObjectContainerResolve();
 
         try {
             equalsMethod = delegate.getClass().getMethod("equals", new Class[] { Object.class });
@@ -79,12 +75,12 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     protected void resolveIfRequired(final Object domainObject) {
         if (resolveObjectChangedEnabled) {
-            domainObjectContainerResolve.resolve(domainObject);
+            IsisContext.getPersistenceSession().resolve(domainObject);
         }
     }
 
 
-    public WrapperFactory getHeadlessViewer() {
+    public WrapperFactory getWrapperFactory() {
         return wrapperFactory;
     }
 

@@ -105,7 +105,6 @@ import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -128,7 +127,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucl
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessorAbstract;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -149,9 +147,7 @@ public class PersistenceSession implements
         SessionScopedComponent,
         AdapterManager,
         MessageBrokerServiceInternal,
-        IsisLifecycleListener2.PersistenceSessionLifecycleManagement,
-        IsisTransactionManager.PersistenceSessionTransactionManagement,
-        PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement {
+        IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     //region > constants
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
@@ -233,8 +229,7 @@ public class PersistenceSession implements
         // sub-components
         final AdapterManager adapterManager = this;
         this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, specificationLoader);
-        final IsisTransactionManager.PersistenceSessionTransactionManagement psTranManagement = this;
-        this.transactionManager = new IsisTransactionManager(psTranManagement, servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
 
@@ -282,13 +277,12 @@ public class PersistenceSession implements
         final IsisLifecycleListener2 isisLifecycleListener = new IsisLifecycleListener2(psLifecycleMgmt);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
 
-        final PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement psQueryProcessorMgmt = this;
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(psQueryProcessorMgmt));
+                new PersistenceQueryFindAllInstancesProcessor(this));
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
-                new PersistenceQueryFindUsingApplibQueryProcessor(psQueryProcessorMgmt));
+                new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
         initServices();
 
@@ -901,7 +895,7 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > refreshRootInTransaction, refreshRoot
+    //region > refreshRootInTransaction, refreshRoot, resolve
 
     /**
      * Re-initialises the fields of an object. If the object is unresolved then
@@ -954,6 +948,12 @@ public class PersistenceSession implements
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         initializeMapAndCheckConcurrency((Persistable) domainObject);
     }
+
+    public void resolve(final Object parent) {
+        final ObjectAdapter adapter = adapterFor(parent);
+        refreshRootInTransaction(adapter);
+    }
+
     //endregion
 
     //region > makePersistent
@@ -2240,36 +2240,21 @@ public class PersistenceSession implements
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
-        return new DomainObjectContainerResolve().lookup(bookmark, fieldResetPolicy);
-    }
-
-    public Bookmark bookmarkFor(Object domainObject) {
-        return new DomainObjectContainerResolve().bookmarkFor(domainObject);
-    }
-
-    public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
-    }
-
-
-    public void resolve(final Object parent) {
-        new DomainObjectContainerResolve().resolve(parent);
-    }
-
-    public void resolve(final Object parent, final Object field) {
-        new DomainObjectContainerResolve().resolve(parent, field);
-    }
-
-    public void beginTran() {
-        getTransactionManager().startTransaction();
+        RootOid oid = RootOid.create(bookmark);
+        final ObjectAdapter adapter = adapterFor(oid);
+        if(adapter == null) {
+            return null;
+        }
+        if(fieldResetPolicy == BookmarkService2.FieldResetPolicy.RESET) {
+            refreshRootInTransaction(adapter);
+        } else {
+            loadObjectInTransaction(oid);
+        }
+        return adapter.getObject();
     }
 
     public boolean flush() {
         return getTransactionManager().flushTransaction();
-    }
-
-    public void commit() {
-        getTransactionManager().endTransaction();
     }
 
     @Override

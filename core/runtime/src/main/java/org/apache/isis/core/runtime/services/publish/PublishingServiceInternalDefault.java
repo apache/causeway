@@ -72,7 +72,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -447,7 +446,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         return IsisContext.getOidMarshaller();
     }
 
-    private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
+    private PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
     //endregion

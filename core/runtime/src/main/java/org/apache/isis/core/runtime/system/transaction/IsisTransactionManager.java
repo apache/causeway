@@ -39,13 +39,12 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -56,7 +55,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransactionManager.class);
 
-    private final PersistenceSessionTransactionManagement persistenceSession;
+    private final PersistenceSession persistenceSession;
 
     private int transactionLevel;
     
@@ -83,22 +82,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // constructor
     // ////////////////////////////////////////////////////////////////
 
-    /**
-     * The internal contract between PersistenceSession and this class.
-     */
-    public interface PersistenceSessionTransactionManagement extends AdapterManagerBase {
-
-        void startTransaction();
-        void endTransaction();
-        void abortTransaction();
-
-        void execute(List<PersistenceCommand> persistenceCommandList);
-
-        ObjectAdapter adapterFor(Object object);
-    }
-
     public IsisTransactionManager(
-            final PersistenceSessionTransactionManagement persistenceSession,
+            final PersistenceSession persistenceSession,
             final ServicesInjector servicesInjector) {
 
         this.persistenceSession = persistenceSession;
@@ -114,7 +99,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.userService = lookupService(UserService.class);
     }
 
-    public PersistenceSessionTransactionManagement getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
 

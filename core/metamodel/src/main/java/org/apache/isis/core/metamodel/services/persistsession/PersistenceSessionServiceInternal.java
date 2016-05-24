@@ -60,7 +60,10 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
      *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
+     *
+     * @deprecated - left over from manual object resolving.
      */
+    @Deprecated
     @Programmatic
     void resolve(Object parent, Object field);
 
