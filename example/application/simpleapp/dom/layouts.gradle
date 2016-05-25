@@ -1,0 +1,29 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// this gradle script copies over .layout.xml files from src to target directory.
+//
+// This script is intended to be used while the app is running (in prototype mode), reducing the turn-around time
+// when updating the layout.
+//
+// The framework does already automatically notice any changes to .layout.xml files, but these do need to be in the
+// target directory.  Using IntelliJ (say) this would be done by manually by invoking
+// Run > Reload Changed Classes, and then refreshing the browser.
+//
+// This script instead is intended to be run in the background as a daemon; whenever a change
+// is made to any .layout.xml file, gradle will automatically copy over the file to the target directory.
+//
+// The script is run using:
+//
+//      gradle -t -b layouts.gradle
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+defaultTasks 'copyLayouts'
+
+task copyLayouts(type:Copy) {
+    from 'src/main/java'
+    into 'target/classes'
+    include '**/*.layout.xml'
+}
+

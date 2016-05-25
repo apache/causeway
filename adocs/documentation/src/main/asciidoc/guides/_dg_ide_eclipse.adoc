@@ -159,7 +159,7 @@ And, remember also to configure Eclipse's DataNucleus plugin for these other dom
 In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
 
 
-=== Setting up Dynamic Reloading
+=== Setting up DCEVM
 
 link:github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
 reliable hot swapping of the implementation of existing methods.

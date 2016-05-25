@@ -254,6 +254,8 @@ appendedResourcesDir.mkdir()
 def supplementalModelsFile=new File(appendedResourcesDir, "supplemental-models.xml")
 supplementalModelsFile.text = supplemental_models_text
 
+
+
 ///////////////////////////////////////////////////
 //
 // helper methods

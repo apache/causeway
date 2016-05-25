@@ -15,12 +15,13 @@ This material does not constitute an endorsement; JetBrains is not affiliated to
 This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
 
 
-
+[[_dg_ide_intellij_installing]]
 == Installing and Setting up
 
 This section covers installation and setup. These notes/screenshots were prepared using IntelliJ Community Edition 14.1.x, but are believed to be compatible with more recent versions/other editions of the IDE.
 
 
+[[_dg_ide_intellij_installing_download]]
 === Download and Install
 
 https://www.jetbrains.com/idea/download/[Download] latest version of IntelliJ Community Edition, and install:
@@ -63,6 +64,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/010-installing/070-set-ui-th
 
 
 
+[[_dg_ide_intellij_installing_new-project]]
 === New Project
 
 In IntelliJ a project can contain multiple modules; these need not be physically located together.  (If you are previously an Eclipse user, you can think of it as similar to an Eclipse workspace).
@@ -218,6 +220,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/044-other-settings-misc/010-
 
 
 
+[[_dg_ide_intellij_importing-maven-modules]]
 == Importing Maven Modules
 
 Let's load in some actual code!  We do this by importing the Maven modules.
@@ -259,10 +262,12 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/060-ig
 
 
 
+[[_dg_ide_intellij_running]]
 == Running
 
 Let's see how to run both the app and the tests.
 
+[[_dg_ide_intellij_running_the-app]]
 === Running the App
 
 Once you've imported your Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
@@ -288,6 +293,7 @@ WARNING: if you forget to set up the enhancer goal, or don't run it on the corre
 You should now be able to run the app using `Run > Run Configuration`.  The same configuration can also be used to debug the app if you so need.
 
 
+[[_dg_ide_intellij_running_unit-tests]]
 === Running the Unit Tests
 
 The easiest way to run the unit tests is just to right click on the `dom` module in the _Project Window_, and choose run unit tests.  Hopefully your tests will pass (!).
@@ -302,6 +308,8 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/040-runn
 
 Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
 
+
+[[_dg_ide_intellij_running_integ-tests]]
 === Running the Integration Tests
 
 Integration tests can be run in the same way as unit tests, however the `dom` module must also have been enhanced.
@@ -313,9 +321,19 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/050-runn
 
 
 
+Also make sure that the `search for tests` radio button is set to `In single module`:
 
+image::{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-debug-configuration-single-module.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-debug-configuration-single-module.png"]
+
+If this radio button is set to one of the other options then you may obtain class loading issues; these result from IntelliJ attempting to run unit tests of the `dom` project that depend on test classes in that module, but using the classpath of the `integtests` module whereby the `dom` test-classes (`test-jar` artifact) are not exposed on the Maven classpath.
+
+
+
+
+[[_dg_ide_intellij_hints-and-tips]]
 == Hints and Tips
 
+[[_dg_ide_intellij_hints-and-tips_keyboard-cheat-sheets]]
 === Keyboard Cheat Sheets
 
 You can download 1-page PDFs cheat sheets for IntelliJ's keyboard shortcuts:
@@ -341,6 +359,7 @@ The Tool Windows are the views around the editor (to left, bottom and right).  I
 
 Using these shortcuts you can easily toggle between the tool windows and the editor, without using the mouse.  Peachy!
 
+[[_dg_ide_intellij_hints-and-tips_navigating-around]]
 === Navigating Around
 
 For all of the following, you don't need to type every letter, typing "ab" will actually search for ".*a.*b.*".
@@ -362,6 +381,7 @@ Viewing the structure (ie outline) of a class
 ** hit `ctrl-F12` again to also see inherited members
 
 
+[[_dg_ide_intellij_hints-and-tips_editing]]
 === Editing
 
 * Extend selection using `ctrl-W`
@@ -385,6 +405,7 @@ In certain circumstances (eg in methods0) you can also type `ctrl-shift-space` t
 Last, when invoking a method, use `ctrl-P` to see the parameter types.
 
 
+[[_dg_ide_intellij_hints-and-tips_refactoring]]
 === Refactoring
 
 Loads of good stuff on the `Refactor` menu; most used are:
@@ -399,6 +420,7 @@ Loads of good stuff on the `Refactor` menu; most used are:
 If you can't remember all those shortcuts, just use `ctrl-shift-alt-T` (might want to rebind that to something else!) and get a context-sensitive list of refactorings available for the currently selected object
 
 
+[[_dg_ide_intellij_hints-and-tips_plugins]]
 === Plugins
 
 You might want to set up some additional plugins.  You can do this using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
@@ -418,6 +440,8 @@ Some others you might like to explore are:
 .IntelliJ Plugins
 image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="600px"]
 
+
+[[_dg_ide_intellij_hints-and-tips_plugins_maven-helper-plugin]]
 ==== Maven Helper Plugin
 
 This plugin provides a couple of great features.  One is better visualization of dependency trees (similar to Eclipse).
@@ -439,6 +463,7 @@ This menu can also be bound to a keystroke so that it is available as a pop-up:
 image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png"]
 
 
+[[_dg_ide_intellij_troubleshooting]]
 === Troubleshooting
 
 When a Maven module is imported, IntelliJ generates its own project files (suffix `.ipr`), and the application is actually built from that.
@@ -464,24 +489,120 @@ are set up correctly.
 
 
 
-== Running Integration Tests
-
-
-When running integration tests from within IntelliJ, make sure that the `search for tests` radio button is set to `In single module`:
-
-image::{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-debug-configuration-single-module.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-debug-configuration-single-module.png"]
-
-If this radio button is set to one of the other options then you may obtain class loading issues; these result from IntelliJ attempting to run unit tests of the `dom` project that depend on test classes in that module, but using the classpath of the `integtests` module whereby the `dom` test-classes (`test-jar` artifact) are not exposed on the Maven classpath.
-
 
 [[_dg_ide_intellij_advanced]]
-== Advanced
+== Faster turnaround times
 
-In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
+In this section are several options that will reduce the time it takes between making a source code edit and seeing the results in the running app. code/build/deploy/review feedback loop.
+
+
+[[_dg_ide_intellij_advanced_gradle-compile-enhance]]
+=== Using Grade to compile/enhance
+
+Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:dg.adoc#_dg_ide_intellij_running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
+
+Alternative, you can use the following `build.gradle` script in your `dom` module:
+
+[source,groovy]
+.`build.gradle`
+----
+apply plugin: 'java'
+apply plugin: 'tangram.tools'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version = (new XmlParser()).parse('pom.xml').parent.version.text()
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'tangram:gradle-plugin:1.1.2'
+  }
+}
+repositories {
+    mavenLocal()
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+}
+dependencies {
+    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: version
+}
+task copyClasses << {
+    copy {
+        from 'build/classes/main'
+        into 'target/classes'
+    }
+}
+----
+
+The script is intended to be in the background as a daemon while editing/developing; whenever a change is made to any
+source code, gradle will automatically compile _and_ enhance the code.  In this way it eliminates the need to start up
+Maven and run the enhancer goal.
+
+To use, you must disable the IntelliJ's automatic building of the 'dom' project.  This is done using:
+`File > Settings > Build, Execution, Deployment > Compiler > Excludes`, and then exclude the `.../dom/src/main/java`
+directory:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/002-compiler-exclude.png[width="800px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/002-compiler-exclude.png"]
+
+
+The script is run using:
+
+[source,bash]
+----
+gradle -t --offline
+----
+
+from the command line (in the `dom` module).
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/004-gradle-output.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/004-gradle-output.png"]
+
+Use `ctrl-C` to cancel, as any other process.
+
+
+[[_dg_ide_intellij_advanced_gradle-layout]]
+=== Using Grade for ``layout.xml``s
+
+Similarly, gradle can be run to reduce the turn-around time when tweaking the UI (defined by the
+ xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`*.layout.xml`] file for each domain class), when the app is running.
+
+The framework does already automatically notice any changes to `.layout.xml` files, but these do need to be on
+the classpath (in the `target/classes` directory).  With IntelliJ this can be done by manually by invoking
+`Run > Reload Changed Classes`, and then refreshing the browser.
+
+Using this script though this manual step can be removed; whenever a change is made to any `.layout.xml` file, gradle
+will automatically copy over the file to the `target/classes` directory:
+
+[source,groovy]
+.`layouts.gradle`
+----
+defaultTasks 'copyLayouts'
+task copyLayouts(type:Copy) {
+    from 'src/main/java'
+    into 'target/classes'
+    include '**/*.layout.xml'
+}
+----
+
+The script is run using:
+
+[source,bash]
+----
+gradle -t --offline -b layouts.gradle
+----
+
+from the command line (in the `dom` module).
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/005-gradle-output.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/005-gradle-output.png"]
+
+Use `ctrl-C` to cancel, as any other process.
+
+
 
 
 [[_dg_ide_intellij_advanced_dcevm]]
-=== Setting up Dynamic Reloading
+=== Setting up DCEVM
 
 link:github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
 reliable hot swapping of the implementation of existing methods.
