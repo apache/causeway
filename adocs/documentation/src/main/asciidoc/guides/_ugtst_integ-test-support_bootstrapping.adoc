@@ -254,7 +254,20 @@ Although not mandatory, this provides a number of helper/convenience methods and
 
 All of these rules could be inlined in your own base class; as we say, they are a convenience.
 
-In addition, `IntegrationTestAbstract` provides a number of helper/convenience methods.  Most important amongst these are `nextSession()` and `nextTransaction()` that to allow tests to simulate multiple separate user interactions (each of which would normally occur in a separate transaction).
+The `IntegrationTestAbstract` also provides a number of helper/convenience methods, though most of these have been
+deprecated because the functionality they expose is now readily accessible through various domain services; most
+notably these are:
 
-It also provides `wrap(...)` and `unwrap(...)` which delegate to the `WrapperFactory`.  We talk about these methods in the next section
+* xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] +
++
+to wrap objects simulating interaction through the user interface)
+
+* xref:rgsvc.adoc#_rgsvc_api_TransactionService[`TransactionService`] +
++
+most commonly used to commit changes after the fixture setup) and,
+
+* xref:rgsvc.adoc#_rgsvc_api_SessionManagementService[`SessionManagementService`] +
++
+for tests that check interactions over multiple separate sessions.
+
 
