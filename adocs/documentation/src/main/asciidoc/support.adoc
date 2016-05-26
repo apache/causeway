@@ -63,7 +63,7 @@ If you ever want to unsubscribe, then you can send a mail to the `users-unsubscr
 
 Just a couple of rules/suggestions:
 
-* if you are referencing links, then in the body of the mail, number then [1], [2], [3] etc and then list them at the end.  Here's a [good example]() from the archives.
+* if you are referencing links, then in the body of the mail, number then [1], [2], [3] etc and then list them at the end.
 * reply to a previous post in the link:http://en.wikipedia.org/wiki/Posting_style#Interleaved_style[interleaved style] (adding your replies in-line).  Try not to link:http://en.wikipedia.org/wiki/Posting_style#Top-posting)[top-post].
 
 
