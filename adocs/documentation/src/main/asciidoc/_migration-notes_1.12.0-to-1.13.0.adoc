@@ -19,10 +19,23 @@ issues here.
 
 == Faster startup times
 
-The new `isis.services.applicationFeatures.init` can be used to control whether the
-xref:rgsvc.adoc#_rgsvc_api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service lazily or
-eagerly initializes itself based on the framework's internal metamodel.
+Several new configuration settings influence application startup times:
 
+* `isis.services.applicationFeatures.init` +
++
+This setting can be used to control whether the
+xref:rgsvc.adoc#_rgsvc_api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service lazily or
+eagerly initializes itself based on the framework's internal metamodel. +
++
 Prior to `1.13.0` this service eagerly initialized itself, causing the framework to have to traverse the domain object
 model graph for all types.  This could add noticeable overhead.  For `1.13.0` this service now initializes itself
 lazily.  The previous behaviour (of eager initialization) can be re-enabled by setting this property to `eager`.
+
+* `isis.services.injector.injectPrefix` and `isis.services.injector.setPrefix` +
++
+These settings can be used to control the styles of injection of domain services that the framework supports. +
++
+Prior to `1.13.0` the framework supported the injection of fields using xref:rgant.adoc#_rgant-Inject[`@Inject`], and
+also injection to `set...()` setter methods and also `inject...()` methods.  In `1.13.0` the injection through `@Inject`
+remains, and injection through setters is enabled by default.  Injection through `inject...()` is disabled however.
+For faster start-up times still, consider disabling injection through `set...()`.

@@ -23,25 +23,24 @@ import java.util.Collections;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private DefaultedFacetAnnotationElseConfigurationFactory facetFactory;
-    private IsisConfigurationDefault isisConfigurationDefault;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         facetFactory = new DefaultedFacetAnnotationElseConfigurationFactory();
-        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList());
-        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, isisConfigurationDefault = new IsisConfigurationDefault());
+
+        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
+        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class,  stubConfiguration);
         facetFactory.setServicesInjector(servicesInjector);
     }
 
@@ -190,7 +189,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDefaultedProviderNameCanBePickedUpFromConfiguration() {
         final String className = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
+        stubConfiguration.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
@@ -213,7 +212,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
         final String className = "org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
+        stubConfiguration.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);

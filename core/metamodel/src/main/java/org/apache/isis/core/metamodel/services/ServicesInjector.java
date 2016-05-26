@@ -27,8 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
@@ -38,7 +36,6 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,14 +43,14 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
-import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
@@ -68,6 +65,9 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjector.class);
+
+    public static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
+    public static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
 
     //region > constructor, fields
     /**
@@ -84,20 +84,45 @@ public class ServicesInjector implements ApplicationScopedComponent {
     private final Map<Class<?>, Object> serviceByConcreteType = Maps.newHashMap();
 
     private final InjectorMethodEvaluator injectorMethodEvaluator;
+    private final boolean autowireSetters;
+    private final boolean autowireInject;
 
-    public ServicesInjector(final List<Object> services) {
-        this(services, null);
+    public ServicesInjector(final List<Object> services, final IsisConfiguration configuration) {
+        this(services, null, configuration);
     }
 
     /**
      * For testing.
      */
-    public ServicesInjector(final List<Object> services, final InjectorMethodEvaluator injectorMethodEvaluator) {
+    public ServicesInjector(
+            final List<Object> services,
+            final IsisConfigurationDefault configuration,
+            final InjectorMethodEvaluator injectorMethodEvaluator) {
+        this(services, injectorMethodEvaluator, defaultAutowiring(configuration));
+    }
+
+    private static IsisConfiguration defaultAutowiring(final IsisConfigurationDefault configuration) {
+        configuration.put(KEY_SET_PREFIX, ""+true);
+        configuration.put(KEY_INJECT_PREFIX, ""+false);
+        return configuration;
+    }
+
+    /**
+     * For testing.
+     */
+    private ServicesInjector(
+            final List<Object> services,
+            final InjectorMethodEvaluator injectorMethodEvaluator,
+            final IsisConfiguration configuration) {
         this.services.addAll(services);
+
         this.injectorMethodEvaluator =
                 injectorMethodEvaluator != null
                         ? injectorMethodEvaluator
                         : new InjectorMethodEvaluatorDefault();
+
+        this.autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
+        this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
 
         autowireServicesAndContainer();
     }
@@ -153,25 +178,13 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     /**
-     * Validate domain service Ids are unique, and that the {@link PostConstruct} method, if present, must either
-     * take no arguments or take a {@link Map} object), and that the {@link PreDestroy} method, if present, must take
-     * no arguments.
-     *
-     * <p>
-     * TODO: there seems to be some duplication/overlap with {@link ServiceInitializer}.
+     * Validate domain service Ids are unique.
      */
     public void validateServices() {
         validate(getRegisteredServices());
     }
 
     private static void validate(List<Object> serviceList) {
-        for (Object service : serviceList) {
-            final Method[] methods = service.getClass().getMethods();
-            for (Method method : methods) {
-                validatePostConstructMethods(service, method);
-                validatePreDestroyMethods(service, method);
-            }
-        }
         ListMultimap<String, Object> servicesById = ArrayListMultimap.create();
         for (Object service : serviceList) {
             String id = ServiceUtil.id(service);
@@ -199,33 +212,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return buf.toString();
     }
 
-    private static void validatePostConstructMethods(Object service, Method method) {
-        final PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
-        if(postConstruct == null) {
-            return;
-        }
-        final int numParams = method.getParameterTypes().length;
-        if(numParams == 0) {
-            return;
-        }
-        if(numParams == 1 && method.getParameterTypes()[0].isAssignableFrom(Map.class)) {
-            return;
-        }
-        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PostConstruct method " + method.getName() + "; such methods must take either no argument or 1 argument of type Map<String,String>");
-    }
-
-    private static void validatePreDestroyMethods(Object service, Method method) {
-        final PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
-        if(preDestroy == null) {
-            return;
-        }
-        final int numParams = method.getParameterTypes().length;
-        if(numParams == 0) {
-            return;
-        }
-        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PreDestroy method " + method.getName() + "; such methods must take no arguments");
-    }
-
 
     static boolean contains(final List<Object> services, final Class<?> serviceClass) {
         for (Object service : services) {
@@ -244,21 +230,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return Collections.unmodifiableList(services);
     }
 
-    private void addServices(final List<Object> services) {
-        for (final Object service : services) {
-            if (service instanceof List) {
-                final List<Object> serviceList = ObjectExtensions.asListT(service, Object.class);
-                addServices(serviceList);
-            } else {
-                addService(service);
-            }
-        }
-    }
-
-    private boolean addService(final Object service) {
-        return services.add(service);
-    }
-
     //endregion
 
     //region > injectServicesInto
@@ -270,9 +241,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
      * Called in multiple places from metamodel and facets.
      */
     public void injectServicesInto(final Object object) {
-        Assert.assertNotNull("no services", services);
-
-        injectServices(object, Collections.unmodifiableList(services));
+        injectServices(object, services);
     }
 
     /**
@@ -308,8 +277,13 @@ public class ServicesInjector implements ApplicationScopedComponent {
         final Class<?> cls = object.getClass();
 
         autowireViaFields(object, services, cls);
-        autowireViaPrefixedMethods(object, services, cls, "set");
-        autowireViaPrefixedMethods(object, services, cls, "inject");
+
+        if(autowireSetters) {
+            autowireViaPrefixedMethods(object, services, cls, "set");
+        }
+        if(autowireInject) {
+            autowireViaPrefixedMethods(object, services, cls, "inject");
+        }
     }
 
     private void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {

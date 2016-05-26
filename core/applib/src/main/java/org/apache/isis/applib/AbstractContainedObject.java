@@ -21,6 +21,8 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -702,6 +704,7 @@ public abstract class AbstractContainedObject {
 
     // //////////////////////////////////////
 
+    @Inject
     private DomainObjectContainer container;
 
     /**
@@ -712,8 +715,9 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Injected by the application container itself.
+     * @deprecated - will use the field to inject instead.
      */
+    @Deprecated
     @Programmatic
     public void setContainer(final DomainObjectContainer container) {
         this.container = container;

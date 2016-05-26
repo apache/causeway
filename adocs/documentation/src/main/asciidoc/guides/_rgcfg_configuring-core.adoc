@@ -312,6 +312,26 @@ This implementation provides a default set of recognizers to convert RDBMS const
 
 
 |`isis.services.` +
+`injector.injectPrefix`
+| `true`,`false`  +
+(`false`)
+|(`1.13.0-SNAPSHOT`) Whether the framework should support `inject...()` as a prefix for injecting domain services into other domain objects.
++
+By default this is disabled.  The default prior to `1.13.0` was enabled.  If the setting is left as disabled then this may reduce application start-up times.
+
+
+|`isis.services.` +
+`injector.setPrefix`
+| `true`,`false`  +
+(`true`)
+|(`1.13.0-SNAPSHOT`) Whether the framework should support `set...()` as a prefix for injecting domain services into other domain objects.
++
+By default this is enabled (no change in `1.13.0`).  If the setting is changed to disabled then this may reduce application start-up times.
+
+
+
+
+|`isis.services.` +
 `publish.objects`
 | `all`, `none` +
 (`all`)

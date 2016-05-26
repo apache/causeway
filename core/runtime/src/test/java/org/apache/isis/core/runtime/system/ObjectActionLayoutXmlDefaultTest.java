@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -69,16 +70,19 @@ public class ObjectActionLayoutXmlDefaultTest {
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
     private ServicesInjector stubServicesInjector;
+    private IsisConfigurationDefault stubConfiguration;
 
     @Before
     public void setUp() throws Exception {
+
+        stubConfiguration = new IsisConfigurationDefault();
 
         stubServicesInjector =
                 new ServicesInjector(Lists.newArrayList(
                         mockAuthenticationSessionProvider,
                         mockSpecificationLoader,
                         mockPersistenceSessionServiceInternal,
-                        mockMessageBrokerServiceInternal));
+                        mockMessageBrokerServiceInternal), stubConfiguration);
 
         context.checking(new Expectations() {
             {

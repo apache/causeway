@@ -103,7 +103,8 @@ public abstract class SpecificationLoaderTestAbstract {
         stubConfiguration = new IsisConfigurationDefault(null);
 
         stubServicesInjector =
-                new ServicesInjector(Lists.newArrayList(
+                new ServicesInjector(
+                    Lists.newArrayList(
                         mockAuthenticationSessionProvider,
                         stubConfiguration,
                         mockDeploymentCategoryProvider,
@@ -112,7 +113,8 @@ public abstract class SpecificationLoaderTestAbstract {
                         mockMessageBrokerServiceInternal,
                         mockTransactionStateProviderInternal,
                         mockGridService,
-                        mockDeploymentCategoryProvider));
+                        mockDeploymentCategoryProvider),
+                    stubConfiguration);
 
         final SpecificationLoader specificationLoader =
                 new SpecificationLoader(DeploymentCategory.PRODUCTION,

@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -85,16 +86,18 @@ public class OneToManyAssociationDefaultTest {
     private CollectionAddToFacet mockCollectionAddToFacet;
 
     private ServicesInjector stubServicesInjector;
+    private IsisConfigurationDefault stubConfiguration;
 
     private OneToManyAssociation association;
 
     @Before
     public void setUp() {
+        stubConfiguration = new IsisConfigurationDefault();
         stubServicesInjector = new ServicesInjector(Lists.newArrayList(
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
                 mockMessageBrokerServiceInternal,
-                mockPersistenceSessionServiceInternal));
+                mockPersistenceSessionServiceInternal), stubConfiguration);
 
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();

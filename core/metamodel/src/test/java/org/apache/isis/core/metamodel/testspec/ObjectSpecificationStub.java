@@ -71,9 +71,9 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
-        this.servicesInjector = new ServicesInjector(Collections.emptyList());
-        servicesInjector.addFallbackIfRequired(
-                ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
+        IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault(null);
+        this.servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
+        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, stubConfiguration);
     }
 
     @Override

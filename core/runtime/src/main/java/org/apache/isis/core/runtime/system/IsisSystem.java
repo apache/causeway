@@ -146,7 +146,7 @@ public class IsisSystem implements ApplicationScopedComponent {
             final IsisConfigurationDefault configuration = componentProvider.getConfiguration();
 
             // services
-            ServicesInjector servicesInjector = componentProvider.provideServiceInjector();
+            ServicesInjector servicesInjector = componentProvider.provideServiceInjector(configuration);
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
             servicesInjector.validateServices();

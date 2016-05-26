@@ -23,30 +23,27 @@ import java.util.Collections;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.annotation.Encodable;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private EncodableFacetAnnotationElseConfigurationFactory facetFactory;
-    private IsisConfigurationDefault isisConfigurationDefault;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         facetFactory = new EncodableFacetAnnotationElseConfigurationFactory();
-        isisConfigurationDefault = new IsisConfigurationDefault();
 
-        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList());
-        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, isisConfigurationDefault = new IsisConfigurationDefault());
+        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
+        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, stubConfiguration);
         facetFactory.setServicesInjector(servicesInjector);
 
     }
@@ -186,7 +183,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testEncoderDecoderNameCanBePickedUpFromConfiguration() {
         final String className = "org.apache.isis.core.metamodel.facets.object.encodable.EncodableFacetFactoryTest$MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className) + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
+        stubConfiguration.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className) + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final EncodableFacetAbstract facet = (EncodableFacetAbstract) facetedMethod.getFacet(EncodableFacet.class);
         assertNotNull(facet);
@@ -204,7 +201,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testNonAnnotatedEncodeableCanPickUpEncoderDecoderFromConfiguration() {
         final String className = "org.apache.isis.core.metamodel.facets.object.encodable.EncodableFacetFactoryTest$NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className) + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
+        stubConfiguration.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className) + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final EncodableFacetAbstract facet = (EncodableFacetAbstract) facetedMethod.getFacet(EncodableFacet.class);
         assertNotNull(facet);

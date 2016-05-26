@@ -265,8 +265,10 @@ public abstract class IsisComponentProvider {
         return authorizationManager;
     }
 
-    public ServicesInjector provideServiceInjector() {
-        return new ServicesInjector(services);
+    public ServicesInjector provideServiceInjector(final IsisConfiguration configuration) {
+        boolean autowireSetters = configuration.getBoolean(ServicesInjector.KEY_SET_PREFIX, false);
+        boolean autowireInject = configuration.getBoolean(ServicesInjector.KEY_INJECT_PREFIX, false);
+        return new ServicesInjector(services, configuration);
     }
 
     public FixturesInstaller provideFixturesInstaller()  {
