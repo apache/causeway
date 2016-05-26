@@ -25,7 +25,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -78,28 +77,44 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         super.process(processClassContext);
 
-        removeSyntheticOrAbstractMethods(processClassContext);
-        removeSuperclassMethods(processClassContext.getCls(), processClassContext);
-
-        removeJavaLangObjectMethods(processClassContext);
-        removeJavaLangComparable(processClassContext);
-
-        removeSetDomainObjectContainerMethod(processClassContext);
-        removeInitMethod(processClassContext);
-
-        removeInjectMethods(processClassContext);
-
-        removeGetClass(processClassContext);
-    }
-
-    private void removeSyntheticOrAbstractMethods(final ProcessClassContext processClassContext) {
         Class<?> cls = processClassContext.getCls();
         Method[] methods = cls.getMethods();
+
         for (Method method : methods) {
+            // removeSyntheticOrAbstractMethods(processClassContext);
             if (method.isSynthetic() || Modifier.isAbstract(method.getModifiers())) {
                 processClassContext.removeMethod(method);
             }
+
+            // removeJavaLangComparable(processClassContext);
+            if(method.getName().equals("compareTo")) {
+                processClassContext.removeMethod(method);
+            }
+
         }
+
+        final List<Class<?>> serviceClasses = getSpecificationLoader().allServiceClasses();
+        for (Class<? extends Object> serviceClass : serviceClasses) {
+
+            // removeInjectMethods(processClassContext);
+            Method[] methods2 = processClassContext.getCls().getMethods();
+            for (Method method : methods2) {
+                if(injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass)) {
+                    processClassContext.removeMethod(method);
+                }
+            }
+        }
+
+
+        removeSuperclassMethods(processClassContext.getCls(), processClassContext);
+
+        // removeJavaLangObjectMethods(processClassContext);
+        for (final MethodAndParameterTypes mapt : javaLangObjectMethodsToIgnore) {
+            processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
+        }
+
+        // removeInitMethod(processClassContext);
+        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
     }
 
     private void removeSuperclassMethods(Class<?> type, final ProcessClassContext processClassContext) {
@@ -117,52 +132,6 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             processClassContext.removeMethod(method);
         }
 
-    }
-
-    private void removeJavaLangObjectMethods(final ProcessClassContext processClassContext) {
-        for (final RemoveMethodsFacetFactory.MethodAndParameterTypes mapt : javaLangObjectMethodsToIgnore) {
-            processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
-        }
-    }
-
-
-    private void removeJavaLangComparable(final ProcessClassContext processClassContext) {
-        Class<?> cls = processClassContext.getCls();
-        Method[] methods = cls.getMethods(); // not getDeclaredMethods !!!
-        for (Method method : methods) {
-            if(method.getName().equals("compareTo")) {
-                processClassContext.removeMethod(method);
-            }
-
-        }
-    }
-
-    private void removeSetDomainObjectContainerMethod(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(
-                MethodScope.OBJECT, "setContainer", void.class, new Class[] { DomainObjectContainer.class });
-        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class, new Class[] { DomainObjectContainer.class });
-    }
-
-
-    private void removeInitMethod(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
-    }
-
-
-    private void removeInjectMethods(final ProcessClassContext processClassContext) {
-        final List<Class<?>> serviceClasses = getSpecificationLoader().allServiceClasses();
-        for (Class<? extends Object> serviceClass : serviceClasses) {
-            Method[] methods = processClassContext.getCls().getMethods();
-            for (Method method : methods) {
-                if(injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass)) {
-                    processClassContext.removeMethod(method);
-                }
-            }
-        }
-    }
-
-    private void removeGetClass(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "getClass", Class.class, null);
     }
 
 }
