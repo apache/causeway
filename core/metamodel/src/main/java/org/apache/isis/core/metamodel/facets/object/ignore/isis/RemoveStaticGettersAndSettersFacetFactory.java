@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 /**
  * Removes any static getter or setter methods.
  */
+@Deprecated
 public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstract {
 
     public RemoveStaticGettersAndSettersFacetFactory() {

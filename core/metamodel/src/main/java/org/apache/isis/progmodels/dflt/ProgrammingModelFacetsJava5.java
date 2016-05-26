@@ -94,16 +94,9 @@ import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodF
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveGetClassMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveInitMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveInjectMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveJavaLangComparableMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveSyntheticOrAbstractMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
@@ -232,16 +225,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new IteratorFilteringFacetFactory());
 
-        addFactory(new RemoveSyntheticOrAbstractMethodsFacetFactory());
-        addFactory(new RemoveSuperclassMethodsFacetFactory());
-        addFactory(new RemoveJavaLangObjectMethodsFacetFactory());
-        addFactory(new RemoveJavaLangComparableMethodsFacetFactory());
-        addFactory(new RemoveSetDomainObjectContainerMethodFacetFactory());
+        addFactory(new RemoveMethodsFacetFactory());
 
-        addFactory(new RemoveInitMethodFacetFactory());
-        addFactory(new RemoveInjectMethodsFacetFactory());
         addFactory(new RemoveStaticGettersAndSettersFacetFactory());
-        addFactory(new RemoveGetClassMethodFacetFactory());
 
         addFactory(new RemoveAnnotatedMethodsFacetFactory());
 
