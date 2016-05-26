@@ -191,10 +191,20 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 
 
 |`isis.services.` +
+`applicationFeatures.init`
+| `lazy`, `eager` +
+(`lazy`)
+|(`1.13.0-SNAPSHOT`) Whether the application features repository (which surfaces the framework's metamodel) should be initialized lazily or eagerly.  +
++
+Lazily initialization can speed up bootstrapping, useful while developing and running tests.  The default prior to `1.13.0` was eager initialization.
+
+
+|`isis.services.` +
 `audit.objects`
 | `all`, `none` +
 (`all`)
 |Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+
 
 |`isis.services.` +
 `command.actions`
@@ -208,12 +218,6 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 | `all`, `none` (`all`)
 |(`1.13.0-SNAPSHOT`) Whether property edits should be automatically reified into commands (for properties annotated with xref:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
-
-|`isis.services.` +
-`container.disableAutoFlush`
-|`true`,`false` +
-(`false`)
-|Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
 |`isis.services.` +
 `container.disableAutoFlush`
