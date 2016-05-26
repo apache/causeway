@@ -34,6 +34,8 @@ public interface CommandService {
     Command create();
     
     /**
+     * DEPRECATED - this method is no longer called by the framework.
+     *
      * @deprecated - the framework automatically populates the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()}  and {@link Command#getTransactionId()}, so there is no need for the service implementation to initialize any of these.  In particular, the {@link Command} will already have been initialized with the provided <tt>transactionId</tt> argument.
      */
     @Deprecated

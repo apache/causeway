@@ -19,22 +19,21 @@
 
 package org.apache.isis.core.runtime.services;
 
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
@@ -43,6 +42,11 @@ import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
+
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
 
 /**
  * Instantiates the service, taking into account whether the service is annotated with
@@ -71,13 +75,6 @@ public final class ServiceInstantiator {
     private final static Logger LOG = LoggerFactory.getLogger(ServiceInstantiator.class);
 
     public ServiceInstantiator() {
-    }
-
-    // //////////////////////////////////////
-
-    private boolean ignoreFailures;
-    public void setIgnoreFailures(boolean ignoreFailures) {
-        this.ignoreFailures = ignoreFailures;
     }
 
     // //////////////////////////////////////
@@ -116,9 +113,6 @@ public final class ServiceInstantiator {
             //return Thread.currentThread().getContextClassLoader().loadClass(className);
             return Class.forName(className);
         } catch (final ClassNotFoundException ex) {
-            if(ignoreFailures) {
-                return null;
-            }
             throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
         }
     }
@@ -219,21 +213,17 @@ public final class ServiceInstantiator {
                     } else {
                         T service = serviceByThread.get();
                         if(service == null) {
-                            // ignore; this could potentially happen during an application-level init (PersistenceSessionFactory#init)
-                            // it has also happened in past when enabling debugging, though the
-                            // new hashCode(), equals() and toString() checks above should mitigate.
-                            return null;
+                            // shouldn't happen...
+                            throw new IllegalStateException("No service of type " + cls + " is available on this ");
                         }
-                        final Object proxiedReturn = proxyMethod.invoke(service, args); 
+                        final Object proxiedReturn = proxyMethod.invoke(service, args);
                         return proxiedReturn;
                     }
                 }
             });
 
             return newInstance;
-        } catch (final InstantiationException e) {
-            throw new IsisException(e);
-        } catch (final IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException e) {
             throw new IsisException(e);
         }
     }

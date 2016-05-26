@@ -56,7 +56,7 @@ public interface CommandService {
 <1> Instantiate the appropriate instance of the `Command` (as defined by the
 xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service).  Its members will be populated automatically by
 the framework.
-<2> (as of `1.13.0-SNAPSHOT`) is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
+<2> (as of `1.13.0-SNAPSHOT`) is *NO LONGER CALLED* and is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
 `user` and `transactionId` fields, so there is no need for the service implementation to initialize any of these.  In
 particular, the ``Command`` will already have been initialized with the provided `transactionId` argument.
 <3> Set the hint that the `Command` should be persisted if possible (when completed, see below).

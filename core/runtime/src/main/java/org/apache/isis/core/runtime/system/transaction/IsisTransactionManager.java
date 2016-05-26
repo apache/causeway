@@ -19,22 +19,16 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -42,7 +36,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -68,14 +61,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private final ServicesInjector servicesInjector;
 
-    private final FactoryService factoryService;
     private final CommandContext commandContext;
-    private final CommandService commandService;
-
     private final InteractionContext interactionContext;
-
-    private final ClockService clockService;
-    private final UserService userService;
 
 
     // ////////////////////////////////////////////////////////////////
@@ -89,14 +76,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
 
-        this.factoryService = lookupService(FactoryService.class);
         this.commandContext = lookupService(CommandContext.class);
-        this.commandService = lookupService(CommandService.class);
-
         this.interactionContext = lookupService(InteractionContext.class);
-
-        this.clockService = lookupService(ClockService.class);
-        this.userService = lookupService(UserService.class);
     }
 
     public PersistenceSession getPersistenceSession() {
@@ -262,40 +243,29 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
             noneInProgress = true;
 
-            startRequestOnRequestScopedServices();
+            // previously we called __isis_startRequest here on all RequestScopedServices.  This is now
+            // done earlier, in PersistenceSession#open(). If we introduce support for @TransactionScoped
+            // services, then this would be the place to initialize them.
 
-            // note that at this point there may not be an EventBusService initialized.  The PersistenceSession has
-            // logic to suppress the posting of the ObjectCreatedEvent for the special case of Command objects.
+
+            // allow the command to be overridden (if running as a background command with a parent command supplied)
+
+            final Interaction interaction = interactionContext.getInteraction();
 
             final Command command;
-            final UUID transactionId;
-
             if (existingCommandIfAny != null) {
-                command = existingCommandIfAny;
-                transactionId = command.getTransactionId();
+                commandContext.setCommand(existingCommandIfAny);
+                interaction.setTransactionId(existingCommandIfAny.getTransactionId());
             }
-            else {
-                command = createCommand();
-                transactionId = UUID.randomUUID();
-            }
-            final Interaction interaction = factoryService.instantiate(Interaction.class);
+            command = commandContext.getCommand();
+            final UUID transactionId = command.getTransactionId();
 
-            initCommandAndInteraction(transactionId, command, interaction);
-
-            commandContext.setCommand(command);
-            interactionContext.setInteraction(interaction);
-
-            initOtherApplibServicesIfConfigured();
 
             final MessageBroker messageBroker = MessageBroker.acquire(getAuthenticationSession());
             this.transaction = new IsisTransaction(this, messageBroker, servicesInjector, transactionId);
             transactionLevel = 0;
 
             persistenceSession.startTransaction();
-
-            // a no-op; the command will have been populated already
-            // in the earlier call to #createCommandAndInitAndSetAsContext(...).
-            commandService.startTransaction(command, transactionId);
         }
 
         transactionLevel++;
@@ -304,80 +274,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
             LOG.debug("startTransaction: level " + (transactionLevel - 1) + "->" + (transactionLevel) + (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
         }
     }
-
-    private void initOtherApplibServicesIfConfigured() {
-        
-        final Bulk.InteractionContext bic = lookupServiceIfAny(Bulk.InteractionContext.class);
-        if(bic != null) {
-            Bulk.InteractionContext.current.set(bic);
-        }
-    }
-
-    private void startRequestOnRequestScopedServices() {
-
-        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-
-        // tell the proxy of all request-scoped services to instantiate the underlying
-        // services, store onto the thread-local and inject into them...
-        for (final Object service : registeredServices) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest(servicesInjector);
-            }
-        }
-        // ... and invoke all @PostConstruct
-        for (final Object service : registeredServices) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_postConstruct();
-            }
-        }
-    }
-
-    private void endRequestOnRequestScopeServices() {
-        // tell the proxy of all request-scoped services to invoke @PreDestroy
-        // (if any) on all underlying services stored on their thread-locals...
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_preDestroy();
-            }
-        }
-
-        // ... and then remove those underlying services from the thread-local
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_endRequest();
-            }
-        }
-    }
-
-    private Command createCommand() {
-        final Command command = commandService.create();
-
-        servicesInjector.injectServicesInto(command);
-        return command;
-    }
-
-    /**
-     * Sets up {@link Command#getTransactionId()}, {@link Command#getUser()} and {@link Command#getTimestamp()}.
-     *
-     * The remaining properties are set further down the call-stack, if an action is actually performed
-     * @param transactionId
-     * @param interaction
-     */
-    private void initCommandAndInteraction(
-            final UUID transactionId,
-            final Command command,
-            final Interaction interaction) {
-
-        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
-        final String userName = userService.getUser().getName();
-
-        command.setTimestamp(timestamp);
-        command.setUser(userName);
-        command.setTransactionId(transactionId);
-
-        interaction.setTransactionId(transactionId);
-    }
-
 
     // //////////////////////////////////////////////////////
     // flush
@@ -498,9 +394,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
                     transactionLevel = 1; // because the transactionLevel was decremented earlier
                 }
             }
-            
-            
-            endRequestOnRequestScopeServices();
+
+
+            // previously we called __isis_endRequest here on all RequestScopedServices.  This is now
+            // done later, in PersistenceSession#close(). If we introduce support for @TransactionScoped
+            // services, then this would be the place to finalize them.
 
             if(abortCause != null) {
                 

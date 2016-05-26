@@ -175,6 +175,7 @@
         <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version>
 
         <validation-api.version>1.1.0.Final</validation-api.version>
+        <transaction-api.version>1.2</transaction-api.version>
 
         <javax-mail.version>1.4.7</javax-mail.version>
 
@@ -1889,6 +1890,11 @@ ${license.additional-notes}
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.transaction</groupId>
+                <artifactId>transaction-api</artifactId>
+                <version>${transaction-api.version}</version>
             </dependency>
 
 

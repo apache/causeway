@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.listener.InstanceLifecycleListener;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,15 +40,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command2;
+import org.apache.isis.applib.services.command.Command3;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -112,8 +125,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Transact
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
+import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.services.metrics.MetricsServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.PojoAdapterHashMap;
@@ -176,6 +189,20 @@ public class PersistenceSession implements
     private final AuthenticationSession authenticationSession;
 
     private final ServicesInjector servicesInjector;
+
+    private final CommandContext commandContext;
+    private final CommandService commandService;
+
+    private final InteractionContext interactionContext;
+    private final EventBusService eventBusService ;
+    private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    private final FactoryService factoryService;
+    private final MetricsService metricsService;
+    private final ClockService clockService;
+    private final UserService userService;
+    private final Bulk.InteractionContext bulkInteractionContext;
+
+
     /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
      */
@@ -196,7 +223,6 @@ public class PersistenceSession implements
      */
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
 
-    private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
 
     private final boolean concurrencyCheckingGloballyEnabled;
 
@@ -217,21 +243,32 @@ public class PersistenceSession implements
             LOG.debug("creating " + this);
         }
 
+        this.servicesInjector = servicesInjector;
+        this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
+        this.fixturesInstalledFlag = fixturesInstalledFlag;
+
         // injected
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
-        this.fixturesInstalledFlag = fixturesInstalledFlag;
 
-        this.servicesInjector = servicesInjector;
-        this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
+        this.commandContext = lookupService(CommandContext.class);
+        this.commandService = lookupService(CommandService.class);
+        this.interactionContext = lookupService(InteractionContext.class);
+        this.eventBusService = lookupService(EventBusService.class);
+        this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
+        this.metricsService = lookupService(MetricsService.class);
+        this.factoryService = lookupService(FactoryService.class);
+        this.clockService = lookupService(ClockService.class);
+        this.userService = lookupService(UserService.class);
+        this.bulkInteractionContext = lookupService(Bulk.InteractionContext.class);
 
         // sub-components
         final AdapterManager adapterManager = this;
         this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, specificationLoader);
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
 
-        setState(State.NOT_INITIALIZED);
+        this.state = State.NOT_INITIALIZED;
 
         final boolean concurrencyCheckingGloballyDisabled =
                 configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
@@ -285,37 +322,84 @@ public class PersistenceSession implements
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
         initServices();
+        startRequestOnRequestScopedServices();
 
-        final MetricsServiceDefault metricsServiceDefault = servicesInjector.lookupService(MetricsServiceDefault.class);
-        persistenceManager.addInstanceLifecycleListener(metricsServiceDefault, (Class[])null);
+        if(metricsService instanceof InstanceLifecycleListener) {
+            final InstanceLifecycleListener metricsService = (InstanceLifecycleListener) this.metricsService;
+            persistenceManager.addInstanceLifecycleListener(metricsService, (Class[]) null);
+        }
 
-        setState(State.OPEN);
+
+        final Command command = createCommand();
+        final UUID transactionId = UUID.randomUUID();
+        final Interaction interaction = factoryService.instantiate(Interaction.class);
+
+        final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
+        final String userName = userService.getUser().getName();
+
+        command.setTimestamp(timestamp);
+        command.setUser(userName);
+        command.setTransactionId(transactionId);
+
+        interaction.setTransactionId(transactionId);
+
+        commandContext.setCommand(command);
+        interactionContext.setInteraction(interaction);
+
+        Bulk.InteractionContext.current.set(bulkInteractionContext);
+
+        this.state = State.OPEN;
     }
 
 
+
+    private void startRequestOnRequestScopedServices() {
+
+        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+
+        // tell the proxy of all request-scoped services to instantiate the underlying
+        // services, store onto the thread-local and inject into them...
+        for (final Object service : registeredServices) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_startRequest(servicesInjector);
+            }
+        }
+        // ... and invoke all @PostConstruct
+        for (final Object service : registeredServices) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_postConstruct();
+            }
+        }
+    }
+
     /**
-     * Creates {@link ObjectAdapter adapters} for the service list.
+     * Creates {@link ObjectAdapter adapters} for the service list, ensuring that these are mapped correctly,
+     * and have the same OIDs as in any previous sessions.
      */
     private void initServices() {
         final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+
         for (final Object service : registeredServices) {
             final ObjectSpecification serviceSpecification =
                     specificationLoader.loadSpecification(service.getClass());
             serviceSpecification.markAsService();
-            final RootOid existingOid = getOidForService(serviceSpecification);
-            final ObjectAdapter serviceAdapter =
-                    existingOid == null
-                            ? adapterFor(service)
-                            : mapRecreatedPojo(existingOid, service);
-            if (serviceAdapter.getOid().isTransient()) {
-                remapAsPersistent(serviceAdapter, null);
-            }
 
-            if (existingOid == null) {
-                final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
-                this.registeredServices.put(persistentOid.getObjectSpecId(), persistentOid);
-            }
+            final ObjectAdapter serviceAdapter = adapterFor(service);
+            remapAsPersistentIfRequired(serviceAdapter);
         }
+    }
+
+    private void remapAsPersistentIfRequired(final ObjectAdapter serviceAdapter) {
+        if (serviceAdapter.getOid().isTransient()) {
+            remapAsPersistent(serviceAdapter, null);
+        }
+    }
+
+    private Command createCommand() {
+        final Command command = commandService.create();
+
+        servicesInjector.injectServicesInto(command);
+        return command;
     }
 
     //endregion
@@ -335,10 +419,17 @@ public class PersistenceSession implements
      */
     public void close() {
 
-        if (getState() == State.CLOSED) {
+        if (state == State.CLOSED) {
             // nothing to do
             return;
         }
+
+        completeCommandFromInteractionAndClearDomainEvents();
+        transactionManager.flushTransaction();
+
+        Bulk.InteractionContext.current.set(null);
+
+        endRequestOnRequestScopeServices();
 
         try {
             final IsisTransaction currentTransaction = transactionManager.getTransaction();
@@ -361,8 +452,6 @@ public class PersistenceSession implements
             LOG.error(
                 "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
         }
-        // TODO: REVIEW ... ??? this is a guess: don't set to null, because we need for -> transactionManager -> transaction -> messageBroker
-        // persistenceManager = null;
 
         try {
             oidAdapterMap.close();
@@ -378,8 +467,65 @@ public class PersistenceSession implements
             LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
         }
 
-        setState(State.CLOSED);
+        this.state = State.CLOSED;
     }
+
+    private void endRequestOnRequestScopeServices() {
+        // tell the proxy of all request-scoped services to invoke @PreDestroy
+        // (if any) on all underlying services stored on their thread-locals...
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_preDestroy();
+            }
+        }
+
+        // ... and then remove those underlying services from the thread-local
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_endRequest();
+            }
+        }
+    }
+
+    private void completeCommandFromInteractionAndClearDomainEvents() {
+
+        final Command command = commandContext.getCommand();
+        final Interaction interaction = interactionContext.getInteraction();
+
+        if(command.getStartedAt() != null && command.getCompletedAt() == null) {
+            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
+
+
+            // copy over from the most recent (which will be the top-level) interaction
+            Interaction.Execution priorExecution = interaction.getPriorExecution();
+            final Timestamp completedAt = priorExecution.getCompletedAt();
+            command.setCompletedAt(completedAt);
+        }
+
+        // ensureCommandsPersistedIfDirtyXactn
+
+        // ensure that any changed objects means that the command should be persisted
+        if(command.getMemberIdentifier() != null) {
+            if(metricsService.numberObjectsDirtied() > 0) {
+                command.setPersistHint(true);
+            }
+        }
+
+
+        commandService.complete(command);
+
+        if(command instanceof Command3) {
+            final Command3 command3 = (Command3) command;
+            command3.flushActionDomainEvents();
+        } else
+        if(command instanceof Command2) {
+            final Command2 command2 = (Command2) command;
+            command2.flushActionInteractionEvents();
+        }
+
+        interaction.clear();
+    }
+
 
     //endregion
 
@@ -484,16 +630,8 @@ public class PersistenceSession implements
 
     private State state;
 
-    private State getState() {
-        return state;
-    }
-    
-    private void setState(final State state) {
-        this.state = state;
-    }
-    
     protected void ensureNotOpened() {
-        if (getState() != State.NOT_INITIALIZED) {
+        if (state != State.NOT_INITIALIZED) {
             throw new IllegalStateException("Persistence session has already been initialized");
         }
     }
@@ -508,7 +646,6 @@ public class PersistenceSession implements
         }
         throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
     }
-
 
 
     //endregion
@@ -657,29 +794,13 @@ public class PersistenceSession implements
         final List<Object> services = servicesInjector.getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
         for (final Object servicePojo : services) {
-            serviceAdapters.add(getService(servicePojo));
+            ObjectAdapter serviceAdapter = getAdapterFor(servicePojo);
+            if(serviceAdapter == null) {
+                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
+            }
+            serviceAdapters.add(serviceAdapter);
         }
         return serviceAdapters;
-    }
-
-    private ObjectAdapter getService(final Object servicePojo) {
-        final ObjectSpecification serviceSpecification =
-                specificationLoader.loadSpecification(servicePojo.getClass());
-        final RootOid oid = getOidForService(serviceSpecification);
-        final ObjectAdapter serviceAdapter = mapRecreatedPojo(oid, servicePojo);
-
-        return serviceAdapter;
-    }
-
-    /**
-     * Returns the OID for the adapted service. This allows a service object to
-     * be given the same OID that it had when it was created in a different
-     * session.
-     */
-    private RootOid getOidForService(final ObjectSpecification serviceSpec) {
-        final ObjectSpecId serviceSpecId = serviceSpec.getSpecId();
-        final RootOid oid = this.registeredServices.get(serviceSpecId);
-        return oid;
     }
 
     //endregion
@@ -699,7 +820,6 @@ public class PersistenceSession implements
     }
 
     void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
-        final EventBusService eventBusService = getServicesInjector().lookupService(EventBusService.class);
         event.setSource(pojo);
         eventBusService.post(event);
     }
@@ -851,7 +971,8 @@ public class PersistenceSession implements
             result = persistenceManager.getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
 
-            final List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            Class<ExceptionRecognizer> serviceClass = ExceptionRecognizer.class;
+            final List<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
             for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
                 if(exceptionRecognizer instanceof ExceptionRecognizer2) {
                     final ExceptionRecognizer2 recognizer = (ExceptionRecognizer2) exceptionRecognizer;
@@ -1967,9 +2088,6 @@ public class PersistenceSession implements
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
-        final ChangedObjectsServiceInternal changedObjectsServiceInternal =
-                getServicesInjector().lookupService(ChangedObjectsServiceInternal.class);
-
         changedObjectsServiceInternal.enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
@@ -2159,10 +2277,6 @@ public class PersistenceSession implements
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
             postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
 
-
-            final ChangedObjectsServiceInternal changedObjectsServiceInternal =
-                    getServicesInjector().lookupService(ChangedObjectsServiceInternal.class);
-
             changedObjectsServiceInternal.enlistCreated(adapter);
 
         } else {
@@ -2206,10 +2320,6 @@ public class PersistenceSession implements
 
         CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
         postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
-
-
-        final ChangedObjectsServiceInternal changedObjectsServiceInternal =
-                getServicesInjector().lookupService(ChangedObjectsServiceInternal.class);
 
         changedObjectsServiceInternal.enlistUpdating(adapter);
 
@@ -2275,6 +2385,25 @@ public class PersistenceSession implements
 
     //endregion
 
+    //region > helpers: lookupService, lookupServices
+
+    private <T> T lookupService(Class<T> serviceType) {
+        T service = lookupServiceIfAny(serviceType);
+        if(service == null) {
+            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
+        }
+        return service;
+    }
+
+    private <T> T lookupServiceIfAny(final Class<T> serviceType) {
+        return servicesInjector.lookupService(serviceType);
+    }
+
+    private <T> List<T> lookupServices(final Class<T> serviceClass) {
+        return servicesInjector.lookupServices(serviceClass);
+    }
+    //endregion
+
     //region > toString
 
     @Override
@@ -2284,6 +2413,8 @@ public class PersistenceSession implements
 
 
     //endregion
+
+
 
 }
 

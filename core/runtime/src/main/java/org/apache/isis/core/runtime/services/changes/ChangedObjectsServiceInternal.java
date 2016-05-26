@@ -260,6 +260,7 @@ public class ChangedObjectsServiceInternal {
     @Programmatic
     public void clearChangedObjectProperties() {
         enlistedObjectProperties.clear();
+        changedObjectProperties = null;
     }
 
     private static final Predicate<ObjectAdapter> IS_TRANSACTION_ID = new Predicate<ObjectAdapter>() {
