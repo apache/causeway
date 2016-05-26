@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.enterprise.context.RequestScoped;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -38,10 +37,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.system.transaction.WithTransactionScope;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
-public class ChangedObjectsServiceInternal {
+public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
@@ -209,19 +209,9 @@ public class ChangedObjectsServiceInternal {
         return previous == null;
     }
 
-
-    @Programmatic
-    public boolean hasChangedAdapters() {
-        final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
-
-        final Set<ObjectAdapter> changedAdapters = Sets.newHashSet(
-                        Iterables.transform(
-                                changedObjectProperties,
-                                AdapterAndProperty.Functions.GET_ADAPTER)
-                        );
-        return !changedAdapters.isEmpty();
-    }
-
+    /**
+     * Intended to be called at the end of the transaction.  Use {@link #resetForNextTransaction()} once fully read.
+     */
     @Programmatic
     public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
         return changedObjectProperties != null
@@ -257,12 +247,6 @@ public class ChangedObjectsServiceInternal {
                 Sets.filter(processedObjectProperties1.entrySet(), PreAndPostValues.Predicates.CHANGED));
     }
 
-    @Programmatic
-    public void clearChangedObjectProperties() {
-        enlistedObjectProperties.clear();
-        changedObjectProperties = null;
-    }
-
     private static final Predicate<ObjectAdapter> IS_TRANSACTION_ID = new Predicate<ObjectAdapter>() {
         @Override
         public boolean apply(ObjectAdapter input) {
@@ -285,9 +269,26 @@ public class ChangedObjectsServiceInternal {
         return changeKindByEnlistedAdapter.size();
     }
 
+    /**
+     * Must be called only after {@link #getChangedObjectProperties()} has been called at least once.
+     */
     @Programmatic
     public int numberObjectPropertiesModified() {
-        return enlistedObjectProperties.size();
+        if(changedObjectProperties == null) {
+            throw new IllegalStateException("getChangedObjectProperties() has not yet been called");
+        }
+        return changedObjectProperties.size();
+    }
+
+    /**
+     * Intended to be called at the end of a transaction.  (This service really ought to be considered
+     * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
+     */
+    @Override
+    @Programmatic
+    public void resetForNextTransaction() {
+        enlistedObjectProperties.clear();
+        changedObjectProperties = null;
     }
 
 

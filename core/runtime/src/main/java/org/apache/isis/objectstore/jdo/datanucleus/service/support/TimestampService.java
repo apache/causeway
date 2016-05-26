@@ -22,7 +22,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -30,6 +29,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.timestamp.HoldsUpdatedAt;
 import org.apache.isis.applib.services.timestamp.HoldsUpdatedBy;
+import org.apache.isis.applib.services.user.UserService;
 
 @RequestScoped
 @DomainService(
@@ -54,11 +54,9 @@ public class TimestampService implements
         final Object pi = event.getPersistentInstance();
 
         if(pi instanceof org.datanucleus.enhancement.Persistable) {
-            boolean isPersistent =
-                    ((org.datanucleus.enhancement.Persistable)pi).dnIsPersistent();
 
             if(pi instanceof HoldsUpdatedBy) {
-                ((HoldsUpdatedBy)pi).setUpdatedBy(container.getUser().getName());
+                ((HoldsUpdatedBy)pi).setUpdatedBy(userService.getUser().getName());
             }
             if(pi instanceof HoldsUpdatedAt) {
                 ((HoldsUpdatedAt)pi).setUpdatedAt(clockService.nowAsJavaSqlTimestamp());
@@ -72,7 +70,7 @@ public class TimestampService implements
     }
 
     @Inject
-    DomainObjectContainer container;
+    UserService userService;
 
     @Inject
     ClockService clockService;

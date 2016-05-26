@@ -549,8 +549,7 @@ public class Interaction implements HasTransactionId {
                         final Execution<?, ?> execution,
                         final Timestamp timestamp,
                         final int numberObjectsLoaded,
-                        final int numberObjectsDirtied,
-                        final int numberObjectPropertiesModified) {
+                        final int numberObjectsDirtied) {
 
                     execution.startedAt = timestamp;
 
@@ -562,7 +561,6 @@ public class Interaction implements HasTransactionId {
                     final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
                     numberObjectsLoadedFor(objectCountsDto).setBefore(numberObjectsLoaded);
                     numberObjectsDirtiedFor(objectCountsDto).setBefore(numberObjectsDirtied);
-                    numberObjectPropertiesModifiedFor(objectCountsDto).setBefore(numberObjectPropertiesModified);
                 }
 
             },
@@ -571,8 +569,7 @@ public class Interaction implements HasTransactionId {
                         final Execution<?, ?> execution,
                         final Timestamp timestamp,
                         final int numberObjectsLoaded,
-                        final int numberObjectsDirtied,
-                        final int numberObjectPropertiesModified) {
+                        final int numberObjectsDirtied) {
 
                     execution.completedAt = timestamp;
 
@@ -584,16 +581,11 @@ public class Interaction implements HasTransactionId {
                     final ObjectCountsDto objectCountsDto = objectCountsFor(metricsDto);
                     numberObjectsLoadedFor(objectCountsDto).setAfter(numberObjectsLoaded);
                     numberObjectsDirtiedFor(objectCountsDto).setAfter(numberObjectsDirtied);
-                    numberObjectPropertiesModifiedFor(objectCountsDto).setAfter(numberObjectPropertiesModified);
-
                 }
 
             };
 
             //region > helpers
-            private static DifferenceDto numberObjectPropertiesModifiedFor(final ObjectCountsDto objectCountsDto) {
-                return MemberExecutionDtoUtils.numberObjectPropertiesModifiedFor(objectCountsDto);
-            }
 
             private static DifferenceDto numberObjectsDirtiedFor(final ObjectCountsDto objectCountsDto) {
                 return MemberExecutionDtoUtils.numberObjectsDirtiedFor(objectCountsDto);
@@ -617,20 +609,18 @@ public class Interaction implements HasTransactionId {
             //endregion
 
             abstract void syncMetrics(
-                    final Execution<?,?> teExecution,
+                    final Execution<?, ?> teExecution,
                     final Timestamp timestamp,
                     final int numberObjectsLoaded,
-                    final int numberObjectsDirtied,
-                    final int numberObjectPropertiesModified);
+                    final int numberObjectsDirtied);
         }
         private void syncMetrics(final When when, final Timestamp timestamp) {
             final MetricsService metricsService = interaction.metricsService;
 
             final int numberObjectsLoaded = metricsService.numberObjectsLoaded();
             final int numberObjectsDirtied = metricsService.numberObjectsDirtied();
-            final int numberObjectPropertiesModified = metricsService.numberObjectPropertiesModified();
 
-            when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied, numberObjectPropertiesModified);
+            when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied);
         }
 
         //endregion

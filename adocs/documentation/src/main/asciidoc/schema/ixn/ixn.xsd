@@ -197,12 +197,6 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="propertiesModified" type="com:differenceDto">
-                <xs:annotation>
-                    <xs:documentation>The number of individual properties of objects that were modified (each such change would correspond to a separate call to AuditingService if configured).
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
         </xs:sequence>
 
     </xs:complexType>

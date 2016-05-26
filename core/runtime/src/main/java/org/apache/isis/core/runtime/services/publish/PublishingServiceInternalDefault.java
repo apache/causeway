@@ -183,7 +183,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
 
         final int numberLoaded = metricsService.numberObjectsLoaded();
-        final int numberObjectPropertiesModified = metricsService.numberObjectPropertiesModified();
+        final int numberObjectPropertiesModified = changedObjectsServiceInternal.numberObjectPropertiesModified();
         final PublishedObjects publishedObjects = newPublishedObjects(numberLoaded, numberObjectPropertiesModified,
                 changeKindByPublishedAdapter);
 

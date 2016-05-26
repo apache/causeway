@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -172,6 +173,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
     private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
+    private final MetricsService metricsService;
 
     private final UUID transactionId;
         
@@ -194,7 +196,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
         this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
         this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
-
+        this.metricsService = lookupService(MetricsService.class);
 
         this.transactionId = transactionId;
 
@@ -411,7 +413,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
-            changedObjectsServiceInternal.clearChangedObjectProperties();
+            changedObjectsServiceInternal.resetForNextTransaction();
+            if(metricsService instanceof WithTransactionScope) {
+                ((WithTransactionScope) metricsService).resetForNextTransaction();
+            }
         }
     }
 

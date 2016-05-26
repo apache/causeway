@@ -1891,11 +1891,6 @@ ${license.additional-notes}
                 <artifactId>validation-api</artifactId>
                 <version>${validation-api.version}</version>
             </dependency>
-            <dependency>
-                <groupId>javax.transaction</groupId>
-                <artifactId>transaction-api</artifactId>
-                <version>${transaction-api.version}</version>
-            </dependency>
 
 
             <!-- DataNucleus -->

@@ -61,19 +61,6 @@ public interface MetricsService {
     @Programmatic
     int numberObjectsDirtied();
 
-    /**
-     * The number of individual properties of objects that were modified; a good measure of the amount of work being done in the interaction.
-     * 
-     * <p>
-     *     Related to {@link #numberObjectsDirtied()}, corresponds to the number of times that {@link org.apache.isis.applib.services.audit.AuditingService3#audit(UUID, String, Bookmark, String, String, String, String, String, Timestamp)}  would be called if the transaction were to complete.
-     * </p>
-     * 
-     * <p>
-     *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
-     * </p>
-     */
-    @Programmatic
-    int numberObjectPropertiesModified();
 
 }
 

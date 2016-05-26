@@ -31,10 +31,11 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
+import org.apache.isis.core.runtime.system.transaction.WithTransactionScope;
 
 @RequestScoped
 @DomainService(nature = NatureOfService.DOMAIN)
-public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener {
+public class MetricsServiceDefault implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, WithTransactionScope {
 
     private AtomicInteger numberLoaded = new AtomicInteger(0);
 
@@ -48,20 +49,23 @@ public class MetricsServiceDefault implements MetricsService, InstanceLifecycleL
         return changedObjectsServiceInternal.numberObjectsDirtied();
     }
 
-    @Override
-    public int numberObjectPropertiesModified() {
-        return changedObjectsServiceInternal.numberObjectPropertiesModified();
-    }
-
     @Programmatic
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
         numberLoaded.incrementAndGet();
     }
 
+    /**
+     * Intended to be called at the end of a transaction.  (This service really ought to be considered
+     * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
+     */
+    @Programmatic
+    @Override
+    public void resetForNextTransaction() {
+        numberLoaded.set(0);
+    }
 
     @Inject
     ChangedObjectsServiceInternal changedObjectsServiceInternal;
-
 
 }

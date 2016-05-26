@@ -187,8 +187,6 @@ The schema also defines a small number of supporting types:
         <xs:sequence>
             <xs:element name="loaded" type="com:differenceDto"/>
             <xs:element name="dirtied" type="com:differenceDto"/>
-            <xs:element name="propertiesModified"
-                        type="com:differenceDto"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -203,9 +201,8 @@ The schema also defines a small number of supporting types:
 ----
 <1> the `metricsDto` captures the time to perform an execution, and also the differences in various object counts.
 <2> the `objectCountsDto` complex type is the set of before/after differences, one for each execution; the framework
-tracks number of objects loaded (read from) the database, the number of objects dirtied (will need to be saved back
-to the database), and the number of properties across all objects that changed.  Together these metrics give an idea of
-the "size" of this  particular execution.
+tracks number of objects loaded (read from) the database and the number of objects dirtied (will need to be saved back
+to the database).  Together these metrics give an idea of the "size" of this  particular execution.
 <3> the `exceptionDto` complex type defines a structure for capturing the stack trace of any exception that might occur
 in the course of invoking an action or editing a property.
 
