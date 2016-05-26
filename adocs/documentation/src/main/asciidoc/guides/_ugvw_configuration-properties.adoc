@@ -53,6 +53,14 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 |No longer supported.
 
 |`isis.viewer.wicket.` +
+`liveReloadUrl`
+| URL
+|(`1.13.0-SNAPSHOT`), specifies the URL if xref:dg.adoc#_dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
+
+`http://localhost:35729/livereload.js?snipver=1`
+
+
+|`isis.viewer.wicket.` +
 `maxTitleLengthInParentedTables`
 | +ve integer, (`_12_`)
 | See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].

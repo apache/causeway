@@ -141,6 +141,7 @@ public class IsisWicketApplication
     private static final String WICKET_SOURCE_PLUGIN_KEY = "isis.viewer.wicket.wicketSourcePlugin";
     private static final boolean WICKET_SOURCE_PLUGIN_DEFAULT = false;
 
+
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**

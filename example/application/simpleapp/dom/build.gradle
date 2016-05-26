@@ -9,7 +9,7 @@
 //
 // To use, just type:
 //
-//      gradle -t
+//      gradle -t --offline &
 //
 // It is also necessary to disable the IntelliJ's automatic building of the 'dom' project.  This is done using:
 //

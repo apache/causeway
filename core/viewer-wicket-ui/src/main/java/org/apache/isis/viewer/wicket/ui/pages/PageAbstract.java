@@ -104,7 +104,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
-    
+
+    private static final String LIVE_RELOAD_URL_KEY = "isis.viewer.wicket.liveReloadUrl";
+
     // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
     private static final String ID_THEME = "theme";
@@ -271,6 +273,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
+        String liveReloadUrl = getConfiguration().getString(LIVE_RELOAD_URL_KEY);
+        if(liveReloadUrl != null) {
+            response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
+        }
         if(isModernBrowser()) {
             addBootLint(response);
         }
