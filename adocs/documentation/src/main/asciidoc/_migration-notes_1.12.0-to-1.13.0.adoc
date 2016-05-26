@@ -39,3 +39,12 @@ Prior to `1.13.0` the framework supported the injection of fields using xref:rga
 also injection to `set...()` setter methods and also `inject...()` methods.  In `1.13.0` the injection through `@Inject`
 remains, and injection through setters is enabled by default.  Injection through `inject...()` is disabled however.
 For faster start-up times still, consider disabling injection through `set...()`.
+
+* `isis.reflector.facets.ignoreDeprecated` +
++
+This setting indicates whether to continue to honour or to simply ignore any deprecated annotations and other
+semantics that make up the programming model. +
++
+Be aware that enabling this setting could substantially alter the semantics of your application.  To be safe, we
+recommend that you first run the application using `isis.reflector.validator.allowDeprecated` set to `false`; if any
+deprecated annotations etc. are in use, then the app will fail-fast and refuse to start.

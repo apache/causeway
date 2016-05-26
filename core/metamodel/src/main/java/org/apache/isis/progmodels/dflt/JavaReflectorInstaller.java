@@ -105,18 +105,13 @@ public class JavaReflectorInstaller extends InstallerAbstract implements Specifi
      * exclude.
      */
     protected ProgrammingModel createProgrammingModel(final IsisConfiguration configuration) {
-        final ProgrammingModel programmingModel = lookupAndCreateProgrammingModelFacets(configuration);
+        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5(configuration);
         includeAndExcludeFacetFactories(configuration, programmingModel);
         return programmingModel;
     }
 
-    private ProgrammingModel lookupAndCreateProgrammingModelFacets(final IsisConfiguration configuration) {
-        final String progModelFacetsClassName = configuration.getString(ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME, ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT);
-        final ProgrammingModel programmingModel = InstanceUtil.createInstance(progModelFacetsClassName, ProgrammingModel.class);
-        return programmingModel;
-    }
-
-    private void includeAndExcludeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
+    private void includeAndExcludeFacetFactories(
+            final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
         includeFacetFactories(configuration, programmingModel);
         excludeFacetFactories(configuration, programmingModel);
     }

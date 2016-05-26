@@ -119,7 +119,7 @@ public abstract class SpecificationLoaderTestAbstract {
         final SpecificationLoader specificationLoader =
                 new SpecificationLoader(DeploymentCategory.PRODUCTION,
                         stubConfiguration,
-                        new ProgrammingModelFacetsJava5(),
+                        new ProgrammingModelFacetsJava5(mockConfiguration),
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(
                                 new LayoutMetadataReaderFromJson()), stubServicesInjector);
@@ -140,7 +140,7 @@ public abstract class SpecificationLoaderTestAbstract {
 
         new SpecificationLoader(DeploymentCategory.PRODUCTION ,
                 stubConfiguration,
-                new ProgrammingModelFacetsJava5(),
+                new ProgrammingModelFacetsJava5(mockConfiguration),
                 new MetaModelValidatorDefault(),
                 Lists.<LayoutMetadataReader>newArrayList(),
                 stubServicesInjector);
@@ -153,7 +153,7 @@ public abstract class SpecificationLoaderTestAbstract {
 
         new SpecificationLoader(DeploymentCategory.PRODUCTION,
                 stubConfiguration,
-                new ProgrammingModelFacetsJava5(),
+                new ProgrammingModelFacetsJava5(mockConfiguration),
                 new MetaModelValidatorDefault(),
                 null,
                 stubServicesInjector);

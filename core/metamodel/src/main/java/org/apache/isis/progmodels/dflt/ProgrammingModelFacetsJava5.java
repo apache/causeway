@@ -17,6 +17,7 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
@@ -215,7 +216,12 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
-    public ProgrammingModelFacetsJava5() {
+    public ProgrammingModelFacetsJava5(final IsisConfiguration configuration) {
+        this(DeprecatedPolicy.parse(configuration));
+    }
+
+    public ProgrammingModelFacetsJava5(final DeprecatedPolicy deprecatedPolicy) {
+        super(deprecatedPolicy);
 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.

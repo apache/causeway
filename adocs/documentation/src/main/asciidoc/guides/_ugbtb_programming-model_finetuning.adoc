@@ -54,7 +54,7 @@ Or, suppose you wanted to use the example https://github.com/apache/isis/blob/ma
 isis.reflector.facets.include=org.apache.isis.example.metamodel.namefile.facets.NameFileFacetFactory
 ----
 
-To include/exclude more than one `FacetFactory`, specify as a comma-separated list. And if you want to dig into this in more detail, the code that implements this logic is https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/progmodels/dflt/JavaReflectorInstallerNoDecorators.java[JavaReflectorInstallerNoDecorators].
+To include/exclude more than one `FacetFactory`, specify as a comma-separated list.
 
 [TIP]
 ====
@@ -65,6 +65,11 @@ This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mai
 
 
 == Replacing the Prog. Model
+
+[WARNING]
+====
+This property is ignored as of `1.13.0-SNAPSHOT`
+====
 
 If you want to make many changes to the programming model, then (rather than include/exclude lots of facet factories) you can specify a completely new programming model.  For this you'll first need an implementation of `ProgrammingModel`.
 
@@ -77,4 +82,3 @@ To tell Apache Isis to use your new programming model, use:
 isis.reflector.facets=com.mycompany.myapp.isis.IsisProgrammingModel
 ----
 
-Again, the code that implements this logic is https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/progmodels/dflt/JavaReflectorInstallerNoDecorators.java[JavaReflectorInstallerNoDecorators].

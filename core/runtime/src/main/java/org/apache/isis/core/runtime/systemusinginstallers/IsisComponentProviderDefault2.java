@@ -102,9 +102,10 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
     // TODO: this is duplicating logic in JavaReflectorInstaller; need to unify.
     private ProgrammingModel createDefaultProgrammingModel() {
 
-        final ProgrammingModelFacetsJava5 programmingModel = new ProgrammingModelFacetsJava5();
 
         final IsisConfigurationDefault configuration = getConfiguration();
+
+        final ProgrammingModelFacetsJava5 programmingModel = new ProgrammingModelFacetsJava5(configuration);
         ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
         ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
 

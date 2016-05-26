@@ -412,6 +412,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 
 See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
+
 |`isis.reflector.facet.` +
 `filterVisibility`
 |`true`,`false` +
@@ -426,12 +427,33 @@ See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for 
 
 See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
+`1.13.0-SNAPSHOT` - this property is now ignored.  To customize the programming model, use `facets.exclude` and `facets.include`.
+
+
+
+
 |`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
 See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+
+
+|`isis.reflector.facets.` +
+`ignoreDeprecated`
+|`true`,`false` +
+(`false`)
+|(`1.13.0-SNAPSHOT`) whether deprecated facets should be ignored or honoured.  +
++
+By default all deprecated facets are honoured; they remain part of the metamodel.  If instead this property is set to
+`true` then the facets are simply not loaded into the metamodel and their semantics will be excluded.  +
++
+In most cases this should reduce the start-up times for the application.  However, be aware that this could also
+substantially alter the semantics of your application.  To be safe, we recommend that you first run your application
+using `isis.reflector.validator.allowDeprecated` set to `false`; if any deprecated annotations etc. are in use, then
+the app will fail-fast and refuse to start.
+
 
 |`isis.reflector.facets.` +
 `include`
@@ -459,7 +481,9 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 `allowDeprecated`
 |`true`,`false` +
 (`true`)
-| Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
+| Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast). +
++
+See also `isis.reflector.facets.ignoreDeprecated` (`1.13.0-SNAPSHOT`).
 
 
 
@@ -485,7 +509,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 
 
 [[_rgcfg_configuring-core_filterVisibility]]
-== Filtering visibility
+=== Filtering visibility
 
 The framework provides the `isis.reflector.facet.filterVisibility` configuration property that influences whether a returned object is visible to the end-user:
 
@@ -532,7 +556,7 @@ some cases.
 
 
 [[_rgcfg_configuring-core_isis-objects-editing]]
-== `objects.editing`
+=== `objects.editing`
 
 This configuration property in effect allows editing to be disabled globally for an application:
 
@@ -546,7 +570,7 @@ We recommend enabling this feature; it will help drive out the underlying busine
 
 
 [[_rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition]]
-== `propertyLayout.labelPosition`
+=== `propertyLayout.labelPosition`
 
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather
 frustrating to have to annotate every property.
