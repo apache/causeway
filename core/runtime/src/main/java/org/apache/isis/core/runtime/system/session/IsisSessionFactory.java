@@ -38,7 +38,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -83,14 +82,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             final AuthorizationManager authorizationManager,
             final PersistenceSessionFactory persistenceSessionFactory) {
 
-        ensureThatArg(deploymentType, is(not(nullValue())));
-        ensureThatArg(configuration, is(not(nullValue())));
-        ensureThatArg(specificationLoader, is(not(nullValue())));
-        ensureThatArg(servicesInjector, is(not(nullValue())));
-        ensureThatArg(authenticationManager, is(not(nullValue())));
-        ensureThatArg(authorizationManager, is(not(nullValue())));
-        ensureThatArg(persistenceSessionFactory, is(not(nullValue())));
-
         this.deploymentType = deploymentType;
         this.configuration = configuration;
         this.specificationLoaderSpi = specificationLoader;
@@ -117,8 +108,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         final PersistenceSession persistenceSession =
                 persistenceSessionFactory.createPersistenceSession(
                         servicesInjector, getSpecificationLoader(), authenticationSession);
-        ensureThatArg(persistenceSession, is(not(nullValue())));
-
         return newIsisSession(authenticationSession, persistenceSession);
     }
 

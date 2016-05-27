@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -112,14 +111,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjector servicesInjector) {
-
-        ensureThatArg(deploymentCategory, is(notNullValue()));
-        ensureThatArg(configuration, is(notNullValue()));
-        ensureThatArg(servicesInjector, is(notNullValue()));
-        ensureThatArg(programmingModel, is(notNullValue()));
-        ensureThatArg(metaModelValidator, is(notNullValue()));
-        ensureThatArg(layoutMetadataReaders, is(notNullValue()));
-        ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
 
         this.deploymentCategory = deploymentCategory;
         this.servicesInjector = servicesInjector;
@@ -300,7 +291,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      */
     @Programmatic
     public ObjectSpecification loadSpecification(final String className) {
-        ensureThatArg(className, is(notNullValue()), "specification class name must be specified");
+        assert className != null;
 
         try {
             final Class<?> cls = loadBuiltIn(className);

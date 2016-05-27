@@ -18,12 +18,8 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import java.io.Serializable;
 
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
 /**
@@ -44,7 +40,7 @@ public final class ObjectSpecId implements Serializable {
     }
 
     public ObjectSpecId(String specId) {
-        Ensure.ensureThatArg(specId, is(IsisMatchers.nonEmptyString()));
+        assert !(specId == null || "".equals(specId));
         this.specId = specId;
     }
 

@@ -35,7 +35,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -71,15 +70,7 @@ public class IsisSession implements SessionScopedComponent {
             final AuthenticationSession authenticationSession,
             final PersistenceSession persistenceSession) {
 
-        // global context
-        ensureThatArg(sessionFactory, is(not(nullValue())), "execution context factory is required");
-
-        // session
-        ensureThatArg(authenticationSession, is(not(nullValue())), "authentication session is required");
-        ensureThatArg(persistenceSession, is(not(nullValue())), "persistence session is required");
-
         this.isisSessionFactory = sessionFactory;
-
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
 

@@ -51,11 +51,6 @@ public class ProxyContextHandler {
             final SpecificationLoader specificationLookup,
             final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
-        Ensure.ensureThatArg(wrapperFactory, is(not(nullValue())));
-        Ensure.ensureThatArg(authenticationSessionProvider, is(not(nullValue())));
-        Ensure.ensureThatArg(specificationLookup, is(not(nullValue())));
-        Ensure.ensureThatArg(persistenceSessionServiceInternal, is(not(nullValue())));
-
         final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider, specificationLookup,
                 persistenceSessionServiceInternal, this);
 

@@ -34,7 +34,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -51,8 +50,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
-import static org.hamcrest.CoreMatchers.is;
 
 class CssMenuItem implements Serializable {
 
@@ -78,7 +75,8 @@ class CssMenuItem implements Serializable {
         }
 
         public <T extends Page> Builder link(final AbstractLink link) {
-            Ensure.ensureThatArg(link.getId(), is(ID_MENU_LINK));
+            assert link.getId().equals(ID_MENU_LINK);
+
             cssMenuItem.setLink(link);
             return this;
         }

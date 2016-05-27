@@ -40,7 +40,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -89,7 +88,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public void open() {
-        ensureThatState(session, is(notNullValue()), "session is required");
+        assert session != null;
     }
 
     public void close() {

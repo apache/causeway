@@ -37,10 +37,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = Maps.newHashMap();
@@ -230,7 +226,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      */
     @Programmatic
     public void setRandomCodeGenerator(final RandomCodeGenerator randomCodeGenerator) {
-        ensureThatArg(randomCodeGenerator, is(notNullValue()), "randomCodeGenerator cannot be null");
+        assert randomCodeGenerator != null;
         this.randomCodeGenerator = randomCodeGenerator;
     }
 

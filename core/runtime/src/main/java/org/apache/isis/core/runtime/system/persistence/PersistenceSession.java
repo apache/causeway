@@ -65,7 +65,6 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -146,9 +145,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
@@ -1709,8 +1706,8 @@ public class PersistenceSession implements
     @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {
 
-        Ensure.ensureThatArg(parentAdapter, is(not(nullValue())));
-        Ensure.ensureThatArg(collection, is(not(nullValue())));
+        assert parentAdapter != null;
+        assert collection != null;
 
         final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
         if(existingOrValueAdapter != null) {
@@ -2005,14 +2002,14 @@ public class PersistenceSession implements
      * @see #createCollectionAdapter(Object, ParentedCollectionOid)
      */
     private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
-        Ensure.ensureThatArg(rootOid, is(not(nullValue())));
+        assert rootOid != null;
         return createAdapter(pojo, rootOid);
     }
 
     private ObjectAdapter createCollectionAdapter(
             final Object pojo,
             ParentedCollectionOid collectionOid) {
-        Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
+        assert collectionOid != null;
         return createAdapter(pojo, collectionOid);
     }
 

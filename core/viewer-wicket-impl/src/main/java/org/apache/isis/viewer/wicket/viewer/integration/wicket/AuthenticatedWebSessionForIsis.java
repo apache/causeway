@@ -32,7 +32,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -41,10 +40,6 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -68,7 +63,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     private AuthenticationSession authenticationSession;
 
     public AuthenticatedWebSessionForIsis(final Request request) {
-        super(Ensure.ensureThatArg(request, is(not(nullValue(Request.class)))));
+        super(request);
     }
 
     @Override

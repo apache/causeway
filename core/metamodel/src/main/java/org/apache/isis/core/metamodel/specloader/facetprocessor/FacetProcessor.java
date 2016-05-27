@@ -49,7 +49,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -123,8 +122,6 @@ public class FacetProcessor implements ServicesInjectorAware {
     private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
     public FacetProcessor(final ProgrammingModel programmingModel) {
-        ensureThatState(programmingModel, is(notNullValue()));
-
         this.programmingModel = programmingModel;
     }
 

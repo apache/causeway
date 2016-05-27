@@ -82,9 +82,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;
-
-        Ensure.ensureThatArg(specificationLoader, is(notNullValue()));
-
         this.specificationLoader = specificationLoader;
         this.localization = localization;
         this.authenticationSession = authenticationSession;

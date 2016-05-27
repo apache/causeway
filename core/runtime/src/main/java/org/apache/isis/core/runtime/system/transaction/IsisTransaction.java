@@ -43,12 +43,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
  * applied.
@@ -185,10 +179,6 @@ public class IsisTransaction implements TransactionScopedComponent {
             final ServicesInjector servicesInjector,
             final UUID transactionId) {
         
-        ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
-        ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
-        ensureThatArg(servicesInjector, is(not(nullValue())), "services injector is required");
-
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
         this.servicesInjector = servicesInjector;
@@ -388,8 +378,8 @@ public class IsisTransaction implements TransactionScopedComponent {
     //region > preCommit, commit
 
     synchronized void preCommit() {
-        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
-        ensureThatState(abortCause, is(nullValue()), "cannot commit: an abort cause has been set");
+        assert getState().canCommit();
+        assert abortCause == null;
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("preCommit transaction " + this);
@@ -422,8 +412,8 @@ public class IsisTransaction implements TransactionScopedComponent {
 
 
     public synchronized void commit() {
-        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
-        ensureThatState(abortCause, is(nullValue()), "cannot commit: an abort cause has been set");
+        assert getState().canCommit();
+        assert abortCause == null;
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("postCommit transaction " + this);
@@ -448,7 +438,8 @@ public class IsisTransaction implements TransactionScopedComponent {
      * internal API called by IsisTransactionManager only
      */
     synchronized final void markAsAborted() {
-        ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
+        assert getState().canAbort();
+
         if (LOG.isInfoEnabled()) {
             LOG.info("abort transaction " + this);
         }

@@ -30,17 +30,11 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 public class RootOid implements TypedOid, Serializable {
 
@@ -119,11 +113,15 @@ public class RootOid implements TypedOid, Serializable {
     }
 
     public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
-        Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
-        Ensure.ensureThatArg(identifier, is(not(nullValue())));
-        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
-        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))), "identifier '" + identifier + "' contains an '@' symbol");
-        Ensure.ensureThatArg(state, is(not(nullValue())));
+
+        assert objectSpecId != null;
+        assert identifier != null;
+
+        // too slow...
+        // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
+        // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))), "identifier '" + identifier + "' contains an '@' symbol");
+
+        assert state != null;
 
         this.objectSpecId = objectSpecId;
         this.identifier = identifier;
