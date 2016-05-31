@@ -194,9 +194,11 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 `applicationFeatures.init`
 | `lazy`, `eager` +
 (`lazy`)
-|(`1.13.0-SNAPSHOT`) Whether the application features repository (which surfaces the framework's metamodel) should be initialized lazily or eagerly.  +
-+
-Lazily initialization can speed up bootstrapping, useful while developing and running tests.  The default prior to `1.13.0` was eager initialization.
+|(`1.13.0-SNAPSHOT`) Whether the application features repository (which surfaces the framework's metamodel) should be
+initialized lazily or eagerly.  +
+
+Lazy initialization can speed up bootstrapping, useful while developing and running tests.  The default prior to
+`1.13.0` was eager initialization.
 
 
 |`isis.services.` +
