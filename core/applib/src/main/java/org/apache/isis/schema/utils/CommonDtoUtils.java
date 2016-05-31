@@ -215,6 +215,9 @@ public final class CommonDtoUtils {
         }
         case ENUM: {
             final Enum argValue = (Enum) val;
+            if(argValue == null) {
+                return null;
+            }
             final EnumDto enumDto = new EnumDto();
             valueDto.setEnum(enumDto);
             enumDto.setEnumType(argValue.getClass().getName());
