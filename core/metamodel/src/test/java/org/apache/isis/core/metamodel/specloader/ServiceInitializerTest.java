@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +40,10 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class ServiceInitializerTest {
 
     @Rule
@@ -60,7 +61,6 @@ public class ServiceInitializerTest {
     
     @Before
     public void setUp() throws Exception {
-        serviceInitializer = new ServiceInitializer();
         props = Maps.<String,String>newHashMap();
         context.checking(new Expectations() {
             {
@@ -102,8 +102,14 @@ public class ServiceInitializerTest {
     public void postConstruct() {
         final DomainServiceWithPostConstruct d1 = new DomainServiceWithPostConstruct();
         final DomainServiceWithPostConstructWithProperties d2 = new DomainServiceWithPostConstructWithProperties();
-        serviceInitializer.validate(configuration, listOf(d1, d2));
+
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1, d2));
+        serviceInitializer.validate();
+
+        // when
         serviceInitializer.postConstruct();
+
+        // then
         assertThat(d1.called, is(true));
         assertThat(d2.called, is(true));
         assertThat(d2.properties, is(props));
@@ -122,8 +128,14 @@ public class ServiceInitializerTest {
     public void preDestroy() {
         final DomainServiceWithPreDestroy d1 = new DomainServiceWithPreDestroy();
         final DomainServiceWithPreDestroy d2 = new DomainServiceWithPreDestroy();
-        serviceInitializer.validate(configuration, listOf(d1, d2));
+
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1, d2));
+        serviceInitializer.validate();
+
+        // when
         serviceInitializer.preDestroy();
+
+        // then
         assertThat(d1.called, is(true));
         assertThat(d2.called, is(true));
     }
@@ -146,7 +158,10 @@ public class ServiceInitializerTest {
         expectedException.expectMessage(
                 containsString(
                 "Found more than one @PostConstruct method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePostConstruct, found"));
-        serviceInitializer.validate(configuration, listOf(d1));
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
+
+        // when
+        serviceInitializer.validate();
     }
 
     public static class DomainServiceWithMultiplePreDestroy {
@@ -167,7 +182,10 @@ public class ServiceInitializerTest {
         expectedException.expectMessage(
                 containsString(
                 "Found more than one @PreDestroy method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePreDestroy, found"));
-        serviceInitializer.validate(configuration, listOf(d1));
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
+
+        // when
+        serviceInitializer.validate();
     }
 
     public static class DomainServiceWithPostConstructOneArgWrongType {
@@ -183,7 +201,10 @@ public class ServiceInitializerTest {
         final DomainServiceWithPostConstructOneArgWrongType d1 = new DomainServiceWithPostConstructOneArgWrongType();
         expectedException.expectMessage(
                 "@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithPostConstructOneArgWrongType#y");
-        serviceInitializer.validate(configuration, listOf(d1));
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
+
+        // when
+        serviceInitializer.validate();
     }
 
     public static class DomainServiceWithPostConstructTwoArgs {
@@ -199,7 +220,10 @@ public class ServiceInitializerTest {
         final DomainServiceWithPostConstructTwoArgs d1 = new DomainServiceWithPostConstructTwoArgs();
         expectedException.expectMessage(
                 "@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithPostConstructTwoArgs#y");
-        serviceInitializer.validate(configuration, listOf(d1));
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
+
+        // when
+        serviceInitializer.validate();
     }
 
     public static class DomainServiceWithPreDestroyOneArgs {
@@ -216,7 +240,10 @@ public class ServiceInitializerTest {
         final DomainServiceWithPreDestroyOneArgs d1 = new DomainServiceWithPreDestroyOneArgs();
         expectedException.expectMessage(
                 "@PreDestroy method must be no-arg; method is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithPreDestroyOneArgs#y");
-        serviceInitializer.validate(configuration, listOf(d1));
+        serviceInitializer = new ServiceInitializer(configuration, listOf(d1));
+
+        // when
+        serviceInitializer.validate();
     }
 
 

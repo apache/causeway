@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.runtime.system.context;
 
-import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -58,21 +56,8 @@ public class IsisContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisContext.class);
 
+    //region > singleton
     private static IsisContext singleton;
-
-    private final IsisSessionFactory sessionFactory;
-    private final SessionClosePolicy sessionClosePolicy;
-
-    private static IsisConfiguration configuration;
-
-    /**
-     * Populated only if the metamodel was found to be invalid
-     */
-    private static MetaModelInvalidException metamodelInvalidException;
-
-    // ///////////////////////////////////////////////////////////
-    // Singleton & Constructor, shutdown
-    // ///////////////////////////////////////////////////////////
 
     /**
      * Returns the singleton providing access to the set of execution contexts.
@@ -95,6 +80,14 @@ public class IsisContext {
         singleton = null;
     }
 
+    //endregion
+
+
+    //region > metaModelInvalidExceptionIfAny (static)
+    /**
+     * Populated only if the metamodel was found to be invalid
+     */
+    private static MetaModelInvalidException metamodelInvalidException;
 
     public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
         return IsisContext.metamodelInvalidException;
@@ -102,9 +95,17 @@ public class IsisContext {
     public static void setMetaModelInvalidException(final MetaModelInvalidException metaModelInvalid) {
         IsisContext.metamodelInvalidException = metaModelInvalid;
     }
+    //endregion
 
+    private static IsisConfiguration configuration;
 
-    protected static enum SessionClosePolicy {
+    public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
+        return new IsisContext(sessionFactory);
+    }
+
+    //region > constructor, fields
+
+    protected enum SessionClosePolicy {
         /**
          * Sessions must be explicitly closed.
          *
@@ -117,6 +118,12 @@ public class IsisContext {
          */
         AUTO_CLOSE
     }
+
+
+
+    private final IsisSessionFactory sessionFactory;
+    private final SessionClosePolicy sessionClosePolicy;
+
 
 
     /**
@@ -141,7 +148,16 @@ public class IsisContext {
         this(SessionClosePolicy.AUTO_CLOSE, sessionFactory);
     }
 
+    /**
+     * As injected in constructor.
+     */
+    public final IsisSessionFactory getSessionFactoryInstance() {
+        return sessionFactory;
+    }
 
+    //endregion
+
+    //region > shutdown
 
     protected void shutdownInstance() {
         this.sessionFactory.shutdown();
@@ -154,20 +170,9 @@ public class IsisContext {
     }
 
 
-    // ///////////////////////////////////////////////////////////
-    // SessionFactory
-    // ///////////////////////////////////////////////////////////
+    //endregion
 
-    /**
-     * As injected in constructor.
-     */
-    public final IsisSessionFactory getSessionFactoryInstance() {
-        return sessionFactory;
-    }
-
-    // ///////////////////////////////////////////////////////////
-    // Policies
-    // ///////////////////////////////////////////////////////////
+    //region > Policies
 
     /**
      * Whether any open session can be automatically
@@ -192,9 +197,11 @@ public class IsisContext {
         closeSessionInstance();
     }
 
-    // ///////////////////////////////////////////////////////////
-    // open / close 
-    // ///////////////////////////////////////////////////////////
+    //endregion
+
+    //region > openSessionInstance / closeSessionInstance, getSessionInstance
+
+    private final ThreadLocal<IsisSession> currentSession = new ThreadLocal<>();
 
     /**
      * Creates a new {@link IsisSession} and binds into the current context.
@@ -210,26 +217,10 @@ public class IsisContext {
      *             if already opened.
      */
     public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
-        final Thread thread = Thread.currentThread();
-        synchronized (sessionsByThread) {
-            applySessionClosePolicy();
-            final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
-            }
-            saveSession(thread, session);
-            session.open();
-            return session;
-        }
-    }
-
-    private IsisSession saveSession(final Thread thread, final IsisSession session) {
-        synchronized (sessionsByThread) {
-            sessionsByThread.put(thread, session);
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("  saving session " + session + "; now have " + sessionsByThread.size() + " sessions");
-        }
+        applySessionClosePolicy();
+        final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
+        currentSession.set(session);
+        session.open();
         return session;
     }
 
@@ -251,34 +242,9 @@ public class IsisContext {
         final IsisSession isisSession = getSessionInstance();
         if (isisSession != null) {
             isisSession.close();
-            doClose();
+            currentSession.set(null);
         }
     }
-
-    /**
-     * Overridable hook method called from {@link #closeSessionInstance()},
-     * allowing subclasses to clean up (for example datastructures).
-     * 
-     * <p>
-     * The {@link #getSessionInstance() current} {@link IsisSession} will
-     * already have been {@link IsisSession#close() closed}.
-     */
-    protected void doClose() {
-        sessionsByThread.remove(Thread.currentThread());
-    }
-
-    /**
-     * Shutdown the application.
-     */
-    public void closeAllSessionsInstance() {
-        shutdownAllThreads();
-    }
-
-
-
-    // ///////////////////////////////////////////////////////////
-    // getSession()
-    // ///////////////////////////////////////////////////////////
 
     /**
      * Locates the current {@link IsisSession} from the threadlocal.
@@ -286,40 +252,12 @@ public class IsisContext {
      * @see #openSessionInstance(AuthenticationSession)
      */
     public IsisSession getSessionInstance() {
-        final Thread thread = Thread.currentThread();
-        return sessionsByThread.get(thread);
+        return currentSession.get();
     }
 
-    /**
-     * The {@link IsisSession} for specified {@link IsisSession#getId()}.
-     */
-    protected IsisSession getSessionInstance(final String executionContextId) {
-        for (final IsisSession data : sessionsByThread.values()) {
-            if (data.getId().equals(executionContextId)) {
-                return data;
-            }
-        }
-        return null;
-    }
+    //endregion
 
-    /**
-     * All known session Ids.
-     * 
-     * <p>
-     * Provided primarily for debugging.
-     */
-    public String[] allSessionIds() {
-        final String[] ids = new String[sessionsByThread.size()];
-        int i = 0;
-        for (final IsisSession data  : sessionsByThread.values()) {
-            ids[i++] = data.getId();
-        }
-        return ids;
-    }
-
-    // ///////////////////////////////////////////////////////////
-    // Static Convenience methods (session management)
-    // ///////////////////////////////////////////////////////////
+    //region > Static Convenience methods (session management)
 
 
     /**
@@ -340,34 +278,9 @@ public class IsisContext {
         getInstance().closeSessionInstance();
     }
 
-    /**
-     * Convenience method to return {@link IsisSession} for specified
-     * {@link IsisSession#getId()}.
-     * 
-     * <p>
-     * Provided primarily for debugging.
-     * 
-     * @see #getSessionInstance(String)
-     */
-    public static IsisSession getSession(final String sessionId) {
-        return getInstance().getSessionInstance(sessionId);
-    }
+    //endregion
 
-    /**
-     * Convenience method to close all sessions.
-     */
-    public static void closeAllSessions() {
-        LOG.info("closing all instances");
-        final IsisContext instance = getInstance();
-        if (instance != null) {
-            instance.closeAllSessionsInstance();
-        }
-    }
-
-    // ///////////////////////////////////////////////////////////
-    // Static Convenience methods (application scoped)
-    // ///////////////////////////////////////////////////////////
-
+    //region > Static Convenience methods (application scoped)
     /**
      * Convenience method returning the {@link IsisSessionFactory} of the
      * current {@link #getSession() session}.
@@ -432,10 +345,9 @@ public class IsisContext {
         return getSessionFactory().getOidMarshaller();
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////
-    // Static Convenience methods (session scoped)
-    // ///////////////////////////////////////////////////////////
+    //region > Static Convenience methods (session scoped)
 
     public static boolean inSession() {
         final IsisSession session = getInstance().getSessionInstance();
@@ -451,16 +363,6 @@ public class IsisContext {
             throw new IllegalStateException("No Session opened for this thread");
         }
         return session;
-    }
-
-    /**
-     * Convenience method to return the {@link #getSession() current}
-     * {@link IsisSession}'s {@link IsisSession#getId() id}.
-     * 
-     * @see IsisSession#getId()
-     */
-    public static String getSessionId() {
-        return getSession().getId();
     }
 
     /**
@@ -496,9 +398,9 @@ public class IsisContext {
         return getPersistenceSession().getTransactionManager();
     }
 
-    // ///////////////////////////////////////////////////////////
-    // Static Convenience methods (transaction scoped)
-    // ///////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Static Convenience methods (transaction scoped)
 
     public static boolean inTransaction() {
         if (inSession())
@@ -576,32 +478,8 @@ public class IsisContext {
         }
     }
 
+    //endregion
 
-
-    public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
-        return new IsisContext(sessionFactory);
-    }
-
-    // TODO: could convert this to a regular ThreadLocal, I think; except for the closeAllSessionsInstance() method...; is that method really needed?
-    private final Map<Thread, IsisSession> sessionsByThread = new IdentityHashMap<>();
-
-
-
-
-    // /////////////////////////////////////////////////////////
-    // Session
-    // /////////////////////////////////////////////////////////
-
-
-    protected void shutdownAllThreads() {
-        synchronized (sessionsByThread) {
-            for (final Map.Entry<Thread, IsisSession> entry : sessionsByThread.entrySet()) {
-                LOG.info("Shutting down thread: {}", entry.getKey().getName());
-                final IsisSession data = entry.getValue();
-                data.closeAll();
-            }
-        }
-    }
 
 
 }

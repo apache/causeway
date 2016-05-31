@@ -208,7 +208,12 @@ public class IsisSystem implements ApplicationScopedComponent {
                 persistenceSessionFactory.init();
 
                 // do postConstruct.  We store the initializer to do preDestroy on shutdown
-                this.serviceInitializer = initializeServices();
+
+                // validate
+                this.serviceInitializer = new ServiceInitializer(getConfiguration(), sessionFactory.getServices());
+                serviceInitializer.validate();
+
+                postConstructInSession(this.serviceInitializer);
 
                 installFixturesIfRequired();
 
@@ -234,28 +239,16 @@ public class IsisSystem implements ApplicationScopedComponent {
         return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
     }
 
-    /**
-     * @see #shutdownServices(ServiceInitializer)
-     */
-    private ServiceInitializer initializeServices() {
-
-        final List<Object> services = sessionFactory.getServices();
-
-        // validate
-        final ServiceInitializer serviceInitializer = new ServiceInitializer();
-        serviceInitializer.validate(getConfiguration(), services);
-
-        // call @PostConstruct (in a session)
+    private void postConstructInSession(final ServiceInitializer serviceInitializer) {
         IsisContext.openSession(new InitialisationSession());
         try {
             getTransactionManager().startTransaction();
             try {
                 serviceInitializer.postConstruct();
-
-                return serviceInitializer;
+                return;
             } catch(RuntimeException ex) {
                 getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
-                return serviceInitializer;
+                return;
             } finally {
                 // will commit or abort
                 getTransactionManager().endTransaction();
@@ -339,22 +332,18 @@ public class IsisSystem implements ApplicationScopedComponent {
     public void shutdown() {
         LOG.info("shutting down system");
 
-        shutdownServices(this.serviceInitializer);
+        preDestroyInSession(this.serviceInitializer);
 
-        IsisContext.closeAllSessions();
     }
 
-    /**
-     * @see #initializeServices()
-     */
-    private void shutdownServices(final ServiceInitializer serviceInitializer) {
+    private void preDestroyInSession(final ServiceInitializer serviceInitializer) {
 
         // may not be set if the metamodel validation failed during initialization
         if (serviceInitializer == null) {
             return;
         }
 
-        // call @PostDestroy (in a session)
+        // call @PreDestroy (in a session)
         IsisContext.openSession(new InitialisationSession());
         try {
             getTransactionManager().startTransaction();

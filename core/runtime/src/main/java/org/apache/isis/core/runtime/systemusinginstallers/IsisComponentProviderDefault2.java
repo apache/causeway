@@ -61,7 +61,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
             final List<Object> servicesOverride,
             final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride,
-            final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride) {
         super(deploymentType, appManifestIfAny, elseDefault(configurationOverride));
 
@@ -80,7 +79,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         this.authenticationManager = createAuthenticationManager();
         this.authorizationManager = createAuthorizationManager();
 
-        this.programmingModel = elseDefault(programmingModelOverride);
+        this.programmingModel = createDefaultProgrammingModel();
         this.metaModelValidator = elseDefault(metaModelValidatorOverride);
 
     }
@@ -93,10 +92,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         return configuration != null
                 ? (IsisConfigurationDefault) configuration
                 : new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
-    }
-
-    private ProgrammingModel elseDefault(final ProgrammingModel programmingModel) {
-        return programmingModel != null ? programmingModel : createDefaultProgrammingModel();
     }
 
     // TODO: this is duplicating logic in JavaReflectorInstaller; need to unify.

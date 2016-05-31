@@ -59,7 +59,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
         final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
         final IsisComponentProviderDefault2 componentProvider = new IsisComponentProviderDefault2(
-                DeploymentType.UNIT_TESTING, manifest, null, null, null, null, null);
+                DeploymentType.UNIT_TESTING, manifest, null, null, null, null);
 
         final IsisSystem isisSystem = new IsisSystem(componentProvider);
         try {

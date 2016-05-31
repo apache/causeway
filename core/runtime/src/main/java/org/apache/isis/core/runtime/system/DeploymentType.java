@@ -72,10 +72,6 @@ public class DeploymentType {
         IsisContext.createInstance(sessionFactory);
     }
 
-    public boolean shouldMonitor() {
-        return (this == SERVER) && isProduction();
-    }
-
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }

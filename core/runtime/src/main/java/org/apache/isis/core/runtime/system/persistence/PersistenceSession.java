@@ -319,7 +319,13 @@ public class PersistenceSession implements
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
         initServices();
+
+        // tell the proxy of all request-scoped services to instantiate the underlying
+        // services, store onto the thread-local and inject into them...
         startRequestOnRequestScopedServices();
+
+        // ... and invoke all @PostConstruct
+        postConstructOnRequestScopedServices();
 
         if(metricsService instanceof InstanceLifecycleListener) {
             final InstanceLifecycleListener metricsService = (InstanceLifecycleListener) this.metricsService;
@@ -348,23 +354,18 @@ public class PersistenceSession implements
         this.state = State.OPEN;
     }
 
-
-
-    private void startRequestOnRequestScopedServices() {
-
-        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-
-        // tell the proxy of all request-scoped services to instantiate the underlying
-        // services, store onto the thread-local and inject into them...
-        for (final Object service : registeredServices) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest(servicesInjector);
-            }
-        }
-        // ... and invoke all @PostConstruct
-        for (final Object service : registeredServices) {
+    private void postConstructOnRequestScopedServices() {
+        for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_postConstruct();
+            }
+        }
+    }
+
+    private void startRequestOnRequestScopedServices() {
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_startRequest(servicesInjector);
             }
         }
     }
@@ -424,10 +425,6 @@ public class PersistenceSession implements
         completeCommandFromInteractionAndClearDomainEvents();
         transactionManager.flushTransaction();
 
-        Bulk.InteractionContext.current.set(null);
-
-        endRequestOnRequestScopeServices();
-
         try {
             final IsisTransaction currentTransaction = transactionManager.getTransaction();
             if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
@@ -441,6 +438,15 @@ public class PersistenceSession implements
             // ignore
             LOG.error("close: failed to end transaction; continuing to avoid memory leakage");
         }
+
+        Bulk.InteractionContext.current.set(null);
+
+        // tell the proxy of all request-scoped services to invoke @PreDestroy
+        // (if any) on all underlying services stored on their thread-locals...
+        preDestroyOnRequestScopedServices();
+
+        // ... and then remove those underlying services from the thread-local
+        endRequestOnRequestScopeServices();
 
         try {
             persistenceManager.close();
@@ -468,18 +474,17 @@ public class PersistenceSession implements
     }
 
     private void endRequestOnRequestScopeServices() {
-        // tell the proxy of all request-scoped services to invoke @PreDestroy
-        // (if any) on all underlying services stored on their thread-locals...
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_preDestroy();
-            }
-        }
-
-        // ... and then remove those underlying services from the thread-local
         for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_endRequest();
+            }
+        }
+    }
+
+    private void preDestroyOnRequestScopedServices() {
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_preDestroy();
             }
         }
     }

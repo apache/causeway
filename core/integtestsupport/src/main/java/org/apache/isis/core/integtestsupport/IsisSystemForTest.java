@@ -75,6 +75,8 @@ import static org.junit.Assert.fail;
  */
 public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServiceProvider {
 
+    //region > Listener, ListenerAdapter
+
     public interface Listener {
 
         void init(IsisConfiguration configuration) throws Exception;
@@ -128,7 +130,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     }
 
-    // //////////////////////////////////////
+    //endregion
+
+    //region > getElseNull, get, set
 
     private static ThreadLocal<IsisSystemForTest> ISFT = new ThreadLocal<IsisSystemForTest>();
 
@@ -148,38 +152,15 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public static void set(IsisSystemForTest isft) {
         ISFT.set(isft);
     }
+    //endregion
 
-    // //////////////////////////////////////
+    //region > Builder
 
-    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
-
-
-    // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
-    private final AppManifest appManifestIfAny;
-    private final IsisConfiguration configurationOverride;
-    private final List<Object> servicesIfAny;
-    private final List<InstallableFixture> fixturesIfAny;
-    private final MetaModelValidator metaModelValidatorOverride;
-    private final ProgrammingModel programmingModelOverride;
-
-    // populated at #setupSystem
-    private IsisComponentProvider componentProvider;
-
-    private IsisSystem isisSystem;
-
-    private final AuthenticationRequest authenticationRequestIfAny;
-    private AuthenticationSession authenticationSession;
-
-    private List <Listener> listeners;
-
-    ////////////////////////////////////////////////////////////
-    // constructor
-    ////////////////////////////////////////////////////////////
 
     public static class Builder {
 
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
-        
+
         private IsisConfigurationDefault configuration = new IsisConfigurationDefault();
 
         private AppManifest appManifestIfAny;
@@ -189,7 +170,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private final List<Object> services = Lists.newArrayList();
         private final List<InstallableFixture> fixtures = Lists.newArrayList();
-        
+
         private final List <Listener> listeners = Lists.newArrayList();
 
         private org.apache.log4j.Level level;
@@ -212,8 +193,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
 
+        /**
+         * @deprecated - this is now a no-op because there is now only a single implementation of {@link ProgrammingModel}, so this is redundant.
+         */
+        @Deprecated
         public Builder with(ProgrammingModel programmingModel) {
-            this.programmingModelOverride = programmingModel;
             return this;
         }
 
@@ -270,7 +254,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             this.fixtures.addAll(Arrays.asList(fixtures));
             return this;
         }
-        
+
         public Builder withLoggingAt(org.apache.log4j.Level level) {
             this.level = level;
             return this;
@@ -281,7 +265,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     new IsisSystemForTest(
                             appManifestIfAny,
                             configuration,
-                            services, fixtures, programmingModelOverride,
+                            services, fixtures,
                             metaModelValidatorOverride,
                             authenticationRequest,
                             listeners);
@@ -328,12 +312,27 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return new Builder();
     }
 
+    //endregion
+
+    //region > constructor, fields
+
+    // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
+    private final AppManifest appManifestIfAny;
+    private final IsisConfiguration configurationOverride;
+    private final List<Object> servicesIfAny;
+    private final List<InstallableFixture> fixturesIfAny;
+    private final MetaModelValidator metaModelValidatorOverride;
+
+
+    private final AuthenticationRequest authenticationRequestIfAny;
+    private AuthenticationSession authenticationSession;
+
+
     private IsisSystemForTest(
             final AppManifest appManifestIfAny,
             final IsisConfiguration configurationOverride,
             final List<Object> servicesIfAny,
             final List<InstallableFixture> fixturesIfAny,
-            final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride,
             final AuthenticationRequest authenticationRequestIfAny,
             final List<Listener> listeners) {
@@ -341,15 +340,15 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         this.configurationOverride = configurationOverride;
         this.servicesIfAny = servicesIfAny;
         this.fixturesIfAny = fixturesIfAny;
-        this.programmingModelOverride = programmingModelOverride;
         this.metaModelValidatorOverride = metaModelValidatorOverride;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
         this.listeners = listeners;
     }
 
-    ////////////////////////////////////////////////////////////
-    // level
-    ////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > level
+    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
 
     /**
      * The level to use for the root logger if fallback (ie a <tt>logging.properties</tt> file cannot be found).
@@ -362,10 +361,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         this.level = level;
     }
 
-    ////////////////////////////////////////////////////////////
-    // setup, teardown
-    ////////////////////////////////////////////////////////////
-    
+    //endregion
+
+    //region > setup (also componentProvider)
+
+    // populated at #setupSystem
+    private IsisComponentProvider componentProvider;
 
     /**
      * Intended to be called from a test's {@link Before} method.
@@ -402,7 +403,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     servicesIfAny,
                     fixturesIfAny,
                     configurationOverride,
-                    programmingModelOverride,
                     metaModelValidatorOverride
             );
 
@@ -432,7 +432,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             }
         }
 
-
         final AuthenticationManager authenticationManager = IsisContext.getAuthenticationManager();
         authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
@@ -449,14 +448,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         fixturesInstaller.installFixtures();
     }
 
-    private enum FireListeners {
-        FIRE,
-        DONT_FIRE;
-        public boolean shouldFire() {
-            return this == FIRE;
-        }
-    }
-
     public DomainObjectContainer getContainer() {
         for (Object service : IsisContext.getSessionFactory().getServices()) {
             if(service instanceof DomainObjectContainer) {
@@ -466,14 +457,37 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         throw new IllegalStateException("Could not locate DomainObjectContainer");
     }
 
+    //endregion
+
+    //region > isisSystem (populated during setup)
+    private IsisSystem isisSystem;
+
+    /**
+     * The {@link IsisSystem} created during {@link #setUpSystem()}.
+     */
+    public IsisSystem getIsisSystem() {
+        return isisSystem;
+    }
+
+    /**
+     * The {@link AuthenticationSession} created during {@link #setUpSystem()}.
+     */
+    public AuthenticationSession getAuthenticationSession() {
+        return authenticationSession;
+    }
+
+    //endregion
+
+    //region > teardown
+
     /**
      * Intended to be called from a test's {@link After} method.
      */
     public void tearDownSystem() throws Exception {
-        tearDownSystem(FireListeners.FIRE);
+        closeSession(FireListeners.FIRE);
     }
 
-    private void tearDownSystem(final FireListeners fireListeners) throws Exception {
+    private void closeSession(final FireListeners fireListeners) throws Exception {
         if(fireListeners.shouldFire()) {
             firePreTeardownSystem();
         }
@@ -498,6 +512,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         firePostBounceSystem();
     }
 
+    //endregion
+
+    //region > openSession, closeSession
     public void openSession() throws Exception {
         openSession(authenticationSession);
 
@@ -511,9 +528,20 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         IsisContext.closeSession();
     }
 
-    ////////////////////////////////////////////////////////////
-    // listeners
-    ////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > listeners
+
+    private List <Listener> listeners;
+
+    private enum FireListeners {
+        FIRE,
+        DONT_FIRE;
+        public boolean shouldFire() {
+            return this == FIRE;
+        }
+    }
+
 
     private void fireInitAndPreSetupSystem(boolean firstTime) throws Exception {
         if(firstTime) {
@@ -555,31 +583,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             listener.postBounceSystem();
         }
     }
+    //endregion
 
-    
-    ////////////////////////////////////////////////////////////
-    // properties
-    ////////////////////////////////////////////////////////////
-
-    /**
-     * The {@link IsisSystem} created during {@link #setUpSystem()}.
-     */
-    public IsisSystem getIsisSystem() {
-        return isisSystem;
-    }
-
-    /**
-     * The {@link AuthenticationSession} created during {@link #setUpSystem()}.
-     */
-    public AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
-
-
-
-    ////////////////////////////////////////////////////////////
-    // Convenience for tests
-    ////////////////////////////////////////////////////////////
+    //region > Convenience for tests
 
     public ObjectSpecification loadSpecification(Class<?> cls) {
         return getIsisSystem().getSessionFactory().getSpecificationLoader().loadSpecification(cls);
@@ -641,9 +647,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
-    ////////////////////////////////////////////////////////////
-    // JUnit @Rule integration
-    ////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > JUnit @Rule integration
 
     @Override
     public Statement apply(final Statement base, final Description description) {
@@ -666,8 +672,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         };
     }
 
+    //endregion
 
-    
+    //region > beginTran, endTran, commitTran, abortTran
+
     public void beginTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
@@ -791,6 +799,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
+    //endregion
+
+    //region > getService, replaceService
 
     /* (non-Javadoc)
      * @see org.apache.isis.core.integtestsupport.ServiceProvider#getService(java.lang.Class)
@@ -815,11 +826,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         servicesInjector.replaceService(originalService, replacementService);
     }
 
+    //endregion
 
-    ////////////////////////////////////////////////////////////
-    // Fixture management 
-    // (for each test, rather than at bootstrap)
-    ////////////////////////////////////////////////////////////
+    //region > Fixture management (for each test, rather than at bootstrap)
 
     /**
      * @deprecated - use {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service instead.
@@ -847,11 +856,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
+    //endregion
 
-    ////////////////////////////////////////////////////////////
-    // Dependencies
-    ////////////////////////////////////////////////////////////
-    
+    //region > Dependencies
+
     protected IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
@@ -878,5 +886,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         // no-op
     }
 
-    
+    //endregion
+
 }
