@@ -212,6 +212,7 @@ public abstract class IntegrationTestAbstract {
                     try {
                         base.evaluate();
                         isft.endTran();
+                        isft.bounceSystem();
                     } catch(final Throwable e) {
                         isft.bounceSystem();
                         final List<Throwable> causalChain = Throwables.getCausalChain(e);
