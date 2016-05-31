@@ -85,16 +85,15 @@ some elements are copied directly:
     ...
     <xs:complexType name="memberExecutionDto" abstract="true">              <!--1-->
         <xs:sequence>
-            <xs:element name="id" type="xs:string"/>                        <!--2-->
-            <xs:element name="sequence" type="xs:int"/>                     <!--3-->
-            <xs:element name="target" type="com:oidDto"/>                   <!--4-->
-            <xs:element name="memberIdentifier" type="xs:string"/>          <!--5-->
-            <xs:element name="user" type="xs:string"/>                      <!--6-->
-            <xs:element name="title" type="xs:string"/>                     <!--7-->
-            <xs:element name="metrics" type="metricsDto"/>                  <!--8-->
-            <xs:element name="threw" type="exceptionDto"                    <!--9-->
+            <xs:element name="sequence" type="xs:int"/>                     <!--2-->
+            <xs:element name="target" type="com:oidDto"/>                   <!--3-->
+            <xs:element name="memberIdentifier" type="xs:string"/>          <!--4-->
+            <xs:element name="user" type="xs:string"/>                      <!--5-->
+            <xs:element name="title" type="xs:string"/>                     <!--6-->
+            <xs:element name="metrics" type="metricsDto"/>                  <!--7-->
+            <xs:element name="threw" type="exceptionDto"                    <!--8-->
                         minOccurs="0" maxOccurs="1"/>
-            <xs:element name="childExecutions" minOccurs="0" maxOccurs="1"> <!--10-->
+            <xs:element name="childExecutions" minOccurs="0" maxOccurs="1"> <!--9-->
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="execution" type="memberExecutionDto"
@@ -109,18 +108,17 @@ some elements are copied directly:
 </xs:schema>
 ----
 <1> the `memberExecutionDto` is an abstract type
-<2> uniquely identifies this execution, in the format `transactionId.sequence`.  In many cases a transaction may have
-only a single action invocation, but if the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] is in use then
-there may be many sub-executions.
-<3> uniquely identifies this execution within the transaction.
-<4> the target object, corresponding to one of the elements of the `targets` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
-<5> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
-<6> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
-<7> the current "human-friendly" title of the target object
-<8> the set of metrics captured for this execution, of type `metricsDto` defined xref:rgcms.adoc#_rgcms_schema-ixn_ancillary[below].
-<9> if the action invocation/property edit threw an exception, then this is captured here.
-<10> if any sub-actions or sub-edits were performed via the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`], then these are captured in the `childExecutions` element.
-<11> the `interactionType` attribute indicates whether the member is an action or a property (similar attribute exists for the "cmd" schema).
+<2> uniquely identifies this execution within the transaction.  Can be combined with `transactionId` to create a unique
+identifier (across all other interaction executions and also changed objects events) of this particular interaction
+execution.
+<3> the target object, corresponding to one of the elements of the `targets` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
+<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
+<5> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
+<6> the current "human-friendly" title of the target object
+<7> the set of metrics captured for this execution, of type `metricsDto` defined xref:rgcms.adoc#_rgcms_schema-ixn_ancillary[below].
+<8> if the action invocation/property edit threw an exception, then this is captured here.
+<9> if any sub-actions or sub-edits were performed via the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`], then these are captured in the `childExecutions` element.
+<10> the `interactionType` attribute indicates whether the member is an action or a property (similar attribute exists for the "cmd" schema).
 
 
 The `actionInvocationDto` and `propertyEditDto` are the concrete subtypes:

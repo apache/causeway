@@ -27,7 +27,9 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -168,6 +170,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final AuditingServiceInternal auditingServiceInternal;
     private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
     private final MetricsService metricsService;
+    private final QueryResultsCache queryResultsCache;
 
     private final UUID transactionId;
         
@@ -187,6 +190,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
         this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
         this.metricsService = lookupService(MetricsService.class);
+        this.queryResultsCache = lookupService(QueryResultsCache.class);
 
         this.transactionId = transactionId;
 
@@ -398,14 +402,14 @@ public class IsisTransaction implements TransactionScopedComponent {
             publishingServiceInternal.publishObjects();
             doFlush();
 
-
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
-            changedObjectsServiceInternal.resetForNextTransaction();
-            if(metricsService instanceof WithTransactionScope) {
-                ((WithTransactionScope) metricsService).resetForNextTransaction();
+            List<WithTransactionScope> withTransactionScopes = servicesInjector
+                    .lookupServices(WithTransactionScope.class);
+            for (WithTransactionScope withTransactionScope : withTransactionScopes) {
+                withTransactionScope.resetForNextTransaction();
             }
         }
     }

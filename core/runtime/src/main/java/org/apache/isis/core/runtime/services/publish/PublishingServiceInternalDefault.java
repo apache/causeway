@@ -203,7 +203,11 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final String userName = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        return new PublishedObjectsDefault(transactionUuid, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
+        final Interaction interaction = interactionContext.getInteraction();
+
+        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
+
+        return new PublishedObjectsDefault(transactionUuid, nextEventSequence, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
     }
 
     //endregion

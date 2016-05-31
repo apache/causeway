@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.WithTransactionScope;
+import org.apache.isis.applib.services.WithTransactionScope;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped

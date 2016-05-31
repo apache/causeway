@@ -19,13 +19,18 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import javax.enterprise.context.RequestScoped;
+
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.WithTransactionScope;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -39,7 +44,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  */
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
-public class QueryResultsCache {
+public class QueryResultsCache implements WithTransactionScope {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCache.class);
 
@@ -188,4 +193,19 @@ public class QueryResultsCache {
         String hitOrMiss = cacheValue != null ? "HIT" : "MISS";
         LOG.debug( hitOrMiss + ": " + cacheKey.toString());
     }
+
+    /**
+     * Not API: for framework to call at end of transaction, to clear out the cache.
+     *
+     * <p>
+     * (This service really ought to be considered
+     * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
+     * </p>
+     */
+    @Programmatic
+    @Override
+    public void resetForNextTransaction() {
+        cache.clear();
+    }
+
 }

@@ -23,7 +23,7 @@
            xmlns="http://isis.apache.org/schema/ixn"
            xmlns:cmd="http://isis.apache.org/schema/cmd"
            xmlns:com="http://isis.apache.org/schema/common"
-        >
+>
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
     <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.0.xsd"/>
@@ -49,7 +49,7 @@
                 </xs:element>
                 <xs:element name="transactionId" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>Transaction id within which this member was interacted with (action invoked/property edited); can be used to locate the corresponding Command object (which may have been persisted).
+                        <xs:documentation>Unique identifier of the interaction which this member was interacted with (action invoked/property edited); can be used to locate the corresponding Command object (which may have been persisted).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
@@ -65,15 +65,9 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="id" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Unique identifier for this individual member interaction, in the format &quot;transactionId.sequence&quot; (where 'transactionId' is part of the owning 'memberInteractionMementoDto' and 'sequence' is defined below).
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="sequence" type="xs:int">
                 <xs:annotation>
-                    <xs:documentation>Unique sequence number of an individual member interaction within a transaction.  There could be many such member interactions (within a single transaction ) for two reasons: either a single top-level interaction could call sub-interactions (by virtue of WrapperFactory), or there may be a bulk action interaction against many targets.
+                    <xs:documentation>Unique sequence number of an individual member interaction within the overall interaction.  There could be many such member interactions (within a single transaction) for two reasons: either a single top-level interaction could call sub-interactions (by virtue of WrapperFactory), or there may be a bulk action interaction against many targets.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

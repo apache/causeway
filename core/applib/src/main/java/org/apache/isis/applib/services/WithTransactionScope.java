@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.system.transaction;
+package org.apache.isis.applib.services;
 
 /**
  * Hacky workaround since we don't currently support @TransactionScoped.

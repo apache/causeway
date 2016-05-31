@@ -62,7 +62,7 @@ public class Roundtrip {
         final MemberExecutionDto executionDto = InteractionDtoUtils.newActionInvocation(
                 sequence, targetBookmark, targetTitle,
                 actionIdentifier, parameterDtos,
-                user, transactionId);
+                user);
 
         final InteractionDto interactionDto = new InteractionDto();
 

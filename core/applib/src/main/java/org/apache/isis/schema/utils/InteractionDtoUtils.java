@@ -225,11 +225,10 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String actionIdentifier,
             final List<ParamDto> parameterDtos,
-            final String user,
-            final String transactionId) {
+            final String user) {
 
         return (ActionInvocationDto) newMemberExecutionDto(
-                InteractionType.ACTION_INVOCATION, transactionId, sequence,
+                InteractionType.ACTION_INVOCATION, sequence,
                 targetBookmark, targetTitle, actionIdentifier,
                 parameterDtos, null,
                 user);
@@ -241,10 +240,9 @@ public final class InteractionDtoUtils {
             final String targetTitle,
             final String propertyIdentifier,
             final ValueWithTypeDto newValueDto,
-            final String user,
-            final String transactionId) {
+            final String user) {
         return (PropertyEditDto) newMemberExecutionDto(
-                InteractionType.PROPERTY_EDIT, transactionId, sequence,
+                InteractionType.PROPERTY_EDIT, sequence,
                 targetBookmark, targetTitle, propertyIdentifier,
                 null, newValueDto,
                 user);
@@ -252,7 +250,6 @@ public final class InteractionDtoUtils {
 
     private static MemberExecutionDto newMemberExecutionDto(
             final InteractionType type,
-            final String transactionId,
             final int sequence,
             final Bookmark targetBookmark,
             final String targetTitle,
@@ -278,7 +275,6 @@ public final class InteractionDtoUtils {
         }
 
         executionDto.setSequence(sequence);
-        executionDto.setId(transactionId + "." + sequence);
 
         final OidDto target = targetBookmark.toOidDto();
         executionDto.setTarget(target);

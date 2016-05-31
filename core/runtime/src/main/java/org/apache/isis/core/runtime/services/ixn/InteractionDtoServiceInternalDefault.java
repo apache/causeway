@@ -81,8 +81,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,
                 actionDto.getMemberIdentifier(),
-                parameterDtos, currentUser,
-                transactionIdStr);
+                parameterDtos, currentUser
+        );
     }
 
     @Override @Programmatic
@@ -107,7 +107,6 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ObjectAdapter newValueAdapterIfAny) {
 
         final Interaction interaction = interactionContext.getInteraction();
-        final UUID transactionId = interaction.getTransactionId();
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
@@ -124,13 +123,11 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         commandDtoServiceInternal.addPropertyValue(property, propertyDto, newValueAdapterIfAny);
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
 
-        final String transactionIdStr = transactionId.toString();
-
         return InteractionDtoUtils.newPropertyEdit(
                 nextEventSequence, targetBookmark, targetTitle,
                 propertyDto.getMemberIdentifier(),
-                newValue, currentUser,
-                transactionIdStr);
+                newValue, currentUser
+        );
     }
 
     @Inject

@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.transaction.WithTransactionScope;
+import org.apache.isis.applib.services.WithTransactionScope;
 
 @RequestScoped
 @DomainService(nature = NatureOfService.DOMAIN)
