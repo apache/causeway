@@ -32,6 +32,7 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -64,6 +65,13 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final IsisSystem isisSystem = new IsisSystem(componentProvider);
         try {
             isisSystem.init();
+            if(!isisSystem.isMetaModelValid()) {
+                MetaModelInvalidException metaModelInvalidException = IsisContext
+                        .getMetaModelInvalidExceptionIfAny();
+                Set<String> validationErrors = metaModelInvalidException.getValidationErrors();
+                    context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
+                return;
+            }
             IsisContext.doInSession(new Runnable() {
                 @Override
                 public void run() {

@@ -45,7 +45,8 @@ public class IsisMojoValidate extends IsisMojoAbstract {
         this.metaModelProcessor = new ValidateMetaModelProcessor();
     }
 
-    @Override protected void doExecute(final ContextForMojo context, final IsisSystem isisSystem)
+    @Override
+    protected void doExecute(final ContextForMojo context, final IsisSystem isisSystem)
             throws MojoFailureException {
         final SpecificationLoader specificationLoader =
                 isisSystem.getSessionFactory().getSpecificationLoader();
