@@ -29,15 +29,19 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 /**
  * The {@link Aggregated @Aggregated} annotation is no longer supported; this facet factory prevents its use.
+ *
+ * @deprecated
  */
+@Deprecated
 public class AggregatedAnnotationFactory extends FacetFactoryAbstract implements
-        MetaModelValidatorRefiner {
+        MetaModelValidatorRefiner, DeprecatedMarker {
 
     public AggregatedAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);

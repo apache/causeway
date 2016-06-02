@@ -66,7 +66,7 @@ import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFace
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
@@ -319,7 +319,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(new AggregatedAnnotationFactory());
         
-        addFactory(new BookmarkPolicyFacetViaBookmarkableAnnotationFactory());
+        addFactory(new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory());
         addFactory(new HomePageFacetAnnotationFactory());
         addFactory(new ChoicesFacetFromBoundedMarkerInterfaceFactory());
         addFactory(new DebugFacetAnnotationFactory());

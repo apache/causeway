@@ -47,9 +47,12 @@ import com.google.common.collect.Lists;
  * are present on an entity, then this one takes precedence.
  *
  * <p>
- *     An alternative is to use the <code>Xxx.layout.json</code> file, where <code>Xxx</code> is the domain object name.
+ *     The recommended alternative is to use the <code>Xxx.layout.xml</code> file, where <code>Xxx</code> is the domain object name.
  * </p>
+ *
+ * @deprecated
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

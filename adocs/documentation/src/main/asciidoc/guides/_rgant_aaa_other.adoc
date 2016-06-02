@@ -25,12 +25,6 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |UI
 |
 
-|xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
-|Grouping of properties into groups, and organizing of properties, collections into columns.
-|UI
-|Yes
-
-
 |xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
 |Ordering of properties, collections and actions, and also associating actions with either a property or a collection.
 |UI

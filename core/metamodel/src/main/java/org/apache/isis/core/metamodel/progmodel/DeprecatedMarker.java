@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.marker;
+package org.apache.isis.core.metamodel.progmodel;
 
-import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Marker interface to show that an object can always be changed, even after
- * persisted.
- * 
- * Use {@link Immutable} annotation in preference to this marker interface.
+ * Marker interface for deprecated facet factories, so that they can be ignored via a configuration property.
  *
- * @deprecated
+ * <p>
+ *     Using this rather than the presence of <tt>@Deprecated</tt> annotation, as want better visibility.
+ * </p>
  */
-@Deprecated
-public interface NeverImmutable {
+public interface DeprecatedMarker {
 
 }

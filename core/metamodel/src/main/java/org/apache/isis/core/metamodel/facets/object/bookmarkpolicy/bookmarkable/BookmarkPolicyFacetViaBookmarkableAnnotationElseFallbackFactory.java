@@ -42,15 +42,11 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-/**
- * @deprecated
- */
-@Deprecated
-public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner {
+public class BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Bookmarkable.class);
 
-    public BookmarkPolicyFacetViaBookmarkableAnnotationFactory() {
+    public BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory() {
         super(FeatureType.OBJECTS_AND_ACTIONS);
     }
 

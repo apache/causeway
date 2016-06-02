@@ -168,9 +168,16 @@ For domain service, use xref:rgant.adoc#_rgant-DomainService_nature[`@DomainServ
 
 |`@MemberGroups`
 |Layout of properties and collections of a domain object or view model object.
-|xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
+|xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic `.layout.xml`] files
 |UI
 |Yes
+
+|@MemberGroupLayout`
+|Grouping of properties into groups, and organizing of properties, collections into columns.
+|xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic `.layout.xml`] files
+|UI
+|Yes
+
 
 |`@MultiLine`
 |Render string property over multiple lines (a textarea rather than a textbox).

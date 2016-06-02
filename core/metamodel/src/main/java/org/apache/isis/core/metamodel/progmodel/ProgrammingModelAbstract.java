@@ -122,7 +122,11 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         assertNotInitialized();
         if(deprecatedPolicy == DeprecatedPolicy.IGNORE) {
             if( facetFactoryInstanceOrClass instanceof FacetFactory) {
-                if(facetFactoryInstanceOrClass.getClass().isAnnotationPresent(Deprecated.class)) {
+                if(facetFactoryInstanceOrClass instanceof DeprecatedMarker) {
+                    return;
+                }
+            } else if (facetFactoryInstanceOrClass instanceof Class) {
+                if(DeprecatedMarker.class.isAssignableFrom((Class)facetFactoryInstanceOrClass)) {
                     return;
                 }
             }

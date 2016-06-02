@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -50,7 +51,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
  * @deprecated
  */
 @Deprecated
-public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, DeprecatedMarker {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(SortedBy.class);
 

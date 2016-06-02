@@ -25,7 +25,10 @@ import org.apache.isis.applib.annotation.Immutable;
  * Marker interface to show that an object cannot be changed once persisted.
  * 
  * Use {@link Immutable} annotation in preference to this marker interface.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface ImmutableOncePersisted {
 
 }

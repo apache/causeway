@@ -23,13 +23,14 @@ import org.apache.isis.applib.marker.Auditable;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 
 
 /**
  * @deprecated
  */
 @Deprecated
-public class AuditableFacetMarkerInterfaceFactory extends FacetFactoryAbstract {
+public class AuditableFacetMarkerInterfaceFactory extends FacetFactoryAbstract implements DeprecatedMarker {
 
     public AuditableFacetMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);

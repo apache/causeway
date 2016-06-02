@@ -29,13 +29,18 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NotPersistableFacetMarkerInterfaceFactory extends FacetFactoryAbstract implements
-        MetaModelValidatorRefiner {
+        MetaModelValidatorRefiner, DeprecatedMarker {
 
     public NotPersistableFacetMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);
