@@ -102,7 +102,7 @@ some elements are copied directly:
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
-        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--11-->
+        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--10-->
     </xs:complexType>
     ...
 </xs:schema>
