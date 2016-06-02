@@ -1,0 +1,36 @@
+[[_ugbtb_deployment_docker]]
+= Docker (`1.13.0-SNAPSHOT`)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+In addition to loading the regular configuration properties from `WEB-INF` directory (described
+xref:rgcfg.adoc#_rgcfg_configuration-files[here]), Apache Isis will also (as of `1.13.0-SNAPSHOT`)load the
+`overrides.properties` file.
+
+This file is treated slightly differently than the other configuration files; it is loaded last, and any configuration
+properties defined in it will _override_ any configuration properties already read from other files (this includes
+any properties specified via the command line).
+
+While the regular configuration files are "baked into" the application WAR file, the `overrides.properties` file is
+created dynamically as part of the Docker `ENTRYPOINT` script, eg as documented in the
+link:https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/[Dockerfile best practices].
+
+This, Docker can be supported relatively trivially:
+
+* use `mvn` (as currently) to create a WAR file; set up with the `pom.xml` with the JDBC drivers of all DB servers that
+  you might want to connect to (hsqldb, sql server, postgresql etc)
+
+* in the `Dockerfile`, specify a base image containing Tomcat 8 + Java 8 (say)
+
+* also in the `Dockerfile`, arrange it such that the WAR file is "exploded" (there is no need to copy over the WAR file itself)
+
+* write a script that:
+** explodes the WAR file, copying it into the Tomcat's `webapp` directory.  There is no need to copy
+over the WAR file itself.
+** creates the `overrides.properties` file from any input arguments, placing it into the `WEB-INF` directory
+** sets all files to read-only
+
+* use `ENTRYPOINT` (and probably also `CMD`) to invoke above script.
+
