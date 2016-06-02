@@ -99,15 +99,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     //region > initializeIfRequired
 
-    private boolean initialized;
+    enum InitializationState {
+        NOT_INITIALIZED,
+        INITIALIZED
+    }
+    private InitializationState initializationState = InitializationState.NOT_INITIALIZED;
 
-    private void initializeIfRequired() {
-        if(initialized) {
+    private synchronized void initializeIfRequired() {
+        if(initializationState == InitializationState.INITIALIZED) {
             return;
         }
+        initializationState = InitializationState.INITIALIZED;
         final Collection<ObjectSpecification> specifications = primeMetaModel();
         createApplicationFeaturesFor(specifications);
-        initialized = true;
     }
 
     private Collection<ObjectSpecification> primeMetaModel() {
