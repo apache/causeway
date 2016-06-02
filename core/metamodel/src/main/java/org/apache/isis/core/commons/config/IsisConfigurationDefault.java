@@ -109,36 +109,12 @@ public class IsisConfigurationDefault implements IsisConfiguration, Configuratio
     }
     
     /**
-     * Add the properties from an existing Properties object; if the key exists in the configuration then will be ignored.
-     *
-     * @see #addPerPolicy(Properties, ContainsPolicy)
-     * @see #put(Properties)
+     * Add the properties from an existing Properties object.
      */
-    public void add(final Properties properties) {
-        addPerPolicy(properties, ContainsPolicy.IGNORE);
-    }
-
-    /**
-     * Add the properties from an existing Properties object; if the key exists in the configuration then will be overwritten.
-     *
-     * @see #add(Properties)
-     * @see #addPerPolicy(Properties, ContainsPolicy)
-     */
-    public void put(final Properties properties) {
-        addPerPolicy(properties, ContainsPolicy.OVERWRITE);
-    }
-
-    /**
-     * Add the properties from an existing Properties object; if the key exists in the configuration then the
-     * {@link ContainsPolicy} will be applied.
-     *
-     * @see #add(Properties)
-     * @see #put(Properties)
-     */
-    private void addPerPolicy(final Properties properties, final ContainsPolicy policy) {
+    public void add(final Properties properties, final ContainsPolicy containsPolicy) {
         for(Object key: properties.keySet()) {
             Object value = properties.get(key);
-            addPerPolicy((String) key, (String) value, policy);
+            addPerPolicy((String) key, (String) value, containsPolicy);
         }
     }
     
@@ -387,17 +363,17 @@ public class IsisConfigurationDefault implements IsisConfiguration, Configuratio
     public IsisConfiguration getProperties(final String withPrefix) {
         final int prefixLength = "".length();
 
-        final Properties pp = new Properties();
-        final Enumeration<?> e = properties.keys();
+        final Properties properties = new Properties();
+        final Enumeration<?> e = this.properties.keys();
         while (e.hasMoreElements()) {
             final String key = (String) e.nextElement();
             if (key.startsWith(withPrefix)) {
                 final String modifiedKey = key.substring(prefixLength);
-                pp.put(modifiedKey, properties.get(key));
+                properties.put(modifiedKey, this.properties.get(key));
             }
         }
         final IsisConfigurationDefault isisConfigurationDefault = new IsisConfigurationDefault(resourceStreamSource);
-        isisConfigurationDefault.add(pp);
+        isisConfigurationDefault.add(properties, ContainsPolicy.IGNORE);
         return isisConfigurationDefault;
     }
 

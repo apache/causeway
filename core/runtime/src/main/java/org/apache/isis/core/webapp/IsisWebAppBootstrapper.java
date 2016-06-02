@@ -199,7 +199,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final IsisConfigurationBuilder isisConfigurationBuilder,
             final DeploymentType deploymentType) {
         final String resourceName = deploymentType.name().toLowerCase() + ".properties";
-        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE);
+        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
     }
 
 

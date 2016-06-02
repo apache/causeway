@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.cli.BasicParser;
@@ -33,13 +32,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.isis.core.commons.config.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
@@ -71,7 +67,6 @@ public final class IsisConfigurationBuilder {
     //region > constructor, fields
 
     private final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
-    private final List<ConfigurationResourceAndPolicy> configurationResources = Lists.newArrayList();
 
     private final IsisConfigurationDefault configuration;
     private boolean locked;
@@ -109,37 +104,46 @@ public final class IsisConfigurationBuilder {
     }
 
     public void addDefaultConfigurationResources() {
-        addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, NotFoundPolicy.FAIL_FAST);
-        addConfigurationResource(ConfigurationConstants.WEB_CONFIG_FILE, NotFoundPolicy.CONTINUE); //web.properties
-        addConfigurationResource("war.properties", NotFoundPolicy.CONTINUE);
+        IsisConfigurationDefault.ContainsPolicy ignorePolicy = IsisConfigurationDefault.ContainsPolicy.IGNORE;
+        NotFoundPolicy continuePolicy = NotFoundPolicy.CONTINUE;
 
-        addConfigurationResource("viewer_wicket.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("viewer_restful.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("viewer_restfulobjects.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, NotFoundPolicy.FAIL_FAST, ignorePolicy);
 
-        addConfigurationResource("persistor_datanucleus.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("persistor.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource(ConfigurationConstants.WEB_CONFIG_FILE, continuePolicy, ignorePolicy);
+        addConfigurationResource("war.properties", continuePolicy, ignorePolicy);
 
-        addConfigurationResource("authentication_shiro.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("authentication_bypass.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("authentication.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("viewer_wicket.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("viewer_restful.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("viewer_restfulobjects.properties", continuePolicy, ignorePolicy);
 
-        addConfigurationResource("authorization_shiro.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("authorization_bypass.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("authorization.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("persistor_datanucleus.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("persistor.properties", continuePolicy, ignorePolicy);
 
-        addConfigurationResource("reflector_java.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("reflector.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("authentication_shiro.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("authentication_bypass.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("authentication.properties", continuePolicy, ignorePolicy);
 
-        addConfigurationResource("fixtures-installer_configuration.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("fixtures-installer.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("authorization_shiro.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("authorization_bypass.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("authorization.properties", continuePolicy, ignorePolicy);
 
-        addConfigurationResource("services-installer_annotation.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("services-installer_configuration.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("reflector_java.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("reflector.properties", continuePolicy, ignorePolicy);
 
-        addConfigurationResource("services-installer_configuration-and-annotation.properties", NotFoundPolicy.CONTINUE);
-        addConfigurationResource("services-installer.properties", NotFoundPolicy.CONTINUE);
+        addConfigurationResource("fixtures-installer_configuration.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("fixtures-installer.properties", continuePolicy, ignorePolicy);
+
+        addConfigurationResource("services-installer_annotation.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("services-installer_configuration.properties", continuePolicy, ignorePolicy);
+
+        addConfigurationResource("services-installer_configuration-and-annotation.properties", continuePolicy, ignorePolicy);
+        addConfigurationResource("services-installer.properties", continuePolicy, ignorePolicy);
+
+        // both override and overrides are accepted (because I keep forgetting which)
+        addConfigurationResource("override.properties", NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.OVERWRITE);
+        addConfigurationResource("overrides.properties", NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.OVERWRITE);
     }
+
 
     //endregion
 
@@ -173,12 +177,12 @@ public final class IsisConfigurationBuilder {
      * {@link NotFoundPolicy} determines whether an exception is thrown or not.
      *
      * <p>
-     * Must be called before {@link IsisConfigurationBuilder#getConfiguration()}; the resource is
-     * actually read on {@link IsisConfigurationBuilder#getConfiguration()}.
+     * Must be called before {@link IsisConfigurationBuilder#getConfiguration()}.
      */
     public synchronized void addConfigurationResource(
             final String configurationResource,
-            final NotFoundPolicy notFoundPolicy) {
+            final NotFoundPolicy notFoundPolicy,
+            final IsisConfigurationDefault.ContainsPolicy containsPolicy) {
 
         ensureNotLocked();
 
@@ -187,8 +191,7 @@ public final class IsisConfigurationBuilder {
                     "checking availability of configuration resource: %s, notFoundPolicy: %s",
                     configurationResource, notFoundPolicy));
         }
-        loadConfigurationResource(configurationResource, notFoundPolicy);
-        configurationResources.add(new ConfigurationResourceAndPolicy(configurationResource, notFoundPolicy));
+        loadConfigurationResource(configurationResource, notFoundPolicy, containsPolicy);
     }
 
     /**
@@ -201,12 +204,14 @@ public final class IsisConfigurationBuilder {
      */
     private void loadConfigurationResource(
             final String configurationResource,
-            final NotFoundPolicy notFoundPolicy) {
+            final NotFoundPolicy notFoundPolicy,
+            final IsisConfigurationDefault.ContainsPolicy containsPolicy) {
+
         try {
             final PropertiesReader propertiesReader =
                     loadConfigurationResource(resourceStreamSourceChain, configurationResource);
             LOG.info("loading properties from " + configurationResource);
-            configuration.add(propertiesReader.getProperties());
+            configuration.add(propertiesReader.getProperties(), containsPolicy);
             configurationResourcesFound.add(configurationResource);
             return;
         } catch (final IOException ignore) {
@@ -362,7 +367,8 @@ public final class IsisConfigurationBuilder {
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("resourceStream", resourceStreamSourceChain)
-                .add("configResources", configurationResources).toString();
+                .add("configResources", configurationResourcesFound)
+                .toString();
     }
 
     //endregion

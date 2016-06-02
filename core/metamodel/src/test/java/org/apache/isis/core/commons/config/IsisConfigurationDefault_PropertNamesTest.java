@@ -39,12 +39,12 @@ public class IsisConfigurationDefault_PropertNamesTest extends TestCase {
         final Properties p = new Properties();
         p.put("isis.bool", "on");
         p.put("isis.str", "original");
-        configuration.add(p);
+        configuration.add(p, IsisConfigurationDefault.ContainsPolicy.IGNORE);
 
         final Properties p1 = new Properties();
         p1.put("isis.int", "1");
         p1.put("isis.str", "replacement");
-        configuration.add(p1);
+        configuration.add(p1, IsisConfigurationDefault.ContainsPolicy.IGNORE);
     }
 
     public void testDuplicatedPropertyIsNotReplaced() {

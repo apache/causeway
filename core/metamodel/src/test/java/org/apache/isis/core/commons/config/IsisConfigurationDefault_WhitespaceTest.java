@@ -42,7 +42,7 @@ public class IsisConfigurationDefault_WhitespaceTest extends TestCase {
         p.put("properties.trailingSpaces", "twoSpacesAfterThis  ");
         p.put("properties.trailingTab", "oneTabAfterThis\t");
         p.put("properties.trailingTabAndSpaces", "oneTabAndTwoSpacesAfterThis\t  ");
-        configuration.add(p);
+        configuration.add(p, IsisConfigurationDefault.ContainsPolicy.IGNORE);
 
     }
 
