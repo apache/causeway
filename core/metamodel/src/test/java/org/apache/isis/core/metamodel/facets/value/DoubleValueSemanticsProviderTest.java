@@ -49,7 +49,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         });
 
         holder = new FacetHolderImpl();
-        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockContext));
+        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockServicesInjector));
 
         doubleObj = new Double(32.5d);
         allowMockAdapterToReturn(doubleObj);

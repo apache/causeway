@@ -52,7 +52,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         allowMockAdapterToReturn(float1);
 
         holder = new FacetHolderImpl();
-        setValue(value = new FloatWrapperValueSemanticsProvider(holder, mockContext));
+        setValue(value = new FloatWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test

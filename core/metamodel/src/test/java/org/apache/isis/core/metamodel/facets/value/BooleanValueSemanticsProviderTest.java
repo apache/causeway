@@ -43,7 +43,7 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
         facetHolder = new FacetHolderImpl();
-        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder, mockContext));
+        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder, mockServicesInjector));
     }
 
     @Test

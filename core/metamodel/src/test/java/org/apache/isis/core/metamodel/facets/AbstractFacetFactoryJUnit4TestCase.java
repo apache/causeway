@@ -110,6 +110,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
 
         context.checking(new Expectations() {{
+
+            allowing(mockServicesInjector).getDeploymentCategoryProvider();
+            will(returnValue(mockDeploymentCategoryProvider));
+
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
 
@@ -127,6 +131,9 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
+
+            allowing(mockServicesInjector).getAuthenticationSessionProvider();
+            will(returnValue(mockAuthenticationSessionProvider));
 
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));

@@ -54,7 +54,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
         TestClock.initialize();
         date = new Date(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder, mockContext) {
+        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder, mockServicesInjector) {
             @Override
             protected String defaultFormat() {
                 return "iso";

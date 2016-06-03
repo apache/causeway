@@ -49,7 +49,7 @@ public class TimeStampValueSemanticsProviderTest extends ValueSemanticsProviderA
         TestClock.initialize();
         timestamp = new TimeStamp(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new TimeStampValueSemanticsProvider(holder, mockContext));
+        setValue(adapter = new TimeStampValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Override

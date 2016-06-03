@@ -126,10 +126,16 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).getAuthenticationSessionProvider();
+            will(returnValue(mockAuthenticationSessionProvider));
+
             allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(stubConfigurationServiceInternal));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
+            will(returnValue(mockDeploymentCategoryProvider));
+
+            allowing(mockServicesInjector).getDeploymentCategoryProvider();
             will(returnValue(mockDeploymentCategoryProvider));
 
             allowing(mockServicesInjector).getSpecificationLoader();
@@ -574,7 +580,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -594,7 +599,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
@@ -635,7 +639,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -657,7 +660,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {

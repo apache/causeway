@@ -40,7 +40,8 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     private FacetHolder holder;
 
     @Before
-    public void setUpObjects() throws Exception {
+    public void setUp() throws Exception {
+        super.setUp();
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
@@ -52,7 +53,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         });
 
         holder = new FacetHolderImpl();
-        setValue(new BigIntegerValueSemanticsProvider(holder, mockContext));
+        setValue(new BigIntegerValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test

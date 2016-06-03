@@ -134,32 +134,6 @@ public abstract class SpecificationLoaderTestAbstract {
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
 
     @Test
-    public void testLayoutMetadataReaderEmptyList() {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("illegal argument, expected: is not an empty collection");
-
-        new SpecificationLoader(DeploymentCategory.PRODUCTION ,
-                stubConfiguration,
-                new ProgrammingModelFacetsJava5(stubConfiguration),
-                new MetaModelValidatorDefault(),
-                Lists.<LayoutMetadataReader>newArrayList(),
-                stubServicesInjector);
-    }
-
-    @Test
-    public void testLayoutMetadataReaderNull() {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("illegal argument, expected: is not null");
-
-        new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                stubConfiguration,
-                new ProgrammingModelFacetsJava5(stubConfiguration),
-                new MetaModelValidatorDefault(),
-                null,
-                stubServicesInjector);
-    }
-
-    @Test
     public void testCollectionFacet() throws Exception {
         final Facet facet = specification.getFacet(CollectionFacet.class);
         Assert.assertNull(facet);

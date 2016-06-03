@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.value;
 
 import java.util.Locale;
 
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -66,13 +68,11 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected FacetHolder mockFacetHolder;
     @Mock
-    protected IsisConfiguration mockConfiguration;
-    @Mock
-    protected ServicesInjector mockContext;
+    protected ConfigurationServiceInternal mockConfiguration;
     @Mock
     protected ServicesInjector mockServicesInjector;
     @Mock
-    protected AdapterManager mockAdapterManager;
+    protected PersistenceSessionServiceInternal mockAdapterManager;
     @Mock
     protected SpecificationLoader mockSpecificationLoader;
     @Mock
@@ -94,6 +94,15 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
                 allowing(mockConfiguration).getString("isis.locale");
                 will(returnValue(null));
+
+                allowing(mockServicesInjector).getConfigurationServiceInternal();
+                will(returnValue(mockConfiguration));
+
+                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+                will(returnValue(mockAuthenticationSessionProvider));
+
+                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                will(returnValue(mockAdapterManager));
 
                 allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));

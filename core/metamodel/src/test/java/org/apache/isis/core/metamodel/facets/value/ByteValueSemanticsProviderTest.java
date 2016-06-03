@@ -53,7 +53,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
             }
         });
 
-        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockContext));
+        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test

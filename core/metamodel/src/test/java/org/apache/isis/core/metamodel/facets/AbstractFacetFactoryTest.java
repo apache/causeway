@@ -129,8 +129,17 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).getAuthenticationSessionProvider();
+            will(returnValue(mockAuthenticationSessionProvider));
+
+            allowing(mockServicesInjector).getAuthenticationSessionProvider();
+            will(returnValue(mockAuthenticationSessionProvider));
+
             allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
+
+            allowing(mockServicesInjector).getDeploymentCategoryProvider();
+            will(returnValue(mockDeploymentCategoryProvider));
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));

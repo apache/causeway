@@ -41,7 +41,8 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
     private FacetHolder holder;
 
     @Before
-    public void setUpObjects() throws Exception {
+    public void setUp() throws Exception {
+        super.setUp();
         context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.decimal");
@@ -53,7 +54,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
         allowMockAdapterToReturn(bigDecimal);
         holder = new FacetHolderImpl();
 
-        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockContext));
+        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test

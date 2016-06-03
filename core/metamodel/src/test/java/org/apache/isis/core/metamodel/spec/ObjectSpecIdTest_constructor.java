@@ -28,13 +28,13 @@ public class ObjectSpecIdTest_constructor {
         final ObjectSpecId objectSpecId = new ObjectSpecId("CUS");
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=AssertionError.class)
     public void cannotBeEmpty() throws Exception {
         new ObjectSpecId("");
     }
 
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=AssertionError.class)
     public void cannotBeNull() throws Exception {
         new ObjectSpecId(null);
     }

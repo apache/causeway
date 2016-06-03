@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -84,6 +85,9 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Mock
     ServiceRegistry2 mockServiceRegistry;
 
+    @Mock
+    SpecificationLoader mockSpecificationLoader;
+
     ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
     @Before
@@ -91,11 +95,11 @@ public class ApplicationFeatureRepositoryDefaultTest {
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault();
         applicationFeatureRepository.container = mockContainer;
         applicationFeatureRepository.serviceRegistry = mockServiceRegistry;
+        applicationFeatureRepository.specificationLoader = mockSpecificationLoader;
 
         final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
         applicationFeatureRepository.applicationFeatureFactory = applicationFeatureFactory;
         applicationFeatureFactory.factoryService = mockFactoryService;
-
 
 
         mockActThatIsHidden = context.mock(ObjectAction.class, "mockActThatIsHidden");
@@ -263,13 +267,27 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
     public static class AddClassParent extends ApplicationFeatureRepositoryDefaultTest {
 
+        @Before
+        public void setUp() throws Exception {
+            super.setUp();
+
+            context.checking(new Expectations() {{
+                allowing(mockServiceRegistry).getRegisteredServices();
+                will(returnValue(Lists.newArrayList()));
+
+                allowing(mockSpecificationLoader).allSpecifications();
+                will(returnValue(Lists.newArrayList()));
+            }});
+
+        }
+
         @Test
         public void parentNotYetEncountered() throws Exception {
 
             // given
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
 
-            // then
+            // expecting
             final ApplicationFeature newlyCreatedParent = new ApplicationFeature();
 
             context.checking(new Expectations() {{
@@ -296,6 +314,8 @@ public class ApplicationFeatureRepositoryDefaultTest {
             applicationFeatureRepository.packageFeatures.put(packageId, pkg);
 
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+
+
 
             // when
             final ApplicationFeatureId applicationFeatureId = applicationFeatureRepository.addClassParent(classFeatureId);

@@ -52,7 +52,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         });
 
         holder = new FacetHolderImpl();
-        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockContext));
+        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
