@@ -257,15 +257,24 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             final ObjectAction objectAction = (ObjectAction) objectMember;
 
-            final ObjectAction actualObjectAction;
-            final ObjectAdapter actualTargetAdapter;
+            ObjectAction actualObjectAction;
+            ObjectAdapter actualTargetAdapter;
 
             final MixinFacet mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
             if(mixinFacet != null) {
 
-                // rather than invoke on a (transient) mixin, instead figure out the corresponding ObjectActoinMixedIn
-                actualTargetAdapter = mixinFacet.mixedIn(targetAdapter);
-                actualObjectAction = determineMixinAction(objectAction, actualTargetAdapter);
+                try {
+                    // rather than invoke on a (transient) mixin, instead figure out the corresponding ObjectActoinMixedIn
+                    actualTargetAdapter = mixinFacet.mixedIn(targetAdapter);
+                    actualObjectAction = determineMixinAction(objectAction, actualTargetAdapter);
+                    
+                } catch(RuntimeException ex) {
+
+                    // revert to original behaviour
+                    // TODO: need to explore why this could happen...
+                    actualTargetAdapter = targetAdapter;
+                    actualObjectAction = objectAction;
+                }
 
             } else {
                 actualTargetAdapter = targetAdapter;
