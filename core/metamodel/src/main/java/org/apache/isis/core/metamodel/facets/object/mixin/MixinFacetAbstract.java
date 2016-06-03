@@ -20,8 +20,12 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
@@ -83,6 +87,34 @@ public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements 
             // shouldn't happen; ought we to fail-fast instead?
             return null;
         }
+    }
+
+    @Override
+    public ObjectAdapter mixedIn(ObjectAdapter mixinAdapter) {
+
+        final Object mixin = mixinAdapter.getObject();
+
+        final Field[] declaredFields = mixinType.getDeclaredFields();
+        for (final Field declaredField : declaredFields) {
+            if(declaredField.getType().isAssignableFrom(constructorType)) {
+                declaredField.setAccessible(true);
+                try {
+                    Object o = declaredField.get(mixin);
+                    return getAdapterManager().adapterFor(o);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("Unable to access " + declaredField + " for " + getTitleService().titleOf(mixin));
+                }
+            }
+        }
+        throw new RuntimeException("Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixin) + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
+    }
+
+    private AdapterManager getAdapterManager() {
+        return servicesInjector.getPersistenceSessionServiceInternal();
+    }
+
+    private TitleService getTitleService() {
+        return servicesInjector.lookupService(TitleService.class);
     }
 
 }

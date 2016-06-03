@@ -32,6 +32,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Where;
@@ -253,11 +255,41 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
             }
 
-            final ObjectAction noa = (ObjectAction) objectMember;
-            return handleActionMethod(targetAdapter, args, noa, contributeeMember);
+            final ObjectAction objectAction = (ObjectAction) objectMember;
+
+            final ObjectAction actualObjectAction;
+            final ObjectAdapter actualTargetAdapter;
+
+            final MixinFacet mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
+            if(mixinFacet != null) {
+
+                // rather than invoke on a (transient) mixin, instead figure out the corresponding ObjectActoinMixedIn
+                actualTargetAdapter = mixinFacet.mixedIn(targetAdapter);
+                actualObjectAction = determineMixinAction(objectAction, actualTargetAdapter);
+
+            } else {
+                actualTargetAdapter = targetAdapter;
+                actualObjectAction = objectAction;
+            }
+
+            return handleActionMethod(actualTargetAdapter, args, actualObjectAction, contributeeMember);
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
+    }
+
+    private ObjectAction determineMixinAction(final ObjectAction objectAction, final ObjectAdapter actualTargetAdapter) {
+        final ObjectSpecification specification = actualTargetAdapter.getSpecification();
+        final List<ObjectAction> objectActions = specification.getObjectActions(Contributed.INCLUDED);
+        for (final ObjectAction action : objectActions) {
+            if(action instanceof ObjectActionMixedIn) {
+                ObjectActionMixedIn mixedInAction = (ObjectActionMixedIn) action;
+                if(mixedInAction.hasMixinAction(objectAction)) {
+                    return mixedInAction;
+                }
+            }
+        }
+        throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
     }
 
     public InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -618,11 +650,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode().shouldExecute()) {
             final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-            final ObjectAdapter mixedInAdapter = null; // mixin action will automatically fill in.
-            final ObjectAdapter returnedAdapter =
-                    objectAction.execute(
-                            targetAdapter, mixedInAdapter, argAdapters,
-                            interactionInitiatedBy);
+
+            final ObjectAdapter mixedInAdapter = null; // if a mixin action, then it will automatically fill in.
+
+            final ObjectAdapter returnedAdapter = objectAction.execute(
+                    targetAdapter, mixedInAdapter, argAdapters,
+                    interactionInitiatedBy);
 
             return ObjectAdapter.Util.unwrap(returnedAdapter);
         }

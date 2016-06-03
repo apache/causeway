@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -33,6 +34,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public interface MixinFacet extends Facet {
 
     boolean isMixinFor(Class<?> candidateDomainType);
+
+    /**
+     * Returns the (adapter of the) domain object that a mixin adapter contains.
+     */
+    ObjectAdapter mixedIn(ObjectAdapter mixinAdapter);
 
     /**
      * Returns the mixin around the provided domain object
