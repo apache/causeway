@@ -33,7 +33,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Configuration holder for all {@link org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker} configurations.
+ * Configuration holder for all {@link TextFieldWithDateTimePicker} configurations.
  * Provides settings for <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime picker</a>
  * JavaScript widget
  */

@@ -30,16 +30,14 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     private final Class<T> cls;
     protected final String datePattern;
     protected final String dateTimePattern;
-    protected final String datePickerPattern;
 
     protected final int adjustBy;
     
 
-    protected DateConverterAbstract(Class<T> cls, String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
+    protected DateConverterAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
         this.cls = cls;
         this.datePattern = datePattern;
         this.dateTimePattern = dateTimePattern;
-        this.datePickerPattern = datePickerPattern;
         this.adjustBy = adjustBy;
     }
 
@@ -52,16 +50,12 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     public String getDatePattern(Locale locale) {
         return datePattern;
     }
+
     @Override
     public String getDateTimePattern(Locale locale) {
         return dateTimePattern;
     }
-    
-    @Override
-    public String getDatePickerPattern(Locale locale) {
-        return datePickerPattern;
-    }
-    
+
     @Override
     public T convertToObject(String value, Locale locale) throws ConversionException {
         return value != null? doConvertToObject(value, locale): null;

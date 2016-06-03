@@ -18,20 +18,112 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
+import de.agilecoders.wicket.core.util.Attributes;
+
 import java.util.Locale;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
-public class TextFieldWithDateTimePicker<T> extends TextFieldWithDatePicker<T> {
+/**
+ * A text input field that is used as a date or date/time picker.
+ * It uses <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime picker</a>
+ * JavaScript widget
+ *
+ * @param <T> The type of the date/time
+ */
+public class TextFieldWithDateTimePicker<T> extends TextField<T> implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;
 
+    protected final DateConverter<T> converter;
+
+    private final DateTimeConfig config;
+
     public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter) {
-        super(id, model, type, converter);
+        this(id, model, type, converter, new DateTimeConfig());
     }
 
-    protected String getPattern(DateConverter<T> converter, Locale locale) {
-        return converter.getDateTimePattern(locale);
+    public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter, DateTimeConfig config) {
+        super(id, model, type);
+
+        setOutputMarkupId(true);
+
+        this.converter = converter;
+
+        String datePickerPattern = converter.getDateTimePattern(getLocale());
+
+        // convert Java (SimpleDateFormat|DateTimeFormat) format to Moment.js format
+        datePickerPattern = datePickerPattern.replace('d', 'D');
+        datePickerPattern = datePickerPattern.replace('y', 'Y');
+        config.withFormat(datePickerPattern);
+
+        config.calendarWeeks(true);
+        if (datePickerPattern.contains("HH")) {
+            config.sideBySide(true);
+        }
+        this.config = config;
+    }
+
+    @Override
+    public T convertToObject(String value, Locale locale) {
+        return converter.convertToObject(value, locale);
+    }
+
+    @Override
+    public String convertToString(T value, Locale locale) {
+        return converter.convertToString(value, locale);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <C> IConverter<C> getConverter(Class<C> type) {
+        // we use isAssignableFrom rather than a simple == to handle
+        // the persistence of JDO/DataNucleus:
+        // if persisting a java.sql.Date, the object we are given is actually a
+        // org.datanucleus.store.types.simple.SqlDate (a subclass of java.sql.Date)
+        if (converter.getConvertableClass().isAssignableFrom(type)) {
+            return (IConverter<C>) this;
+        }
+        return super.getConverter(type);
+    }
+
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+
+        checkComponentTag(tag, "input");
+        Attributes.set(tag, "type", "text");
+    }
+
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+
+        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/bootstrap-datetimepicker.css")));
+
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/moment.js")));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/bootstrap-datetimepicker.js")));
+
+        response.render(OnDomReadyHeaderItem.forScript(createScript(config)));
+    }
+
+    /**
+     * creates the initializer script.
+     *
+     * @return initializer script
+     */
+    private CharSequence createScript(final DateTimeConfig config) {
+        return $(this).chain("datetimepicker", config).get();
     }
 }

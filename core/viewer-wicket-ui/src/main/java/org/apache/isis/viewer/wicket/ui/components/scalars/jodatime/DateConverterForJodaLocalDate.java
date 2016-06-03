@@ -30,11 +30,11 @@ public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaLocalDate(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDatePattern(), adjustBy);
+        this(settings.getDatePattern(), adjustBy);
     }
     
-    private DateConverterForJodaLocalDate(String datePattern, String datePickerPattern, int adjustBy) {
-        super(LocalDate.class, datePattern, datePattern, datePickerPattern, adjustBy);
+    private DateConverterForJodaLocalDate(String datePattern, int adjustBy) {
+        super(LocalDate.class, datePattern, datePattern, adjustBy);
     }
 
     @Override

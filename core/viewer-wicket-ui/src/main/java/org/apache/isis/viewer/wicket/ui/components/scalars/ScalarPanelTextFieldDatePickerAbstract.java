@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker;
+import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
@@ -70,7 +70,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     protected TextField<T> createTextField(final String id) {
-        return new TextFieldWithDatePicker<>(id, newTextFieldValueModel(), cls, converter);
+        return new TextFieldWithDateTimePicker<>(id, newTextFieldValueModel(), cls, converter);
     }
 
     @Override
@@ -136,16 +136,6 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         });
     }
 
-    
-    protected String getDatePattern() {
-        return converter.getDatePattern(getLocale());
-    }
-    protected String getDateTimePattern() {
-        return converter.getDateTimePattern(getLocale());
-    }
-    protected String getDatePickerPattern() {
-        return converter.getDatePickerPattern(getLocale());
-    }
     
     @Inject
     private WicketViewerSettings settings;

@@ -42,11 +42,4 @@ public interface DateConverter<T> extends IConverter<T> {
      */
     String getDateTimePattern(Locale locale);
     
-    /**
-     * For the JQuery UI Date Picker.
-     * 
-     * <p>
-     * For example, <tt>dd-mm-yy</tt> (corresponds to <tt>dd-MM-yyyy</tt> for {@link SimpleDateFormat}).
-     */
-    String getDatePickerPattern(Locale locale);
 }

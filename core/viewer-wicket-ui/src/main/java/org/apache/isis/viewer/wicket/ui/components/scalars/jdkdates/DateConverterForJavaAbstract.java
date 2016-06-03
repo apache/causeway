@@ -26,7 +26,7 @@ public abstract class DateConverterForJavaAbstract<T extends java.util.Date> ext
     private static final long serialVersionUID = 1L;
     
     public DateConverterForJavaAbstract(final Class<T> cls, final String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
-        super(cls, datePattern, dateTimePattern, datePickerPattern, adjustBy);
+        super(cls, datePattern, dateTimePattern, adjustBy);
     }
     
     protected SimpleDateFormat newSimpleDateFormatUsingDatePattern() {
