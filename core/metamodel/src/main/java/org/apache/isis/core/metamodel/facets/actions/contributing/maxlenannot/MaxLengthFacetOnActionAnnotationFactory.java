@@ -68,7 +68,7 @@ public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstrac
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        validator.setConfiguration((IsisConfigurationDefault)servicesInjector.lookupService(ConfigurationServiceInternal.class));
+        validator.setConfiguration(servicesInjector.lookupService(ConfigurationServiceInternal.class));
     }
 
 

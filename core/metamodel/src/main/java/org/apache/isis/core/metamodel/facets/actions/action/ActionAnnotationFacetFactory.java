@@ -208,9 +208,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getDeploymentCategory(), getConfiguration(), servicesInjector,
-                                getAuthenticationSessionProvider(), adapterManager,
-                                transactionStateProviderInternal
+                                servicesInjector
                         ), processMethodContext);
             } else
             // deprecated (but more recently)
@@ -218,27 +216,21 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getDeploymentCategory(), getConfiguration(), servicesInjector,
-                                getAuthenticationSessionProvider(), adapterManager,
-                                transactionStateProviderInternal
+                                servicesInjector
                         ), processMethodContext);
             } else
             // current
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), getConfiguration(),
-                        servicesInjector, getAuthenticationSessionProvider(),
-                        adapterManager, transactionStateProviderInternal
+                        servicesInjector
                 );
             } else
             // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), getConfiguration(),
-                        servicesInjector, getAuthenticationSessionProvider(),
-                        adapterManager, transactionStateProviderInternal
+                        servicesInjector
                 );
             }
             FacetUtil.addFacet(actionInvocationFacet);

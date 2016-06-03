@@ -110,23 +110,18 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final IsisConfiguration configuration,
-            final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager,
-            final TransactionStateProviderInternal transactionStateProviderInternal) {
+            final ServicesInjector servicesInjector) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
         this.onType = onType;
         this.returnType = returnType;
-        this.deploymentCategory = deploymentCategory;
-        this.authenticationSessionProvider = authenticationSessionProvider;
-        this.adapterManager = adapterManager;
+        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
+        this.adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
-        this.configuration = configuration;
-        this.transactionStateProviderInternal = transactionStateProviderInternal;
+        this.configuration = servicesInjector.getConfigurationServiceInternal();
+        this.transactionStateProviderInternal = servicesInjector.lookupService(TransactionStateProviderInternal.class);
         this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
 
     }

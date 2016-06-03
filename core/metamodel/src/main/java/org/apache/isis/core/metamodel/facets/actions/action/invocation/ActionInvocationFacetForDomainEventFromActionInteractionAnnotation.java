@@ -44,13 +44,8 @@ public class ActionInvocationFacetForDomainEventFromActionInteractionAnnotation
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final IsisConfiguration isisConfiguration,
-            final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager,
-            final TransactionStateProviderInternal transactionStateProviderInternal) {
-        super(eventType, method, onType, returnType, holder, deploymentCategory, isisConfiguration, servicesInjector, authenticationSessionProvider, adapterManager,
-                transactionStateProviderInternal);
+            final ServicesInjector servicesInjector) {
+        super(eventType, method, onType, returnType, holder, servicesInjector
+        );
     }
 }
