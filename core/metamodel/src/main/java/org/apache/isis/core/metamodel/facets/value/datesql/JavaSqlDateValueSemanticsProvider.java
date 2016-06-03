@@ -25,12 +25,12 @@ import java.util.Calendar;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.value.date.DateValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
@@ -47,11 +47,11 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public JavaSqlDateValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
+    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
         allowMockAdapterToReturn(bigDecimal);
         holder = new FacetHolderImpl();
 
-        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

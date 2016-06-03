@@ -32,7 +32,8 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -48,10 +49,10 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     private static final int TYPICAL_LENGTH = 18;
 
     @SuppressWarnings("unchecked")
-    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE, configuration, context);
+    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final ServicesInjector context) {
+        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutability, equalByContent, (T) DEFAULT_VALUE, context);
 
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.datetime");
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.datetime");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

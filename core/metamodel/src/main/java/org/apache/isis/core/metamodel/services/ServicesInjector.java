@@ -36,6 +36,8 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -499,6 +501,22 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return specificationLoader != null
                 ? specificationLoader
                 : (specificationLoader = lookupService(SpecificationLoader.class));
+    }
+
+    private DeploymentCategoryProvider deploymentCategoryProvider;
+    @Programmatic
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return deploymentCategoryProvider != null
+                ? deploymentCategoryProvider
+                : (deploymentCategoryProvider = lookupService(DeploymentCategoryProvider.class));
+    }
+
+    private AuthenticationSessionProvider authenticationSessionProvider;
+    @Programmatic
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider != null
+                ? authenticationSessionProvider
+                : (authenticationSessionProvider = lookupService(AuthenticationSessionProvider.class));
     }
 
     private PersistenceSessionServiceInternal persistenceSessionServiceInternal;

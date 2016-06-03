@@ -76,11 +76,11 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     }
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return servicesInjector.lookupService(AuthenticationSessionProvider.class);
+        return servicesInjector.getAuthenticationSessionProvider();
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
+        return servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration() {

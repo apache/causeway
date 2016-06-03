@@ -53,7 +53,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
             }
         });
 
-        setValue(value = new LongWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new LongWrapperValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

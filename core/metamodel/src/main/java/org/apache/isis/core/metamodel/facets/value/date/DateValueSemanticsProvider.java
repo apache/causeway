@@ -23,9 +23,9 @@ import java.util.Date;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<org.apache.isis.applib.value.Date> {
 
@@ -38,11 +38,11 @@ public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstra
      * {@link EncoderDecoder}.
      */
     public DateValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public DateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, org.apache.isis.applib.value.Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
+    public DateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, org.apache.isis.applib.value.Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 
     @Override

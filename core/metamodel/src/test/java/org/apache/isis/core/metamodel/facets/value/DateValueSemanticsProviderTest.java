@@ -51,7 +51,7 @@ public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         TestClock.initialize();
         date = new Date(2001, 2, 4);
         holder = new FacetHolderImpl();
-        setValue(adapter = new DateValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new DateValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

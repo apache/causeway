@@ -22,12 +22,11 @@ package org.apache.isis.core.metamodel.facets.value.string;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements StringValueFacet {
 
@@ -43,11 +42,11 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
      * {@link EncoderDecoder}.
      */
     public StringValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public StringValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, String.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public StringValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, String.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -109,8 +109,7 @@ public class ParseableFacetUsingParserTest {
                 return null;
             }
         };
-        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder,
-                mockServicesInjector, mockAdapterManager);
+        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder, mockServicesInjector);
     }
 
     @Ignore

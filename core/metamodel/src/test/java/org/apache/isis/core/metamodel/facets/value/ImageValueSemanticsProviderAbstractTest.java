@@ -67,7 +67,7 @@ public class ImageValueSemanticsProviderAbstractTest {
 class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int[][]> {
 
     TestImageSemanticsProvider(final FacetHolder holder) {
-        super(holder, null, null, null);
+        super(holder, null, null);
     }
 
     @Override

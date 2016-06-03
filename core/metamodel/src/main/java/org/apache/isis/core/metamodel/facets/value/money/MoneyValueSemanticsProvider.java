@@ -29,14 +29,13 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
 
@@ -77,14 +76,14 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
      * {@link EncoderDecoder}.
      */
     public MoneyValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public MoneyValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Money.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public MoneyValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, Money.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
 
         final String property = ConfigurationConstants.ROOT + "value.money.currency";
-        defaultCurrencyCode = configuration.getString(property, LOCAL_CURRENCY_CODE);
+        defaultCurrencyCode = getConfiguration().getString(property, LOCAL_CURRENCY_CODE);
     }
 
     // //////////////////////////////////////////////////////////////////

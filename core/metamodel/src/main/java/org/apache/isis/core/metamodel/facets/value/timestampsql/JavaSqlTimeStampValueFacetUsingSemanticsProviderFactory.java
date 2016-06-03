@@ -39,7 +39,7 @@ public class JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory extends Val
         if (type != java.sql.Timestamp.class) {
             return;
         }
-        addFacets(new JavaSqlTimeStampValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new JavaSqlTimeStampValueSemanticsProvider(holder, getContext()));
     }
 
 }

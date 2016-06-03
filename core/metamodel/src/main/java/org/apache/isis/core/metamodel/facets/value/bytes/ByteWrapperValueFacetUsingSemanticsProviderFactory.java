@@ -36,7 +36,7 @@ public class ByteWrapperValueFacetUsingSemanticsProviderFactory extends ValueFac
         if (type != Byte.class) {
             return;
         }
-        addFacets(new ByteWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new ByteWrapperValueSemanticsProvider(holder, getContext()));
     }
 
 }

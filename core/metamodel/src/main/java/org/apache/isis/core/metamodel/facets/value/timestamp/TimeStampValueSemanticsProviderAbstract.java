@@ -30,8 +30,9 @@ import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -44,9 +45,9 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
     }
 
     @SuppressWarnings("unchecked")
-    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.timestamp");
+    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
+        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, context);
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.timestamp");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

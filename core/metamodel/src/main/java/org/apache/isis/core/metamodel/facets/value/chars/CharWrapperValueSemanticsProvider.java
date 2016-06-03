@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value.chars;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class CharWrapperValueSemanticsProvider extends CharValueSemanticsProviderAbstract {
 
@@ -32,11 +32,11 @@ public class CharWrapperValueSemanticsProvider extends CharValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public CharWrapperValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public CharWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Character.class, configuration, context);
+    public CharWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, Character.class, context);
     }
 
 }

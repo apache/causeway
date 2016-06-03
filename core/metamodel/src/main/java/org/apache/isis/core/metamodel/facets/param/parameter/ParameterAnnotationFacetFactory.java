@@ -206,7 +206,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
+        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         maxLengthValidator.setConfiguration(configuration);
         mustSatisfyValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);

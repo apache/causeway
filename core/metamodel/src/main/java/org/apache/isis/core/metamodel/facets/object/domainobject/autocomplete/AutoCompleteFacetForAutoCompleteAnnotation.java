@@ -37,10 +37,7 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
     public static AutoCompleteFacet create(
             final AutoComplete annotation,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
+            final ServicesInjector servicesInjector) {
 
         if(annotation == null) {
             return null;
@@ -49,8 +46,8 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
         final Class<?> repositoryClass = annotation.repository();
         final String actionName = annotation.action();
 
-        return new AutoCompleteFacetForAutoCompleteAnnotation(holder, repositoryClass, actionName, deploymentCategory,
-                specificationLoader, servicesInjector, adapterManager
+        return new AutoCompleteFacetForAutoCompleteAnnotation(holder, repositoryClass, actionName,
+                servicesInjector
         );
     }
 
@@ -58,12 +55,8 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
             final FacetHolder holder,
             final Class<?> repositoryClass,
             final String actionName,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
-        super(holder, repositoryClass, actionName, deploymentCategory, specificationLoader, servicesInjector,
-                adapterManager
+            final ServicesInjector servicesInjector) {
+        super(holder, repositoryClass, actionName, servicesInjector
         );
     }
 

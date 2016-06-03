@@ -196,16 +196,14 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final AutoComplete annotation = Annotations.getAnnotation(processClassContext.getCls(), AutoComplete.class);
         Facet facet = autoCompleteValidator.flagIfPresent(
                 AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, facetHolder,
-                        getDeploymentCategory(), getSpecificationLoader(),
-                        servicesInjector, persistenceSessionServiceInternal
+                        servicesInjector
                 ));
 
         // else check from @DomainObject(auditing=...)
         if(facet == null) {
             facet = AutoCompleteFacetForDomainObjectAnnotation.create(
-                    domainObject, facetHolder, getDeploymentCategory(),
-                    getSpecificationLoader(), servicesInjector,
-                    getAuthenticationSessionProvider(), persistenceSessionServiceInternal
+                    domainObject, facetHolder,
+                    servicesInjector
             );
         }
 

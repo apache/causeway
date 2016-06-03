@@ -36,7 +36,7 @@ public class CharPrimitiveValueFacetUsingSemanticsProviderFactory extends ValueF
         if (type != char.class) {
             return;
         }
-        addFacets(new CharPrimitiveValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new CharPrimitiveValueSemanticsProvider(holder, getContext()));
     }
 
 }

@@ -50,7 +50,7 @@ public class JavaSqlTimeStampValueSemanticsProviderTest extends ValueSemanticsPr
         TestClock.initialize();
         timestamp = new Timestamp(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new JavaSqlTimeStampValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new JavaSqlTimeStampValueSemanticsProvider(holder, mockContext));
     }
 
     @Override

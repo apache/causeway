@@ -38,7 +38,7 @@ public class UUIDValueFacetUsingSemanticsProviderFactory extends ValueFacetUsing
         if (type != UUID.class) {
             return;
         }
-        addFacets(new UUIDValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new UUIDValueSemanticsProvider(holder, getContext()));
     }
 
 }

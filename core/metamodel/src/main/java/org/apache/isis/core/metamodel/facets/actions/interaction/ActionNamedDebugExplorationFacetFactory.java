@@ -131,8 +131,7 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector
-                .getConfigurationServiceInternal();
+        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         explorationValidator.setConfiguration(configuration);
         debugValidator.setConfiguration(configuration);
     }

@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value.doubles;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class DoublePrimitiveValueSemanticsProvider extends DoubleValueSemanticsProviderAbstract implements PropertyDefaultFacet {
 
@@ -34,11 +34,11 @@ public class DoublePrimitiveValueSemanticsProvider extends DoubleValueSemanticsP
      * {@link EncoderDecoder}.
      */
     public DoublePrimitiveValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public DoublePrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, double.class, configuration, context);
+    public DoublePrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, double.class, context);
     }
 
     // //////////////////////////////////////////////////////////////////

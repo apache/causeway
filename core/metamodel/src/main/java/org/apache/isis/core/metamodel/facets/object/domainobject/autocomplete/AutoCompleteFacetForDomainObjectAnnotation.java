@@ -37,11 +37,7 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
     public static AutoCompleteFacet create(
             final DomainObject domainObject,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ServicesInjector servicesInjector) {
 
         if(domainObject == null) {
             return null;
@@ -52,7 +48,7 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
             return null;
         }
         final String autoCompleteAction = domainObject.autoCompleteAction();
-        return new AutoCompleteFacetForDomainObjectAnnotation(holder, autoCompleteRepository, autoCompleteAction, deploymentCategory, specificationLoader, servicesInjector, authenticationSessionProvider, adapterManager
+        return new AutoCompleteFacetForDomainObjectAnnotation(holder, autoCompleteRepository, autoCompleteAction, servicesInjector
         );
     }
 
@@ -60,13 +56,8 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
             final FacetHolder holder,
             final Class<?> repositoryClass,
             final String actionName,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
-        super(holder, repositoryClass, actionName, deploymentCategory, specificationLoader, servicesInjector,
-                adapterManager
+            final ServicesInjector servicesInjector) {
+        super(holder, repositoryClass, actionName, servicesInjector
         );
         this.repositoryClass = repositoryClass;
         this.actionName = actionName;

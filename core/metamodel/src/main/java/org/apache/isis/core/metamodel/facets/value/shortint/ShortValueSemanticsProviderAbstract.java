@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements ShortValueFacet {
 
@@ -44,8 +45,8 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     private final NumberFormat format;
 
-    public ShortValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Short> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public ShortValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Short> adaptedClass, final ServicesInjector context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
         format = determineNumberFormat("value.format.short");
     }
 

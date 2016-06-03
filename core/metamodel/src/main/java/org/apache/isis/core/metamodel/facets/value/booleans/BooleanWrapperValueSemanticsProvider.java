@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.value.booleans;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract {
 
@@ -35,11 +35,11 @@ public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsP
      * {@link EncoderDecoder}.
      */
     public BooleanWrapperValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public BooleanWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Boolean.class, DEFAULT_PROVIDER, configuration, context);
+    public BooleanWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, Boolean.class, DEFAULT_PROVIDER, context);
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -41,7 +41,7 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     public void setUpObjects() throws Exception {
         string = "text entry";
         holder = new FacetHolderImpl();
-        setValue(value = new StringValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new StringValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

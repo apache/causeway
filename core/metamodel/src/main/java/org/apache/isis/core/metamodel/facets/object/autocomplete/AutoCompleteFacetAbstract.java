@@ -77,18 +77,15 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             final FacetHolder holder,
             final Class<?> repositoryClass,
             final String actionName,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
+            final ServicesInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.repositoryClass = repositoryClass;
         this.actionName = actionName;
-        this.deploymentCategory = deploymentCategory;
-        this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
+        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
-        this.authenticationSessionProvider = servicesInjector.lookupService(AuthenticationSessionProvider.class);
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
     }
 
     @Override

@@ -39,7 +39,7 @@ public class TimeStampValueFacetUsingSemanticsProviderFactory extends ValueFacet
         if (type != org.apache.isis.applib.value.TimeStamp.class) {
             return;
         }
-        addFacets(new TimeStampValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new TimeStampValueSemanticsProvider(holder, getContext()));
     }
 
 }

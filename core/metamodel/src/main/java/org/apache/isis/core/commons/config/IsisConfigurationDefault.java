@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
  *
  * @see
  */
-public class IsisConfigurationDefault implements IsisConfiguration, ConfigurationServiceInternal {
+public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);
     private final ResourceStreamSource resourceStreamSource;

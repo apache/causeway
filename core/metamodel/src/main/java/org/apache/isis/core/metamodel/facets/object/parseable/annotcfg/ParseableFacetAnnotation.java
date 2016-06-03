@@ -61,7 +61,7 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
             final FacetHolder holder,
             final AdapterManager adapterManager,
             final ServicesInjector dependencyInjector) {
-        super(candidateParserName, candidateParserClass, holder, dependencyInjector, adapterManager);
+        super(candidateParserName, candidateParserClass, holder, dependencyInjector);
     }
 
 }

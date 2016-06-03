@@ -44,7 +44,7 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         allowMockAdapterToReturn(color);
         holder = new FacetHolderImpl();
 
-        setValue(value = new ColorValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new ColorValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

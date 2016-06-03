@@ -26,15 +26,15 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.util.Enums;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
@@ -66,17 +66,17 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
      * Required because {@link Parser} and {@link EncoderDecoder}.
      */
     public EnumValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
-    public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+    public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
         super(
                 type(), holder,  adaptedClass, 
                 maxLengthFor(adaptedClass),
                 maxLengthFor(adaptedClass), Immutability.IMMUTABLE,
                 EqualByContent.HONOURED, 
-                defaultFor(adaptedClass), 
-                configuration, context);
+                defaultFor(adaptedClass),
+                context);
 
         titleMethod = MethodFinderUtils.findMethod(
                 getAdaptedClass(), MethodScope.OBJECT,

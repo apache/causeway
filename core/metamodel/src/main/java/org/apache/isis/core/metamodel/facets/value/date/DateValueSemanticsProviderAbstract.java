@@ -32,8 +32,8 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -45,10 +45,10 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
-    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("date", holder, adaptedClass, 12, immutability, equalByContent, defaultValue, configuration, context);
+    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue, final ServicesInjector context) {
+        super("date", holder, adaptedClass, 12, immutability, equalByContent, defaultValue, context);
 
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.date");
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.date");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {

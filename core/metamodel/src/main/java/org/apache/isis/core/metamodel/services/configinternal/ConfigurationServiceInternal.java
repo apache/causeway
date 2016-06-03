@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-public interface ConfigurationServiceInternal {
+public interface ConfigurationServiceInternal extends IsisConfiguration {
 
     String getProperty(String name);
 

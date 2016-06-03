@@ -63,7 +63,7 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
         twoOClock = new Time(c.getTimeInMillis());
 
         holder = new FacetHolderImpl();
-        setValue(value = new JavaSqlTimeValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new JavaSqlTimeValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

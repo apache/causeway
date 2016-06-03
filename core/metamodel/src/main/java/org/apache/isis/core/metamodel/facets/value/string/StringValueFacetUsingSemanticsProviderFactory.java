@@ -36,7 +36,7 @@ public class StringValueFacetUsingSemanticsProviderFactory extends ValueFacetUsi
         if (type != String.class) {
             return;
         }
-        addFacets(new StringValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new StringValueSemanticsProvider(holder, getContext()));
     }
 
 }

@@ -52,7 +52,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         });
 
         holder = new FacetHolderImpl();
-        setValue(new BigIntegerValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(new BigIntegerValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

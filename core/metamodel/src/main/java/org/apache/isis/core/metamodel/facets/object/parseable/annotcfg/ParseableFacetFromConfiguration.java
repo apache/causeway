@@ -31,6 +31,6 @@ public class ParseableFacetFromConfiguration extends ParseableFacetAbstract {
             final FacetHolder holder,
             final ServicesInjector servicesInjector,
             final AdapterManager adapterManager) {
-        super(candidateParserName, null, holder, servicesInjector, adapterManager);
+        super(candidateParserName, null, holder, servicesInjector);
     }
 }

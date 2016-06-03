@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements ImageValueFacet {
 
@@ -58,8 +58,8 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     private FacetHolder facetHolder;
 
     @SuppressWarnings("unchecked")
-    public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, null, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
+    public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
+        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, null, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, context);
     }
 
     /**

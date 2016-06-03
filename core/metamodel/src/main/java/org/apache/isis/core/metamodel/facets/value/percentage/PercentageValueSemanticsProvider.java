@@ -28,14 +28,14 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.value.floats.FloatingPointValueFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements FloatingPointValueFacet {
 
@@ -56,13 +56,13 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
      * {@link EncoderDecoder}.
      */
     public PercentageValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public PercentageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Percentage.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public PercentageValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
 
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.percentage");
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.percentage");
         if (formatRequired == null) {
             format = PERCENTAGE_FORMAT;
         } else {

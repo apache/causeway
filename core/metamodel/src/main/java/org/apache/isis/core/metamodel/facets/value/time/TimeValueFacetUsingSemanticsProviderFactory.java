@@ -39,7 +39,7 @@ public class TimeValueFacetUsingSemanticsProviderFactory extends ValueFacetUsing
         if (type != org.apache.isis.applib.value.Time.class) {
             return;
         }
-        addFacets(new TimeValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new TimeValueSemanticsProvider(holder, getContext()));
     }
 
 }

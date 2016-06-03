@@ -67,7 +67,7 @@ public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        validator.setConfiguration((IsisConfiguration)servicesInjector.getConfigurationServiceInternal());
+        validator.setConfiguration(servicesInjector.getConfigurationServiceInternal());
     }
 
 }

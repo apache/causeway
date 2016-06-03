@@ -72,7 +72,7 @@ public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetF
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
+        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         validator.setConfiguration(configuration);
     }
 

@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value.shortint;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class ShortWrapperValueSemanticsProvider extends ShortValueSemanticsProviderAbstract {
 
@@ -32,11 +32,11 @@ public class ShortWrapperValueSemanticsProvider extends ShortValueSemanticsProvi
      * {@link EncoderDecoder}.
      */
     public ShortWrapperValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public ShortWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Short.class, configuration, context);
+    public ShortWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, Short.class, context);
     }
 
 }

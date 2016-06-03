@@ -23,7 +23,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,21 +40,19 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
             final String candidateParserName,
             final Class<?> candidateParserClass,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
+            final ServicesInjector servicesInjector) {
         super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         this.parseableFacetUsingParser = isValid()?
-                createParser(holder, servicesInjector, adapterManager):null;
+                createParser(holder, servicesInjector):null;
     }
 
     private ParseableFacetUsingParser createParser(
             final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
+            final ServicesInjector servicesInjector) {
         final Parser<?> parser = (Parser<?>) ClassExtensions.newInstance(parserClass, FacetHolder.class, holder);
-        return new ParseableFacetUsingParser(parser, holder, servicesInjector, adapterManager);
+        return new ParseableFacetUsingParser(parser, holder, servicesInjector);
     }
 
     /**

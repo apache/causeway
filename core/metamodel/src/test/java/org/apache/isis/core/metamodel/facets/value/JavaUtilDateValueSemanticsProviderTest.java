@@ -54,7 +54,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         date = new java.util.Date(0);
 
         holder = new FacetHolderImpl();
-        setValue(new JavaUtilDateValueSemanticsProvider(holder, mockConfiguration, mockContext) {
+        setValue(new JavaUtilDateValueSemanticsProvider(holder, mockContext) {
             @Override
             protected String defaultFormat() {
                 return "iso";

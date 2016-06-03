@@ -101,7 +101,7 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
+        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         renderValidator.setConfiguration(configuration);
         resolveValidator.setConfiguration(configuration);
     }

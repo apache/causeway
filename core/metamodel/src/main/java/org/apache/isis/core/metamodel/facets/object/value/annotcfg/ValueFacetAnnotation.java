@@ -25,8 +25,9 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
@@ -44,12 +45,12 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
         return annotation.semanticsProviderClass();
     }
 
-    public ValueFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder, configuration, context);
+    public ValueFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder, final ServicesInjector context) {
+        this(semanticsProviderName(annotatedClass, context.getConfigurationServiceInternal()), semanticsProviderClass(annotatedClass), holder, context);
     }
 
-    private ValueFacetAnnotation(final String candidateSemanticsProviderName, final Class<?> candidateSemanticsProviderClass, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, configuration, context);
+    private ValueFacetAnnotation(final String candidateSemanticsProviderName, final Class<?> candidateSemanticsProviderClass, final FacetHolder holder, final ServicesInjector context) {
+        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, context);
     }
 
     /**

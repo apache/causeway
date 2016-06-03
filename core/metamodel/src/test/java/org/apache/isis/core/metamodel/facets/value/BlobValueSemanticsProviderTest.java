@@ -44,7 +44,7 @@ public class BlobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(blob);
         holder = new FacetHolderImpl();
 
-        setValue(value = new BlobValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new BlobValueSemanticsProvider(holder, mockContext));
     }
 
     @Test

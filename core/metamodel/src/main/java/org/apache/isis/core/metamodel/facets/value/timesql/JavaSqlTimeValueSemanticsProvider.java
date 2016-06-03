@@ -30,10 +30,10 @@ import com.google.common.collect.Maps;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.value.time.TimeValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
@@ -51,11 +51,11 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public JavaSqlTimeValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, java.sql.Time.class, configuration, context);
+    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, java.sql.Time.class, context);
     }
 
     @Override

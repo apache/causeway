@@ -80,7 +80,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private ObjectSpecification specification;
 
     private final IsisConfiguration configuration;
-    private final ValueSemanticsProviderContext context;
+    private final ServicesInjector context;
 
     public ValueSemanticsProviderAndFacetAbstract(
             final Class<? extends Facet> adapterFacetType,
@@ -91,8 +91,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
             final Immutability immutability,
             final EqualByContent equalByContent,
             final T defaultValue,
-            final IsisConfiguration configuration,
-            final ValueSemanticsProviderContext context) {
+            final ServicesInjector context) {
         super(adapterFacetType, holder, Derivation.NOT_DERIVED);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
@@ -101,7 +100,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         this.equalByContent = (equalByContent == EqualByContent.HONOURED);
         this.defaultValue = defaultValue;
 
-        this.configuration = configuration;
+        this.configuration = context.getConfigurationServiceInternal();
         this.context = context;
     }
 
@@ -328,7 +327,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         return configuration;
     }
 
-    protected ValueSemanticsProviderContext getContext() {
+    protected ServicesInjector getContext() {
         return context;
     }
 
@@ -336,7 +335,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * From {@link #getContext() context.}
      */
     protected AdapterManager getAdapterManager() {
-        return context.getAdapterManager();
+        return context.getPersistenceSessionServiceInternal();
     }
 
     /**
@@ -350,7 +349,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * From {@link #getContext() context.}
      */
     protected ServicesInjector getServicesInjector() {
-        return context.getServicesInjector();
+        return context;
     }
 
     // //////////////////////////////////////////////////////////
