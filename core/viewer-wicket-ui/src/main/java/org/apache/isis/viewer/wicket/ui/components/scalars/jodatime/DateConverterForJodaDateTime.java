@@ -24,41 +24,42 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.joda.time.DateTime;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
 
 public class DateConverterForJodaDateTime extends DateConverterForJodaAbstract<DateTime> {
     
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaDateTime(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
+        super(DateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
     }
     
-    private DateConverterForJodaDateTime(String datePattern, String dateTimePattern, int adjustBy) {
-        super(DateTime.class, datePattern, dateTimePattern, adjustBy);
+    @Override
+    protected DateTime minusDays(DateTime value, int adjustBy) {
+        return value.minusDays(adjustBy);
     }
-    
 
     @Override
-    protected DateTime doConvertToObject(String value, Locale locale) throws ConversionException {
-        final DateTime parsedDateTime = convert(value);
-        return parsedDateTime.minusDays(adjustBy);
+    protected DateTime plusDays(DateTime value, int adjustBy) {
+        return value.plusDays(adjustBy);
     }
 
-    private DateTime convert(String value) throws ConversionException {
+    @Override
+    protected DateTime convert(String value) throws ConversionException {
         try {
             return getFormatterForDateTimePattern().parseDateTime(value);
         } catch(IllegalArgumentException ex) {
             try {
                 return getFormatterForDatePattern().parseDateTime(value);
             } catch(IllegalArgumentException ex2) {
-                throw new ConversionException("Cannot convert into a date/time", ex2);
+                throw new ConversionException(String.format("Cannot convert '%s' into a date/time", value), ex2);
             }
         }
     }
 
     @Override
-    protected String doConvertToString(DateTime value, Locale locale) {
-        return value.plusDays(adjustBy).toString(getFormatterForDateTimePattern());
+    protected String toString(DateTime value, DateTimeFormatter dateTimeFormatter) {
+        return value.toString(dateTimeFormatter);
     }
-
 }

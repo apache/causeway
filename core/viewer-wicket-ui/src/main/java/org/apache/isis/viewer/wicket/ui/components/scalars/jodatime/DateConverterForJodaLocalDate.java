@@ -24,38 +24,37 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.joda.time.format.DateTimeFormatter;
 
 public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<LocalDate> {
     
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaLocalDate(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), adjustBy);
-    }
-    
-    private DateConverterForJodaLocalDate(String datePattern, int adjustBy) {
-        super(LocalDate.class, datePattern, datePattern, adjustBy);
+        super(LocalDate.class, settings.getDatePattern(), settings.getDatePattern(), adjustBy);
     }
 
     @Override
-    protected LocalDate doConvertToObject(String value, Locale locale) throws ConversionException {
-        LocalDate date = convert(value);
-        LocalDate adjustedDate = date.minusDays(adjustBy);
-        return adjustedDate;
+    protected LocalDate minusDays(LocalDate value, int adjustBy) {
+        return value.minusDays(adjustBy);
     }
 
-    private LocalDate convert(String value) throws ConversionException {
+    @Override
+    protected LocalDate plusDays(LocalDate value, int adjustBy) {
+        return value.plusDays(adjustBy);
+    }
+
+    @Override
+    protected LocalDate convert(String value) throws ConversionException {
         try {
-            LocalDate date = getFormatterForDatePattern().parseLocalDate(value);
-            return date;
+            return getFormatterForDateTimePattern().parseLocalDate(value);
         } catch(IllegalArgumentException ex) {
-            throw new ConversionException("Cannot convert into a date", ex);
+            throw new ConversionException(String.format("Cannot convert '%s' into a date/time", value), ex);
         }
     }
 
     @Override
-    protected String doConvertToString(LocalDate value, Locale locale) {
-        return value.plusDays(adjustBy).toString(getFormatterForDatePattern());
+    protected String toString(LocalDate value, DateTimeFormatter dateTimeFormatter) {
+        return value.toString(dateTimeFormatter);
     }
-
 }

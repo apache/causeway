@@ -18,25 +18,43 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
+import org.apache.wicket.util.convert.ConversionException;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverterAbstract;
 
-public abstract class DateConverterForJodaAbstract<T> extends DateConverterAbstract<T> {
+import java.util.Locale;
+
+abstract class DateConverterForJodaAbstract<T> extends DateConverterAbstract<T> {
     
     private static final long serialVersionUID = 1L;
     
-    protected DateConverterForJodaAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
+    DateConverterForJodaAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
         super(cls, datePattern, dateTimePattern, adjustBy);
     }
 
-    protected DateTimeFormatter getFormatterForDatePattern() {
-        return DateTimeFormat.forPattern(datePattern);
+    @Override
+    protected final T doConvertToObject(String value, Locale locale) {
+        T dateTime = convert(value);
+        return minusDays(dateTime, adjustBy);
     }
 
-    protected DateTimeFormatter getFormatterForDateTimePattern() {
-        return DateTimeFormat.forPattern(dateTimePattern);
+    @Override
+    protected String doConvertToString(T value, Locale locale) {
+        // for JodaLocalDate, the date time pattern is same as date pattern, so can use either to convert to string.
+        T t = plusDays(value, adjustBy);
+        return toString(t, getFormatterForDateTimePattern());
     }
-    
+
+
+    protected abstract T minusDays(T value, int adjustBy);
+    protected abstract T plusDays(T value, int adjustBy);
+
+    protected abstract T convert(String value) throws ConversionException;
+    protected abstract String toString(T value, DateTimeFormatter dateTimeFormatter);
+
 }

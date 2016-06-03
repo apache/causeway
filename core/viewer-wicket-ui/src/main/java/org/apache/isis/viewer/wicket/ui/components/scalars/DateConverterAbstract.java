@@ -21,6 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.ConversionException;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 
 public abstract class DateConverterAbstract<T> implements DateConverter<T> {
@@ -56,6 +59,14 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
         return dateTimePattern;
     }
 
+    protected DateTimeFormatter getFormatterForDatePattern() {
+        return DateTimeFormat.forPattern(datePattern);
+    }
+
+    protected DateTimeFormatter getFormatterForDateTimePattern() {
+        return DateTimeFormat.forPattern(dateTimePattern);
+    }
+
     @Override
     public T convertToObject(String value, Locale locale) throws ConversionException {
         return value != null? doConvertToObject(value, locale): null;
@@ -66,5 +77,7 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     }
 
     protected abstract T doConvertToObject(String value, Locale locale) throws ConversionException;
+
+
     protected abstract String doConvertToString(T value, Locale locale);
 }

@@ -21,47 +21,47 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.ConversionException;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.joda.time.format.DateTimeFormatter;
 
 public class DateConverterForJodaLocalDateTime extends DateConverterForJodaAbstract<LocalDateTime> {
 
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaLocalDateTime(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
+        super(LocalDateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
     }
 
-    private DateConverterForJodaLocalDateTime(String datePattern, String dateTimePattern, int adjustBy) {
-        super(LocalDateTime.class, datePattern, dateTimePattern, adjustBy);
+
+    @Override
+    protected LocalDateTime minusDays(LocalDateTime value, int adjustBy) {
+        return value.minusDays(adjustBy);
     }
 
     @Override
-    protected LocalDateTime doConvertToObject(String value, Locale locale) {
-        LocalDateTime dateTime = convert(value);
-        LocalDateTime adjustedDateTime = dateTime.minusDays(adjustBy);
-        return adjustedDateTime;
+    protected LocalDateTime plusDays(LocalDateTime value, int adjustBy) {
+        return value.plusDays(adjustBy);
     }
 
-    private LocalDateTime convert(String value) {
+
+    @Override
+    protected LocalDateTime convert(String value) throws ConversionException {
         try {
-            final LocalDateTime dateTime = getFormatterForDateTimePattern().parseLocalDateTime(value);
-            return dateTime;
+            return getFormatterForDateTimePattern().parseLocalDateTime(value);
         } catch(IllegalArgumentException ex) {
             try {
-                final LocalDateTime dateTime = getFormatterForDatePattern().parseLocalDateTime(value);
-                return dateTime;
+                return getFormatterForDatePattern().parseLocalDateTime(value);
             } catch(IllegalArgumentException ex2) {
-                throw new ConversionException("Cannot convert into a date/time", ex);
+                throw new ConversionException(String.format("Cannot convert '%s' into a date/time", value), ex2);
             }
         }
     }
 
     @Override
-    protected String doConvertToString(LocalDateTime value, Locale locale) {
-        return value.plusDays(adjustBy).toString(getFormatterForDateTimePattern());
+    protected String toString(LocalDateTime value, DateTimeFormatter dateTimeFormatter) {
+        return value.toString(dateTimeFormatter);
     }
-
-
 }
