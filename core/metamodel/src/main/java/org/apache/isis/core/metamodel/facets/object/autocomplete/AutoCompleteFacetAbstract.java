@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,6 +38,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -100,8 +102,16 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         
         final ObjectAdapter repositoryAdapter = adapterManager.getAdapterFor(repository);
         final ObjectAdapter searchAdapter = adapterManager.adapterFor(search);
-        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, null, new ObjectAdapter[] { searchAdapter},
-                interactionInitiatedBy);
+
+        final ObjectAdapter resultAdapter =
+                getPublishingServiceInternal().withPublishingSuppressed(new PublishingServiceInternal.Block<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter exec() {
+                return repositoryAction.execute(repositoryAdapter, null, new ObjectAdapter[] { searchAdapter},
+                        interactionInitiatedBy);
+            }
+        });
+
         // check a collection was returned
         if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {
             return Collections.emptyList();
@@ -112,6 +122,10 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
         return ObjectAdapter.Util.visibleAdapters(
                         adapterList, interactionInitiatedBy);
+    }
+
+    private PublishingServiceInternal getPublishingServiceInternal() {
+        return servicesInjector.lookupService(PublishingServiceInternal.class);
     }
 
 
