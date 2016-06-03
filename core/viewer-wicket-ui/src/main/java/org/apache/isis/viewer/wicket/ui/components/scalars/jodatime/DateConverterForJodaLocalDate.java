@@ -26,6 +26,10 @@ import org.joda.time.LocalDate;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.joda.time.format.DateTimeFormatter;
 
+/**
+ * Uses the same pattern for both date and date/time.  The only real consequence of this is that when converting a
+ * string value to the date value, only a single pattern is used.
+ */
 public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<LocalDate> {
     
     private static final long serialVersionUID = 1L;

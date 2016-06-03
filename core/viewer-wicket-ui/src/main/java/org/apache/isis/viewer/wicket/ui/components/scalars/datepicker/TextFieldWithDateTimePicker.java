@@ -51,28 +51,35 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter) {
-        this(id, model, type, converter, new DateTimeConfig());
-    }
-
-    public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter, DateTimeConfig config) {
         super(id, model, type);
+
+        DateTimeConfig config = new DateTimeConfig();
 
         setOutputMarkupId(true);
 
         this.converter = converter;
 
-        String datePickerPattern = converter.getDateTimePattern(getLocale());
+        // if this text field is for a LocalDate, then note that pattern obtained will just be a simple date format
+        // (with no hour/minute components).
+        final String dateTimePattern = converter.getDateTimePattern(getLocale());
+        final String pattern = convertToMomentJsFormat(dateTimePattern);
+        config.withFormat(pattern);
 
-        // convert Java (SimpleDateFormat|DateTimeFormat) format to Moment.js format
-        datePickerPattern = datePickerPattern.replace('d', 'D');
-        datePickerPattern = datePickerPattern.replace('y', 'Y');
-        config.withFormat(datePickerPattern);
-
-        config.calendarWeeks(true);
-        if (datePickerPattern.contains("HH")) {
+        boolean patternContainsTimeComponent = pattern.contains("HH");
+        if (patternContainsTimeComponent) {
             config.sideBySide(true);
         }
+
+        config.calendarWeeks(true);
+
         this.config = config;
+    }
+
+    private String convertToMomentJsFormat(String javaDateTimeFormat) {
+        String momentJsFormat = javaDateTimeFormat;
+        momentJsFormat = momentJsFormat.replace('d', 'D');
+        momentJsFormat = momentJsFormat.replace('y', 'Y');
+        return momentJsFormat;
     }
 
     @Override
