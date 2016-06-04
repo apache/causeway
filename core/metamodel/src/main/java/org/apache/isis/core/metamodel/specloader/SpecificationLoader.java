@@ -333,16 +333,24 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type, final NatureOfService nature) {
         Assert.assertNotNull(type);
-        final String typeName = type.getName();
 
-        return loadSpecificationForSubstitutedClassSynchronized(type, nature, typeName);
+        final String typeName = type.getName();
+        final ObjectSpecification spec = cache.get(typeName);
+        if (spec != null) {
+            return spec;
+        }
+
+        return loadSpecificationForSubstitutedClassSynchronized(type, nature);
     }
 
     private synchronized ObjectSpecification loadSpecificationForSubstitutedClassSynchronized(
             final Class<?> type,
-            final NatureOfService nature, final String typeName) {
+            final NatureOfService nature) {
+
+        final String typeName = type.getName();
         final ObjectSpecification spec = cache.get(typeName);
         if (spec != null) {
+            // because caller isn't synchronized.
             return spec;
         }
         final ObjectSpecification specification = createSpecification(type);
