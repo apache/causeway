@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Objects;
+
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.util.ToString;
@@ -36,15 +38,16 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     private static final long serialVersionUID = 1L;
 
+    //region > Constructor, fields
+
     private final String name;
     private final List<String> roles = new ArrayList<String>();
     private final String validationCode;
 
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
 
-    // ///////////////////////////////////////////////////////
-    // Constructor, encode
-    // ///////////////////////////////////////////////////////
+    private final MessageBroker messageBroker;
+
 
     @SuppressWarnings("unchecked")
     public AuthenticationSessionAbstract(final String name, final String code) {
@@ -55,15 +58,21 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         this.name = name;
         this.roles.addAll(roles);
         this.validationCode = validationCode;
-        initialized();
+        this.messageBroker = new MessageBroker();
+        // nothing to do
     }
 
     public AuthenticationSessionAbstract(final DataInputExtended input) throws IOException {
         this.name = input.readUTF();
         this.roles.addAll(Arrays.asList(input.readUTFs()));
         this.validationCode = input.readUTF();
-        initialized();
+        this.messageBroker = new MessageBroker();
+        // nothing to do
     }
+
+    //endregion
+
+    //region > encode
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
@@ -72,13 +81,9 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         output.writeUTF(validationCode);
     }
 
-    private void initialized() {
-        // nothing to do
-    }
+    //endregion
 
-    // ///////////////////////////////////////////////////////
-    // User Name
-    // ///////////////////////////////////////////////////////
+    //region > User Name
 
     @Override
     public String getUserName() {
@@ -87,12 +92,12 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     @Override
     public boolean hasUserNameOf(final String userName) {
-        return userName == null ? false : userName.equals(getUserName());
+        return Objects.equal(userName, getUserName());
     }
 
-    // ///////////////////////////////////////////////////////
-    // Roles
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > Roles
 
     /**
      * Can be overridden.
@@ -102,18 +107,18 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return Collections.unmodifiableList(roles);
     }
 
-    // ///////////////////////////////////////////////////////
-    // Validation Code
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > Validation Code
 
     @Override
     public String getValidationCode() {
         return validationCode;
     }
 
-    // ///////////////////////////////////////////////////////
-    // Attributes
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > Attributes
 
     @Override
     public Object getAttribute(final String attributeName) {
@@ -125,28 +130,24 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         attributeByName.put(attributeName, attribute);
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////
-    // MessageBroker
-    // ///////////////////////////////////////////////////////
+    //region > MessageBroker
 
-    private MessageBroker messageBroker;
     @Override
     public MessageBroker getMessageBroker() {
         return messageBroker;
     }
-    @Override
-    public void setMessageBroker(MessageBroker messageBroker) {
-        this.messageBroker = messageBroker;
-    }
 
-    // ///////////////////////////////////////////////////////
-    // toString
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > toString
 
     @Override
     public String toString() {
         return new ToString(this).append("name", getUserName()).append("code", getValidationCode()).toString();
     }
+
+    //endregion
 
 }

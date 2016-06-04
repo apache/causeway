@@ -29,26 +29,14 @@ import com.google.common.collect.Lists;
 public class MessageBroker implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
+    //region > constructor, fields
+
     private final List<String> messages = Lists.newArrayList();
     private final List<String> warnings = Lists.newArrayList();
     private String applicationError;
 
-    //region > acquire (factory method)
-
-    public static MessageBroker acquire(final AuthenticationSession authenticationSession) {
-        MessageBroker messageBroker;
-        synchronized (authenticationSession) {
-            messageBroker = authenticationSession.getMessageBroker();
-            if(messageBroker == null) {
-                messageBroker = new MessageBroker();
-                authenticationSession.setMessageBroker(messageBroker);
-            }
-        }
-        return messageBroker;
-    }
-
-    private MessageBroker() {
+    public MessageBroker() {
     }
     //endregion
 
@@ -86,6 +74,7 @@ public class MessageBroker implements Serializable {
 
     //endregion
 
+    //region > applicationError
     public String getApplicationError() {
         final String error = applicationError;
         setApplicationError(null);
@@ -96,6 +85,7 @@ public class MessageBroker implements Serializable {
         this.applicationError = applicationError;
     }
 
+    //endregion
 
     //region > helpers
 

@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -39,9 +38,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -259,8 +255,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             command = commandContext.getCommand();
             final UUID transactionId = command.getTransactionId();
 
-
-            final MessageBroker messageBroker = MessageBroker.acquire(getAuthenticationSession());
+            final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
             this.transaction = new IsisTransaction(this, messageBroker, servicesInjector, transactionId);
             transactionLevel = 0;
 
