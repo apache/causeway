@@ -32,10 +32,13 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.isis.core.commons.config.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
@@ -179,7 +182,7 @@ public final class IsisConfigurationBuilder {
      * <p>
      * Must be called before {@link IsisConfigurationBuilder#getConfiguration()}.
      */
-    public synchronized void addConfigurationResource(
+    public void addConfigurationResource(
             final String configurationResource,
             final NotFoundPolicy notFoundPolicy,
             final IsisConfigurationDefault.ContainsPolicy containsPolicy) {
@@ -241,7 +244,7 @@ public final class IsisConfigurationBuilder {
     /**
      * Adds additional property; if already present then will _not_ be replaced.
      */
-    public synchronized void add(final String key, final String value) {
+    public void add(final String key, final String value) {
         ensureNotLocked();
         configuration.add(key, value);
     }
@@ -249,7 +252,7 @@ public final class IsisConfigurationBuilder {
     /**
      * Adds/updates property; if already present then _will_ be replaced.
      */
-    public synchronized void put(final String key, final String value) {
+    public void put(final String key, final String value) {
         ensureNotLocked();
         configuration.put(key, value);
     }
@@ -311,7 +314,7 @@ public final class IsisConfigurationBuilder {
     /**
      * Returns the {@link IsisConfiguration}; this will cause the configuration to be locked
      */
-    public synchronized IsisConfigurationDefault getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         if(!locked) {
             locked = true;
             dumpResourcesToLog();
@@ -333,7 +336,7 @@ public final class IsisConfigurationBuilder {
      *     Used while bootstrapping, to obtain the web.server port etc.
      * </p>
      */
-    public synchronized IsisConfigurationDefault peekConfiguration() {
+    public IsisConfigurationDefault peekConfiguration() {
         return new IsisConfigurationDefault(resourceStreamSourceChain);
     }
 
