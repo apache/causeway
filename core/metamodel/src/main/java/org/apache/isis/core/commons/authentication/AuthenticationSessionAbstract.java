@@ -29,7 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.security.RoleMemento;
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.util.ToString;
@@ -137,6 +140,19 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     @Override
     public MessageBroker getMessageBroker() {
         return messageBroker;
+    }
+
+    //endregion
+
+    //region > createUserMemento
+
+    @Override
+    public UserMemento createUserMemento() {
+        final List<RoleMemento> roles = Lists.newArrayList();
+        for (final String roleName : getRoles()) {
+            roles.add(new RoleMemento(roleName));
+        }
+        return new UserMemento(getUserName(), roles);
     }
 
     //endregion

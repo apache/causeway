@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.authentication;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.encoding.Encodable;
 
 /**
@@ -68,5 +69,5 @@ public interface AuthenticationSession extends Encodable, Serializable {
      */
     MessageBroker getMessageBroker();
 
-    
+    UserMemento createUserMemento();
 }
