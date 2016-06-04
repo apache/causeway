@@ -26,9 +26,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +46,9 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
@@ -58,11 +58,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectS
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Builds the meta-model.
@@ -340,9 +335,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         Assert.assertNotNull(type);
         final String typeName = type.getName();
 
-        final SpecificationCacheDefault specificationCache = cache;
-        synchronized (specificationCache) {
-            final ObjectSpecification spec = specificationCache.get(typeName);
+        synchronized (cache) {
+            final ObjectSpecification spec = cache.get(typeName);
             if (spec != null) {
                 return spec;
             }
@@ -356,7 +350,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
             // put into the cache prior to introspecting, to prevent
             // infinite loops
-            specificationCache.cache(typeName, specification);
+            cache.cache(typeName, specification);
 
             introspectIfRequired(specification);
 
