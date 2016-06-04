@@ -347,7 +347,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     @Override
-    public synchronized String toString() {
+    public String toString() {
         final ToString str = new ToString(this);
         toString(str);
 

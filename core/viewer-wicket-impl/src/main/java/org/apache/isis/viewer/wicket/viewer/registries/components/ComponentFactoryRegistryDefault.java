@@ -83,7 +83,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
         ensureAllComponentTypesRegistered();
     }
 
-    protected synchronized void registerComponentFactory(final ComponentFactory componentFactory) {
+    protected void registerComponentFactory(final ComponentFactory componentFactory) {
         componentFactoriesByType.put(componentFactory.getComponentType(), componentFactory);
     }
 

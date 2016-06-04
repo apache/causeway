@@ -320,8 +320,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //region > flush
 
-
-    public synchronized final void flush() {
+    public final void flush() {
 
         // have removed THIS guard because we hit a situation where a xactn is aborted
         // from a no-arg action, the Wicket viewer attempts to render a new page that (of course)
@@ -403,7 +402,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //region > preCommit, commit
 
-    synchronized void preCommit() {
+    void preCommit() {
         assert getState().canCommit();
         assert abortCause == null;
 
@@ -437,7 +436,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     }
 
 
-    public synchronized void commit() {
+    public void commit() {
         assert getState().canCommit();
         assert abortCause == null;
 
@@ -463,7 +462,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     /**
      * internal API called by IsisTransactionManager only
      */
-    synchronized final void markAsAborted() {
+    final void markAsAborted() {
         assert getState().canAbort();
 
         if (LOG.isInfoEnabled()) {

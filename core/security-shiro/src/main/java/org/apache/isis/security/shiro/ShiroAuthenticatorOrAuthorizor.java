@@ -90,7 +90,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
      * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
      * (if shiro is configured for both components).
      */
-    protected synchronized RealmSecurityManager getSecurityManager() {
+    protected RealmSecurityManager getSecurityManager() {
         SecurityManager securityManager;
         try {
             securityManager = SecurityUtils.getSecurityManager();

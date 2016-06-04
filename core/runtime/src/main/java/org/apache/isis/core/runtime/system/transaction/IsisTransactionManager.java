@@ -226,7 +226,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // startTransaction
     // //////////////////////////////////////////////////////
 
-    public synchronized void startTransaction() {
+    public void startTransaction() {
         startTransaction(null);
     }
 
@@ -273,7 +273,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // flush
     // //////////////////////////////////////////////////////
 
-    public synchronized boolean flushTransaction() {
+    public boolean flushTransaction() {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("flushTransaction");
@@ -302,7 +302,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * If an abort cause has been set (or an exception occurs), then will throw this
      * exception in turn.
      */
-    public synchronized void endTransaction() {
+    public void endTransaction() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("endTransaction: level " + (transactionLevel) + "->" + (transactionLevel - 1));
         }
@@ -417,7 +417,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
 
-    public synchronized void abortTransaction() {
+    public void abortTransaction() {
         if (getTransaction() != null) {
             getTransaction().markAsAborted();
             transactionLevel = 0;
