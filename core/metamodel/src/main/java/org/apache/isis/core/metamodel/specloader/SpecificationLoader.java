@@ -335,27 +335,31 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         Assert.assertNotNull(type);
         final String typeName = type.getName();
 
-        synchronized (cache) {
-            final ObjectSpecification spec = cache.get(typeName);
-            if (spec != null) {
-                return spec;
-            }
-            final ObjectSpecification specification = createSpecification(type);
-            if(nature != null) {
-                specification.markAsService();
-            }
-            if (specification == null) {
-                throw new IsisException("Failed to create specification for class " + typeName);
-            }
+        return loadSpecificationForSubstitutedClassSynchronized(type, nature, typeName);
+    }
 
-            // put into the cache prior to introspecting, to prevent
-            // infinite loops
-            cache.cache(typeName, specification);
-
-            introspectIfRequired(specification);
-
-            return specification;
+    private synchronized ObjectSpecification loadSpecificationForSubstitutedClassSynchronized(
+            final Class<?> type,
+            final NatureOfService nature, final String typeName) {
+        final ObjectSpecification spec = cache.get(typeName);
+        if (spec != null) {
+            return spec;
         }
+        final ObjectSpecification specification = createSpecification(type);
+        if(nature != null) {
+            specification.markAsService();
+        }
+        if (specification == null) {
+            throw new IsisException("Failed to create specification for class " + typeName);
+        }
+
+        // put into the cache prior to introspecting, to prevent
+        // infinite loops
+        cache.cache(typeName, specification);
+
+        introspectIfRequired(specification);
+
+        return specification;
     }
 
     /**
