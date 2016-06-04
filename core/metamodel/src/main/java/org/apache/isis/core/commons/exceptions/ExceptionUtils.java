@@ -64,11 +64,6 @@ public class ExceptionUtils {
      */
     private static final Method THROWABLE_CAUSE_METHOD;
 
-    /**
-     * <p>The Method object for Java 1.4 initCause.</p>
-     */
-    private static final Method THROWABLE_INITCAUSE_METHOD;
-    
     static {
         Method causeMethod;
         try {
@@ -77,12 +72,6 @@ public class ExceptionUtils {
             causeMethod = null;
         }
         THROWABLE_CAUSE_METHOD = causeMethod;
-        try {
-            causeMethod = Throwable.class.getMethod("initCause", new Class[]{Throwable.class});
-        } catch (Exception e) {
-            causeMethod = null;
-        }
-        THROWABLE_INITCAUSE_METHOD = causeMethod;
     }
     
     /**
@@ -100,10 +89,7 @@ public class ExceptionUtils {
      * <p>Introspects the <code>Throwable</code> to obtain the cause.</p>
      *
      * <p>The method searches for methods with specific names that return a 
-     * <code>Throwable</code> object. This will pick up most wrapping exceptions,
-     * including those from JDK 1.4, and
-     * {@link org.apache.commons.lang.exception.NestableException NestableException}.
-     * The method names can be added to using {@link #addCauseMethodName(String)}.</p>
+     * <code>Throwable</code> object. This will pick up most wrapping exceptions.
      *
      * <p>The default list searched for are:</p>
      * <ul>
@@ -128,42 +114,12 @@ public class ExceptionUtils {
      * @since 1.0
      */
     public static Throwable getCause(Throwable throwable) {
-        synchronized(CAUSE_METHOD_NAMES) {
-            return getCause(throwable, CAUSE_METHOD_NAMES);
-        }
-    }
-
-    /**
-     * <p>Introspects the <code>Throwable</code> to obtain the cause.</p>
-     *
-     * <ol>
-     * <li>Try known exception types.</li>
-     * <li>Try the supplied array of method names.</li>
-     * <li>Try the field 'detail'.</li>
-     * </ol>
-     *
-     * <p>A <code>null</code> set of method names means use the default set.
-     * A <code>null</code> in the set of method names will be ignored.</p>
-     *
-     * @param throwable  the throwable to introspect for a cause, may be null
-     * @param methodNames  the method names, null treated as default set
-     * @return the cause of the <code>Throwable</code>,
-     *  <code>null</code> if none found or null throwable input
-     * @since 1.0
-     */
-    public static Throwable getCause(Throwable throwable, String[] methodNames) {
         if (throwable == null) {
             return null;
         }
         Throwable cause = getCauseUsingWellKnownTypes(throwable);
         if (cause == null) {
-            if (methodNames == null) {
-                synchronized(CAUSE_METHOD_NAMES) {
-                    methodNames = CAUSE_METHOD_NAMES;
-                }
-            }
-            for (int i = 0; i < methodNames.length; i++) {
-                String methodName = methodNames[i];
+            for (String methodName : CAUSE_METHOD_NAMES) {
                 if (methodName != null) {
                     cause = getCauseUsingMethodName(throwable, methodName);
                     if (cause != null) {
@@ -171,7 +127,6 @@ public class ExceptionUtils {
                     }
                 }
             }
-
             if (cause == null) {
                 cause = getCauseUsingFieldName(throwable, "detail");
             }
@@ -195,11 +150,11 @@ public class ExceptionUtils {
         } else */
         if (throwable instanceof SQLException) {
             return ((SQLException) throwable).getNextException();
-        } else if (throwable instanceof InvocationTargetException) {
-            return ((InvocationTargetException) throwable).getTargetException();
-        } else {
-            return null;
         }
+        if (throwable instanceof InvocationTargetException) {
+            return ((InvocationTargetException) throwable).getTargetException();
+        }
+        return null;
     }
 
     /**
@@ -210,31 +165,23 @@ public class ExceptionUtils {
      * @return the wrapped exception, or <code>null</code> if not found
      */
     private static Throwable getCauseUsingMethodName(Throwable throwable, String methodName) {
-        Method method = null;
+        Method method;
         try {
-            method = throwable.getClass().getMethod(methodName, null);
-        } catch (NoSuchMethodException ignored) {
-            // exception ignored
-        } catch (SecurityException ignored) {
-            // exception ignored
+            method = throwable.getClass().getMethod(methodName);
+        } catch (NoSuchMethodException | SecurityException ignored) {
+            return null;
         }
 
-        if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
-            try {
-                return (Throwable) method.invoke(throwable, /*ArrayUtils.*/EMPTY_OBJECT_ARRAY);
-            } catch (IllegalAccessException ignored) {
-                // exception ignored
-            } catch (IllegalArgumentException ignored) {
-                // exception ignored
-            } catch (InvocationTargetException ignored) {
-                // exception ignored
-            }
+        if (!Throwable.class.isAssignableFrom(method.getReturnType())) {
+            return null;
         }
-        return null;
+        try {
+            return (Throwable) method.invoke(throwable);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) {
+            return null;
+        }
     }
     
-    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
-
     /**
      * <p>Finds a <code>Throwable</code> by field name.</p>
      *
@@ -246,25 +193,20 @@ public class ExceptionUtils {
         Field field = null;
         try {
             field = throwable.getClass().getField(fieldName);
-        } catch (NoSuchFieldException ignored) {
-            // exception ignored
-        } catch (SecurityException ignored) {
+        } catch (NoSuchFieldException | SecurityException ignored) {
             // exception ignored
         }
 
         if (field != null && Throwable.class.isAssignableFrom(field.getType())) {
             try {
                 return (Throwable) field.get(throwable);
-            } catch (IllegalAccessException ignored) {
-                // exception ignored
-            } catch (IllegalArgumentException ignored) {
+            } catch (IllegalAccessException | IllegalArgumentException ignored) {
                 // exception ignored
             }
         }
         return null;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * <p>Checks if the Throwable class has a <code>getCause</code> method.</p>
      *
@@ -302,18 +244,14 @@ public class ExceptionUtils {
         }
 
         Class cls = throwable.getClass();
-        synchronized(CAUSE_METHOD_NAMES) {
-            for (int i = 0, isize = CAUSE_METHOD_NAMES.length; i < isize; i++) {
-                try {
-                    Method method = cls.getMethod(CAUSE_METHOD_NAMES[i], null);
-                    if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
-                        return true;
-                    }
-                } catch (NoSuchMethodException ignored) {
-                    // exception ignored
-                } catch (SecurityException ignored) {
-                    // exception ignored
+        for (final String causeMethodName : CAUSE_METHOD_NAMES) {
+            try {
+                Method method = cls.getMethod(causeMethodName, null);
+                if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
+                    return true;
                 }
+            } catch (NoSuchMethodException | SecurityException ignored) {
+                // exception ignored
             }
         }
 
@@ -322,9 +260,7 @@ public class ExceptionUtils {
             if (field != null) {
                 return true;
             }
-        } catch (NoSuchFieldException ignored) {
-            // exception ignored
-        } catch (SecurityException ignored) {
+        } catch (NoSuchFieldException | SecurityException ignored) {
             // exception ignored
         }
 
