@@ -181,7 +181,7 @@ public class ObjectAdapterMemento implements Serializable {
             }
         };
 
-        public synchronized ObjectAdapter getAdapter(final ObjectAdapterMemento nom, ConcurrencyChecking concurrencyChecking) {
+        public ObjectAdapter getAdapter(final ObjectAdapterMemento nom, ConcurrencyChecking concurrencyChecking) {
             return recreateAdapter(nom, concurrencyChecking);
         }
 
