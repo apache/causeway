@@ -35,10 +35,15 @@ public interface MixinFacet extends Facet {
 
     boolean isMixinFor(Class<?> candidateDomainType);
 
+    enum Policy {
+        FAIL_FAST,
+        IGNORE_FAILURES
+    }
+
     /**
      * Returns the (adapter of the) domain object that a mixin adapter contains.
      */
-    ObjectAdapter mixedIn(ObjectAdapter mixinAdapter);
+    ObjectAdapter mixedIn(ObjectAdapter mixinAdapter, final Policy policy);
 
     /**
      * Returns the mixin around the provided domain object

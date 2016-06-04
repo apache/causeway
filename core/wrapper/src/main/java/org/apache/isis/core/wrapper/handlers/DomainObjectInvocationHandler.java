@@ -32,8 +32,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Where;
@@ -60,18 +58,20 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
@@ -263,19 +263,16 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final MixinFacet mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
             if(mixinFacet != null) {
 
-                try {
-                    // rather than invoke on a (transient) mixin, instead figure out the corresponding ObjectActoinMixedIn
-                    actualTargetAdapter = mixinFacet.mixedIn(targetAdapter);
-                    actualObjectAction = determineMixinAction(objectAction, actualTargetAdapter);
-                    
-                } catch(RuntimeException ex) {
+                // rather than invoke on a (transient) mixin, instead try to
+                // figure out the corresponding ObjectActionMixedIn
+                actualTargetAdapter = mixinFacet.mixedIn(targetAdapter, MixinFacet.Policy.IGNORE_FAILURES);
+                actualObjectAction = determineMixinAction(actualTargetAdapter, objectAction);
 
+                if(actualTargetAdapter == null || actualObjectAction == null) {
                     // revert to original behaviour
-                    // TODO: need to explore why this could happen...
                     actualTargetAdapter = targetAdapter;
                     actualObjectAction = objectAction;
                 }
-
             } else {
                 actualTargetAdapter = targetAdapter;
                 actualObjectAction = objectAction;
@@ -287,8 +284,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
     }
 
-    private ObjectAction determineMixinAction(final ObjectAction objectAction, final ObjectAdapter actualTargetAdapter) {
-        final ObjectSpecification specification = actualTargetAdapter.getSpecification();
+    private static ObjectAction determineMixinAction(
+            final ObjectAdapter domainObjectAdapter,
+            final ObjectAction objectAction) {
+        if(domainObjectAdapter == null) {
+            return null;
+        }
+        final ObjectSpecification specification = domainObjectAdapter.getSpecification();
         final List<ObjectAction> objectActions = specification.getObjectActions(Contributed.INCLUDED);
         for (final ObjectAction action : objectActions) {
             if(action instanceof ObjectActionMixedIn) {
@@ -298,7 +300,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 }
             }
         }
-        throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
+        // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
+        return null;
     }
 
     public InteractionInitiatedBy getInteractionInitiatedBy() {

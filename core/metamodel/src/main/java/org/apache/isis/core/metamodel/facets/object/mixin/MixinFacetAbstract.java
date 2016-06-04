@@ -90,7 +90,7 @@ public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements 
     }
 
     @Override
-    public ObjectAdapter mixedIn(ObjectAdapter mixinAdapter) {
+    public ObjectAdapter mixedIn(ObjectAdapter mixinAdapter, final Policy policy) {
 
         final Object mixin = mixinAdapter.getObject();
 
@@ -102,11 +102,21 @@ public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements 
                     Object o = declaredField.get(mixin);
                     return getAdapterManager().adapterFor(o);
                 } catch (IllegalAccessException e) {
-                    throw new RuntimeException("Unable to access " + declaredField + " for " + getTitleService().titleOf(mixin));
+                    if(policy == Policy.FAIL_FAST) {
+                        throw new RuntimeException(
+                                "Unable to access " + declaredField + " for " + getTitleService().titleOf(mixin));
+                    }
+                    // otherwise continue to next possible field.
                 }
             }
         }
-        throw new RuntimeException("Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixin) + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
+        if(policy == Policy.FAIL_FAST) {
+            throw new RuntimeException(
+                    "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixin)
+                            + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
+        }
+        // else just...
+        return null;
     }
 
     private AdapterManager getAdapterManager() {
