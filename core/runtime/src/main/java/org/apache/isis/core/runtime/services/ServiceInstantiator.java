@@ -348,9 +348,9 @@ public final class ServiceInstantiator {
         } catch (final NoClassDefFoundError e) {
             throw new InstanceCreationClassException("Class found '" + cls + "', but is missing a dependent class", e);
         } catch (final InstantiationException e) {
-            throw new InstanceCreationException("Could not instantiate an object of class '" + cls.getName() + "'; " + e.getMessage());
+            throw new InstanceCreationException("Could not instantiate an object of class '" + cls.getName() + "'; " + e.getMessage(), e);
         } catch (final IllegalAccessException e) {
-            throw new InstanceCreationException("Could not access the class '" + cls.getName() + "'; " + e.getMessage());
+            throw new InstanceCreationException("Could not access the class '" + cls.getName() + "'; " + e.getMessage(), e);
         }
     }
 

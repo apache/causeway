@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -93,9 +92,5 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
         return !isOneToManyAssociation();
     }
 
-    @Override
-    public String getBusinessKeyName() {
-        throw new NotYetImplementedException();
-    }
 
 }

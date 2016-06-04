@@ -138,11 +138,11 @@ public final class InstanceUtil {
         } catch (final NoClassDefFoundError e) {
             throw new InstanceCreationClassException(String.format("Class '%s'found , but is missing a dependent class: %s", cls, e.getMessage()), e);
         } catch (final InstantiationException | InvocationTargetException e) {
-            throw new InstanceCreationException(String.format("Could not instantiate an object of class '%s'; %s", cls.getName(), e.getMessage()));
+            throw new InstanceCreationException(String.format("Could not instantiate an object of class '%s'; %s", cls.getName(), e.getMessage()), e);
         } catch (final IllegalAccessException e) {
-            throw new InstanceCreationException(String.format("Could not access the class '%s'; %s", cls.getName(), e.getMessage()));
+            throw new InstanceCreationException(String.format("Could not access the class '%s'; %s", cls.getName(), e.getMessage()), e);
         } catch (NoSuchMethodException e) {
-            throw new InstanceCreationException(String.format("Could not find constructor in the class '%s'; %s", cls.getName(), e.getMessage()));
+            throw new InstanceCreationException(String.format("Could not find constructor in the class '%s'; %s", cls.getName(), e.getMessage()), e);
         }
     }
 

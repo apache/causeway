@@ -24,16 +24,8 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 public class InstanceCreationClassException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public InstanceCreationClassException() {
-        super();
-    }
-
     public InstanceCreationClassException(final String s) {
         super(s);
-    }
-
-    public InstanceCreationClassException(final Throwable cause) {
-        super(cause);
     }
 
     public InstanceCreationClassException(final String msg, final Throwable cause) {
