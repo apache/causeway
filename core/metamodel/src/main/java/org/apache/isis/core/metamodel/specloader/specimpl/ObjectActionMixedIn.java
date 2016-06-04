@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -67,7 +66,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
-    private List<ObjectActionParameterMixedIn> parameters;
+    private List<ObjectActionParameter> parameters;
 
     private final Identifier identifier;
 
@@ -122,23 +121,23 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return mixinAction.getParameterCount();
     }
 
-    public synchronized List<ObjectActionParameter> getParameters() {
-
-        if (this.parameters == null) {
-            final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
-            final List<ObjectActionParameterMixedIn> mixedInParameters = Lists.newArrayList();
-
-            for (int paramNum = 0; paramNum < mixinActionParameters.size(); paramNum++ ) {
-
-                final ObjectActionParameterAbstract mixinParameter =
-                        (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
-                final ObjectActionParameterMixedIn mixedInParameter;
-                mixedInParameter = new OneToOneActionParameterMixedIn(mixinParameter, this);
-                mixedInParameters.add(mixedInParameter);
-            }
-            this.parameters = mixedInParameters;
+    @Override
+    protected synchronized List<ObjectActionParameter> determineParameters() {
+        if (parameters != null) {
+            // because possible race condition (caller isn't synchronized)
+            return parameters;
         }
-        return ObjectExtensions.asListT(parameters, ObjectActionParameter.class);
+        final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
+        final List<ObjectActionParameter> mixedInParameters = Lists.newArrayList();
+
+        for (ObjectActionParameter mixinActionParameter : mixinActionParameters) {
+            final ObjectActionParameterAbstract mixinParameter =
+                    (ObjectActionParameterAbstract) mixinActionParameter;
+            final ObjectActionParameterMixedIn mixedInParameter;
+            mixedInParameter = new OneToOneActionParameterMixedIn(mixinParameter, this);
+            mixedInParameters.add(mixedInParameter);
+        }
+        return mixedInParameters;
     }
 
     @Override

@@ -92,7 +92,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
-    private List<ObjectActionParameter> parameters;
+    List<ObjectActionParameter> parameters;
 
     //endregion
 
@@ -192,28 +192,38 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * so there shouldn't be any thread race conditions.
      */
     @Override
-    public synchronized List<ObjectActionParameter> getParameters() {
-        if (this.parameters == null) {
-            final int parameterCount = getParameterCount();
-            final List<ObjectActionParameter> parameters = Lists.newArrayList();
-            final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
-            for (int i = 0; i < parameterCount; i++) {
-                final TypedHolder paramPeer = paramPeers.get(i);
-                final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLoader(), paramPeer.getType());
-                
-                if (!specification.isNotCollection()) {
-                    throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
-                }
-                final ObjectActionParameter parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
-                parameters.add(parameter);
+    public List<ObjectActionParameter> getParameters() {
+        if (parameters == null) {
+            parameters = determineParameters();
+        }
+        return parameters;
+    }
+
+    protected synchronized List<ObjectActionParameter> determineParameters() {
+        if (parameters != null) {
+            // because possible race condition (caller isn't synchronized)
+            return parameters;
+        }
+        final int parameterCount = getParameterCount();
+        final List<ObjectActionParameter> parameters = Lists.newArrayList();
+        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
+
+        for (int i = 0; i < parameterCount; i++) {
+            final TypedHolder paramPeer = paramPeers.get(i);
+            final ObjectSpecification specification = ObjectMemberAbstract
+                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
+
+            if (!specification.isNotCollection()) {
+                throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
             }
-            this.parameters = parameters;
+            final ObjectActionParameter parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
+            parameters.add(parameter);
         }
         return parameters;
     }
 
     @Override
-    public synchronized List<ObjectSpecification> getParameterTypes() {
+    public List<ObjectSpecification> getParameterTypes() {
         final List<ObjectSpecification> parameterTypes = Lists.newArrayList();
         final List<ObjectActionParameter> parameters = getParameters();
         for (final ObjectActionParameter parameter : parameters) {

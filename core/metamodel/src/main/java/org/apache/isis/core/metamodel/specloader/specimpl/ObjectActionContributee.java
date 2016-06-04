@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -54,11 +53,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
      */
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-    /**
-     * Lazily initialized by {@link #getParameters()} (so don't use directly!)
-     */
-    private List<ObjectActionParameterContributee> parameters;
-    
+
     
     private final Identifier identifier;
 
@@ -108,37 +103,38 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         return contributeeParam;
     }
 
-    public synchronized List<ObjectActionParameter> getParameters() {
-        
-        if (this.parameters == null) {
-            final List<ObjectActionParameter> serviceParameters = serviceAction.getParameters();
-            
-            final List<ObjectActionParameterContributee> contributeeParameters = Lists.newArrayList();
-            
-            int contributeeParamNum = 0;
-            for (int serviceParamNum = 0; serviceParamNum < serviceParameters.size(); serviceParamNum++ ) {
-                if(serviceParamNum == contributeeParam) {
-                    // skip so is omitted from the Contributed action
-                    continue;
-                }
-
-                final ObjectActionParameterAbstract serviceParameter =
-                        (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
-
-                final ObjectActionParameterContributee contributedParam;
-                contributedParam = new OneToOneActionParameterContributee(
-                        getServiceAdapter(), serviceParameter,
-                        contributeeParamNum, this);
-                contributeeParameters.add(contributedParam);
-                
-                contributeeParamNum++;
-            }
-            this.parameters = contributeeParameters;
+    @Override
+    protected synchronized List<ObjectActionParameter> determineParameters() {
+        if (parameters != null) {
+            // because possible race condition (caller isn't synchronized)
+            return parameters;
         }
-        return ObjectExtensions.asListT(parameters, ObjectActionParameter.class);
+
+        final List<ObjectActionParameter> serviceParameters = serviceAction.getParameters();
+        final List<ObjectActionParameter> contributeeParameters = Lists.newArrayList();
+
+        int contributeeParamNum = 0;
+
+        for (int serviceParamNum = 0; serviceParamNum < serviceParameters.size(); serviceParamNum++ ) {
+            if(serviceParamNum == contributeeParam) {
+                // skip so is omitted from the Contributed action
+                continue;
+            }
+
+            final ObjectActionParameterAbstract serviceParameter =
+                    (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
+
+            final ObjectActionParameterContributee contributedParam;
+            contributedParam = new OneToOneActionParameterContributee(
+                    getServiceAdapter(), serviceParameter,
+                    contributeeParamNum, this);
+            contributeeParameters.add(contributedParam);
+
+            contributeeParamNum++;
+        }
+        return contributeeParameters;
     }
 
-    
     @Override
     public Consent isVisible(
             final ObjectAdapter contributee,
