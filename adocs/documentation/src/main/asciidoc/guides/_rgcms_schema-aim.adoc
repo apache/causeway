@@ -102,6 +102,6 @@ be serialized to/from using the same `ActionInvocationMementoDtoUtils` class.
 
 [NOTE]
 ====
-As of `1.11.0` through `1.12.1` this schema is not used directly by the framework; in particular
+As of `1.11.0` through `1.12.2` this schema is not used directly by the framework; in particular
 `Command#setMemento(...)` sets a similar but less formal XML structure.  This may change in the future.
 ====
