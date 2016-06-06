@@ -6,16 +6,36 @@
 
 
 
-The `InteractionContext` (`1.13.0-SNAPSHOT`) is a request-scoped domain service that is used to obtain the current `Interaction`.
+The `InteractionContext` (`1.13.0-SNAPSHOT`) is a request-scoped domain service that is used to obtain the current
+`Interaction`.
 
-An `Interaction` generally consists of a single top-level `Execution`, either to invoke an action or to edit a property.  If that top-level action or property uses xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] to invoke child actions/properties, then those sub-executions are captured as a call-graph.  The `Execution` is thus a graph structure.
+An `Interaction` generally consists of a single top-level `Execution`, either to invoke an action or to edit a
+property.  If that top-level action or property uses xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] to
+invoke child actions/properties, then those sub-executions are captured as a call-graph.  The `Execution` is thus a
+graph structure.
 
-If a bulk action is performed (as per an action annotated using xref:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one per selected object (not one `Interaction` with multiple top-level ``Execution``s).
+If a bulk action is performed (as per an action annotated using
+xref:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one
+per selected object (not one `Interaction` with multiple top-level ``Execution``s).
+
+
+It is possible for ``Interaction.Execution``s to be persisted; this is supported by the (non-ASF)
+http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module, for example.  Persistent
+``Interaction``s support several use cases:
+
+* they enable profiling of the running application (which actions are invoked then most often, what is their response
+time)
+
+* if auditing is configured (using either xref:rgsvc.adoc#_rgsvc_spi_AuditingService[auditing] or
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]), they provide better audit information, since the
+`Interaction.Execution` captures the 'cause' of an interaction and can be correlated to the audit records (the "effect"
+of the interaction) by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
 
 
 
 
-== API & Implementatin
+
+== API & Implementation
 
 The public API of the service consists of several related classes:
 

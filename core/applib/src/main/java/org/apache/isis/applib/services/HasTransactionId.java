@@ -20,23 +20,19 @@ import java.util.UUID;
 
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable, 
- * and so can be associated with the GUID of the Isis transaction in which they were
- * created.
- * 
+ * Mix-in interface for objects (usually created by service implementations) that are be persistable,
+ * and so can be associated together using a unique identifier.
+ *
  * <p>
- * Other services can then use this transaction Id as a &quot;foreign key&quot; to store other
- * persistent information.  They may then use contributed actions/collections to render such aggregated
- * information back to the user.
+ *     Prior to 1.13.0, this identifier was the GUID of the Isis transaction in which the object was created (hence
+ *     the name).  As of 1.13.0, this identifier actually is for the request/interaction in which the object was
+ *     created, so is misnamed.
+ * </p>
  */
 public interface HasTransactionId {
 
     /**
-     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
-     * 
-     * <p>
-     * Note that this is the same as the Isis transaction guid as found in the JDO applib's
-     * <tt>PublishedEvent</tt>.
+     * The unique identifier (a GUID) of the request/interaction.
      */
     UUID getTransactionId();
 

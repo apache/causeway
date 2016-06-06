@@ -22,7 +22,9 @@ The table below summarizes the annotation's attributes.
 |xref:rgant.adoc#_rgant-DomainObject_auditing[`auditing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|indicates whether each of the changed properties of an object should be submitted to the registered xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`].
+|indicates whether each of the changed properties of an object should be submitted to the registered
+xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] or
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`).
 
 
 |xref:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]

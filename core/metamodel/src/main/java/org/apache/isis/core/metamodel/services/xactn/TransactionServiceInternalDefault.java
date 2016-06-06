@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.xactn;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
@@ -39,6 +40,11 @@ public class TransactionServiceInternalDefault implements TransactionService {
     public void nextTransaction() {
         persistenceSessionServiceInternal.commit();
         persistenceSessionServiceInternal.beginTran();
+    }
+
+    @Override
+    public Transaction currentTransaction() {
+        return persistenceSessionServiceInternal.currentTransaction();
     }
 
 

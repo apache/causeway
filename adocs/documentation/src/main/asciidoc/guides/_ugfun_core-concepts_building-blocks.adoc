@@ -308,8 +308,14 @@ Some examples:
 * the information within an OID could be converted into a barcode, and stamped onto a PDF form.  When the PDF is
 scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
 
-* as a handle to any object in an audit record (as used by the
-xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`], in fact).
+* as a handle to any object in an audit record (as used by xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`]
+or xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`));
+
+* similarly within implementations of xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] to persist `Command`
+objects
+
+* similarly within implementations of xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]
+(`1.13.0-SNAPSHOT`) to persist published action invocations
 
 * and of course both the xref:ugvro.adoc#[RestfulObjects viewer] and
 xref:ugvw.adoc#[Wicket viewer]

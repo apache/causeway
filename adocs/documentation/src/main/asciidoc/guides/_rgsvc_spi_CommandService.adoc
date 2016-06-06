@@ -9,22 +9,27 @@
 The `CommandService` service supports the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service such
 that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
 
-Persistent ``Command``s support several use cases:
+As of `1.13.0-SNAPSHOT`, the primary use case for persistent ``Command``s is in support of background commands; they
+act as a parent to any background commands that can be persisted either explicitly using the
+xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`], or implicitly by way of the
+xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 
-* they enable profiling of the running application (which actions are invoked then most often, what is their response
-time) ++
-+
-However, note that (as of `1.13.0-SNAPSHOT`) much more powerful profiling capabilities are provided by
-xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]; these can be logged using the
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].
+In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
 
-* they act as a parent to any background commands that might be invoked through the xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`]
+* they enable profiling of the running application (which actions are invoked then most often, what is their response time)
+* if xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] or
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`) is configured, they provide better traceability
+as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* if xref:rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] or
+         xref:rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] (`1.13.0-SNAPSHOT`) is configured, they provide better audit
+         information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
+         the action) through the `transactionId` GUID
 
-* if xref:rgsvc.adoc#_rgsvc_spi_AuditingService[auditing] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
+As of `1.13.0-SNAPSHOT`, these other uses cases are now more fully supported through the
+xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service and persistent implementations of the
+``Interaction`` object, eg as provided by the (non-ASF)
+http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module.
 
-* if xref:rgsvc.adoc#_rgsvc_spi_PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique  xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
-
-* the associated xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation attribute also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
 
 == Screencast

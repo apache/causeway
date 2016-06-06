@@ -20,8 +20,23 @@
 package org.apache.isis.applib.services.xactn;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.HasTransactionId;
 
-public interface TransactionService {
+import java.util.UUID;
+
+/**
+ * Representation of the current transaction, which conceptually wraps the underlying objectstore transaction.
+ */
+public interface Transaction extends HasTransactionId {
+
+
+    /**
+     * The {@link HasTransactionId#getTransactionId()} is (as of 1.13.0) actually an identifier for the request/
+     * interaction, and there can actually be multiple transactions within such a request/interaction.  The sequence
+     * (0-based) is used to distinguish such.
+     */
+    @Programmatic
+    int getSequence();
 
     /**
      * Flush all changes to the object store.
@@ -32,22 +47,10 @@ public interface TransactionService {
      * </p>
      *
      * <p>
-     *     Equivalent to {@link Transaction#flush()} (with {@link Transaction} obtained using {@link #currentTransaction()}).
+     *     Equivalent to {@link TransactionService#flushTransaction()}.
      * </p>
      */
     @Programmatic
-    void flushTransaction();
-
-    /**
-     * Intended only for use by fixture scripts and integration tests; commits this transaction and starts a new one.
-     */
-    @Programmatic
-    void nextTransaction();
-
-    /**
-     * Returns a representation of the current transaction.
-     */
-    @Programmatic
-    Transaction currentTransaction();
+    void flush();
 
 }

@@ -25,11 +25,22 @@ The table below summarizes the persistence layer SPIs defined by Apache Isis.  I
 
 |xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`o.a.i.applib.` +
 `services.audit` +
-`AuditingService3`]
-|Create an audit record for every changed property of every changed object within a transaction.
-|`AuditingService` +
+`AuditerService`]
+|(`1.13.0-SNAPSHOT`) Create an audit record for every changed property of every changed object within a transaction.
+|`AuditerServiceLogging` +
+also +
+`AuditerServiceUsingJdo` +
 ``o.ia.m.audit`` +
 ``isis-module-audit``
+|
+
+
+|xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`o.a.i.applib.` +
+`services.audit` +
+`AuditingService3`]
+|(deprecated in `1.13.0-SNAPSHOT`, replaced by xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]); creates
+an audit record for every changed property of every changed object within a transaction.
+|
 |
 
 

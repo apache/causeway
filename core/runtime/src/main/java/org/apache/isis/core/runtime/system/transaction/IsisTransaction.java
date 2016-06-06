@@ -24,6 +24,9 @@ import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +60,8 @@ import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceIntern
  * the {@link IsisTransactionManager} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
-public class IsisTransaction implements TransactionScopedComponent {
+public class IsisTransaction implements TransactionScopedComponent, Transaction {
+
 
     public static class Placeholder {
         public static Placeholder NEW = new Placeholder("[NEW]");
@@ -172,15 +176,17 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final MetricsService metricsService;
     private final QueryResultsCache queryResultsCache;
 
-    private final UUID transactionId;
-        
+    private final UUID interactionId;
+    private final int sequence;
+
     private IsisException abortCause;
 
     public IsisTransaction(
             final IsisTransactionManager transactionManager,
             final MessageBroker messageBroker,
             final ServicesInjector servicesInjector,
-            final UUID transactionId) {
+            final UUID interactionId,
+            final int sequence) {
         
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
@@ -192,7 +198,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.metricsService = lookupService(MetricsService.class);
         this.queryResultsCache = lookupService(QueryResultsCache.class);
 
-        this.transactionId = transactionId;
+        this.interactionId = interactionId;
+        this.sequence = sequence;
 
         this.state = State.IN_PROGRESS;
 
@@ -205,8 +212,22 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     //region > transactionId
 
+    @Programmatic
     public final UUID getTransactionId() {
-        return transactionId;
+        return interactionId;
+    }
+
+    /**
+     * Just throws an exception (the issue is that {@link HasTransactionId} really ought not to expose the setter).
+     */
+    @Override
+    public void setTransactionId(UUID transactionId) {
+        throw new IllegalStateException("Transaction Id cannot be set on Transaction object");
+    }
+
+    @Override
+    public int getSequence() {
+        return sequence;
     }
 
     //endregion
@@ -298,6 +319,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     //endregion
 
     //region > flush
+
 
     public synchronized final void flush() {
 

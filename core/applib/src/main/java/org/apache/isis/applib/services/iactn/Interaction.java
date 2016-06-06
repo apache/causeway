@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.schema.common.v1.DifferenceDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.PeriodDto;
@@ -282,10 +283,16 @@ public class Interaction implements HasTransactionId {
          */
         INTERACTION,
         /**
-         * &quot;pe&quot; - published event.  For objects: multiple such could be dirtied and thus published as
-         * separate events.  For actions invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the {@link WrapperFactory}.
+         * For objects: multiple such could be dirtied and thus published as separate events.  For actions
+         * invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the
+         * {@link WrapperFactory}.
          */
-        PUBLISHED_EVENT;
+        PUBLISHED_EVENT,
+        /**
+         * There may be multiple transactions within a given interaction, as per {@link Transaction#getSequence()}.
+         */
+        TRANSACTION,
+        ;
 
         @Programmatic
         public String id() {

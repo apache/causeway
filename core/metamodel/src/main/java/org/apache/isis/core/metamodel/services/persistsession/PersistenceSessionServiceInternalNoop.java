@@ -7,6 +7,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -99,6 +100,11 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     @Override
     public void commit() {
         throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
+
+    @Override
+    public Transaction currentTransaction() {
+        throw new UnsupportedOperationException("Not supported by this implementation");
     }
 
     @Override
