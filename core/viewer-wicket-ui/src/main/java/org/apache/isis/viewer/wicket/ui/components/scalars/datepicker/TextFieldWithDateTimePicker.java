@@ -72,6 +72,8 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         config.calendarWeeks(true);
 
+        config.useCurrent(false);
+
         this.config = config;
     }
 

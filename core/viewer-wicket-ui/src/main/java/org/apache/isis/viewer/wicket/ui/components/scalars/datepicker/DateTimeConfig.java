@@ -72,6 +72,11 @@ public class DateTimeConfig extends AbstractConfig {
      */
     private static final IKey<Boolean> SideBySide = newKey("sideBySide", false);
 
+    /**
+     * @see <a href="http://eonasdan.github.io/bootstrap-datetimepicker/Options/#usecurrent">online reference</a>
+     */
+    private static final IKey<Boolean> UseCurrent = newKey("useCurrent", true);
+
 
     /**
      * The two-letter code of the language to use for month and day names.
@@ -321,6 +326,15 @@ public class DateTimeConfig extends AbstractConfig {
      */
     public DateTimeConfig calendarWeeks(final boolean value) {
         put(CalendarWeeks, value);
+        return this;
+    }
+
+    /**
+     * @param value Whether or not to show week numbers to the left of week rows.
+     * @return this instance for chaining
+     */
+    public DateTimeConfig useCurrent(final boolean value) {
+        put(UseCurrent, value);
         return this;
     }
 
