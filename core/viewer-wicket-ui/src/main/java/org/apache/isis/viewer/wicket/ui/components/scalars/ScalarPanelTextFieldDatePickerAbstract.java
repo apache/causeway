@@ -23,6 +23,8 @@ import java.io.Serializable;
 
 import com.google.inject.Inject;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -146,6 +148,5 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     private ObjectAdapter adapterFor(final Object pojo) {
         return getPersistenceSession().adapterFor(pojo);
     }
-    
-    
+
 }

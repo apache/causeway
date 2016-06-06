@@ -77,6 +77,16 @@ public class DateTimeConfig extends AbstractConfig {
      */
     private static final IKey<Boolean> UseCurrent = newKey("useCurrent", true);
 
+    /**
+     * @see <a href="http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate">online reference</a>
+     */
+    private static final IKey<String> MinDate = newKey("minDate", null);
+
+    /**
+     * @see <a href="http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate">online reference</a>
+     */
+    private static final IKey<String> MaxDate = newKey("maxDate", null);
+
 
     /**
      * The two-letter code of the language to use for month and day names.
@@ -329,12 +339,18 @@ public class DateTimeConfig extends AbstractConfig {
         return this;
     }
 
-    /**
-     * @param value Whether or not to show week numbers to the left of week rows.
-     * @return this instance for chaining
-     */
     public DateTimeConfig useCurrent(final boolean value) {
         put(UseCurrent, value);
+        return this;
+    }
+
+    public DateTimeConfig minDate(final String value) {
+        put(MinDate, value);
+        return this;
+    }
+
+    public DateTimeConfig maxDate(final String value) {
+        put(MaxDate, value);
         return this;
     }
 

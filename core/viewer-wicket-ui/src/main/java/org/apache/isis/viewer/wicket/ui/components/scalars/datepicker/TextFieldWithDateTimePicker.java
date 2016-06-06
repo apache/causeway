@@ -21,6 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 import de.agilecoders.wicket.core.util.Attributes;
 
 import java.util.Locale;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -45,6 +48,18 @@ import static de.agilecoders.wicket.jquery.JQuery.$;
 public class TextFieldWithDateTimePicker<T> extends TextField<T> implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate, in ISO format (per https://github.com/moment/moment/issues/1407).
+     */
+    private static final String KEY_DATE_PICKER_MIN_DATE = "isis.viewer.wicket.datePicker.minDate";
+    private static final String KEY_DATE_PICKER_MIN_DATE_DEFAULT = "1900-01-01T00:00:00.000Z";
+
+    /**
+     * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+     */
+    private static final String KEY_DATE_PICKER_MAX_DATE = "isis.viewer.wicket.datePicker.maxDate";
+    private static final String KEY_DATE_PICKER_MAX_DATE_DEFAULT = "2100-01-01T00:00:00.000Z";
 
     protected final DateConverter<T> converter;
 
@@ -71,8 +86,13 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         }
 
         config.calendarWeeks(true);
-
         config.useCurrent(false);
+
+        final String datePickerMinDate = getConfiguration().getString(KEY_DATE_PICKER_MIN_DATE, KEY_DATE_PICKER_MIN_DATE_DEFAULT);
+        final String datePickerMaxDate = getConfiguration().getString(KEY_DATE_PICKER_MAX_DATE, KEY_DATE_PICKER_MAX_DATE_DEFAULT);
+
+        config.minDate(datePickerMinDate);
+        config.maxDate(datePickerMaxDate);
 
         this.config = config;
     }
@@ -135,4 +155,9 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     private CharSequence createScript(final DateTimeConfig config) {
         return $(this).chain("datetimepicker", config).get();
     }
+
+    IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+
 }

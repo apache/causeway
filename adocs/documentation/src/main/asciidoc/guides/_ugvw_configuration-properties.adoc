@@ -43,6 +43,26 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 | number of pages to bookmark
 
 |`isis.viewer.wicket.` +
+`datePicker.maxDate`
+| ISO format date +
+(`2100-01-01T00:00:00.000Z`)
+|(`1.13.0-SNAPSHOT`), specifies a maximum date after which dates may not be specified.
+
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for
+further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+for further details).
+
+|`isis.viewer.wicket.` +
+`datePicker.minDate`
+| ISO format date +
+(`1900-01-01T00:00:00.000Z`)
+|(`1.13.0-SNAPSHOT`), specifies a minimum date before which dates may not be specified.
+
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[datetimepicker reference docs] for
+further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+for further details).
+
+|`isis.viewer.wicket.` +
 `disableDependentChoiceAutoSelection`
 | `true`,`false` (`_false_`)
 | For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
