@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authentication.standard.exploration;
+package org.apache.isis.core.runtime.authentication.exploration;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;

@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.authentication.fixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -44,9 +45,10 @@ public class LogonFixtureAuthenticator extends AuthenticatorAbstractForDfltRunti
      * exploration} or {@link DeploymentType#isPrototyping() prototyping} mode.
      */
     @Override
-    public final boolean isValid(final AuthenticationRequest request) {
+    protected final boolean isValid(final AuthenticationRequest request) {
         final DeploymentType deploymentType = getDeploymentType();
         return deploymentType.isExploring() || deploymentType.isPrototyping();
     }
+
 
 }

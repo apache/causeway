@@ -67,50 +67,32 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     private static final Logger LOG = LoggerFactory.getLogger(ShiroAuthenticatorOrAuthorizor.class);
 
+    //region > constructor and fields
     private final IsisConfiguration configuration;
-
-
-    // //////////////////////////////////////////////////////
-    // constructor
-    // //////////////////////////////////////////////////////
 
     public ShiroAuthenticatorOrAuthorizor(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    // //////////////////////////////////////////////////////
-    // init, shutdown
-    // //////////////////////////////////////////////////////
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    //endregion
+
+    //region > init, shutdown
 
     @Override
     public void init() {
-    }
-
-    /**
-     * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
-     * (if shiro is configured for both components).
-     */
-    protected RealmSecurityManager getSecurityManager() {
-        SecurityManager securityManager;
-        try {
-            securityManager = SecurityUtils.getSecurityManager();
-        } catch(UnavailableSecurityManagerException ex) {
-            return null;
-        }
-        if(!(securityManager instanceof RealmSecurityManager)) {
-            return null;
-        }
-        return (RealmSecurityManager) securityManager;
     }
 
 
     @Override
     public void shutdown() {
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////
-    // Authenticator API
-    // //////////////////////////////////////////////////////
+    //region > Authenticator API
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -212,19 +194,9 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         
         return new UsernamePasswordToken(username, password);
     }
+    //endregion
 
-
-    /**
-     * UNUSED (see [ISIS-292]).
-     */
-    @Override
-    public boolean isValid(AuthenticationRequest request) {
-        return false;
-    }
-
-    // //////////////////////////////////////////////////////
-    // Authorizor API
-    // //////////////////////////////////////////////////////
+    //region > Authorizor API
 
     @Override
     public boolean isVisibleInAnyRole(Identifier identifier) {
@@ -287,15 +259,28 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     public boolean isUsableInRole(String role, Identifier identifier) {
         return false;
     }
-    
-    // //////////////////////////////////////////////////////
-    // Injected (via constructor)
-    // //////////////////////////////////////////////////////
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
+    //endregion
+
+    //region > Injected (via Shiro service locator)
+
+    /**
+     * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
+     * (if shiro is configured for both components).
+     */
+    protected RealmSecurityManager getSecurityManager() {
+        SecurityManager securityManager;
+        try {
+            securityManager = SecurityUtils.getSecurityManager();
+        } catch(UnavailableSecurityManagerException ex) {
+            return null;
+        }
+        if(!(securityManager instanceof RealmSecurityManager)) {
+            return null;
+        }
+        return (RealmSecurityManager) securityManager;
     }
 
-
+    //endregion
 
 }

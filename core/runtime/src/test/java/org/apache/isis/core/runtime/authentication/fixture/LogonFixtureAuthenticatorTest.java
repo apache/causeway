@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authentication.standard.fixture;
+package org.apache.isis.core.runtime.authentication.fixture;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;

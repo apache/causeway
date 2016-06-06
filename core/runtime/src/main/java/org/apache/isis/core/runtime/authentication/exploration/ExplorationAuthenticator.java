@@ -107,7 +107,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
      * exploration} mode.
      */
     @Override
-    public final boolean isValid(final AuthenticationRequest request) {
+    protected final boolean isValid(final AuthenticationRequest request) {
         return getDeploymentType().isExploring();
     }
 
