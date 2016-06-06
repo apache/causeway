@@ -24,15 +24,13 @@ import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
-import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -46,7 +44,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
-import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -172,9 +169,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
-    private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
-    private final MetricsService metricsService;
-    private final QueryResultsCache queryResultsCache;
 
     private final UUID interactionId;
     private final int sequence;
@@ -194,9 +188,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         
         this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
         this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
-        this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
-        this.metricsService = lookupService(MetricsService.class);
-        this.queryResultsCache = lookupService(QueryResultsCache.class);
 
         this.interactionId = interactionId;
         this.sequence = sequence;
