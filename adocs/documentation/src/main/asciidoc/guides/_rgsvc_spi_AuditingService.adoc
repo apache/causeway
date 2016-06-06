@@ -77,9 +77,7 @@ implementing a xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subs
 
 == Related Services
 
-The auditing service works very well with the xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`].  The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+This service has been deprecated and replaced by the equivalent
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`).
 
-You may also want to configure the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
-
-All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] interface.
 

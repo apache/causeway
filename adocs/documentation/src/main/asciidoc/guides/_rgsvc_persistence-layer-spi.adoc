@@ -109,6 +109,7 @@ Where an implementation is available (on the classpath) then it is always regist
 
 
 
+include::_rgsvc_spi_AuditerService.adoc[leveloffset=+1]
 include::_rgsvc_spi_AuditingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_EventSerializer.adoc[leveloffset=+1]
 include::_rgsvc_spi_PublisherService.adoc[leveloffset=+1]
