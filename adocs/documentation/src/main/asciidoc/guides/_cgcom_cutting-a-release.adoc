@@ -447,9 +447,19 @@ popd
 [source,bash]
 ----
 cp webapp/target/simpleapp.war $CATALINA_HOME/webapps/ROOT.war
+pushd $CATALINA_HOME/bin
+sh startup.sh
+----
++
+quit using:
++
+[source,bash]
+----
+sh shutdown.sh
+popd
 ----
 
-Check the about page and confirm built against non-SNAPSHOT versions of the Apache Isis jars.
+In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
 
 
 [[_cgcom_cutting-a-release_releasing-the-archetype_create-the-archetype]]

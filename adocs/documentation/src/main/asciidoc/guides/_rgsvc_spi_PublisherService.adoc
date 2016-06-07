@@ -69,11 +69,26 @@ serializable XML representation can be obtained using the `ChangesDtoUtils` util
 <5> metrics as to the number of objects loaded, created, updated or deleted and the number of object properties modified (in other words the "size" or "weight" of the transaction).
 
 
-== Implementation
+== Implementations
 
 The framework allows multiple implementations of this service to be registered; all will be called.  The framework
 provides one implementation of its own, `PublisherServiceLogging` (in `o.a.i.applib.services.publish` package); this
 logs "deep" serializations to an SLF4J logger.
+
+For example, this can be configured to write to a separate log file by adding the following to `logging.properties`:
+
+[source,ini]
+----
+log4j.appender.PublisherServiceLogging=org.apache.log4j.FileAppender
+log4j.appender.PublisherServiceLogging.File=./logs/PublisherServiceLogging.log
+log4j.appender.PublisherServiceLogging.Append=false
+log4j.appender.PublisherServiceLogging.layout=org.apache.log4j.PatternLayout
+log4j.appender.PublisherServiceLogging.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss.SSS} %m%n
+
+log4j.logger.org.apache.isis.applib.services.publish.PublisherServiceLogging=DEBUG,PublisherServiceLogging
+log4j.additivity.log4j.logger.org.apache.isis.applib.services.publish.PublisherServiceLogging=false
+----
+
 
 The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module also provides an
 implementation (`o.ia.m.publishmq.dom.servicespi.PublishingServiceUsingActiveMq`).  This implementation publishes each

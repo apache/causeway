@@ -43,6 +43,20 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 | number of pages to bookmark
 
 |`isis.viewer.wicket.` +
+`datePattern`
+| date format +
+(`dd-MM-yyyy`)
+|The `SimpleDateFormat` used to render dates.  For the date picker (which uses `moment.js` library), this is converted
+dynamically into the corresponding `moment.js` format.
+
+|`isis.viewer.wicket.` +
+`dateTimePattern`
+| date/time format +
+(`dd-MM-yyyy HH:mm`)
+|The `SimpleDateFormat` used to render date/times.  For the date picker (which uses `moment.js` library), this is
+converted dynamically into the corresponding `moment.js` format.
+
+|`isis.viewer.wicket.` +
 `datePicker.maxDate`
 | ISO format date +
 (`2100-01-01T00:00:00.000Z`)
@@ -119,6 +133,13 @@ for further details).
 `suppressSignUp`
 | `true`,`false` (`_false_`)
 |If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-sign-up[below].
+
+|`isis.viewer.wicket.` +
+`timestampPattern`
+| date/time format +
+(`yyyy-MM-dd HH:mm:ss.SSS`)
+|The `SimpleDateFormat` used to render timestamps.
+
 
 |`isis.viewer.wicket.` +
 `themes.enabled`

@@ -50,11 +50,27 @@ The framework will call this for each and every domain object property that is m
 
 
 
-== Implementation
+== Implementations
 
 The framework allows multiple implementations of this service to be registered; all will be called.  The framework
 provides one implementation of its own, `AuditerServiceLogging` (in `o.a.i.applib.services.audit` package); this
 logs simple messages to an SLF4J logger.
+
+
+For example, this can be configured to write to a separate log file by adding the following to `logging.properties`:
+
+[source,ini]
+----
+log4j.appender.AuditerServiceLogging=org.apache.log4j.FileAppender
+log4j.appender.AuditerServiceLogging.File=./logs/AuditerServiceLogging.log
+log4j.appender.AuditerServiceLogging.Append=false
+log4j.appender.AuditerServiceLogging.layout=org.apache.log4j.PatternLayout
+log4j.appender.AuditerServiceLogging.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss.SSS} %m%n
+
+log4j.logger.org.apache.isis.applib.services.audit.AuditerServiceLogging=DEBUG,AuditerServiceLogging
+log4j.additivity.log4j.logger.org.apache.isis.applib.services.audit.AuditerServiceLogging=false
+----
+
 
 The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' Audit module] also provides an
 implementation, `org.isisaddons.module.audit.dom.AuditerServiceUsingJdo`.  This creates an audit record for each
