@@ -27,20 +27,19 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -55,7 +54,6 @@ import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
@@ -76,7 +74,6 @@ public class IsisSystem implements ApplicationScopedComponent {
     private boolean initialized = false;
 
     private ServiceInitializer serviceInitializer;
-    private FixturesInstaller fixtureInstaller;
     private IsisSessionFactory sessionFactory;
 
     //region > constructors
@@ -117,33 +114,28 @@ public class IsisSystem implements ApplicationScopedComponent {
 
         if (initialized) {
             throw new IllegalStateException("Already initialized");
-        } else {
-            initialized = true;
         }
+        initialized = true;
+
 
         LOG.info("initialising Isis System");
         LOG.info("working directory: " + new File(".").getAbsolutePath());
-        LOG.info("resource stream source: " + getConfiguration().getResourceStreamSource());
 
-        localeInitializer.initLocale(getConfiguration());
-        timeZoneInitializer.initTimeZone(getConfiguration());
+        final IsisConfigurationDefault configuration = componentProvider.getConfiguration();
+        LOG.info("resource stream source: " + configuration.getResourceStreamSource());
 
-        // a bit of a workaround, but required if anything in the metamodel (for
-        // example, a
-        // ValueSemanticsProvider for a date value type) needs to use the Clock
-        // singleton
-        // we do this after loading the services to allow a service to prime a
-        // different clock
+        localeInitializer.initLocale(configuration);
+        timeZoneInitializer.initTimeZone(configuration);
+
+        // a bit of a workaround, but required if anything in the metamodel (for example, a
+        // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
+        // we do this after loading the services to allow a service to prime a different clock
         // implementation (eg to use an NTP time service).
         if (!deploymentType.isProduction() && !Clock.isInitialized()) {
             FixtureClock.initialize();
         }
 
         try {
-
-            // configuration
-            // TODO: HACKY
-            final IsisConfigurationDefault configuration = componentProvider.getConfiguration();
 
             // services
             ServicesInjector servicesInjector = componentProvider.provideServiceInjector(configuration);
@@ -169,8 +161,7 @@ public class IsisSystem implements ApplicationScopedComponent {
 
             // persistenceSessionFactory
             final PersistenceSessionFactory persistenceSessionFactory =
-                    componentProvider.providePersistenceSessionFactory(
-                            deploymentType, servicesInjector);
+                    componentProvider.providePersistenceSessionFactory(deploymentType, servicesInjector);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
             // wire up components and components into services...
@@ -181,13 +172,11 @@ public class IsisSystem implements ApplicationScopedComponent {
 
             // instantiate
             sessionFactory = new IsisSessionFactory(deploymentType, servicesInjector);
-
             IsisContext.set(sessionFactory);
 
-            specificationLoader.init();
-
             try {
-                // validate here after all entities have been registered in the persistence session factory
+                // first, initial metamodel (may throw exception if invalid)
+                specificationLoader.init();
                 specificationLoader.validateAndAssert();
 
 
@@ -200,12 +189,10 @@ public class IsisSystem implements ApplicationScopedComponent {
                 persistenceSessionFactory.init();
 
                 // do postConstruct.  We store the initializer to do preDestroy on shutdown
-
-                // validate
-                this.serviceInitializer = new ServiceInitializer(getConfiguration(), sessionFactory.getServices());
+                serviceInitializer = new ServiceInitializer(configuration, servicesInjector.getRegisteredServices());
                 serviceInitializer.validate();
 
-                postConstructInSession(this.serviceInitializer);
+                postConstructInSession(serviceInitializer);
 
                 installFixturesIfRequired();
 
@@ -234,16 +221,15 @@ public class IsisSystem implements ApplicationScopedComponent {
     private void postConstructInSession(final ServiceInitializer serviceInitializer) {
         IsisContext.openSession(new InitialisationSession());
         try {
-            getTransactionManager().startTransaction();
+            IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
+            transactionManager.startTransaction();
             try {
                 serviceInitializer.postConstruct();
-                return;
             } catch(RuntimeException ex) {
-                getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
-                return;
+                transactionManager.getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
             } finally {
                 // will commit or abort
-                getTransactionManager().endTransaction();
+                transactionManager.endTransaction();
             }
         } finally {
             IsisContext.closeSession();
@@ -252,7 +238,7 @@ public class IsisSystem implements ApplicationScopedComponent {
 
     private void installFixturesIfRequired() throws IsisSystemException {
 
-        fixtureInstaller = componentProvider.provideFixturesInstaller();
+        final FixturesInstaller fixtureInstaller = componentProvider.provideFixturesInstaller();
 
         IsisContext.openSession(new InitialisationSession());
         fixtureInstaller.installFixtures();
@@ -271,25 +257,28 @@ public class IsisSystem implements ApplicationScopedComponent {
      * The act of invoking titleOf(...) will cause translations to be requested.
      */
     private void translateServicesAndEnumConstants() {
+        final ServicesInjector servicesInjector = getServicesInjector();
+
         IsisContext.openSession(new InitialisationSession());
         try {
-            final List<Object> services = sessionFactory.getServices();
-            final DomainObjectContainer container = lookupService(DomainObjectContainer.class);
+            final List<Object> services = servicesInjector.getRegisteredServices();
+            final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
             for (Object service : services) {
-                final String unused = container.titleOf(service);
+                final String unused = titleService.titleOf(service);
             }
-            for (final ObjectSpecification objSpec : allSpecifications()) {
+            for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
                 final Class<?> correspondingClass = objSpec.getCorrespondingClass();
                 if(correspondingClass.isEnum()) {
                     final Object[] enumConstants = correspondingClass.getEnumConstants();
                     for (Object enumConstant : enumConstants) {
-                        final String unused = container.titleOf(enumConstant);
+                        final String unused = titleService.titleOf(enumConstant);
                     }
                 }
             }
 
             // as used by the Wicket UI
-            final TranslationService translationService = lookupService(TranslationService.class);
+            final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+
             final String context = IsisSystem.class.getName();
             translationService.translate(context, MSG_ARE_YOU_SURE);
             translationService.translate(context, MSG_CONFIRM);
@@ -298,23 +287,10 @@ public class IsisSystem implements ApplicationScopedComponent {
         } finally {
             IsisContext.closeSession();
         }
-
-    }
-
-    private <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
     }
 
     private ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
-    }
-
-    private PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    Collection<ObjectSpecification> allSpecifications() {
-        return IsisContext.getSpecificationLoader().allSpecifications();
+        return sessionFactory.getServicesInjector();
     }
 
     //endregion
@@ -336,37 +312,27 @@ public class IsisSystem implements ApplicationScopedComponent {
         }
 
         // call @PreDestroy (in a session)
+        IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
+
         IsisContext.openSession(new InitialisationSession());
         try {
-            getTransactionManager().startTransaction();
+            transactionManager.startTransaction();
             try {
 
                 serviceInitializer.preDestroy();
 
             } catch (RuntimeException ex) {
-                getTransactionManager().getTransaction().setAbortCause(
+                transactionManager.getTransaction().setAbortCause(
                         new IsisTransactionManagerException(ex));
             } finally {
                 // will commit or abort
-                getTransactionManager().endTransaction();
+                transactionManager.endTransaction();
             }
         } finally {
             IsisContext.closeSession();
         }
     }
 
-    //endregion
-
-    //region > configuration
-
-    /**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}
-     * (although once the {@link IsisSystem} is completely initialized, will
-     * effectively be immutable).
-     */
-    public IsisConfiguration getConfiguration() {
-        return componentProvider.getConfiguration();
-    }
     //endregion
 
     // region > metaModel validity
@@ -390,12 +356,9 @@ public class IsisSystem implements ApplicationScopedComponent {
     public LogonFixture getLogonFixture() {
         return logonFixture;
     }
-    //endregion
 
-    //region > debugging
-
-    IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+    IsisTransactionManager getCurrentSessionTransactionManager() {
+        return sessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     //endregion
