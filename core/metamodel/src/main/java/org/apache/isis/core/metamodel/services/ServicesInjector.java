@@ -57,6 +57,8 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -504,7 +506,25 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > convenience lookups (singletons only)
+    //region > convenience lookups (singletons only, cached)
+
+    private AuthenticationManager authenticationManager;
+
+    @Programmatic
+    public AuthenticationManager getAuthenticationManager() {
+        return authenticationManager != null
+                ? authenticationManager
+                : (authenticationManager = lookupService(AuthenticationManager.class));
+    }
+
+    private AuthorizationManager authorizationManager;
+
+    @Programmatic
+    public AuthorizationManager getAuthorizationManager() {
+        return authorizationManager != null
+                ? authorizationManager
+                : (authorizationManager = lookupService(AuthorizationManager.class));
+    }
 
     private SpecificationLoader specificationLoader;
 
@@ -546,6 +566,11 @@ public class ServicesInjector implements ApplicationScopedComponent {
                 ? configurationServiceInternal
                 : (configurationServiceInternal = lookupService(ConfigurationServiceInternal.class));
     }
+
+
+    //endregion
+
+    //region > convenience lookups (not cached as derived properties)
 
     /**
      * Cannot be cached because is a derived property, not a registered service.
