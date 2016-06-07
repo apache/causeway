@@ -117,8 +117,7 @@ public abstract class SpecificationLoaderTestAbstract {
                     stubConfiguration);
 
         final SpecificationLoader specificationLoader =
-                new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                        stubConfiguration,
+                new SpecificationLoader(
                         new ProgrammingModelFacetsJava5(stubConfiguration),
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(

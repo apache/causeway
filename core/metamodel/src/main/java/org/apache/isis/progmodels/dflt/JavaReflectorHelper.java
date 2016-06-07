@@ -63,7 +63,6 @@ public final class JavaReflectorHelper  {
         }
 
         return new SpecificationLoader(
-                deploymentCategory, configuration,
                 programmingModel, metaModelValidator, layoutMetadataReaders, servicesInjector);
     }
 

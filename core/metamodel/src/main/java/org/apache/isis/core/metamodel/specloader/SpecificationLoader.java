@@ -34,11 +34,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -89,7 +87,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //region > constructor, fields
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
-    private final DeploymentCategory deploymentCategory;
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
@@ -100,14 +97,11 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final List<LayoutMetadataReader> layoutMetadataReaders;
 
     public SpecificationLoader(
-            final DeploymentCategory deploymentCategory,
-            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjector servicesInjector) {
 
-        this.deploymentCategory = deploymentCategory;
         this.servicesInjector = servicesInjector;
 
         this.programmingModel = programmingModel;
