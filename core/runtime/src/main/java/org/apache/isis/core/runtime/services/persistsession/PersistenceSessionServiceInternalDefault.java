@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
@@ -176,7 +177,8 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         return IsisContext.getPersistenceSession();
     }
 
-    protected IsisTransactionManager getTransactionManager() {
+    @Programmatic
+    public IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
 

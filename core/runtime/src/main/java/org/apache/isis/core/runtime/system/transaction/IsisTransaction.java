@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -44,6 +45,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
+import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -161,36 +163,34 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     //region > constructor, fields
 
+    private final UUID interactionId;
+    private final int sequence;
+
     private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
-
-    private final ServicesInjector servicesInjector;
-
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
 
-    private final UUID interactionId;
-    private final int sequence;
+    private final List<WithTransactionScope> withTransactionScopes;
 
     private IsisException abortCause;
 
     public IsisTransaction(
-            final IsisTransactionManager transactionManager,
-            final MessageBroker messageBroker,
-            final ServicesInjector servicesInjector,
-            final UUID interactionId,
-            final int sequence) {
-        
-        this.transactionManager = transactionManager;
-        this.messageBroker = messageBroker;
-        this.servicesInjector = servicesInjector;
-        
-        this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
-        this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
+            final UUID interactionId, final int sequence, final ServicesInjector servicesInjector) {
 
         this.interactionId = interactionId;
         this.sequence = sequence;
+
+        final PersistenceSessionServiceInternalDefault persistenceSessionService = servicesInjector
+                .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
+        this.transactionManager = persistenceSessionService.getTransactionManager();
+
+        this.messageBroker = servicesInjector.getMessageBroker();
+        this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
+        this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
+
+        withTransactionScopes = servicesInjector.lookupServices(WithTransactionScope.class);
 
         this.state = State.IN_PROGRESS;
 
@@ -418,8 +418,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
-            List<WithTransactionScope> withTransactionScopes = servicesInjector
-                    .lookupServices(WithTransactionScope.class);
             for (WithTransactionScope withTransactionScope : withTransactionScopes) {
                 withTransactionScope.resetForNextTransaction();
             }
@@ -520,21 +518,6 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
      */
     public MessageBroker getMessageBroker() {
         return messageBroker;
-    }
-
-    //endregion
-
-    //region > helpers: lookupService etc
-    private <T> T lookupService(Class<T> serviceType) {
-        T service = lookupServiceIfAny(serviceType);
-        if(service == null) {
-            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
-        }
-        return service;
-    }
-
-    private <T> T lookupServiceIfAny(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
     }
 
     //endregion

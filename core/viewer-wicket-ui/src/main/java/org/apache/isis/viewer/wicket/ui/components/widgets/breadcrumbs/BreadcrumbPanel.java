@@ -33,7 +33,6 @@ import org.wicketstuff.select2.Settings;
 import org.wicketstuff.select2.TextChoiceProvider;
 
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -104,7 +103,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                     final String oidStr = breadcrumbChoice.getInput();
                     final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                     if(selectedModel == null) {
-                        final MessageBroker messageBroker = IsisContext.getAuthenticationSession().getMessageBroker();
+                        final MessageBroker messageBroker = getServicesInjector().getMessageBroker();
                         messageBroker.addWarning("Cannot find object");
                         String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                         target.appendJavaScript(feedbackMsg);

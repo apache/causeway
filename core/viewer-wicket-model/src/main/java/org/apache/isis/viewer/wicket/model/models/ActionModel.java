@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -560,7 +561,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             // equivalent to calling DomainObjectContainer#raiseError(...)
             final RecoverableException appEx = getApplicationExceptionIfAny(ex);
             if (appEx != null) {
-                IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
+                getServicesInjector().getMessageBroker().setApplicationError(appEx.getMessage());
 
                 // there's no need to set the abort cause on the transaction, it will have already been done
                 // (in IsisTransactionManager#executeWithinTransaction(...)).

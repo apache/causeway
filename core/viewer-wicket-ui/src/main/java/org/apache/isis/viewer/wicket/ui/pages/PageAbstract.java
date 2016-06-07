@@ -61,7 +61,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
@@ -443,16 +442,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return IsisContext.getPersistenceSession();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-    
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
-    }
-    
-    protected MessageBroker getMessageBroker() {
-        return IsisContext.getMessageBroker();
     }
     
     protected IsisConfiguration getConfiguration() {

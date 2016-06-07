@@ -255,8 +255,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
             command = commandContext.getCommand();
             final UUID transactionId = command.getTransactionId();
 
-            final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
-            this.transaction = new IsisTransaction(this, messageBroker, servicesInjector, transactionId, interaction.next(Interaction.Sequence.TRANSACTION.id()));
+            this.transaction = new IsisTransaction(transactionId,
+                    interaction.next(Interaction.Sequence.TRANSACTION.id()), servicesInjector);
             transactionLevel = 0;
 
             persistenceSession.startTransaction();

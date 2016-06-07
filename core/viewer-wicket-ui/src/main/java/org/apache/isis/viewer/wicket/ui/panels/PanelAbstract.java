@@ -133,11 +133,11 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
      * @return
      */
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return getServicesInjector().getAuthenticationSession();
     }
 
     public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+        return getServicesInjector().getDeploymentCategory();
     }
 
 

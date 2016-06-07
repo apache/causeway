@@ -29,7 +29,6 @@ import org.apache.wicket.model.ResourceModel;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -141,7 +140,7 @@ public class PropertyEditFormPanel extends PanelAbstract<ScalarModel> {
 
                         // ensure any jGrowl errors are shown
                         // (normally would be flushed when traverse to next page).
-                        String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(IsisContext.getMessageBroker());
+                        String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(getServicesInjector().getMessageBroker());
                         builder.append(errorMessagesIfAny);
 
                         // append the JS to the response.
