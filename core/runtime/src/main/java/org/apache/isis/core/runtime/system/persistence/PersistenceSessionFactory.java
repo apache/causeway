@@ -35,7 +35,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
@@ -168,7 +167,6 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     @Programmatic
     public PersistenceSession createPersistenceSession(
             final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession) {
 
         final FixturesInstalledFlag fixturesInstalledFlag = this;
@@ -176,7 +174,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
                 applicationComponents.getPersistenceManagerFactory();
 
         return new PersistenceSession(
-                configuration, servicesInjector, specificationLoader,
+                servicesInjector,
                 authenticationSession, persistenceManagerFactory,
                 fixturesInstalledFlag);
     }

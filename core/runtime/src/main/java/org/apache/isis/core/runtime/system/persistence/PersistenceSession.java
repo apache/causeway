@@ -63,7 +63,6 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -181,7 +180,7 @@ public class PersistenceSession implements
     private final FixturesInstalledFlag fixturesInstalledFlag;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
-    private final IsisConfigurationDefault configuration;
+    private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
 
@@ -229,9 +228,7 @@ public class PersistenceSession implements
      * persisted objects and persist changes to the object that are saved.
      */
     public PersistenceSession(
-            final IsisConfigurationDefault configuration,
             final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledFlag fixturesInstalledFlag) {
@@ -245,8 +242,8 @@ public class PersistenceSession implements
         this.fixturesInstalledFlag = fixturesInstalledFlag;
 
         // injected
-        this.configuration = configuration;
-        this.specificationLoader = specificationLoader;
+        this.configuration = servicesInjector.getConfigurationServiceInternal();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
         this.authenticationSession = authenticationSession;
 
         this.commandContext = lookupService(CommandContext.class);
@@ -262,13 +259,13 @@ public class PersistenceSession implements
 
         // sub-components
         final AdapterManager adapterManager = this;
-        this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, specificationLoader);
+        this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, this.specificationLoader);
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
 
         this.state = State.NOT_INITIALIZED;
 
         final boolean concurrencyCheckingGloballyDisabled =
-                configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
+                this.configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
         this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
 
     }
