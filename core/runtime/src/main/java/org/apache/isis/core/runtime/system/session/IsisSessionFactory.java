@@ -38,10 +38,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 /**
  * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
  * 
@@ -60,9 +56,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 public class IsisSessionFactory implements ApplicationScopedComponent {
 
-
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
+
+    //region > constructor, fields, shutdown
 
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
@@ -75,23 +72,19 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     public IsisSessionFactory(
             final DeploymentType deploymentType,
-            final IsisConfiguration configuration,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader,
-            final AuthenticationManager authenticationManager,
-            final AuthorizationManager authorizationManager,
-            final PersistenceSessionFactory persistenceSessionFactory) {
+            final ServicesInjector servicesInjector) {
 
-        this.deploymentType = deploymentType;
-        this.configuration = configuration;
-        this.specificationLoaderSpi = specificationLoader;
-        this.authenticationManager = authenticationManager;
-        this.authorizationManager = authorizationManager;
         this.servicesInjector = servicesInjector;
-        this.persistenceSessionFactory = persistenceSessionFactory;
+        this.deploymentType = deploymentType;
+
+        this.configuration = servicesInjector.getConfigurationServiceInternal();
+        this.specificationLoaderSpi = servicesInjector.getSpecificationLoader();
+        this.authenticationManager = servicesInjector.getAuthenticationManager();
+        this.authorizationManager = servicesInjector.getAuthorizationManager();
+        this.persistenceSessionFactory = servicesInjector.lookupServiceElseFail(PersistenceSessionFactory.class);
+
         this.oidMarshaller = new OidMarshaller();
     }
-
 
     public void shutdown() {
         persistenceSessionFactory.shutdown();
@@ -99,24 +92,47 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         specificationLoaderSpi.shutdown();
     }
 
+    //endregion
 
+    //region > openSession, closeSession, currentSession, inSession
+    private final ThreadLocal<IsisSession> currentSession = new ThreadLocal<>();
 
     /**
      * Creates and {@link IsisSession#open() open}s the {@link IsisSession}.
      */
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
+
+        closeSession();
+
         final PersistenceSession persistenceSession =
-                persistenceSessionFactory.createPersistenceSession(
-                        servicesInjector, getSpecificationLoader(), authenticationSession);
-        return newIsisSession(authenticationSession, persistenceSession);
+                persistenceSessionFactory.createPersistenceSession(servicesInjector, authenticationSession);
+        IsisSession session = new IsisSession(authenticationSession, persistenceSession);
+        currentSession.set(session);
+        session.open();
+        return session;
     }
 
-    protected IsisSession newIsisSession(
-            final AuthenticationSession authenticationSession,
-            final PersistenceSession persistenceSession) {
-        return new IsisSession(this, authenticationSession, persistenceSession);
+    public void closeSession() {
+        final IsisSession existingSessionIfAny = getCurrentSession();
+        if (existingSessionIfAny == null) {
+            return;
+        }
+        existingSessionIfAny.close();
+        currentSession.set(null);
     }
 
+    public IsisSession getCurrentSession() {
+        return currentSession.get();
+    }
+
+    public boolean inSession() {
+        return getCurrentSession() != null;
+    }
+
+
+    //endregion
+
+    //region > component accessors
     /**
      * The {@link ApplicationScopedComponent application-scoped}
      * {@link DeploymentType}.
@@ -193,5 +209,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     public OidMarshaller getOidMarshaller() {
         return oidMarshaller;
     }
+
+    //endregion
 
 }

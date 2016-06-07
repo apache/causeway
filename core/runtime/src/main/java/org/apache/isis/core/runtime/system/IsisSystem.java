@@ -180,17 +180,9 @@ public class IsisSystem implements ApplicationScopedComponent {
             }
 
             // instantiate
-            sessionFactory = new IsisSessionFactory(
-                    deploymentType, configuration, servicesInjector, specificationLoader,
-                    authenticationManager, authorizationManager, persistenceSessionFactory);
+            sessionFactory = new IsisSessionFactory(deploymentType, servicesInjector);
 
-            // temporarily make a configuration available
-            // TODO: REVIEW: would rather inject this
-            IsisContext.setConfiguration(configuration);
-
-            // set up the "appropriate" IsisContext (usually IsisContextThreadLocal) to hold
-            // a reference to the sessionFactory just created
-            deploymentType.initContext(sessionFactory);
+            IsisContext.set(sessionFactory);
 
             specificationLoader.init();
 

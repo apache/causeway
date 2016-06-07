@@ -68,10 +68,6 @@ public class DeploymentType {
         deploymentTypes.add(this);
     }
 
-    public void initContext(final IsisSessionFactory sessionFactory) {
-        IsisContext.createInstance(sessionFactory);
-    }
-
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }

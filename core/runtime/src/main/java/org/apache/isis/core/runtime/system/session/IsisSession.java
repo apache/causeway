@@ -24,10 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -47,31 +44,27 @@ public class IsisSession implements SessionScopedComponent {
 
     //region > constructor, fields
 
-    private final IsisSessionFactory isisSessionFactory;
     private final AuthenticationSession authenticationSession;
     private PersistenceSession persistenceSession; // only non-final so can be replaced in tests.
 
     public IsisSession(
-            final IsisSessionFactory sessionFactory,
             final AuthenticationSession authenticationSession,
             final PersistenceSession persistenceSession) {
 
-        this.isisSessionFactory = sessionFactory;
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
     }
     //endregion
 
     //region > open, close
-    public void open() {
+    void open() {
         persistenceSession.open();
     }
 
     /**
      * Closes session.
      */
-    public void close() {
-        final PersistenceSession persistenceSession = getPersistenceSession();
+    void close() {
         if(persistenceSession != null) {
             persistenceSession.close();
         }
@@ -79,28 +72,6 @@ public class IsisSession implements SessionScopedComponent {
 
     //endregion
 
-    //region > convenience methods
-    /**
-     * Convenience method.
-     */
-    public DeploymentType getDeploymentType() {
-        return isisSessionFactory.getDeploymentType();
-    }
-
-    /**
-     * Convenience method.
-     */
-    public IsisConfiguration getConfiguration() {
-        return isisSessionFactory.getConfiguration();
-    }
-
-    /**
-     * Convenience method.
-     */
-    public SpecificationLoader getSpecificationLoader() {
-        return isisSessionFactory.getSpecificationLoader();
-    }
-    //endregion
 
     //region > AuthenticationSession
     /**

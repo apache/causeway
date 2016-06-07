@@ -491,7 +491,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(fireListeners.shouldFire()) {
             firePreTeardownSystem();
         }
-        if(IsisContext.exists() && IsisContext.inSession()) {
+        if(IsisContext.inSession()) {
             IsisContext.closeSession();
         }
         if(fireListeners.shouldFire()) {
@@ -500,7 +500,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private void shutdown() {
-        if(IsisContext.exists() && isisSystem != null) {
+        if(isisSystem != null) {
             isisSystem.shutdown();
         }
     }
@@ -610,17 +610,29 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return getAdapterManager().adapterFor(domainObject);
     }
 
+    /**
+     * @deprecated - unused by framework
+     */
+    @Deprecated
     public ObjectAdapter reload(RootOid oid) {
         ensureSessionInProgress();
         final PersistenceSession persistenceSession = getPersistenceSession();
         return persistenceSession.loadObjectInTransaction(oid);
     }
 
+    /**
+     * @deprecated - unused by framework
+     */
+    @Deprecated
     public ObjectAdapter recreateAdapter(RootOid oid) {
         ensureSessionInProgress();
         return getPersistenceSession().adapterFor(oid);
     }
 
+    /**
+     * @deprecated - unused by framework
+     */
+    @Deprecated
     public ObjectAdapter remapAsPersistent(Object pojo, RootOid persistentOid) {
         ensureSessionInProgress();
         ensureObjectIsNotPersistent(pojo);

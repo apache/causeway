@@ -84,7 +84,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return;
         }
 
-        getIsisContext().openSessionInstance(authenticationSession);
+        IsisContext.openSession(authenticationSession);
         getTransactionManager().startTransaction();
     }
 
@@ -99,8 +99,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             LOG.debug("onRequestHandlerExecuted: handler: " + handler);
         }
 
-        final IsisSession session = getIsisContext().getSessionInstance();
-        if (session != null) {
+        if (IsisContext.inSession()) {
             try {
                 // will commit (or abort) the transaction;
                 // an abort will cause the exception to be thrown.
@@ -131,13 +130,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public synchronized void onEndRequest(RequestCycle cycle) {
-        final IsisSession session = getIsisContext().getSessionInstance();
-        if (session != null) {
+        if (IsisContext.inSession()) {
             try {
                 // belt and braces
                 getTransactionManager().endTransaction();
             } finally {
-                getIsisContext().closeSessionInstance();
+                IsisContext.closeSession();
             }
         }
     }
@@ -252,10 +250,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         return IsisContext.getPersistenceSession().getServicesInjector();
     }
     
-    protected IsisContext getIsisContext() {
-        return IsisContext.getInstance();
-    }
-
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
