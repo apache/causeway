@@ -200,10 +200,6 @@ public abstract class ResourceAbstract {
         return IsisContext.getLocalization();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-
     // //////////////////////////////////////////////////////////////
     // Dependencies (injected via @Context)
     // //////////////////////////////////////////////////////////////
