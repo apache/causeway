@@ -85,11 +85,11 @@ public abstract class IsisComponentProvider {
     public IsisComponentProvider(
             final DeploymentType deploymentType,
             final AppManifest appManifestIfAny,
-            final IsisConfigurationDefault configuration) {
+            final IsisConfiguration configuration) {
 
         this.deploymentType = deploymentType;
         this.appManifestIfAny = appManifestIfAny;
-        this.configuration = configuration;
+        this.configuration = (IsisConfigurationDefault) configuration; // REVIEW: HACKY
 
         if(appManifestIfAny != null) {
 

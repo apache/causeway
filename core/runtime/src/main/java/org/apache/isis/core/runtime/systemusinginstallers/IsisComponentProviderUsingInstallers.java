@@ -21,17 +21,29 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.factory.InstanceCreationClassException;
+import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.commons.factory.UnavailableClassException;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -45,10 +57,18 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
     public IsisComponentProviderUsingInstallers(
             final DeploymentType deploymentType,
             final AppManifest appManifestIfAny,
+            final IsisConfiguration configuration) {
+        this(deploymentType, appManifestIfAny, configuration, new InstallerLookup(configuration));
+    }
+
+    private IsisComponentProviderUsingInstallers(
+            final DeploymentType deploymentType,
+            final AppManifest appManifestIfAny,
+            final IsisConfiguration configuration,
             final InstallerLookup installerLookup) {
         super(deploymentType,
-                appManifestIfAny(appManifestIfAny, installerLookup),
-                configurationFrom(installerLookup));
+                appManifestIfAny(appManifestIfAny, configuration),
+                configuration);
 
         if(getAppManifestIfAny() != null) {
 
@@ -98,28 +118,132 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
      */
     private static AppManifest appManifestIfAny(
             final AppManifest appManifestFromConstructor,
-            final InstallerLookup installerLookup) {
+            final IsisConfiguration configuration) {
         if(appManifestFromConstructor != null) {
             return appManifestFromConstructor;
         }
-        final IsisConfigurationDefault configuration = configurationFrom(installerLookup);
         final String appManifestFromConfiguration = configuration.getString(SystemConstants.APP_MANIFEST_KEY);
         return appManifestFromConfiguration != null
                 ? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class)
                 : null;
     }
 
-
     //endregion
 
+    /**
+     * Looks up authorization and authentication implementations.
+     *
+     * Previously this class was used to lookup the top-level components of
+     * {@link IsisSystem} (persistence, authentication, authorization, reflector and so on),
+     * each being looked up from a file called <tt>installer-registry.properties</tt>.
+     * Of these responsibilities, only the support for authentication and authorization remains,
+     * the remainder have only a single implementation.  The implementation has been
+     * substantially simplified.
+     *
+     * Note that it <i>is</i> possible to use other {@link Installer} implementations;
+     * just specify the {@link Installer}'s fully qualified class name.
+     *
+     * @deprecated - intention is to replace in future using CDI
+     */
+    @Deprecated
+    static class InstallerLookup implements ApplicationScopedComponent {
 
-    //region > helpers
+        private static final Logger LOG = LoggerFactory.getLogger(InstallerLookup.class);
 
-    private static IsisConfigurationDefault configurationFrom(final InstallerLookup installerLookup) {
-        return installerLookup.getConfiguration();
+        //region > constructor, fields
+
+        private final IsisConfiguration isisConfiguration;
+        private final List<Installer> installerList = Lists.newArrayList();
+
+        public InstallerLookup(final IsisConfiguration isisConfiguration) throws InstanceCreationException {
+            this.isisConfiguration = isisConfiguration;
+
+            final List<String> installerClassNames = Lists.newArrayList(
+                "org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller", // bypass
+                "org.apache.isis.security.shiro.authentication.ShiroAuthenticationManagerInstaller", // shiro
+                "org.apache.isis.core.security.authorization.BypassAuthorizationManagerInstaller",   // bypass
+                "org.apache.isis.security.shiro.authorization.ShiroAuthorizationManagerInstaller"    // shiro
+            );
+
+            for (String className : installerClassNames) {
+                if (className.length() == 0 || className.startsWith("#")) {
+                    continue;
+                }
+                try {
+                    final Installer object = (Installer) InstanceUtil.createInstance(className, isisConfiguration);
+                    LOG.debug("created component installer: " + object.getName() + " - " + className);
+                    installerList.add(object);
+                } catch (final UnavailableClassException e) {
+                    LOG.info("component installer not found; it will not be available: " + className);
+                } catch (final InstanceCreationClassException e) {
+                    LOG.info("instance creation exception: " + e.getMessage());
+                }
+            }
+        }
+
+        //endregion
+
+        //region > framework
+
+        public AuthenticationManagerInstaller authenticationManagerInstaller(final String requested) {
+
+            return getInstaller(
+                    AuthenticationManagerInstaller.class,
+                    requested,
+                    SystemConstants.AUTHENTICATION_INSTALLER_KEY,
+                    SystemConstants.AUTHENTICATION_DEFAULT);
+        }
+
+        public AuthorizationManagerInstaller authorizationManagerInstaller(final String requested) {
+            return getInstaller(
+                    AuthorizationManagerInstaller.class, requested,
+                    SystemConstants.AUTHORIZATION_INSTALLER_KEY,
+                    SystemConstants.AUTHORIZATION_DEFAULT);
+        }
+
+        //endregion
+
+        //region > helpers
+        @SuppressWarnings("unchecked")
+        private <T extends Installer> T getInstaller(final Class<T> cls, final String implName) {
+            Assert.assertNotNull("No name specified", implName);
+            for (final Installer installer : installerList) {
+                if (cls.isAssignableFrom(installer.getClass()) && installer.getName().equals(implName)) {
+                    return (T) installer;
+                }
+            }
+            return (T) getInstaller(implName);
+        }
+
+        @SuppressWarnings("unchecked")
+        public Installer getInstaller(final String implClassName) {
+            try {
+                return ObjectExtensions.asT(InstanceUtil.createInstance(implClassName));
+            } catch (final UnavailableClassException e) {
+                return null;
+            }
+        }
+
+        private <T extends Installer> T getInstaller(
+                final Class<T> requiredType,
+                String reqImpl,
+                final String key,
+                final String defaultImpl) {
+            if (reqImpl == null) {
+                reqImpl = isisConfiguration.getString(key, defaultImpl);
+            }
+            if (reqImpl == null) {
+                return null;
+            }
+            final T installer = getInstaller(requiredType, reqImpl);
+            if (installer == null) {
+                throw new InstanceCreationException(
+                        "Failed to load installer; named/class:'" + reqImpl + "' (of type " + requiredType.getName() + ")");
+            }
+            return installer;
+        }
+
+        //endregion
+
     }
-
-    //endregion
-
-
 }

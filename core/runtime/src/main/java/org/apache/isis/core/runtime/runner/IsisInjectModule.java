@@ -31,7 +31,6 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
@@ -42,8 +41,8 @@ public class IsisInjectModule extends AbstractModule {
      * Placeholder for no {@link AppManifest}.
      *
      * <p>
-     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with
-     *     null when the system is {@link #provideIsisSystem(DeploymentType, InstallerLookup, AppManifest) created} .
+     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with null when the system is
+     *     {@link #provideIsisSystem(DeploymentType, IsisConfiguration, AppManifest) created} .
      * </p>
      */
     private static final AppManifest APP_MANIFEST_NOOP = new AppManifest() {
@@ -72,13 +71,11 @@ public class IsisInjectModule extends AbstractModule {
     };
 
     private final DeploymentType deploymentType;
-    private final InstallerLookup installerLookup;
-    private final IsisConfiguration isisConfiguration;
+    private final IsisConfigurationDefault isisConfiguration;
 
     public IsisInjectModule(
             final DeploymentType deploymentType,
             final IsisConfigurationDefault isisConfiguration) {
-        this.installerLookup = new InstallerLookup(isisConfiguration);
         this.isisConfiguration = isisConfiguration;
         this.deploymentType = deploymentType;
     }
@@ -103,22 +100,11 @@ public class IsisInjectModule extends AbstractModule {
         return isisConfiguration;
     }
 
-    /**
-     * As passed in or defaulted by the constructors.
-     */
-    @SuppressWarnings("unused")
-    @Provides
-    @Singleton
-    @Inject
-    private InstallerLookup providesInstallerLookup() {
-        return installerLookup;
-    }
 
     @Override
     protected void configure() {
         requireBinding(DeploymentType.class);
         requireBinding(IsisConfiguration.class);
-        requireBinding(InstallerLookup.class);
         bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
@@ -128,7 +114,7 @@ public class IsisInjectModule extends AbstractModule {
     @Singleton
     protected IsisSystem provideIsisSystem(
             final DeploymentType deploymentType,
-            final InstallerLookup installerLookup,
+            final IsisConfiguration isisConfiguration,
             final AppManifest appManifestIfAny) {
 
         final IsisComponentProviderUsingInstallers componentProvider =
@@ -136,7 +122,8 @@ public class IsisInjectModule extends AbstractModule {
                         deploymentType,
                         appManifestIfAny == APP_MANIFEST_NOOP
                                 ? null
-                                : appManifestIfAny, installerLookup);
+                                : appManifestIfAny,
+                        isisConfiguration);
 
         final IsisSystem system = new IsisSystem(componentProvider);
 

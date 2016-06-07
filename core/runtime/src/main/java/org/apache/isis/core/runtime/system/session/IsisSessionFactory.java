@@ -33,10 +33,10 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 /**
  * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
@@ -47,7 +47,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
  * components that make up that {@link IsisSession}.
  *
  * <p>
- * The idea is that one subclass can use the {@link InstallerLookup} design to
+ * The idea is that one subclass can use the {@link IsisComponentProviderUsingInstallers.InstallerLookup} design to
  * lookup installers for components (and hence create the components
  * themselves), whereas another subclass might simply use Spring (or another DI
  * container) to inject in the components according to some Spring-configured
