@@ -111,18 +111,6 @@ public final class SystemConstants {
     public final static String PASSWORD_KEY = ConfigurationConstants.ROOT + "password";
 
 
-    /**
-     * Key as to whether to show splash (eg via command line) is made available
-     * in {@link IsisConfiguration}.
-     * 
-     * <p>
-     * Use {@link Splash#valueOf(String)} to decode.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public static final String NOSPLASH_KEY = ConfigurationConstants.ROOT + "nosplash";
-
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
 
     private SystemConstants() {

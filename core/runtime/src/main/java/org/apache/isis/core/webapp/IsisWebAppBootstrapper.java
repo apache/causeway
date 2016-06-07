@@ -87,7 +87,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
             final String webappDir = servletContext.getRealPath("/");
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
-            isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
             final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
 
