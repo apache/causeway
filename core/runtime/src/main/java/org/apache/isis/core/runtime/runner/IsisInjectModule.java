@@ -19,20 +19,57 @@
 
 package org.apache.isis.core.runtime.runner;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
-import org.apache.isis.core.runtime.system.IsisSystemFactory;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 public class IsisInjectModule extends AbstractModule {
+
+    /**
+     * Placeholder for no {@link AppManifest}.
+     *
+     * <p>
+     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with
+     *     null when the system is {@link #provideIsisSystem(DeploymentType, InstallerLookup, AppManifest) created} .
+     * </p>
+     */
+    private static final AppManifest APP_MANIFEST_NOOP = new AppManifest() {
+        @Override public List<Class<?>> getModules() {
+            return null;
+        }
+        @Override public List<Class<?>> getAdditionalServices() {
+            return null;
+        }
+
+        @Override public String getAuthenticationMechanism() {
+            return null;
+        }
+
+        @Override public String getAuthorizationMechanism() {
+            return null;
+        }
+
+        @Override public List<Class<? extends FixtureScript>> getFixtures() {
+            return null;
+        }
+
+        @Override public Map<String, String> getConfigurationProperties() {
+            return null;
+        }
+    };
 
     private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
@@ -82,7 +119,7 @@ public class IsisInjectModule extends AbstractModule {
         requireBinding(DeploymentType.class);
         requireBinding(IsisConfiguration.class);
         requireBinding(InstallerLookup.class);
-        bind(AppManifest.class).toInstance(IsisSystemFactory.APP_MANIFEST_NOOP);
+        bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
 
@@ -94,12 +131,19 @@ public class IsisInjectModule extends AbstractModule {
             final InstallerLookup installerLookup,
             final AppManifest appManifestIfAny) {
 
-        final IsisSystemFactory systemFactory = new IsisSystemFactory(installerLookup);
-        final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
+        final IsisComponentProviderUsingInstallers componentProvider =
+                new IsisComponentProviderUsingInstallers(
+                        deploymentType,
+                        appManifestIfAny == APP_MANIFEST_NOOP
+                                ? null
+                                : appManifestIfAny, installerLookup);
+
+        final IsisSystem system = new IsisSystem(componentProvider);
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
         system.init();
+
         return system;
     }
 
