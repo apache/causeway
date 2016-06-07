@@ -36,18 +36,21 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -446,6 +449,15 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return !services.isEmpty() ? services.get(0) : null;
     }
 
+    @Programmatic
+    public <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+        T service = lookupService(serviceClass);
+        if(service == null) {
+            throw new IllegalStateException("Could not locate service of type '" + serviceClass + "'");
+        }
+        return service;
+    }
+
     /**
      * Returns all domain services implementing the requested type, in the order
      * that they were registered in <tt>isis.properties</tt>.
@@ -492,7 +504,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > convenience lookups
+    //region > convenience lookups (singletons only)
 
     private SpecificationLoader specificationLoader;
 
@@ -533,6 +545,30 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return configurationServiceInternal != null
                 ? configurationServiceInternal
                 : (configurationServiceInternal = lookupService(ConfigurationServiceInternal.class));
+    }
+
+    /**
+     * Cannot be cached because is a derived property, not a registered service.
+     */
+    @Programmatic
+    public AuthenticationSession getAuthenticationSession() {
+        return getAuthenticationSessionProvider().getAuthenticationSession();
+    }
+
+    /**
+     * Cannot be cached because is a derived property, not a registered service.
+     */
+    @Programmatic
+    public MessageBroker getMessageBroker() {
+        return getAuthenticationSession().getMessageBroker();
+    }
+
+    /**
+     * Cannot be cached because is a derived property, not a registered service.
+     */
+    @Programmatic
+    public DeploymentCategory getDeploymentCategory() {
+        return getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     //endregion
