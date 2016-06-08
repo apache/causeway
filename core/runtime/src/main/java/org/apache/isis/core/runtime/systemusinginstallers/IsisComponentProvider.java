@@ -62,16 +62,12 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * 
@@ -80,28 +76,42 @@ public abstract class IsisComponentProvider {
 
     //region > constructor, fields
 
-    private final AppManifest appManifestIfAny;
+    private final AppManifest appManifest;
     private final IsisConfigurationDefault configuration;
+    protected final List<Object> services;
+    protected final AuthenticationManager authenticationManager;
+    protected final AuthorizationManager authorizationManager;
 
     public IsisComponentProvider(
-            final AppManifest appManifestIfAny,
-            final IsisConfiguration configuration) {
+            final AppManifest appManifest,
+            final IsisConfiguration configuration,
+            final AuthenticationManager authenticationManager,
+            final AuthorizationManager authorizationManager){
 
-        this.appManifestIfAny = appManifestIfAny;
+        if(appManifest == null) {
+            throw new IllegalArgumentException("AppManifest is required");
+        }
+
+        this.appManifest = appManifest;
         this.configuration = (IsisConfigurationDefault) configuration; // REVIEW: HACKY
 
-        if(appManifestIfAny != null) {
+        putAppManifestKey(appManifest);
+        findAndRegisterTypes(appManifest);
+        specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
-            putAppManifestKey(appManifestIfAny);
-            findAndRegisterTypes(appManifestIfAny);
-            specifyServicesAndRegisteredEntitiesUsing(appManifestIfAny);
+        overrideConfigurationUsing(appManifest);
 
-            overrideConfigurationUsing(appManifestIfAny);
-        }
+        this.services = new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration()).getServices();
+
+        final String fixtureClassNamesCsv = classNamesFrom(getAppManifest().getFixtures());
+        putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
+
+        this.authenticationManager = authenticationManager;
+        this.authorizationManager = authorizationManager;
     }
 
-    public AppManifest getAppManifestIfAny() {
-        return appManifestIfAny;
+    public AppManifest getAppManifest() {
+        return appManifest;
     }
 
     public IsisConfigurationDefault getConfiguration() {
@@ -109,7 +119,6 @@ public abstract class IsisComponentProvider {
     }
 
     //endregion
-
 
     //region > helpers (appManifest)
 
@@ -221,34 +230,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > services, configuration, authenticationManager, authorizationManager (populated by subclass)
-
-    /**
-     * populated by subclass, in its constructor.
-     */
-    protected List<Object> services;
-    /**
-     * populated by subclass, in its constructor.
-     */
-    protected AuthenticationManager authenticationManager;
-    /**
-     * populated by subclass, in its constructor.
-     */
-    protected AuthorizationManager authorizationManager;
-
-
-    /**
-     * Provided for subclasses to call to ensure that they have correctly populated all fields.
-     */
-    protected void ensureInitialized() {
-        ensureThatState(authenticationManager, is(not(nullValue())));
-        ensureThatState(authorizationManager, is(not(nullValue())));
-        ensureThatState(services, is(not(nullValue())));
-        ensureThatState(configuration, is(not(nullValue())));
-    }
-    //endregion
-
-    //region > provide*
+    //region > provideAuth*
 
     public AuthenticationManager provideAuthenticationManager() {
         return authenticationManager;
@@ -260,7 +242,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provide*
+    //region > provideServiceInjector
 
     public ServicesInjector provideServiceInjector(final IsisConfiguration configuration) {
         return new ServicesInjector(services, configuration);
@@ -268,7 +250,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provide*
+    //region > provideFixturesInstaller
 
     public FixturesInstaller provideFixturesInstaller()  {
         return new FixturesInstallerFromConfiguration(getConfiguration());
@@ -276,7 +258,7 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provide*
+    //region > provideSpecificationLoader
 
     public SpecificationLoader provideSpecificationLoader(
             final DeploymentCategory deploymentCategory,

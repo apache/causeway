@@ -96,7 +96,7 @@ public class IsisInjectModule extends AbstractModule {
         final AppManifest appManifest = appManifestIfAny != APP_MANIFEST_NOOP ? appManifestIfAny : null;
 
         final IsisComponentProviderUsingInstallers componentProvider =
-                new IsisComponentProviderUsingInstallers(isisConfiguration, appManifest);
+                new IsisComponentProviderUsingInstallers(appManifest, isisConfiguration);
 
         final IsisSystem system = new IsisSystem(componentProvider, deploymentCategory);
 

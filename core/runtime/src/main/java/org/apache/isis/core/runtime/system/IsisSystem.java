@@ -56,6 +56,7 @@ import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
@@ -85,8 +86,8 @@ public class IsisSystem implements ApplicationScopedComponent {
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
     public IsisSystem(final AppManifest manifest) {
-        this(new IsisComponentProviderDefault2(
-                manifest, null, null), DeploymentCategory.PRODUCTION);
+        this(new IsisComponentProviderDefault2(manifest, null),
+                DeploymentCategory.PRODUCTION);
     }
 
     public IsisSystem(final IsisComponentProvider componentProvider, final DeploymentCategory deploymentCategory) {
@@ -318,9 +319,8 @@ public class IsisSystem implements ApplicationScopedComponent {
         }
 
         // call @PreDestroy (in a session)
-        IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
-
         IsisContext.openSession(new InitialisationSession());
+        IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
         try {
             transactionManager.startTransaction();
             try {
@@ -364,7 +364,8 @@ public class IsisSystem implements ApplicationScopedComponent {
     }
 
     IsisTransactionManager getCurrentSessionTransactionManager() {
-        return sessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager();
+        final IsisSession currentSession = sessionFactory.getCurrentSession();
+        return currentSession.getPersistenceSession().getTransactionManager();
     }
 
     //endregion

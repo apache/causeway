@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
-import java.util.List;
-
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -30,36 +27,40 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
-import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 
 public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
 
+    //region > constructors
 
     public IsisComponentProviderDefault2(
-            final AppManifest appManifestIfAny,
-            final List<InstallableFixture> fixturesOverride,
+            final AppManifest appManifest,
             final IsisConfiguration configurationOverride) {
-        super(appManifestIfAny, elseDefault(configurationOverride));
-
-        final IsisConfigurationDefault configuration = getConfiguration();
-
-        this.services = appManifestIfAny != null
-                ? new ServicesInstallerFromConfigurationAndAnnotation(configuration).getServices()
-                : new ServicesInstallerFromConfiguration(configuration).getServices();
-
-        final String fixtureClassNamesCsv = classNamesFrom(
-                        appManifestIfAny != null ? appManifestIfAny.getFixtures() : fixturesOverride);
-
-        putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
-
-        // integration tests ignore appManifest for authentication and authorization.
-        this.authenticationManager = createAuthenticationManager();
-        this.authorizationManager = createAuthorizationManager();
+        this(elseDefault(configurationOverride), appManifest);
 
     }
 
+    private IsisComponentProviderDefault2(
+            final IsisConfigurationDefault configuration,
+            final AppManifest appManifest
+    ) {
+        this(configuration, appManifest,
+                // integration tests ignore appManifest for authentication and authorization.
+                authenticationManagerWithBypass(configuration),
+                new AuthorizationManagerStandard(configuration));
+    }
+
+    private IsisComponentProviderDefault2(
+            final IsisConfigurationDefault configuration,
+            final AppManifest appManifest,
+            final AuthenticationManager authenticationManager,
+            final AuthorizationManager authorizationManager
+    ) {
+        super(appManifest, configuration, authenticationManager, authorizationManager);
+    }
+
+    //endregion
+
+    //region > constructor helpers (factories)
     /**
      * Default will read <tt>isis.properties</tt> (and other optional property files) from the &quot;config&quot;
      * package on the current classpath.
@@ -73,16 +74,12 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
     /**
      * The standard authentication manager, configured with the 'bypass' authenticator (allows all requests through).
      */
-    private AuthenticationManager createAuthenticationManager() {
-        final AuthenticationManagerStandard authenticationManager =
-                new AuthenticationManagerStandard(getConfiguration());
-        authenticationManager.addAuthenticator(new AuthenticatorBypass(getConfiguration()));
+    private static AuthenticationManager authenticationManagerWithBypass(final IsisConfiguration configuration ) {
+        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(configuration);
+        authenticationManager.addAuthenticator(new AuthenticatorBypass(configuration));
         return authenticationManager;
     }
-
-    private AuthorizationManager createAuthorizationManager() {
-        return new AuthorizationManagerStandard(getConfiguration());
-    }
+    //endregion
 
 
 }

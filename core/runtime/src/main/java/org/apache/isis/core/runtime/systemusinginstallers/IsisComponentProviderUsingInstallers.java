@@ -27,86 +27,62 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.services.ServicesInstaller;
-import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 public class IsisComponentProviderUsingInstallers extends IsisComponentProvider {
 
+    //region > constructors
 
     public IsisComponentProviderUsingInstallers(
-            final IsisConfiguration configuration, final AppManifest appManifestIfAny) {
-        this(appManifestIfAny, configuration, new InstallerLookup(configuration));
+            final AppManifest appManifestIfAny,
+            final IsisConfiguration configuration) {
+        this(appManifestFrom(appManifestIfAny, configuration),
+                (IsisConfigurationDefault) configuration, // REVIEW: HACKY
+                new InstallerLookup(configuration));
     }
 
     private IsisComponentProviderUsingInstallers(
-            final AppManifest appManifestIfAny,
-            final IsisConfiguration configuration,
+            final AppManifest appManifest,
+            final IsisConfigurationDefault configuration,
             final InstallerLookup installerLookup) {
-        super(
-                appManifestIfAny(appManifestIfAny, configuration),
-                configuration);
-
-        if(getAppManifestIfAny() != null) {
-
-            final String authenticationMechanism = getAppManifestIfAny().getAuthenticationMechanism();
-            putConfigurationProperty(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
-
-            final String authorizationMechanism = getAppManifestIfAny().getAuthorizationMechanism();
-            putConfigurationProperty(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
-        }
-
-        if(getAppManifestIfAny() != null) {
-            List<Class<? extends FixtureScript>> fixtureClasses = getAppManifestIfAny().getFixtures();
-            final String fixtureClassNamesCsv = classNamesFrom(fixtureClasses);
-            putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
-        }
-
-        // loading installers causes the configuration to be appended to successively
-        final String requestedAuthencn = getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY);
-        AuthenticationManagerInstaller authenticationInstaller =
-                installerLookup.authenticationManagerInstaller(requestedAuthencn);
-
-        final String requestedAuthorzn = getConfiguration().getString(SystemConstants.AUTHORIZATION_INSTALLER_KEY);
-        AuthorizationManagerInstaller authorizationInstaller =
-                installerLookup.authorizationManagerInstaller(requestedAuthorzn);
-
-        ServicesInstaller servicesInstaller = new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration());
-
-        // eagerly calculate
-        authenticationManager = authenticationInstaller.createAuthenticationManager();
-        authorizationManager = authorizationInstaller.createAuthorizationManager();
-
-        services = servicesInstaller.getServices();
-
-        ensureInitialized();
+        this(configuration, appManifest,
+                lookupAuthenticationManager(appManifest, installerLookup, configuration),
+                lookupAuthorizationManager(appManifest, installerLookup, configuration));
     }
+
+    private IsisComponentProviderUsingInstallers(
+            final IsisConfiguration configuration,
+            final AppManifest appManifest,
+            final AuthenticationManager authenticationManager,
+            final AuthorizationManager authorizationManager){
+        super(appManifest, configuration, authenticationManager, authorizationManager);
+    }
+
+    //endregion
+
+    //region > constructor helpers (factories)
 
     /**
      * If an {@link AppManifest} was explicitly provided (eg from the Guice <tt>IsisWicketModule</tt> when running
      * unde the Wicket viewer) then use that; otherwise read the <tt>isis.properties</tt> config file and look
      * for an <tt>isis.appManifest</tt> entry instead.
      */
-    private static AppManifest appManifestIfAny(
+    private static AppManifest appManifestFrom(
             final AppManifest appManifestFromConstructor,
             final IsisConfiguration configuration) {
         if(appManifestFromConstructor != null) {
@@ -117,6 +93,37 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                 ? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class)
                 : null;
     }
+
+    private static AuthenticationManager lookupAuthenticationManager(
+            final AppManifest appManifest, final InstallerLookup installerLookup,
+            final IsisConfigurationDefault configuration) {
+
+        final String authenticationMechanism = appManifest.getAuthenticationMechanism();
+        final AuthenticationManagerInstaller authenticationInstaller =
+                installerLookup.authenticationManagerInstaller(authenticationMechanism);
+
+        // no longer used, could probably remove
+        configuration.put(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
+
+        return authenticationInstaller.createAuthenticationManager();
+    }
+
+    private static AuthorizationManager lookupAuthorizationManager(
+            final AppManifest appManifest, final InstallerLookup installerLookup,
+            final IsisConfigurationDefault configuration) {
+
+        final String authorizationMechanism = appManifest.getAuthorizationMechanism();
+
+
+        AuthorizationManagerInstaller authorizationInstaller =
+                installerLookup.authorizationManagerInstaller(authorizationMechanism);
+
+        // no longer used, could probably remove
+        configuration.put(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
+
+        return authorizationInstaller.createAuthorizationManager();
+    }
+
 
     //endregion
 
