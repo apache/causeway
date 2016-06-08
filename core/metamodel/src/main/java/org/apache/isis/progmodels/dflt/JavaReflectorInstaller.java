@@ -27,8 +27,6 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.components.InstallerAbstract;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -40,44 +38,26 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
-public class JavaReflectorInstaller extends InstallerAbstract implements SpecificationLoaderInstaller {
-
-    //region > constants
+public class JavaReflectorInstaller {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorInstaller.class);
 
-    public static final String PROPERTY_BASE = ConfigurationConstants.ROOT;
-
-    //endregion
-
-    //region > constructor
-
-    public JavaReflectorInstaller(final IsisConfigurationDefault isisConfiguration) {
-        this("java", isisConfiguration);
-    }
-
-    public JavaReflectorInstaller(final String name, final IsisConfigurationDefault isisConfiguration) {
-        super(name, isisConfiguration);
-
-    }
-    //endregion
-
     //region > createReflector, doCreateReflector
 
-    @Override
     public SpecificationLoader createReflector(
             final DeploymentCategory deploymentCategory,
+            final IsisConfigurationDefault configuration,
             final Collection<MetaModelRefiner> metaModelRefiners,
             final ServicesInjector servicesInjector) {
 
-        final ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
-        final MetaModelValidator mmv = createMetaModelValidator(getConfiguration());
-        final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders(getConfiguration());
+        final ProgrammingModel programmingModel = createProgrammingModel(configuration);
+        final MetaModelValidator mmv = createMetaModelValidator(configuration);
+        final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders(configuration);
 
-        return JavaReflectorHelper.createObjectReflector(deploymentCategory, getConfiguration(), programmingModel, metaModelRefiners,
+        return JavaReflectorHelper.createObjectReflector(
+                deploymentCategory, configuration, programmingModel, metaModelRefiners,
                 layoutMetadataReaders, mmv,
                 servicesInjector);
     }
@@ -174,13 +154,5 @@ public class JavaReflectorInstaller extends InstallerAbstract implements Specifi
 
     //endregion
 
-    //region > getTypes
-
-    @Override
-    public List<Class<?>> getTypes() {
-        return listOf(SpecificationLoader.class);
-    }
-
-    //endregion
 
 }

@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
@@ -268,9 +267,9 @@ public abstract class IsisComponentProvider {
             final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners)  throws IsisSystemException {
 
-        final SpecificationLoaderInstaller reflectorInstaller = new JavaReflectorInstaller(getConfiguration());
+        final JavaReflectorInstaller reflectorInstaller = new JavaReflectorInstaller();
 
-        return reflectorInstaller.createReflector(deploymentCategory, metaModelRefiners, servicesInjector);
+        return reflectorInstaller.createReflector(deploymentCategory, getConfiguration(), metaModelRefiners, servicesInjector);
     }
 
     //endregion
