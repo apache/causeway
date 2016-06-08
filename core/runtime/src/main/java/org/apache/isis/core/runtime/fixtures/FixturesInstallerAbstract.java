@@ -33,7 +33,7 @@ public abstract class FixturesInstallerAbstract extends InstallerAbstract implem
     private LogonFixture logonFixture;
 
     public FixturesInstallerAbstract(final String name, final IsisConfigurationDefault isisConfiguration) {
-        super(FixturesInstaller.TYPE, name, isisConfiguration);
+        super(name, isisConfiguration);
     }
 
     @Override

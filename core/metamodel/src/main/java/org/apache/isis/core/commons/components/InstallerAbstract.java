@@ -30,7 +30,6 @@ public abstract class InstallerAbstract implements Installer {
 
     //region > constructor, fields
 
-    private final String type;
     private final String name;
     private final IsisConfigurationDefault isisConfiguration;
 
@@ -45,22 +44,15 @@ public abstract class InstallerAbstract implements Installer {
      * to this constructor.
      */
     public InstallerAbstract(
-            final String type,
             final String name,
             final IsisConfigurationDefault isisConfiguration) {
-        this.type = type;
         this.name = name;
         this.isisConfiguration = isisConfiguration;
     }
 
     //endregion
 
-    //region > type, name
-
-    @Override
-    public String getType() {
-        return type;
-    }
+    //region > name
 
     @Override
     public String getName() {

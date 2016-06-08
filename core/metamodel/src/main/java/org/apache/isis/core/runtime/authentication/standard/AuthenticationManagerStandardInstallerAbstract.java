@@ -31,7 +31,7 @@ public abstract class AuthenticationManagerStandardInstallerAbstract extends Ins
     public AuthenticationManagerStandardInstallerAbstract(
             final String name,
             final IsisConfigurationDefault isisConfiguration) {
-        super(AuthenticationManagerInstaller.TYPE, name, isisConfiguration);
+        super(name, isisConfiguration);
     }
 
     @Override

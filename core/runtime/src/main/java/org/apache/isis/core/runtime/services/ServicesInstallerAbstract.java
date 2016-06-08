@@ -27,7 +27,7 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
     public ServicesInstallerAbstract(
             final String name,
             final IsisConfigurationDefault isisConfiguration) {
-        super(ServicesInstaller.TYPE, name, isisConfiguration);
+        super(name, isisConfiguration);
     }
 
 }

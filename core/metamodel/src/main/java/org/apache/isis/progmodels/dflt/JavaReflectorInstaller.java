@@ -60,7 +60,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements Specifi
     }
 
     public JavaReflectorInstaller(final String name, final IsisConfigurationDefault isisConfiguration) {
-        super(SpecificationLoaderInstaller.TYPE, name, isisConfiguration);
+        super(name, isisConfiguration);
 
     }
     //endregion

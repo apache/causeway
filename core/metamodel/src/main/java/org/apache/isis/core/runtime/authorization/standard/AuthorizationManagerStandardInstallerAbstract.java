@@ -33,7 +33,7 @@ public abstract class AuthorizationManagerStandardInstallerAbstract
     public AuthorizationManagerStandardInstallerAbstract(
             final String name,
             final IsisConfigurationDefault isisConfiguration) {
-        super(AuthorizationManagerInstaller.TYPE, name, isisConfiguration);
+        super(name, isisConfiguration);
     }
 
     @Override
