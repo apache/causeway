@@ -98,7 +98,6 @@ public abstract class IsisComponentProvider {
 
             overrideConfigurationUsing(appManifestIfAny);
         }
-
     }
 
     public AppManifest getAppManifestIfAny() {
@@ -259,13 +258,25 @@ public abstract class IsisComponentProvider {
         return authorizationManager;
     }
 
+    //endregion
+
+    //region > provide*
+
     public ServicesInjector provideServiceInjector(final IsisConfiguration configuration) {
         return new ServicesInjector(services, configuration);
     }
 
+    //endregion
+
+    //region > provide*
+
     public FixturesInstaller provideFixturesInstaller()  {
         return new FixturesInstallerFromConfiguration(getConfiguration());
     }
+
+    //endregion
+
+    //region > provide*
 
     public SpecificationLoader provideSpecificationLoader(
             final DeploymentCategory deploymentCategory,

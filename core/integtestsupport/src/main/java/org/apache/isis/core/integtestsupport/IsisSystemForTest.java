@@ -184,38 +184,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
 
-        public Builder withServicesIn(String... packagePrefixes ) {
-            if(appManifestIfAny != null) {
-                throw new IllegalStateException("An appManifest has already been provided; instead use AppManifest#getAdditionalServices()");
-            }
-            if(packagePrefixes.length == 0) {
-                throw new IllegalArgumentException("Specify packagePrefixes to search for @DomainService-annotated services");
-            }
-
-            configuration.put(
-                    ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY,
-                    Joiner.on(",").join(packagePrefixes)
-            );
-
-            final ServicesInstaller installer = new ServicesInstallerFromConfigurationAndAnnotation(configuration);
-
-            //installer.setConfiguration(configuration);
-
-            final List<Object> serviceList = installer.getServices();
-            this.services.addAll(serviceList);
-
-            installer.init();
-            return this;
-        }
-
-        public Builder withServices(Object... services) {
-            if(appManifestIfAny != null) {
-                throw new IllegalStateException("An appManifest has already been provided");
-            }
-            this.services.addAll(Arrays.asList(services));
-            return this;
-        }
-
         /**
          * @deprecated - prefer to use {@link org.apache.isis.applib.fixturescripts.FixtureScript}s API instead.
          */
@@ -238,7 +206,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     new IsisSystemForTest(
                             appManifestIfAny,
                             configuration,
-                            services, fixtures,
+                            fixtures,
                             authenticationRequest,
                             listeners);
             if(level != null) {
@@ -291,7 +259,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
     private final AppManifest appManifestIfAny;
     private final IsisConfiguration configurationOverride;
-    private final List<Object> servicesIfAny;
     private final List<InstallableFixture> fixturesIfAny;
 
     private final AuthenticationRequest authenticationRequestIfAny;
@@ -301,13 +268,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private IsisSystemForTest(
             final AppManifest appManifestIfAny,
             final IsisConfiguration configurationOverride,
-            final List<Object> servicesIfAny,
             final List<InstallableFixture> fixturesIfAny,
             final AuthenticationRequest authenticationRequestIfAny,
             final List<Listener> listeners) {
         this.appManifestIfAny = appManifestIfAny;
         this.configurationOverride = configurationOverride;
-        this.servicesIfAny = servicesIfAny;
         this.fixturesIfAny = fixturesIfAny;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
         this.listeners = listeners;
@@ -367,7 +332,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
             componentProvider = new IsisComponentProviderDefault(
                     appManifestIfAny,
-                    servicesIfAny,
                     fixturesIfAny,
                     configurationOverride
             );

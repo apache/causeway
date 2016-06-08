@@ -37,20 +37,17 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationA
 public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
 
 
-
-
     public IsisComponentProviderDefault2(
             final AppManifest appManifestIfAny,
-            final List<Object> servicesOverride,
             final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride) {
         super(appManifestIfAny, elseDefault(configurationOverride));
 
+        final IsisConfigurationDefault configuration = getConfiguration();
+
         this.services = appManifestIfAny != null
-                ? new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration()).getServices()
-                : servicesOverride != null
-                    ? servicesOverride
-                    : new ServicesInstallerFromConfiguration(getConfiguration()).getServices();
+                ? new ServicesInstallerFromConfigurationAndAnnotation(configuration).getServices()
+                : new ServicesInstallerFromConfiguration(configuration).getServices();
 
         final String fixtureClassNamesCsv = classNamesFrom(
                         appManifestIfAny != null ? appManifestIfAny.getFixtures() : fixturesOverride);

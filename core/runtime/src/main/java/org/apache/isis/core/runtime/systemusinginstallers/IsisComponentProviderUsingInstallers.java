@@ -92,12 +92,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
         ServicesInstaller servicesInstaller = new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration());
 
-        // ensure we were able to load all components via InstallerLookup (fail fast)
-        ensureThatState(authenticationInstaller, is(not(nullValue())),
-                "authenticationInstaller could not be looked up");
-        ensureThatState(authorizationInstaller, is(not(nullValue())),
-                "authorizationInstaller could not be looked up");
-
         // eagerly calculate
         authenticationManager = authenticationInstaller.createAuthenticationManager();
         authorizationManager = authorizationInstaller.createAuthorizationManager();

@@ -30,10 +30,9 @@ public class IsisComponentProviderDefault extends IsisComponentProviderDefault2 
 
     public IsisComponentProviderDefault(
             final AppManifest appManifestIfAny,
-            final List<Object> servicesOverride,
             final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride) {
-        super(appManifestIfAny, servicesOverride, fixturesOverride, configurationOverride);
+        super(appManifestIfAny, fixturesOverride, configurationOverride);
 
     }
 }
