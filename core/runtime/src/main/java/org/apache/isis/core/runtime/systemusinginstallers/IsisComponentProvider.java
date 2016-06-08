@@ -46,11 +46,16 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
@@ -60,7 +65,8 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
-import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
+import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
+import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
@@ -216,7 +222,6 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-
     //region > services, configuration, authenticationManager, authorizationManager (populated by subclass)
 
     /**
@@ -267,10 +272,51 @@ public abstract class IsisComponentProvider {
             final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners)  throws IsisSystemException {
 
-        final JavaReflectorInstaller reflectorInstaller = new JavaReflectorInstaller();
+        final ProgrammingModel programmingModel = createProgrammingModel();
 
-        return reflectorInstaller.createReflector(deploymentCategory, getConfiguration(), metaModelRefiners, servicesInjector);
+        final MetaModelValidator mmv = createMetaModelValidator();
+
+        final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders();
+
+        return JavaReflectorHelper.createObjectReflector(
+                deploymentCategory, configuration, programmingModel, metaModelRefiners,
+                layoutMetadataReaders, mmv,
+                servicesInjector);
     }
+
+    protected MetaModelValidator createMetaModelValidator() {
+        final String metaModelValidatorClassName =
+                configuration.getString(
+                        ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
+                        ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
+        return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
+    }
+
+    protected ProgrammingModel createProgrammingModel() {
+
+        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5(configuration);
+        ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
+        ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
+        return programmingModel;
+    }
+
+    protected List<LayoutMetadataReader> createLayoutMetadataReaders() {
+        final List<LayoutMetadataReader> layoutMetadataReaders = Lists.newArrayList();
+        final String[] layoutMetadataReaderClassNames =
+                configuration.getList(
+                        ReflectorConstants.LAYOUT_METADATA_READER_LIST,
+                        ReflectorConstants.LAYOUT_METADATA_READER_LIST_DEFAULT);
+
+        if (layoutMetadataReaderClassNames != null) {
+            for (final String layoutMetadataReaderClassName : layoutMetadataReaderClassNames) {
+                final LayoutMetadataReader layoutMetadataReader =
+                        InstanceUtil.createInstance(layoutMetadataReaderClassName, LayoutMetadataReader.class);
+                layoutMetadataReaders.add(layoutMetadataReader);
+            }
+        }
+        return layoutMetadataReaders;
+    }
+
 
     //endregion
 

@@ -19,25 +19,13 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
-import java.util.Collection;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
-import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
-import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -45,21 +33,17 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerS
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
-import org.apache.isis.core.runtime.system.IsisSystemException;
-import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
-import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
 
-    private final ProgrammingModel programmingModel;
-    private final MetaModelValidator metaModelValidator;
+
+
 
     public IsisComponentProviderDefault2(
             final AppManifest appManifestIfAny,
             final List<Object> servicesOverride,
             final List<InstallableFixture> fixturesOverride,
-            final IsisConfiguration configurationOverride,
-            final MetaModelValidator metaModelValidatorOverride) {
+            final IsisConfiguration configurationOverride) {
         super(appManifestIfAny, elseDefault(configurationOverride));
 
         this.services = appManifestIfAny != null
@@ -77,9 +61,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         this.authenticationManager = createAuthenticationManager();
         this.authorizationManager = createAuthorizationManager();
 
-        this.programmingModel = createDefaultProgrammingModel();
-        this.metaModelValidator = elseDefault(metaModelValidatorOverride);
-
     }
 
     /**
@@ -90,25 +71,6 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         return configuration != null
                 ? (IsisConfigurationDefault) configuration
                 : new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
-    }
-
-    // TODO: this is duplicating logic in JavaReflectorInstaller; need to unify.
-    private ProgrammingModel createDefaultProgrammingModel() {
-
-
-        final IsisConfigurationDefault configuration = getConfiguration();
-
-        final ProgrammingModelFacetsJava5 programmingModel = new ProgrammingModelFacetsJava5(configuration);
-        ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
-        ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
-
-        return programmingModel;
-    }
-
-    private static MetaModelValidator elseDefault(final MetaModelValidator metaModelValidator) {
-        return metaModelValidator != null
-                ? metaModelValidator
-                : new MetaModelValidatorDefault();
     }
 
     /**
@@ -125,23 +87,5 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
         return new AuthorizationManagerStandard(getConfiguration());
     }
 
-
-    @Override
-    public SpecificationLoader provideSpecificationLoader(
-            final DeploymentCategory deploymentCategory,
-            final ServicesInjector servicesInjector,
-            final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
-
-        final List<LayoutMetadataReader> layoutMetadataReaders =
-                Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson());
-
-        return JavaReflectorHelper
-                .createObjectReflector(
-                        deploymentCategory, getConfiguration(), programmingModel,
-                        metaModelRefiners,
-                        layoutMetadataReaders,
-                        metaModelValidator,
-                        servicesInjector);
-    }
 
 }

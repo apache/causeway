@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
@@ -56,7 +55,6 @@ import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -164,8 +162,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private AppManifest appManifestIfAny;
 
-        private MetaModelValidator metaModelValidatorOverride;
-
         private final List<Object> services = Lists.newArrayList();
         private final List<InstallableFixture> fixtures = Lists.newArrayList();
 
@@ -175,11 +171,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         public Builder with(IsisConfiguration configuration) {
             this.configuration = (IsisConfigurationDefault) configuration;
-            return this;
-        }
-
-        public Builder with(MetaModelValidator metaModelValidator) {
-            this.metaModelValidatorOverride = metaModelValidator;
             return this;
         }
 
@@ -248,7 +239,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                             appManifestIfAny,
                             configuration,
                             services, fixtures,
-                            metaModelValidatorOverride,
                             authenticationRequest,
                             listeners);
             if(level != null) {
@@ -303,8 +293,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private final IsisConfiguration configurationOverride;
     private final List<Object> servicesIfAny;
     private final List<InstallableFixture> fixturesIfAny;
-    private final MetaModelValidator metaModelValidatorOverride;
-
 
     private final AuthenticationRequest authenticationRequestIfAny;
     private AuthenticationSession authenticationSession;
@@ -315,14 +303,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             final IsisConfiguration configurationOverride,
             final List<Object> servicesIfAny,
             final List<InstallableFixture> fixturesIfAny,
-            final MetaModelValidator metaModelValidatorOverride,
             final AuthenticationRequest authenticationRequestIfAny,
             final List<Listener> listeners) {
         this.appManifestIfAny = appManifestIfAny;
         this.configurationOverride = configurationOverride;
         this.servicesIfAny = servicesIfAny;
         this.fixturesIfAny = fixturesIfAny;
-        this.metaModelValidatorOverride = metaModelValidatorOverride;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
         this.listeners = listeners;
     }
@@ -380,12 +366,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             isisLoggingConfigurer.configureLogging(".", new String[] {});
 
             componentProvider = new IsisComponentProviderDefault(
-                    DeploymentType.UNIT_TESTING,
                     appManifestIfAny,
                     servicesIfAny,
                     fixturesIfAny,
-                    configurationOverride,
-                    metaModelValidatorOverride
+                    configurationOverride
             );
 
             isisSystem = new IsisSystem(componentProvider, DeploymentCategory.PRODUCTION);

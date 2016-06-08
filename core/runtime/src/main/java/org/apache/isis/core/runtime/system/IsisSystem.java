@@ -86,7 +86,7 @@ public class IsisSystem implements ApplicationScopedComponent {
 
     public IsisSystem(final AppManifest manifest) {
         this(new IsisComponentProviderDefault2(
-                manifest, null, null, null, null), DeploymentCategory.PRODUCTION);
+                manifest, null, null, null), DeploymentCategory.PRODUCTION);
     }
 
     public IsisSystem(final IsisComponentProvider componentProvider, final DeploymentCategory deploymentCategory) {
