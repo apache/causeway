@@ -56,13 +56,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.apache.isis.progmodels.dflt.JavaReflectorInstaller;
 
@@ -274,16 +271,6 @@ public abstract class IsisComponentProvider {
         final SpecificationLoaderInstaller reflectorInstaller = new JavaReflectorInstaller(getConfiguration());
 
         return reflectorInstaller.createReflector(deploymentCategory, metaModelRefiners, servicesInjector);
-    }
-
-    public PersistenceSessionFactory providePersistenceSessionFactory(
-            final DeploymentCategory deploymentCategory,
-            final ServicesInjector servicesInjector) {
-        final PersistenceMechanismInstaller persistenceMechanismInstaller =
-                new DataNucleusPersistenceMechanismInstaller(getConfiguration());
-
-        return persistenceMechanismInstaller.createPersistenceSessionFactory(
-                deploymentCategory, servicesInjector);
     }
 
     //endregion

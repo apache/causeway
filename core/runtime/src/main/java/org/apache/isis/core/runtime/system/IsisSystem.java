@@ -167,8 +167,7 @@ public class IsisSystem implements ApplicationScopedComponent {
             servicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 
             // persistenceSessionFactory
-            final PersistenceSessionFactory persistenceSessionFactory =
-                    componentProvider.providePersistenceSessionFactory(deploymentCategory, servicesInjector);
+            final PersistenceSessionFactory persistenceSessionFactory = new PersistenceSessionFactory(configuration);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
             // wire up components and components into services...

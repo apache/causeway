@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, DataNucleusPropertiesAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusPersistenceMechanismInstaller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CreateSchemaObjectFromClassMetadata.class);
 
     //region > persistenceManagerFactory, properties
 

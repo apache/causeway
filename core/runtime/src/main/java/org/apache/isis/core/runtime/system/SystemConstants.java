@@ -41,17 +41,6 @@ public final class SystemConstants {
 
 
 
-    /**
-     * Key used to lookup {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory persistor} in
-     * {@link IsisConfiguration}, and root for any
-     * {@link PersistenceMechanismInstaller persistor}-specific configuration
-     * keys.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public final static String OBJECT_PERSISTOR_INSTALLER_KEY = ConfigurationConstants.ROOT + PersistenceMechanismInstaller.TYPE;
-
 
     /**
      * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.

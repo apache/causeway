@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -53,7 +52,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
@@ -167,7 +165,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         private AppManifest appManifestIfAny;
 
         private MetaModelValidator metaModelValidatorOverride;
-        private ProgrammingModel programmingModelOverride;
 
         private final List<Object> services = Lists.newArrayList();
         private final List<InstallableFixture> fixtures = Lists.newArrayList();
@@ -181,24 +178,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
 
-        /**
-         * @deprecated - this is now a no-op because there is now only a single implementation of {@link PersistenceMechanismInstaller}, so this is redundant.
-         */
-        @Deprecated
-        public Builder with(PersistenceMechanismInstaller persistenceMechanismInstaller) {
-            return this;
-        }
-
         public Builder with(MetaModelValidator metaModelValidator) {
             this.metaModelValidatorOverride = metaModelValidator;
-            return this;
-        }
-
-        /**
-         * @deprecated - this is now a no-op because there is now only a single implementation of {@link ProgrammingModel}, so this is redundant.
-         */
-        @Deprecated
-        public Builder with(ProgrammingModel programmingModel) {
             return this;
         }
 

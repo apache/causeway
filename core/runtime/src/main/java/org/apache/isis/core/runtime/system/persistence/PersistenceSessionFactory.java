@@ -36,7 +36,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
@@ -65,6 +64,10 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
 
     //region > init, createDataNucleusApplicationComponents
 
+    public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
+    public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
+
+
     private DataNucleusApplicationComponents applicationComponents;
 
     @Programmatic
@@ -78,9 +81,9 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
         if (applicationComponents == null || applicationComponents.isStale()) {
 
             final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
-                    DataNucleusPersistenceMechanismInstaller. JDO_OBJECTSTORE_CONFIG_PREFIX);
+                    JDO_OBJECTSTORE_CONFIG_PREFIX);
 
-            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DataNucleusPersistenceMechanismInstaller.DATANUCLEUS_CONFIG_PREFIX);
+            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
