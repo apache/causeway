@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -65,7 +65,7 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     //region > createPersistenceSessionFactory
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector) {
 
         return new PersistenceSessionFactory(getConfiguration());

@@ -191,7 +191,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+        return IsisContext.getDeploymentCategory();
     }
 
 

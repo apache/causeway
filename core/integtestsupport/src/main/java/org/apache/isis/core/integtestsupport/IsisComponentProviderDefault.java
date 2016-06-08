@@ -37,7 +37,7 @@ public class IsisComponentProviderDefault extends IsisComponentProviderDefault2 
             final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride,
             final MetaModelValidator metaModelValidatorOverride) {
-        super(deploymentType, appManifestIfAny, servicesOverride, fixturesOverride, configurationOverride,
+        super(appManifestIfAny, servicesOverride, fixturesOverride, configurationOverride,
                 metaModelValidatorOverride);
 
     }

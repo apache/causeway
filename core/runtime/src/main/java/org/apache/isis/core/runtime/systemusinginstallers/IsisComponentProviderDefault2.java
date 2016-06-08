@@ -45,7 +45,6 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerS
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -56,13 +55,12 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
     private final MetaModelValidator metaModelValidator;
 
     public IsisComponentProviderDefault2(
-            final DeploymentType deploymentType,
             final AppManifest appManifestIfAny,
             final List<Object> servicesOverride,
             final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride,
             final MetaModelValidator metaModelValidatorOverride) {
-        super(deploymentType, appManifestIfAny, elseDefault(configurationOverride));
+        super(appManifestIfAny, elseDefault(configurationOverride));
 
         this.services = appManifestIfAny != null
                 ? new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration()).getServices()
@@ -130,11 +128,9 @@ public class IsisComponentProviderDefault2 extends IsisComponentProvider  {
 
     @Override
     public SpecificationLoader provideSpecificationLoader(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
-
-        final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
 
         final List<LayoutMetadataReader> layoutMetadataReaders =
                 Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson());

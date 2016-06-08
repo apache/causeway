@@ -42,7 +42,6 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
@@ -55,18 +54,15 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
 
     public IsisComponentProviderUsingInstallers(
-            final DeploymentType deploymentType,
-            final AppManifest appManifestIfAny,
-            final IsisConfiguration configuration) {
-        this(deploymentType, appManifestIfAny, configuration, new InstallerLookup(configuration));
+            final IsisConfiguration configuration, final AppManifest appManifestIfAny) {
+        this(appManifestIfAny, configuration, new InstallerLookup(configuration));
     }
 
     private IsisComponentProviderUsingInstallers(
-            final DeploymentType deploymentType,
             final AppManifest appManifestIfAny,
             final IsisConfiguration configuration,
             final InstallerLookup installerLookup) {
-        super(deploymentType,
+        super(
                 appManifestIfAny(appManifestIfAny, configuration),
                 configuration);
 

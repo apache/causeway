@@ -43,9 +43,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -67,7 +67,7 @@ public class ResourceContext implements RendererContext6 {
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
 
-    private final DeploymentType deploymentType;
+    private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
@@ -98,7 +98,7 @@ public class ResourceContext implements RendererContext6 {
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
@@ -123,7 +123,7 @@ public class ResourceContext implements RendererContext6 {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
-        this.deploymentType = deploymentType;
+        this.deploymentCategory = deploymentCategory;
         this.interactionInitiatedBy = interactionInitiatedBy;
 
         init(representationType);
@@ -252,8 +252,8 @@ public class ResourceContext implements RendererContext6 {
     }
 
     @Override
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
     }
 
     @Override

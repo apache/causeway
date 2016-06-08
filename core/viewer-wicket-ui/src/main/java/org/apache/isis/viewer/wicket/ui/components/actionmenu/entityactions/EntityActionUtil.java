@@ -57,7 +57,7 @@ public final class EntityActionUtil {
 
     public static List<LinkAndLabel> getEntityActionLinksForAssociation(
             final ScalarModel scalarModel,
-            final DeploymentType deploymentType) {
+            final DeploymentCategory deploymentCategory) {
         final List<LinkAndLabel> entityActions = Lists.newArrayList();
 
         if (scalarModel.getKind() != ScalarModel.Kind.PROPERTY) {
@@ -67,7 +67,8 @@ public final class EntityActionUtil {
             final EntityModel parentEntityModel = new EntityModel(parentMemento);
             final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
 
-            final List<ObjectAction> associatedActions = getObjectActionsForAssociation(parentEntityModel, oneToOneAssociation, deploymentType);
+            final List<ObjectAction> associatedActions = getObjectActionsForAssociation(parentEntityModel, oneToOneAssociation,
+                    deploymentCategory);
 
             entityActions.addAll(asLinkAndLabelsForAdditionalLinksPanel(parentEntityModel, associatedActions));
             return entityActions;
@@ -176,11 +177,11 @@ public final class EntityActionUtil {
 
     public static List<ObjectAction> getTopLevelActions(
             final ObjectAdapter adapter,
-            final DeploymentType deploymentType) {
+            final DeploymentCategory deploymentCategory) {
         final List<ObjectAction> topLevelActions = Lists.newArrayList();
 
         addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-        if(deploymentType.isPrototyping()) {
+        if(deploymentCategory.isPrototyping()) {
             addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions);
             addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
         }

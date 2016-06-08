@@ -248,7 +248,7 @@ public class IsisWicketApplication
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
-            final IsisInjectModule isisModule = newIsisModule(deploymentType, configuration);
+            final IsisInjectModule isisModule = newIsisModule(deploymentType.getDeploymentCategory(), configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
             injector.injectMembers(this);
@@ -651,9 +651,9 @@ public class IsisWicketApplication
     }
     
     protected IsisInjectModule newIsisModule(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault isisConfiguration) {
-        return new IsisInjectModule(deploymentType, isisConfiguration);
+        return new IsisInjectModule(deploymentCategory, isisConfiguration);
     }
 
     // //////////////////////////////////////

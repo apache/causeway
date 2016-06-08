@@ -43,8 +43,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -316,12 +314,5 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         return visible;
     }
 
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
 }

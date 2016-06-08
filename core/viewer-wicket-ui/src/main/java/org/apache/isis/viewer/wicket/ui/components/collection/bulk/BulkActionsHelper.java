@@ -81,10 +81,10 @@ public class BulkActionsHelper implements Serializable {
     //region > from context
 
     public boolean isExploring() {
-        return IsisContext.getDeploymentType().isExploring();
+        return IsisContext.getDeploymentCategory().isExploring();
     }
     public boolean isPrototyping() {
-        return IsisContext.getDeploymentType().isPrototyping();
+        return IsisContext.getDeploymentCategory().isPrototyping();
     }
 
     /**

@@ -90,7 +90,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
         }
 
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
+        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
         addPositioningCssTo(labelIfRegular, entityActions);
 

@@ -43,6 +43,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -406,7 +407,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     metaModelValidatorOverride
             );
 
-            isisSystem = new IsisSystem(componentProvider);
+            isisSystem = new IsisSystem(componentProvider, DeploymentCategory.PRODUCTION);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();

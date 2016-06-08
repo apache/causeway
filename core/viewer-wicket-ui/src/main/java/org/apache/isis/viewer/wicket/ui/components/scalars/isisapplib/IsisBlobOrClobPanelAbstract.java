@@ -98,7 +98,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         labelIfRegular.add(scalarName);
 
         // find the links...
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
+        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
         addPositioningCssTo(labelIfRegular, entityActions);
 

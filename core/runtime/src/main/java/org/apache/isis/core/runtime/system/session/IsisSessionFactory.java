@@ -29,11 +29,11 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
@@ -61,7 +61,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     //region > constructor, fields, shutdown
 
-    private final DeploymentType deploymentType;
+    private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoaderSpi;
     private final ServicesInjector servicesInjector;
@@ -71,11 +71,11 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     private final OidMarshaller oidMarshaller;
 
     public IsisSessionFactory(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector) {
 
         this.servicesInjector = servicesInjector;
-        this.deploymentType = deploymentType;
+        this.deploymentCategory = deploymentCategory;
 
         this.configuration = servicesInjector.getConfigurationServiceInternal();
         this.specificationLoaderSpi = servicesInjector.getSpecificationLoader();
@@ -135,10 +135,10 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     //region > component accessors
     /**
      * The {@link ApplicationScopedComponent application-scoped}
-     * {@link DeploymentType}.
+     * {@link DeploymentCategory}.
      */
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
     }
 
     /**

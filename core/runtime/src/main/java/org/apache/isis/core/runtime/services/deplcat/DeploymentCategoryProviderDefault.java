@@ -29,6 +29,6 @@ public class DeploymentCategoryProviderDefault implements DeploymentCategoryProv
     @Programmatic
     @Override
     public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+        return IsisContext.getDeploymentCategory();
     }
 }

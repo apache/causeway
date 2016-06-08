@@ -33,10 +33,8 @@ import org.apache.maven.project.MavenProject;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
@@ -59,10 +57,8 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
         final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
-        final IsisComponentProviderDefault2 componentProvider = new IsisComponentProviderDefault2(
-                DeploymentType.UNIT_TESTING, manifest, null, null, null, null);
 
-        final IsisSystem isisSystem = new IsisSystem(componentProvider);
+        final IsisSystem isisSystem = new IsisSystem(manifest);
         try {
             isisSystem.init();
             if(!isisSystem.isMetaModelValid()) {

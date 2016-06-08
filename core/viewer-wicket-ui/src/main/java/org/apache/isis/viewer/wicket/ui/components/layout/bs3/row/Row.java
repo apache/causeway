@@ -96,12 +96,5 @@ public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         return visible;
     }
 
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
 }

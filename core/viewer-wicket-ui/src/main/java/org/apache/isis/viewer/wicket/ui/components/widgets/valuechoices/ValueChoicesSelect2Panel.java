@@ -102,7 +102,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         }
 
         // find the links...
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
+        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
         addPositioningCssTo(labelIfRegular, entityActions);
 

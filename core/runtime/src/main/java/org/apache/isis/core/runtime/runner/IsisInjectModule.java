@@ -29,9 +29,8 @@ import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
@@ -42,7 +41,7 @@ public class IsisInjectModule extends AbstractModule {
      *
      * <p>
      *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with null when the system is
-     *     {@link #provideIsisSystem(DeploymentType, IsisConfiguration, AppManifest) created} .
+     *     {@link #provideIsisSystem(AppManifest) created} .
      * </p>
      */
     private static final AppManifest APP_MANIFEST_NOOP = new AppManifest() {
@@ -70,41 +69,21 @@ public class IsisInjectModule extends AbstractModule {
         }
     };
 
-    private final DeploymentType deploymentType;
+    private final DeploymentCategory deploymentCategory;
     private final IsisConfigurationDefault isisConfiguration;
 
     public IsisInjectModule(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
-        this.deploymentType = deploymentType;
+        this.deploymentCategory = deploymentCategory;
     }
 
     /**
-     * As passed in or defaulted by the constructors.
+     * Allows the {@link AppManifest} to be programmatically bound in.
      */
-    @SuppressWarnings("unused")
-    @Provides
-    @Singleton
-    private DeploymentType provideDeploymentsType() {
-        return deploymentType;
-    }
-
-    /**
-     * As passed in or defaulted by the constructors.
-     */
-    @SuppressWarnings("unused")
-    @Provides
-    @Singleton
-    private IsisConfiguration providesConfiguration() {
-        return isisConfiguration;
-    }
-
-
     @Override
     protected void configure() {
-        requireBinding(DeploymentType.class);
-        requireBinding(IsisConfiguration.class);
         bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
@@ -112,20 +91,14 @@ public class IsisInjectModule extends AbstractModule {
     @Provides
     @Inject
     @Singleton
-    protected IsisSystem provideIsisSystem(
-            final DeploymentType deploymentType,
-            final IsisConfiguration isisConfiguration,
-            final AppManifest appManifestIfAny) {
+    protected IsisSystem provideIsisSystem(final AppManifest appManifestIfAny) {
+
+        final AppManifest appManifest = appManifestIfAny != APP_MANIFEST_NOOP ? appManifestIfAny : null;
 
         final IsisComponentProviderUsingInstallers componentProvider =
-                new IsisComponentProviderUsingInstallers(
-                        deploymentType,
-                        appManifestIfAny == APP_MANIFEST_NOOP
-                                ? null
-                                : appManifestIfAny,
-                        isisConfiguration);
+                new IsisComponentProviderUsingInstallers(isisConfiguration, appManifest);
 
-        final IsisSystem system = new IsisSystem(componentProvider);
+        final IsisSystem system = new IsisSystem(componentProvider, deploymentCategory);
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
@@ -133,6 +106,5 @@ public class IsisInjectModule extends AbstractModule {
 
         return system;
     }
-
 
 }

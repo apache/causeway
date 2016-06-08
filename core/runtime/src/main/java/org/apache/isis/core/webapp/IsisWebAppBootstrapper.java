@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
@@ -90,7 +91,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
             final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
 
-            injector = createGuiceInjector(isisConfiguration, deploymentType);
+            injector = createGuiceInjector(isisConfiguration, deploymentType.getDeploymentCategory());
             final IsisSystem system = injector.getInstance(IsisSystem.class);
 
             servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);
@@ -149,8 +150,8 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
     private Injector createGuiceInjector(
             final IsisConfigurationDefault isisConfiguration,
-            final DeploymentType deploymentType) {
-        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfiguration);
+            final DeploymentCategory deploymentCategory) {
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentCategory, isisConfiguration);
         return Guice.createInjector(isisModule);
     }
 

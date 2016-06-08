@@ -29,8 +29,6 @@ import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -68,7 +66,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         final EntityModel entityModel = collectionModel.getEntityModel();
 
         final List<ObjectAction> associatedActions =
-                EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentType());
+                EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentCategory());
 
         entityActionLinks.addAll(
                 EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
@@ -107,14 +105,5 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     }
     //endregion
 
-
-
-    //region > dependencies
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
-
-    //endregion
 
 }

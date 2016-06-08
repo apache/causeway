@@ -19,18 +19,21 @@
 package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @DomainService(
@@ -83,8 +86,7 @@ public class TranslationServicePo implements TranslationService {
     }
 
     protected boolean isPrototypeOrTest() {
-        final DeploymentType deploymentType = getDeploymentType();
-        return !deploymentType.isProduction();
+        return !getDeploymentCategory().isProduction();
     }
 
     @Programmatic
@@ -166,8 +168,8 @@ public class TranslationServicePo implements TranslationService {
 
     // //////////////////////////////////////
 
-    DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
+    DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentCategory();
     }
 
 

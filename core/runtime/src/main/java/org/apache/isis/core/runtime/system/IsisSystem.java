@@ -27,6 +27,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.LogonFixture;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
@@ -58,6 +60,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 
 public class IsisSystem implements ApplicationScopedComponent {
 
@@ -67,32 +70,36 @@ public class IsisSystem implements ApplicationScopedComponent {
     public static final String MSG_CONFIRM = "Confirm";
     public static final String MSG_CANCEL = "Cancel";
 
-    private final IsisLocaleInitializer localeInitializer;
-    private final IsisTimeZoneInitializer timeZoneInitializer;
-    private final DeploymentType deploymentType;
 
     private boolean initialized = false;
 
     private ServiceInitializer serviceInitializer;
     private IsisSessionFactory sessionFactory;
 
-    //region > constructors
+    //region > constructors, fields
 
     private final IsisComponentProvider componentProvider;
+    private final DeploymentCategory deploymentCategory;
 
-    public IsisSystem(IsisComponentProvider componentProvider) {
-        this.deploymentType = componentProvider.getDeploymentType();
-        this.localeInitializer = new IsisLocaleInitializer();
-        this.timeZoneInitializer = new IsisTimeZoneInitializer();
+    private final IsisLocaleInitializer localeInitializer;
+    private final IsisTimeZoneInitializer timeZoneInitializer;
 
-        this.componentProvider = componentProvider;
+    public IsisSystem(final AppManifest manifest) {
+        this(new IsisComponentProviderDefault2(
+                manifest, null, null, null, null), DeploymentCategory.PRODUCTION);
     }
 
-    //endregion
+    public IsisSystem(final IsisComponentProvider componentProvider, final DeploymentCategory deploymentCategory) {
 
-    //region > deploymentType
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
+        this.componentProvider = componentProvider;
+        this.deploymentCategory = deploymentCategory;
+
+        this.localeInitializer = new IsisLocaleInitializer();
+        this.timeZoneInitializer = new IsisTimeZoneInitializer();
+    }
+
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
     }
     //endregion
 
@@ -131,7 +138,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
         // we do this after loading the services to allow a service to prime a different clock
         // implementation (eg to use an NTP time service).
-        if (!deploymentType.isProduction() && !Clock.isInitialized()) {
+        if (!getDeploymentCategory().isProduction() && !Clock.isInitialized()) {
             FixtureClock.initialize();
         }
 
@@ -156,12 +163,12 @@ public class IsisSystem implements ApplicationScopedComponent {
                     refiners(authenticationManager, authorizationManager,
                             new PersistenceSessionFactoryMetamodelRefiner());
             final SpecificationLoader specificationLoader =
-                    componentProvider.provideSpecificationLoader(deploymentType, servicesInjector, metaModelRefiners);
+                    componentProvider.provideSpecificationLoader(deploymentCategory, servicesInjector, metaModelRefiners);
             servicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 
             // persistenceSessionFactory
             final PersistenceSessionFactory persistenceSessionFactory =
-                    componentProvider.providePersistenceSessionFactory(deploymentType, servicesInjector);
+                    componentProvider.providePersistenceSessionFactory(deploymentCategory, servicesInjector);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
             // wire up components and components into services...
@@ -171,7 +178,7 @@ public class IsisSystem implements ApplicationScopedComponent {
             }
 
             // instantiate
-            sessionFactory = new IsisSessionFactory(deploymentType, servicesInjector);
+            sessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector);
             IsisContext.set(sessionFactory);
 
             try {
@@ -245,7 +252,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         try {
 
             // only allow logon fixtures if not in production mode.
-            if (!getDeploymentType().isProduction()) {
+            if (!getDeploymentCategory().isProduction()) {
                 logonFixture = fixtureInstaller.getLogonFixture();
             }
         } finally {

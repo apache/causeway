@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -196,12 +195,8 @@ public class EntityPage extends PageAbstract {
         addBookmarkedPages(entityPageContainer);
     }
 
-    private DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
-
     protected DeploymentCategory getDeploymentCategory() {
-        return getDeploymentType().getDeploymentCategory();
+        return IsisContext.getDeploymentCategory();
     }
 
 

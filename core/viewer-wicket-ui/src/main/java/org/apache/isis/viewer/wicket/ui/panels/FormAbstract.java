@@ -111,7 +111,7 @@ public abstract class FormAbstract<T> extends Form<T>
     }
 
     public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+        return IsisContext.getDeploymentCategory();
     }
 
 

@@ -43,8 +43,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -414,10 +412,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
 
     // ///////////////////////////////////////////////////////////////////
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
     @Override
     public AdapterManager getAdapterManager() {

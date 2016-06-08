@@ -30,11 +30,11 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.l10n.LocalizationDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -142,10 +142,10 @@ public final class IsisContext {
     /**
      * Convenience method.
      * 
-     * @see IsisSessionFactory#getDeploymentType()
+     * @see IsisSessionFactory#getDeploymentCategory()
      */
-    public static DeploymentType getDeploymentType() {
-        return getSessionFactory().getDeploymentType();
+    public static DeploymentCategory getDeploymentCategory() {
+        return getSessionFactory().getDeploymentCategory();
     }
 
     /**

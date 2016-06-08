@@ -138,7 +138,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     }
 
     public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+        return IsisContext.getDeploymentCategory();
     }
 
     // ///////////////////////////////////////////////////////////////////

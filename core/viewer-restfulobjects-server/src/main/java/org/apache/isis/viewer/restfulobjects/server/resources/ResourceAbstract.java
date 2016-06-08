@@ -36,13 +36,12 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -122,7 +121,7 @@ public abstract class ResourceAbstract {
         this.resourceContext = new ResourceContext(
                 representationType, httpHeaders, providers, uriInfo, request, where, intent, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext,
-                getDeploymentType(), getConfiguration(),
+                getDeploymentCategory(), getConfiguration(),
                 getServicesInjector(), getSpecificationLoader(),
                 getAuthenticationSession(), getLocalization(),
                 getPersistenceSession(), InteractionInitiatedBy.USER);
@@ -168,8 +167,8 @@ public abstract class ResourceAbstract {
     // Dependencies (from singletons)
     // //////////////////////////////////////////////////////////////
 
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
+    protected DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration () {

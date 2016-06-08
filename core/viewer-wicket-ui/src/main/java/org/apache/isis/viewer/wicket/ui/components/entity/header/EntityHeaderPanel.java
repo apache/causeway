@@ -25,8 +25,6 @@ import org.apache.wicket.Component;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -83,7 +81,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         final EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
         if (adapter != null) {
-            final List<ObjectAction> topLevelActions = EntityActionUtil.getTopLevelActions(adapter, getDeploymentType());
+            final List<ObjectAction> topLevelActions = EntityActionUtil.getTopLevelActions(adapter, getDeploymentCategory());
 
             final List<LinkAndLabel> entityActionLinks = EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(model, topLevelActions);
 
@@ -93,14 +91,6 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         }
     }
 
-
-    // ///////////////////////////////////////////////
-    // Dependency Injection
-    // ///////////////////////////////////////////////
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
 
 }

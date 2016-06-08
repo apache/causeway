@@ -47,6 +47,7 @@ import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsing
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -58,7 +59,6 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -78,16 +78,13 @@ public abstract class IsisComponentProvider {
 
     //region > constructor, fields
 
-    private final DeploymentType deploymentType;
     private final AppManifest appManifestIfAny;
     private final IsisConfigurationDefault configuration;
 
     public IsisComponentProvider(
-            final DeploymentType deploymentType,
             final AppManifest appManifestIfAny,
             final IsisConfiguration configuration) {
 
-        this.deploymentType = deploymentType;
         this.appManifestIfAny = appManifestIfAny;
         this.configuration = (IsisConfigurationDefault) configuration; // REVIEW: HACKY
 
@@ -100,10 +97,6 @@ public abstract class IsisComponentProvider {
             overrideConfigurationUsing(appManifestIfAny);
         }
 
-    }
-
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
     }
 
     public AppManifest getAppManifestIfAny() {
@@ -274,24 +267,23 @@ public abstract class IsisComponentProvider {
     }
 
     public SpecificationLoader provideSpecificationLoader(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners)  throws IsisSystemException {
 
         final SpecificationLoaderInstaller reflectorInstaller = new JavaReflectorInstaller(getConfiguration());
 
-        return reflectorInstaller.createReflector(
-                deploymentType.getDeploymentCategory(), metaModelRefiners, servicesInjector);
+        return reflectorInstaller.createReflector(deploymentCategory, metaModelRefiners, servicesInjector);
     }
 
     public PersistenceSessionFactory providePersistenceSessionFactory(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector) {
         final PersistenceMechanismInstaller persistenceMechanismInstaller =
                 new DataNucleusPersistenceMechanismInstaller(getConfiguration());
 
         return persistenceMechanismInstaller.createPersistenceSessionFactory(
-                deploymentType, servicesInjector);
+                deploymentCategory, servicesInjector);
     }
 
     //endregion
