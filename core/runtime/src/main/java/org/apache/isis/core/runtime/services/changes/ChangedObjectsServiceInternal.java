@@ -269,13 +269,11 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         return changeKindByEnlistedAdapter.size();
     }
 
-    /**
-     * Must be called only after {@link #getChangedObjectProperties()} has been called at least once.
-     */
     @Programmatic
     public int numberObjectPropertiesModified() {
         if(changedObjectProperties == null) {
-            throw new IllegalStateException("getChangedObjectProperties() has not yet been called");
+            // normally done during auditing, but in case none of the objects in this xactn are audited...
+            getChangedObjectProperties();
         }
         return changedObjectProperties.size();
     }

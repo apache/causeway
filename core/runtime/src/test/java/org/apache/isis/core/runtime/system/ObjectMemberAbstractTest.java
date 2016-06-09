@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -82,6 +83,8 @@ public class ObjectMemberAbstractTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock
     private AuthenticationSession mockAuthenticationSession;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
@@ -101,7 +104,7 @@ public class ObjectMemberAbstractTest {
 
         stubConfiguration = new IsisConfigurationDefault();
         stubServicesInjector = new ServicesInjector(Lists.<Object>newArrayList(
-                mockSpecificationLoader, mockSpecificationLoader), stubConfiguration);
+                mockSpecificationLoader, mockSpecificationLoader, mockPersistenceSessionServiceInternal), stubConfiguration);
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
