@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.spec.feature;
 import com.google.common.base.Function;
 
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -124,8 +123,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     String isValid(
             final ObjectAdapter adapter,
             final Object proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Localization localization);
+            final InteractionInitiatedBy interactionInitiatedBy);
  
 
     

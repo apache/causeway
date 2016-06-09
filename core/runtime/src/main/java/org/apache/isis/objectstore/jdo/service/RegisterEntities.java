@@ -165,7 +165,7 @@ public class RegisterEntities {
     // //////////////////////////////////////
 
     SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
     

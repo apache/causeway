@@ -68,15 +68,15 @@ public class LocalizerForIsis extends Localizer {
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
         final String context = contextClass.getName();
-        if(IsisContext.inSession()) {
+        if(IsisContext.getSessionFactory().inSession()) {
             return translate(key, context);
         } else {
-            return IsisContext.doInSession(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    return translate(key, context);
-                }
-            });
+            return IsisContext.getSessionFactory().doInSession(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        return translate(key, context);
+                    }
+                });
         }
     }
 
@@ -153,7 +153,7 @@ public class LocalizerForIsis extends Localizer {
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 }

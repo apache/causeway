@@ -126,7 +126,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             return value;
         } else {
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
-            final String title = titleFacet.title(valueAdapter, rendererContext.getLocalization());
+            final String title = titleFacet.title(valueAdapter);
             
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, valueAdapter).withTitle(title);
             if(eagerlyRender) {

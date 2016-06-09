@@ -42,7 +42,7 @@ public abstract class PersistenceCommandAbstract implements PersistenceCommand {
     // /////////////////////////////////////////////////////////////////////
 
     protected static AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
 }

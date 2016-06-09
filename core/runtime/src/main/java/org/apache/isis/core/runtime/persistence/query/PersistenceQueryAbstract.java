@@ -129,7 +129,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
     // ///////////////////////////////////////////////////////
 
     protected static SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 }

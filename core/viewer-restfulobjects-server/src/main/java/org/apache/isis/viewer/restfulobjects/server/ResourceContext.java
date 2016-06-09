@@ -36,7 +36,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -47,6 +46,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
@@ -72,7 +72,6 @@ public class ResourceContext implements RendererContext6 {
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
-    private final Localization localization;
     private final PersistenceSession persistenceSession;
 
     private List<List<String>> followLinks;
@@ -98,13 +97,8 @@ public class ResourceContext implements RendererContext6 {
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
-            final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader,
-            final AuthenticationSession authenticationSession,
-            final Localization localization,
-            final PersistenceSession persistenceSession,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         this.httpHeaders = httpHeaders;
@@ -118,12 +112,15 @@ public class ResourceContext implements RendererContext6 {
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
         this.servicesInjector = servicesInjector;
-        this.localization = localization;
         this.configuration = configuration;
-        this.authenticationSession = authenticationSession;
-        this.persistenceSession = persistenceSession;
-        this.specificationLoader = specificationLoader;
-        this.deploymentCategory = deploymentCategory;
+
+        this.authenticationSession = servicesInjector.getAuthenticationSession();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.deploymentCategory = servicesInjector.getDeploymentCategory();
+
+        final IsisSessionFactory isisSessionFactory = servicesInjector.lookupServiceElseFail(IsisSessionFactory.class);
+        this.persistenceSession = isisSessionFactory.getCurrentSession().getPersistenceSession();
+
         this.interactionInitiatedBy = interactionInitiatedBy;
 
         init(representationType);
@@ -264,11 +261,6 @@ public class ResourceContext implements RendererContext6 {
     @Override
     public List<List<String>> getFollowLinks() {
         return followLinks;
-    }
-
-    @Override
-    public Localization getLocalization() {
-        return localization;
     }
 
     @Override

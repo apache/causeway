@@ -68,12 +68,12 @@ public abstract class EventBusImplementationAbstract implements EventBusImplemen
     // region > exception handling
 
     private static void abortTransaction(final Throwable exception) {
-        getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
+        getTransactionManager().getCurrentTransaction().setAbortCause(new IsisApplicationException(exception));
         return;
     }
 
     private static IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     // endregion

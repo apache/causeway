@@ -26,7 +26,6 @@ import java.util.Currency;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -146,7 +145,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         if (object == null) {
             return "";
         }

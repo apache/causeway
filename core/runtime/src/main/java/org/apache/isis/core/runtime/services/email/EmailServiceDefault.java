@@ -190,7 +190,7 @@ public class EmailServiceDefault implements EmailService {
 
     //region > dependencies
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
     //endregion
 

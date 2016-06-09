@@ -25,7 +25,6 @@ import java.text.ParseException;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -92,7 +91,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object value, final Localization localization) {
+    public String titleString(final Object value) {
         return titleString(format, value);
     }
 

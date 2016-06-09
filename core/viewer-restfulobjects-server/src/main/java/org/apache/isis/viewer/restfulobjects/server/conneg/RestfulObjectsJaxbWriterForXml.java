@@ -57,7 +57,8 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
         marshaller.setAdapter(PersistentEntityAdapter.class, new PersistentEntityAdapter() {
             @Override
             protected BookmarkService getBookmarkService() {
-                final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
+                final PersistenceSession persistenceSession = IsisContext.getSessionFactory().getCurrentSession()
+                        .getPersistenceSession();
                 final ServicesInjector servicesInjector = persistenceSession.getServicesInjector();
                 return servicesInjector.lookupService(BookmarkService.class);
             }

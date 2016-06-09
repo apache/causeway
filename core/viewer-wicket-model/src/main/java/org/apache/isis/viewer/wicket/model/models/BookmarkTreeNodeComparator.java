@@ -76,11 +76,11 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
     //////////////////////////////////////////////////
     
     protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return IsisContext.getSessionFactory().getOidMarshaller();
     }
     
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 }

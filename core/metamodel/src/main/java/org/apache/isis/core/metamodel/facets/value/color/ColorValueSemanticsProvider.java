@@ -23,7 +23,6 @@ import java.text.DecimalFormat;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -74,7 +73,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         final Color color = (Color) object;
         return color.title();
     }

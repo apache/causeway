@@ -44,7 +44,6 @@ import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -387,14 +386,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     //region > Title, Icon
 
     @Override
-    public String getTitle(final ObjectAdapter targetAdapter, final Localization localization) {
-        return getTitle(null, targetAdapter, localization);
+    public String getTitle(final ObjectAdapter targetAdapter) {
+        return getTitle(null, targetAdapter);
     }
 
     @Override
-    public String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, Localization localization) {
+    public String getTitle(
+            ObjectAdapter contextAdapterIfAny,
+            ObjectAdapter targetAdapter) {
         if (titleFacet != null) {
-            final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter, localization);
+            final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
             if (titleString != null && !titleString.equals("")) {
                 return titleString;
             }

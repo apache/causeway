@@ -134,7 +134,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     // /////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        return IsisContext.getSessionFactory().getAuthenticationManager();
     }
 
     // /////////////////////////////////////////////////
@@ -147,22 +147,22 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             final SessionLoggingService.CausedBy causedBy) {
         final SessionLoggingService sessionLoggingService = getSessionLoggingService();
         if (sessionLoggingService != null) {
-            IsisContext.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
-                    int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-                    sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
-                }
-            });
+            IsisContext.getSessionFactory().doInSession(new Runnable() {
+                    @Override
+                    public void run() {
+                        // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
+                        int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
+                        sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
+                    }
+                });
         }
     }
 
     protected SessionLoggingService getSessionLoggingService() {
-        return IsisContext.doInSession(new Callable<SessionLoggingService>() {
+        return IsisContext.getSessionFactory().doInSession(new Callable<SessionLoggingService>() {
             @Override
             public SessionLoggingService call() throws Exception {
-                return IsisContext.getPersistenceSession().getServicesInjector().lookupService(SessionLoggingService.class);
+                return IsisContext.getSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
             }
         });
     }

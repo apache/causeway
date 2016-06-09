@@ -36,10 +36,11 @@ public class UsernameAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-        IsisContext.doInSession(new Runnable() {
+        IsisContext.getSessionFactory().doInSession(new Runnable() {
             @Override
             public void run() {
-                UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                UserRegistrationService userRegistrationService = IsisContext.getSessionFactory().getCurrentSession()
+                        .getPersistenceSession().getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
                 String username = validatable.getValue();
                 boolean usernameExists = userRegistrationService.usernameExists(username);
                 if (usernameExists) {

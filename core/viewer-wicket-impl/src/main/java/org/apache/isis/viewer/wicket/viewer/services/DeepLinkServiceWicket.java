@@ -72,7 +72,7 @@ public class DeepLinkServiceWicket implements DeepLinkService {
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     @Inject

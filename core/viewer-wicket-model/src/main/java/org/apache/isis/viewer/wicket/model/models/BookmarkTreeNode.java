@@ -261,7 +261,7 @@ public class BookmarkTreeNode implements Serializable {
     // //////////////////////////////////////
 
     protected static OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return IsisContext.getSessionFactory().getOidMarshaller();
     }
 
 

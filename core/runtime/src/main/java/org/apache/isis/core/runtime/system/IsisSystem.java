@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -75,7 +76,7 @@ public class IsisSystem implements ApplicationScopedComponent {
     private boolean initialized = false;
 
     private ServiceInitializer serviceInitializer;
-    private IsisSessionFactory sessionFactory;
+    private IsisSessionFactory isisSessionFactory;
 
     //region > constructors, fields
 
@@ -110,7 +111,7 @@ public class IsisSystem implements ApplicationScopedComponent {
      * Populated after {@link #init()}.
      */
     public IsisSessionFactory getSessionFactory() {
-        return sessionFactory;
+        return isisSessionFactory;
     }
 
     //endregion
@@ -145,8 +146,16 @@ public class IsisSystem implements ApplicationScopedComponent {
 
         try {
 
+            //
+            // everything added to ServicesInjector will be able to @Inject'ed
+            //
+
+            //
+            // the IsisSessionFactory will look up each of these components from the ServicesInjector
+            //
+
             // services
-            ServicesInjector servicesInjector = componentProvider.provideServiceInjector(configuration);
+            final ServicesInjector servicesInjector = componentProvider.provideServiceInjector(configuration);
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
             servicesInjector.validateServices();
@@ -171,16 +180,41 @@ public class IsisSystem implements ApplicationScopedComponent {
             final PersistenceSessionFactory persistenceSessionFactory = new PersistenceSessionFactory(configuration);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
-            // wire up components and components into services...
+
+            // instantiate the IsisSessionFactory
+            isisSessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector);
+
+
+            //
+            // now, add the IsisSessionFactory and its subcomponents into ServicesInjector, so that they can be
+            // @Inject'd into any internal domain services
+            //
+
+            // isisSessionFactory itself
+            servicesInjector.addFallbackIfRequired(IsisSessionFactory.class, isisSessionFactory);
+
+            // subcomponents of isisSessionFactory itself
+            servicesInjector.addFallbackIfRequired(OidMarshaller.class, isisSessionFactory.getOidMarshaller());
+
+
+
+            //
+            // finally, wire up components and components into services...
+            //
             for (Object service : servicesInjector.getRegisteredServices()) {
                 // inject itself into each service (if implements ServiceInjectorAware).
                 servicesInjector.injectInto(service);
             }
 
-            // instantiate
-            sessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector);
-            IsisContext.set(sessionFactory);
+            // ... and make IsisSessionFactory available via the IsisContext static for those places where we canont
+            // yet inject.
+            IsisContext.setSessionFactory(isisSessionFactory);
 
+
+
+            //
+            // time to initialize...
+            //
             try {
                 // first, initial metamodel (may throw exception if invalid)
                 specificationLoader.init();
@@ -199,11 +233,66 @@ public class IsisSystem implements ApplicationScopedComponent {
                 serviceInitializer = new ServiceInitializer(configuration, servicesInjector.getRegisteredServices());
                 serviceInitializer.validate();
 
-                postConstructInSession(serviceInitializer);
+                isisSessionFactory.openSession(new InitialisationSession());
 
-                installFixturesIfRequired();
+                try {
+                    //
+                    // postConstructInSession
+                    //
 
-                translateServicesAndEnumConstants();
+                    IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
+                    transactionManager.startTransaction();
+                    try {
+                        serviceInitializer.postConstruct();
+                    } catch(RuntimeException ex) {
+                        transactionManager.getCurrentTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                    } finally {
+                        // will commit or abort
+                        transactionManager.endTransaction();
+                    }
+
+
+                    //
+                    // installFixturesIfRequired
+                    //
+                    final FixturesInstaller fixtureInstaller = componentProvider.provideFixturesInstaller();
+                    fixtureInstaller.installFixtures();
+
+                    // only allow logon fixtures if not in production mode.
+                    if (!deploymentCategory.isProduction()) {
+                        logonFixture = fixtureInstaller.getLogonFixture();
+                    }
+
+                    //
+                    // translateServicesAndEnumConstants
+                    //
+                    final List<Object> services = servicesInjector.getRegisteredServices();
+                    final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
+                    for (Object service : services) {
+                        final String unused = titleService.titleOf(service);
+                    }
+                    for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
+                        final Class<?> correspondingClass = objSpec.getCorrespondingClass();
+                        if(correspondingClass.isEnum()) {
+                            final Object[] enumConstants = correspondingClass.getEnumConstants();
+                            for (Object enumConstant : enumConstants) {
+                                final String unused = titleService.titleOf(enumConstant);
+                            }
+                        }
+                    }
+
+                    // as used by the Wicket UI
+                    final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+
+                    final String context = IsisSystem.class.getName();
+                    translationService.translate(context, MSG_ARE_YOU_SURE);
+                    translationService.translate(context, MSG_CONFIRM);
+                    translationService.translate(context, MSG_CANCEL);
+
+                } finally {
+                    isisSessionFactory.closeSession();
+                }
+
 
             } catch (final MetaModelInvalidException ex) {
                 // no need to use a higher level, such as error(...); the calling code will expose any metamodel
@@ -225,79 +314,8 @@ public class IsisSystem implements ApplicationScopedComponent {
         return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
     }
 
-    private void postConstructInSession(final ServiceInitializer serviceInitializer) {
-        IsisContext.openSession(new InitialisationSession());
-        try {
-            IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
-            transactionManager.startTransaction();
-            try {
-                serviceInitializer.postConstruct();
-            } catch(RuntimeException ex) {
-                transactionManager.getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
-            } finally {
-                // will commit or abort
-                transactionManager.endTransaction();
-            }
-        } finally {
-            IsisContext.closeSession();
-        }
-    }
-
-    private void installFixturesIfRequired() throws IsisSystemException {
-
-        final FixturesInstaller fixtureInstaller = componentProvider.provideFixturesInstaller();
-
-        IsisContext.openSession(new InitialisationSession());
-        fixtureInstaller.installFixtures();
-        try {
-
-            // only allow logon fixtures if not in production mode.
-            if (!getDeploymentCategory().isProduction()) {
-                logonFixture = fixtureInstaller.getLogonFixture();
-            }
-        } finally {
-            IsisContext.closeSession();
-        }
-    }
-
-    /**
-     * The act of invoking titleOf(...) will cause translations to be requested.
-     */
-    private void translateServicesAndEnumConstants() {
-        final ServicesInjector servicesInjector = getServicesInjector();
-
-        IsisContext.openSession(new InitialisationSession());
-        try {
-            final List<Object> services = servicesInjector.getRegisteredServices();
-            final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
-            for (Object service : services) {
-                final String unused = titleService.titleOf(service);
-            }
-            for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
-                final Class<?> correspondingClass = objSpec.getCorrespondingClass();
-                if(correspondingClass.isEnum()) {
-                    final Object[] enumConstants = correspondingClass.getEnumConstants();
-                    for (Object enumConstant : enumConstants) {
-                        final String unused = titleService.titleOf(enumConstant);
-                    }
-                }
-            }
-
-            // as used by the Wicket UI
-            final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
-
-            final String context = IsisSystem.class.getName();
-            translationService.translate(context, MSG_ARE_YOU_SURE);
-            translationService.translate(context, MSG_CONFIRM);
-            translationService.translate(context, MSG_CANCEL);
-
-        } finally {
-            IsisContext.closeSession();
-        }
-    }
-
     private ServicesInjector getServicesInjector() {
-        return sessionFactory.getServicesInjector();
+        return isisSessionFactory.getServicesInjector();
     }
 
     //endregion
@@ -319,7 +337,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         }
 
         // call @PreDestroy (in a session)
-        IsisContext.openSession(new InitialisationSession());
+        getSessionFactory().openSession(new InitialisationSession());
         IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
         try {
             transactionManager.startTransaction();
@@ -328,14 +346,14 @@ public class IsisSystem implements ApplicationScopedComponent {
                 serviceInitializer.preDestroy();
 
             } catch (RuntimeException ex) {
-                transactionManager.getTransaction().setAbortCause(
+                transactionManager.getCurrentTransaction().setAbortCause(
                         new IsisTransactionManagerException(ex));
             } finally {
                 // will commit or abort
                 transactionManager.endTransaction();
             }
         } finally {
-            IsisContext.closeSession();
+            getSessionFactory().closeSession();
         }
     }
 
@@ -364,7 +382,7 @@ public class IsisSystem implements ApplicationScopedComponent {
     }
 
     IsisTransactionManager getCurrentSessionTransactionManager() {
-        final IsisSession currentSession = sessionFactory.getCurrentSession();
+        final IsisSession currentSession = isisSessionFactory.getCurrentSession();
         return currentSession.getPersistenceSession().getTransactionManager();
     }
 

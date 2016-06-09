@@ -45,7 +45,7 @@ public enum ActionResultResponseHandlingStrategy {
             // force any changes in state etc to happen now prior to the redirect;
             // in the case of an object being returned, this should cause our page mementos 
             // (eg EntityModel) to hold the correct state.  I hope.
-            IsisContext.getTransactionManager().flushTransaction();
+            IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
             
             // "redirect-after-post"
             component.setResponsePage(resultResponse.getToPage());

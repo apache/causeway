@@ -24,7 +24,6 @@ import java.util.IllegalFormatException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -70,7 +69,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     public ObjectAdapter parseTextEntry(
             final ObjectAdapter contextAdapter,
             final String entry,
-            final InteractionInitiatedBy interactionInitiatedBy, Localization localization) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
         }
@@ -92,7 +91,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         getDependencyInjector().injectServicesInto(parser);
 
         try {
-            final Object parsed = parser.parseTextEntry(context, entry, localization);
+            final Object parsed = parser.parseTextEntry(context, entry);
             if (parsed == null) {
                 return null;
             }

@@ -37,7 +37,7 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // no-op if no session available.
-        if(!IsisContext.inSession()) {
+        if(!IsisContext.getSessionFactory().inSession()) {
             chain.doFilter(request, response);
             return;
         }
@@ -54,11 +54,11 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
     }
 
     protected boolean inTransaction() {
-        return IsisContext.inTransaction();
+        return IsisContext.getSessionFactory().inTransaction();
     }
 
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     @Override

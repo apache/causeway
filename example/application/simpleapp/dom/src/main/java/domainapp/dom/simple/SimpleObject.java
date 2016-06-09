@@ -22,6 +22,7 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -60,7 +61,8 @@ import org.apache.isis.applib.util.ObjectContracts;
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject(
-        publishing = Publishing.ENABLED
+        publishing = Publishing.ENABLED,
+        auditing = Auditing.ENABLED
 )
 public class SimpleObject implements Comparable<SimpleObject> {
 

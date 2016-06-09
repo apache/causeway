@@ -215,6 +215,6 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     }
 
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getPersistenceSession().getServicesInjector();
+        return IsisContext.getSessionFactory().getServicesInjector();
     }
 }

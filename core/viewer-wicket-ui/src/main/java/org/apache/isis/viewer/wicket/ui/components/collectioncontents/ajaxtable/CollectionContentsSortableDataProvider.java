@@ -187,11 +187,11 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     // //////////////////////////////////////
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentCategory();
+        return IsisContext.getSessionFactory().getDeploymentCategory();
     }
 
 

@@ -38,7 +38,7 @@ public final class SpecUtils {
     }
 
     protected static SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 }

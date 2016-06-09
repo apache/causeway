@@ -24,9 +24,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.common.collect.Lists;
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Settings;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -39,6 +36,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -525,13 +525,15 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoCompleteFacet != null;
     }
 
-
     @Inject
     private WicketViewerSettings wicketViewerSettings;
 
+    // REVIEW: can't inject because IsisConfiguration not serializable.
     IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
+
+
 
 
 }

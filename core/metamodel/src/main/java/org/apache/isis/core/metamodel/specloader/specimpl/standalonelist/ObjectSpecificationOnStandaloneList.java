@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
 import java.util.List;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
@@ -136,7 +135,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     // /////////////////////////////////////////////////////
 
     @Override
-    public String getTitle(final ObjectAdapter object, final Localization localization) {
+    public String getTitle(final ObjectAdapter object) {
         return ((FreeStandingList) object.getObject()).titleString();
     }
 

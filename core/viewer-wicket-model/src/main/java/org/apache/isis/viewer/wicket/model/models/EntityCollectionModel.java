@@ -515,11 +515,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
     private static PersistenceSession getPersistenceSessionStatic() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     private static SpecificationLoader getSpecificationLoaderStatic() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 }

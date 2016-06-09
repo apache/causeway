@@ -232,7 +232,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private static Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
-            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(persistableClassName);
+            final ObjectSpecification spec = IsisContext.getSessionFactory().getSpecificationLoader().loadSpecification(persistableClassName);
             final JdoQueryFacet facet = spec.getFacet(JdoQueryFacet.class);
             if (facet == null) {
                 continue;

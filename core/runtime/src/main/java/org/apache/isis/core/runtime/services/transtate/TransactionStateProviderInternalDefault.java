@@ -36,7 +36,7 @@ public class TransactionStateProviderInternalDefault implements TransactionState
 
     @Override
     public TransactionState getTransactionState() {
-        final IsisTransaction transaction = getTransactionManager().getTransaction();
+        final IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
         if (transaction == null) {
             return TransactionState.NONE;
         }
@@ -49,7 +49,7 @@ public class TransactionStateProviderInternalDefault implements TransactionState
     }
 
     private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 }

@@ -71,7 +71,7 @@ public class SwaggerSpecResource {
 
     private String swagger(final SwaggerService.Visibility visibility) {
         final SwaggerService.Format format = deriveFrom(httpHeaders);
-        String spec = IsisContext.doInSession(new MyCallable(visibility, format));
+        String spec = IsisContext.getSessionFactory().doInSession(new MyCallable(visibility, format));
         return spec;
     }
 
@@ -119,7 +119,7 @@ public class SwaggerSpecResource {
         }
 
         PersistenceSession getPersistenceSession() {
-            return IsisContext.getPersistenceSession();
+            return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
         }
     }
 }

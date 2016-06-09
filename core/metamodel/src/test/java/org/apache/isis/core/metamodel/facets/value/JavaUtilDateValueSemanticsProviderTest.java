@@ -30,7 +30,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -65,7 +64,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "invalid entry", null);
+            getValue().parseTextEntry(null, "invalid entry");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -79,12 +78,12 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Test
     public void testTitleOf() {
         final String EXPECTED = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date(0));
-        assertEquals(EXPECTED, getValue().displayTitleOf(date, (Localization) null));
+        assertEquals(EXPECTED, getValue().displayTitleOf(date));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40", null);
+        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40");
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

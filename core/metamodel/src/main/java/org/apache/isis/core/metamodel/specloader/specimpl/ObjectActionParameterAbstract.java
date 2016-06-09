@@ -25,7 +25,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -460,8 +459,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public String isValid(
             final ObjectAdapter objectAdapter,
             final Object proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Localization localization) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         ObjectAdapter proposedValueAdapter = null;
         ObjectSpecification proposedValueSpec;

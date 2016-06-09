@@ -121,14 +121,14 @@ public class StandaloneData extends Data {
         if (objectAsSerializable != null) {
             return getPersistenceSession().adapterFor(objectAsSerializable);
         } else {
-            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(getClassName());
+            final ObjectSpecification spec = IsisContext.getSessionFactory().getSpecificationLoader().loadSpecification(getClassName());
             final EncodableFacet encodeableFacet = spec.getFacet(EncodableFacet.class);
             return encodeableFacet.fromEncodedString(objectAsEncodedString);
         }
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 }

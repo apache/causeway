@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.pages.mmverror;
 
 import java.util.List;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
@@ -53,23 +52,23 @@ public class MmvErrorPage extends WebPage {
     private static final String ID_APPLICATION_NAME = "applicationName";
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationCss")
     private String applicationCss;
     
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationJs")
     private String applicationJs;
 
@@ -131,7 +130,7 @@ public class MmvErrorPage extends WebPage {
     // ///////////////////////////////////////////////////
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
 
 }

@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -93,8 +92,8 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ObjectAdapter targetAdapter, final Localization localization) {
-        return title(null, targetAdapter, localization);
+    public String title(final ObjectAdapter targetAdapter) {
+        return title(null, targetAdapter);
     }
 
     private String titleOf(final ObjectAdapter adapter) {
@@ -113,7 +112,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter, Localization localization) {
+    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter) {
         final StringBuilder stringBuilder = new StringBuilder();
 
         try {

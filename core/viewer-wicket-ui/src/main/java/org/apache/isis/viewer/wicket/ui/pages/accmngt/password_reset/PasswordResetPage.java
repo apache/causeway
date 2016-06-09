@@ -73,10 +73,12 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                 error(getString("passwordResetExpiredOrInvalidToken"));
                 addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
             } else {
-                Boolean emailExists = IsisContext.doInSession(new Callable<Boolean>() {
+                Boolean emailExists = IsisContext.getSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
-                        UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        UserRegistrationService userRegistrationService = IsisContext.getSessionFactory()
+                                .getCurrentSession().getPersistenceSession().getServicesInjector()
+                                .lookupService(UserRegistrationService.class);
                         return userRegistrationService.emailExists(email);
                     }
                 });

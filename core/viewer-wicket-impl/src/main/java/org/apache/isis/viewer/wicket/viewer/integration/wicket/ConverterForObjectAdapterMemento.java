@@ -82,11 +82,11 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
     // //////////////////////////////////////////////////////////
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return IsisContext.getSessionFactory().getOidMarshaller();
     }
 
 }

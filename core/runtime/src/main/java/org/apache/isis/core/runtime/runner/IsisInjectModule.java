@@ -29,9 +29,12 @@ import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 public class IsisInjectModule extends AbstractModule {
@@ -105,6 +108,34 @@ public class IsisInjectModule extends AbstractModule {
         system.init();
 
         return system;
+    }
+
+    @Provides
+    @Inject
+    @Singleton
+    protected IsisConfiguration provideConfiguration() {
+        return isisConfiguration;
+    }
+
+    @Provides
+    @Inject
+    @Singleton
+    protected DeploymentCategory provideDeploymentCaeg() {
+        return deploymentCategory;
+    }
+
+    @Provides
+    @Inject
+    @Singleton
+    protected IsisSessionFactory provideIsisSessionFactory(final IsisSystem isisSystem) {
+        return isisSystem.getSessionFactory();
+    }
+
+    @Provides
+    @Inject
+    @Singleton
+    protected ServicesInjector provideServicesInjector(final IsisSessionFactory isisSessionFactory) {
+        return isisSessionFactory.getServicesInjector();
     }
 
 }

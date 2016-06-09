@@ -315,7 +315,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
             // recognized
             raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
-            getTransactionManager().getTransaction().clearAbortCause();
+            getTransactionManager().getCurrentTransaction().clearAbortCause();
             
             // there's no need to abort the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
@@ -338,7 +338,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
     ///////////////////////////////////////////////////////
     
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     protected MessageBroker getMessageBroker() {

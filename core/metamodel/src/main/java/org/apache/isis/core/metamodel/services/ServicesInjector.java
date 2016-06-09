@@ -49,6 +49,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -514,7 +515,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public AuthenticationManager getAuthenticationManager() {
         return authenticationManager != null
                 ? authenticationManager
-                : (authenticationManager = lookupService(AuthenticationManager.class));
+                : (authenticationManager = lookupServiceElseFail(AuthenticationManager.class));
     }
 
     private AuthorizationManager authorizationManager;
@@ -523,7 +524,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public AuthorizationManager getAuthorizationManager() {
         return authorizationManager != null
                 ? authorizationManager
-                : (authorizationManager = lookupService(AuthorizationManager.class));
+                : (authorizationManager = lookupServiceElseFail(AuthorizationManager.class));
     }
 
     private SpecificationLoader specificationLoader;
@@ -532,7 +533,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader != null
                 ? specificationLoader
-                : (specificationLoader = lookupService(SpecificationLoader.class));
+                : (specificationLoader = lookupServiceElseFail(SpecificationLoader.class));
     }
 
     private DeploymentCategoryProvider deploymentCategoryProvider;
@@ -540,7 +541,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public DeploymentCategoryProvider getDeploymentCategoryProvider() {
         return deploymentCategoryProvider != null
                 ? deploymentCategoryProvider
-                : (deploymentCategoryProvider = lookupService(DeploymentCategoryProvider.class));
+                : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
     }
 
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -548,7 +549,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
         return authenticationSessionProvider != null
                 ? authenticationSessionProvider
-                : (authenticationSessionProvider = lookupService(AuthenticationSessionProvider.class));
+                : (authenticationSessionProvider = lookupServiceElseFail(AuthenticationSessionProvider.class));
     }
 
     private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
@@ -556,7 +557,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
         return persistenceSessionServiceInternal != null
                 ? persistenceSessionServiceInternal
-                : (persistenceSessionServiceInternal = lookupService(PersistenceSessionServiceInternal.class));
+                : (persistenceSessionServiceInternal = lookupServiceElseFail(PersistenceSessionServiceInternal.class));
     }
 
     private ConfigurationServiceInternal configurationServiceInternal;
@@ -564,8 +565,18 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public ConfigurationServiceInternal getConfigurationServiceInternal() {
         return configurationServiceInternal != null
                 ? configurationServiceInternal
-                : (configurationServiceInternal = lookupService(ConfigurationServiceInternal.class));
+                : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
     }
+
+    private OidMarshaller oidMarshaller;
+
+    @Programmatic
+    public OidMarshaller getOidMarshaller() {
+        return oidMarshaller != null
+                ? oidMarshaller
+                : (oidMarshaller = lookupServiceElseFail(OidMarshaller.class));
+    }
+
 
 
     //endregion

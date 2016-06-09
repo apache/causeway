@@ -37,6 +37,6 @@ public class AuthenticationSessionStrategyTrusted extends AuthenticationSessionS
 
         // will always succeed.
         final AuthenticationRequestExploration request = new AuthenticationRequestExploration();
-        return IsisContext.getAuthenticationManager().authenticate(request);
+        return IsisContext.getSessionFactory().getAuthenticationManager().authenticate(request);
     }
 }

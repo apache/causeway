@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
@@ -41,7 +40,7 @@ public class TitleServiceDefault implements TitleService {
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
         final boolean destroyed = objectAdapter.isDestroyed();
         if(!destroyed) {
-            return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProviderInternal.getLocalization());
+            return objectAdapter.getSpecification().getTitle(objectAdapter);
         } else {
             return "[DELETED]";
         }
@@ -67,9 +66,6 @@ public class TitleServiceDefault implements TitleService {
 
     @Inject
     PersistenceSessionServiceInternal adapterManager;
-
-    @javax.inject.Inject
-    LocalizationProviderInternal localizationProviderInternal;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

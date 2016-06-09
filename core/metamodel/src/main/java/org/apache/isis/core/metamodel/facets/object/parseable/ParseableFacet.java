@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
@@ -36,17 +35,11 @@ public interface ParseableFacet extends MultipleValueFacet {
      * <p>
      * Equivalent to <tt>Parser#parseTextEntry(Object, String)</tt>, though may
      * be implemented through some other mechanism.
-     * @param interactionInitiatedBy
-     * @param localization TODO
-     *
-     * @throws InvalidEntryException
-     * @throws TextEntryParseException
      */
     ObjectAdapter parseTextEntry(
             final ObjectAdapter original,
             final String text,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Localization localization);
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * A title for the object that is valid but which may be easier to edit than

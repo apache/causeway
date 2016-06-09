@@ -29,6 +29,6 @@ public class AuthenticationSessionProviderDefault implements AuthenticationSessi
     @Programmatic
     @Override
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 }

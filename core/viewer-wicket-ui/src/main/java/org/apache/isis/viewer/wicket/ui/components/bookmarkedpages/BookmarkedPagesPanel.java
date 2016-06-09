@@ -233,7 +233,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 }

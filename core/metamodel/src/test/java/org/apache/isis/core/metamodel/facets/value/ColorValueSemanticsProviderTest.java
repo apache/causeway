@@ -25,7 +25,6 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -49,14 +48,14 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "#3366fF", null);
+        final Object newValue = value.parseTextEntry(null, "#3366fF");
         assertEquals(color, newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "red", null);
+            value.parseTextEntry(null, "red");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -64,17 +63,17 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testTitleOf() {
-        assertEquals("#3366FF", value.displayTitleOf(color, (Localization) null));
+        assertEquals("#3366FF", value.displayTitleOf(color));
     }
 
     @Test
     public void testTitleOfBlack() {
-        assertEquals("Black", value.displayTitleOf(new Color(0), (Localization) null));
+        assertEquals("Black", value.displayTitleOf(new Color(0)));
     }
 
     @Test
     public void testTitleOfWhite() {
-        assertEquals("White", value.displayTitleOf(new Color(0xffffff), (Localization) null));
+        assertEquals("White", value.displayTitleOf(new Color(0xffffff)));
     }
 
     @Test

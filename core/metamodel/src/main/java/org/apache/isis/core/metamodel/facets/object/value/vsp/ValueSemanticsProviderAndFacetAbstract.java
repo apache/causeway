@@ -30,7 +30,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.Parser2;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -169,7 +168,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public T parseTextEntry(final Object context, final String entry, final Localization localization) {
+    public T parseTextEntry(final Object context, final String entry) {
         if (entry == null) {
             throw new IllegalArgumentException();
         }
@@ -180,7 +179,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
                 return null;
             }
         }
-        return doParse(context, entry, localization);
+        return doParse(context, entry);
     }
 
     /**
@@ -194,7 +193,8 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         throw new UnexpectedCallException(); 
     } 
 
-    protected T doParse(Object context, String entry, Localization localization) { 
+    // REVIEW: unused?  (this method used to take Localization as a third param)
+    protected T doParse(String entry, Object context) {
         return doParse(context, entry); 
     } 
 
@@ -209,11 +209,11 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     @Override
-    public String displayTitleOf(final Object object, final Localization localization) {
+    public String displayTitleOf(final Object object) {
         if (object == null) {
             return "";
         }
-        return titleString(object, localization);
+        return titleString(object);
     }
 
     @Override
@@ -225,11 +225,11 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     /**
-     * Defaults to {@link #displayTitleOf(Object, Localization)}.
+     * Defaults to {@link Parser#displayTitleOf(Object)}.
      */
     @Override
     public String parseableTitleOf(final Object existing) {
-        return displayTitleOf(existing, (Localization) null);
+        return displayTitleOf(existing);
     }
 
     protected String titleString(final Format formatter, final Object object) {
@@ -239,7 +239,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     /**
      * Return a string representation of aforesaid object.
      */
-    protected abstract String titleString(Object object, Localization localization);
+    protected abstract String titleString(Object object);
 
     public abstract String titleStringWithMask(final Object value, final String usingMask);
 

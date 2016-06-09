@@ -216,7 +216,7 @@ public class FixturesInstallerDelegate {
     private boolean shouldInstallFixture(final InstallableFixture installableFixture) {
         final FixtureType fixtureType = installableFixture.getType();
         if (fixtureType == FixtureType.DOMAIN_OBJECTS) {
-            return !IsisContext.getPersistenceSession().isFixturesInstalled();
+            return !IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().isFixturesInstalled();
         }
 
         // fixtureType is OTHER; always install.
@@ -270,7 +270,8 @@ public class FixturesInstallerDelegate {
      * that use the singleton to break).
      */
     private PersistenceSession getPersistenceSession() {
-        return persistenceSession != null ? persistenceSession : IsisContext.getPersistenceSession();
+        return persistenceSession != null ? persistenceSession :
+                IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     private ServicesInjector getServicesInjector() {

@@ -210,7 +210,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                         e.printStackTrace();
                     }
                     try {
-                        IsisContext.shutdown();
+                        isisSystemForTest.isisSystem.getSessionFactory().shutdown();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -320,7 +320,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             FixtureClock.initialize();
 
             isisSystem.init();
-            IsisContext.closeSession();
+
+            // REVIEW: is this required?
+            isisSystem.getSessionFactory().closeSession();
 
             // if the IsisSystem does not initialize properly, then - as a side effect - the resulting
             // MetaModelInvalidException will be pushed onto the IsisContext (as a static field).
@@ -340,7 +342,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             }
         }
 
-        final AuthenticationManager authenticationManager = IsisContext.getAuthenticationManager();
+        final AuthenticationManager authenticationManager = isisSystem.getSessionFactory().getAuthenticationManager();
         authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         openSession();
@@ -357,12 +359,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     public DomainObjectContainer getContainer() {
-        for (Object service : IsisContext.getSessionFactory().getServices()) {
-            if(service instanceof DomainObjectContainer) {
-                return (DomainObjectContainer) service;
-            }
-        }
-        throw new IllegalStateException("Could not locate DomainObjectContainer");
+        return getService(DomainObjectContainer.class);
     }
 
     //endregion
@@ -399,8 +396,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(fireListeners.shouldFire()) {
             firePreTeardownSystem();
         }
-        if(IsisContext.inSession()) {
-            IsisContext.closeSession();
+        if(isisSystem.getSessionFactory().inSession()) {
+            isisSystem.getSessionFactory().closeSession();
         }
         if(fireListeners.shouldFire()) {
             firePostTeardownSystem();
@@ -429,11 +426,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     public void openSession(AuthenticationSession authenticationSession) throws Exception {
-        IsisContext.openSession(authenticationSession);
+        isisSystem.getSessionFactory().openSession(authenticationSession);
     }
 
     public void closeSession() throws Exception {
-        IsisContext.closeSession();
+        isisSystem.getSessionFactory().closeSession();
     }
 
     //endregion
@@ -496,7 +493,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     //region > Convenience for tests
 
     public ObjectSpecification loadSpecification(Class<?> cls) {
-        return getIsisSystem().getSessionFactory().getSpecificationLoader().loadSpecification(cls);
+        return isisSystem.getSessionFactory().getSpecificationLoader().loadSpecification(cls);
     }
 
     public ObjectAdapter persist(Object domainObject) {
@@ -549,8 +546,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return adapter;
     }
 
-    private static void ensureSessionInProgress() {
-        if(!IsisContext.inSession()) {
+    private void ensureSessionInProgress() {
+        if(!isisSystem.getSessionFactory().inSession()) {
             throw new IllegalStateException("Session must be in progress");
         }
     }
@@ -598,7 +595,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     public void beginTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getTransaction();
+        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
 
         if(transaction == null) {
             startTransactionForUser(transactionManager);
@@ -637,7 +634,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
      */
     public void endTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getTransaction();
+        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
             fail("No transaction exists");
             return;
@@ -670,7 +667,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     @Deprecated
     public void commitTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getTransaction();
+        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
             fail("No transaction exists");
             return;
@@ -698,7 +695,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     @Deprecated
     public void abortTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getTransaction();
+        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         if(transaction == null) {
             fail("No transaction exists");
             return;
@@ -729,20 +726,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getService(Class<T> serviceClass) {
-        if(serviceClass == DomainObjectContainer.class) {
-            return (T) getContainer();
-        }
-        final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
-        final T service = servicesInjector.lookupService(serviceClass);
-        if(service == null) {
-            throw new RuntimeException("Could not find a service of type: " + serviceClass.getName());
-        }
-        return service;
+        final ServicesInjector servicesInjector = isisSystem.getSessionFactory().getServicesInjector();
+        return servicesInjector.lookupServiceElseFail(serviceClass);
     }
 
     @Override
     public <T> void replaceService(final T originalService, final T replacementService) {
-        final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
+        final ServicesInjector servicesInjector = isisSystem.getSessionFactory().getServicesInjector();
         servicesInjector.replaceService(originalService, replacementService);
     }
 
@@ -763,7 +753,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         // ensure that tests are performed in separate xactn to any fixture setup.
         final IsisTransactionManager transactionManager = getTransactionManager();
-        final IsisTransaction transaction = transactionManager.getTransaction();
+        final IsisTransaction transaction = transactionManager.getCurrentTransaction();
         final State transactionState = transaction.getState();
         if(transactionState.canCommit()) {
             commitTran();
@@ -793,7 +783,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return isisSystem.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     /**

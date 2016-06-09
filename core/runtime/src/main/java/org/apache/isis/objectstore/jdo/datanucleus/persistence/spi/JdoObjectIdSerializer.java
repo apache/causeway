@@ -217,6 +217,6 @@ public final class JdoObjectIdSerializer {
     }
 
     private static SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 }

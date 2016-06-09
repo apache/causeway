@@ -237,7 +237,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         }
 
         protected HintStore getHintStore() {
-            return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+            return IsisContext.getSessionFactory().getServicesInjector().lookupService(HintStore.class);
         }
 
 
@@ -632,11 +632,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     // //////////////////////////////////////////////////////////
 
     protected static OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
+        return IsisContext.getSessionFactory().getOidMarshaller();
+    }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 

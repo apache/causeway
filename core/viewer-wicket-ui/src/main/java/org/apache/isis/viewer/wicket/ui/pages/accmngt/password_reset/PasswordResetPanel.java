@@ -76,12 +76,14 @@ public class PasswordResetPanel extends Panel {
 
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
-                Boolean passwordUpdated = IsisContext.doInSession(new Callable<Boolean>() {
+                Boolean passwordUpdated = IsisContext.getSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
                         String email = accountConfirmationMap.get(uuid);
 
-                        UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        UserRegistrationService userRegistrationService = IsisContext.getSessionFactory()
+                                .getCurrentSession().getPersistenceSession().getServicesInjector()
+                                .lookupService(UserRegistrationService.class);
                         return userRegistrationService.updatePasswordByEmail(email, password);
                     }
                 });

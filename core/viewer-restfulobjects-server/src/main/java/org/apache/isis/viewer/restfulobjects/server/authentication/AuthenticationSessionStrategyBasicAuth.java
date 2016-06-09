@@ -88,7 +88,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
     // //////////////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        return IsisContext.getSessionFactory().getAuthenticationManager();
     }
 
 }

@@ -19,11 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
-import org.jmock.Expectations;
-
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
@@ -94,7 +91,7 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
 
     public static class ParserNoop<T> implements Parser<T> {
         @Override
-        public T parseTextEntry(final Object context, final String entry, Localization localization) {
+        public T parseTextEntry(final Object context, final String entry) {
             return null;
         }
 
@@ -104,7 +101,7 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
         }
 
         @Override
-        public String displayTitleOf(final T object, final Localization localization) {
+        public String displayTitleOf(final T object) {
             return null;
         }
 

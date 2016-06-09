@@ -57,7 +57,7 @@ public class ExceptionRecognizerTranslate implements MethodRule {
      * Simply invokes {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#recognize(Throwable)} for all registered {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}s for the provided exception, so that the message will be translated.
      */
     private void recognize(final Throwable ex) {
-        final List<ExceptionRecognizer> exceptionRecognizers = IsisContext.getPersistenceSession().getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        final List<ExceptionRecognizer> exceptionRecognizers = IsisContext.getSessionFactory().getServicesInjector().lookupServices(ExceptionRecognizer.class);
         for (final ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
             final String unused = exceptionRecognizer.recognize(ex);
         }

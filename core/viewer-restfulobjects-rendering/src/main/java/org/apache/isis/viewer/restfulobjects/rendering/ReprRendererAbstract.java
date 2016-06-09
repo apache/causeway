@@ -222,7 +222,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected List<ObjectAdapter> getServiceAdapters() {
-        return IsisContext.getPersistenceSession().getServices();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getServices();
     }
 
 }

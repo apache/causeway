@@ -96,13 +96,5 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
 
     
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-    
-    protected static OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-
 
 }

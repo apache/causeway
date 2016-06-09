@@ -59,10 +59,10 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentCategory();
+        return IsisContext.getSessionFactory().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
 }

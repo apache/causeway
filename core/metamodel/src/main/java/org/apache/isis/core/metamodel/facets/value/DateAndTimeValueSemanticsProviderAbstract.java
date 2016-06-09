@@ -28,9 +28,7 @@ import java.util.TimeZone;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
@@ -76,9 +74,12 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     }
 
     @Override
-    protected DateFormat format(final Localization localization) {
-        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, localization.getLocale());
-        dateFormat.setTimeZone(localization.getTimeZone());
+    protected DateFormat format() {
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale);
+        dateFormat.setTimeZone(timeZone);
         return dateFormat;
     }
 
@@ -87,10 +88,12 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
         return "JavaDateTimeValueSemanticsProvider: " + format;
     }
 
-    protected List<DateFormat> formatsToTry(Localization localization) {
+    protected List<DateFormat> formatsToTry() {
         List<DateFormat> formats = new ArrayList<DateFormat>();
 
-        Locale locale = localization == null ? Locale.getDefault() : localization.getLocale();
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
         formats.add(DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale));
         formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
         formats.add(createDateFormat("yyyyMMdd'T'HHmmssSSS"));
@@ -103,7 +106,7 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
         formats.add(createDateFormat("dd-MMM-yyyy HH:mm"));
 
         for (DateFormat format : formats) {
-            format.setTimeZone(localization == null ? TimeZone.getDefault() : localization.getTimeZone());
+            format.setTimeZone(timeZone);
         }
 
         return formats;

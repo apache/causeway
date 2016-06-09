@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
@@ -33,7 +32,7 @@ public class TitleFacetFormattedByRegex extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ObjectAdapter object, final Localization localization) {
+    public String title(final ObjectAdapter object) {
         return regexFacet.format(object.titleString());
     }
 

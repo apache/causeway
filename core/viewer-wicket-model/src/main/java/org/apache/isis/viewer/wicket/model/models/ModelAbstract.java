@@ -47,11 +47,11 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
     // //////////////////////////////////////////////////////////////
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected AdapterManager getAdapterManager() {

@@ -23,7 +23,6 @@ import java.util.Iterator;
 
 import com.google.common.base.Splitter;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -61,12 +60,10 @@ public class PojoAdapterBuilder {
 
     private Version version;
 
-    private Localization localization;
-
     private AuthenticationSession authenticationSession;
 
     
-    public static enum Persistence {
+    public enum Persistence {
         TRANSIENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
@@ -181,11 +178,6 @@ public class PojoAdapterBuilder {
         return this;
     }
     
-    public PojoAdapterBuilder with(Localization localization) {
-        this.localization = localization;
-        return this;
-    }
-
     public PojoAdapterBuilder with(Version version) {
         this.version = version;
         return this;
@@ -199,7 +191,7 @@ public class PojoAdapterBuilder {
     public PojoAdapter build() {
         final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
         final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
-        final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, authenticationSession, localization,
+        final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, authenticationSession,
                 specificationLoader, persistenceSession) {
             @Override
             public ObjectSpecification getSpecification() { return objectSpec != null? objectSpec: super.getSpecification(); }

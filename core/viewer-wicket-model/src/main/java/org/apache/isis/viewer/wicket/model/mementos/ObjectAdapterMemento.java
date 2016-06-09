@@ -462,12 +462,12 @@ public class ObjectAdapterMemento implements Serializable {
     //////////////////////////////////////////////////
 
     private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 	public static OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
+        return IsisContext.getSessionFactory().getOidMarshaller();
+    }
 
 
 

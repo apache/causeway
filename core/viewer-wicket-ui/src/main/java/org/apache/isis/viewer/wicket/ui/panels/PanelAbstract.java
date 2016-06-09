@@ -33,7 +33,6 @@ import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -48,7 +47,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
 public abstract class PanelAbstract<T extends IModel<?>> extends Panel
-            implements IHeaderContributor, PersistenceSessionProvider {
+            implements IHeaderContributor {
 
     private static final long serialVersionUID = 1L;
 
@@ -145,13 +144,12 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    @Override
     public PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return IsisContext.getSessionFactory().getServicesInjector();
     }
 
     // /////////////////////////////////////////////////

@@ -25,20 +25,14 @@ import com.google.common.base.Function;
 
 import org.joda.time.format.DateTimeFormatter;
 
-import org.apache.isis.applib.profiles.Localization;
-
 public final class JodaFunctions  {
 
     private JodaFunctions(){}
-    
-    public static Function<DateTimeFormatter, DateTimeFormatter> withLocale(final Localization localization) {
+
+    public static Function<DateTimeFormatter, DateTimeFormatter> withLocale(final Locale locale) {
         return new Function<DateTimeFormatter, DateTimeFormatter>() {
             @Override
             public DateTimeFormatter apply(DateTimeFormatter input) {
-                if (localization == null) {
-                    return input;
-                }
-                final Locale locale = localization.getLocale();
                 if (locale == null) {
                     return input;
                 }

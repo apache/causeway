@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
@@ -49,6 +50,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
 
@@ -192,8 +194,11 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     // //////////////////////////////////////
 
+    @Inject
+    IsisSessionFactory isisSessionFactory;
+
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected ServicesInjector getServicesInjector() {

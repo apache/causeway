@@ -123,20 +123,22 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         {
             final UserDetails userDetails = getModelObject();
 
-            IsisContext.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+            IsisContext.getSessionFactory().doInSession(new Runnable() {
+                    @Override
+                    public void run() {
+                        final UserRegistrationService userRegistrationService = IsisContext.getSessionFactory()
+                                .getCurrentSession().getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
 
-                    IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
-                        @Override
-                        public void execute() {
-                            userRegistrationService.registerUser(userDetails);
-                            removeAccountConfirmation();
-                        }
-                    });
-                }
-            });
+                        IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
+                                .executeWithinTransaction(new TransactionalClosure() {
+                            @Override
+                            public void execute() {
+                                userRegistrationService.registerUser(userDetails);
+                                removeAccountConfirmation();
+                            }
+                        });
+                    }
+                });
 
             signIn(userDetails.getUsername(), userDetails.getPassword());
             setResponsePage(getApplication().getHomePage());

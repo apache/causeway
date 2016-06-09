@@ -52,7 +52,6 @@ import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -682,7 +681,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     //////////////////////////////////////////////////
     
     private static OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return IsisContext.getSessionFactory().getOidMarshaller();
     }
 
     public ActionModel copy() {

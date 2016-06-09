@@ -31,15 +31,14 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -111,7 +110,7 @@ public abstract class ResourceAbstract {
             final Where where,
             final RepresentationService.Intent intent,
             final String urlUnencodedQueryString) {
-        if (!IsisContext.inSession()) {
+        if (!IsisContext.getSessionFactory().inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
         if (getAuthenticationSession() == null) {
@@ -121,10 +120,9 @@ public abstract class ResourceAbstract {
         this.resourceContext = new ResourceContext(
                 representationType, httpHeaders, providers, uriInfo, request, where, intent, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext,
-                getDeploymentCategory(), getConfiguration(),
-                getServicesInjector(), getSpecificationLoader(),
-                getAuthenticationSession(), getLocalization(),
-                getPersistenceSession(), InteractionInitiatedBy.USER);
+                getConfiguration(),
+                getServicesInjector(),
+                InteractionInitiatedBy.USER);
     }
 
     protected ResourceContext getResourceContext() {
@@ -168,11 +166,11 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentCategory();
+        return IsisContext.getSessionFactory().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration () {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
 
     protected ServicesInjector getServicesInjector () {
@@ -180,23 +178,19 @@ public abstract class ResourceAbstract {
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        return IsisContext.getSessionFactory().getAuthenticationManager();
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected Localization getLocalization() {
-        return IsisContext.getLocalization();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     // //////////////////////////////////////////////////////////////

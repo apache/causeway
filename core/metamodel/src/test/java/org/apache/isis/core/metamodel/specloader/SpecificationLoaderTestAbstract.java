@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
@@ -73,8 +72,6 @@ public abstract class SpecificationLoaderTestAbstract {
     private TransactionStateProviderInternal mockTransactionStateProviderInternal;
     @Mock
     private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
-    @Mock
-    private LocalizationProviderInternal mockLocalizationProviderInternal;
 
     ServicesInjector stubServicesInjector;
     IsisConfigurationDefault stubConfiguration;
@@ -96,7 +93,6 @@ public abstract class SpecificationLoaderTestAbstract {
             ignoring(mockPersistenceSessionServiceInternal);
             ignoring(mockTransactionStateProviderInternal);
             ignoring(mockMessageBrokerServiceInternal);
-            ignoring(mockLocalizationProviderInternal);
 
         }});
 
@@ -109,7 +105,6 @@ public abstract class SpecificationLoaderTestAbstract {
                         stubConfiguration,
                         mockDeploymentCategoryProvider,
                         mockPersistenceSessionServiceInternal,
-                        mockLocalizationProviderInternal,
                         mockMessageBrokerServiceInternal,
                         mockTransactionStateProviderInternal,
                         mockGridService,

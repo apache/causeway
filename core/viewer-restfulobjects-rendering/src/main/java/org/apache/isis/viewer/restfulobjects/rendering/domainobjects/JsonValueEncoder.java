@@ -846,7 +846,7 @@ public final class JsonValueEncoder {
     }
 
     private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 }

@@ -27,7 +27,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -58,13 +57,13 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return object != null? ((Blob)object).getName(): "[null]";
     }
 
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value, null);
+        return titleString(value);
     }
 
 

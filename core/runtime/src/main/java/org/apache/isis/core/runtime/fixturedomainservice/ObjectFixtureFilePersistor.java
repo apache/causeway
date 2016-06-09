@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -42,12 +44,12 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class ObjectFixtureFilePersistor {
 
@@ -57,7 +59,7 @@ public class ObjectFixtureFilePersistor {
         final Set<Object> objects = new HashSet<Object>();
 
         final BufferedReader buffer = new BufferedReader(reader);
-        final LoadedObjects loaded = new LoadedObjects(objects);
+        final LoadedObjects loaded = new LoadedObjects(objects, specificationLoader, getPersistenceSession());
         String line;
         ObjectAdapter object = null;
         int lineNo = 0;
@@ -114,7 +116,7 @@ public class ObjectFixtureFilePersistor {
                 } else if (association.getSpecification().isParseable()) {
                     data = data.replaceAll("\\n", "\n");
                     final ParseableFacet facet = association.getSpecification().getFacet(ParseableFacet.class);
-                    final ObjectAdapter value = facet.parseTextEntry(null, data, InteractionInitiatedBy.FRAMEWORK, null);
+                    final ObjectAdapter value = facet.parseTextEntry(null, data, InteractionInitiatedBy.FRAMEWORK);
                     ((OneToOneAssociation) association).initAssociation(object, value);
                 } else if (association.isOneToOneAssociation()) {
                     final ObjectAdapter value = loaded.get(data);
@@ -177,15 +179,16 @@ public class ObjectFixtureFilePersistor {
         }
     }
 
-    
-    
+
+    @Inject
+    IsisSessionFactory isisSessionFactory;
+
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
+    @Inject
+    SpecificationLoader specificationLoader;
 
 }
 
@@ -193,9 +196,16 @@ public class ObjectFixtureFilePersistor {
 class LoadedObjects {
     private final Map<String, ObjectAdapter> idMap = Maps.newHashMap();
     private final Set<Object> objects;
+    private final SpecificationLoader specificationLoader;
+    private final PersistenceSession persistenceSession;
 
-    public LoadedObjects(final Set<Object> objects) {
+    public LoadedObjects(
+            final Set<Object> objects,
+            final SpecificationLoader specificationLoader,
+            final PersistenceSession persistenceSession) {
         this.objects = objects;
+        this.specificationLoader = specificationLoader;
+        this.persistenceSession = persistenceSession;
     }
 
     public ObjectAdapter get(final String data) {
@@ -207,21 +217,12 @@ class LoadedObjects {
         ObjectAdapter object = idMap.get(id);
         if (object == null) {
             final String className = data.substring(0, pos);
-            final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
-            object = getPersistenceSession().createTransientInstance(specification);
+            final ObjectSpecification specification = specificationLoader.loadSpecification(className);
+            object = persistenceSession.createTransientInstance(specification);
             idMap.put(id, object);
             objects.add(object.getObject());
         }
         return object;
-    }
-
-    
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
     }
 }
 

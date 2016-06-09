@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -79,8 +78,8 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     public ObjectAdapter parseTextEntry(
             final ObjectAdapter original,
             final String entryText,
-            final InteractionInitiatedBy interactionInitiatedBy, final Localization localization) {
-        return parseableFacetUsingParser.parseTextEntry(original, entryText, interactionInitiatedBy, localization);
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return parseableFacetUsingParser.parseTextEntry(original, entryText, interactionInitiatedBy);
     }
 
     @Override

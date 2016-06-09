@@ -31,11 +31,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
@@ -156,7 +153,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testParseNull() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
         try {
-            valueSemanticsProvider.parseTextEntry(null, null, null);
+            valueSemanticsProvider.parseTextEntry(null, null);
             fail();
         } catch (final IllegalArgumentException expected) {
         }
@@ -166,7 +163,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testParseEmptyString() throws Exception {
         Assume.assumeThat(valueSemanticsProvider.getParser(), is(not(nullValue())));
 
-        final Object newValue = valueSemanticsProvider.parseTextEntry(null, "", null);
+        final Object newValue = valueSemanticsProvider.parseTextEntry(null, "");
         assertNull(newValue);
     }
 
@@ -187,6 +184,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     @Test
     public void testTitleOfForNullObject() {
-        assertEquals("", valueSemanticsProvider.displayTitleOf(null, (Localization) null));
+        assertEquals("", valueSemanticsProvider.displayTitleOf(null));
     }
 }

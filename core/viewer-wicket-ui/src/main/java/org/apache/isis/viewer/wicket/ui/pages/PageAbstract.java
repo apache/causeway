@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Component;
@@ -58,11 +57,11 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
@@ -129,31 +128,32 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private final List<ComponentType> childComponentIds;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("applicationCss")
     private String applicationCss;
     
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      *///
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("applicationJs")
     private String applicationJs;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
+
 
     /**
      * Top-level &lt;div&gt; to which all content is added.
@@ -417,37 +417,43 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
     
 
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
 
+    //region > getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
+    //endregion
 
-    protected <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
+
+    //region > injected (application-scope) 
+
+    // REVIEW: can't inject because not serializable.
+    private IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
-    // ///////////////////////////////////////////////////
-    // System components
-    // ///////////////////////////////////////////////////
+    protected IsisConfiguration getConfiguration() {
+        return getSessionFactory().getConfiguration();
+    }
 
     protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return getSessionFactory().getServicesInjector();
     }
 
+    //endregion
+
+    //region > derived from injected components (session-scope)
+
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
-    
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
+
+    //endregion
+
 
 }

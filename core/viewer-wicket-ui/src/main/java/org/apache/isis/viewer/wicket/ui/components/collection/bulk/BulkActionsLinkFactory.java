@@ -240,7 +240,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
     }
 
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getPersistenceSession().getServicesInjector();
+        return IsisContext.getSessionFactory().getServicesInjector();
     }
 
 }

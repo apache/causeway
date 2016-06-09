@@ -106,7 +106,7 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
     protected static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 }

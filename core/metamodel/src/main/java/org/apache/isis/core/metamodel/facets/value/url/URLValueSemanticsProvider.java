@@ -23,7 +23,6 @@ import java.net.MalformedURLException;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -74,13 +73,13 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return object != null? object.toString(): "";
     }
 
     @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object, null);
+        return titleString(object);
     }
 
     // //////////////////////////////////////////////////////////////////

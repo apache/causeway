@@ -31,7 +31,7 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     private static final long serialVersionUID = 1L;
 
     IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
 
     @Override

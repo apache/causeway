@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
@@ -423,7 +422,7 @@ public class PersistenceSession implements
         transactionManager.flushTransaction();
 
         try {
-            final IsisTransaction currentTransaction = transactionManager.getTransaction();
+            final IsisTransaction currentTransaction = transactionManager.getCurrentTransaction();
             if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
                 if(currentTransaction.getState().canCommit()) {
                     transactionManager.endTransaction();
@@ -1233,7 +1232,7 @@ public class PersistenceSession implements
     }
 
     private void ensureInSession() {
-        ensureThatContext(IsisContext.inSession(), is(true));
+        ensureThatContext(IsisContext.getSessionFactory().inSession(), is(true));
     }
 
     private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
@@ -1321,7 +1320,7 @@ public class PersistenceSession implements
     }
 
     private void ensureInTransaction() {
-        ensureThatContext(IsisContext.inTransaction(), is(true));
+        ensureThatContext(IsisContext.getSessionFactory().inTransaction(), is(true));
         javax.jdo.Transaction currentTransaction = persistenceManager.currentTransaction();
         ensureThatState(currentTransaction, is(notNullValue()));
         ensureThatState(currentTransaction.isActive(), is(true));
@@ -2020,7 +2019,7 @@ public class PersistenceSession implements
             final Oid oid) {
         return new PojoAdapter(
                 pojo, oid,
-                authenticationSession, getLocalization(),
+                authenticationSession,
                 specificationLoader, this);
     }
 
@@ -2068,17 +2067,10 @@ public class PersistenceSession implements
 
     //endregion
 
-    //region > dependencies (from context)
-    protected Localization getLocalization() {
-        return IsisContext.getLocalization();
-    }
-
-    //endregion
-
 
     //region > TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
-        return transactionManager.getTransaction();
+        return transactionManager.getCurrentTransaction();
     }
     //endregion
 

@@ -77,7 +77,7 @@ public class TitleFacetViaMethodTest {
 
     @Test
     public void testTitleThrowsException() {
-        final String title = facet.title(mockOwningAdapter, null);
+        final String title = facet.title(mockOwningAdapter);
         assertThat(title, is("Failed Title"));
     }
 

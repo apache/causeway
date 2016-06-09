@@ -38,7 +38,8 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
     @Override
     public Response toResponse(final RuntimeException ex) {
         // since have rendered...
-        final IsisTransaction currentTransaction = IsisContext.getTransactionManager().getTransaction();
+        final IsisTransaction currentTransaction = IsisContext.getSessionFactory().getCurrentSession()
+                .getPersistenceSession().getTransactionManager().getCurrentTransaction();
 
         final Throwable rootCause = Throwables.getRootCause(ex);
         final List<Throwable> causalChain = Throwables.getCausalChain(ex);

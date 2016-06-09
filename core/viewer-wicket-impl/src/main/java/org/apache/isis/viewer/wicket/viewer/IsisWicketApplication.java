@@ -28,7 +28,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
@@ -69,6 +68,7 @@ import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -152,40 +152,56 @@ public class IsisWicketApplication
     }
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private ComponentFactoryRegistry componentFactoryRegistry;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
     @SuppressWarnings("unused")
-    @Inject
+    @com.google.inject.Inject
     private ImageResourceCache imageCache;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
     @SuppressWarnings("unused")
-    @Inject
+    @com.google.inject.Inject
     private WicketViewerSettings wicketViewerSettings;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
-
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private IsisSystem isisSystem;
 
+    /**
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
+     */
+    @com.google.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
 
-    private boolean determiningDeploymentType;
+    /**
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
+     */
+    @com.google.inject.Inject
+    private IsisConfiguration configuration;
+
+    /**
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
+     */
+    @com.google.inject.Inject
+    private DeploymentCategory deploymentCategory;
+
+    private boolean determiningConfigurationType;
     private DeploymentTypeWicketAbstract deploymentType;
 
     private final List<String> validationErrors = Lists.newArrayList();
@@ -241,7 +257,8 @@ public class IsisWicketApplication
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
-            deploymentType = determineDeploymentType(configuration.getString("isis.deploymentType"));
+            DeploymentTypeWicketAbstract deploymentType =
+                    determineDeploymentType(configuration.getString("isis.deploymentType"));
 
             RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
             IRequestCycleListener requestCycleListenerForIsis = newWebRequestCycleForIsis();
@@ -267,7 +284,7 @@ public class IsisWicketApplication
 
             filterJavascriptContributions();
 
-            configureWicketSourcePluginIfNecessary(configuration);
+            configureWicketSourcePluginIfNecessary();
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
@@ -312,14 +329,14 @@ public class IsisWicketApplication
         select2Settings.setIncludeJqueryUI(false);
     }
 
-    protected void configureWicketSourcePluginIfNecessary(final IsisConfiguration configuration) {
-        if(isWicketSourcePluginEnabled(configuration)) {
+    protected void configureWicketSourcePluginIfNecessary() {
+        if(isWicketSourcePluginEnabled(this.configuration)) {
             configureWicketSourcePlugin();
         }
     }
 
     protected void configureWicketSourcePlugin() {
-        if(!deploymentType.isProduction()) {
+        if(!deploymentCategory.isProduction()) {
             WicketSource.configure(this);
         }
     }
@@ -388,7 +405,7 @@ public class IsisWicketApplication
             return;
         }
 
-        determiningDeploymentType = true;
+        determiningConfigurationType = true;
         try {
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
 
@@ -396,7 +413,7 @@ public class IsisWicketApplication
             String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
             deploymentType = determineDeploymentType(deploymentTypeFromConfig);
         } finally {
-            determiningDeploymentType = false;
+            determiningConfigurationType = false;
         }
     }
 
@@ -641,7 +658,7 @@ public class IsisWicketApplication
 
     @Override
     public RuntimeConfigurationType getConfigurationType() {
-        if(determiningDeploymentType) {
+        if(determiningConfigurationType) {
             // avoiding an infinite loop; have already passed through here once before
             // this time around, just delegate to web-inf
             return super.getConfigurationType();
@@ -718,7 +735,6 @@ public class IsisWicketApplication
         return pageClassRegistry;
     }
 
-    
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
      */
@@ -726,7 +742,6 @@ public class IsisWicketApplication
     public Class<? extends Page> getHomePage() {
         return getPageClassRegistry().getPageClass(PageType.HOME);
     }
-
 
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
@@ -761,13 +776,11 @@ public class IsisWicketApplication
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
     }
 
-
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession();
     }
 
-
     public DeploymentCategory getDeploymentCategory() {
-        return deploymentType.getDeploymentCategory();
+        return deploymentCategory;
     }
 }

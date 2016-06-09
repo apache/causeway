@@ -68,19 +68,19 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
                     context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
                 return;
             }
-            IsisContext.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        doExecute(context, isisSystem);
-                    } catch (IOException e) {
-                        ;
-                        // ignore
-                    } catch (MojoFailureException e) {
-                        throw new RuntimeException(e);
+            IsisContext.getSessionFactory().doInSession(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            doExecute(context, isisSystem);
+                        } catch (IOException e) {
+                            ;
+                            // ignore
+                        } catch (MojoFailureException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                }
-            });
+                });
 
         } catch(RuntimeException e) {
             if(e.getCause() instanceof MojoFailureException) {

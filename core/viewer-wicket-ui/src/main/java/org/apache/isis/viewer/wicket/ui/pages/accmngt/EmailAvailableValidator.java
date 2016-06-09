@@ -42,10 +42,11 @@ public class EmailAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-        IsisContext.doInSession(new Runnable() {
+        IsisContext.getSessionFactory().doInSession(new Runnable() {
             @Override
             public void run() {
-                UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                UserRegistrationService userRegistrationService = IsisContext.getSessionFactory().getCurrentSession()
+                        .getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
                 String email = validatable.getValue();
                 boolean emailExists1 = userRegistrationService.emailExists(email);
                 if (emailExists1 != emailExists) {

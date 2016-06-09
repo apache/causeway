@@ -397,7 +397,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return JsonValueEncoder.asObject(objectAdapter, format);
         }
         final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
-        final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
+        final String title = titleFacet.title(objectAdapter);
         return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
     }
 
@@ -408,7 +408,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     // ///////////////////////////////////////////////////////////////////
 
     protected static OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
+        return IsisContext.getSessionFactory().getOidMarshaller();
+    }
 
 }

@@ -196,7 +196,7 @@ public class EntityPage extends PageAbstract {
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentCategory();
+        return IsisContext.getSessionFactory().getDeploymentCategory();
     }
 
 

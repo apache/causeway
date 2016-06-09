@@ -31,7 +31,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -83,7 +82,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         public String isValid(
                 final ObjectAdapter objectAdapter,
                 final Object proposedValue,
-                final InteractionInitiatedBy interactionInitiatedBy, final Localization localization) {
+                final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 

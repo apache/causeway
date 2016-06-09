@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 import java.lang.reflect.Method;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.util.Enums;
@@ -105,17 +104,17 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     protected String doEncode(final Object object) {
-        return titleString(object, null);
+        return titleString(object);
     }
 
     @Override
     protected T doRestore(final String data) {
-        return doParse(null, data);
+        return doParse((Object)null, data);
     }
 
 
     @Override
-    protected String titleString(final Object object, final Localization localization) {
+    protected String titleString(final Object object) {
         final TranslationService translationService = getServicesInjector().lookupService(TranslationService.class);
 
         if (titleMethod != null) {
@@ -146,7 +145,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value, null);
+        return titleString(value);
     }
 
 }

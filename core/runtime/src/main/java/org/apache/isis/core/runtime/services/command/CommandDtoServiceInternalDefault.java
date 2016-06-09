@@ -242,11 +242,11 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     // //////////////////////////////////////
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
     protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
 

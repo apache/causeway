@@ -29,7 +29,8 @@ public final class JsonWriterUtil {
     private JsonWriterUtil(){}
 
     public static String jsonFor(final Object object) {
-        final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting(IsisContext.getDeploymentCategory());
+        final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting(
+                IsisContext.getSessionFactory().getDeploymentCategory());
         try {
             return JsonMapper.instance(prettyPrinting).write(object);
         } catch (final IOException e) {

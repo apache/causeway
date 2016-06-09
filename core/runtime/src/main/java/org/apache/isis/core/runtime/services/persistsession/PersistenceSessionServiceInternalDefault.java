@@ -160,7 +160,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @Override
     public Transaction currentTransaction() {
-        return getTransactionManager().getTransaction();
+        return getTransactionManager().getCurrentTransaction();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     @Programmatic
@@ -183,7 +183,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return IsisContext.getSessionFactory().getSpecificationLoader();
     }
 
 }

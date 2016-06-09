@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -62,15 +61,13 @@ public class PojoAdapterTest {
     private AuthenticationSession mockAuthenticationSession;
     @Mock
     private PersistenceSession mockPersistenceSession;
-    @Mock
-    private Localization mockLocalization;
-    
+
     @Before
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
         
         adapter = new PojoAdapter(domainObject, RootOid.create(ObjectSpecId.of("CUS"), "1"), mockAuthenticationSession,
-                mockLocalization, mockSpecificationLoader, mockPersistenceSession);
+                mockSpecificationLoader, mockPersistenceSession);
         adapter.setVersion(mockVersion);
         
         allowUnimportantMethodCallsOn(mockVersion);

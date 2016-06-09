@@ -27,16 +27,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.applib.annotation.Exploration;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -47,8 +52,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class ObjectFixtureService {
 
@@ -56,8 +61,16 @@ public class ObjectFixtureService {
     private static final String DATA_FILEPATH = ConfigurationConstants.ROOT + "exploration-objects.file";
     private static final String DEFAULT_FILEPATH = "fixture-data";
 
-    private final ObjectFixtureFilePersistor persistor = new ObjectFixtureFilePersistor();
+    private ObjectFixtureFilePersistor persistor;
+
     private Set<Object> objects = Sets.newHashSet();
+
+
+    @PostConstruct
+    public void init() {
+        persistor = new ObjectFixtureFilePersistor();
+        serviceRegistry.injectServicesInto(persistor);
+    }
 
     // {{ title, Id
     public String title() {
@@ -75,9 +88,13 @@ public class ObjectFixtureService {
     // }}
 
     // {{ action: save
-    @DescribedAs("Add this object to the set of saved objects")
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            describedAs = "Add this object to the set of saved objects"
+    )
     @MemberOrder(sequence = "1")
-    @Exploration
     public void save(final Object object) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
         if (adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
@@ -126,9 +143,13 @@ public class ObjectFixtureService {
     // }}
 
     // {{ action: remove
-    @DescribedAs("Remove this object from the set of saved objects")
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            describedAs = "Remove this object from the set of saved objects"
+    )
     @MemberOrder(sequence = "2")
-    @Exploration
     public void remove(final Object object) {
         objects.remove(object);
         saveAll();
@@ -144,9 +165,13 @@ public class ObjectFixtureService {
     // }}
 
     // {{ action: all Saved Objects
-    @DescribedAs("Retrieved all the saved objects")
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            describedAs = "Retrieved all the saved objects"
+    )
     @MemberOrder(sequence = "4")
-    @Exploration
     public Set<Object> allSavedObjects() {
         return objects;
     }
@@ -154,9 +179,13 @@ public class ObjectFixtureService {
     // }}
 
     // {{ action: saveAll
-    @DescribedAs("Save the current state of the saved objects")
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            describedAs = "Save the current state of the saved objects"
+    )
     @MemberOrder(sequence = "3")
-    @Exploration
     public void saveAll() {
         FileWriter out = null;
         try {
@@ -178,11 +207,7 @@ public class ObjectFixtureService {
 
     // }}
 
-    // //////////////////////////////////////////////////////////////////
-    // programmatic
-    // //////////////////////////////////////////////////////////////////
-
-    // {{ loadFile (ignored)
+    // {{ loadFile (programmtic)
     @Programmatic
     public void loadFile() {
         FileReader reader = null;
@@ -206,7 +231,7 @@ public class ObjectFixtureService {
     }
 
     private File file(final boolean createFileIfDoesntExist) throws IOException {
-        final String fixturePath = getConfiguration().getString(DATA_FILEPATH, DEFAULT_FILEPATH);
+        final String fixturePath = configuration.getString(DATA_FILEPATH, DEFAULT_FILEPATH);
         final File file = new File(fixturePath);
         final File directory = file.getParentFile();
         mkdirIfRequired(directory);
@@ -226,17 +251,18 @@ public class ObjectFixtureService {
         file.createNewFile();
     }
     // }}
-    
-    // //////////////////////////////////////////////////////////////////
-    // from context
-    // //////////////////////////////////////////////////////////////////
+
+    @Inject
+    IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
+    @Inject
+    IsisConfiguration configuration;
+
+    @Inject
+    ServiceRegistry2 serviceRegistry;
 
 }

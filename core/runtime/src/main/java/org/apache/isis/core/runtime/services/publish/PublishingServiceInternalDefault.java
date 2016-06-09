@@ -81,27 +81,25 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
     //region > static helper functions
-    private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY =
-            new Function<ObjectAdapter, ObjectAdapter>() {
-        public ObjectAdapter apply(ObjectAdapter adapter) {
-            if(adapter == null) {
-                return null;
-            }
-            if (!adapter.isDestroyed()) {
+    private Function<ObjectAdapter, ObjectAdapter> notDestroyedElseEmpty() {
+        return new Function<ObjectAdapter, ObjectAdapter>() {
+            public ObjectAdapter apply(ObjectAdapter adapter) {
+                if (adapter == null) {
+                    return null;
+                }
+                if (!adapter.isDestroyed()) {
+                    return adapter;
+                }
+                // objectstores such as JDO prevent the underlying pojo from being touched once it has been deleted.
+                // we therefore replace that pojo with an 'empty' one.
+
+                Object replacementObject = getPersistenceSession()
+                        .instantiateAndInjectServices(adapter.getSpecification());
+                getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
                 return adapter;
             }
-            // objectstores such as JDO prevent the underlying pojo from being touched once it has been deleted.
-            // we therefore replace that pojo with an 'empty' one.
-
-            Object replacementObject = getPersistenceSession().instantiateAndInjectServices(adapter.getSpecification());
-            getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
-            return adapter;
-        }
-        protected PersistenceSession getPersistenceSession() {
-            return IsisContext.getPersistenceSession();
-        }
-
-    };
+        };
+    }
     //endregion
 
     //region > publishObjects
@@ -252,7 +250,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
 
         final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-        final String oidStr = getOidMarshaller().marshal(adapterOid);
+        final String oidStr = oidMarshaller.marshal(adapterOid);
         final Identifier actionIdentifier = objectAction.getIdentifier();
         final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
 
@@ -313,9 +311,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                     if(object == null) {
                         return null;
                     }
-                    final ObjectAdapter adapter = IsisContext.getPersistenceSession().adapterFor(object);
+                    final ObjectAdapter adapter = IsisContext.getSessionFactory().getCurrentSession()
+                            .getPersistenceSession().adapterFor(object);
                     Oid oid = adapter.getOid();
-                    return oid != null? oid.enString(getOidMarshaller()): encodedValueOf(adapter);
+                    return oid != null? oid.enString(oidMarshaller): encodedValueOf(adapter);
                 }
                 private String encodedValueOf(ObjectAdapter adapter) {
                     EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
@@ -330,12 +329,12 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             };
     }
 
-    private static List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
-        return Lists.newArrayList(Iterables.transform(parameters, NOT_DESTROYED_ELSE_EMPTY));
+    private List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
+        return Lists.newArrayList(Iterables.transform(parameters, notDestroyedElseEmpty()));
     }
 
-    private static ObjectAdapter undeletedElseEmpty(ObjectAdapter adapter) {
-        return NOT_DESTROYED_ELSE_EMPTY.apply(adapter);
+    private ObjectAdapter undeletedElseEmpty(ObjectAdapter adapter) {
+        return notDestroyedElseEmpty().apply(adapter);
     }
 
     private EventMetadata newEventMetadata(
@@ -446,12 +445,11 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     @Inject
     private MetricsService metricsService;
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
+    @Inject
+    private OidMarshaller oidMarshaller;
 
     private PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
     //endregion
 

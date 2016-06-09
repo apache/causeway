@@ -27,7 +27,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -48,7 +47,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -117,10 +115,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                     final ObjectAdapter currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
-                    final Localization localization = IsisContext.getLocalization();
-                    final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr,
-                            InteractionInitiatedBy.USER, localization
-                    );
+                    final ObjectAdapter proposedAdapter =
+                            parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
                             InteractionInitiatedBy.USER);
                     return valid.isAllowed() ? null : valid.getReason();
@@ -310,9 +306,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter();
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-                    Localization localization = IsisContext.getLocalization(); 
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
-                            InteractionInitiatedBy.USER, localization
+                            InteractionInitiatedBy.USER
                     );
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
@@ -325,9 +320,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter();
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-                    Localization localization = IsisContext.getLocalization();
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(),
-                            InteractionInitiatedBy.USER, localization
+                            InteractionInitiatedBy.USER
                     );
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
@@ -643,9 +637,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         if (parseableFacet == null) {
             throw new RuntimeException("unable to parse string for " + getTypeOfSpecification().getFullIdentifier());
         }
-        Localization localization = IsisContext.getLocalization(); 
         final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
-                InteractionInitiatedBy.USER, localization
+                InteractionInitiatedBy.USER
         );
 
         setObject(adapter);

@@ -47,7 +47,7 @@ public class MessageBrokerServiceInternalDefault implements MessageBrokerService
     }
 
     private static MessageBroker getMessageBroker() {
-        return IsisContext.getMessageBroker();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker();
     }
 
 }

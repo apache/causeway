@@ -81,7 +81,7 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
      * of some other adapter.
      * 
      * <p>
-     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter, org.apache.isis.applib.profiles.Localization)
+     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
      */
     String titleString(ObjectAdapter contextAdapter);
 

@@ -26,7 +26,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -49,7 +48,7 @@ public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.xml", value.displayTitleOf(clob, (Localization) null));
+        assertEquals("myfile1.xml", value.displayTitleOf(clob));
     }
 
     @Test

@@ -84,7 +84,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return;
         }
 
-        IsisContext.openSession(authenticationSession);
+        IsisContext.getSessionFactory().openSession(authenticationSession);
         getTransactionManager().startTransaction();
     }
 
@@ -99,7 +99,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             LOG.debug("onRequestHandlerExecuted: handler: " + handler);
         }
 
-        if (IsisContext.inSession()) {
+        if (IsisContext.getSessionFactory().inSession()) {
             try {
                 // will commit (or abort) the transaction;
                 // an abort will cause the exception to be thrown.
@@ -107,7 +107,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             } catch(Exception ex) {
                 // will redirect to error page after this, 
                 // so make sure there is a new transaction ready to go.
-                if(getTransactionManager().getTransaction().getState().isComplete()) {
+                if(getTransactionManager().getCurrentTransaction().getState().isComplete()) {
                     getTransactionManager().startTransaction();
                 }
                 if(handler instanceof RenderPageRequestHandler) {
@@ -130,12 +130,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public synchronized void onEndRequest(RequestCycle cycle) {
-        if (IsisContext.inSession()) {
+        if (IsisContext.getSessionFactory().inSession()) {
             try {
                 // belt and braces
                 getTransactionManager().endTransaction();
             } finally {
-                IsisContext.closeSession();
+                IsisContext.getSessionFactory().closeSession();
             }
         }
     }
@@ -247,19 +247,19 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     
     //region > Dependencies (from isis' context)
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getPersistenceSession().getServicesInjector();
+        return IsisContext.getSessionFactory().getServicesInjector();
     }
     
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     protected boolean inIsisSession() {
-        return IsisContext.inSession();
+        return IsisContext.getSessionFactory().inSession();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
     //endregion
 

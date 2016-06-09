@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -44,8 +43,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Wicket {@link FormComponentPanel}, providing the ability to build up the
  * panel using other {@link ComponentType}s.
  */
-public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T>
-        implements PersistenceSessionProvider {
+public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T>  {
 
     private static final long serialVersionUID = 1L;
 
@@ -134,20 +132,19 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
      * @return
      */
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentCategory();
+        return IsisContext.getSessionFactory().getDeploymentCategory();
     }
 
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    @Override
     public PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected List<ObjectAdapter> getServices() {

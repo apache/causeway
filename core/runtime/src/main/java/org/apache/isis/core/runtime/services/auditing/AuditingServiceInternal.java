@@ -51,8 +51,7 @@ public class AuditingServiceInternal {
 
     Boolean whetherCanAudit;
 
-    @Programmatic
-    public boolean canAudit() {
+    private boolean canAudit() {
         if(whetherCanAudit == null) {
             whetherCanAudit = determineWhetherCanAudit();
         }
@@ -73,6 +72,9 @@ public class AuditingServiceInternal {
 
     @Programmatic
     public void audit() {
+        if(!canAudit()) {
+            return;
+        }
         final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
                 changedObjectsServiceInternal.getChangedObjectProperties();
 

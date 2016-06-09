@@ -32,7 +32,7 @@ public class PropertyMemento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(final OneToOneAssociation association) {
-        return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
+        return IsisContext.getSessionFactory().getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
     private final ObjectSpecId owningSpecId;

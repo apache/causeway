@@ -91,11 +91,11 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     // //////////////////////////////////////
 
     protected PersistenceSession gerPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return IsisContext.getSessionFactory().getOidMarshaller();
     }
 
 

@@ -143,7 +143,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
 
     
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return IsisContext.getSessionFactory().getConfiguration();
     }
 
 

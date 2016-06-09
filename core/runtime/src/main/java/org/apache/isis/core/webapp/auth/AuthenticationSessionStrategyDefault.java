@@ -115,7 +115,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
     // //////////////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        return IsisContext.getSessionFactory().getAuthenticationManager();
     }
 
 }

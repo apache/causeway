@@ -100,7 +100,7 @@ public class IsisSession implements SessionScopedComponent {
      * session, if any.
      */
     public IsisTransaction getCurrentTransaction() {
-        return getTransactionManager().getTransaction();
+        return getTransactionManager().getCurrentTransaction();
     }
 
     //endregion

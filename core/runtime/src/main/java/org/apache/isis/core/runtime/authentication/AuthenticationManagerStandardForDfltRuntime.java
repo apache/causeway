@@ -72,7 +72,7 @@ public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationM
     @Override
     public void closeSession(final AuthenticationSession session) {
         super.closeSession(session);
-        IsisContext.closeSession();
+        IsisContext.getSessionFactory().closeSession();
     }
 
 }

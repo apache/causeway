@@ -150,7 +150,7 @@ public class BreadcrumbModel implements Serializable {
 
 
     protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return IsisContext.getSessionFactory().getOidMarshaller();
     }
 
 

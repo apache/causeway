@@ -55,13 +55,13 @@ public class JavaSqlTimeStampValueSemanticsProviderTest extends ValueSemanticsPr
 
     @Override
     public void testParseEmptyString() {
-        final Object parsed = adapter.parseTextEntry(null, "", null);
+        final Object parsed = adapter.parseTextEntry(null, "");
         assertNull(parsed);
     }
 
     @Test
     public void testTitle() {
-        assertEquals("01/01/70 00:00:00 UTC", adapter.titleString(timestamp, null));
+        assertEquals("01/01/70 00:00:00 UTC", adapter.titleString(timestamp));
     }
 
     @Test
