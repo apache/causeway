@@ -19,10 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -34,6 +33,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -72,7 +74,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testTitleOf() {
-        assertEquals("1970-01-01", adapter.displayTitleOf(date));
+        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.displayTitleOf(date));
     }
 
     @Test

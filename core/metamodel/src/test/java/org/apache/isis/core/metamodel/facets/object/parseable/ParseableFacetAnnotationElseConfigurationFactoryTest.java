@@ -37,7 +37,7 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
         super.setUp();
 
         facetFactory = new ParseableFacetAnnotationElseConfigurationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
     }
 

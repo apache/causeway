@@ -32,7 +32,6 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.LocaleUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -190,10 +189,10 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      *            parsed
      */
     protected T doParse(Object context, String entry) { 
-        throw new UnexpectedCallException(); 
+        return doParse(entry, context);
     } 
 
-    // REVIEW: unused?  (this method used to take Localization as a third param)
+    // REVIEW: this method used to take Localization as a third param, could now inline
     protected T doParse(String entry, Object context) {
         return doParse(context, entry); 
     } 

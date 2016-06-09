@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.encodable;
 
-import java.util.Collections;
-
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -29,8 +27,6 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
 import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -42,9 +38,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory = new EncodableFacetAnnotationElseConfigurationFactory();
 
-        ServicesInjector servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
-        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, stubConfiguration);
-        facetFactory.setServicesInjector(servicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
     }
 

@@ -21,13 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-
 import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -45,24 +39,8 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
     protected void setUp() throws Exception {
         super.setUp();
 
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
-        context.checking(new Expectations() {{
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-        }});
-
         facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override

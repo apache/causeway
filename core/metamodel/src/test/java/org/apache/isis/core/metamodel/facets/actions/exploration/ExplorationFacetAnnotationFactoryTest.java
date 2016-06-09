@@ -21,56 +21,22 @@ package org.apache.isis.core.metamodel.facets.actions.exploration;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-
 import org.apache.isis.applib.annotation.Exploration;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ExplorationFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
     private ExplorationFacetAnnotationFactory facetFactory;
-
-    private TranslationService mockTranslationService;
-
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
-        context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-        }});
-
-
         facetFactory = new ExplorationFacetAnnotationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override

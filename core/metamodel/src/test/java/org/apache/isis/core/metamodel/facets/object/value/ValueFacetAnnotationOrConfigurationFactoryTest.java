@@ -48,7 +48,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         super.setUp();
 
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override

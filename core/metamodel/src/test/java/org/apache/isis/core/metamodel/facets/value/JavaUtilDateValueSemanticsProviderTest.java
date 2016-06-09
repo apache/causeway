@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -34,6 +32,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -77,7 +78,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
      */
     @Test
     public void testTitleOf() {
-        final String EXPECTED = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date(0));
+        final String EXPECTED = DateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT).format(new java.util.Date(0));
         assertEquals(EXPECTED, getValue().displayTitleOf(date));
     }
 

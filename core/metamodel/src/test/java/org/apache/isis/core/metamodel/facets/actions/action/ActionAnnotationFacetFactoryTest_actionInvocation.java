@@ -21,11 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -52,7 +47,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory();;
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
     }
 
@@ -163,13 +158,13 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForChoices.setServicesInjector(mockServicesInjector);
+        facetFactoryForChoices.setServicesInjector(stubServicesInjector);
 
-        facetFactoryForChoices.setServicesInjector(mockServicesInjector);
+        facetFactoryForChoices.setServicesInjector(stubServicesInjector);
 
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
+        facetFactoryForDisable.setServicesInjector(stubServicesInjector);
 
 
         class Customer {

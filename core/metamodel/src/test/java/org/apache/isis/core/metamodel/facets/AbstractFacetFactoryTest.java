@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.junit.Rule;
 
@@ -63,7 +65,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected ServicesInjector mockServicesInjector;
+    protected ServicesInjector stubServicesInjector;
     protected TranslationService mockTranslationService;
     protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
@@ -108,7 +110,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        mockServicesInjector = context.mock(ServicesInjector.class);
+        stubServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
         stubConfiguration = new IsisConfigurationDefault();
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
@@ -118,54 +120,26 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
+        stubServicesInjector = new ServicesInjector(Lists.newArrayList(
+                mockTransactionStateProviderInternal,
+                stubConfiguration,
+                mockAuthenticationSessionProvider,
+                mockSpecificationLoader,
+                mockDeploymentCategoryProvider,
+                mockPersistenceSessionServiceInternal
+        ), stubConfiguration);
+
         context.checking(new Expectations() {{
-
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(stubConfiguration));
-
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getAuthenticationSessionProvider();
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getAuthenticationSessionProvider();
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getSpecificationLoader();
-            will(returnValue(mockSpecificationLoader));
-
-            allowing(mockServicesInjector).getDeploymentCategoryProvider();
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
-
-            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            will(returnValue(mockPersistenceSessionServiceInternal));
-
-            allowing(mockServicesInjector).lookupService(TransactionStateProviderInternal.class);
-            will(returnValue(mockTransactionStateProviderInternal));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
-
         }});
-
-
     }
+
+
 
     protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
         context.checking(new Expectations() {{
