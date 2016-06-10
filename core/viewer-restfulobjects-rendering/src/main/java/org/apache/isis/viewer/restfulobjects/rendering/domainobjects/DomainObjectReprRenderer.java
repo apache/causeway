@@ -401,14 +401,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
     }
 
- 
-    
-    // ///////////////////////////////////////////////////////////////////
-    // dependencies (from context)
-    // ///////////////////////////////////////////////////////////////////
 
-    protected static OidMarshaller getOidMarshaller() {
-        return IsisContext.getSessionFactory().getOidMarshaller();
-    }
 
 }

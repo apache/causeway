@@ -79,7 +79,7 @@ public class Persistable_downloadJdoMetadata {
         return jdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
     }
 
-    @Inject
+    @javax.inject.Inject
     IsisJdoSupport jdoSupport;
 
 }

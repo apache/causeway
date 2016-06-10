@@ -141,7 +141,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
     @Override
     public ObjectAdapterToggleboxColumn createToggleboxColumn() {
 
-        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
         final EntityCollectionModel entityCollectionModel = getModel();
         if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
@@ -176,7 +176,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         final BulkActionsLinkFactory linkFactory =
                 new BulkActionsLinkFactory(getModel(), toggleboxColumn);
 
-        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
         List<LinkAndLabel> links = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
             @Override

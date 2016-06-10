@@ -52,6 +52,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -84,11 +85,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             return;
         }
 
-        IsisContext.getSessionFactory().openSession(authenticationSession);
+        getIsisSessionFactory().openSession(authenticationSession);
         getTransactionManager().startTransaction();
     }
 
-    
     /**
      * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
      * throw an exception.
@@ -99,7 +99,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             LOG.debug("onRequestHandlerExecuted: handler: " + handler);
         }
 
-        if (IsisContext.getSessionFactory().inSession()) {
+        if (getIsisSessionFactory().inSession()) {
             try {
                 // will commit (or abort) the transaction;
                 // an abort will cause the exception to be thrown.
@@ -130,12 +130,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public synchronized void onEndRequest(RequestCycle cycle) {
-        if (IsisContext.getSessionFactory().inSession()) {
+        if (getIsisSessionFactory().inSession()) {
             try {
                 // belt and braces
                 getTransactionManager().endTransaction();
             } finally {
-                IsisContext.getSessionFactory().closeSession();
+                getIsisSessionFactory().closeSession();
             }
         }
     }
@@ -247,20 +247,25 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     
     //region > Dependencies (from isis' context)
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getSessionFactory().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
     
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     protected boolean inIsisSession() {
-        return IsisContext.getSessionFactory().inSession();
+        return getIsisSessionFactory().inSession();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
     //endregion
 
     //region > Dependencies (from wicket)

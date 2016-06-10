@@ -51,7 +51,7 @@ public class Object_rebuildMetamodel {
         metaModelService.rebuild(object.getClass());
     }
 
-    @Inject
+    @javax.inject.Inject
     MetaModelService metaModelService;
 
 

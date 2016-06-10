@@ -647,34 +647,34 @@ public class DomainObjectContainerDefault
 
     //region > service dependencies
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     org.apache.isis.applib.services.config.ConfigurationService configurationService;
 
-    @Inject
+    @javax.inject.Inject
     FactoryService factoryService;
 
-    @Inject
+    @javax.inject.Inject
     MessageService messageService;
 
-    @Inject
+    @javax.inject.Inject
     RepositoryService repositoryService;
 
-    @Inject
+    @javax.inject.Inject
     ServiceRegistry serviceRegistry;
 
-    @Inject
+    @javax.inject.Inject
     TransactionService transactionService;
 
-    @Inject
+    @javax.inject.Inject
     TitleService titleService;
 
-    @Inject
+    @javax.inject.Inject
     UserService userService;
 
-    @Inject
+    @javax.inject.Inject
     WrapperFactory wrapperFactory;
 
     @javax.inject.Inject

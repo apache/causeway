@@ -42,10 +42,12 @@ import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class ObjectAdapterMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
 
     /**
      * Factory method
@@ -109,7 +111,7 @@ public class ObjectAdapterMemento implements Serializable {
         PERSISTENT {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
-                RootOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
+                RootOid oid = OID_MARSHALLER.unmarshal(oam.persistentOidStr, RootOid.class);
                 try {
                     final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid, concurrencyChecking);
                     return adapter;
@@ -119,8 +121,8 @@ public class ObjectAdapterMemento implements Serializable {
                     // with the correct version, even when there is a concurrency exception
                     // we copy this updated oid string into our memento so that, if we retry, 
                     // we will succeed second time around
-                    
-                    oam.persistentOidStr = oid.enString(getOidMarshaller());
+
+                    oam.persistentOidStr = oid.enString(OID_MARSHALLER);
                 }
             }
 
@@ -129,7 +131,7 @@ public class ObjectAdapterMemento implements Serializable {
                 // REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 final ObjectAdapter adapter = recreateAdapter(oam, ConcurrencyChecking.NO_CHECK);
                 Oid oid = adapter.getOid();
-                oam.persistentOidStr = oid.enString(getOidMarshaller());
+                oam.persistentOidStr = oid.enString(OID_MARSHALLER);
             }
 
             @Override
@@ -236,7 +238,7 @@ public class ObjectAdapterMemento implements Serializable {
 
         assert !rootOid.isTransient();
 
-        this.persistentOidStr = rootOid.enString(getOidMarshaller());
+        this.persistentOidStr = rootOid.enString(OID_MARSHALLER);
         this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
@@ -268,9 +270,9 @@ public class ObjectAdapterMemento implements Serializable {
             transientMemento = new Memento(adapter);
             type = Type.TRANSIENT;
             return;
-        } 
-        
-        persistentOidStr = oid.enString(getOidMarshaller());
+        }
+
+        persistentOidStr = oid.enString(OID_MARSHALLER);
         bookmark = oid.asBookmark();
         type = Type.PERSISTENT;
     }
@@ -372,20 +374,22 @@ public class ObjectAdapterMemento implements Serializable {
             };
         }
 
-        public static Function<OneToOneAssociation, PropertyMemento> fromProperty() {
+        public static Function<OneToOneAssociation, PropertyMemento> fromProperty(
+                final IsisSessionFactory isisSessionFactory) {
             return new Function<OneToOneAssociation, PropertyMemento>() {
                 @Override
                 public PropertyMemento apply(final OneToOneAssociation from) {
-                    return new PropertyMemento(from);
+                    return new PropertyMemento(from, isisSessionFactory);
                 }
             };
         }
 
-        public static Function<OneToManyAssociation, CollectionMemento> fromCollection() {
+        public static Function<OneToManyAssociation, CollectionMemento> fromCollection(
+                final IsisSessionFactory isisSessionFactory) {
             return new Function<OneToManyAssociation, CollectionMemento>() {
                 @Override
                 public CollectionMemento apply(final OneToManyAssociation from) {
-                    return new CollectionMemento(from);
+                    return new CollectionMemento(from, isisSessionFactory);
                 }
             };
         }
@@ -464,12 +468,5 @@ public class ObjectAdapterMemento implements Serializable {
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
-
-	public static OidMarshaller getOidMarshaller() {
-        return IsisContext.getSessionFactory().getOidMarshaller();
-    }
-
-
-
 
 }

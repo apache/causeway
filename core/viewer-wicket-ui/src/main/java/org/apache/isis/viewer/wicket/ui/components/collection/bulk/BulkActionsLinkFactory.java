@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -158,7 +158,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     if(lastReturnedAdapter != null) {
                         final ActionResultResponse resultResponse =
                                 ActionResultResponseType.determineAndInterpretResult(actionModel, null, lastReturnedAdapter);
-                        resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+                        resultResponse.getHandlingStrategy().handleResults(this, resultResponse, model.getIsisSessionFactory());
                     }
 
                 } catch(final ConcurrencyException ex) {
@@ -240,7 +240,11 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
     }
 
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getSessionFactory().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
+    private IsisSessionFactory getIsisSessionFactory() {
+        return model.getIsisSessionFactory();
     }
 
 }

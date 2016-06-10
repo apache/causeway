@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Path("/swagger")
 public class SwaggerSpecResource {
@@ -71,7 +72,7 @@ public class SwaggerSpecResource {
 
     private String swagger(final SwaggerService.Visibility visibility) {
         final SwaggerService.Format format = deriveFrom(httpHeaders);
-        String spec = IsisContext.getSessionFactory().doInSession(new MyCallable(visibility, format));
+        String spec = getSessionFactory().doInSession(new MyCallable(visibility, format));
         return spec;
     }
 
@@ -93,7 +94,12 @@ public class SwaggerSpecResource {
         return SwaggerService.Format.JSON;
     }
 
-    static class MyCallable implements Callable<String> {
+    IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
+
+    class MyCallable implements Callable<String> {
 
         private final SwaggerService.Visibility visibility;
         private final SwaggerService.Format format;
@@ -111,7 +117,7 @@ public class SwaggerSpecResource {
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
 
-        @Inject
+        @javax.inject.Inject
         SwaggerService swaggerService;
 
         ServicesInjector getServicesInjector() {
@@ -119,7 +125,7 @@ public class SwaggerSpecResource {
         }
 
         PersistenceSession getPersistenceSession() {
-            return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+            return getSessionFactory().getCurrentSession().getPersistenceSession();
         }
     }
 }

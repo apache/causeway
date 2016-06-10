@@ -60,7 +60,7 @@ public class ConfigurationServiceMenu {
         return configurationService.allProperties();
     }
 
-    @Inject
+    @javax.inject.Inject
     private ConfigurationService configurationService;
 
 }

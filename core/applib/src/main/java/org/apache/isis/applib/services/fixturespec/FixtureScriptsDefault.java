@@ -215,7 +215,7 @@ public class FixtureScriptsDefault extends FixtureScripts {
     //endregion
 
     //region > injected services
-    @Inject
+    @javax.inject.Inject
     private FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider;
     //endregion
 

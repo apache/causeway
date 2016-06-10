@@ -38,6 +38,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
@@ -130,7 +131,9 @@ public class MmvErrorPage extends WebPage {
     // ///////////////////////////////////////////////////
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getSessionFactory().getConfiguration();
+        return getSessionFactory().getConfiguration();
+    }IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

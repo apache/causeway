@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -135,22 +136,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
         return getServicesInjector().getAuthenticationSession();
     }
 
-    public DeploymentCategory getDeploymentCategory() {
-        return getServicesInjector().getDeploymentCategory();
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext)
-    // ///////////////////////////////////////////////////////////////////
-
-    public PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    protected ServicesInjector getServicesInjector() {
-        return IsisContext.getSessionFactory().getServicesInjector();
-    }
 
     // /////////////////////////////////////////////////
     // Dependency Injection
@@ -203,6 +188,27 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
         component.add(new ConfirmationBehavior(confirmationConfig));
     }
 
+
+    public DeploymentCategory getDeploymentCategory() {
+        return getServicesInjector().getDeploymentCategory();
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////
+    // Dependencies (from IsisContext)
+    // ///////////////////////////////////////////////////////////////////
+
+    public PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    protected ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
 
 
 }

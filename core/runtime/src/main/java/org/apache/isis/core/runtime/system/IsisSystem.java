@@ -136,7 +136,7 @@ public class IsisSystem implements ApplicationScopedComponent {
         try {
 
             //
-            // everything added to ServicesInjector will be able to @Inject'ed
+            // everything added to ServicesInjector will be able to @javax.inject.Inject'ed
             //
 
             //
@@ -183,7 +183,7 @@ public class IsisSystem implements ApplicationScopedComponent {
 
             //
             // now, add the IsisSessionFactory and its subcomponents into ServicesInjector, so that they can be
-            // @Inject'd into any internal domain services
+            // @javax.inject.Inject'd into any internal domain services
             //
 
             // isisSessionFactory itself
@@ -197,14 +197,13 @@ public class IsisSystem implements ApplicationScopedComponent {
             //
             // finally, wire up components and components into services...
             //
-            for (Object service : servicesInjector.getRegisteredServices()) {
-                // inject itself into each service (if implements ServiceInjectorAware).
-                servicesInjector.injectInto(service);
-            }
+            servicesInjector.autowire();
+
 
             // ... and make IsisSessionFactory available via the IsisContext static for those places where we canont
             // yet inject.
             IsisContext.setSessionFactory(isisSessionFactory);
+
 
 
 
@@ -223,7 +222,7 @@ public class IsisSystem implements ApplicationScopedComponent {
                 authenticationManager.init();
                 authorizationManager.init();
 
-                persistenceSessionFactory.init();
+                persistenceSessionFactory.init(specificationLoader);
 
                 isisSessionFactory.constructServices();
 

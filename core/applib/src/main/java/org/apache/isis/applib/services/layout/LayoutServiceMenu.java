@@ -83,7 +83,7 @@ public class LayoutServiceMenu {
     // //////////////////////////////////////
 
 
-    @Inject
+    @javax.inject.Inject
     LayoutService layoutService;
 
 

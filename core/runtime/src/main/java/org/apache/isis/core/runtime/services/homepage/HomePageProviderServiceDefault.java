@@ -108,7 +108,7 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
     protected static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
 
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {

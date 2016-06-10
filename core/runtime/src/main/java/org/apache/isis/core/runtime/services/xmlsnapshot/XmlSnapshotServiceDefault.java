@@ -93,14 +93,14 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     // //////////////////////////////////////
 
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    @Inject
+    @javax.inject.Inject
     OidMarshaller oidMarshaller;
 
 

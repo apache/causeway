@@ -26,42 +26,51 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
 public abstract class PersistenceQueryAbstract implements PersistenceQuery, Encodable {
+
+    //region > constructor, fields
 
     protected final long start;
     protected final long count;
     
     private final ObjectSpecification specification;
+    private final SpecificationLoader specificationLoader;
 
-    public PersistenceQueryAbstract(final ObjectSpecification specification, final long ... range) {
+    public PersistenceQueryAbstract(
+            final ObjectSpecification specification,
+            final SpecificationLoader specificationLoader,
+            final long... range) {
+        this.specificationLoader = specificationLoader;
         this.start = range.length > 0 ? range[0]:0;
         this.count = range.length > 1 ? range[1]:0;
         
-        this.specification = specification;        
-        initialized();
+        this.specification = specification;
+        // nothing to do
     }
 
-    protected PersistenceQueryAbstract(final DataInputExtended input, final long ... range) throws IOException {
+    protected PersistenceQueryAbstract(
+            final DataInputExtended input,
+            final SpecificationLoader specificationLoader,
+            final long... range) throws IOException {
+
+        this.specificationLoader = specificationLoader;
         final String specName = input.readUTF();
         this.start = range.length > 0 ? range[0]:0;
         this.count = range.length > 1 ? range[1]:0;
         
-        specification = getSpecificationLoader().loadSpecification(specName);
-        initialized();
+        specification = specificationLoader.loadSpecification(specName);
+        // nothing to do
     }
+
+    //endregion
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(specification.getFullIdentifier());
     }
 
-    private void initialized() {
-        // nothing to do
-    }
-    
     /**
      * The start index into the set table
      * @return
@@ -72,27 +81,19 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
 
 
     /**
-     * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
-     * @return
+     * The number of items to return, starting at {@link #getStart()}
      */
     public long getCount() {
         return count;
     }
     
 
-    // ///////////////////////////////////////////////////////
-    //
-    // ///////////////////////////////////////////////////////
-
     @Override
     public ObjectSpecification getSpecification() {
         return specification;
     }
 
-    // ///////////////////////////////////////////////////////
-    // equals, hashCode
-    // ///////////////////////////////////////////////////////
-
+    //region > equals, hashCode
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -124,12 +125,6 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
         return result;
     }
 
-    // ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ///////////////////////////////////////////////////////
-
-    protected static SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
-    }
+    //endregion
 
 }

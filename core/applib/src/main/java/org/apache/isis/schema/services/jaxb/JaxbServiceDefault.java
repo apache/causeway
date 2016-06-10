@@ -43,7 +43,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
         marshaller.setAdapter(PersistentEntityAdapter.class, adapter);
     }
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
 }
 

@@ -37,20 +37,16 @@ import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.Closure;
 import org.apache.isis.core.commons.lang.IterableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -129,11 +125,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 if(sortedBy != null) {
                     @SuppressWarnings("unchecked")
                     final Comparator<Object> comparator = (Comparator<Object>) InstanceUtil.createInstance(sortedBy);
-                    getServicesInjector().injectServicesInto(comparator);
+                    entityCollectionModel.getIsisSessionFactory().getServicesInjector().injectServicesInto(comparator);
                     Collections.sort(objectList, comparator);
                 }
 
-                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapter.Functions.adapterForUsing(getAdapterManagerStatic()));
+                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapter.Functions.adapterForUsing( entityCollectionModel.getPersistenceSession()));
                 final List<ObjectAdapter> adapterList = Lists.newArrayList(adapterIterable);
 
                 return adapterList;
@@ -194,11 +190,14 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     /**
      * Factory.
      */
-    public static EntityCollectionModel createStandalone(final ObjectAdapter collectionAsAdapter) {
+    public static EntityCollectionModel createStandalone(
+            final ObjectAdapter collectionAsAdapter,
+            final IsisSessionFactory sessionFactory) {
         final Iterable<Object> pojos = EntityCollectionModel.asIterable(collectionAsAdapter);
-        
-        final List<ObjectAdapterMemento> mementoList = 
-                Lists.newArrayList(Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
+
+        final List<ObjectAdapterMemento> mementoList =
+                Lists.newArrayList(Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(
+                        sessionFactory.getCurrentSession().getPersistenceSession())));
 
         final ObjectSpecification elementSpec;
         if(!Iterables.isEmpty(pojos)) {
@@ -213,7 +212,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 }
             };
             IterableExtensions.fold(Iterables.transform(pojos,  function), closure);
-            elementSpec = getSpecificationLoaderStatic().loadSpecification(closure.getLowestCommonSuperclass());
+            elementSpec = sessionFactory.getSpecificationLoader().loadSpecification(closure.getLowestCommonSuperclass());
         } else {
             elementSpec = collectionAsAdapter.getElementSpecification();
         }
@@ -315,21 +314,22 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         final OneToManyAssociation collection = collectionFor(entityModel.getObjectAdapterMemento(), getLayoutData());
         this.type = Type.PARENTED;
         this.typeOf = forName(collection.getSpecification());
-        this.collectionMemento = new CollectionMemento(collection);
+        this.collectionMemento = new CollectionMemento(collection, entityModel.getIsisSessionFactory());
         this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
         final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
         this.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
     }
     
 
-    private static OneToManyAssociation collectionFor(
-            final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {
+    private OneToManyAssociation collectionFor(
+            final ObjectAdapterMemento parentObjectAdapterMemento,
+            final CollectionLayoutData collectionLayoutData) {
         if(collectionLayoutData == null) {
             throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
         }
         final String collectionId = collectionLayoutData.getId();
         final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
-        final ObjectSpecification objectSpec = getSpecificationLoaderStatic().lookupBySpecId(objectSpecId);
+        final ObjectSpecification objectSpec = getIsisSessionFactory().getSpecificationLoader().lookupBySpecId(objectSpecId);
         final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);
         return otma;
     }
@@ -388,7 +388,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     public ObjectSpecification getTypeOfSpecification() {
         if (typeOfSpec == null) {
-            typeOfSpec = getSpecificationLoaderStatic().loadSpecification(typeOf);
+            typeOfSpec = getSpecificationLoader().loadSpecification(typeOf);
         }
         return typeOfSpec;
     }
@@ -405,7 +405,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public void setObjectList(ObjectAdapter resultAdapter) {
         final Iterable<Object> pojos = EntityCollectionModel.asIterable(resultAdapter);
         this.mementoList = Lists.newArrayList(
-                Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
+                Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession())));
     }
 
     /**
@@ -504,22 +504,5 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
 
-    // //////////////////////////////////////
-
-    private static AdapterManager getAdapterManagerStatic() {
-        return getPersistenceSessionStatic();
-    }
-
-    private static ServicesInjector getServicesInjector() {
-        return getPersistenceSessionStatic().getServicesInjector();
-    }
-
-    private static PersistenceSession getPersistenceSessionStatic() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    private static SpecificationLoader getSpecificationLoaderStatic() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
-    }
 
 }

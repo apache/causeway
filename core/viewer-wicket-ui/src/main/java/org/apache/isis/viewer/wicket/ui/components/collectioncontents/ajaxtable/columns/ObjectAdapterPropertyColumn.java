@@ -84,10 +84,10 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {
 
         final ObjectAdapter adapter = rowModel.getObject();
-        final EntityModel model = new EntityModel(adapter);
+        final EntityModel entityModel = new EntityModel(adapter);
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
-        final PropertyMemento pm = new PropertyMemento(property);
-        final ScalarModel scalarModel = model.getPropertyModel(pm);
+        final PropertyMemento pm = new PropertyMemento(property, entityModel.getIsisSessionFactory());
+        final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
 
         scalarModel.setRenderingHint(RenderingHint.PROPERTY_COLUMN);
         scalarModel.toViewMode();

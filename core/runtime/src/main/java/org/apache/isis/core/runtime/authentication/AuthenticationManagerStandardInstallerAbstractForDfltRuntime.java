@@ -25,6 +25,7 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticationManage
 
 public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime extends AuthenticationManagerStandardInstallerAbstract {
 
+
     public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(
             final String name,
             final IsisConfigurationDefault isisConfiguration) {

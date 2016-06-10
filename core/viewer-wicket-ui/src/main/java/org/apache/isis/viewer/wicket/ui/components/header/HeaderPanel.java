@@ -19,8 +19,9 @@
 package org.apache.isis.viewer.wicket.ui.components.header;
 
 import java.util.Locale;
-import com.google.inject.Inject;
+
 import com.google.inject.name.Named;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -29,6 +30,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
@@ -52,11 +54,11 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
     private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
     private static final String ID_TERTIARY_MENU_BAR = "tertiaryMenuBar";
 
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("brandLogo")
     private String brandLogo;
 

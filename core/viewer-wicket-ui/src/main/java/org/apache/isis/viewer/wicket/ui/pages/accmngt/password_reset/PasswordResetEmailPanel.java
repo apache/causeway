@@ -22,17 +22,6 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.services.email.EmailService;
-import org.apache.isis.applib.services.userreg.EmailNotificationService;
-import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -43,7 +32,15 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
-import com.google.inject.name.Named;
+import org.apache.isis.applib.services.email.EmailService;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
 
 /**
  * A panel with a form for creation of new users
@@ -108,19 +105,20 @@ public class PasswordResetEmailPanel extends Panel {
         form.add(signUpButton);
     }
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailNotificationService emailNotificationService;
-    @Inject
+
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailService emailService;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailVerificationUrlService emailVerificationUrlService;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageNavigationService pageNavigationService;
 
-    @Inject
-    @Named("applicationName")
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
+    @com.google.inject.name.Named("applicationName")
     private String applicationName;
 
 }

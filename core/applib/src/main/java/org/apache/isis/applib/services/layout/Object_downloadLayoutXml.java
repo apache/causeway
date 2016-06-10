@@ -65,10 +65,10 @@ public class Object_downloadLayoutXml {
         return LayoutService.Style.NORMALIZED;
     }
 
-    @Inject
+    @javax.inject.Inject
     LayoutService layoutService;
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
 }

@@ -33,7 +33,7 @@ public class ApplicationFeatureFactory {
         return factoryService.instantiate(ApplicationFeature.class);
     }
 
-    @Inject
+    @javax.inject.Inject
     FactoryService factoryService;
 
 }

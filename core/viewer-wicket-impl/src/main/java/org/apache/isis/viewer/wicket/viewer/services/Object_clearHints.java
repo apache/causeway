@@ -71,10 +71,10 @@ public class Object_clearHints {
                 : null;
     }
 
-    @Inject
+    @javax.inject.Inject
     HintStore hintStore;
 
-    @Inject
+    @javax.inject.Inject
     BookmarkService bookmarkService;
 
 }

@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.services.container.query.QueryFindByPatter
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to {@link QueryFindByPattern}.
@@ -38,8 +39,12 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
         return pattern;
     }
 
-    public PersistenceQueryFindByPattern(final ObjectSpecification specification, final ObjectAdapter pattern, final long ... range) {
-        super(specification, range);
+    public PersistenceQueryFindByPattern(
+            final ObjectSpecification specification,
+            final ObjectAdapter pattern,
+            final SpecificationLoader specificationLoader,
+            final long... range) {
+        super(specification, specificationLoader, range);
         this.pattern = pattern;
     }
 

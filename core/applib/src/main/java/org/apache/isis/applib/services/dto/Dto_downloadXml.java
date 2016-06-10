@@ -61,7 +61,7 @@ public class Dto_downloadXml {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
 }

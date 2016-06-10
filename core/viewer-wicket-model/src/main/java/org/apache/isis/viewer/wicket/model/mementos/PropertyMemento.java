@@ -24,40 +24,41 @@ import java.io.Serializable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 public class PropertyMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ObjectSpecification owningSpecFor(final OneToOneAssociation association) {
-        return IsisContext.getSessionFactory().getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
+    private static ObjectSpecification owningSpecFor(
+            final OneToOneAssociation property,
+            final IsisSessionFactory isisSessionFactory) {
+        final SpecificationLoader specificationLoader = isisSessionFactory.getSpecificationLoader();
+        return specificationLoader.loadSpecification(property.getIdentifier().toClassIdentityString());
     }
 
     private final ObjectSpecId owningSpecId;
     private final String identifier;
     private final ObjectSpecId specId;
 
-//    private transient OneToOneAssociation property;
-
-    public PropertyMemento(final ObjectSpecId owningType, final String identifier) {
-        this(owningType, identifier, null);
-    }
-
-    public PropertyMemento(final ObjectSpecId owningType, final String identifier, final ObjectSpecId type) {
-        this(owningType, identifier, type, propertyFor(owningType, identifier));
-    }
-
-    public PropertyMemento(final OneToOneAssociation property) {
-        this(owningSpecFor(property).getSpecId(), property.getIdentifier().toNameIdentityString(), property.getSpecification().getSpecId(), property);
+    public PropertyMemento(
+            final OneToOneAssociation property, final IsisSessionFactory isisSessionFactory) {
+        this(
+                owningSpecFor(property, isisSessionFactory).getSpecId(),
+                property.getIdentifier().toNameIdentityString(),
+                property.getSpecification().getSpecId()
+        );
     }
     
-    private PropertyMemento(final ObjectSpecId owningSpecId, final String name, final ObjectSpecId specId, final OneToOneAssociation property) {
+    private PropertyMemento(
+            final ObjectSpecId owningSpecId,
+            final String name,
+            final ObjectSpecId specId) {
         this.owningSpecId = owningSpecId;
         this.identifier = name;
         this.specId = specId;
-//        this.property = property;
     }
 
     public ObjectSpecId getOwningType() {
@@ -73,10 +74,6 @@ public class PropertyMemento implements Serializable {
     }
 
     public OneToOneAssociation getProperty() {
-//        if (property == null) {
-//            property = propertyFor(owningSpecId, identifier);
-//        }
-//        return property;
         return propertyFor(owningSpecId, identifier);
     }
 

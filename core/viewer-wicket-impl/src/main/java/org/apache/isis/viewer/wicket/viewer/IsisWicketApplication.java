@@ -258,11 +258,17 @@ public class IsisWicketApplication
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
+            //
+            // create IsisSessionFactory
+            //
             final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
             final IsisInjectModule isisModule = newIsisModule(deploymentCategory, configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
-            injector.injectMembers(this);
+
+            injector.injectMembers(this); // populates this.isisSessionFactory
+
+
 
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;

@@ -54,7 +54,7 @@ public class TransactionStateProviderInternalDefault implements TransactionState
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
 }

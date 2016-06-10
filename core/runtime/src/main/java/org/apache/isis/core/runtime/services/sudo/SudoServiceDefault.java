@@ -106,7 +106,7 @@ public class SudoServiceDefault implements SudoService {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
 }

@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -115,7 +114,7 @@ public class TertiaryActionsPanel extends Panel {
     /**
      * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
 }

@@ -18,12 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
-import de.agilecoders.wicket.core.util.Attributes;
-
 import java.util.Locale;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -34,8 +30,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 
+import de.agilecoders.wicket.core.util.Attributes;
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
@@ -157,7 +158,9 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     }
 
     IsisConfiguration getConfiguration() {
-        return IsisContext.getSessionFactory().getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
+    }IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

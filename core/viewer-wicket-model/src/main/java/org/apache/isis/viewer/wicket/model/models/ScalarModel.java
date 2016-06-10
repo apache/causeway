@@ -815,7 +815,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
             if(cloneable) {
                 final Object newViewModel = recreatableObjectFacet.clone(viewModel);
-                adapter = getAdapterManager().adapterFor(newViewModel);
+                adapter = getPersistenceSession().adapterFor(newViewModel);
             }
         }
 

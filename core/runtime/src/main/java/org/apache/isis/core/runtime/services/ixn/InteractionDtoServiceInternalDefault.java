@@ -130,16 +130,16 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         );
     }
 
-    @Inject
+    @javax.inject.Inject
     CommandDtoServiceInternal commandDtoServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     private BookmarkService bookmarkService;
 
-    @Inject
+    @javax.inject.Inject
     private InteractionContext interactionContext;
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
 

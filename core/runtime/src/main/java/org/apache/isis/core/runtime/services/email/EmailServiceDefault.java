@@ -38,7 +38,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * A service that sends email notifications when specific events occur
@@ -97,23 +96,23 @@ public class EmailServiceDefault implements EmailService {
     }
 
     protected String getSenderEmailAddress() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
     }
 
     protected String getSenderEmailPassword() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
     }
 
     protected String getSenderEmailHostName() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
     }
 
     protected Integer getSenderEmailPort() {
-        return getConfiguration().getInteger(ISIS_SERVICE_EMAIL_PORT, ISIS_SERVICE_EMAIL_PORT_DEFAULT);
+        return configuration.getInteger(ISIS_SERVICE_EMAIL_PORT, ISIS_SERVICE_EMAIL_PORT_DEFAULT);
     }
 
     protected Boolean getSenderEmailTlsEnabled() {
-        return getConfiguration().getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
+        return configuration.getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
     }
     //endregion
 
@@ -188,10 +187,10 @@ public class EmailServiceDefault implements EmailService {
     }
     //endregion
 
-    //region > dependencies
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getSessionFactory().getConfiguration();
-    }
+
     //endregion
+
+    @javax.inject.Inject
+    IsisConfiguration configuration;
 
 }

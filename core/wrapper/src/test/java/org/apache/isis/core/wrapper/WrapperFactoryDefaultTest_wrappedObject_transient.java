@@ -60,6 +60,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
@@ -87,6 +88,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private IsisSessionFactory mockIsisSessionFactory;
 
     private Employee employeeDO;
     @Mock
@@ -127,7 +130,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         wrapperFactory = createWrapperFactory();
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
-        wrapperFactory.specificationLoader = mockSpecificationLoader;
+        wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
 
         context.checking(new Expectations() {
             {

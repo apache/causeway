@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
@@ -253,7 +252,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
                     // forward on instead to void page
                     // (otherwise, we'll have rendered an action parameters page
                     // and so we'll be staying on that page)
-                    ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID.handleResults(this, null);
+                    ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID.handleResults(this, null, getIsisSessionFactory());
                 }
 
                 return false;
@@ -306,7 +305,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
     ///////////////////////////////////////////////////////
     
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
+        return getPersistenceSession().getTransactionManager();
     }
 
     protected MessageBroker getMessageBroker() {

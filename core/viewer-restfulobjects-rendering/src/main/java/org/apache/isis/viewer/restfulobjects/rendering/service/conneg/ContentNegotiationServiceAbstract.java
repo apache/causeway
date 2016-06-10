@@ -157,6 +157,6 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
 
     //endregion
 
-    @Inject
+    @javax.inject.Inject
     protected DomainObjectContainer container;
 }

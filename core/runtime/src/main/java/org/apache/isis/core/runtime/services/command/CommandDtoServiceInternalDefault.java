@@ -37,14 +37,14 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
@@ -97,7 +97,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {
-        return getSpecificationLoader().loadSpecification(type);
+        return specificationLoader.loadSpecification(type);
     }
 
 
@@ -234,21 +234,21 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     // //////////////////////////////////////
 
-
+    //region > injected services
     @javax.inject.Inject
     private BookmarkService bookmarkService;
 
+    @javax.inject.Inject
+    SpecificationLoader specificationLoader;
 
-    // //////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
-    }
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
     protected AdapterManager getAdapterManager() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
+    //endregion
 
 
 }

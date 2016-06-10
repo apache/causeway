@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
@@ -75,7 +75,11 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
 
 
     protected MessageBroker getMessageBroker() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker();
     }
-    
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
 }

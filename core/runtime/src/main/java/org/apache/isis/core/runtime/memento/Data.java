@@ -26,6 +26,9 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class Data implements Encodable, Serializable {
 
@@ -56,9 +59,6 @@ public class Data implements Encodable, Serializable {
         // nothing to do
     }
 
-    // ///////////////////////////////////////////////////////
-    //
-    // ///////////////////////////////////////////////////////
 
     /**
      * Note: could be <tt>null</tt> if represents a value (standalone adapter).
@@ -74,6 +74,16 @@ public class Data implements Encodable, Serializable {
     @Override
     public String toString() {
         return className + "/" + oid;
+    }
+
+
+
+    protected PersistenceSession getPersistenceSession() {
+        return getSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    protected IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

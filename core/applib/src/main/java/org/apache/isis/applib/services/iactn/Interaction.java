@@ -675,10 +675,10 @@ public class Interaction implements HasTransactionId {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     MetricsService metricsService;
 
-    @Inject
+    @javax.inject.Inject
     ClockService clockService;
 
 }

@@ -139,7 +139,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
             
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
 
             getMessageBroker().addWarning(ex.getMessage());
         }
@@ -173,7 +173,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
             final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
 
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
         }
     }
 
@@ -214,7 +214,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
 
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
 
             getMessageBroker().addWarning(ex.getMessage());
             return false;
@@ -260,7 +260,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
             getTransactionManager().flushTransaction();
             
             ActionResultResponse resultResponse = ActionResultResponseType.determineAndInterpretResult(this.getActionModel(), target, resultAdapter);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
 
             if (actionModel.isBookmarkable()) {
                 bookmarkPage(actionModel);
@@ -285,7 +285,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
                     // forward on instead to void page
                     // (otherwise, we'll have rendered an action parameters page 
                     // and so we'll be staying on that page)
-                    ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID.handleResults(this, null);
+                    ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID.handleResults(this, null, getIsisSessionFactory());
                 }
 
                 return false;

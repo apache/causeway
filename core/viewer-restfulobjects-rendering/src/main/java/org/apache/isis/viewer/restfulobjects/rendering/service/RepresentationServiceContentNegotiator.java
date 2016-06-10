@@ -208,6 +208,6 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     }
 
 
-    @Inject
+    @javax.inject.Inject
     List<ContentNegotiationService> contentNegotiationServices;
 }

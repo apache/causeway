@@ -48,7 +48,7 @@ public class SessionManagementServiceDefault implements SessionManagementService
     }
 
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
 }

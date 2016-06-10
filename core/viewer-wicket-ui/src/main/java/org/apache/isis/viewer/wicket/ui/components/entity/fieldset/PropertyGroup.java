@@ -152,7 +152,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             final OneToOneAssociation otoa,
             final WebMarkupContainer container,
             final List<LinkAndLabel> entityActions) {
-        final PropertyMemento pm = new PropertyMemento(otoa);
+        final PropertyMemento pm = new PropertyMemento(otoa, entityModel.getIsisSessionFactory());
 
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
         getComponentFactoryRegistry()

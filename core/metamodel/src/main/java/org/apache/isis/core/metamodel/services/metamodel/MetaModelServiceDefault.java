@@ -200,10 +200,10 @@ public class MetaModelServiceDefault implements MetaModelService2 {
 
 
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLookup;
 
-    @Inject
+    @javax.inject.Inject
     GridService gridService;
 
 }

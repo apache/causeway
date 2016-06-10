@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
@@ -103,7 +102,7 @@ public class IsisInjectModule extends AbstractModule {
     }
 
     @Provides
-    @Inject
+    @com.google.inject.Inject
     @Singleton
     protected IsisSessionFactory provideIsisSessionFactory(final AppManifest appManifestIfAny) {
 
@@ -122,7 +121,7 @@ public class IsisInjectModule extends AbstractModule {
     }
 
     @Provides
-    @Inject
+    @com.google.inject.Inject
     @Singleton
     protected ServicesInjector provideServicesInjector(final IsisSessionFactory isisSessionFactory) {
         return isisSessionFactory.getServicesInjector();

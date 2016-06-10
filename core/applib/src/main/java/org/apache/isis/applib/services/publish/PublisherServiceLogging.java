@@ -71,10 +71,10 @@ public class PublisherServiceLogging implements PublisherService {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     private CommandContext commandContext;
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
 }

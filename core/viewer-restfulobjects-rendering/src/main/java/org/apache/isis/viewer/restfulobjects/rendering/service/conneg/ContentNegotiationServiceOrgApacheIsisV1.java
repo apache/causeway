@@ -399,6 +399,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     }
 
 
-    @Inject
+    @javax.inject.Inject
     protected DomainObjectContainer container;
 }

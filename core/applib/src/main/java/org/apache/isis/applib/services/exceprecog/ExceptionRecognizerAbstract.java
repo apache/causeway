@@ -156,7 +156,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         return Recognition.of(category, recognize(ex));
     }
 
-    @Inject
+    @javax.inject.Inject
     protected TranslationService translationService;
 
 }

@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public abstract class AuthenticationSessionStrategyAbstract implements AuthenticationSessionStrategy {
 
@@ -49,6 +51,11 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
     public void invalidate(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
         bind(httpServletRequest, httpServletResponse, null);
         httpServletResponse.setStatus(STATUS_UNAUTHORIZED);
+    }
+
+    // TODO
+    protected IsisSessionFactory isisSessionFactoryFrom(final HttpServletRequest httpServletRequest) {
+        return IsisContext.getSessionFactory();
     }
 
 }

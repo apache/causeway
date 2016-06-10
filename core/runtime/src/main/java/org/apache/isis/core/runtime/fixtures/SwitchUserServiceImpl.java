@@ -79,13 +79,13 @@ public class SwitchUserServiceImpl implements SwitchUserService {
         }
     }
 
-    @Inject
+    @javax.inject.Inject
     AuthenticationManager authenticationManager;
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
-    @Inject
+    @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

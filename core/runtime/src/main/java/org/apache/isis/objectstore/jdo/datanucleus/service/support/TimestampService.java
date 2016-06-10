@@ -69,12 +69,12 @@ public class TimestampService implements
         // no-op
     }
 
-    @Inject
+    @javax.inject.Inject
     UserService userService;
 
-    @Inject
+    @javax.inject.Inject
     ClockService clockService;
 
-    @Inject
+    @javax.inject.Inject
     IsisJdoSupport isisJdoSupport;
 }

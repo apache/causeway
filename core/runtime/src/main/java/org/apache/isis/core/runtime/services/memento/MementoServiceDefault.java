@@ -164,7 +164,7 @@ public class MementoServiceDefault implements MementoService {
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     UrlEncodingService urlEncodingService;
 
 }

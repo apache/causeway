@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.AttributeModifier;
@@ -525,7 +523,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoCompleteFacet != null;
     }
 
-    @Inject
+    @com.google.inject.Inject
     private WicketViewerSettings wicketViewerSettings;
 
     // REVIEW: can't inject because IsisConfiguration not serializable.

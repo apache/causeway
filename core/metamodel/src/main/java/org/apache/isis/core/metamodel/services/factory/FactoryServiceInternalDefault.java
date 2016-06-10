@@ -89,10 +89,10 @@ public class FactoryServiceInternalDefault implements FactoryService {
                 "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject

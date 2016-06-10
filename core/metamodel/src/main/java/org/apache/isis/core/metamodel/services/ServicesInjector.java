@@ -131,8 +131,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
         this.autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
         this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
-
-        autowireServicesAndContainer();
     }
 
     //endregion
@@ -160,8 +158,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         // invalidate
         servicesAssignableToType.clear();
         serviceByConcreteType.clear();
-
-        autowireServicesAndContainer();
+        autowire();
     }
 
     public boolean isRegisteredService(final Class<?> cls) {
@@ -258,7 +255,8 @@ public class ServicesInjector implements ApplicationScopedComponent {
      */
     public void injectServicesInto(final List<Object> objects) {
         for (final Object object : objects) {
-            injectServicesInto(object);
+            injectInto(object); // if implements ServiceInjectorAware
+            injectServicesInto(object); // via @javax.inject.Inject or setXxx(...)
         }
     }
 
@@ -427,12 +425,22 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-    private void autowireServicesAndContainer() {
-        injectServicesInto(this.services);
-    }
+
 
 
     //endregion
+
+
+
+    //region > autoWire
+
+    @Programmatic
+    public void autowire() {
+        injectServicesInto(this.services);
+    }
+
+    //endregion
+
 
     //region > lookupService, lookupServices
 
@@ -606,6 +614,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public DeploymentCategory getDeploymentCategory() {
         return getDeploymentCategoryProvider().getDeploymentCategory();
     }
+
 
     //endregion
 

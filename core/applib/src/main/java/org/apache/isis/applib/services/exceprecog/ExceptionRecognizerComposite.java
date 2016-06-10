@@ -165,9 +165,9 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
-    @Inject
+    @javax.inject.Inject
     TranslationService translationService;
 
 }

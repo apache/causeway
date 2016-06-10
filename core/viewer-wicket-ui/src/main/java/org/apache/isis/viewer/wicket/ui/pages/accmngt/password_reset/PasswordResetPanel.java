@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -80,12 +78,12 @@ public class PasswordResetPanel extends Panel {
 
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
-                Boolean passwordUpdated = getSessionFactory().doInSession(new Callable<Boolean>() {
+                Boolean passwordUpdated = getIsisSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
                         String email = accountConfirmationMap.get(uuid);
 
-                        UserRegistrationService userRegistrationService = getSessionFactory().getServicesInjector()
+                        UserRegistrationService userRegistrationService = getIsisSessionFactory().getServicesInjector()
                                 .lookupServiceElseFail(UserRegistrationService.class);
                         return userRegistrationService.updatePasswordByEmail(email, password);
                     }
@@ -114,10 +112,10 @@ public class PasswordResetPanel extends Panel {
         return message;
     }
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
-    protected IsisSessionFactory getSessionFactory() {
+    protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 

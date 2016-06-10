@@ -134,7 +134,7 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     private TranslationServicePo translationService;
 
 }

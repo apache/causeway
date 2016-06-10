@@ -704,7 +704,7 @@ public abstract class AbstractContainedObject {
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     private DomainObjectContainer container;
 
     /**

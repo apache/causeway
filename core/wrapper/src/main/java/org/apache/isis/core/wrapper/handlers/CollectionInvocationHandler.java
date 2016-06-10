@@ -27,7 +27,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHandler<T, R> {
 
-    public CollectionInvocationHandler(final R collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public CollectionInvocationHandler(
+            final R collectionToProxy,
+            final String collectionName,
+            final DomainObjectInvocationHandler<T> handler,
+            final OneToManyAssociation otma) {
         super(collectionToProxy, collectionName, handler, otma);
 
         try {

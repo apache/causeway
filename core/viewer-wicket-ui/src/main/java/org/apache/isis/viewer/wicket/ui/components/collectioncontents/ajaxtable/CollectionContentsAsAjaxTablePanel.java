@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -236,7 +235,7 @@ public class CollectionContentsAsAjaxTablePanel
 
     //region > dependencies
 
-    @Inject
+    @com.google.inject.Inject
     private WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;

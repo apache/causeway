@@ -64,7 +64,7 @@ public class TitleServiceDefault implements TitleService {
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     PersistenceSessionServiceInternal adapterManager;
 
     @javax.inject.Inject

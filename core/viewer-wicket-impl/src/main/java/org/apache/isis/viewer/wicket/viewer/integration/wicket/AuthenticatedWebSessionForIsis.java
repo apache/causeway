@@ -36,6 +36,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
@@ -134,7 +135,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     // /////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getSessionFactory().getAuthenticationManager();
+        return getIsisSessionFactory().getAuthenticationManager();
     }
 
     // /////////////////////////////////////////////////
@@ -147,7 +148,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             final SessionLoggingService.CausedBy causedBy) {
         final SessionLoggingService sessionLoggingService = getSessionLoggingService();
         if (sessionLoggingService != null) {
-            IsisContext.getSessionFactory().doInSession(new Runnable() {
+            getIsisSessionFactory().doInSession(new Runnable() {
                     @Override
                     public void run() {
                         // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
@@ -159,10 +160,12 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     protected SessionLoggingService getSessionLoggingService() {
-        return IsisContext.getSessionFactory().doInSession(new Callable<SessionLoggingService>() {
+        return getIsisSessionFactory().doInSession(new Callable<SessionLoggingService>() {
             @Override
             public SessionLoggingService call() throws Exception {
-                return IsisContext.getSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
+
+                // REVIEW: I strongly suspect that this doesn't need to be done in a session anymore
+                return getIsisSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
             }
         });
     }
@@ -172,4 +175,11 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         // do nothing here because this will lead to problems with Shiro
         // see https://issues.apache.org/jira/browse/ISIS-1018
     }
+
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
+
 }

@@ -140,7 +140,7 @@ public class MetaModelServicesMenu {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     MetaModelService metaModelService;
 
 }

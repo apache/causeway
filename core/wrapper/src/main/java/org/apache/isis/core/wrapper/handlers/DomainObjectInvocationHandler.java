@@ -46,7 +46,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
@@ -60,6 +59,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -73,6 +73,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -82,6 +83,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private final ProxyContextHandler proxy;
     private final ExecutionMode executionMode;
+    private final IsisSessionFactory isisSessionFactory;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -119,19 +121,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     public DomainObjectInvocationHandler(
             final T delegate,
-            final WrapperFactory wrapperFactory,
             final ExecutionMode mode,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final SpecificationLoader specificationLoader,
-            final PersistenceSessionServiceInternal persistenceSessionServiceInternal,
-            final ProxyContextHandler proxy) {
-        super(delegate, wrapperFactory, mode);
+            final ProxyContextHandler proxy,
+            final IsisSessionFactory isisSessionFactory) {
+        super(delegate, mode, isisSessionFactory);
 
         this.proxy = proxy;
-        this.authenticationSessionProvider = authenticationSessionProvider;
-        this.specificationLoader = specificationLoader;
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
         this.executionMode = mode;
+        this.isisSessionFactory = isisSessionFactory;
+
+        final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
+
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
 
 
         try {
@@ -824,7 +827,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+        return isisSessionFactory.getSpecificationLoader();
     }
 
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
@@ -839,5 +842,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return persistenceSessionServiceInternal;
     }
 
-
+    public IsisSessionFactory getIsisSessionFactory() {
+        return isisSessionFactory;
+    }
 }

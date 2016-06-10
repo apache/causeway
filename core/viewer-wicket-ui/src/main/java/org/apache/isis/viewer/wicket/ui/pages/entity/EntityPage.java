@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -196,8 +195,7 @@ public class EntityPage extends PageAbstract {
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getSessionFactory().getDeploymentCategory();
+        return getIsisSessionFactory().getDeploymentCategory();
     }
-
 
 }

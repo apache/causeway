@@ -678,22 +678,22 @@ public abstract class GridSystemServiceAbstract<G extends Grid> implements GridS
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     protected SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     protected TranslationService translationService;
 
-    @Inject
+    @javax.inject.Inject
     protected JaxbService jaxbService;
 
-    @Inject
+    @javax.inject.Inject
     protected DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
     protected MessageService messageService;
 
-    @Inject
+    @javax.inject.Inject
     DeploymentCategoryProvider deploymentCategoryProvider;
 
 

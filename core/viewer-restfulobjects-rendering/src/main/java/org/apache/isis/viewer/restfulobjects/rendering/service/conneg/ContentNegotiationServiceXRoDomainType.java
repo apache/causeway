@@ -166,9 +166,9 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-    @Inject
+    @javax.inject.Inject
     List<org.apache.isis.applib.conmap.ContentMappingService> contentMappingServices;
 
-    @Inject
+    @javax.inject.Inject
     List<ContentMappingService> legacyContentMappingServices;
 }

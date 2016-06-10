@@ -25,6 +25,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryBuiltInAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 
 /**
@@ -39,16 +40,22 @@ public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAb
     protected long index;
     protected long countedSoFar;
 
-    public PersistenceQueryBuiltInAbstract(final ObjectSpecification specification, final long ... range) {
-        super(specification, range);
+    public PersistenceQueryBuiltInAbstract(
+            final ObjectSpecification specification,
+            final SpecificationLoader specificationLoader,
+            final long... range) {
+        super(specification, specificationLoader, range);
     }
 
-    public PersistenceQueryBuiltInAbstract(final DataInputExtended input, final long ... range) throws IOException {
-        super(input, range);
+    public PersistenceQueryBuiltInAbstract(
+            final DataInputExtended input,
+            final SpecificationLoader specificationLoader,
+            final long... range) throws IOException {
+        super(input, specificationLoader, range);
     }
 
     protected boolean matchesRange(final boolean ifMatches) {
-        if (ifMatches == false){
+        if (!ifMatches){
             return false;
         }
         

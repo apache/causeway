@@ -22,9 +22,11 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -47,15 +49,24 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
     // //////////////////////////////////////////////////////////////
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
+        return getCurrentSession().getAuthenticationSession();
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return getCurrentSession().getPersistenceSession();
     }
 
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession();
+    protected IsisSession getCurrentSession() {
+        return getIsisSessionFactory().getCurrentSession();
     }
+
+    public IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
+    public SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
 
 }

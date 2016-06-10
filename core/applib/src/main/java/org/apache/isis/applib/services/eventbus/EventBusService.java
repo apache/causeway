@@ -119,8 +119,8 @@ public abstract class EventBusService {
      *     @RequestScoped @DomainService
      *     public class SomeSubscribingService {
      *
-     *         @Inject private EventBusService ebs;
-     *         @Inject private SomeSubscribingService proxy;
+     *         @javax.inject.Inject private EventBusService ebs;
+     *         @javax.inject.Inject private SomeSubscribingService proxy;
      *
      *         @PostConstruct
      *         public void startRequest() {

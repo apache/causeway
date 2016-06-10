@@ -172,10 +172,10 @@ public class TranslationServicePo implements TranslationService {
         return deploymentCategoryProvider.getDeploymentCategory();
     }
 
-    @Inject
+    @javax.inject.Inject
     DeploymentCategoryProvider deploymentCategoryProvider;
 
-    @Inject
+    @javax.inject.Inject
     private TranslationsResolver translationsResolver;
 
     @Programmatic
@@ -183,7 +183,7 @@ public class TranslationServicePo implements TranslationService {
         return translationsResolver;
     }
 
-    @Inject
+    @javax.inject.Inject
     private LocaleProvider localeProvider;
 
     @Programmatic

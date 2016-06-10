@@ -27,6 +27,7 @@ import org.jboss.resteasy.spi.interception.DecoratorProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DecorateTypes({"text/*+xml", "application/*+xml"})
 public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshaller, PrettyPrinting> {
@@ -58,11 +59,17 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
         }
     }
 
+
+
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getSessionFactory().getDeploymentCategory();
+        return getIsisSessionFactory().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getSessionFactory().getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

@@ -122,7 +122,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
                 if(NULL_PLACEHOLDER.equals(input)) {
                     return null;
                 }
-                final RootOid oid = RootOid.deString(input, ObjectAdapterMemento.getOidMarshaller());
+                final RootOid oid = RootOid.deString(input, ObjectAdapterMemento.OID_MARSHALLER);
                 return ObjectAdapterMemento.createPersistent(oid);
             }
         };

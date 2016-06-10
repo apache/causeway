@@ -293,6 +293,14 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         return false;
     }
 
+    /**
+     * As per {@link #doInSession(Runnable, AuthenticationSession)}, using a default {@link InitialisationSession}.
+     * @param runnable
+     */
+    @Programmatic
+    public void doInSession(final Runnable runnable) {
+        doInSession(runnable, new InitialisationSession());
+    }
 
     /**
      * A template method that executes a piece of code in a session.
@@ -300,16 +308,25 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      * is created.
      *
      * @param runnable The piece of code to run.
+     * @param authenticationSession
      */
     @Programmatic
-    public void doInSession(final Runnable runnable) {
+    public void doInSession(final Runnable runnable, final AuthenticationSession authenticationSession) {
         doInSession(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 runnable.run();
                 return null;
             }
-        });
+        }, authenticationSession);
+    }
+
+    /**
+     * As per {@link #doInSession(Callable), AuthenticationSession}, using a default {@link InitialisationSession}.
+     */
+    @Programmatic
+    public <R> R doInSession(final Callable<R> callable) {
+        return doInSession(callable, new InitialisationSession());
     }
 
     /**
@@ -318,15 +335,15 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      * is created.
      *
      * @param callable The piece of code to run.
-     * @return The result of the code execution.
+     * @param authenticationSession - the user to run under
      */
     @Programmatic
-    public <R> R doInSession(final Callable<R> callable) {
+    public <R> R doInSession(final Callable<R> callable, final AuthenticationSession authenticationSession) {
         final IsisSessionFactory sessionFactory = this;
         boolean noSession = !sessionFactory.inSession();
         try {
             if (noSession) {
-                sessionFactory.openSession(new InitialisationSession());
+                sessionFactory.openSession(authenticationSession);
             }
 
             return callable.call();
@@ -340,7 +357,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             }
         }
     }
-
 
     //endregion
 

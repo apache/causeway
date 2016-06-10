@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 /**
@@ -43,6 +44,8 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
 
     private static final long serialVersionUID = 1L;
 
+    private static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
+
     /**
      * Converts string representation of {@link Oid} to
      * {@link ObjectAdapterMemento}.
@@ -52,7 +55,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
+        final Oid oid = RootOid.deStringEncoded(value, OID_MARSHALLER);
         final ObjectAdapter adapter = getPersistenceSession().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }
@@ -72,7 +75,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
             // REVIEW: is this right?
             return memento.toString();
         }
-        return oid.enString(getOidMarshaller());
+        return oid.enString(OID_MARSHALLER);
     }
     
 
@@ -82,11 +85,11 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
     // //////////////////////////////////////////////////////////
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getSessionFactory().getOidMarshaller();
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

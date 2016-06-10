@@ -75,6 +75,6 @@ public class DeepLinkServiceWicket implements DeepLinkService {
         return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    @Inject
+    @javax.inject.Inject
     private GuiceBeanProvider guiceBeanProvider;
 }

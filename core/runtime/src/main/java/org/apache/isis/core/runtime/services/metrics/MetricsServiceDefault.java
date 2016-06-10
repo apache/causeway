@@ -65,7 +65,7 @@ public class MetricsServiceDefault implements MetricsService, InstanceLifecycleL
         numberLoaded.set(0);
     }
 
-    @Inject
+    @javax.inject.Inject
     ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
 }

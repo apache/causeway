@@ -43,8 +43,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -63,6 +61,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     private static final long serialVersionUID = 1L;
 
+    private static OidMarshaller oidMarshaller = new OidMarshaller();
+
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
     // //////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         final Boolean persistent = adapter != null && adapter.representsPersistent();
 
         if (persistent) {
-            final String oidStr = adapter.getOid().enStringNoVersion(getOidMarshaller());
+            final String oidStr = adapter.getOid().enStringNoVersion(oidMarshaller);
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -175,7 +175,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     }
 
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return getOidMarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
+        return oidMarshaller.unmarshal(oidStr(pageParameters), RootOid.class);
     }
 
 
@@ -195,7 +195,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return createPageParameters(getObject());
     }
 
-    static class HintPageParameterSerializer implements Serializable {
+    class HintPageParameterSerializer implements Serializable {
 
         private static final long serialVersionUID = 1L;
         private static final String PREFIX = "hint-";
@@ -237,10 +237,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         }
 
         protected HintStore getHintStore() {
-            return IsisContext.getSessionFactory().getServicesInjector().lookupService(HintStore.class);
+            return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class);
         }
-
-
     }
 
     // //////////////////////////////////////////////////////////
@@ -626,18 +624,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     }
     
-
-    // //////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////
-
-    protected static OidMarshaller getOidMarshaller() {
-        return IsisContext.getSessionFactory().getOidMarshaller();
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
-    }
 
 
 }

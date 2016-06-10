@@ -70,8 +70,8 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
@@ -311,7 +311,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                     if(object == null) {
                         return null;
                     }
-                    final ObjectAdapter adapter = IsisContext.getSessionFactory().getCurrentSession()
+                    final ObjectAdapter adapter = isisSessionFactory.getCurrentSession()
                             .getPersistenceSession().adapterFor(object);
                     Oid oid = adapter.getOid();
                     return oid != null? oid.enString(oidMarshaller): encodedValueOf(adapter);
@@ -418,38 +418,41 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     //endregion
 
     //region > injected services
-    @Inject
+    @javax.inject.Inject
     private List<PublisherService> publisherServices;
 
-    @Inject
+    @javax.inject.Inject
     private PublishingService publishingServiceIfAny;
 
-    @Inject
+    @javax.inject.Inject
     private ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     private InteractionDtoServiceInternal interactionDtoServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     private CommandContext commandContext;
 
-    @Inject
+    @javax.inject.Inject
     private InteractionContext interactionContext;
 
-    @Inject
+    @javax.inject.Inject
     private ClockService clockService;
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
-    @Inject
+    @javax.inject.Inject
     private MetricsService metricsService;
 
-    @Inject
+    @javax.inject.Inject
     private OidMarshaller oidMarshaller;
 
+    @javax.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
+
     private PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
     //endregion
 

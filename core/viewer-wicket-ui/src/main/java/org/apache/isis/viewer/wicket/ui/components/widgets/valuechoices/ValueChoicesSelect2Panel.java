@@ -20,15 +20,11 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Select2Choice;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -37,6 +33,8 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2Choice;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -294,6 +292,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         return scalarModel;
     }
 
-    @Inject
+    @com.google.inject.Inject
     private WicketViewerSettings wicketViewerSettings;
 }

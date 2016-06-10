@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 @DomainService(
@@ -174,7 +174,11 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    private IsisSessionFactory getIsisSessionFactory() {
+        return isisSessionFactory;
     }
 
     @Programmatic
@@ -183,7 +187,12 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
+        return getIsisSessionFactory().getSpecificationLoader();
     }
+
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
 
 }

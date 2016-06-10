@@ -194,10 +194,10 @@ public class GridServiceDefault implements GridService {
 
 
 
-    @Inject
+    @javax.inject.Inject
     GridLoaderService gridLoaderService;
 
-    @Inject
+    @javax.inject.Inject
     List<GridSystemService> gridSystemServices;
 
 }

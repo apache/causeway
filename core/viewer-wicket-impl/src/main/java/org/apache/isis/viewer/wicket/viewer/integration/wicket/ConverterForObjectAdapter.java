@@ -38,13 +38,15 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 
+    private static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
+
     /**
      * Converts string representation of {@link Oid} to
      * {@link ObjectAdapter}.
      */
     @Override
     public ObjectAdapter convertToObject(final String value, final Locale locale) {
-        final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
+        final Oid oid = RootOid.deStringEncoded(value, OID_MARSHALLER);
         return getPersistenceSession().getAdapterFor(oid);
     }
 
@@ -58,8 +60,8 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
             // values don't have an Oid
             return null;
         }
-        
-        return oid.enString(getOidMarshaller());
+
+        return oid.enString(OID_MARSHALLER);
     }
     
 
@@ -70,10 +72,6 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getSessionFactory().getOidMarshaller();
     }
 
 }

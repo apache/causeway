@@ -180,14 +180,14 @@ public class ObjectFixtureFilePersistor {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
 }

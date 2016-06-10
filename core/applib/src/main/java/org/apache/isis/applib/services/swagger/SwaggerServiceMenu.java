@@ -75,6 +75,6 @@ public class SwaggerServiceMenu {
         return SwaggerService.Format.YAML;
     }
 
-    @Inject
+    @javax.inject.Inject
     SwaggerService swaggerService;
 }    

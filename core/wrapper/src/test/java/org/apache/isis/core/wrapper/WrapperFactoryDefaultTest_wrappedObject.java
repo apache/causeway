@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDef
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.services.command.CommandDtoServiceInternalDefault;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
@@ -102,6 +103,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     @Mock
     private IsisConfiguration mockConfiguration;
+
+    @Mock
+    private IsisSessionFactory mockIsisSessionFactory;
 
     @Mock
     private ObjectSpecificationDefault mockEmployeeSpec;
@@ -198,7 +202,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         wrapperFactory = createWrapperFactory();
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
-        wrapperFactory.specificationLoader = mockSpecificationLoader;
+        wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
 
         final Method employeeGetNameMethod = methodOf(Employee.class, "getName");

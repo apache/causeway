@@ -36,6 +36,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
@@ -123,13 +124,13 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         {
             final UserDetails userDetails = getModelObject();
 
-            IsisContext.getSessionFactory().doInSession(new Runnable() {
+            getSessionFactory().doInSession(new Runnable() {
                     @Override
                     public void run() {
-                        final UserRegistrationService userRegistrationService = IsisContext.getSessionFactory()
-                                .getCurrentSession().getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        final UserRegistrationService userRegistrationService = getSessionFactory()
+                                .getServicesInjector().lookupService(UserRegistrationService.class);
 
-                        IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
+                        getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
                                 .executeWithinTransaction(new TransactionalClosure() {
                             @Override
                             public void execute() {
@@ -158,6 +159,10 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
             AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
             accountConfirmationMap.remove(uuid);
         }
+    }
+
+    static IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
     protected TextField<String> newEmailField(final UserDetails userDetails) {

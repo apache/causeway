@@ -252,17 +252,17 @@ public class ObjectFixtureService {
     }
     // }}
 
-    @Inject
+    @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    @Inject
+    @javax.inject.Inject
     IsisConfiguration configuration;
 
-    @Inject
+    @javax.inject.Inject
     ServiceRegistry2 serviceRegistry;
 
 }

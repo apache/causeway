@@ -291,10 +291,10 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     @javax.inject.Inject
     private FactoryService factoryService;
 
-    @Inject
+    @javax.inject.Inject
     private SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     private IsisSessionFactory isisSessionFactory;
 
     protected AdapterManager getAdapterManager() {

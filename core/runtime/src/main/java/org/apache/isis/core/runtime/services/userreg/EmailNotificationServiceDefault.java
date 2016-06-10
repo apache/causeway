@@ -171,7 +171,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     //region > dependencies
 
-    @Inject
+    @javax.inject.Inject
     private EmailServiceDefault emailService;
     //endregion
 

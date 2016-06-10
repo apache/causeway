@@ -53,26 +53,26 @@ public class ServicesInjectorDefaultTest_usingFields {
     static class SomeDomainService3 { }
 
     static class SomeDomainService1 {
-        @Inject
+        @javax.inject.Inject
         private DomainObjectContainer container;
         DomainObjectContainer getContainer() {
             return container;
         }
-        @Inject
+        @javax.inject.Inject
         private SomeDomainService2Abstract someDomainService2;
         SomeDomainService2Abstract getSomeDomainService2() {
             return someDomainService2;
         }
     }
     static abstract class SomeDomainService2Abstract {
-        @Inject
+        @javax.inject.Inject
         private SomeDomainService1 someDomainService1;
         SomeDomainService1 getSomeDomainService1() {
             return someDomainService1;
         }
     }
     static class SomeDomainService2 extends SomeDomainService2Abstract {
-        @Inject
+        @javax.inject.Inject
         private SomeDomainService3 someDomainService3;
         SomeDomainService3 getSomeDomainService3() {
             return someDomainService3;

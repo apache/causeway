@@ -186,16 +186,16 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     //region > injected dependencies
 
-    @Inject
+    @javax.inject.Inject
     DeploymentCategoryProvider deploymentCategoryProvider;
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
-    @Inject
+    @javax.inject.Inject
     List<GridSystemService> gridSystemServices;
     //endregion
 

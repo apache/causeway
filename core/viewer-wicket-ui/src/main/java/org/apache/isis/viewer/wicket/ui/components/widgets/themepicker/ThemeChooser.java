@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
@@ -234,6 +235,10 @@ public class ThemeChooser extends Panel {
     }
 
     private IsisConfiguration getConfiguration() {
-        return IsisContext.getSessionFactory().getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

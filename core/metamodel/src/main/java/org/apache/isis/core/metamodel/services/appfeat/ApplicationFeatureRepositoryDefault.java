@@ -558,19 +558,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     //region  > services (injected)
 
-    @Inject
+    @javax.inject.Inject
     ServiceRegistry2 serviceRegistry;
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
     ConfigurationService configurationService;
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     ApplicationFeatureFactory applicationFeatureFactory;
 
     //endregion

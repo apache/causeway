@@ -22,7 +22,9 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Validates that an username is or is not already in use by someone else
@@ -36,12 +38,12 @@ public class UsernameAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-        IsisContext.getSessionFactory().doInSession(new Runnable() {
+        getIsisSessionFactory().doInSession(new Runnable() {
             @Override
             public void run() {
-                UserRegistrationService userRegistrationService = IsisContext.getSessionFactory().getCurrentSession()
-                        .getPersistenceSession().getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
-                String username = validatable.getValue();
+                UserRegistrationService userRegistrationService = getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
+
+                final String username = validatable.getValue();
                 boolean usernameExists = userRegistrationService.usernameExists(username);
                 if (usernameExists) {
                     validatable.error(new ValidationError().addKey("usernameIsNotAvailable"));
@@ -49,5 +51,13 @@ public class UsernameAvailableValidator implements IValidator<String> {
             }
         });
 
+    }
+
+    ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

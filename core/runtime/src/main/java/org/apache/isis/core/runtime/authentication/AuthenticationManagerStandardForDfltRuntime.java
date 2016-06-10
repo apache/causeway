@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.runtime.authentication;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -27,7 +30,7 @@ import org.apache.isis.core.runtime.authentication.exploration.ExplorationSessio
 import org.apache.isis.core.runtime.authentication.fixture.LogonFixtureAuthenticator;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * A refinement of the {@link AuthenticationManagerStandard}, which adds support
@@ -53,10 +56,8 @@ public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationM
         super(configuration);
     }
 
-    // //////////////////////////////////////////////////////////
-    // init
-    // //////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     protected void addDefaultAuthenticators() {
         // we add to start to ensure that these special case authenticators
@@ -65,14 +66,14 @@ public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationM
         addAuthenticatorToStart(new LogonFixtureAuthenticator(getConfiguration()));
     }
 
-    // //////////////////////////////////////////////////////////
-    // Session Management (including authenticate)
-    // //////////////////////////////////////////////////////////
-
+    @Programmatic
     @Override
     public void closeSession(final AuthenticationSession session) {
         super.closeSession(session);
-        IsisContext.getSessionFactory().closeSession();
+        isisSessionFactory.closeSession();
     }
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
 }

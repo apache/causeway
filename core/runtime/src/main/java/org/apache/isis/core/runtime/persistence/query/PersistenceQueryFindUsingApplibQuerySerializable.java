@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
@@ -36,15 +37,22 @@ public class PersistenceQueryFindUsingApplibQuerySerializable extends Persistenc
     private final Query<?> query;
     private final QueryCardinality cardinality;
 
-    public PersistenceQueryFindUsingApplibQuerySerializable(final ObjectSpecification specification, final Query<?> query, final QueryCardinality cardinality) {
-        super(specification, query.getStart(), query.getCount());
+    public PersistenceQueryFindUsingApplibQuerySerializable(
+            final ObjectSpecification specification,
+            final Query<?> query,
+            final QueryCardinality cardinality,
+            final SpecificationLoader specificationLoader) {
+        super(specification, specificationLoader, query.getStart(), query.getCount());
         this.query = query;
         this.cardinality = cardinality;
         initialized();
     }
 
-    public PersistenceQueryFindUsingApplibQuerySerializable(final DataInputExtended input, final long ... range) throws IOException {
-        super(input, range);
+    public PersistenceQueryFindUsingApplibQuerySerializable(
+            final DataInputExtended input,
+            final SpecificationLoader specificationLoader,
+            final long... range) throws IOException {
+        super(input, specificationLoader, range);
         this.query = input.readSerializable(Query.class);
         this.cardinality = QueryCardinality.valueOf(input.readUTF());
         initialized();
@@ -61,8 +69,6 @@ public class PersistenceQueryFindUsingApplibQuerySerializable extends Persistenc
         // nothing to do
     }
 
-    // ///////////////////////////////////////////////////////
-    //
     // ///////////////////////////////////////////////////////
 
     public Query getApplibQuery() {

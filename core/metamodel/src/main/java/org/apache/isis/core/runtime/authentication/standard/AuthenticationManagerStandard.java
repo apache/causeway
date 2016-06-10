@@ -50,10 +50,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     private RandomCodeGenerator randomCodeGenerator;
     private final IsisConfiguration configuration;
 
-    // //////////////////////////////////////////////////////////
-    // constructor
-    // //////////////////////////////////////////////////////////
-
     public AuthenticationManagerStandard(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
@@ -65,9 +61,9 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     /**
      * Will default the {@link #setRandomCodeGenerator(RandomCodeGenerator)
      * RandomCodeGenerator}, but {@link Authenticator}(s) must have been
-     * {@link #addAuthenticator(Authenticator) added} or
-     * {@link #setAuthenticators(List) injected}.
+     * {@link #addAuthenticator(Authenticator) added}.
      */
+    @Programmatic
     public final void init() {
         defaultRandomCodeGeneratorIfNecessary();
         addDefaultAuthenticators();
@@ -91,6 +87,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     protected void addDefaultAuthenticators() {
     }
 
+    @Programmatic
     public void shutdown() {
         for (final Authenticator authenticator : authenticators) {
             authenticator.shutdown();
@@ -101,6 +98,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Session Management (including authenticate)
     // //////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public synchronized final AuthenticationSession authenticate(final AuthenticationRequest request) {
         if (request == null) {
@@ -130,12 +128,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return code;
     }
 
+    @Programmatic
     @Override
     public final boolean isSessionValid(final AuthenticationSession session) {
         final String userName = userByValidationCode.get(session.getValidationCode());
         return session.hasUserNameOf(userName);
     }
 
+    @Programmatic
     @Override
     public void closeSession(final AuthenticationSession session) {
         userByValidationCode.remove(session.getValidationCode());
@@ -145,35 +145,13 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Authenticators
     // //////////////////////////////////////////////////////////
 
-    /**
-     * Adds an {@link Authenticator}.
-     * 
-     * <p>
-     * Use either this or alternatively {@link #setAuthenticators(List) inject}
-     * the full list of {@link Authenticator}s.
-     */
     @Programmatic
     public final void addAuthenticator(final Authenticator authenticator) {
         authenticators.add(authenticator);
     }
 
-    /**
-     * Adds an {@link Authenticator} to the start of the list (not API).
-     */
     protected void addAuthenticatorToStart(final Authenticator authenticator) {
         authenticators.add(0, authenticator);
-    }
-
-    /**
-     * Provide direct injection.
-     * 
-     * <p>
-     * Use either this or programmatically
-     * {@link #addAuthenticator(Authenticator)}.
-     */
-    @Programmatic
-    public void setAuthenticators(final List<Authenticator> authenticators) {
-        this.authenticators = authenticators;
     }
 
     @Programmatic
@@ -181,10 +159,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return Collections.unmodifiableList(authenticators);
     }
 
-    // //////////////////////////////////////////////////////////
-    // register
-    // //////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public boolean register(final RegistrationDetails registrationDetails) {
         for (final Registrar registrar : getRegistrars()) {
@@ -195,6 +171,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
+    @Programmatic
     @Override
     public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
         for (final Registrar registrar : getRegistrars()) {

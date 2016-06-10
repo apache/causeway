@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -110,7 +111,7 @@ public abstract class ResourceAbstract {
             final Where where,
             final RepresentationService.Intent intent,
             final String urlUnencodedQueryString) {
-        if (!IsisContext.getSessionFactory().inSession()) {
+        if (!getIsisSessionFactory().inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
         if (getAuthenticationSession() == null) {
@@ -166,31 +167,35 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
 
     protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getSessionFactory().getDeploymentCategory();
+        return getIsisSessionFactory().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration () {
-        return IsisContext.getSessionFactory().getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
     }
 
     protected ServicesInjector getServicesInjector () {
-        return IsisContext.getSessionFactory().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getSessionFactory().getAuthenticationManager();
+        return getIsisSessionFactory().getAuthenticationManager();
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
+        return getIsisSessionFactory().getSpecificationLoader();
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
     // //////////////////////////////////////////////////////////////

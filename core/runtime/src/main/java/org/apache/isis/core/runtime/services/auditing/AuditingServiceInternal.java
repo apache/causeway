@@ -129,25 +129,25 @@ public class AuditingServiceInternal {
     /**
      * could be null if none has been registered.
      */
-    @Inject
+    @javax.inject.Inject
     private AuditingService3 auditingServiceIfAny;
 
-    @Inject
+    @javax.inject.Inject
     private List<AuditerService> auditerServices;
 
-    @Inject
+    @javax.inject.Inject
     private ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     UserService userService;
 
-    @Inject
+    @javax.inject.Inject
     ClockService clockService;
 
-    @Inject
+    @javax.inject.Inject
     InteractionContext interactionContext;
 
-    @Inject
+    @javax.inject.Inject
     TransactionService transactionService;
 
 }

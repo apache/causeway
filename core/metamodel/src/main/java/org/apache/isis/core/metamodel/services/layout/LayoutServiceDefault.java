@@ -139,13 +139,13 @@ public class LayoutServiceDefault implements LayoutService {
 
 
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
-    @Inject
+    @javax.inject.Inject
     GridService gridService;
 
 

@@ -29,23 +29,30 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
         @Override
-        public void handleResults(Component component, ActionResultResponse resultResponse) {
+        public void handleResults(
+                Component component,
+                ActionResultResponse resultResponse,
+                final IsisSessionFactory isisSessionFactory) {
             component.setResponsePage(new VoidReturnPage(new VoidModel()));
         }
     },
     REDIRECT_TO_PAGE {
         @Override
-        public void handleResults(final Component component, final ActionResultResponse resultResponse) {
+        public void handleResults(
+                final Component component,
+                final ActionResultResponse resultResponse,
+                final IsisSessionFactory isisSessionFactory) {
             // force any changes in state etc to happen now prior to the redirect;
             // in the case of an object being returned, this should cause our page mementos 
             // (eg EntityModel) to hold the correct state.  I hope.
-            IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
+            isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
             
             // "redirect-after-post"
             component.setResponsePage(resultResponse.getToPage());
@@ -53,7 +60,10 @@ public enum ActionResultResponseHandlingStrategy {
     },
     SCHEDULE_HANDLER {
         @Override
-        public void handleResults(final Component component, final ActionResultResponse resultResponse) {
+        public void handleResults(
+                final Component component,
+                final ActionResultResponse resultResponse,
+                final IsisSessionFactory isisSessionFactory) {
             RequestCycle requestCycle = component.getRequestCycle();
             AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class);
 
@@ -75,7 +85,10 @@ public enum ActionResultResponseHandlingStrategy {
     },
     OPEN_URL_IN_BROWSER {
         @Override
-        public void handleResults(final Component component, final ActionResultResponse resultResponse) {
+        public void handleResults(
+                final Component component,
+                final ActionResultResponse resultResponse,
+                final IsisSessionFactory isisSessionFactory) {
             final AjaxRequestTarget target = resultResponse.getTarget();
             final URL url = resultResponse.getUrl();
             
@@ -87,7 +100,10 @@ public enum ActionResultResponseHandlingStrategy {
 
     };
 
-    public abstract void handleResults(Component component, ActionResultResponse resultResponse);
+    public abstract void handleResults(
+            Component component,
+            ActionResultResponse resultResponse,
+            final IsisSessionFactory isisSessionFactory);
 
     /**
      * @see #expanded(String)

@@ -22,18 +22,10 @@ package org.apache.isis.core.wrapper.handlers;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.wrapper.proxy.ProxyCreator;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 public class ProxyContextHandler {
 
@@ -45,14 +37,12 @@ public class ProxyContextHandler {
 
     public <T> T proxy(
             final T domainObject,
-            final WrapperFactory wrapperFactory,
             final ExecutionMode mode,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final SpecificationLoader specificationLookup,
-            final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+            final IsisSessionFactory isisSessionFactory) {
 
-        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider, specificationLookup,
-                persistenceSessionServiceInternal, this);
+        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject,
+                mode,
+                this, isisSessionFactory);
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }

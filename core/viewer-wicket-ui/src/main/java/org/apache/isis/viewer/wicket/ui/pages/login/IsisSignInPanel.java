@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -157,19 +155,19 @@ public class IsisSignInPanel extends SignInPanel {
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     ServicesInjector servicesInjector;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailNotificationService emailNotificationService;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailService emailService;
 
 }

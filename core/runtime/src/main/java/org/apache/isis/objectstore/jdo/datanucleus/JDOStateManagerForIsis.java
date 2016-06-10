@@ -29,6 +29,7 @@ import org.datanucleus.store.fieldmanager.FieldManager;
 
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
@@ -215,6 +216,10 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     }
 
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getSessionFactory().getServicesInjector();
+        return getSessionFactory().getServicesInjector();
+    }
+
+    IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

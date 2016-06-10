@@ -429,16 +429,16 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     //region > injected (application-scope) 
 
     // REVIEW: can't inject because not serializable.
-    private IsisSessionFactory getSessionFactory() {
+    protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 
     protected IsisConfiguration getConfiguration() {
-        return getSessionFactory().getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
     }
 
     protected ServicesInjector getServicesInjector() {
-        return getSessionFactory().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
 
     //endregion
@@ -446,11 +446,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     //region > derived from injected components (session-scope)
 
     protected PersistenceSession getPersistenceSession() {
-        return getSessionFactory().getCurrentSession().getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getSessionFactory().getCurrentSession().getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     //endregion

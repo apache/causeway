@@ -71,7 +71,7 @@ public class SwaggerServiceDefault implements SwaggerService {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
 }

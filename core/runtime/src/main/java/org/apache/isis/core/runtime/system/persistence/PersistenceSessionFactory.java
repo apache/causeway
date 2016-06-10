@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
@@ -71,12 +72,12 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     private DataNucleusApplicationComponents applicationComponents;
 
     @Programmatic
-    public void init() {
-        this.applicationComponents = createDataNucleusApplicationComponents(configuration);
+    public void init(final SpecificationLoader specificationLoader) {
+        this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
     }
 
     private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
-            final IsisConfiguration configuration) {
+            final IsisConfiguration configuration, final SpecificationLoader specificationLoader) {
 
         if (applicationComponents == null || applicationComponents.isStale()) {
 
@@ -87,7 +88,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap(), specificationLoader);
             final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
 
             applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, datanucleusProps, classesToBePersisted);

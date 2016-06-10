@@ -52,6 +52,6 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         return bookmarkService;
     }
 
-    @Inject
+    @javax.inject.Inject
     BookmarkService2 bookmarkService;
 }

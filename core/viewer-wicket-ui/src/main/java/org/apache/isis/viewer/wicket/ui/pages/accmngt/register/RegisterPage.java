@@ -19,7 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
-import javax.inject.Inject;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -27,11 +31,6 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.string.Strings;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -86,6 +85,6 @@ public class RegisterPage extends AccountManagementPageAbstract {
         return new WebMarkupContainer(id);
     }
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageNavigationService pageNavigationService;
 }

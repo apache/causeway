@@ -52,7 +52,7 @@ public class RoutingServiceDefault implements RoutingService {
         return original != null? original: homePageProviderService.homePage();
     }
 
-    @Inject
+    @javax.inject.Inject
     HomePageProviderService homePageProviderService;
 
 }

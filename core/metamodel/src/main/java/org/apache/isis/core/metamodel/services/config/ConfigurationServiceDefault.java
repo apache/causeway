@@ -85,7 +85,7 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 
 
 
-    @Inject
+    @javax.inject.Inject
     ConfigurationServiceInternal configurationServiceInternal;
 
 }
