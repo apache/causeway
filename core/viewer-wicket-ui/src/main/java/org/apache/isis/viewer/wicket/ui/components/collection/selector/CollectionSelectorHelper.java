@@ -133,7 +133,7 @@ public class CollectionSelectorHelper implements Serializable {
 
         // else @CollectionLayout#defaultView attribute
         if (hasDefaultViewFacet(model)) {
-            DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
+            DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection(model.getSpecificationLoader()).getFacet(DefaultViewFacet.class);
             for (ComponentFactory componentFactory : componentFactories) {
                 final String componentName = componentFactory.getName();
                 final String viewName = defaultViewFacet.value();
@@ -193,7 +193,7 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         final OneToManyAssociation collection =
-                entityCollectionModel.getCollectionMemento().getCollection();
+                entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
         RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
         return renderFacet != null && renderFacet.value() == Render.Type.EAGERLY;
     }
@@ -205,7 +205,7 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         final OneToManyAssociation collection =
-                entityCollectionModel.getCollectionMemento().getCollection();
+                entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
         DefaultViewFacet defaultViewFacet = collection.getFacet(DefaultViewFacet.class);
         return defaultViewFacet != null;
     }

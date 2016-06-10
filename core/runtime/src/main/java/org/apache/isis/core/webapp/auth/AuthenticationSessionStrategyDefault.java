@@ -30,7 +30,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.system.IsisSystem;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.WebAppConstants;
 
 /**
@@ -58,7 +57,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
     @Override
     public AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
 
-        final AuthenticationManager authenticationManager = getAuthenticationManager();
+        final AuthenticationManager authenticationManager = authenticationManagerFrom(httpServletRequest);
         final HttpSession httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
@@ -110,12 +109,6 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
     }
 
 
-    // //////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////
 
-    protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getSessionFactory().getAuthenticationManager();
-    }
 
 }

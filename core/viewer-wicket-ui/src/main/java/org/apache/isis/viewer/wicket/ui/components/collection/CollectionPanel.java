@@ -62,7 +62,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
         final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
 
-        final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection();
+        final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
         final EntityModel entityModel = collectionModel.getEntityModel();
 
         final List<ObjectAction> associatedActions =

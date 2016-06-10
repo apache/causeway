@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -45,6 +44,8 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -84,7 +85,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
             @Override
             public void onClick() {
-                final ObjectAction objectAction = actionMemento.getAction();
+                final ObjectAction objectAction = actionMemento.getAction(getSpecificationLoader());
                 final ConcurrencyChecking concurrencyChecking =
                         ConcurrencyChecking.concurrencyCheckingFor(objectAction.getSemantics());
 
@@ -93,8 +94,10 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                     final List<ObjectAdapter> toggledAdapters =
                             FluentIterable.from(toggleMementosList)
-                            .transform(ObjectAdapterMemento.Functions.fromMemento(concurrencyChecking))
-                            .toList();
+                            .transform(
+                                    ObjectAdapterMemento.Functions.fromMemento(
+                                            concurrencyChecking, getPersistenceSession(), getSpecificationLoader()))
+                                    .toList();
 
                     final List<Object> domainObjects = Lists.newArrayList(Iterables.transform(toggledAdapters, ObjectAdapter.Functions.getObject()));
 
@@ -148,7 +151,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     model.clearToggleMementosList();
                     toggleboxColumn.clearToggles();
                     final ActionModel actionModel = model.getActionModelHint();
-                    if(actionModel != null && actionModel.getActionMemento().getAction().getSemantics().isIdempotentInNature()) {
+                    if(actionModel != null && actionModel.getActionMemento().getAction(getSpecificationLoader()).getSemantics().isIdempotentInNature()) {
                         ObjectAdapter resultAdapter = actionModel.getObject();
                         model.setObjectList(resultAdapter);
                     } else {
@@ -190,7 +193,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                 final List<ObjectAdapterMemento> toggleMementosList = Lists.newArrayList(model.getToggleMementosList());
                 for (ObjectAdapterMemento oam : toggleMementosList) {
                     // just requesting the adapter will sync the OAM's version with the objectstore
-                    oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                    oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
                 }
 
                 // discard any adapters that might have been deleted
@@ -200,7 +203,8 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                 final List<ObjectAdapter> adapters = model.getObject();
                 model.clearToggleMementosList();
                 for (ObjectAdapterMemento oam : toggleMementosList) {
-                    final ObjectAdapter objectAdapter = oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                    final ObjectAdapter objectAdapter = oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                            getPersistenceSession(), getSpecificationLoader());
                     if(adapters.contains(objectAdapter)) {
                         // in case it has been deleted...
                         model.toggleSelectionOn(objectAdapter);
@@ -231,8 +235,16 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
     // Dependencies (from context)
     ///////////////////////////////////////////////////////
 
+    SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
     public AuthenticationSession getAuthenticationSession() {
-        return getServicesInjector().lookupService(AuthenticationSessionProvider.class).getAuthenticationSession();
+        return getServicesInjector().getAuthenticationSession();
     }
 
     protected MessageBroker getMessageBroker() {

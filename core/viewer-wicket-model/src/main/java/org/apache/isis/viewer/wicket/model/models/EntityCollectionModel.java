@@ -84,7 +84,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 return Lists.newArrayList(
                         Iterables.filter(
                                 Iterables.transform(entityCollectionModel.mementoList,
-                                        ObjectAdapterMemento.Functions.fromMemento(ConcurrencyChecking.NO_CHECK)),
+                                        ObjectAdapterMemento.Functions.fromMemento(ConcurrencyChecking.NO_CHECK,
+                                                entityCollectionModel.getPersistenceSession(), entityCollectionModel.getSpecificationLoader())),
                                 Predicates.notNull()));
             }
 
@@ -115,8 +116,10 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
                 final ObjectAdapter adapter = entityCollectionModel.getParentObjectAdapterMemento().getObjectAdapter(
-                        ConcurrencyChecking.NO_CHECK);
-                final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection();
+                        ConcurrencyChecking.NO_CHECK, entityCollectionModel.getPersistenceSession(),
+                        entityCollectionModel.getSpecificationLoader());
+                final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection(
+                        entityCollectionModel.getSpecificationLoader());
                 final ObjectAdapter collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 
                 final List<Object> objectList = asIterable(collectionAsAdapter);
@@ -149,7 +152,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
             @Override
             public String getName(EntityCollectionModel model) {
-                return model.getCollectionMemento().getName();
+                return model.getCollectionMemento().getName(model.getSpecificationLoader());
             }
 
             @Override

@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 public final class JsonWriterUtil {
@@ -29,13 +30,17 @@ public final class JsonWriterUtil {
     private JsonWriterUtil(){}
 
     public static String jsonFor(final Object object) {
-        final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting(
-                IsisContext.getSessionFactory().getDeploymentCategory());
+        final DeploymentCategory deploymentCategory = getIsisSessionFactory().getDeploymentCategory();
+        final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting(deploymentCategory);
         try {
             return JsonMapper.instance(prettyPrinting).write(object);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    static IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
     private static JsonMapper.PrettyPrinting inferPrettyPrinting(final DeploymentCategory deploymentCategory) {

@@ -329,7 +329,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             return null;
         }
         
-        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(concurrencyChecking);
+        final ObjectAdapter objectAdapter =
+                adapterMemento.getObjectAdapter(concurrencyChecking, getPersistenceSession(), getSpecificationLoader());
         return objectAdapter;
     }
 
@@ -383,12 +384,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
      * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
-        adapterMemento.resetVersion();
+        adapterMemento.resetVersion(getPersistenceSession(), getSpecificationLoader());
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
             final ObjectAdapter associatedAdapter =
-                    pm.getProperty().get(adapter, InteractionInitiatedBy.USER);
+                    pm.getProperty(getSpecificationLoader()).get(adapter, InteractionInitiatedBy.USER);
             scalarModel.setObject(associatedAdapter);
         }
     }
@@ -526,7 +527,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
         private ObjectAdapter getPendingAdapter() {
             final ObjectAdapterMemento memento = getObject();
-            return memento != null ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK) : null;
+            return memento != null
+                    ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                                entityModel.getPersistenceSession(), entityModel.getSpecificationLoader())
+                    : null;
         }
 
         public ObjectAdapter getPendingElseCurrentAdapter() {

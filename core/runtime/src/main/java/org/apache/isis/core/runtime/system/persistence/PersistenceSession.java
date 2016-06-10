@@ -124,7 +124,6 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingA
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.PojoAdapterHashMap;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.RootAndCollectionAdapters;
@@ -140,8 +139,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.Persisten
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -1310,13 +1307,6 @@ public class PersistenceSession implements
         }
     }
 
-    private void ensureInTransaction() {
-        ensureThatContext(IsisContext.getSessionFactory().inTransaction(), is(true));
-        javax.jdo.Transaction currentTransaction = persistenceManager.currentTransaction();
-        ensureThatState(currentTransaction, is(notNullValue()));
-        ensureThatState(currentTransaction.isActive(), is(true));
-    }
-
     //endregion
 
 
@@ -1349,10 +1339,10 @@ public class PersistenceSession implements
         return transactionManager;
     }
 
-    // for testing only
-    void setTransactionManager(final IsisTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
+//    // for testing only
+//    void setTransactionManager(final IsisTransactionManager transactionManager) {
+//        this.transactionManager = transactionManager;
+//    }
 
 
     //endregion
@@ -1376,15 +1366,6 @@ public class PersistenceSession implements
 
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
-
-    /**
-     * @deprecated
-     * @return - simply returns this {@link PersistenceSession}.
-     */
-    @Deprecated
-    public AdapterManager getAdapterManager() {
-        return this;
-    }
 
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {

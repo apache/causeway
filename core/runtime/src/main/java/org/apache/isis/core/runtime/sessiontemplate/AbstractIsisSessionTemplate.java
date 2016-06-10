@@ -35,12 +35,12 @@ public abstract class AbstractIsisSessionTemplate {
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
         try {
-            getSessionFactory().openSession(authSession);
+            getIsisSessionFactory().openSession(authSession);
             PersistenceSession persistenceSession = getPersistenceSession();
             persistenceSession.getServicesInjector().injectServicesInto(this);
             doExecute(context);
         } finally {
-            getSessionFactory().closeSession();
+            getIsisSessionFactory().closeSession();
         }
     }
 
@@ -91,16 +91,12 @@ public abstract class AbstractIsisSessionTemplate {
     // //////////////////////////////////////
 
 
-    protected IsisSessionFactory getSessionFactory() {
+    protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return getSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected IsisTransactionManager getTransactionManager(PersistenceSession persistenceSession) {
@@ -108,7 +104,7 @@ public abstract class AbstractIsisSessionTemplate {
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return getSessionFactory().getSpecificationLoader();
+        return getIsisSessionFactory().getSpecificationLoader();
     }
 
 

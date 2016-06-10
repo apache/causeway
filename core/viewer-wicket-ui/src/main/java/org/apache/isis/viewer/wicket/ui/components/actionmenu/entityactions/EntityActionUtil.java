@@ -65,7 +65,8 @@ public final class EntityActionUtil {
         } else {
             final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
             final EntityModel parentEntityModel = new EntityModel(parentMemento);
-            final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
+            final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty(
+                    scalarModel.getSpecificationLoader());
 
             final List<ObjectAction> associatedActions = getObjectActionsForAssociation(parentEntityModel, oneToOneAssociation,
                     deploymentCategory);

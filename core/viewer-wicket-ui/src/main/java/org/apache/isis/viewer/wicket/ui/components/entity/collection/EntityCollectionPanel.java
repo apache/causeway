@@ -96,7 +96,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
 
-        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
+        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection(
+                entityCollectionModel.getSpecificationLoader());
         final ObjectAdapter objectAdapter = getModel().getObject();
         final Consent visibility = association.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 

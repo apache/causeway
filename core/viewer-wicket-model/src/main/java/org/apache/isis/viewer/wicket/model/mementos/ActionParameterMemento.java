@@ -24,10 +24,11 @@ import java.io.Serializable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
- * of a {@link ObjecObjectAction}.
+ * of a {@link ObjectAction}.
  * 
  * @see ActionMemento
  */
@@ -40,8 +41,11 @@ public class ActionParameterMemento implements Serializable {
 
     private transient ObjectActionParameter actionParameter;
 
-    public ActionParameterMemento(final ActionMemento actionMemento, final int number) {
-        this(actionMemento, number, actionParameterFor(actionMemento, number));
+    public ActionParameterMemento(
+            final ActionMemento actionMemento,
+            final int number,
+            final SpecificationLoader specificationLoader) {
+        this(actionMemento, number, actionParameterFor(actionMemento, number, specificationLoader));
     }
 
     public ActionParameterMemento(final ObjectActionParameter actionParameter) {
@@ -65,23 +69,27 @@ public class ActionParameterMemento implements Serializable {
         return number;
     }
 
-    public ObjectActionParameter getActionParameter() {
+    public ObjectActionParameter getActionParameter(final SpecificationLoader specificationLoader) {
         if (actionParameter == null) {
-            this.actionParameter = actionParameterFor(actionMemento, number);
+            this.actionParameter = actionParameterFor(actionMemento, number, specificationLoader);
         }
         return actionParameter;
     }
 
-    private static ObjectActionParameter actionParameterFor(ActionMemento actionMemento, int number) {
-        final ObjectAction action = actionMemento.getAction();
+    private static ObjectActionParameter actionParameterFor(
+            final ActionMemento actionMemento,
+            final int number,
+            final SpecificationLoader specificationLoader) {
+        final ObjectAction action = actionMemento.getAction(specificationLoader);
         return action.getParameters().get(number);
     }
 
     /**
      * Convenience.
+     * @param specificationLoader
      */
-    public ObjectSpecification getSpecification() {
-        return getActionParameter().getSpecification();
+    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
+        return getActionParameter(specificationLoader).getSpecification();
     }
 
 }

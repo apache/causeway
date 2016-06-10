@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -369,11 +368,12 @@ public class ReferencePanel extends ScalarPanelAbstract {
             return;
         }
         
-        if(!curr.containedIn(choiceMementos)) {
+        if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
             if(!choiceMementos.isEmpty() && autoSelect()) {
                 final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
                 select2Field.getModel().setObject(newAdapterMemento);
-                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                        getPersistenceSession(), getSpecificationLoader()));
             } else {
                 select2Field.getModel().setObject(null);
                 getModel().setObject(null);
@@ -465,7 +465,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 select2Field.getModel().setObject(convertedInput);
             }
             
-            final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null;
+            final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                    getPersistenceSession(), getSpecificationLoader()):null;
             getModel().setObject(adapter);
         }
     
@@ -526,9 +527,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     @com.google.inject.Inject
     private WicketViewerSettings wicketViewerSettings;
 
-    // REVIEW: can't inject because IsisConfiguration not serializable.
     IsisConfiguration getConfiguration() {
-        return IsisContext.getSessionFactory().getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
     }
 
 

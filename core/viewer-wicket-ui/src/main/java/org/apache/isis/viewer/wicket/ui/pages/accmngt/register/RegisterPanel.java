@@ -95,7 +95,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
     /**
      * Register user form.
      */
-    private static class RegisterForm extends StatelessForm<UserDetails>
+    private class RegisterForm extends StatelessForm<UserDetails>
     {
         private static final long serialVersionUID = 1L;
 
@@ -124,13 +124,13 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         {
             final UserDetails userDetails = getModelObject();
 
-            getSessionFactory().doInSession(new Runnable() {
+            getIsisSessionFactory().doInSession(new Runnable() {
                     @Override
                     public void run() {
-                        final UserRegistrationService userRegistrationService = getSessionFactory()
+                        final UserRegistrationService userRegistrationService = getIsisSessionFactory()
                                 .getServicesInjector().lookupService(UserRegistrationService.class);
 
-                        getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
+                        getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
                                 .executeWithinTransaction(new TransactionalClosure() {
                             @Override
                             public void execute() {
@@ -159,10 +159,6 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
             AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
             accountConfirmationMap.remove(uuid);
         }
-    }
-
-    static IsisSessionFactory getSessionFactory() {
-        return IsisContext.getSessionFactory();
     }
 
     protected TextField<String> newEmailField(final UserDetails userDetails) {
@@ -199,4 +195,9 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         usernameFormGroup.add(username);
         return usernameFormGroup;
     }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
 }

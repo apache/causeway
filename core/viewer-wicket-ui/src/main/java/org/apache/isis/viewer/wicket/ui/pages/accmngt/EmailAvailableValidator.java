@@ -44,7 +44,7 @@ public class EmailAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-        getSessionFactory().doInSession(new Runnable() {
+        getIsisSessionFactory().doInSession(new Runnable() {
             @Override
             public void run() {
                 UserRegistrationService userRegistrationService = getServicesInjector().lookupService(UserRegistrationService.class);
@@ -57,10 +57,10 @@ public class EmailAvailableValidator implements IValidator<String> {
         });
 
     }ServicesInjector getServicesInjector() {
-        return getSessionFactory().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
 
-    IsisSessionFactory getSessionFactory() {
+    IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 }

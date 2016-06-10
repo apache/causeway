@@ -70,13 +70,13 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         PROPERTY {
             @Override
             public String getName(final ScalarModel scalarModel) {
-                return scalarModel.getPropertyMemento().getProperty().getName();
+                return scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader()).getName();
             }
 
             @Override
             public ObjectSpecification getScalarTypeSpec(final ScalarModel scalarModel) {
                 ObjectSpecId type = scalarModel.getPropertyMemento().getType();
-                return SpecUtils.getSpecificationFor(type);
+                return SpecUtils.getSpecificationFor(type, scalarModel.getSpecificationLoader());
             }
 
             @Override
@@ -87,17 +87,16 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public String getLongName(final ScalarModel scalarModel) {
                 ObjectSpecId objectSpecId = scalarModel.parentObjectAdapterMemento.getObjectSpecId();
-                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId).getShortIdentifier();
-                return specShortName + "-" + scalarModel.getPropertyMemento().getProperty().getId();
+                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId, scalarModel.getSpecificationLoader()).getShortIdentifier();
+                return specShortName + "-" + scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader()).getId();
             }
 
             @Override
             public String disable(final ScalarModel scalarModel, final Where where) {
                 final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(
-                        ConcurrencyChecking.CHECK);
-                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
+                        ConcurrencyChecking.CHECK, scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 try {
-                    final AuthenticationSession session = scalarModel.getAuthenticationSession();
                     final Consent usable = property.isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
                     return usable.isAllowed() ? null : usable.getReason();
                 } catch (final Exception ex) {
@@ -107,13 +106,14 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public String parseAndValidate(final ScalarModel scalarModel, final String proposedPojoAsStr) {
-                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
+                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 ParseableFacet parseableFacet = property.getFacet(ParseableFacet.class);
                 if (parseableFacet == null) {
                     parseableFacet = property.getSpecification().getFacet(ParseableFacet.class);
                 }
                 try {
-                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                     final ObjectAdapter currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
                     final ObjectAdapter proposedAdapter =
                             parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
@@ -131,8 +131,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public String validate(final ScalarModel scalarModel, final ObjectAdapter proposedAdapter) {
-                final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
+                final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                        scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 try {
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
                             InteractionInitiatedBy.USER);
@@ -144,20 +145,20 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public boolean isRequired(final ScalarModel scalarModel) {
-                final FacetHolder facetHolder = scalarModel.getPropertyMemento().getProperty();
+                final FacetHolder facetHolder = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 return isRequired(facetHolder);
             }
 
             @Override
             public <T extends Facet> T getFacet(final ScalarModel scalarModel, final Class<T> facetType) {
-                final FacetHolder facetHolder = scalarModel.getPropertyMemento().getProperty();
+                final FacetHolder facetHolder = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 return facetHolder.getFacet(facetType);
             }
 
             @Override
             public boolean hasChoices(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 return property.hasChoices();
             }
 
@@ -168,9 +169,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     final AuthenticationSession authenticationSession,
                     final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento
-                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, scalarModel.getPersistenceSession(),
+                                scalarModel.getSpecificationLoader());
                 final ObjectAdapter[] choices = property.getChoices(
                         parentAdapter,
                         InteractionInitiatedBy.USER);
@@ -181,7 +183,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public boolean hasAutoComplete(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 return property.hasAutoComplete();
             }
 
@@ -192,9 +194,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     final AuthenticationSession authenticationSession,
                     final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                 final ObjectAdapter[] choices =
                         property.getAutoComplete(
                                 parentAdapter, searchArg,
@@ -207,7 +210,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 
                 if (scalarModel.hasAutoComplete()) {
                     final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                    final OneToOneAssociation property = propertyMemento.getProperty();
+                    final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                     return property.getAutoCompleteMinLength();
                 } else {
                     return 0;
@@ -217,20 +220,21 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             
             @Override
             public void resetVersion(ScalarModel scalarModel) {
-                scalarModel.parentObjectAdapterMemento.resetVersion();
+                scalarModel.parentObjectAdapterMemento.resetVersion(scalarModel.getPersistenceSession(),
+                        scalarModel.getSpecificationLoader());
             }
 
             @Override
             public String getDescribedAs(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 return property.getDescription();
             }
 
             @Override
             public Integer getLength(ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getLength(): null;
             }
@@ -238,7 +242,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public Integer getScale(ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
@@ -246,7 +250,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public int getTypicalLength(ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
-                final OneToOneAssociation property = propertyMemento.getProperty();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final TypicalLengthFacet facet = property.getFacet(TypicalLengthFacet.class);
                 return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
             }
@@ -258,9 +262,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public void reset(ScalarModel scalarModel) {
-                final OneToOneAssociation property = scalarModel.propertyMemento.getProperty();
+                final OneToOneAssociation property = scalarModel.propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                 final ObjectAdapter associatedAdapter =
                         property.get(parentAdapter, InteractionInitiatedBy.USER);
                 scalarModel.setObject(associatedAdapter);
@@ -269,12 +274,12 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         PARAMETER {
             @Override
             public String getName(final ScalarModel scalarModel) {
-                return scalarModel.getParameterMemento().getActionParameter().getName();
+                return scalarModel.getParameterMemento().getActionParameter(scalarModel.getSpecificationLoader()).getName();
             }
 
             @Override
             public ObjectSpecification getScalarTypeSpec(final ScalarModel scalarModel) {
-                return scalarModel.getParameterMemento().getSpecification();
+                return scalarModel.getParameterMemento().getSpecification(scalarModel.getSpecificationLoader());
             }
 
             @Override
@@ -290,8 +295,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     return null;
                 }
                 ObjectSpecId objectSpecId = adapterMemento.getObjectSpecId();
-                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId).getShortIdentifier();
-                final String parmId = scalarModel.getParameterMemento().getActionParameter().getIdentifier().toNameIdentityString();
+                final String specShortName = SpecUtils.getSpecificationFor(objectSpecId, scalarModel.getSpecificationLoader()).getShortIdentifier();
+                final String parmId = scalarModel.getParameterMemento().getActionParameter(scalarModel.getSpecificationLoader()).getIdentifier().toNameIdentityString();
                 return specShortName + "-" + parmId + "-" + scalarModel.getParameterMemento().getNumber();
             }
 
@@ -303,9 +308,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public String parseAndValidate(final ScalarModel scalarModel, final String proposedPojoAsStr) {
-                final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter();
+                final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter(
+                        scalarModel.getSpecificationLoader());
                 try {
-                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
                             InteractionInitiatedBy.USER
                     );
@@ -317,9 +324,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public String validate(final ScalarModel scalarModel, final ObjectAdapter proposedAdapter) {
-                final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter();
+                final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter(
+                        scalarModel.getSpecificationLoader());
                 try {
-                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(),
                             InteractionInitiatedBy.USER
                     );
@@ -331,20 +340,22 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public boolean isRequired(final ScalarModel scalarModel) {
-                final FacetHolder facetHolder = scalarModel.getParameterMemento().getActionParameter();
+                final FacetHolder facetHolder = scalarModel.getParameterMemento().getActionParameter(
+                        scalarModel.getSpecificationLoader());
                 return isRequired(facetHolder);
             }
 
             @Override
             public <T extends Facet> T getFacet(final ScalarModel scalarModel, final Class<T> facetType) {
-                final FacetHolder facetHolder = scalarModel.getParameterMemento().getActionParameter();
+                final FacetHolder facetHolder = scalarModel.getParameterMemento().getActionParameter(
+                        scalarModel.getSpecificationLoader());
                 return facetHolder.getFacet(facetType);
             }
 
             @Override
             public boolean hasChoices(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 return actionParameter.hasChoices();
             }
             @Override
@@ -354,9 +365,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     final AuthenticationSession authenticationSession,
                     final DeploymentCategory deploymentCategory) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                 final ObjectAdapter[] choices =
                         actionParameter.getChoices(
                                 parentAdapter, argumentsIfAvailable,
@@ -367,7 +379,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public boolean hasAutoComplete(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 return actionParameter.hasAutoComplete();
             }
             @Override
@@ -377,10 +389,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     final AuthenticationSession authenticationSession,
                     final DeploymentCategory deploymentCategory) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                 final ObjectAdapter[] choices = actionParameter.getAutoComplete(
                         parentAdapter, searchArg,
                         InteractionInitiatedBy.USER);
@@ -391,7 +404,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             public int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel) {
                 if (scalarModel.hasAutoComplete()) {
                     final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                    final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                    final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(
+                            scalarModel.getSpecificationLoader());
                     return actionParameter.getAutoCompleteMinLength();
                 } else {
                     return 0;
@@ -405,14 +419,14 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public String getDescribedAs(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 return actionParameter.getDescription();
             }
 
             @Override
             public Integer getLength(ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getLength(): null;
             }
@@ -420,7 +434,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public Integer getScale(ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
@@ -428,7 +442,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public int getTypicalLength(ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 final TypicalLengthFacet facet = actionParameter.getFacet(TypicalLengthFacet.class);
                 return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
             }
@@ -440,9 +454,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public void reset(ScalarModel scalarModel) {
-                final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter();
+                final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter(
+                        scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
                 final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter);
                 scalarModel.setObject(defaultAdapter);
             }
@@ -565,8 +581,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     }
 
     private void getAndStore(final ObjectAdapterMemento parentAdapterMemento) {
-        final OneToOneAssociation property = propertyMemento.getProperty();
-        final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
+        final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                getPersistenceSession(), getSpecificationLoader());
         final ObjectAdapter associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
         setObject(associatedAdapter);
     }
@@ -760,9 +777,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
 
     public String getReasonInvalidIfAny() {
-        final OneToOneAssociation property = getPropertyMemento().getProperty();
+        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
 
-        final ObjectAdapter adapter = getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
+        final ObjectAdapter adapter = getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK,
+                getPersistenceSession(), getSpecificationLoader());
 
         final ObjectAdapter associate = getObject();
 
@@ -776,7 +794,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
      * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ObjectAdapter applyValue(ObjectAdapter adapter) {
-        final OneToOneAssociation property = getPropertyMemento().getProperty();
+        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
 
         //
         // previously there was a guard here to only apply changes provided:

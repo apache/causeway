@@ -22,7 +22,6 @@ import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
@@ -71,15 +70,20 @@ public interface ScalarModelWithPending extends Serializable {
                         LOG.debug("setting to: " + adapterMemento!=null?adapterMemento.toString():null);
                     }
                     owner.setPending(adapterMemento);
-                    if (owner.getScalarModel() != null) {
+                    final ScalarModel ownerScalarModel = owner.getScalarModel();
+                    if (ownerScalarModel != null) {
                         if(adapterMemento == null) {
-                            owner.getScalarModel().setObject((ObjectAdapter)null);
+                            ownerScalarModel.setObject(null);
                         } else {
-                            if (owner.getPending() != null) {
+                            final ObjectAdapterMemento ownerPending = owner.getPending();
+                            if (ownerPending != null) {
                                 if (LOG.isDebugEnabled()) {
-                                    LOG.debug("setting to pending: " + owner.getPending().toString());
+                                    LOG.debug("setting to pending: " + ownerPending.toString());
                                 }
-                                owner.getScalarModel().setObject(owner.getPending().getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                                ownerScalarModel.setObject(
+                                        ownerPending.getObjectAdapter(
+                                            ConcurrencyChecking.NO_CHECK,
+                                            ownerScalarModel.getPersistenceSession(), ownerScalarModel.getSpecificationLoader()));
                             }
                         }
                     }

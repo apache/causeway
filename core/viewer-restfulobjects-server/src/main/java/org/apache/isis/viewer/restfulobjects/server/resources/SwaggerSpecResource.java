@@ -19,7 +19,6 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -72,7 +71,7 @@ public class SwaggerSpecResource {
 
     private String swagger(final SwaggerService.Visibility visibility) {
         final SwaggerService.Format format = deriveFrom(httpHeaders);
-        String spec = getSessionFactory().doInSession(new MyCallable(visibility, format));
+        String spec = getIsisSessionFactory().doInSession(new MyCallable(visibility, format));
         return spec;
     }
 
@@ -92,10 +91,6 @@ public class SwaggerSpecResource {
             }
         }
         return SwaggerService.Format.JSON;
-    }
-
-    IsisSessionFactory getSessionFactory() {
-        return IsisContext.getSessionFactory();
     }
 
 
@@ -125,7 +120,13 @@ public class SwaggerSpecResource {
         }
 
         PersistenceSession getPersistenceSession() {
-            return getSessionFactory().getCurrentSession().getPersistenceSession();
+            return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
         }
     }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
+
 }

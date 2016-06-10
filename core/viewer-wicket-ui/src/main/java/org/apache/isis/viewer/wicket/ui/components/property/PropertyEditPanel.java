@@ -96,14 +96,15 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
         ObjectAdapter targetAdapter = null;
         try {
             targetAdapter = scalarModel.getParentObjectAdapterMemento()
-                    .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK);
+                    .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK, scalarModel.getPersistenceSession(),
+                            scalarModel.getSpecificationLoader());
 
             scalarModel.toEditMode();
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
-            final OneToOneAssociation property = getScalarModel().getPropertyMemento().getProperty();
+            final OneToOneAssociation property = getScalarModel().getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
             final String propertyName = property.getName();
             final Label label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
 
@@ -120,7 +121,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
             // been updated in the attempt
             if (targetAdapter == null) {
                 targetAdapter = scalarModel.getParentObjectAdapterMemento()
-                        .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK);
+                        .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK, getPersistenceSession(),
+                                getSpecificationLoader());
             }
 
             // page redirect/handling
@@ -156,7 +158,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
         ObjectAdapter targetAdapter = null;
         try {
             targetAdapter = getModel().getParentObjectAdapterMemento().getObjectAdapter(
-                    AdapterManager.ConcurrencyChecking.CHECK);
+                    AdapterManager.ConcurrencyChecking.CHECK, getModel().getPersistenceSession(), getSpecificationLoader());
 
             // no concurrency exception, so continue...
             return editTargetAndProcessResults(target, feedbackForm);
@@ -167,7 +169,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
             // been updated in the attempt
             if (targetAdapter == null) {
                 targetAdapter = getModel().getParentObjectAdapterMemento().getObjectAdapter(
-                        AdapterManager.ConcurrencyChecking.CHECK);
+                        AdapterManager.ConcurrencyChecking.CHECK, getModel().getPersistenceSession(),
+                        getSpecificationLoader());
             }
 
             // page redirect/handling
@@ -211,7 +214,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
             // could be programmatic flushing, so must include in the try... finally
 
             ObjectAdapter adapter = getScalarModel().getParentObjectAdapterMemento()
-                    .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK);
+                    .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK, getPersistenceSession(),
+                            getSpecificationLoader());
 
             final ObjectAdapter objectAdapter = getScalarModel().applyValue(adapter);
             // (borrowed some code previously in EntityModel)

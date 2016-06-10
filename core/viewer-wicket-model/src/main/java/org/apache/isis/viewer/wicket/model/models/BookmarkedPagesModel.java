@@ -22,12 +22,14 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> {
@@ -35,15 +37,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
 
     private static final long serialVersionUID = 1L;
 
-    private static final BookmarkTreeNodeComparator COMPARATOR = new BookmarkTreeNodeComparator();
-
     private static final String MAX_SIZE_KEY = "isis.viewer.wicket.bookmarkedPages.maxSize";
     private static final int MAX_SIZE_DEFAULT_VALUE = 15;
 
     private final List<BookmarkTreeNode> rootNodes = Lists.newArrayList();
     
     private transient PageParameters current;
-    
+
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
 
         // hack: remove any garbage that might've got stored in 'rootNodes'
@@ -92,7 +92,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         List<BookmarkTreeNode> depthFirstGraph = Lists.newArrayList();
 
         List<BookmarkTreeNode> sortedNodes = Lists.newArrayList(rootNodes);
-        Collections.sort(sortedNodes, COMPARATOR);
+        Collections.sort(sortedNodes, new BookmarkTreeNodeComparator(getSpecificationLoader()));
 
         for (BookmarkTreeNode rootNode : sortedNodes) {
             rootNode.appendGraphTo(depthFirstGraph);

@@ -175,7 +175,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     public ObjectAdapter getContextAdapterIfAny() {
         EntityModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null;
+        return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                model.getPersistenceSession(), model.getSpecificationLoader()): null;
     }
     
     static String abbreviated(final String str, final int maxLength) {

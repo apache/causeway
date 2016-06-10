@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -34,9 +32,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.linking.DeepLinkService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -54,8 +51,7 @@ public class DeepLinkServiceWicket implements DeepLinkService {
     @Override
     public URI deepLinkFor(final Object domainObject) {
 
-        final AdapterManager adapterManager = getPersistenceSession();
-        final ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
+        final ObjectAdapter objectAdapter = getPersistenceSession().adapterFor(domainObject);
         final PageParameters pageParameters = EntityModel.createPageParameters(objectAdapter);
 
         PageClassRegistry pageClassRegistry = guiceBeanProvider.lookup(PageClassRegistry.class);
@@ -72,8 +68,11 @@ public class DeepLinkServiceWicket implements DeepLinkService {
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
+
+    @javax.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
 
     @javax.inject.Inject
     private GuiceBeanProvider guiceBeanProvider;

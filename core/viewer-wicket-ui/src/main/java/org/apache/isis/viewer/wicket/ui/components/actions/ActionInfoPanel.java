@@ -40,7 +40,7 @@ public class ActionInfoPanel extends PanelAbstract<ActionModel> {
         super(id, actionModel);
 
         final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
-        final ObjectAction objectAction = getModel().getActionMemento().getAction();
+        final ObjectAction objectAction = getModel().getActionMemento().getAction(getModel().getSpecificationLoader());
 
         // TODO: render instead as links (providing isn't a service; provide a
         // component for this?)

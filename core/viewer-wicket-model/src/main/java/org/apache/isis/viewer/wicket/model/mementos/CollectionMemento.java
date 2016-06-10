@@ -49,8 +49,8 @@ public class CollectionMemento implements Serializable {
 
     public CollectionMemento(
             final ObjectSpecId owningType,
-            final String id) {
-        this(owningType, id, collectionFor(owningType, id));
+            final String id, final SpecificationLoader specificationLoader) {
+        this(owningType, id, collectionFor(owningType, id, specificationLoader));
     }
 
     public CollectionMemento(final OneToManyAssociation collection, final IsisSessionFactory isisSessionFactory) {
@@ -78,19 +78,22 @@ public class CollectionMemento implements Serializable {
         return id;
     }
 
-    public String getName() {
-        return getCollection().getName();
+    public String getName(final SpecificationLoader specificationLoader) {
+        return getCollection(specificationLoader).getName();
     }
 
-    public OneToManyAssociation getCollection() {
+    public OneToManyAssociation getCollection(final SpecificationLoader specificationLoader) {
         if (collection == null) {
-            collection = collectionFor(owningType, id);
+            collection = collectionFor(owningType, id, specificationLoader);
         }
         return collection;
     }
 
-    private static OneToManyAssociation collectionFor(ObjectSpecId owningType, String id) {
-        return (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(id);
+    private static OneToManyAssociation collectionFor(
+            ObjectSpecId owningType,
+            String id,
+            final SpecificationLoader specificationLoader) {
+        return (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType, specificationLoader).getAssociation(id);
     }
 
 }

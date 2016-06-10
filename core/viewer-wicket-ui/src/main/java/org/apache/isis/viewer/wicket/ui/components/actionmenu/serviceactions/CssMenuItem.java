@@ -41,7 +41,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -312,8 +314,8 @@ class CssMenuItem implements Serializable {
             final ActionLinkFactory actionLinkFactory) {
 
         // check visibility
-        final AuthenticationSession session = getAuthenticationSession();
-        final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+        final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                getPersistenceSession(), getSpecificationLoader());
         final Consent visibility = objectAction.isVisible(adapter, InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
             return null;
@@ -446,11 +448,20 @@ class CssMenuItem implements Serializable {
     // dependencies
     // //////////////////////////////////////////////////////////////
 
-    protected AuthenticationSession getAuthenticationSession() {
+    AuthenticationSession getAuthenticationSession() {
         return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
-    protected IsisSessionFactory getIsisSessionFactory() {
+    SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 

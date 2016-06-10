@@ -173,7 +173,8 @@ public class CollectionContentsAsAjaxTablePanel
         
         final ObjectSpecification parentSpecIfAny = 
                 getModel().isParented() 
-                    ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification() 
+                    ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                        getPersistenceSession(), getSpecificationLoader()).getSpecification()
                     : null;
         
         @SuppressWarnings("unchecked")

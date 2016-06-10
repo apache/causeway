@@ -21,7 +21,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
@@ -29,6 +29,10 @@ public class AuthenticationSessionProviderDefault implements AuthenticationSessi
     @Programmatic
     @Override
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession();
     }
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
 }

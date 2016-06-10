@@ -79,10 +79,10 @@ public class Data implements Encodable, Serializable {
 
 
     protected PersistenceSession getPersistenceSession() {
-        return getSessionFactory().getCurrentSession().getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    protected IsisSessionFactory getSessionFactory() {
+    protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 

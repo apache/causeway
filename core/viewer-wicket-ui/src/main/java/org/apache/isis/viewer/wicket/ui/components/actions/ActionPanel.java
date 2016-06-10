@@ -37,14 +37,13 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
@@ -126,7 +125,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
-            final String actionName = getActionModel().getActionMemento().getAction().getName();
+            final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
             header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
         } catch (final ConcurrencyException ex) {
@@ -338,7 +337,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
     ///////////////////////////////////////////////////////
     
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
+        return getPersistenceSession().getTransactionManager();
     }
 
     protected MessageBroker getMessageBroker() {

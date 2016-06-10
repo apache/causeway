@@ -26,11 +26,9 @@ import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbst
  */
 public class EventBusImplementationForGuava extends EventBusImplementationAbstract {
 
-    // TODO: does this need to be static?
-    private static final com.google.common.eventbus.EventBus eventBus = new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
+    private final com.google.common.eventbus.EventBus eventBus = new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
 
-    // TODO: does this need to be static?
-    protected static SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
+    protected SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
         return new SubscriberExceptionHandler() {
             @Override
             public void handleException(final Throwable exception,
@@ -57,5 +55,6 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
     public void post(final Object event) {
         eventBus.post(event);
     }
+
 
 }

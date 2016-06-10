@@ -52,7 +52,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
         return getCurrentSession().getAuthenticationSession();
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return getCurrentSession().getPersistenceSession();
     }
 

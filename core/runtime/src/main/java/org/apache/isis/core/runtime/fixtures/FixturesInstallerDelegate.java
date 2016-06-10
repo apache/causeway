@@ -35,7 +35,6 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -162,7 +161,7 @@ public class FixturesInstallerDelegate {
     private boolean shouldInstallFixture(final InstallableFixture installableFixture) {
         final FixtureType fixtureType = installableFixture.getType();
         if (fixtureType == FixtureType.DOMAIN_OBJECTS) {
-            return !IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().isFixturesInstalled();
+            return !isisSessionFactory.getCurrentSession().getPersistenceSession().isFixturesInstalled();
         }
 
         // fixtureType is OTHER; always install.

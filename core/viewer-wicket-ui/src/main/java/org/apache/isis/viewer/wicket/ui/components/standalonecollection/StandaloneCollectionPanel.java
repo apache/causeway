@@ -88,7 +88,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         addOrReplace(outerDiv);
 
         ActionModel actionModel = entityCollectionModel.getActionModelHint();
-        ObjectAction action = actionModel.getActionMemento().getAction();
+        ObjectAction action = actionModel.getActionMemento().getAction(entityCollectionModel.getSpecificationLoader());
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
         CssClassAppender.appendCssClassTo(outerDiv, action.getOnType().getFullIdentifier().replace('.', '-') + "_" + action.getId());

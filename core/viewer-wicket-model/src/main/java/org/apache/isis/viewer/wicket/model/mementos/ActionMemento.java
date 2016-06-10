@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * {@link Serializable} represention of a {@link ObjectAction}
@@ -46,8 +47,12 @@ public class ActionMemento implements Serializable {
         this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString(), action);
     }
 
-    public ActionMemento(final ObjectSpecId owningType, final ActionType actionType, final String nameParmsId) {
-        this(owningType, actionType, nameParmsId, actionFor(owningType, actionType, nameParmsId));
+    public ActionMemento(
+            final ObjectSpecId owningType,
+            final ActionType actionType,
+            final String nameParmsId,
+            final SpecificationLoader specificationLoader) {
+        this(owningType, actionType, nameParmsId, actionFor(owningType, actionType, nameParmsId, specificationLoader));
     }
 
     private ActionMemento(
@@ -78,15 +83,19 @@ public class ActionMemento implements Serializable {
         return ConcurrencyChecking.concurrencyCheckingFor(this.actionSemantics);
     }
 
-    public ObjectAction getAction() {
+    public ObjectAction getAction(final SpecificationLoader specificationLoader) {
         if (action == null) {
-            action = actionFor(owningType, actionType, nameParmsId);
+            action = actionFor(owningType, actionType, nameParmsId, specificationLoader);
         }
         return action;
     }
 
-    private static ObjectAction actionFor(ObjectSpecId owningType, ActionType actionType, String nameParmsId) {
-        final ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(owningType);
+    private static ObjectAction actionFor(
+            ObjectSpecId owningType,
+            ActionType actionType,
+            String nameParmsId,
+            final SpecificationLoader specificationLoader) {
+        final ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(owningType, specificationLoader);
         return objectSpec.getObjectAction(actionType, nameParmsId);
     }
 

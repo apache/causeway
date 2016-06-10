@@ -73,12 +73,15 @@ public class PropertyMemento implements Serializable {
         return identifier;
     }
 
-    public OneToOneAssociation getProperty() {
-        return propertyFor(owningSpecId, identifier);
+    public OneToOneAssociation getProperty(final SpecificationLoader specificationLoader) {
+        return propertyFor(owningSpecId, identifier, specificationLoader);
     }
 
-    private static OneToOneAssociation propertyFor(ObjectSpecId owningType, String identifier) {
-        return (OneToOneAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(identifier);
+    private static OneToOneAssociation propertyFor(
+            ObjectSpecId owningType,
+            String identifier,
+            final SpecificationLoader specificationLoader) {
+        return (OneToOneAssociation) SpecUtils.getSpecificationFor(owningType, specificationLoader).getAssociation(identifier);
     }
 
     /**

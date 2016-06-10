@@ -24,10 +24,14 @@ import java.util.Comparator;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
+
+    private final SpecificationLoader specificationLoader;
+
+    public BookmarkTreeNodeComparator(final SpecificationLoader specificationLoader){
+        this.specificationLoader = specificationLoader;
+    }
 
     @Override
     public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
@@ -60,20 +64,7 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
 
     private String classNameOf(RootOid oid) {
         ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        return getSpecificationLoader().lookupBySpecId(objectSpecId).getIdentifier().getClassName();
-    }
-
-
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-    
-    protected SpecificationLoader getSpecificationLoader() {
-        return getSessionFactory().getSpecificationLoader();
-    }
-
-    IsisSessionFactory getSessionFactory() {
-        return IsisContext.getSessionFactory();
+        return specificationLoader.lookupBySpecId(objectSpecId).getIdentifier().getClassName();
     }
 
 }

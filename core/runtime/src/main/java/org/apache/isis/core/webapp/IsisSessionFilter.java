@@ -311,7 +311,7 @@ public class IsisSessionFilter implements Filter {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        final IsisSessionFactory sessionFactory = getIsisSessionFactory();
+        final IsisSessionFactory sessionFactory = isisSessionFactoryFrom(httpServletRequest);
         try {
             final String queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString.contains(QUERY_STRING_FORCE_LOGOUT)) {
@@ -388,8 +388,8 @@ public class IsisSessionFilter implements Filter {
         return false;
     }
 
-    // REVIEW: it ought to be possible to remove this static lookup by binding the IsisSystem or IsisSessionFactory to the thread in an earlier filter
-    private IsisSessionFactory getIsisSessionFactory() {
+    // REVIEW: it ought to be possible to remove this static lookup by binding the IsisSessionFactory to the request in an earlier filter
+    private IsisSessionFactory isisSessionFactoryFrom(final HttpServletRequest httpServletRequest) {
         return IsisContext.getSessionFactory();
     }
 

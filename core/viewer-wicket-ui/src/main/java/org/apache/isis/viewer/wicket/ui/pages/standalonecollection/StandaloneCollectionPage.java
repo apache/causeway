@@ -49,7 +49,7 @@ public class StandaloneCollectionPage extends PageAbstract {
     private static String actionNameFrom(final EntityCollectionModel model) {
         ActionModel actionModel = model.getActionModelHint();
         if(actionModel != null) {
-            return actionModel.getActionMemento().getAction().getName();
+            return actionModel.getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
         }
         return "Results"; // fallback, probably not required because hint should always exist on the model. 
     }

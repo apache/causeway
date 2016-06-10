@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -46,8 +46,12 @@ public class MessageBrokerServiceInternalDefault implements MessageBrokerService
         throw new RecoverableException(message);
     }
 
-    private static MessageBroker getMessageBroker() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker();
+
+    private MessageBroker getMessageBroker() {
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession().getMessageBroker();
     }
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
 }

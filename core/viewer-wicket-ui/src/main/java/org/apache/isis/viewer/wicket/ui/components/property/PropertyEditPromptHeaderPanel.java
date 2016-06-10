@@ -41,18 +41,19 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
         super(id, model);
 
         ObjectAdapter targetAdapter =
-                model.getParentObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK);
+                model.getParentObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK,
+                        getPersistenceSession(), getSpecificationLoader());
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
         final Label label = new Label(ID_PROPERTY_NAME, new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                final OneToOneAssociation property = model.getPropertyMemento().getProperty();
+                final OneToOneAssociation property = model.getPropertyMemento().getProperty(getSpecificationLoader());
                 return property.getName();
             }
         });
-        final OneToOneAssociation property = model.getPropertyMemento().getProperty();
+        final OneToOneAssociation property = model.getPropertyMemento().getProperty(getSpecificationLoader());
         final NamedFacet namedFacet = property.getFacet(NamedFacet.class);
         if(namedFacet != null) {
             label.setEscapeModelStrings(namedFacet.escaped());

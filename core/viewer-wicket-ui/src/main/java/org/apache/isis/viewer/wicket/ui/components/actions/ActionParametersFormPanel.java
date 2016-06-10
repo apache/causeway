@@ -211,7 +211,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
          */
         private void applyAreYouSure(AjaxButton button) {
             ActionModel actionModel = getActionModel();
-            final ObjectAction action = actionModel.getActionMemento().getAction();
+            final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
             SemanticsOf semanticsOf = SemanticsOf.from(action.getSemantics());
 
             addConfirmationDialogIfAreYouSureSemantics(button, semanticsOf);
@@ -225,7 +225,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
             
             try {
-                final ObjectAction action = actionModel.getActionMemento().getAction();
+                final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
                 final int numParams = action.getParameterCount();
                 for (int i = 0; i < numParams; i++) {
                     final ScalarPanelAbstract paramPanel = paramPanels.get(i);

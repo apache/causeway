@@ -19,16 +19,23 @@ package org.apache.isis.viewer.wicket.ui.components.widgets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.wicketstuff.select2.TextChoiceProvider;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
+import org.wicketstuff.select2.TextChoiceProvider;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -55,7 +62,9 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
             return NULL_DISPLAY_TEXT;
         }
 
-        final ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter objectAdapter =
+                choice.getObjectAdapter(
+                        ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
         final IConverter<Object> converter = findConverter(objectAdapter);
         return converter != null
                 ? converter.convertToString(objectAdapter.getObject(), getLocale())
@@ -102,7 +111,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
             matches.addAll(choicesMementos);
         } else {
             for (ObjectAdapterMemento candidate : choicesMementos) {
-                ObjectAdapter objectAdapter = candidate.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                ObjectAdapter objectAdapter = candidate.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                        getPersistenceSession(), getSpecificationLoader());
                 String title = objectAdapter.titleString(objectAdapter);
                 if (title.toLowerCase().contains(term.toLowerCase())) {
                     matches.add(candidate);
@@ -132,4 +142,23 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     protected ScalarModel getScalarModel() {
         return scalarModel;
     }
+
+
+    ///////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////
+
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    private IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
 }

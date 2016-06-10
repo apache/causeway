@@ -273,7 +273,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
                                 : null;
                         select2Field.getModel().setObject(newAdapterMemento);
                         getModel().setObject(
-                                newAdapterMemento != null? newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null);
+                                newAdapterMemento != null
+                                    ? newAdapterMemento.getObjectAdapter(
+                                        ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader())
+                                    : null);
             }
         }
     }

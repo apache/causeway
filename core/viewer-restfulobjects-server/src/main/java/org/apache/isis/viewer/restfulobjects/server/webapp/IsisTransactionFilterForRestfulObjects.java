@@ -38,18 +38,21 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // no-op if no session available.
-        if(!getSessionFactory().inSession()) {
+        final IsisSessionFactory isisSessionFactory = isisSessionFactoryFrom(request);
+        if(!isisSessionFactory.inSession()) {
             chain.doFilter(request, response);
             return;
         }
-        getTransactionManager().startTransaction();
+
+        final IsisTransactionManager isisTransactionManager = transactionManagerFrom(isisSessionFactory);
+        isisTransactionManager.startTransaction();
         try {
             chain.doFilter(request, response);
         } finally {
-            final boolean inTransaction = inTransaction();
+            final boolean inTransaction = isisSessionFactory.inTransaction();
             if(inTransaction) {
                 // user/logout will have invalidated the current transaction and also persistence session.
-                getTransactionManager().endTransaction();
+                isisTransactionManager.endTransaction();
             }
         }
     }
@@ -60,16 +63,12 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
 
 
     // REVIEW: ought to be able to obtain from thread or as a request attribute
-    protected IsisSessionFactory getSessionFactory() {
+    protected IsisSessionFactory isisSessionFactoryFrom(final ServletRequest request) {
         return IsisContext.getSessionFactory();
     }
 
-    protected boolean inTransaction() {
-        return getSessionFactory().inTransaction();
-    }
-
-    protected IsisTransactionManager getTransactionManager() {
-        return getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
+    protected IsisTransactionManager transactionManagerFrom(final IsisSessionFactory isisSessionFactory) {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
 }

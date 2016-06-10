@@ -49,7 +49,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
             final ObjectAdapterMemento adapterMemento,
             final ObjectAction action) {
 
-        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                entityModel.getPersistenceSession(), entityModel.getSpecificationLoader());
         
         final Boolean persistent = objectAdapter.representsPersistent();
         if (!persistent) {

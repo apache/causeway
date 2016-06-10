@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,
@@ -70,8 +71,12 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

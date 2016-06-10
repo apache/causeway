@@ -26,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 /**
@@ -135,8 +136,13 @@ public class ComponentHintKey implements Serializable {
         };
     }
 
-    protected HintStore getHintStore() {
-        return IsisContext.getSessionFactory().getServicesInjector().lookupService(HintStore.class);
+
+    HintStore getHintStore() {
+        return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class);
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -69,7 +70,8 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (memento == null) {
             return null;
         }
-        final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getOid();
+        final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
+                getSpecificationLoader()).getOid();
         if (oid == null) {
             // values don't have an Oid...
             // REVIEW: is this right?
@@ -77,14 +79,16 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         }
         return oid.enString(OID_MARSHALLER);
     }
-    
-
 
     // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
+    SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+    PersistenceSession getPersistenceSession() {
         return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 

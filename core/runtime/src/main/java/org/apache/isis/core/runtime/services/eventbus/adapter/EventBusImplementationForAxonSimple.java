@@ -30,24 +30,22 @@ import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbst
  */
 public class EventBusImplementationForAxonSimple extends EventBusImplementationAbstract {
 
-    // TODO: does this need to be static?
-    private static SimpleEventBus simpleEventBus = new SimpleEventBus();
+    private SimpleEventBus simpleEventBus = new SimpleEventBus();
 
-    // TODO: does this need to be static?
-    private static Map<Object, AxonEventListenerAdapter> adapters = Maps.newConcurrentMap();
+    private Map<Object, AxonEventListenerAdapter> listenerAdapterByDomainService = Maps.newConcurrentMap();
 
-    private static AxonEventListenerAdapter adapterFor(final Object domainService) {
-        AxonEventListenerAdapter annotationEventListenerAdapter = adapters.get(domainService);
+    private AxonEventListenerAdapter adapterFor(final Object domainService) {
+        AxonEventListenerAdapter annotationEventListenerAdapter = listenerAdapterByDomainService.get(domainService);
         if (annotationEventListenerAdapter == null) {
             annotationEventListenerAdapter = new AxonEventListenerAdapter(domainService);
-            adapters.put(domainService, annotationEventListenerAdapter);
+            listenerAdapterByDomainService.put(domainService, annotationEventListenerAdapter);
         }
         return annotationEventListenerAdapter;
     }
 
     @Override
     public void register(final Object domainService) {
-        simpleEventBus.subscribe(EventBusImplementationForAxonSimple.adapterFor(domainService));
+        simpleEventBus.subscribe(adapterFor(domainService));
     }
 
     @Override
@@ -70,7 +68,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
     }
 
 
-    static class AxonEventListenerAdapter extends AnnotationEventListenerAdapter {
+    class AxonEventListenerAdapter extends AnnotationEventListenerAdapter {
 
         public AxonEventListenerAdapter(final Object annotatedEventListener) {
             super(annotatedEventListener);

@@ -19,19 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -125,31 +120,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         return cfra.getComponentFactoryRegistry();
     }
 
-    /**
-     * The underlying {@link AuthenticationSession Isis session} wrapped in the
-     * {@link #getWebSession() Wicket session}.
-     * 
-     * @return
-     */
-    public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession();
-    }
-
-    public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getSessionFactory().getDeploymentCategory();
-    }
-
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext)
-    // ///////////////////////////////////////////////////////////////////
-
-    public PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    protected List<ObjectAdapter> getServices() {
-        return getPersistenceSession().getServices();
-    }
 
 
 }

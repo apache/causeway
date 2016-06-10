@@ -98,7 +98,8 @@ public class BreadcrumbModel implements Serializable {
     }
 
     public String titleFor(final EntityModel model) {
-        return model.getObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK).titleString(null);
+        return model.getObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK,
+                model.getPersistenceSession(), model.getSpecificationLoader()).titleString(null);
     }
 
     public EntityModel lookup(final String oidStr) {
