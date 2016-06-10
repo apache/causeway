@@ -1220,7 +1220,6 @@ public class PersistenceSession implements
      */
     private CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
-        ensureInSession();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("create object - creating command for: " + adapter);
@@ -1231,13 +1230,8 @@ public class PersistenceSession implements
         return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
     }
 
-    private void ensureInSession() {
-        ensureThatContext(IsisContext.getSessionFactory().inSession(), is(true));
-    }
-
     private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
-        ensureInSession();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroy object - creating command for: " + adapter);
@@ -1251,9 +1245,6 @@ public class PersistenceSession implements
 
     //region > execute
     public void execute(final List<PersistenceCommand> commands) {
-
-        ensureOpened();
-        ensureInTransaction();
 
         // previously we used to check that there were some commands, and skip processing otherwise.
         // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that

@@ -18,12 +18,14 @@
  */
 package org.apache.isis.core.runtime.services.transtate;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
@@ -44,12 +46,15 @@ public class TransactionStateProviderInternalDefault implements TransactionState
         return state.getRuntimeContextState();
     }
 
-    private static IsisTransactionManager getTransactionManager() {
+    private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
 
-    private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+    private PersistenceSession getPersistenceSession() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
+
+    @Inject
+    IsisSessionFactory isisSessionFactory;
 
 }

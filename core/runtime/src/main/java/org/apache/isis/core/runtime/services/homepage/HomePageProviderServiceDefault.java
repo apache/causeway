@@ -20,6 +20,8 @@ package org.apache.isis.core.runtime.services.homepage;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +37,8 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -105,8 +107,13 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
     // for any other value for Where
     protected static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
 
+
+    @Inject
+    IsisSessionFactory isisSessionFactory;
+
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
+
 
 }

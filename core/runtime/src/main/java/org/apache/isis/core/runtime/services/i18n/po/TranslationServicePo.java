@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -169,13 +169,14 @@ public class TranslationServicePo implements TranslationService {
     // //////////////////////////////////////
 
     DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getSessionFactory().getDeploymentCategory();
+        return deploymentCategoryProvider.getDeploymentCategory();
     }
 
+    @Inject
+    DeploymentCategoryProvider deploymentCategoryProvider;
 
     @Inject
-    private
-    TranslationsResolver translationsResolver;
+    private TranslationsResolver translationsResolver;
 
     @Programmatic
     TranslationsResolver getTranslationsResolver() {
@@ -183,8 +184,7 @@ public class TranslationServicePo implements TranslationService {
     }
 
     @Inject
-    private
-    LocaleProvider localeProvider;
+    private LocaleProvider localeProvider;
 
     @Programmatic
     LocaleProvider getLocaleProvider() {
