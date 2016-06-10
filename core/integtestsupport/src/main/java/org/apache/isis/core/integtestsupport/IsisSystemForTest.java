@@ -269,6 +269,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // populated at #setupSystem
     private IsisComponentProvider componentProvider;
 
+    public IsisSystemForTest setUpSystem() throws RuntimeException {
+        return initIfRequiredThenOpenSession();
+    }
+
     /**
      * Intended to be called from a test's {@link Before} method.
      */
