@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
@@ -59,8 +60,9 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
 
         final IsisSystem isisSystem = new IsisSystem(manifest);
+        IsisSessionFactory isisSessionFactory = null;
         try {
-            isisSystem.init();
+            isisSessionFactory = isisSystem.buildSessionFactory();
             if(!isisSystem.isMetaModelValid()) {
                 MetaModelInvalidException metaModelInvalidException = IsisContext
                         .getMetaModelInvalidExceptionIfAny();
@@ -68,11 +70,12 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
                     context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
                 return;
             }
-            IsisContext.getSessionFactory().doInSession(new Runnable() {
+            final IsisSessionFactory isisSessionFactoryFinal = isisSessionFactory;
+            isisSessionFactory.doInSession(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            doExecute(context, isisSystem);
+                            doExecute(context, isisSessionFactoryFinal);
                         } catch (IOException e) {
                             ;
                             // ignore
@@ -88,12 +91,16 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
             }
             throw e;
         } finally {
-            isisSystem.shutdown();
+            if(isisSessionFactory != null) {
+                isisSessionFactory.destroyServicesAndShutdown();
+            }
         }
 
     }
 
-    protected abstract void doExecute(final ContextForMojo context, final IsisSystem system)
+    protected abstract void doExecute(
+            final ContextForMojo context,
+            final IsisSessionFactory isisSessionFactory)
             throws MojoFailureException, IOException;
 
     //region > Context

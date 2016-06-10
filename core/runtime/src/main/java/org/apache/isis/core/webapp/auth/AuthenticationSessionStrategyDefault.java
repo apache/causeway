@@ -77,7 +77,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
             // not expected to happen...
             return null;
         }
-        final LogonFixture logonFixture = system.getLogonFixture();
+        final LogonFixture logonFixture = system.getSessionFactory().getLogonFixture();
 
         // see if exploration is supported
         if (system.getDeploymentCategory().isExploring()) {

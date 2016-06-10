@@ -42,7 +42,6 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
@@ -215,11 +214,10 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         final ServletContext servletContext = ev.getServletContext();
 
         try {
-            final IsisSystem system = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
-            if (system != null) {
+            final IsisSystem isisSystem = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
+            if (isisSystem != null) {
                 LOG.info("calling system shutdown");
-                system.shutdown();
-                IsisContext.shutdown();
+                isisSystem.getSessionFactory().destroyServicesAndShutdown();
             }
         } finally {
             servletContext.removeAttribute(WebAppConstants.ISIS_SYSTEM_KEY);

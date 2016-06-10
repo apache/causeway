@@ -66,7 +66,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
@@ -181,12 +180,6 @@ public class IsisWicketApplication
      * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
     @com.google.inject.Inject
-    private IsisSystem isisSystem;
-
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
-    @com.google.inject.Inject
     private IsisSessionFactory isisSessionFactory;
 
     /**
@@ -265,7 +258,8 @@ public class IsisWicketApplication
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
-            final IsisInjectModule isisModule = newIsisModule(deploymentType.getDeploymentCategory(), configuration);
+            final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
+            final IsisInjectModule isisModule = newIsisModule(deploymentCategory, configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
             injector.injectMembers(this);
@@ -642,10 +636,9 @@ public class IsisWicketApplication
     @Override
     protected void onDestroy() {
         try {
-            if (isisSystem != null) {
-                isisSystem.shutdown();
+            if (isisSessionFactory != null) {
+                isisSessionFactory.destroyServicesAndShutdown();
             }
-            IsisContext.shutdown();
             super.onDestroy();
         } catch(final RuntimeException ex) {
             // symmetry with #init()
@@ -783,4 +776,5 @@ public class IsisWicketApplication
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }
+
 }

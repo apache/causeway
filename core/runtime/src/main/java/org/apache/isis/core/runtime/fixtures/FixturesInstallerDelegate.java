@@ -19,9 +19,10 @@
 
 package org.apache.isis.core.runtime.fixtures;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,67 +31,34 @@ import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-/**
- * Helper for {@link FixturesInstaller} implementations.
- * 
- * <p>
- * Does the mechanics of actually installing the fixtures.
- *
- * @deprecated - instead, use the replacement FixtureScript API ({@link org.apache.isis.applib.fixturescripts.FixtureScript} and {@link org.apache.isis.applib.fixturescripts.FixtureScripts})
- */
-@Deprecated
+// REVIEW: could probably inline
 public class FixturesInstallerDelegate {
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerDelegate.class);
 
-    protected final List<Object> fixtures = new ArrayList<Object>();
-    private final SwitchUserServiceImpl switchUserService = new SwitchUserServiceImpl();
+    //region > Constructor, fields
 
-    private final PersistenceSession persistenceSession;
+    private final IsisSessionFactory isisSessionFactory;
+    private final SwitchUserService switchUserService;
 
-    /**
-     * The requested {@link LogonFixture}, if any.
-     * 
-     * <p>
-     * Each fixture is inspected as it is {@link #installFixture(Object)}; if it
-     * implements {@link LogonFixture} then it is remembered so that it can be
-     * used later to automatically logon.
-     */
-    private LogonFixture logonFixture;
-
-    // /////////////////////////////////////////////////////////
-    // Constructor
-    // /////////////////////////////////////////////////////////
-
-    /**
-     * The {@link PersistenceSession} used will be that from
-     * {@link IsisContext#getPersistenceSession() IsisContext}.
-     */
-    public FixturesInstallerDelegate() {
-        this(null);
+    //endregion
+    public FixturesInstallerDelegate(final IsisSessionFactory isisSessionFactory) {
+        this.isisSessionFactory = isisSessionFactory;
+        switchUserService = isisSessionFactory.getServicesInjector().lookupService(SwitchUserService.class);
     }
 
-    /**
-     * For testing, supply own {@link PersistenceSession} rather than lookup
-     * from context.
-     * 
-     * @param persistenceSession
-     */
-    public FixturesInstallerDelegate(final PersistenceSession persistenceSession) {
-        this.persistenceSession = persistenceSession;
-    }
-    
+    //region > addFixture, getFixtures
 
-    // /////////////////////////////////////////////////////////
-    // addFixture, getFixtures, clearFixtures
-    // /////////////////////////////////////////////////////////
+    protected final List<Object> fixtures = Lists.newArrayList();
 
     /**
      * Automatically flattens any {@link List}s, recursively (depth-first) if
@@ -114,16 +82,9 @@ public class FixturesInstallerDelegate {
         return Collections.unmodifiableList(fixtures);
     }
 
-    /**
-     * Allows the set of fixtures to be cleared (for whatever reason).
-     */
-    public void clearFixtures() {
-        fixtures.clear();
-    }
+    //endregion
 
-    // /////////////////////////////////////////////////////////
-    // installFixtures
-    // /////////////////////////////////////////////////////////
+    //region > installFixtures
 
     /**
      * Installs all {{@link #addFixture(Object) added fixtures} fixtures (ie as
@@ -136,24 +97,9 @@ public class FixturesInstallerDelegate {
      * reused across multiple tests (REVIEW: does that make sense?)
      */
     public final void installFixtures() {
-        preInstallFixtures(getPersistenceSession());
         installFixtures(getFixtures());
-        postInstallFixtures(getPersistenceSession());
     }
 
-    // ///////////////////////////////////////
-    // preInstallFixtures
-    // ///////////////////////////////////////
-
-    /**
-     * Hook - default does nothing.
-     */
-    protected void preInstallFixtures(final PersistenceSession persistenceSession) {
-    }
-
-    // ///////////////////////////////////////
-    // installFixtures, installFixture
-    // ///////////////////////////////////////
 
     private void installFixtures(final List<Object> fixtures) {
         for (final Object fixture : fixtures) {
@@ -199,7 +145,7 @@ public class FixturesInstallerDelegate {
     }
 
     private void installFixture(final Object fixture) {
-        switchUserService.injectInto(fixture);
+        isisSessionFactory.getServicesInjector().injectServicesInto(fixture);
 
         if (fixture instanceof InstallableFixture) {
             final InstallableFixture installableFixture = (InstallableFixture) fixture;
@@ -223,28 +169,20 @@ public class FixturesInstallerDelegate {
         return true;
     }
 
-    private void saveLogonFixtureIfRequired(final Object fixture) {
-        if (fixture instanceof LogonFixture) {
-            if (logonFixture != null) {
-                LOG.warn("Already specified logon fixture, using latest provided");
-            }
-            this.logonFixture = (LogonFixture) fixture;
-        }
-    }
+    //endregion
 
-    // ///////////////////////////////////////
-    // postInstallFixtures
-    // ///////////////////////////////////////
+    //region > logonFixture
 
     /**
-     * Hook - default does nothing.
+     * The requested {@link LogonFixture}, if any.
+     *
+     * <p>
+     * Each fixture is inspected as it is {@link #installFixture(Object)}; if it
+     * implements {@link LogonFixture} then it is remembered so that it can be
+     * used later to automatically logon.
      */
-    protected void postInstallFixtures(final PersistenceSession persistenceSession) {
-    }
+    private LogonFixture logonFixture;
 
-    // /////////////////////////////////////////////////////////
-    // LogonFixture
-    // /////////////////////////////////////////////////////////
 
     /**
      * The {@link LogonFixture}, if any.
@@ -256,30 +194,33 @@ public class FixturesInstallerDelegate {
         return logonFixture;
     }
 
-    // /////////////////////////////////////////////////////////
-    // Dependencies (from either context or via constructor)
-    // /////////////////////////////////////////////////////////
-
-    /**
-     * Returns either the {@link IsisContext#getPersistenceSession() singleton }
-     * persistor or the persistor specified in the constructor.
-     * 
-     * <p>
-     * Note: if a {@link PersistenceSession persistor} was specified via the
-     * constructor, this is not cached (to do so would cause the usage of tests
-     * that use the singleton to break).
-     */
-    private PersistenceSession getPersistenceSession() {
-        return persistenceSession != null ? persistenceSession :
-                IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+    private void saveLogonFixtureIfRequired(final Object fixture) {
+        if (fixture instanceof LogonFixture) {
+            if (logonFixture != null) {
+                LOG.warn("Already specified logon fixture, using latest provided");
+            }
+            this.logonFixture = (LogonFixture) fixture;
+        }
     }
 
+
+    //endregion
+
+    //region > dependencies (derived)
+
     private ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return isisSessionFactory.getServicesInjector();
+    }
+
+
+    private PersistenceSession getPersistenceSession() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
+
+    //endregion
 
 }

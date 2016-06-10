@@ -48,7 +48,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -58,7 +57,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
@@ -250,18 +248,9 @@ public abstract class IsisComponentProvider {
 
     //endregion
 
-    //region > provideFixturesInstaller
-
-    public FixturesInstaller provideFixturesInstaller()  {
-        return new FixturesInstallerFromConfiguration(getConfiguration());
-    }
-
-    //endregion
-
     //region > provideSpecificationLoader
 
     public SpecificationLoader provideSpecificationLoader(
-            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners)  throws IsisSystemException {
 
@@ -272,7 +261,7 @@ public abstract class IsisComponentProvider {
         final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders();
 
         return JavaReflectorHelper.createObjectReflector(
-                deploymentCategory, configuration, programmingModel, metaModelRefiners,
+                configuration, programmingModel, metaModelRefiners,
                 layoutMetadataReaders, mmv,
                 servicesInjector);
     }

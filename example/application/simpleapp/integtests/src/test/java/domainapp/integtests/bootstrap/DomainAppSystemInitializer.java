@@ -33,7 +33,7 @@ public class DomainAppSystemInitializer {
                     .with(new DomainAppAppManifest())
                     .with(new IsisConfigurationForJdoIntegTests())
                     .build();
-            isft.setUpSystem();
+            isft.initIfRequiredThenOpenSession();
             IsisSystemForTest.set(isft);
         }
     }

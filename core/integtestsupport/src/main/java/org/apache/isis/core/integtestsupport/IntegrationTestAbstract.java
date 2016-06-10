@@ -212,9 +212,9 @@ public abstract class IntegrationTestAbstract {
                     try {
                         base.evaluate();
                         isft.endTran();
-                        isft.bounceSystem();
+                        isft.nextSession();
                     } catch(final Throwable e) {
-                        isft.bounceSystem();
+                        isft.nextSession();
                         final List<Throwable> causalChain = Throwables.getCausalChain(e);
                         // if underlying cause is an applib-defined exception, throw that rather than Isis' wrapper exception
                         for (final Throwable cause : causalChain) {

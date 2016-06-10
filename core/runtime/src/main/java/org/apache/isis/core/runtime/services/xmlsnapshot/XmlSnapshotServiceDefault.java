@@ -16,6 +16,8 @@
  */
 package org.apache.isis.core.runtime.services.xmlsnapshot;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -25,8 +27,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshotBuilder;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
@@ -72,8 +74,8 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     @Programmatic
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
-        final ObjectAdapter adapter = gerPersistenceSession().adapterFor(domainObject);
-        return new XmlSnapshot(adapter, getOidMarshaller());
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
+        return new XmlSnapshot(adapter, oidMarshaller);
     }
 
     /**
@@ -90,13 +92,16 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     
     // //////////////////////////////////////
 
-    protected PersistenceSession gerPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+
+    @Inject
+    IsisSessionFactory isisSessionFactory;
+
+    protected PersistenceSession getPersistenceSession() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getSessionFactory().getOidMarshaller();
-    }
+    @Inject
+    OidMarshaller oidMarshaller;
 
 
 }

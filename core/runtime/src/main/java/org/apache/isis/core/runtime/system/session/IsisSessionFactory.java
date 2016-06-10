@@ -26,6 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -33,12 +36,20 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 /**
@@ -62,7 +73,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
 
-    //region > constructor, fields, shutdown
+    //region > constructor, fields
 
     private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
@@ -89,11 +100,139 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.oidMarshaller = new OidMarshaller();
     }
 
+
+    //endregion
+
+    //region > constructServices, destroyServicesAndShutdown
+
+    private ServiceInitializer serviceInitializer;
+
     @Programmatic
-    public void shutdown() {
+    public void constructServices() {
+
+        // do postConstruct.  We store the initializer to do preDestroy on shutdown
+        serviceInitializer = new ServiceInitializer(configuration, servicesInjector.getRegisteredServices());
+        serviceInitializer.validate();
+
+        openSession(new InitialisationSession());
+
+        try {
+            //
+            // postConstructInSession
+            //
+
+            IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
+            transactionManager.startTransaction();
+            try {
+                serviceInitializer.postConstruct();
+            } catch(RuntimeException ex) {
+                transactionManager.getCurrentTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+            } finally {
+                // will commit or abort
+                transactionManager.endTransaction();
+            }
+
+
+            //
+            // installFixturesIfRequired
+            //
+            final FixturesInstallerFromConfiguration fixtureInstaller =
+                    new FixturesInstallerFromConfiguration(this);
+            fixtureInstaller.installFixtures();
+
+            // only allow logon fixtures if not in production mode.
+            if (!deploymentCategory.isProduction()) {
+                logonFixture = fixtureInstaller.getLogonFixture();
+            }
+
+            //
+            // translateServicesAndEnumConstants
+            //
+            final List<Object> services = servicesInjector.getRegisteredServices();
+            final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
+            for (Object service : services) {
+                final String unused = titleService.titleOf(service);
+            }
+            for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
+                final Class<?> correspondingClass = objSpec.getCorrespondingClass();
+                if(correspondingClass.isEnum()) {
+                    final Object[] enumConstants = correspondingClass.getEnumConstants();
+                    for (Object enumConstant : enumConstants) {
+                        final String unused = titleService.titleOf(enumConstant);
+                    }
+                }
+            }
+
+            // as used by the Wicket UI
+            final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+
+            final String context = IsisSystem.class.getName();
+            translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
+            translationService.translate(context, IsisSystem.MSG_CONFIRM);
+            translationService.translate(context, IsisSystem.MSG_CANCEL);
+
+        } finally {
+            closeSession();
+        }
+    }
+
+
+    @Programmatic
+    public void destroyServicesAndShutdown() {
+        destroyServices();
+        shutdown();
+    }
+
+    private void destroyServices() {
+        // may not be set if the metamodel validation failed during initialization
+        if (serviceInitializer == null) {
+            return;
+        }
+
+        // call @PreDestroy (in a session)
+        openSession(new InitialisationSession());
+        IsisTransactionManager transactionManager = getCurrentSessionTransactionManager();
+        try {
+            transactionManager.startTransaction();
+            try {
+
+                serviceInitializer.preDestroy();
+
+            } catch (RuntimeException ex) {
+                transactionManager.getCurrentTransaction().setAbortCause(
+                        new IsisTransactionManagerException(ex));
+            } finally {
+                // will commit or abort
+                transactionManager.endTransaction();
+            }
+        } finally {
+            closeSession();
+        }
+    }
+
+    private void shutdown() {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
         specificationLoader.shutdown();
+    }
+
+    //endregion
+
+    //region > logonFixture
+
+    private LogonFixture logonFixture;
+
+    /**
+     * The {@link LogonFixture}, if any, obtained by running fixtures.
+     *
+     * <p>
+     * Intended to be used when for {@link DeploymentType#SERVER_EXPLORATION
+     * exploration} (instead of an {@link ExplorationSession}) or
+     * {@link DeploymentType#SERVER_PROTOTYPE prototype} deployments (saves logging
+     * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
+     */
+    public LogonFixture getLogonFixture() {
+        return logonFixture;
     }
 
     //endregion
@@ -130,6 +269,11 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     @Programmatic
     public IsisSession getCurrentSession() {
         return currentSession.get();
+    }
+
+    private IsisTransactionManager getCurrentSessionTransactionManager() {
+        final IsisSession currentSession = getCurrentSession();
+        return currentSession.getPersistenceSession().getTransactionManager();
     }
 
     @Programmatic
@@ -196,6 +340,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             }
         }
     }
+
 
     //endregion
 
@@ -285,6 +430,8 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     public OidMarshaller getOidMarshaller() {
         return oidMarshaller;
     }
+
+
 
     //endregion
 

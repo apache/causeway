@@ -114,8 +114,7 @@ public abstract class SpecificationLoaderTestAbstract {
         final SpecificationLoader specificationLoader =
                 new SpecificationLoader(
                         new ProgrammingModelFacetsJava5(stubConfiguration),
-                        new MetaModelValidatorDefault(),
-                        Lists.<LayoutMetadataReader>newArrayList(
+                        new MetaModelValidatorDefault(), Lists.<LayoutMetadataReader>newArrayList(
                                 new LayoutMetadataReaderFromJson()), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);

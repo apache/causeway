@@ -103,9 +103,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             final ServicesInjector servicesInjector) {
 
         this.servicesInjector = servicesInjector;
-
         this.programmingModel = programmingModel;
-
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(programmingModel);
@@ -118,7 +116,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         LOG.info("finalizing reflector factory " + this);
     }
 
+
     //endregion
+
 
     //region > init
 
@@ -513,6 +513,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
         return objectSpecification;
     }
+
     //endregion
 
 

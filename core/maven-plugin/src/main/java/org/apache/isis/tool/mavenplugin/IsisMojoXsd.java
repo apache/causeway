@@ -36,7 +36,7 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Mojo(
         name = "xsd",
@@ -78,10 +78,10 @@ public class IsisMojoXsd extends IsisMojoAbstract {
 
     @Override
     protected void doExecute(
-            final ContextForMojo context, final IsisSystem system)
+            final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
             throws MojoFailureException, IOException {
 
-        final JaxbService jaxbService = system.getSessionFactory().getServicesInjector().lookupService(JaxbService.class);
+        final JaxbService jaxbService = isisSessionFactory.getServicesInjector().lookupService(JaxbService.class);
 
         final MavenProject mavenProject = context.getMavenProject();
         final File outputDir = determineOutputDir(mavenProject);

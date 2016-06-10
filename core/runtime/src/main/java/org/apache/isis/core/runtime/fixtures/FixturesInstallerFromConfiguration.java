@@ -23,10 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.fixtures.domainservice.ObjectLoaderFixture;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
 
@@ -42,8 +42,8 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     private static final String EXPLORATION_OBJECTS = ConfigurationConstants.ROOT + "exploration-objects";
 
-    public FixturesInstallerFromConfiguration(final IsisConfigurationDefault isisConfiguration) {
-        super("configuration", isisConfiguration);
+    public FixturesInstallerFromConfiguration(final IsisSessionFactory isisSessionFactory) {
+        super(isisSessionFactory);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
                 fixtureLoaded = true;
                 delegate.addFixture(fixture);
             }
-            if (getConfiguration().getBoolean(EXPLORATION_OBJECTS)) {
+            if (configuration.getBoolean(EXPLORATION_OBJECTS)) {
                 delegate.addFixture(new ObjectLoaderFixture());
             }
             if (!fixtureLoaded) {
@@ -123,8 +123,8 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
     private FixtureConfig getFixtureConfig() {
         final FixtureConfig fixtureConfig = new FixtureConfig();
 
-        fixtureConfig.setFixtures(getConfiguration().getList(FIXTURES));
-        fixtureConfig.setFixturePrefix(getConfiguration().getString(FIXTURES_PREFIX));
+        fixtureConfig.setFixtures(configuration.getList(FIXTURES));
+        fixtureConfig.setFixturePrefix(configuration.getString(FIXTURES_PREFIX));
 
         return fixtureConfig;
     }

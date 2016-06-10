@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
@@ -34,15 +35,14 @@ public abstract class AbstractIsisSessionTemplate {
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
         try {
-            IsisContext.getSessionFactory().openSession(authSession);
+            getSessionFactory().openSession(authSession);
             PersistenceSession persistenceSession = getPersistenceSession();
             persistenceSession.getServicesInjector().injectServicesInto(this);
             doExecute(context);
         } finally {
-            IsisContext.getSessionFactory().closeSession();
+            getSessionFactory().closeSession();
         }
     }
-
 
     // //////////////////////////////////////
     
@@ -89,21 +89,27 @@ public abstract class AbstractIsisSessionTemplate {
     }
     
     // //////////////////////////////////////
-    
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession();
+
+
+    protected IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
-    protected IsisTransactionManager getTransactionManager(PersistenceSession persistenceSession) {
-        return persistenceSession.getTransactionManager();
+    protected PersistenceSession getPersistenceSession() {
+        return getSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSessionFactory().getSpecificationLoader();
+    protected IsisTransactionManager getTransactionManager(PersistenceSession persistenceSession) {
+        return persistenceSession.getTransactionManager();
     }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return getSessionFactory().getSpecificationLoader();
+    }
+
 
 }

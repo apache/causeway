@@ -24,7 +24,6 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -38,21 +37,17 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -68,20 +63,18 @@ import static org.junit.Assert.fail;
 public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServiceProvider {
 
     //region > Listener, ListenerAdapter
-
     public interface Listener {
 
         void init(IsisConfiguration configuration) throws Exception;
         
-        void preSetupSystem(boolean firstTime) throws Exception;
-        void postSetupSystem(boolean firstTime) throws Exception;
+        void preOpenSession(boolean firstTime) throws Exception;
+        void postOpenSession(boolean firstTime) throws Exception;
         
-        void preBounceSystem() throws Exception;
-        void postBounceSystem() throws Exception;
+        void preNextSession() throws Exception;
+        void postNextSession() throws Exception;
 
-        void preTeardownSystem() throws Exception;
-        void postTeardownSystem() throws Exception;
-        
+        void preCloseSession() throws Exception;
+        void postCloseSession() throws Exception;
     }
     
     public static abstract class ListenerAdapter implements Listener {
@@ -97,36 +90,35 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         @Override
-        public void preSetupSystem(boolean firstTime) throws Exception {
+        public void preOpenSession(boolean firstTime) throws Exception {
         }
 
         @Override
-        public void postSetupSystem(boolean firstTime) throws Exception {
+        public void postOpenSession(boolean firstTime) throws Exception {
         }
 
         @Override
-        public void preBounceSystem() throws Exception {
+        public void preNextSession() throws Exception {
         }
 
         @Override
-        public void postBounceSystem() throws Exception {
+        public void postNextSession() throws Exception {
         }
 
         @Override
-        public void preTeardownSystem() throws Exception {
+        public void preCloseSession() throws Exception {
         }
 
         @Override
-        public void postTeardownSystem() throws Exception {
+        public void postCloseSession() throws Exception {
         }
-
     }
 
     //endregion
 
     //region > getElseNull, get, set
 
-    private static ThreadLocal<IsisSystemForTest> ISFT = new ThreadLocal<IsisSystemForTest>();
+    private static ThreadLocal<IsisSystemForTest> ISFT = new ThreadLocal<>();
 
     public static IsisSystemForTest getElseNull() {
         return ISFT.get();
@@ -199,18 +191,15 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                 @Override
                 public synchronized void run() {
                     try {
-                        isisSystemForTest.tearDownSystem();
+                        isisSystemForTest.closeSession();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     try {
-                        isisSystemForTest.shutdown();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        isisSystemForTest.isisSystem.getSessionFactory().shutdown();
+                        if(isisSystemForTest.isisSessionFactory != null) {
+                            isisSystemForTest.isisSessionFactory.destroyServicesAndShutdown();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -283,16 +272,16 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     /**
      * Intended to be called from a test's {@link Before} method.
      */
-    public IsisSystemForTest setUpSystem() throws RuntimeException {
+    public IsisSystemForTest initIfRequiredThenOpenSession() throws RuntimeException {
         try {
-            setUpSystem(FireListeners.FIRE);
+            initIfRequiredThenOpenSession(FireListeners.FIRE);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return this;
     }
 
-    private void setUpSystem(FireListeners fireListeners) throws Exception {
+    private void initIfRequiredThenOpenSession(FireListeners fireListeners) throws Exception {
 
         // exit as quickly as possible for this case... (will already have been logged)
         if(IsisContext.getMetaModelInvalidExceptionIfAny() != null) {
@@ -300,9 +289,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return;
         }
 
-        boolean firstTime = isisSystem == null;
+        boolean firstTime = isisSessionFactory == null;
         if(fireListeners.shouldFire()) {
-            fireInitAndPreSetupSystem(firstTime);
+            fireInitAndPreOpenSession(firstTime);
         }
 
         if(firstTime) {
@@ -314,15 +303,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     configurationOverride
             );
 
-            isisSystem = new IsisSystem(componentProvider, DeploymentCategory.PRODUCTION);
+            final IsisSystem isisSystem = new IsisSystem(componentProvider, DeploymentCategory.PRODUCTION);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
 
-            isisSystem.init();
-
-            // REVIEW: is this required?
-            isisSystem.getSessionFactory().closeSession();
+            isisSessionFactory = isisSystem.buildSessionFactory();
+            // REVIEW: does no harm, but is this required?
+            closeSession();
 
             // if the IsisSystem does not initialize properly, then - as a side effect - the resulting
             // MetaModelInvalidException will be pushed onto the IsisContext (as a static field).
@@ -342,20 +330,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             }
         }
 
-        final AuthenticationManager authenticationManager = isisSystem.getSessionFactory().getAuthenticationManager();
+        final AuthenticationManager authenticationManager = isisSessionFactory.getAuthenticationManager();
         authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         openSession();
 
-        wireAndInstallFixtures();
         if(fireListeners.shouldFire()) {
-            firePostSetupSystem(firstTime);
+            firePostOpenSession(firstTime);
         }
-    }
-
-    private void wireAndInstallFixtures() {
-        FixturesInstaller fixturesInstaller = componentProvider.provideFixturesInstaller();
-        fixturesInstaller.installFixtures();
     }
 
     public DomainObjectContainer getContainer() {
@@ -365,17 +347,17 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     //endregion
 
     //region > isisSystem (populated during setup)
-    private IsisSystem isisSystem;
+    private IsisSessionFactory isisSessionFactory;
 
     /**
-     * The {@link IsisSystem} created during {@link #setUpSystem()}.
+     * The {@link IsisSessionFactory} created during {@link #initIfRequiredThenOpenSession()}.
      */
-    public IsisSystem getIsisSystem() {
-        return isisSystem;
+    public IsisSessionFactory getIsisSessionFactory() {
+        return isisSessionFactory;
     }
 
     /**
-     * The {@link AuthenticationSession} created during {@link #setUpSystem()}.
+     * The {@link AuthenticationSession} created during {@link #initIfRequiredThenOpenSession()}.
      */
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
@@ -385,36 +367,23 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     //region > teardown
 
-    /**
-     * Intended to be called from a test's {@link After} method.
-     */
-    public void tearDownSystem() throws Exception {
-        closeSession(FireListeners.FIRE);
-    }
-
     private void closeSession(final FireListeners fireListeners) throws Exception {
         if(fireListeners.shouldFire()) {
-            firePreTeardownSystem();
+            firePreCloseSession();
         }
-        if(isisSystem.getSessionFactory().inSession()) {
-            isisSystem.getSessionFactory().closeSession();
+        if(isisSessionFactory.inSession()) {
+            isisSessionFactory.closeSession();
         }
         if(fireListeners.shouldFire()) {
-            firePostTeardownSystem();
+            firePostCloseSession();
         }
     }
 
-    private void shutdown() {
-        if(isisSystem != null) {
-            isisSystem.shutdown();
-        }
-    }
-
-    public void bounceSystem() throws Exception {
-        firePreBounceSystem();
+    public void nextSession() throws Exception {
+        firePreNextSession();
         closeSession();
         openSession();
-        firePostBounceSystem();
+        firePostNextSession();
     }
 
     //endregion
@@ -426,11 +395,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     public void openSession(AuthenticationSession authenticationSession) throws Exception {
-        isisSystem.getSessionFactory().openSession(authenticationSession);
+        isisSessionFactory.openSession(authenticationSession);
     }
 
     public void closeSession() throws Exception {
-        isisSystem.getSessionFactory().closeSession();
+        closeSession(FireListeners.FIRE);
     }
 
     //endregion
@@ -448,122 +417,46 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
 
-    private void fireInitAndPreSetupSystem(boolean firstTime) throws Exception {
+    private void fireInitAndPreOpenSession(boolean firstTime) throws Exception {
         if(firstTime) {
             for(Listener listener: listeners) {
                 listener.init(componentProvider.getConfiguration());
             }
         }
         for(Listener listener: listeners) {
-            listener.preSetupSystem(firstTime);
+            listener.preOpenSession(firstTime);
         }
     }
 
-    private void firePostSetupSystem(boolean firstTime) throws Exception {
+    private void firePostOpenSession(boolean firstTime) throws Exception {
         for(Listener listener: listeners) {
-            listener.postSetupSystem(firstTime);
+            listener.postOpenSession(firstTime);
         }
     }
 
-    private void firePreTeardownSystem() throws Exception {
+    private void firePreCloseSession() throws Exception {
         for(Listener listener: listeners) {
-            listener.preTeardownSystem();
+            listener.preCloseSession();
         }
     }
 
-    private void firePostTeardownSystem() throws Exception {
+    private void firePostCloseSession() throws Exception {
         for(Listener listener: listeners) {
-            listener.postTeardownSystem();
+            listener.postCloseSession();
         }
     }
 
-    private void firePreBounceSystem() throws Exception {
+    private void firePreNextSession() throws Exception {
         for(Listener listener: listeners) {
-            listener.preBounceSystem();
+            listener.preNextSession();
         }
     }
 
-    private void firePostBounceSystem() throws Exception {
+    private void firePostNextSession() throws Exception {
         for(Listener listener: listeners) {
-            listener.postBounceSystem();
+            listener.postNextSession();
         }
     }
-    //endregion
-
-    //region > Convenience for tests
-
-    public ObjectSpecification loadSpecification(Class<?> cls) {
-        return isisSystem.getSessionFactory().getSpecificationLoader().loadSpecification(cls);
-    }
-
-    public ObjectAdapter persist(Object domainObject) {
-        ensureSessionInProgress();
-        ensureObjectIsNotPersistent(domainObject);
-        getContainer().persist(domainObject);
-        return adapterFor(domainObject);
-    }
-
-    public ObjectAdapter destroy(Object domainObject ) {
-        ensureSessionInProgress();
-        ensureObjectIsPersistent(domainObject);
-        getContainer().remove(domainObject);
-        return adapterFor(domainObject);
-    }
-
-    public ObjectAdapter adapterFor(Object domainObject) {
-        ensureSessionInProgress();
-        return getAdapterManager().adapterFor(domainObject);
-    }
-
-    /**
-     * @deprecated - unused by framework
-     */
-    @Deprecated
-    public ObjectAdapter reload(RootOid oid) {
-        ensureSessionInProgress();
-        final PersistenceSession persistenceSession = getPersistenceSession();
-        return persistenceSession.loadObjectInTransaction(oid);
-    }
-
-    /**
-     * @deprecated - unused by framework
-     */
-    @Deprecated
-    public ObjectAdapter recreateAdapter(RootOid oid) {
-        ensureSessionInProgress();
-        return getPersistenceSession().adapterFor(oid);
-    }
-
-    /**
-     * @deprecated - unused by framework
-     */
-    @Deprecated
-    public ObjectAdapter remapAsPersistent(Object pojo, RootOid persistentOid) {
-        ensureSessionInProgress();
-        ensureObjectIsNotPersistent(pojo);
-        final ObjectAdapter adapter = adapterFor(pojo);
-        getPersistenceSession().remapAsPersistent(adapter, persistentOid);
-        return adapter;
-    }
-
-    private void ensureSessionInProgress() {
-        if(!isisSystem.getSessionFactory().inSession()) {
-            throw new IllegalStateException("Session must be in progress");
-        }
-    }
-
-    private void ensureObjectIsNotPersistent(Object domainObject) {
-        if(getContainer().isPersistent(domainObject)) {
-            throw new IllegalArgumentException("domain object is already persistent");
-        }
-    }
-
-    private void ensureObjectIsPersistent(Object domainObject) {
-        if(!getContainer().isPersistent(domainObject)) {
-            throw new IllegalArgumentException("domain object is not persistent");
-        }
-    }
-
     //endregion
 
     //region > JUnit @Rule integration
@@ -573,13 +466,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                setUpSystem();
+                initIfRequiredThenOpenSession();
                 try {
                     base.evaluate();
-                    tearDownSystem();
+                    closeSession();
                 } catch(Throwable ex) {
                     try {
-                        tearDownSystem();
+                        closeSession();
                     } catch(Exception ex2) {
                         // ignore, since already one pending
                     }
@@ -593,6 +486,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     //region > beginTran, endTran, commitTran, abortTran
 
+    /**
+     * @deprecated - ought to be using regular domain services rather than reaching into the framework
+     */
+    @Deprecated
     public void beginTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
@@ -600,7 +497,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(transaction == null) {
             startTransactionForUser(transactionManager);
             return;
-        } 
+        }
 
         final State state = transaction.getState();
         switch(state) {
@@ -617,7 +514,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             default:
                 fail("Unknown transaction state '" + state + "'");
         }
-        
+
     }
 
     private void startTransactionForUser(IsisTransactionManager transactionManager) {
@@ -631,7 +528,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * Either commits or aborts the transaction, depending on the Transaction's {@link org.apache.isis.core.runtime.system.transaction.IsisTransaction#getState()}
+     *
+     * @deprecated - ought to be using regular domain services rather than reaching into the framework
      */
+    @Deprecated
     public void endTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getCurrentTransaction();
@@ -661,8 +561,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * Commits the transaction.
-     * 
-     * @deprecated - typically use just {@link #endTran()}
+     *
+     * @deprecated - ought to be using regular domain services rather than reaching into the framework
      */
     @Deprecated
     public void commitTran() {
@@ -671,7 +571,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(transaction == null) {
             fail("No transaction exists");
             return;
-        } 
+        }
         final State state = transaction.getState();
         switch(state) {
             case COMMITTED:
@@ -688,9 +588,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     /**
-     * Commits the transaction.
+     * Aborts the transaction.
      *
-     * @deprecated - typically use just {@link #abortTran()}
+     * @deprecated - ought to be using regular domain services rather than reaching into the framework
      */
     @Deprecated
     public void abortTran() {
@@ -699,7 +599,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(transaction == null) {
             fail("No transaction exists");
             return;
-        } 
+        }
         final State state = transaction.getState();
         switch(state) {
             case ABORTED:
@@ -726,13 +626,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getService(Class<T> serviceClass) {
-        final ServicesInjector servicesInjector = isisSystem.getSessionFactory().getServicesInjector();
+        final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
         return servicesInjector.lookupServiceElseFail(serviceClass);
     }
 
     @Override
     public <T> void replaceService(final T originalService, final T replacementService) {
-        final ServicesInjector servicesInjector = isisSystem.getSessionFactory().getServicesInjector();
+        final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
         servicesInjector.replaceService(originalService, replacementService);
     }
 
@@ -745,8 +645,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
      */
     @Deprecated
     public void installFixtures(final InstallableFixture... fixtures) {
-        final FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
-        for (InstallableFixture fixture : fixtures) {
+        final FixturesInstallerDelegate fid = new FixturesInstallerDelegate(isisSessionFactory);
+        for (final InstallableFixture fixture : fixtures) {
             fid.addFixture(fixture);
         }
         fid.installFixtures();
@@ -758,7 +658,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(transactionState.canCommit()) {
             commitTran();
             try {
-                bounceSystem();
+                nextSession();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -770,30 +670,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     //region > Dependencies
 
-    protected IsisTransactionManager getTransactionManager() {
+    private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
     
-    public PersistenceSession getPersistor() {
-    	return getPersistenceSession();
-    }
-
-    public AdapterManager getAdapterManager() {
-        return getPersistor();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return isisSystem.getSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    /**
-     * @param container the container to set
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public void setContainer(DomainObjectContainer container) {
-        // no-op
+    private PersistenceSession getPersistenceSession() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
     //endregion

@@ -28,7 +28,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Mojo(
         name = "validate",
@@ -46,10 +46,12 @@ public class IsisMojoValidate extends IsisMojoAbstract {
     }
 
     @Override
-    protected void doExecute(final ContextForMojo context, final IsisSystem isisSystem)
+    protected void doExecute(
+            final ContextForMojo context,
+            final IsisSessionFactory isisSessionFactory)
             throws MojoFailureException {
         final SpecificationLoader specificationLoader =
-                isisSystem.getSessionFactory().getSpecificationLoader();
+                isisSessionFactory.getSpecificationLoader();
         metaModelProcessor.process(context, specificationLoader);
     }
 

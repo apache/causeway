@@ -192,14 +192,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.servicesInjector = servicesInjector;
         this.facetProcessor = facetProcessor;
 
-        this.deploymentCategory = servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.deploymentCategory = servicesInjector.getDeploymentCategory();
     }
 
     
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
     //endregion
 
     //region > Stuff immediately derivable from class
@@ -664,7 +661,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(oa != null) {
             return oa;
         }
-        if(!getDeploymentCategory().isProduction()) {
+        if(! deploymentCategory.isProduction()) {
             // automatically refresh if not in production
             // (better support for jrebel)
             

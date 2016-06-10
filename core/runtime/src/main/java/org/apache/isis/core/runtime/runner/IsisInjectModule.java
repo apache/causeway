@@ -44,7 +44,7 @@ public class IsisInjectModule extends AbstractModule {
      *
      * <p>
      *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with null when the system is
-     *     {@link #provideIsisSystem(AppManifest) created} .
+     *     {@link #provideIsisSessionFactory(AppManifest)} created} .
      * </p>
      */
     private static final AppManifest APP_MANIFEST_NOOP = new AppManifest() {
@@ -90,11 +90,22 @@ public class IsisInjectModule extends AbstractModule {
         bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
+    @Provides
+    @Singleton
+    protected IsisConfiguration provideConfiguration() {
+        return isisConfiguration;
+    }
+
+    @Provides
+    @Singleton
+    protected DeploymentCategory provideDeploymentCategory() {
+        return deploymentCategory;
+    }
 
     @Provides
     @Inject
     @Singleton
-    protected IsisSystem provideIsisSystem(final AppManifest appManifestIfAny) {
+    protected IsisSessionFactory provideIsisSessionFactory(final AppManifest appManifestIfAny) {
 
         final AppManifest appManifest = appManifestIfAny != APP_MANIFEST_NOOP ? appManifestIfAny : null;
 
@@ -105,30 +116,9 @@ public class IsisInjectModule extends AbstractModule {
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
-        system.init();
+        system.buildSessionFactory();
 
-        return system;
-    }
-
-    @Provides
-    @Inject
-    @Singleton
-    protected IsisConfiguration provideConfiguration() {
-        return isisConfiguration;
-    }
-
-    @Provides
-    @Inject
-    @Singleton
-    protected DeploymentCategory provideDeploymentCaeg() {
-        return deploymentCategory;
-    }
-
-    @Provides
-    @Inject
-    @Singleton
-    protected IsisSessionFactory provideIsisSessionFactory(final IsisSystem isisSystem) {
-        return isisSystem.getSessionFactory();
+        return system.getSessionFactory();
     }
 
     @Provides

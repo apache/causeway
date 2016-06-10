@@ -83,16 +83,5 @@ public final class IsisContext {
 
     //endregion
 
-    //region > shutdown
-
-    public static void shutdown() {
-        if (sessionFactory == null) {
-            return;
-        }
-        sessionFactory.shutdown();
-    }
-
-    //endregion
-
 
 }

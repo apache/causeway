@@ -26,6 +26,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public class IsisTransactionFilterForRestfulObjects implements Filter {
@@ -37,7 +38,7 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // no-op if no session available.
-        if(!IsisContext.getSessionFactory().inSession()) {
+        if(!getSessionFactory().inSession()) {
             chain.doFilter(request, response);
             return;
         }
@@ -53,16 +54,22 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
         }
     }
 
+    @Override
+    public void destroy() {
+    }
+
+
+    // REVIEW: ought to be able to obtain from thread or as a request attribute
+    protected IsisSessionFactory getSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
     protected boolean inTransaction() {
-        return IsisContext.getSessionFactory().inTransaction();
+        return getSessionFactory().inTransaction();
     }
 
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
-    }
-
-    @Override
-    public void destroy() {
+        return getSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
 }
