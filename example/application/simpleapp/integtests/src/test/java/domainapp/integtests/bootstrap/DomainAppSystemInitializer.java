@@ -18,10 +18,14 @@
  */
 package domainapp.integtests.bootstrap;
 
+import com.google.common.collect.Maps;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
 import domainapp.app.DomainAppAppManifest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DomainAppSystemInitializer {
 
@@ -30,10 +34,18 @@ public class DomainAppSystemInitializer {
         if(isft == null) {
             isft = new IsisSystemForTest.Builder()
                     .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new DomainAppAppManifest())
-                    .with(new IsisConfigurationForJdoIntegTests())
+                    .with(new DomainAppAppManifest() {
+                        @Override
+                        public Map<String, String> getConfigurationProperties() {
+                            final Map<String, String> map = Maps.newHashMap();
+                            IsisConfigurationForJdoIntegTests.withJavaxJdoRunInMemoryProperties(map);
+                            IsisConfigurationForJdoIntegTests.withDatanucleusProperties(map);
+                            IsisConfigurationForJdoIntegTests.withIsisIntegTestProperties(map);
+                            return map;
+                        }
+                    })
                     .build();
-            isft.initIfRequiredThenOpenSession();
+            isft.setUpSystem();
             IsisSystemForTest.set(isft);
         }
     }

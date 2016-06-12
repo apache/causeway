@@ -269,14 +269,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // populated at #setupSystem
     private IsisComponentProvider componentProvider;
 
-    public IsisSystemForTest setUpSystem() throws RuntimeException {
-        return initIfRequiredThenOpenSession();
-    }
-
     /**
      * Intended to be called from a test's {@link Before} method.
      */
-    public IsisSystemForTest initIfRequiredThenOpenSession() throws RuntimeException {
+    public IsisSystemForTest setUpSystem() throws RuntimeException {
         try {
             initIfRequiredThenOpenSession(FireListeners.FIRE);
         } catch (Exception e) {
@@ -354,14 +350,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private IsisSessionFactory isisSessionFactory;
 
     /**
-     * The {@link IsisSessionFactory} created during {@link #initIfRequiredThenOpenSession()}.
+     * The {@link IsisSessionFactory} created during {@link #setUpSystem()}.
      */
     public IsisSessionFactory getIsisSessionFactory() {
         return isisSessionFactory;
     }
 
     /**
-     * The {@link AuthenticationSession} created during {@link #initIfRequiredThenOpenSession()}.
+     * The {@link AuthenticationSession} created during {@link #setUpSystem()}.
      */
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
@@ -470,7 +466,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                initIfRequiredThenOpenSession();
+                setUpSystem();
                 try {
                     base.evaluate();
                     closeSession();
