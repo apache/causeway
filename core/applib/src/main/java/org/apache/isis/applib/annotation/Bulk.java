@@ -48,7 +48,12 @@ public @interface Bulk {
          * @deprecated - see {@link InvokeOn#COLLECTION_ONLY}
          */
         @Deprecated
-        BULK_ONLY
+        BULK_ONLY,
+        /**
+         * @deprecated - see {@link InvokeOn#OBJECT_ONLY}
+         */
+        @Deprecated
+        REGULAR_ONLY
     }
 
     /**

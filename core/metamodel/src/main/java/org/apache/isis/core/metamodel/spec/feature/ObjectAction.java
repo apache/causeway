@@ -392,7 +392,9 @@ public interface ObjectAction extends ObjectMember {
 
                 @Override
                 public boolean accept(ObjectAction oa) {
-                    if (!oa.containsDoOpFacet(BulkFacet.class)) {
+
+                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
+                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == Bulk.AppliesTo.REGULAR_ONLY) {
                         return false;
                     }
                     if (oa.getParameterCount() != 0) {

@@ -33,7 +33,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @javax.jdo.annotations.PersistenceCapable(
@@ -127,6 +129,8 @@ public class SimpleObject implements Comparable<SimpleObject> {
             semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
     )
     public void delete() {
+        final String title = titleService.titleOf(this);
+        messageService.informUser(String.format("'%s' deleted", title));
         repositoryService.remove(this);
     }
 
@@ -140,5 +144,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     @javax.inject.Inject
     RepositoryService repositoryService;
+
+    @javax.inject.Inject
+    TitleService titleService;
+
+    @javax.inject.Inject
+    MessageService messageService;
 
 }

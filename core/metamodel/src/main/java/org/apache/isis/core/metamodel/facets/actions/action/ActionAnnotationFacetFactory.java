@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
@@ -341,6 +342,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         // else check for @Action(invokeOn=...)
         if(facet == null) {
             facet = BulkFacetForActionAnnotation.create(action, holder);
+        }
+        if(facet == null) {
+            facet = new BulkFacetObjectOnly(holder);
         }
 
         FacetUtil.addFacet(facet);
