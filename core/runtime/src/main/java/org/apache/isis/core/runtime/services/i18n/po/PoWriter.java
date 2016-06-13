@@ -105,6 +105,9 @@ class PoWriter extends PoAbstract {
 
     public String translate(final String context, final String msgId) {
 
+        if(msgId == null) {
+            return null;
+        }
         final Block block = blockFor(msgId);
         block.contexts.add(context);
 
@@ -114,6 +117,9 @@ class PoWriter extends PoAbstract {
     @Override
     String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
 
+        if(msgId == null) {
+            return null;
+        }
         final Block block = blockFor(msgId);
         block.contexts.add(context);
         block.msgIdPlural = msgIdPlural;
