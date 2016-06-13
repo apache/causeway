@@ -16,15 +16,12 @@
  */
 package org.apache.isis.core.runtime.services.xmlsnapshot;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshotBuilder;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -65,8 +62,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
             XmlSnapshot xmlSnapshot = builder.build();
             return xmlSnapshot;
         }
-    } 
-
+    }
 
     /**
      * Creates a simple snapshot of the domain object.
@@ -75,7 +71,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
-        return new XmlSnapshot(adapter, oidMarshaller);
+        return new XmlSnapshot(adapter);
     }
 
     /**
@@ -100,8 +96,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    @javax.inject.Inject
-    OidMarshaller oidMarshaller;
+
 
 
 }

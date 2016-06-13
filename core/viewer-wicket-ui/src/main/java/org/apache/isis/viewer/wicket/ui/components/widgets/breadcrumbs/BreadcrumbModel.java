@@ -37,7 +37,8 @@ public class BreadcrumbModel implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private static final int MAX_SIZE = 5;
-    public static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
+
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final Map<String, EntityModel> entityModelByOidStr = Maps.newHashMap();
     private final Map<EntityModel, String> oidStrByEntityModel = Maps.newHashMap();
@@ -74,7 +75,7 @@ public class BreadcrumbModel implements Serializable {
         }
         try {
             final RootOid unmarshal = OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
-            return unmarshal.enStringNoVersion(OID_MARSHALLER);
+            return unmarshal.enStringNoVersion();
         } catch(Exception ex) {
             return null;
         }
@@ -119,7 +120,7 @@ public class BreadcrumbModel implements Serializable {
         try {
             final PageParameters pageParameters = choice.getPageParameters();
             final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-            return RootOid.deString(oidStr, OID_MARSHALLER);
+            return RootOid.deString(oidStr);
         } catch (Exception ex) {
             remove(choice);
             return null;

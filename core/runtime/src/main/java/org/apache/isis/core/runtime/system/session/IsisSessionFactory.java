@@ -32,8 +32,6 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,7 +42,7 @@ import org.apache.isis.core.runtime.authentication.exploration.ExplorationSessio
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.MessageRegistry;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -82,7 +80,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final OidMarshaller oidMarshaller;
 
     public IsisSessionFactory(
             final DeploymentCategory deploymentCategory,
@@ -96,8 +93,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.authenticationManager = servicesInjector.getAuthenticationManager();
         this.authorizationManager = servicesInjector.getAuthorizationManager();
         this.persistenceSessionFactory = servicesInjector.lookupServiceElseFail(PersistenceSessionFactory.class);
-
-        this.oidMarshaller = new OidMarshaller();
     }
 
 
@@ -166,10 +161,12 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             // as used by the Wicket UI
             final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
 
-            final String context = IsisSystem.class.getName();
-            translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
-            translationService.translate(context, IsisSystem.MSG_CONFIRM);
-            translationService.translate(context, IsisSystem.MSG_CANCEL);
+            final String context = IsisSessionFactoryBuilder.class.getName();
+            final MessageRegistry messageRegistry = new MessageRegistry();
+            final List<String> messages = messageRegistry.listMessages();
+            for (String message : messages) {
+                translationService.translate(context, message);
+            }
 
         } finally {
             closeSession();
@@ -437,16 +434,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     public PersistenceSessionFactory getPersistenceSessionFactory() {
         return persistenceSessionFactory;
     }
-
-    /**
-     * The {@link OidMarshaller} to use for marshalling and unmarshalling {@link Oid}s
-     * into strings.
-     */
-    @Programmatic
-    public OidMarshaller getOidMarshaller() {
-        return oidMarshaller;
-    }
-
 
 
     //endregion

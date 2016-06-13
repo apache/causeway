@@ -103,7 +103,8 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                     final String oidStr = breadcrumbChoice.getInput();
                     final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                     if(selectedModel == null) {
-                        final MessageBroker messageBroker = getServicesInjector().getMessageBroker();
+                        final MessageBroker messageBroker = getIsisSessionFactory().getCurrentSession()
+                                .getAuthenticationSession().getMessageBroker();
                         messageBroker.addWarning("Cannot find object");
                         String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                         target.appendJavaScript(feedbackMsg);

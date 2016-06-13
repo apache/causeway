@@ -41,9 +41,9 @@ public interface Oid extends Encodable {
     /**
      * A string representation of this {@link Oid}.
      */
-    String enString(OidMarshaller oidMarshaller);
+    String enString();
 
-    String enStringNoVersion(OidMarshaller oidMarshaller);
+    String enStringNoVersion();
     
     Version getVersion();
 

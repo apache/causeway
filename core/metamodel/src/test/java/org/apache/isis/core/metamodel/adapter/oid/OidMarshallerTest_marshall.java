@@ -32,7 +32,7 @@ public class OidMarshallerTest_marshall {
     
     @Before
     public void setUp() throws Exception {
-        oidMarshaller = new OidMarshaller();
+        oidMarshaller = OidMarshaller.INSTANCE;
     }
     
     @Test

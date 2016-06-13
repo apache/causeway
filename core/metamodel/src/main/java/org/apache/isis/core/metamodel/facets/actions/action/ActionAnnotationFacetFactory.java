@@ -87,8 +87,6 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -546,15 +544,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
         prototypeValidator.setConfiguration(configuration);
-
-        this.transactionStateProviderInternal =
-                servicesInjector.lookupService(TransactionStateProviderInternal.class);
-
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-
-    private TransactionStateProviderInternal transactionStateProviderInternal;
-    PersistenceSessionServiceInternal adapterManager;
 
 }

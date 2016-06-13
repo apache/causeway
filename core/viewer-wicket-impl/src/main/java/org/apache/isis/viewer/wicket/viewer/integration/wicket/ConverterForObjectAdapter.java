@@ -25,7 +25,6 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -39,15 +38,13 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
-
     /**
      * Converts string representation of {@link Oid} to
      * {@link ObjectAdapter}.
      */
     @Override
     public ObjectAdapter convertToObject(final String value, final Locale locale) {
-        final Oid oid = RootOid.deStringEncoded(value, OID_MARSHALLER);
+        final Oid oid = RootOid.deStringEncoded(value);
         return getPersistenceSession().getAdapterFor(oid);
     }
 
@@ -62,7 +59,7 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
             return null;
         }
 
-        return oid.enString(OID_MARSHALLER);
+        return oid.enString();
     }
     
 

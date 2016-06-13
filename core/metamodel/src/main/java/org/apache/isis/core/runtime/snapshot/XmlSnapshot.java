@@ -121,25 +121,18 @@ public class XmlSnapshot implements Snapshot {
 
     private final XsMetaModel xsMeta;
 
-    private final OidMarshaller oidMarshaller;
-
     /**
      * Start a snapshot at the root object, using own namespace manager.
-     * 
-     * @param oidMarshaller
-     *            TODO
+     *
      */
-    public XmlSnapshot(final ObjectAdapter rootAdapter, OidMarshaller oidMarshaller) {
-        this(rootAdapter, new XmlSchema(), oidMarshaller);
+    public XmlSnapshot(final ObjectAdapter rootAdapter) {
+        this(rootAdapter, new XmlSchema());
     }
 
     /**
      * Start a snapshot at the root object, using supplied namespace manager.
-     * 
-     * @param oidMarshaller
-     *            TODO
      */
-    public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema, final OidMarshaller oidMarshaller) {
+    public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(".ctor(" + log("rootObj", rootAdapter) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
@@ -149,7 +142,6 @@ public class XmlSnapshot implements Snapshot {
         this.xsMeta = new XsMetaModel();
 
         this.schema = schema;
-        this.oidMarshaller = oidMarshaller;
 
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -837,7 +829,7 @@ public class XmlSnapshot implements Snapshot {
             }
             return fakeOid;
         } else {
-            return adapter.getOid().enString(oidMarshaller);
+            return adapter.getOid().enString();
         }
     }
 

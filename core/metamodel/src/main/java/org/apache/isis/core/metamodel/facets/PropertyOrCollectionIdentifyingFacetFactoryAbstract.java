@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
@@ -42,18 +40,6 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         return CollectionUtils.isCollectionType(cls) || CollectionUtils.isArrayType(cls);
     }
 
-
-    // //////////////////////////////////////
-
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    PersistenceSessionServiceInternal adapterManager;
 
 
 

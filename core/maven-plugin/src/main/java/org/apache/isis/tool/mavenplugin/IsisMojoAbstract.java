@@ -33,7 +33,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
@@ -59,11 +59,11 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
         final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
 
-        final IsisSystem isisSystem = new IsisSystem(manifest);
+        final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(manifest);
         IsisSessionFactory isisSessionFactory = null;
         try {
-            isisSessionFactory = isisSystem.buildSessionFactory();
-            if(!isisSystem.isMetaModelValid()) {
+            isisSessionFactory = isisSessionFactoryBuilder.buildSessionFactory();
+            if(!isisSessionFactoryBuilder.isMetaModelValid()) {
                 MetaModelInvalidException metaModelInvalidException = IsisContext
                         .getMetaModelInvalidExceptionIfAny();
                 Set<String> validationErrors = metaModelInvalidException.getValidationErrors();

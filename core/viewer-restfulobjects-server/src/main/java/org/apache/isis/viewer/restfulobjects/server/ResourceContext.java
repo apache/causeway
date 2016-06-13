@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
@@ -47,6 +48,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
@@ -97,8 +99,6 @@ public class ResourceContext implements RendererContext6 {
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
-            final IsisConfiguration configuration,
-            final ServicesInjector servicesInjector,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         this.httpHeaders = httpHeaders;
@@ -110,15 +110,18 @@ public class ResourceContext implements RendererContext6 {
         this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
+
         this.securityContext = securityContext;
-        this.servicesInjector = servicesInjector;
-        this.configuration = configuration;
 
-        this.authenticationSession = servicesInjector.getAuthenticationSession();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.deploymentCategory = servicesInjector.getDeploymentCategory();
+        final ServletContext servletContext = httpServletRequest.getServletContext();
+        final IsisSessionFactory isisSessionFactory = (IsisSessionFactory)servletContext.getAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
 
-        final IsisSessionFactory isisSessionFactory = servicesInjector.lookupServiceElseFail(IsisSessionFactory.class);
+        this.servicesInjector = isisSessionFactory.getServicesInjector();
+        this.configuration = isisSessionFactory.getConfiguration();
+
+        this.authenticationSession = isisSessionFactory.getCurrentSession().getAuthenticationSession();
+        this.specificationLoader = isisSessionFactory.getSpecificationLoader();
+        this.deploymentCategory = isisSessionFactory.getDeploymentCategory();
         this.persistenceSession = isisSessionFactory.getCurrentSession().getPersistenceSession();
 
         this.interactionInitiatedBy = interactionInitiatedBy;

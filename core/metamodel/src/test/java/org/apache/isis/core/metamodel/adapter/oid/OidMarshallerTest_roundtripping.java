@@ -28,14 +28,14 @@ import static org.junit.Assert.assertThat;
 
 public class OidMarshallerTest_roundtripping {
 
-    private OidMarshaller oidMarshaller = new OidMarshaller();
+    private OidMarshaller oidMarshaller = OidMarshaller.INSTANCE;
     
     @Test
     public void rootOid_withNoVersion() {
         RootOid oid = RootOid.create(ObjectSpecId.of("CUS"), "123");
         
-        final String enString = oid.enString(oidMarshaller);
-        final RootOid deString = RootOid.deString(enString, oidMarshaller);
+        final String enString = oid.enString();
+        final RootOid deString = RootOid.deString(enString);
         assertThat(deString, is(oid));
     }
 
@@ -43,8 +43,8 @@ public class OidMarshallerTest_roundtripping {
     public void rootOid_withVersion() {
         RootOid oid = RootOid.create(ObjectSpecId.of("CUS"), "123", 90807L);
         
-        final String enString = oid.enString(oidMarshaller);
-        final RootOid deString = RootOid.deString(enString, oidMarshaller);
+        final String enString = oid.enString();
+        final RootOid deString = RootOid.deString(enString);
         assertThat(deString, is(oid));
         assertThat(deString.getVersion(), is(oid.getVersion())); // assert separately because not part of equality check
     }
@@ -56,8 +56,8 @@ public class OidMarshallerTest_roundtripping {
         RootOid parentOid = RootOid.create(ObjectSpecId.of("CUS"), "123");
         ParentedCollectionOid oid = new ParentedCollectionOid(parentOid, "items");
         
-        final String enString = oid.enString(oidMarshaller);
-        final ParentedCollectionOid deString = ParentedCollectionOid.deString(enString, oidMarshaller);
+        final String enString = oid.enString();
+        final ParentedCollectionOid deString = ParentedCollectionOid.deString(enString);
         assertThat(deString, is(oid));
     }
 
@@ -66,8 +66,8 @@ public class OidMarshallerTest_roundtripping {
         RootOid parentOid = RootOid.create(ObjectSpecId.of("CUS"), "123", 90807L);
         ParentedCollectionOid oid = new ParentedCollectionOid(parentOid, "items");
         
-        final String enString = oid.enString(oidMarshaller);
-        final ParentedCollectionOid deString = ParentedCollectionOid.deString(enString, oidMarshaller);
+        final String enString = oid.enString();
+        final ParentedCollectionOid deString = ParentedCollectionOid.deString(enString);
         assertThat(deString, is(oid));
         assertThat(deString.getRootOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
     }

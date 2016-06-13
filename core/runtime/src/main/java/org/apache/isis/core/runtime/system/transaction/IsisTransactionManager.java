@@ -53,6 +53,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     //region > constructor, fields
 
     private final PersistenceSession persistenceSession;
+    private final AuthenticationSession authenticationSession;
     private final ServicesInjector servicesInjector;
 
     private final CommandContext commandContext;
@@ -60,9 +61,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     public IsisTransactionManager(
             final PersistenceSession persistenceSession,
+            final AuthenticationSession authenticationSession,
             final ServicesInjector servicesInjector) {
 
         this.persistenceSession = persistenceSession;
+        this.authenticationSession = authenticationSession;
         this.servicesInjector = servicesInjector;
 
         this.commandContext = this.servicesInjector.lookupServiceElseFail(CommandContext.class);
@@ -238,7 +241,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             final UUID transactionId = command.getTransactionId();
 
             this.currentTransaction = new IsisTransaction(transactionId,
-                    interaction.next(Interaction.Sequence.TRANSACTION.id()), servicesInjector);
+                    interaction.next(Interaction.Sequence.TRANSACTION.id()), authenticationSession, servicesInjector);
             transactionLevel = 0;
 
             persistenceSession.startTransaction();
@@ -411,16 +414,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
     public void addCommand(final PersistenceCommand command) {
         getCurrentTransaction().addCommand(command);
     }
-
     //endregion
-
-
-    /**
-     * Called back by {@link IsisTransaction}.
-     */
-    protected AuthenticationSession getAuthenticationSession() {
-        return servicesInjector.getAuthenticationSession();
-    }
-
 
 }

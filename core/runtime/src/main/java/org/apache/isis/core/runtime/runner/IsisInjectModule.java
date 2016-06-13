@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
@@ -111,13 +111,11 @@ public class IsisInjectModule extends AbstractModule {
         final IsisComponentProviderUsingInstallers componentProvider =
                 new IsisComponentProviderUsingInstallers(appManifest, isisConfiguration);
 
-        final IsisSystem system = new IsisSystem(componentProvider, deploymentCategory);
+        final IsisSessionFactoryBuilder builder = new IsisSessionFactoryBuilder(componentProvider, deploymentCategory);
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
-        system.buildSessionFactory();
-
-        return system.getSessionFactory();
+        return builder.buildSessionFactory();
     }
 
     @Provides

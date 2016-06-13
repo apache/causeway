@@ -157,6 +157,8 @@ public class PersistenceSession implements
     //region > constants
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     /**
      * @see #isFixturesInstalled()
      */
@@ -203,7 +205,6 @@ public class PersistenceSession implements
     // not final only for testing purposes
     private IsisTransactionManager transactionManager;
 
-    private final OidMarshaller oidMarshaller = new OidMarshaller();
 
     /**
      * populated only when {@link #open()}ed.
@@ -256,7 +257,7 @@ public class PersistenceSession implements
         // sub-components
         final AdapterManager adapterManager = this;
         this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, this.specificationLoader);
-        this.transactionManager = new IsisTransactionManager(this, servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this, authenticationSession, servicesInjector);
 
         this.state = State.NOT_INITIALIZED;
 
@@ -608,10 +609,6 @@ public class PersistenceSession implements
 
     public IsisConfiguration getConfiguration() {
         return configuration;
-    }
-
-    public OidMarshaller getOidMarshaller() {
-        return oidMarshaller;
     }
 
 
@@ -1026,7 +1023,7 @@ public class PersistenceSession implements
             public void execute() {
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(oidMarshaller));
+                    LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString());
                 }
 
                 if (!adapter.representsPersistent()) {
@@ -1804,7 +1801,7 @@ public class PersistenceSession implements
         // associate root adapter with the new Oid, and remap
         if (LOG.isDebugEnabled()) {
             LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: " + persistedRootOid.enString(
-                    oidMarshaller) + " (was: " + transientRootOid.enString(oidMarshaller) + ")");
+            ) + " (was: " + transientRootOid.enString() + ")");
         }
         adapter.replaceOid(persistedRootOid);
         oidAdapterMap.add(persistedRootOid, adapter);

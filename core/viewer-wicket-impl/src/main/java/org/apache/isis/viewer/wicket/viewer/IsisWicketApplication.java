@@ -69,6 +69,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
+import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -268,6 +269,7 @@ public class IsisWicketApplication
 
             injector.injectMembers(this); // populates this.isisSessionFactory
 
+            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, this.isisSessionFactory);
 
 
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
@@ -645,6 +647,7 @@ public class IsisWicketApplication
             if (isisSessionFactory != null) {
                 isisSessionFactory.destroyServicesAndShutdown();
             }
+            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, null);
             super.onDestroy();
         } catch(final RuntimeException ex) {
             // symmetry with #init()

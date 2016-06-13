@@ -81,7 +81,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <p>
  * Note that # and ; were not chosen as separators to minimize noise when URL encoding OIDs.
  */
-public class OidMarshaller {
+public final class OidMarshaller {
+
+    public final static OidMarshaller INSTANCE = new OidMarshaller();
+
+    private OidMarshaller(){}
 
     //region > public constants
     public static final String VIEWMODEL_INDICATOR =
@@ -258,7 +262,7 @@ public class OidMarshaller {
 
     @Programmatic
     public String marshalNoVersion(ParentedCollectionOid collectionOid) {
-        return collectionOid.getRootOid().enStringNoVersion(this) + SEPARATOR_COLLECTION + collectionOid.getName();
+        return collectionOid.getRootOid().enStringNoVersion() + SEPARATOR_COLLECTION + collectionOid.getName();
     }
 
     @Programmatic

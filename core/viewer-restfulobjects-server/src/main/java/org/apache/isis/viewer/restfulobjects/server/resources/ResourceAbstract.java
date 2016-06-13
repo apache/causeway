@@ -121,8 +121,6 @@ public abstract class ResourceAbstract {
         this.resourceContext = new ResourceContext(
                 representationType, httpHeaders, providers, uriInfo, request, where, intent, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext,
-                getConfiguration(),
-                getServicesInjector(),
                 InteractionInitiatedBy.USER);
     }
 

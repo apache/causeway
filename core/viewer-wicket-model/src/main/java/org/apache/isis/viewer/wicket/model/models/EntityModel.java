@@ -61,7 +61,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     private static final long serialVersionUID = 1L;
 
-    private static OidMarshaller oidMarshaller = new OidMarshaller();
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
@@ -78,7 +78,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         final Boolean persistent = adapter != null && adapter.representsPersistent();
 
         if (persistent) {
-            final String oidStr = adapter.getOid().enStringNoVersion(oidMarshaller);
+            final String oidStr = adapter.getOid().enStringNoVersion();
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -175,7 +175,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     }
 
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return oidMarshaller.unmarshal(oidStr(pageParameters), RootOid.class);
+        return OID_MARSHALLER.unmarshal(oidStr(pageParameters), RootOid.class);
     }
 
 

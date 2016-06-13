@@ -31,7 +31,7 @@ public class ConcurrencyException extends IsisException {
         
         final StringBuilder buf = new StringBuilder();
         buf.append(currentUser != null? currentUser + " " : "");
-        buf.append(" attempted to update ").append(oid.enStringNoVersion(getOidMarshaller()));
+        buf.append(" attempted to update ").append(oid.enStringNoVersion());
         buf.append(", however this object has since been modified");
         if(datastoreVersion.getUser() != null) {
             buf.append(" by ").append(datastoreVersion.getUser());
@@ -59,8 +59,5 @@ public class ConcurrencyException extends IsisException {
         return oid;
     }
     
-    private static OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
-    }
 
 }

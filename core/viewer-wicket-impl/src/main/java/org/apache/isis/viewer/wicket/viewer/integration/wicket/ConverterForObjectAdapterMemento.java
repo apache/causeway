@@ -28,7 +28,6 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -45,8 +44,6 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
 
     private static final long serialVersionUID = 1L;
 
-    private static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
-
     /**
      * Converts string representation of {@link Oid} to
      * {@link ObjectAdapterMemento}.
@@ -56,7 +53,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        final Oid oid = RootOid.deStringEncoded(value, OID_MARSHALLER);
+        final Oid oid = RootOid.deStringEncoded(value);
         final ObjectAdapter adapter = getPersistenceSession().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }
@@ -77,7 +74,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
             // REVIEW: is this right?
             return memento.toString();
         }
-        return oid.enString(OID_MARSHALLER);
+        return oid.enString();
     }
 
     // //////////////////////////////////////////////////////////

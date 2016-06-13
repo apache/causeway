@@ -44,7 +44,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -58,7 +58,7 @@ import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
 import static org.junit.Assert.fail;
 
 /**
- * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.
+ * Wraps a plain {@link IsisSessionFactoryBuilder}, and provides a number of features to assist with testing.
  */
 public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServiceProvider {
 
@@ -303,12 +303,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     configurationOverride
             );
 
-            final IsisSystem isisSystem = new IsisSystem(componentProvider, DeploymentCategory.PRODUCTION);
+            final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(componentProvider, DeploymentCategory.PRODUCTION);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
 
-            isisSessionFactory = isisSystem.buildSessionFactory();
+            isisSessionFactory = isisSessionFactoryBuilder.buildSessionFactory();
             // REVIEW: does no harm, but is this required?
             closeSession();
 

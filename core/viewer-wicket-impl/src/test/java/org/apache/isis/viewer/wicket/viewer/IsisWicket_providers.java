@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 public class IsisWicket_providers {
 
@@ -63,7 +63,7 @@ public class IsisWicket_providers {
     // need to handle config
     @Test
     public void isisSystem() {
-        final IsisSystem instance = injector.getInstance(IsisSystem.class);
+        final IsisSessionFactoryBuilder instance = injector.getInstance(IsisSessionFactoryBuilder.class);
         assertThat(instance, is(notNullValue()));
     }
 

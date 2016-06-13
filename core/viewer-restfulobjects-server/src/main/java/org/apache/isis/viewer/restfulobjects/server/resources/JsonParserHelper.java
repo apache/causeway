@@ -36,6 +36,8 @@ import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
  */
 public class JsonParserHelper {
 
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");
 
     private final RendererContext rendererContext;
@@ -145,7 +147,7 @@ public class JsonParserHelper {
         }
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
-        return getOidMarshaller().joinAsOid(domainType, instanceId);
+        return OID_MARSHALLER.joinAsOid(domainType, instanceId);
     }
 
     private static String resourceFor(final ObjectSpecification objectSpec) {
@@ -154,8 +156,5 @@ public class JsonParserHelper {
         return objectSpec.getFullIdentifier();
     }
 
-    private static OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
-    }
 
 }

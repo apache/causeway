@@ -244,7 +244,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
     }
 
     public AuthenticationSession getAuthenticationSession() {
-        return getServicesInjector().getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
     protected MessageBroker getMessageBroker() {

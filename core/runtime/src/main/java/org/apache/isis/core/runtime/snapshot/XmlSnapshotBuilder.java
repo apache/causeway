@@ -23,7 +23,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -40,7 +39,6 @@ public class XmlSnapshotBuilder {
 
     private final Object domainObject;
     private XmlSchema schema;
-    private OidMarshaller oidMarshaller = new OidMarshaller();
 
     static class PathAndAnnotation {
         public PathAndAnnotation(final String path, final String annotation) {
@@ -74,7 +72,7 @@ public class XmlSnapshotBuilder {
 
     public XmlSnapshot build() {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
-        final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema, oidMarshaller) : new XmlSnapshot(adapter, oidMarshaller);
+        final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema) : new XmlSnapshot(adapter);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {
                 snapshot.include(paa.path, paa.annotation);

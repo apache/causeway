@@ -53,7 +53,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -193,7 +192,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.facetProcessor = facetProcessor;
 
         this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.deploymentCategory = servicesInjector.getDeploymentCategory();
+        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     

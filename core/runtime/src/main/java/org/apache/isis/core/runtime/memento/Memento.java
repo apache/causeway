@@ -60,10 +60,13 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
  */
 public class Memento implements Serializable {
 
-    private final static long serialVersionUID = 1L;
     private final static Logger LOG = LoggerFactory.getLogger(Memento.class);
+    private final static long serialVersionUID = 1L;
+
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final List<Oid> transientObjects = Lists.newArrayList();
+
 
     private Data data;
 
@@ -166,9 +169,8 @@ public class Memento implements Serializable {
 
     private static <T extends Oid> T clone(final T oid) {
         if(oid == null) { return null; }
-        final OidMarshaller oidMarshaller = new OidMarshaller();
-        final String oidStr = oid.enString(oidMarshaller);
-        return (T) oidMarshaller.unmarshal(oidStr, oid.getClass());
+        final String oidStr = oid.enString();
+        return (T) OID_MARSHALLER.unmarshal(oidStr, oid.getClass());
     }
 
     private Data createStandaloneData(final ObjectAdapter adapter) {

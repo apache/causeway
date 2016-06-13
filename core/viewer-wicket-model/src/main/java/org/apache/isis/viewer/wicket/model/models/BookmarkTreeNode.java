@@ -40,7 +40,7 @@ public class BookmarkTreeNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final List<BookmarkTreeNode> children = Lists.newArrayList();
     private final int depth;
@@ -212,7 +212,7 @@ public class BookmarkTreeNode implements Serializable {
                 if(possibleParentOid == null) {
                     continue;
                 }
-                final String possibleParentOidStr = possibleParentOid.enStringNoVersion(OID_MARSHALLER);
+                final String possibleParentOidStr = possibleParentOid.enStringNoVersion();
                 if(Objects.equal(this.oidNoVerStr, possibleParentOidStr)) {
                     this.addChild(candidateBookmarkableModel);
                     whetherAdded = true;

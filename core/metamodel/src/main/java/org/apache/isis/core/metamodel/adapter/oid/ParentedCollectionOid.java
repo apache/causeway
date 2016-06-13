@@ -37,6 +37,8 @@ public final class ParentedCollectionOid implements Serializable, Oid {
 
     private static final long serialVersionUID = 1L;
 
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private final String name;
     private int cachedHashCode;
 
@@ -92,19 +94,19 @@ public final class ParentedCollectionOid implements Serializable, Oid {
     // enstring
     // /////////////////////////////////////////////////////////
 
-    public static ParentedCollectionOid deString(String oidStr, OidMarshaller oidMarshaller) {
-        return oidMarshaller.unmarshal(oidStr, ParentedCollectionOid.class);
+    public static ParentedCollectionOid deString(String oidStr) {
+        return OID_MARSHALLER.unmarshal(oidStr, ParentedCollectionOid.class);
     }
 
 
     @Override
-    public String enString(OidMarshaller oidMarshaller) {
-        return oidMarshaller.marshal(this);
+    public String enString() {
+        return OID_MARSHALLER.marshal(this);
     }
 
     @Override
-    public String enStringNoVersion(OidMarshaller oidMarshaller) {
-        return oidMarshaller.marshalNoVersion(this);
+    public String enStringNoVersion() {
+        return OID_MARSHALLER.marshalNoVersion(this);
     }
 
 
@@ -114,7 +116,7 @@ public final class ParentedCollectionOid implements Serializable, Oid {
 
 
     public ParentedCollectionOid(DataInputExtended inputStream) throws IOException {
-        this(ParentedCollectionOid.deString(inputStream.readUTF(), getEncodingMarshaller()));
+        this(ParentedCollectionOid.deString(inputStream.readUTF()));
     }
 
     private ParentedCollectionOid(ParentedCollectionOid oid) throws IOException {
@@ -125,14 +127,7 @@ public final class ParentedCollectionOid implements Serializable, Oid {
 
     @Override
     public void encode(DataOutputExtended outputStream) throws IOException {
-        outputStream.writeUTF(enString(getEncodingMarshaller()));
-    }
-
-    /**
-     * Cannot be a reference because Oid gets serialized by wicket viewer
-     */
-    private static OidMarshaller getEncodingMarshaller() {
-        return new OidMarshaller();
+        outputStream.writeUTF(enString());
     }
 
     // /////////////////////////////////////////////////////////
@@ -150,7 +145,7 @@ public final class ParentedCollectionOid implements Serializable, Oid {
 
     @Override
     public String toString() {
-        return enString(new OidMarshaller());
+        return enString();
     }
 
 

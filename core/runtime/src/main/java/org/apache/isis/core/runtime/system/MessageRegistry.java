@@ -19,17 +19,16 @@
 
 package org.apache.isis.core.runtime.system;
 
-/**
- * @deprecated
- */
-@Deprecated
-public class IsisSystem {
+import java.util.Arrays;
+import java.util.List;
 
-    public static final String MSG_ARE_YOU_SURE = "Are you sure?";
-    public static final String MSG_CONFIRM = "Confirm";
-    public static final String MSG_CANCEL = "Cancel";
+public class MessageRegistry {
 
-    private IsisSystem(){}
+    public MessageRegistry(){}
+
+    public List<String> listMessages() {
+        return Arrays.asList(IsisSystem.MSG_ARE_YOU_SURE, IsisSystem.MSG_CONFIRM, IsisSystem.MSG_CANCEL);
+    }
 
 
 }

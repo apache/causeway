@@ -30,10 +30,11 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -134,7 +135,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
      * @return
      */
     public AuthenticationSession getAuthenticationSession() {
-        return getServicesInjector().getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
 
@@ -173,7 +174,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-        final String context = IsisSystem.class.getName();
+        final String context = IsisSessionFactoryBuilder.class.getName();
         final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
         final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
         final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
@@ -191,7 +192,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
 
 
     public DeploymentCategory getDeploymentCategory() {
-        return getServicesInjector().getDeploymentCategory();
+        return getIsisSessionFactory().getDeploymentCategory();
     }
 
 

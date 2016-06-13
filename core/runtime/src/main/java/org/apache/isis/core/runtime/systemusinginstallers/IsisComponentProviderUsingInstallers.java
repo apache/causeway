@@ -41,7 +41,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
 public class IsisComponentProviderUsingInstallers extends IsisComponentProvider {
@@ -131,7 +131,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
      * Looks up authorization and authentication implementations.
      *
      * Previously this class was used to lookup the top-level components of
-     * {@link IsisSystem} (persistence, authentication, authorization, reflector and so on),
+     * {@link IsisSessionFactoryBuilder} (persistence, authentication, authorization, reflector and so on),
      * each being looked up from a file called <tt>installer-registry.properties</tt>.
      * Of these responsibilities, only the support for authentication and authorization remains,
      * the remainder have only a single implementation.  The implementation has been

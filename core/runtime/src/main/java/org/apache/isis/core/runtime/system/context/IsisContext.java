@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
@@ -64,7 +64,7 @@ public final class IsisContext {
 
 
     /**
-     * Intended to be called only by {@link IsisSystem}.
+     * Intended to be called only by {@link IsisSessionFactoryBuilder}.
      */
     public static void setSessionFactory(final IsisSessionFactory sessionFactory) {
         if (IsisContext.sessionFactory != null) {

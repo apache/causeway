@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.WebAppConstants;
 
 /**
@@ -71,15 +71,15 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
 
         // otherwise, look for LogonFixture and try to authenticate
         final ServletContext servletContext = getServletContext(httpServletRequest);
-        final IsisSystem system = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
-        if (system == null) {
-            // not expected to happen...
+        final IsisSessionFactory sessionFactory = (IsisSessionFactory) servletContext.getAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
+        if (sessionFactory == null) {
+            // not expected to happen (is set up either by IsisWebAppBootstrapper or in IsisWicketApplication).
             return null;
         }
-        final LogonFixture logonFixture = system.getSessionFactory().getLogonFixture();
+        final LogonFixture logonFixture = sessionFactory.getLogonFixture();
 
         // see if exploration is supported
-        if (system.getDeploymentCategory().isExploring()) {
+        if (sessionFactory.getDeploymentCategory().isExploring()) {
             authSession = authenticationManager.authenticate(new AuthenticationRequestExploration(logonFixture));
             if (authSession != null) {
                 return authSession;

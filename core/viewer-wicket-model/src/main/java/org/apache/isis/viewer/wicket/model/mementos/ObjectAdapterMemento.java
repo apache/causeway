@@ -47,7 +47,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 public class ObjectAdapterMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
+
+    public static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     /**
      * Factory method
@@ -131,7 +132,7 @@ public class ObjectAdapterMemento implements Serializable {
                     // we copy this updated oid string into our memento so that, if we retry, 
                     // we will succeed second time around
 
-                    oam.persistentOidStr = oid.enString(OID_MARSHALLER);
+                    oam.persistentOidStr = oid.enString();
                 }
             }
 
@@ -144,7 +145,7 @@ public class ObjectAdapterMemento implements Serializable {
                 final ObjectAdapter adapter = recreateAdapter(
                         oam, ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
                 Oid oid = adapter.getOid();
-                oam.persistentOidStr = oid.enString(OID_MARSHALLER);
+                oam.persistentOidStr = oid.enString();
             }
 
             @Override
@@ -265,7 +266,7 @@ public class ObjectAdapterMemento implements Serializable {
 
         assert !rootOid.isTransient();
 
-        this.persistentOidStr = rootOid.enString(OID_MARSHALLER);
+        this.persistentOidStr = rootOid.enString();
         this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
@@ -299,7 +300,7 @@ public class ObjectAdapterMemento implements Serializable {
             return;
         }
 
-        persistentOidStr = oid.enString(OID_MARSHALLER);
+        persistentOidStr = oid.enString();
         bookmark = oid.asBookmark();
         type = Type.PERSISTENT;
     }

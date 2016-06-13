@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -82,9 +83,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
     
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private static final String NULL_ARG = "$nullArg$";
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
-    public static final OidMarshaller OID_MARSHALLER = new OidMarshaller();
 
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
@@ -135,8 +137,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final PageParameters pageParameters = PageParametersUtils.newPageParameters();
 
         final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
-                adapter.getOid().enString(OID_MARSHALLER):
-                adapter.getOid().enStringNoVersion(OID_MARSHALLER);
+                adapter.getOid().enString():
+                adapter.getOid().enStringNoVersion();
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         
         final ActionType actionType = objectAction.getType();
@@ -398,7 +400,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             return encodeable.toEncodedString(adapter);
         }
 
-        return adapter.getOid().enStringNoVersion(OID_MARSHALLER);
+        return adapter.getOid().enStringNoVersion();
     }
 
     private ObjectAdapter decodeArg(final ObjectSpecification objSpec, final String encoded) {
@@ -412,7 +414,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
         
         try {
-            final RootOid oid = RootOid.deStringEncoded(encoded, OID_MARSHALLER);
+            final RootOid oid = RootOid.deStringEncoded(encoded);
             return getPersistenceSession().adapterFor(oid);
         } catch (final Exception e) {
             return null;
@@ -575,7 +577,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             // equivalent to calling DomainObjectContainer#raiseError(...)
             final RecoverableException appEx = getApplicationExceptionIfAny(ex);
             if (appEx != null) {
-                getServicesInjector().getMessageBroker().setApplicationError(appEx.getMessage());
+                final MessageBroker messageBroker = getCurrentSession().getAuthenticationSession().getMessageBroker();
+                messageBroker.setApplicationError(appEx.getMessage());
 
                 // there's no need to set the abort cause on the transaction, it will have already been done
                 // (in IsisTransactionManager#executeWithinTransaction(...)).

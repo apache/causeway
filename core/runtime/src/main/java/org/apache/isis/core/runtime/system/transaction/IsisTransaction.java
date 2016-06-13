@@ -32,7 +32,6 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -165,6 +164,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     private final UUID interactionId;
     private final int sequence;
+    private final AuthenticationSession authenticationSession;
 
     private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
@@ -177,16 +177,20 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private IsisException abortCause;
 
     public IsisTransaction(
-            final UUID interactionId, final int sequence, final ServicesInjector servicesInjector) {
+            final UUID interactionId,
+            final int sequence,
+            final AuthenticationSession authenticationSession,
+            final ServicesInjector servicesInjector) {
 
         this.interactionId = interactionId;
         this.sequence = sequence;
+        this.authenticationSession = authenticationSession;
 
         final PersistenceSessionServiceInternalDefault persistenceSessionService = servicesInjector
                 .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
         this.transactionManager = persistenceSessionService.getTransactionManager();
 
-        this.messageBroker = servicesInjector.getMessageBroker();
+        this.messageBroker = authenticationSession.getMessageBroker();
         this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
         this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
 

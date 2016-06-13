@@ -42,14 +42,11 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.publish.PublishingService;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -544,14 +541,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
                 : (specificationLoader = lookupServiceElseFail(SpecificationLoader.class));
     }
 
-    private DeploymentCategoryProvider deploymentCategoryProvider;
-    @Programmatic
-    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return deploymentCategoryProvider != null
-                ? deploymentCategoryProvider
-                : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
-    }
-
     private AuthenticationSessionProvider authenticationSessionProvider;
     @Programmatic
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
@@ -576,43 +565,12 @@ public class ServicesInjector implements ApplicationScopedComponent {
                 : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
     }
 
-    private OidMarshaller oidMarshaller;
-
+    private DeploymentCategoryProvider deploymentCategoryProvider;
     @Programmatic
-    public OidMarshaller getOidMarshaller() {
-        return oidMarshaller != null
-                ? oidMarshaller
-                : (oidMarshaller = lookupServiceElseFail(OidMarshaller.class));
-    }
-
-
-
-    //endregion
-
-    //region > convenience lookups (not cached as derived properties)
-
-    /**
-     * Cannot be cached because is a derived property, not a registered service.
-     */
-    @Programmatic
-    public AuthenticationSession getAuthenticationSession() {
-        return getAuthenticationSessionProvider().getAuthenticationSession();
-    }
-
-    /**
-     * Cannot be cached because is a derived property, not a registered service.
-     */
-    @Programmatic
-    public MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
-    }
-
-    /**
-     * Cannot be cached because is a derived property, not a registered service.
-     */
-    @Programmatic
-    public DeploymentCategory getDeploymentCategory() {
-        return getDeploymentCategoryProvider().getDeploymentCategory();
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return deploymentCategoryProvider != null
+                ? deploymentCategoryProvider
+                : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
     }
 
 

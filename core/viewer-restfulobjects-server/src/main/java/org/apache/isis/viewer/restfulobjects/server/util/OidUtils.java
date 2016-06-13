@@ -26,6 +26,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
 
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private OidUtils() {
     }
 
@@ -36,7 +38,7 @@ public final class OidUtils {
             final RendererContext rendererContext,
             final String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
-        String oidStrUnencoded = getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
+        String oidStrUnencoded = OID_MARSHALLER.joinAsOid(domainType, instanceIdUnencoded);
         return getObjectAdapter(rendererContext, oidStrUnencoded);
     }
 
@@ -53,15 +55,11 @@ public final class OidUtils {
     private static ObjectAdapter getObjectAdapter(
             final RendererContext rendererContext,
             final String oidStrUnencoded) {
-        RootOid rootOid = RootOid.deString(oidStrUnencoded, getOidMarshaller());
+        RootOid rootOid = RootOid.deString(oidStrUnencoded);
 
         final PersistenceSession persistenceSession = rendererContext.getPersistenceSession();
 
         return persistenceSession.adapterForAny(rootOid);
     }
-
-    private static OidMarshaller getOidMarshaller() {
-		return new OidMarshaller();
-	}
 
 }

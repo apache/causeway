@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -79,6 +78,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
+
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     //region > static helper functions
     private Function<ObjectAdapter, ObjectAdapter> notDestroyedElseEmpty() {
@@ -250,7 +251,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
 
         final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-        final String oidStr = oidMarshaller.marshal(adapterOid);
+        final String oidStr = OID_MARSHALLER.marshal(adapterOid);
         final Identifier actionIdentifier = objectAction.getIdentifier();
         final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
 
@@ -314,7 +315,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                     final ObjectAdapter adapter = isisSessionFactory.getCurrentSession()
                             .getPersistenceSession().adapterFor(object);
                     Oid oid = adapter.getOid();
-                    return oid != null? oid.enString(oidMarshaller): encodedValueOf(adapter);
+                    return oid != null? oid.enString(): encodedValueOf(adapter);
                 }
                 private String encodedValueOf(ObjectAdapter adapter) {
                     EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
@@ -444,9 +445,6 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @javax.inject.Inject
     private MetricsService metricsService;
-
-    @javax.inject.Inject
-    private OidMarshaller oidMarshaller;
 
     @javax.inject.Inject
     private IsisSessionFactory isisSessionFactory;

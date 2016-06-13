@@ -47,17 +47,11 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
  */
 public class Version implements Serializable, Encodable {
 
-    
     private static final long serialVersionUID = 1L;
-    
-    private final Long sequence;
-    private final String user;
-    private final Long utcTimestamp;
 
-    // ///////////////////////////////////////////////////////
-    // factory methods
-    // ///////////////////////////////////////////////////////
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
+    //region > factory methods
 
     public static Version create(final Long sequence) {
         return create(sequence, null, (Long)null);
@@ -81,21 +75,28 @@ public class Version implements Serializable, Encodable {
         return new Version(sequence, user, utcTimestamp);
     }
 
+    //endregion
+
+    //region > constructor, fields
+    private final Long sequence;
+    private final String user;
+    private final Long utcTimestamp;
+
     private Version(Long sequence, String user, Long utcTimestamp) {
         this.sequence = sequence;
         this.user = user;
         this.utcTimestamp = utcTimestamp;
     }
 
-    
-    // ///////////////////////////////////////////////////////
-    // encodable
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > encodable
 
     public Version(final DataInputExtended input) throws IOException {
         this(input.readLong(), input.readUTF(), input.readLong());
     }
-    
+
+
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeLong(sequence);
@@ -103,11 +104,9 @@ public class Version implements Serializable, Encodable {
         output.writeLong(utcTimestamp);
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////
-    // getters
-    // ///////////////////////////////////////////////////////
-
+    //region > getters
     /**
      * The internal, strictly monotonically increasing, version number.
      * 
@@ -152,18 +151,17 @@ public class Version implements Serializable, Encodable {
         return utcTimestamp != null? new Date(this.utcTimestamp): null;
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////
-    // enString
-    // ///////////////////////////////////////////////////////
+    //region > enString
 
-    public String enString(OidMarshaller oidMarshaller) {
-        return oidMarshaller.marshal(this);
+    public String enString() {
+        return OID_MARSHALLER.marshal(this);
     }
 
-    // ///////////////////////////////////////////////////////
-    // equals, hashCode
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > equals, hashCode
 
     @Override
     public int hashCode() {
@@ -201,13 +199,11 @@ public class Version implements Serializable, Encodable {
     public boolean different(Version version) {
         return !equals(version);
     }
-    
-    
-    //////////////////////////////////////////////////////////////
-    // sequence
-    //////////////////////////////////////////////////////////////
-    
- 
+
+    //endregion
+
+    //region > sequence
+
     @Override
     public String toString() {
         return "#" + sequence + " " + getUser() + " " + DateExtensions.asTimestamp(getTime());
@@ -219,5 +215,7 @@ public class Version implements Serializable, Encodable {
     public String sequence() {
         return Long.toString(sequence, 16);
     }
-    
+
+    //endregion
+
 }

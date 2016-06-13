@@ -43,9 +43,12 @@ public class RootOid implements TypedOid, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private final ObjectSpecId objectSpecId;
     private final String identifier;
     private final State state;
+
 
     // not part of equality check
     private Version version;
@@ -139,7 +142,7 @@ public class RootOid implements TypedOid, Serializable {
     //region > Encodeable
     public RootOid(final DataInputExtended input) throws IOException {
         final String oidStr = input.readUTF();
-        final RootOid oid = getEncodingMarshaller().unmarshal(oidStr, RootOid.class);
+        final RootOid oid = OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
         this.objectSpecId = oid.objectSpecId;
         this.identifier = oid.identifier;
         this.state = oid.state;
@@ -149,37 +152,30 @@ public class RootOid implements TypedOid, Serializable {
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(enString(getEncodingMarshaller()));
+        output.writeUTF(enString());
     }
 
-
-    /**
-     * Cannot be a reference because Oid gets serialized by wicket viewer
-     */
-    private OidMarshaller getEncodingMarshaller() {
-        return new OidMarshaller();
-    }
 
     //endregion
 
     //region > deString'able, enString
-    public static RootOid deStringEncoded(final String urlEncodedOidStr, final OidMarshaller oidMarshaller) {
+    public static RootOid deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
-        return deString(oidStr, oidMarshaller);
+        return deString(oidStr);
     }
 
-    public static RootOid deString(final String oidStr, final OidMarshaller oidMarshaller) {
-        return oidMarshaller.unmarshal(oidStr, RootOid.class);
-    }
-
-    @Override
-    public String enString(final OidMarshaller oidMarshaller) {
-        return oidMarshaller.marshal(this);
+    public static RootOid deString(final String oidStr) {
+        return OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
     }
 
     @Override
-    public String enStringNoVersion(final OidMarshaller oidMarshaller) {
-        return oidMarshaller.marshalNoVersion(this);
+    public String enString() {
+        return OID_MARSHALLER.marshal(this);
+    }
+
+    @Override
+    public String enStringNoVersion() {
+        return OID_MARSHALLER.marshalNoVersion(this);
     }
     //endregion
 
@@ -283,7 +279,7 @@ public class RootOid implements TypedOid, Serializable {
     //region > toString
     @Override
     public String toString() {
-        return enString(new OidMarshaller());
+        return enString();
     }
 
 
