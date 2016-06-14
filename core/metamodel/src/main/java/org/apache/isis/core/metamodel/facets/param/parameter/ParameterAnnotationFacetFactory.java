@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facets.param.parameter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Optional;
@@ -35,9 +37,11 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForMaxLengthAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
@@ -47,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFor
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
@@ -55,6 +60,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
     private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
+    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
 
     public ParameterAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -177,9 +183,21 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             final Class<?> parameterType = parameterTypes[paramNum];
             if (parameterAnnotation instanceof Optional) {
                 final Optional annotation = (Optional) parameterAnnotation;
-                final Facet facet = MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(annotation, parameterType, holder);
-                FacetUtil.addFacet(optionalValidator.flagIfPresent(facet, processParameterContext));
-                return;
+                FacetUtil.addFacet(optionalValidator.flagIfPresent(
+                        MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(
+                                annotation, parameterType, holder), processParameterContext));
+            }
+        }
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            final Class<?> parameterType = parameterTypes[paramNum];
+            if (parameterAnnotation instanceof javax.annotation.Nullable) {
+                final Nullable annotation = (Nullable) parameterAnnotation;
+                final MandatoryFacet facet =
+                        MandatoryFacetInvertedByNullableAnnotationOnParameter.create(annotation, parameterType, holder);
+                FacetUtil.addFacet(facet);
+                conflictingOptionalityValidator.flagIfConflict(
+                        facet, "Conflicting @Nullable with other optionality annotation");
             }
         }
 
@@ -187,9 +205,11 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof Parameter) {
                 final Parameter parameter = (Parameter) parameterAnnotation;
                 final Class<?> parameterType = parameterTypes[paramNum];
-                FacetUtil.addFacet(
-                        MandatoryFacetForParameterAnnotation.create(parameter, parameterType, holder));
-                return;
+                final MandatoryFacet facet =
+                        MandatoryFacetForParameterAnnotation.create(parameter, parameterType, holder);
+                FacetUtil.addFacet(facet);
+                conflictingOptionalityValidator.flagIfConflict(
+                        facet, "Conflicting @Parameter#optionality with other optionality annotation");
             }
         }
     }
@@ -200,8 +220,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(regexValidator);
         metaModelValidator.add(optionalValidator);
+        metaModelValidator.add(conflictingOptionalityValidator);
     }
-
 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {

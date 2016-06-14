@@ -123,10 +123,10 @@ public final class ArrayExtensions {
         return list;
     }
 
-    public static <T> T coalesce(final T... strings) {
-        for (final T str : strings) {
-            if (str != null) {
-                return str;
+    public static <T> T coalesce(final T... objects) {
+        for (final T object : objects) {
+            if (object != null) {
+                return object;
             }
         }
         return null;

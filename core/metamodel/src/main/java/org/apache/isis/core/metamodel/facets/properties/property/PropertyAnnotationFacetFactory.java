@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Mandatory;
@@ -60,6 +62,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFa
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
@@ -87,6 +90,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
@@ -102,6 +106,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation maxLengthValidator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
+    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
+
 
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
@@ -386,23 +392,37 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        // check for deprecated @Optional first
+        // check for deprecated @Optional
         final Optional optionalAnnotation = Annotations.getAnnotation(method, Optional.class);
-        MandatoryFacet facet = optionalValidator.flagIfPresent(MandatoryFacetInvertedByOptionalAnnotationOnProperty.create(optionalAnnotation, method, holder), processMethodContext);
+        FacetUtil.addFacet(
+                optionalValidator.flagIfPresent(
+                    MandatoryFacetInvertedByOptionalAnnotationOnProperty.create(optionalAnnotation, method, holder),
+                    processMethodContext));
 
-        // else check for deprecated @Mandatory first
+        // check for deprecated @Mandatory
         final Mandatory mandatoryAnnotation = Annotations.getAnnotation(method, Mandatory.class);
-        if(facet == null) {
-            facet = mandatoryValidator.flagIfPresent(MandatoryFacetForMandatoryAnnotationOnProperty.create(mandatoryAnnotation, holder), processMethodContext);
-        }
+        final MandatoryFacet facet =
+                mandatoryValidator.flagIfPresent(
+                    MandatoryFacetForMandatoryAnnotationOnProperty.create(mandatoryAnnotation, holder),
+                    processMethodContext);
+        FacetUtil.addFacet(facet);
+        conflictingOptionalityValidator.flagIfConflict(
+                facet, "Conflicting @Mandatory with other optionality annotation");
+
+        // else check for @Nullable
+        final Nullable nullableAnnotation = Annotations.getAnnotation(method, Nullable.class);
+        final MandatoryFacet facet2 =
+                MandatoryFacetInvertedByNullableAnnotationOnProperty.create(nullableAnnotation, method, holder);
+        FacetUtil.addFacet(facet2);
+        conflictingOptionalityValidator.flagIfConflict(
+                    facet2, "Conflicting @Nullable with other optionality annotation");
 
         // else search for @Property(optional=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
-        if(facet == null) {
-            facet = MandatoryFacetForPropertyAnnotation.create(property, method, holder);
-        }
-
-        FacetUtil.addFacet(facet);
+        final MandatoryFacet facet3 = MandatoryFacetForPropertyAnnotation.create(property, method, holder);
+        FacetUtil.addFacet(facet3);
+        conflictingOptionalityValidator.flagIfConflict(
+                    facet3, "Conflicting Property#optionality with other optionality annotation");
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext) {
@@ -444,6 +464,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         metaModelValidator.add(maxLengthValidator);
         metaModelValidator.add(mustSatisfyValidator);
         metaModelValidator.add(notPersistedValidator);
+        metaModelValidator.add(conflictingOptionalityValidator);
     }
 
     // //////////////////////////////////////

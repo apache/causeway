@@ -280,6 +280,7 @@ public final class Annotations  {
                     Collection.class,
                     CollectionLayout.class,
                     MemberOrder.class,
+                    javax.annotation.Nullable.class,
                     Title.class,
                     javax.jdo.annotations.Column.class
             )
