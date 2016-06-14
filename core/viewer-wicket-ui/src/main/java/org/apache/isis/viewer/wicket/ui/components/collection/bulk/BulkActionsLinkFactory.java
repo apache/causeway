@@ -150,6 +150,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                     model.clearToggleMementosList();
                     toggleboxColumn.clearToggles();
+
                     final ActionModel actionModel = model.getActionModelHint();
                     if(actionModel != null && actionModel.getActionMemento().getAction(getSpecificationLoader()).getSemantics().isIdempotentInNature()) {
                         ObjectAdapter resultAdapter = actionModel.getObject();

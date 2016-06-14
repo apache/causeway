@@ -24,7 +24,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 
 public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
@@ -32,9 +34,11 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
     private static final String ID_SHOW_ALL = "showAll";
     private static final String HINT_KEY_SHOW_ALL = "showAll";
+    private final ObjectAdapterToggleboxColumn toggleboxColumn;
 
-    public IsisAjaxNavigationToolbar(final DataTable<?, ?> table) {
+    public IsisAjaxNavigationToolbar(final DataTable<?, ?> table, final ObjectAdapterToggleboxColumn toggleboxColumn) {
         super(table);
+        this.toggleboxColumn = toggleboxColumn;
         addShowAllButton(table);
     }
 
@@ -46,6 +50,13 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 showAllItemsOn(table);
+
+                final DataTable<?, ?> dataTable = getTable();
+                final CollectionContentsSortableDataProvider dataProvider = (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
+                final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
+                collectionModel.clearToggleMementosList();
+                toggleboxColumn.clearToggles();
+
                 final UiHintContainer hintContainer = getUiHintContainer();
                 if(hintContainer != null) {
                     hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");

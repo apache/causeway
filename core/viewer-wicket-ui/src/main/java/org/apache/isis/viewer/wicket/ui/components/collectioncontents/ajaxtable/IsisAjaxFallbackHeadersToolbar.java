@@ -31,12 +31,14 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
 {
     private static final long serialVersionUID = 1L;
-    private final ISortStateLocator<S> stateLocator;
+    private final CollectionContentsSortableDataProvider stateLocator;
     private IsisAjaxFallbackDataTable<?, S> table;
 
-    public IsisAjaxFallbackHeadersToolbar(final IsisAjaxFallbackDataTable<?, S> table, final ISortStateLocator<S> stateLocator)
+    public IsisAjaxFallbackHeadersToolbar(
+            final IsisAjaxFallbackDataTable<?, S> table,
+            final CollectionContentsSortableDataProvider stateLocator)
     {
-        super(table, stateLocator);
+        super(table, (ISortStateLocator<S>)stateLocator);
         this.table = table;
         table.setOutputMarkupId(true);
         this.stateLocator = stateLocator;
@@ -77,9 +79,7 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
         for (SortOrder sortOrder : SortOrder.values()) {
             String property = uiHintContainer.getHint(table, sortOrder.name());
             if(property != null) {
-                // bit hacky... how know this cast is safe?
-                S propertyS = (S) property;
-                stateLocator.getSortState().setPropertySortOrder(propertyS, sortOrder);
+                stateLocator.getSortState().setPropertySortOrder(property, sortOrder);
             }
         }
     }
