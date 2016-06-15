@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -71,8 +73,12 @@ import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.core.webapp.WebAppConstants;
+import org.apache.isis.schema.utils.ChangesDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -237,12 +243,11 @@ public class IsisWicketApplication
      */
     @Override
     protected void init() {
+        List<Future<Object>> futures = null;
         try {
             super.init();
 
-            configureWebJars();
-            configureWicketBootstrap();
-            configureWicketSelect2();
+            futures = startBackgroundInitializationThreads();
 
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
 
@@ -315,7 +320,35 @@ public class IsisWicketApplication
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             LOG.error("Failed to initialize", ex);
             throw ex;
+        } finally {
+            ThreadPoolSupport.join(futures);
         }
+    }
+
+    protected List<Future<Object>> startBackgroundInitializationThreads() {
+        return ThreadPoolSupport.invokeAll(Lists.newArrayList(
+                new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        configureWebJars();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        configureWicketBootstrap();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        configureWicketSelect2();
+                        return null;
+                    }
+                }
+        ));
     }
 
     /**
