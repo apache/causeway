@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
@@ -156,11 +155,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private static ActionType getType(final FacetHolder facetHolder) {
-        Facet facet = facetHolder.getFacet(DebugFacet.class);
-        if (facet != null) {
-            return ActionType.DEBUG;
-        }
-        facet = facetHolder.getFacet(ExplorationFacet.class);
+        Facet facet = facetHolder.getFacet(ExplorationFacet.class);
         if (facet != null) {
             return ActionType.EXPLORATION;
         }

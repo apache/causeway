@@ -67,10 +67,6 @@ public class BulkActionsHelper implements Serializable {
             objectActions.addAll(explorationActions);
             objectActions.addAll(prototypeActions);
         }
-        if (isDebugMode()) {
-            List<ObjectAction> debugActions = typeSpec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            objectActions.addAll(debugActions);
-        }
 
         List<ObjectAction> flattenedActions = objectActions;
 

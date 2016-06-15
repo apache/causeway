@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
@@ -42,8 +41,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * facets that are based on the action's name.
  * 
  * <p>
- * The supporting methods are: {@link ExplorationFacet}
- * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
+ * The supporting methods are: {@link ExplorationFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
  *
  * @deprecated
@@ -52,13 +50,10 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
-    private static final String DEBUG_PREFIX = "Debug";
 
     private final MetaModelValidatorForDeprecatedMethodPrefix explorationValidator = new MetaModelValidatorForDeprecatedMethodPrefix(EXPLORATION_PREFIX);
 
-    private final MetaModelValidatorForDeprecatedMethodPrefix debugValidator = new MetaModelValidatorForDeprecatedMethodPrefix(DEBUG_PREFIX);
-
-    private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX };
+    private static final String[] PREFIXES = { EXPLORATION_PREFIX };
 
     public ActionNamedDebugExplorationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -72,7 +67,6 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
     public void process(final ProcessMethodContext processMethodContext) {
 
         // DebugFacet, ExplorationFacet
-        attachDebugFacetIfActionMethodNamePrefixed(processMethodContext);
         attachExplorationFacetIfActionMethodNamePrefixed(processMethodContext);
 
         // inferred name
@@ -80,16 +74,6 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
         attachNamedFacetInferredFromMethodName(processMethodContext); 
     }
 
-    private void attachDebugFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
-        final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        if (!capitalizedName.startsWith(DEBUG_PREFIX)) {
-            return;
-        }
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        final Facet facet = new DebugFacetViaNamingConvention(facetedMethod);
-        FacetUtil.addFacet(debugValidator.flagIfPresent(facet, processMethodContext));
-    }
 
     private void attachExplorationFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
 
@@ -113,7 +97,6 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
 
         // this is nasty...
         String name = capitalizedName;
-        name = StringExtensions.removePrefix(name, DEBUG_PREFIX);
         name = StringExtensions.removePrefix(name, EXPLORATION_PREFIX);
         name = StringExtensions.asNaturalName2(name);
 
@@ -125,7 +108,6 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(explorationValidator);
-        metaModelValidator.add(debugValidator);
     }
 
     @Override
@@ -133,7 +115,6 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
         super.setServicesInjector(servicesInjector);
         IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         explorationValidator.setConfiguration(configuration);
-        debugValidator.setConfiguration(configuration);
     }
 
 

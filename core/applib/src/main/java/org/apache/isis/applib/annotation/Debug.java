@@ -26,8 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the an action should be only available for debugging.
- * 
+ * This annotation is ignored.
+ *
  * @deprecated - use {@link org.apache.isis.applib.annotation.Action#restrictTo()} for prototype-mode
  */
 @Inherited

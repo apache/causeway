@@ -165,7 +165,7 @@ public final class Util {
         case PRIVATE:
             return Arrays.asList(ActionType.USER);
         case PRIVATE_WITH_PROTOTYPING:
-            return Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG);
+            return Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE);
         }
         throw new IllegalArgumentException("Unrecognized type '" + visibility + "'");
     }

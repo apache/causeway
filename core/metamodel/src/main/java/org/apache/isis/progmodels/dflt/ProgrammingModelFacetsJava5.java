@@ -21,11 +21,9 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
-import org.apache.isis.core.metamodel.facets.actions.debug.annotation.DebugFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
@@ -273,7 +271,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // actions
         
-        addFactory(new ActionNamedDebugExplorationFacetFactory());
         addFactory(new ActionValidationFacetViaMethodFactory());
         addFactory(new ActionChoicesFacetViaMethodFactory());
         addFactory(new ActionParameterChoicesFacetViaMethodFactory());
@@ -322,7 +319,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory());
         addFactory(new HomePageFacetAnnotationFactory());
         addFactory(new ChoicesFacetFromBoundedMarkerInterfaceFactory());
-        addFactory(new DebugFacetAnnotationFactory());
 
         addFactory(new DefaultedFacetAnnotationElseConfigurationFactory());
         addFactory(new PropertyDefaultFacetDerivedFromTypeFactory());

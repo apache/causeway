@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -78,8 +77,8 @@ import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParam
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
@@ -177,33 +176,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 
-    public void testPicksUpDebugPrefixAndSetsNameAppropriatelyAlso() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void debugAnActionWithDebugPrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "debugAnActionWithDebugPrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(DebugFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DebugFacet);
-
-        facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacet);
-        final NamedFacet namedFacet = (NamedFacet) facet;
-        assertEquals("An Action With Debug Prefix", namedFacet.value());
-    }
-
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
 
@@ -229,54 +201,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(facet instanceof NamedFacet);
         final NamedFacet namedFacet = (NamedFacet) facet;
         assertEquals("An Action With Exploration Prefix", namedFacet.value());
-    }
-
-    public void testCannotHaveBothDebugAndThenExplorationPrefix() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void debugExplorationAnActionWithDebugAndExplorationPrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "debugExplorationAnActionWithDebugAndExplorationPrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(DebugFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DebugFacet);
-
-        facet = facetedMethod.getFacet(ExplorationFacet.class);
-        assertNull(facet);
-    }
-
-    public void testCannotHaveBothExplorationAndThenDebugPrefix() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void explorationDebugAnActionWithExplorationAndDebugPrefix() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "explorationDebugAnActionWithExplorationAndDebugPrefix");
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(ExplorationFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ExplorationFacet);
-
-        facet = facetedMethod.getFacet(DebugFacet.class);
-        assertNull(facet);
     }
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
