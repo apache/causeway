@@ -347,6 +347,24 @@ public class IsisWicketApplication
                         configureWicketSelect2();
                         return null;
                     }
+                },
+                new Callable<Object>() {
+                    @Override public Object call() throws Exception {
+                        ChangesDtoUtils.init();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override public Object call() throws Exception {
+                        InteractionDtoUtils.init();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override public Object call() throws Exception {
+                        CommandDtoUtils.init();
+                        return null;
+                    }
                 }
         ));
     }

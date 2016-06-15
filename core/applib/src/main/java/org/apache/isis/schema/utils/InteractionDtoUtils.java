@@ -55,6 +55,12 @@ import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
 public final class InteractionDtoUtils {
 
+
+    public static void init() {
+        getJaxbContext();
+    }
+
+
     //region > marshalling
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {
