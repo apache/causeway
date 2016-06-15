@@ -115,6 +115,27 @@ for further details).
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
 
 |`isis.viewer.wicket.` +
+`rememberMe.cookieKey`
+| ascii chars (`_isisWicketRememberMe_`)
+| (`1.13.0-SNAPSHOT`) Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
+change this.  +
+
+Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
+
+|`isis.viewer.wicket.` +
+`rememberMe.encryptionKey`
+| any string (a random UUID each time)
+| (`1.13.0-SNAPSHOT`) Encryption key is used to encrypt the rememberMe user/password.  +
+
+It should be set to a unique and private value.  If a hard-coded and publicly known value is used, then it would be
+possible for rememberMe user/password to be intercepted and decrypted, compromising access.
+
+If no value is set then (for safety) a random UUID will be used as the encryption key.  The net effect of this
+default is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have
+to log in again).
+
+
+|`isis.viewer.wicket.` +
 `stripWicketTags`
 | `true`,`false` (`_true_`)
 | Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_stripped-wicket-tags[below].

@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.UUID;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -37,6 +38,8 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.SharedResources;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
@@ -141,6 +144,9 @@ public class IsisWicketApplication
     private static final String WICKET_SOURCE_PLUGIN_KEY = "isis.viewer.wicket.wicketSourcePlugin";
     private static final boolean WICKET_SOURCE_PLUGIN_DEFAULT = false;
 
+    private static final String WICKET_REMEMBER_ME_COOKIE_KEY = "isis.viewer.wicket.rememberMe.cookieKey";
+    private static final String WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT = "isisWicketRememberMe";
+    private static final String WICKET_REMEMBER_ME_ENCRYPTION_KEY = "isis.viewer.wicket.rememberMe.encryptionKey";
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
@@ -279,6 +285,8 @@ public class IsisWicketApplication
             
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
+            configureSecurity(configuration);
+
             getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
 
             // must be done after injected componentFactoryRegistry into the app itself
@@ -308,6 +316,32 @@ public class IsisWicketApplication
             LOG.error("Failed to initialize", ex);
             throw ex;
         }
+    }
+
+    /**
+     * protected visibility to allow ad-hoc overriding of some other authentication strategy.
+     */
+    protected void configureSecurity(final IsisConfiguration configuration) {
+        getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
+    }
+
+    /**
+     * protected visibility to allow ad-hoc overriding of some other authentication strategy.
+     */
+    protected IAuthenticationStrategy newAuthenticationStrategy(final IsisConfiguration configuration) {
+        final String cookieKey = configuration.getString(WICKET_REMEMBER_ME_COOKIE_KEY,
+                WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT);
+        final String encryptionKey = configuration.getString(WICKET_REMEMBER_ME_ENCRYPTION_KEY, defaultEncryptionKeyIfNotConfigured());
+        return new DefaultAuthenticationStrategy(cookieKey, encryptionKey);
+    }
+
+    /**
+     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}; if an encryption key for the 'rememberMe'
+     * cookie hasn't been configured, then use a different encryption key for the 'rememberMe' cookie each time the
+     * app is restarted.
+     */
+    protected String defaultEncryptionKeyIfNotConfigured() {
+        return UUID.randomUUID().toString();
     }
 
     private void log(final List<String> validationErrors) {
