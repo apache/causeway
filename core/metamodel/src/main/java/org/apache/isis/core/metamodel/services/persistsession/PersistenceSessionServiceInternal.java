@@ -109,6 +109,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     void commit();
 
+    @Programmatic
     Transaction currentTransaction();
 
     //endregion
@@ -159,8 +160,5 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
 
     //endregion
-
-
-
 
 }

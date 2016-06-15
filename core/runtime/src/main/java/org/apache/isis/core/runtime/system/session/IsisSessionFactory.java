@@ -228,6 +228,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      * {@link DeploymentType#SERVER_PROTOTYPE prototype} deployments (saves logging
      * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
      */
+    @Programmatic
     public LogonFixture getLogonFixture() {
         return logonFixture;
     }

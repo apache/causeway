@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -42,7 +43,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
  * Thus the {@link IsisConfiguration} held by different components may vary, but
  * with each being a possible superset of the previous.
  */
-public interface IsisConfiguration extends Iterable<String>, ApplicationScopedComponent {
+public interface IsisConfiguration extends ApplicationScopedComponent {
 
     /**
      * Creates a new IsisConfiguration containing the properties starting with
@@ -52,6 +53,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * 
      * @see #getProperties(String)
      */
+    @Programmatic
     IsisConfiguration createSubset(String prefix);
 
     /**
@@ -62,6 +64,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param name
      *            the property name
      */
+    @Programmatic
     boolean getBoolean(String name);
 
     /**
@@ -74,6 +77,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param defaultValue
      *            the value to use as a default
      */
+    @Programmatic
     boolean getBoolean(String name, boolean defaultValue);
 
     /**
@@ -83,6 +87,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param name
      *            the property name
      */
+    @Programmatic
     Color getColor(String name);
 
     /**
@@ -94,6 +99,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param defaultValue
      *            the value to use as a default
      */
+    @Programmatic
     Color getColor(String name, Color defaultValue);
 
     /**
@@ -103,6 +109,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param name
      *            the property name
      */
+    @Programmatic
     Font getFont(String name);
 
     /**
@@ -114,6 +121,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param defaultValue
      *            the color to use as a default
      */
+    @Programmatic
     Font getFont(String name, Font defaultValue);
 
     /**
@@ -123,12 +131,14 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * <p>
      * If there is no matching property then returns an empty array.
      */
+    @Programmatic
     String[] getList(String name);
 
     /**
      * Returns a list of entries for the single configuration property with the
      * specified name.
      */
+    @Programmatic
     String[] getList(String name, String defaultListAsCommaSeparatedArray);
 
     /**
@@ -138,6 +148,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param name
      *            the property name
      */
+    @Programmatic
     int getInteger(String name);
 
     /**
@@ -149,6 +160,7 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * @param defaultValue
      *            the value to use as a default
      */
+    @Programmatic
     int getInteger(String name, int defaultValue);
 
     /**
@@ -160,39 +172,48 @@ public interface IsisConfiguration extends Iterable<String>, ApplicationScopedCo
      * 
      * @see #createSubset(String)
      */
+    @Programmatic
     IsisConfiguration getProperties(String withPrefix);
 
     /**
      * Returns the configuration property with the specified name. If there is
      * no matching property then null is returned.
      */
+    @Programmatic
     String getString(String name);
 
+    @Programmatic
     String getString(String name, String defaultValue);
 
+    @Programmatic
     boolean hasProperty(String name);
 
+    @Programmatic
     boolean isEmpty();
 
     /**
      * Iterates over the property names of this configuration.
      */
-    @Override
+    @Programmatic
     Iterator<String> iterator();
 
+    @Programmatic
+    Iterable<String> asIterable();
+
+    @Programmatic
     int size();
 
     /**
      * The {@link ResourceStreamSource} that was used to build this
      * configuration.
-     * 
-     * @see IsisConfigurationBuilder#getResourceStreamSource()
      */
+    @Programmatic
     ResourceStreamSource getResourceStreamSource();
 
     /**
      * A mutable copy of the current set of properties (name/values) held in this configuration.
      */
+    @Programmatic
     Map<String, String> asMap();
 
 }

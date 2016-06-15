@@ -27,8 +27,6 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -85,11 +83,13 @@ public class Interaction implements HasTransactionId {
 
     private UUID transactionId;
 
+    @Programmatic
     @Override
     public UUID getTransactionId() {
         return transactionId;
     }
 
+    @Programmatic
     @Override
     public void setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
@@ -106,6 +106,7 @@ public class Interaction implements HasTransactionId {
     /**
      * The execution that preceded the current one.
      */
+    @Programmatic
     public Execution getPriorExecution() {
         return priorExecution;
     }
@@ -118,6 +119,7 @@ public class Interaction implements HasTransactionId {
      * by which the framework actually performs the interaction.
      */
     public interface MemberExecutor<T extends Execution> {
+        @Programmatic
         Object execute(final T currentExecution);
     }
 
@@ -129,6 +131,7 @@ public class Interaction implements HasTransactionId {
      * {@link ActionInvocation} capturing the details of said action.
      * </p>
      */
+    @Programmatic
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
             final ActionInvocation actionInvocation) {
@@ -146,6 +149,7 @@ public class Interaction implements HasTransactionId {
      * {@link PropertyEdit} capturing the details of said property edit.
      * </p>
      */
+    @Programmatic
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
             final PropertyEdit propertyEdit) {
@@ -355,14 +359,17 @@ public class Interaction implements HasTransactionId {
 
         //region > via constructor: interaction, interactionType, memberId, target, targetMember, targetClass
 
+        @Programmatic
         public Interaction getInteraction() {
             return interaction;
         }
 
+        @Programmatic
         public InteractionType getInteractionType() {
             return interactionType;
         }
 
+        @Programmatic
         public String getMemberIdentifier() {
             return memberIdentifier;
         }
@@ -371,6 +378,7 @@ public class Interaction implements HasTransactionId {
          * The target of the action invocation.  If this interaction is for a mixin action, then will be the
          * mixed-in target (not the transient mixin itself).
          */
+        @Programmatic
         public Object getTarget() {
             return target;
         }
@@ -378,6 +386,7 @@ public class Interaction implements HasTransactionId {
         /**
          * A human-friendly description of the class of the target object.
          */
+        @Programmatic
         public String getTargetClass() {
             return targetClass;
         }
@@ -385,6 +394,7 @@ public class Interaction implements HasTransactionId {
         /**
          * The human-friendly name of the action invoked/property edited on the target object.
          */
+        @Programmatic
         public String getTargetMember() {
             return targetMember;
         }
@@ -399,6 +409,7 @@ public class Interaction implements HasTransactionId {
         /**
          * The action/property that invoked this action/property edit (if any).
          */
+        @Programmatic
         public Execution<?,?> getParent() {
             return parent;
         }
@@ -406,6 +417,7 @@ public class Interaction implements HasTransactionId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setParent(final Execution<?,?> parent) {
             this.parent = parent;
             if(parent != null) {
@@ -416,6 +428,7 @@ public class Interaction implements HasTransactionId {
         /**
          * The actions/property edits made in turn via the {@link WrapperFactory}.
          */
+        @Programmatic
         public List<Execution<?,?>> getChildren() {
             return Collections.unmodifiableList(children);
         }
@@ -435,6 +448,7 @@ public class Interaction implements HasTransactionId {
          *     {@link AbstractDomainEvent.Phase#EXECUTING executing} phase.
          * </p>
          */
+        @Programmatic
         public E getEvent() {
             return event;
         }
@@ -442,6 +456,7 @@ public class Interaction implements HasTransactionId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setEvent(final E event) {
             this.event = event;
         }
@@ -455,10 +470,12 @@ public class Interaction implements HasTransactionId {
         /**
          * The date/time at which this execution started.
          */
+        @Programmatic
         public Timestamp getStartedAt() {
             return startedAt;
         }
 
+        @Programmatic
         public void setStartedAt(final Timestamp startedAt) {
             syncMetrics(When.BEFORE, startedAt);
         }
@@ -467,6 +484,7 @@ public class Interaction implements HasTransactionId {
         /**
          * The date/time at which this execution completed.
          */
+        @Programmatic
         public Timestamp getCompletedAt() {
             return completedAt;
         }
@@ -494,6 +512,7 @@ public class Interaction implements HasTransactionId {
          * For <tt>void</tt> methods and for actions returning collections, the value
          * will be <tt>null</tt>.
          */
+        @Programmatic
         public Object getReturned() {
             return returned;
         }
@@ -501,6 +520,7 @@ public class Interaction implements HasTransactionId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setReturned(Object returned) {
             this.returned = returned;
         }
@@ -514,6 +534,7 @@ public class Interaction implements HasTransactionId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setThrew(Exception threw) {
             this.threw = threw;
         }
@@ -534,6 +555,7 @@ public class Interaction implements HasTransactionId {
          *     {@link Execution#getReturned()}) will (obviously) still be null.
          * </p>
          */
+        @Programmatic
         public T getDto() {
             return dto;
         }
@@ -541,6 +563,7 @@ public class Interaction implements HasTransactionId {
         /**
          * Set by framework (implementation of {@link MemberExecutor})
          */
+        @Programmatic
         public void setDto(final T executionDto) {
             this.dto = executionDto;
         }
@@ -649,6 +672,7 @@ public class Interaction implements HasTransactionId {
             this.args = args;
         }
 
+        @Programmatic
         public List<Object> getArgs() {
             return args;
         }
@@ -669,6 +693,7 @@ public class Interaction implements HasTransactionId {
             this.newValue = newValue;
         }
 
+        @Programmatic
         public Object getNewValue() {
             return newValue;
         }

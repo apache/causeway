@@ -176,7 +176,7 @@ public abstract class FixtureScript
      * Will always be populated, initially by the default name, but can be
      * {@link #setLocalName(String) overridden}.
      */
-    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @Programmatic
     public String getLocalName() {
         return localName;
     }
@@ -235,7 +235,7 @@ public abstract class FixtureScript
      * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
      * constructor, however or by calling the {@link #withDiscoverability(org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability) setter}.
      */
-    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @Programmatic
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }
@@ -784,6 +784,7 @@ public abstract class FixtureScript
     /**
      * Use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#lookup(String, Class)} directly.
      */
+    @Programmatic
     @Deprecated
     public <T> T lookup(final String key, final Class<T> cls) {
         if(executionContext == null) {
@@ -866,6 +867,7 @@ public abstract class FixtureScript
     //region > (legacy) InstallableFixture impl
 
     @Override
+    @Programmatic
     public FixtureType getType() {
         return FixtureType.DOMAIN_OBJECTS;
     }

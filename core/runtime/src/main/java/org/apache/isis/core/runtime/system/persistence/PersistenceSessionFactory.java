@@ -157,6 +157,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     //endregion
 
     //region > shutdown
+    @Programmatic
     public final void shutdown() {
         // no-op
     }

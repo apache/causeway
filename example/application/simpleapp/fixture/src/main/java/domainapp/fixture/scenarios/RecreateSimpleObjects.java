@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.dom.simple.SimpleObject;
@@ -62,6 +63,7 @@ public class RecreateSimpleObjects extends FixtureScript {
     /**
      * The simpleobjects created by this fixture (output).
      */
+    @Programmatic
     public List<SimpleObject> getSimpleObjects() {
         return simpleObjects;
     }

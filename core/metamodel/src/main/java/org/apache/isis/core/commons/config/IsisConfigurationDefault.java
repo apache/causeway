@@ -34,10 +34,11 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 
 /**
  * This object will typically be registered as the implementation of the {@link ConfigurationServiceInternal}
@@ -111,6 +112,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     /**
      * Add the properties from an existing Properties object.
      */
+    @Programmatic
     public void add(final Properties properties, final ContainsPolicy containsPolicy) {
         for(Object key: properties.keySet()) {
             Object value = properties.get(key);
@@ -125,6 +127,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
      * @see #addPerPolicy(String, String, ContainsPolicy)
      * @see #put(String, String)
      */
+    @Programmatic
     public void add(final String key, final String value) {
         addPerPolicy(key, value, ContainsPolicy.IGNORE);
     }
@@ -136,6 +139,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
      * @see #add(String, String)
      * @see #addPerPolicy(String, String, ContainsPolicy)
      */
+    @Programmatic
     public void put(final String key, final String value) {
         addPerPolicy(key, value, ContainsPolicy.OVERWRITE);
     }
@@ -419,7 +423,12 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
 
     @Override
     public Iterator<String> iterator() {
-        return properties.stringPropertyNames().iterator();
+        return asIterable().iterator();
+    }
+
+    @Override
+    public Iterable<String> asIterable() {
+        return properties.stringPropertyNames();
     }
 
     /**
@@ -448,7 +457,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     @Override
     public Map<String,String> asMap() {
         final Map<String, String> map = Maps.newHashMap();
-        for(String propertyName: this) {
+        for(String propertyName: this.asIterable()) {
             final String propertyValue = this.getPropertyElseNull(propertyName);
             map.put(propertyName, propertyValue);
         }
@@ -472,7 +481,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     private Properties deriveApplicationProperties() {
         final Properties applicationProperties = new Properties();
         final IsisConfiguration applicationConfiguration = getProperties("application");
-        for (final String key : applicationConfiguration) {
+        for (final String key : applicationConfiguration.asIterable()) {
             final String value = applicationConfiguration.getString(key);
             final String newKey = key.substring("application.".length());
             applicationProperties.setProperty(newKey, value);
@@ -491,6 +500,5 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
         return list;
     }
     //endregion
-
 
 }
