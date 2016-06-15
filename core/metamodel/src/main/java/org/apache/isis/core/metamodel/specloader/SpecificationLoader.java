@@ -156,11 +156,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private void loadSpecificationsForServices() {
         for (final Class<?> serviceClass : allServiceClasses()) {
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
-            if(domainService != null) {
-                if(domainService.nature() == NatureOfService.VIEW || domainService.nature() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-                    internalLoadSpecification(serviceClass, domainService.nature());
-                }
-            }
+            final NatureOfService nature = domainService != null ? domainService.nature() : NatureOfService.DOMAIN;
+            // will 'markAsService'
+            internalLoadSpecification(serviceClass, nature);
         }
     }
 

@@ -370,12 +370,7 @@ public class PersistenceSession implements
      */
     private void initServices() {
         final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-
         for (final Object service : registeredServices) {
-            final ObjectSpecification serviceSpecification =
-                    specificationLoader.loadSpecification(service.getClass());
-            serviceSpecification.markAsService();
-
             final ObjectAdapter serviceAdapter = adapterFor(service);
             remapAsPersistentIfRequired(serviceAdapter);
         }
