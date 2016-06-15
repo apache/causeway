@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFace
 import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.PrototypeFacetForExplorationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
@@ -335,7 +335,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new DisabledFacetOnMemberFromPropertiesFactory());
         addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
         
-        addFactory(new ExplorationFacetAnnotationFactory());
+        addFactory(new PrototypeFacetForExplorationAnnotationFactory());
 
         addFactory(new NotContributedFacetAnnotationFactory());
 

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -41,13 +41,13 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * facets that are based on the action's name.
  * 
  * <p>
- * The supporting methods are: {@link ExplorationFacet}. In addition a {@link NamedFacet} is inferred from the
+ * The supporting methods are: {@link PrototypeFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
  *
  * @deprecated
  */
 @Deprecated
-public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class ActionNamedExplorationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
 
@@ -55,7 +55,7 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
 
     private static final String[] PREFIXES = { EXPLORATION_PREFIX };
 
-    public ActionNamedDebugExplorationFacetFactory() {
+    public ActionNamedExplorationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
@@ -83,7 +83,7 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
             return;
         }
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        final Facet facet = new ExplorationFacetViaNamingConvention(facetedMethod, getDeploymentCategory());
+        final Facet facet = new PrototypeFacetViaExplorationPrefixNamingConvention(facetedMethod, getDeploymentCategory());
         FacetUtil.addFacet(explorationValidator.flagIfPresent(facet, processMethodContext));
     }
 

@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.exploration;
+package org.apache.isis.core.metamodel.facets.actions.exploration.annotation;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
 /**
- * Indicates that the action should only be available in a special
- * <i>exploration</i> mode.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * action method using <tt>@Exploration</tt>.
- *
  * @deprecated
  */
 @Deprecated
-public interface ExplorationFacet extends Facet, HidingInteractionAdvisor {
+public class PrototypeFacetForExplorationAnnotation extends PrototypeFacetAbstract {
+
+    public PrototypeFacetForExplorationAnnotation(final FacetHolder holder, final DeploymentCategory deploymentCategory) {
+        super(holder, deploymentCategory);
+    }
 
 }

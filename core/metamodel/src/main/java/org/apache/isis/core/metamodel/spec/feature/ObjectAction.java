@@ -234,10 +234,6 @@ public interface ObjectAction extends ObjectMember {
             return blobOrClob;
         }
 
-        public static boolean isExplorationOrPrototype(final ObjectAction action) {
-            return action.getType().isExploration() || action.getType().isPrototype();
-        }
-
         public static String actionIdentifierFor(final ObjectAction action) {
             @SuppressWarnings("unused")
             final Identifier identifier = action.getIdentifier();
@@ -272,6 +268,8 @@ public interface ObjectAction extends ObjectMember {
         }
 
     }
+
+    boolean isPrototype();
 
     // //////////////////////////////////////////////////////
     // Predicates

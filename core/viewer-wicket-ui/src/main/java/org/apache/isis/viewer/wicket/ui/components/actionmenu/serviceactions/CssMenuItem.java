@@ -346,7 +346,7 @@ class CssMenuItem implements Serializable {
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
                 .returnsBlobOrClob(ObjectAction.Utils.returnsBlobOrClob(objectAction))
-                .prototyping(ObjectAction.Utils.isExplorationOrPrototype(objectAction))
+                .prototyping(objectAction.isPrototype())
                 .requiresSeparator(separator)
                 .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
                 .withCssClass(ObjectAction.Utils.cssClassFor(objectAction, adapter))

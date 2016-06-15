@@ -17,18 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
-import junit.framework.TestCase;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
-public class ActionTypeTest extends TestCase {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class PrototypeFacetViaExplorationPrefixNamingConvention extends PrototypeFacetAbstract {
 
-    public void testEquals() {
-        assertTrue(ActionType.EXPLORATION.equals(ActionType.EXPLORATION));
-    }
-
-    public void testHashCode() {
-        assertEquals(ActionType.EXPLORATION.hashCode(), ActionType.EXPLORATION.hashCode());
+    public PrototypeFacetViaExplorationPrefixNamingConvention(
+            final FacetHolder holder, final DeploymentCategory deploymentCategory) {
+        super(holder, deploymentCategory);
     }
 
 }

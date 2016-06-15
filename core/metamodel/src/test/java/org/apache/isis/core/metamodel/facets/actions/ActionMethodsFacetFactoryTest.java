@@ -43,8 +43,8 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedExplorationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
@@ -151,7 +151,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
+        final ActionNamedExplorationFacetFactory facetFactory = new ActionNamedExplorationFacetFactory();
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
@@ -177,7 +177,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
+        final ActionNamedExplorationFacetFactory facetFactory = new ActionNamedExplorationFacetFactory();
 
         facetFactory.setServicesInjector(mockServicesInjector);
 
@@ -192,9 +192,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method method = findMethod(Customer.class, "explorationAnActionWithExplorationPrefix");
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
-        Facet facet = facetedMethod.getFacet(ExplorationFacet.class);
+        Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ExplorationFacet);
+        assertTrue(facet instanceof PrototypeFacet);
 
         facet = facetedMethod.getFacet(NamedFacet.class);
         assertNotNull(facet);

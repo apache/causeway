@@ -50,7 +50,7 @@ public class LinkAndLabel implements Serializable {
 
         final String name = ObjectAction.Utils.nameFor(objectAction);
 
-        final boolean explorationOrPrototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
+        final boolean explorationOrPrototype = objectAction.isPrototype();
         final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
         final String description = ObjectAction.Utils.descriptionOf(objectAction);
         final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);

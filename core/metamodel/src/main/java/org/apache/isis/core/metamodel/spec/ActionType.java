@@ -23,14 +23,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ActionType {
-    EXPLORATION, PROTOTYPE, USER;
+    PROTOTYPE, USER;
 
     public String getName() {
         return name();
-    }
-
-    public boolean isExploration() {
-        return this == EXPLORATION;
     }
 
     public boolean isPrototype() {

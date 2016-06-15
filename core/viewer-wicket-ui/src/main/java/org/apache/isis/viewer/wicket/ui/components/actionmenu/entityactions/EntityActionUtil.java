@@ -90,7 +90,6 @@ public final class EntityActionUtil {
 
         addActions(ActionType.USER, entityModel, association, associatedActions);
         if(deploymentCategory.isPrototyping()) {
-            addActions(ActionType.EXPLORATION, entityModel, association, associatedActions);
             addActions(ActionType.PROTOTYPE, entityModel, association, associatedActions);
         }
 
@@ -183,7 +182,6 @@ public final class EntityActionUtil {
 
         addTopLevelActions(adapter, ActionType.USER, topLevelActions);
         if(deploymentCategory.isPrototyping()) {
-            addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions);
             addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
         }
         return topLevelActions;

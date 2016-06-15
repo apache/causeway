@@ -62,9 +62,7 @@ public class BulkActionsHelper implements Serializable {
 
         final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {
-            List<ObjectAction> explorationActions = typeSpec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            List<ObjectAction> prototypeActions = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            objectActions.addAll(explorationActions);
+            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
             objectActions.addAll(prototypeActions);
         }
 

@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
@@ -155,11 +154,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private static ActionType getType(final FacetHolder facetHolder) {
-        Facet facet = facetHolder.getFacet(ExplorationFacet.class);
-        if (facet != null) {
-            return ActionType.EXPLORATION;
-        }
-        facet = facetHolder.getFacet(PrototypeFacet.class);
+        Facet facet = facetHolder.getFacet(PrototypeFacet.class);
         if (facet != null) {
             return ActionType.PROTOTYPE;
         }
@@ -582,6 +577,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
         }
+    }
+
+    @Override
+    public boolean isPrototype() {
+        return getType().isPrototype();
     }
 
     /**

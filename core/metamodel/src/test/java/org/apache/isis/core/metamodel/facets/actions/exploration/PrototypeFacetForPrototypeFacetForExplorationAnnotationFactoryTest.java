@@ -25,17 +25,19 @@ import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.PrototypeFacetForExplorationAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
-public class ExplorationFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
+public class PrototypeFacetForPrototypeFacetForExplorationAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
-    private ExplorationFacetAnnotationFactory facetFactory;
+    private PrototypeFacetForExplorationAnnotationFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ExplorationFacetAnnotationFactory();
+        facetFactory = new PrototypeFacetForExplorationAnnotationFactory();
         facetFactory.setServicesInjector(stubServicesInjector);
     }
 
@@ -56,9 +58,9 @@ public class ExplorationFacetAnnotationFactoryTest extends AbstractFacetFactoryT
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ExplorationFacet.class);
+        final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ExplorationFacetAbstract);
+        assertTrue(facet instanceof PrototypeFacetAbstract);
 
         assertNoMethodsRemoved();
     }
