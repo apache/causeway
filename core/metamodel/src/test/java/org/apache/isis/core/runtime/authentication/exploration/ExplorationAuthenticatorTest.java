@@ -26,13 +26,10 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthenticator;
-import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthenticatorConstants;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.SystemConstants;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -62,7 +59,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
-                will(returnValue(DeploymentType.UNIT_TESTING.name()));
+                will(returnValue("unit-testing"));
             }
         });
 
@@ -84,45 +81,19 @@ public class ExplorationAuthenticatorTest {
 
     @Test
     public void isValidExplorationRequestWhenRunningInExplorationMode() throws Exception {
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.SERVER_EXPLORATION.name()));
-            }
-        });
+        authenticator.init(DeploymentCategory.EXPLORING);
         assertThat(authenticator.isValid(explorationRequest), is(true));
     }
 
     @Test
     public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationMode() throws Exception {
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.SERVER_PROTOTYPE.name()));
-            }
-        });
+        authenticator.init(DeploymentCategory.PROTOTYPING);
         assertThat(authenticator.isValid(explorationRequest), is(false));
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void expectsThereToBeADeploymentTypeInIsisConfiguration() throws Exception {
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(null));
-            }
-        });
-        authenticator.isValid(explorationRequest);
     }
 
     @Test
     public void isValidSomeOtherTypeOfRequest() throws Exception {
-        mockery.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.SERVER_PROTOTYPE.name()));
-            }
-        });
+        authenticator.init(DeploymentCategory.PROTOTYPING);
         assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
     }
 
