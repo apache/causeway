@@ -19,12 +19,11 @@
 
 package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
+
+import java.lang.annotation.*;
 
 /**
  * Domain semantics for domain object collection.
@@ -46,7 +45,6 @@ public @interface Parameter {
     @Deprecated
     int minLength() default -1;
 
-    // //////////////////////////////////////
 
     /**
      * The maximum entry length of a field.
@@ -58,7 +56,6 @@ public @interface Parameter {
     int maxLength() default -1;
 
 
-    // //////////////////////////////////////
 
     /**
      * Whether this parameter is optional or is mandatory (ie required).
@@ -71,7 +68,6 @@ public @interface Parameter {
     Optionality optionality() default Optionality.DEFAULT;
 
 
-    // //////////////////////////////////////
 
     /**
      * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this parameter.
@@ -83,7 +79,6 @@ public @interface Parameter {
     Class<? extends Specification>[] mustSatisfy() default {};
 
 
-    // //////////////////////////////////////
 
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
@@ -103,5 +98,17 @@ public @interface Parameter {
      * Replacement text for the pattern in generated error message.
      */
     String regexPatternReplacement() default "Doesn't match pattern";
+
+
+    /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     */
+    String fileAccept() default "";
 
 }

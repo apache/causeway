@@ -18,14 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
-
-import javax.activation.MimeType;
-import javax.imageio.ImageIO;
-
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -46,18 +50,12 @@ import org.apache.wicket.request.resource.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.lang.CloseableExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+import javax.activation.MimeType;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract {
 
@@ -239,7 +237,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private void updateRegularFormComponents(final InputFieldVisibility visibility) {
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.get(ID_SCALAR_VALUE).setVisible(visibility == InputFieldVisibility.VISIBLE);
-
+        
+        addAcceptFilterTo(formComponent.get(ID_SCALAR_VALUE));
         fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
         updateClearLink(visibility);
@@ -255,6 +254,25 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             wicketImage.setVisible(visibility == InputFieldVisibility.NOT_VISIBLE);
         }
     }
+
+	private String getAcceptFilter(){
+		return scalarModel.getFileAccept();
+	}
+	
+	private void addAcceptFilterTo(Component component){
+		final String filter = getAcceptFilter();
+		if(filter==null || filter.isEmpty())
+			return; // ignore
+		class AcceptAttributeModel extends Model<String> {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getObject() {
+				return filter;
+			}
+		}
+		component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
+	}
+
 
     private Label updateFileNameLabel(String idFileName, MarkupContainer formComponent) {
         class FileNameModel extends Model<String> {

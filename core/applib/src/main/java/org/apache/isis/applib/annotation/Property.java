@@ -19,16 +19,13 @@
 
 package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import javax.jdo.annotations.NotPersistent;
-
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
+
+import javax.jdo.annotations.NotPersistent;
+import java.lang.annotation.*;
 
 /**
  * Domain semantics for domain object property.
@@ -66,7 +63,8 @@ public @interface Property {
     Class<? extends PropertyDomainEvent<?,?>> domainEvent() default PropertyDomainEvent.Default.class;
 
 
-    // //////////////////////////////////////
+
+
 
     /**
      * Indicates where the property is not visible to the user.
@@ -74,7 +72,8 @@ public @interface Property {
     Where hidden() default Where.NOWHERE;
 
 
-    // //////////////////////////////////////
+
+
 
     /**
      * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
@@ -92,7 +91,8 @@ public @interface Property {
     String editingDisabledReason() default "";
 
 
-    // //////////////////////////////////////
+
+
 
     /**
      * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
@@ -117,7 +117,8 @@ public @interface Property {
     CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
 
 
-    // //////////////////////////////////////
+
+
 
     /**
      * Whether the property edit should be published.
@@ -129,7 +130,8 @@ public @interface Property {
      */
     Publishing publishing() default Publishing.AS_CONFIGURED;
 
-    // //////////////////////////////////////
+
+
 
 
     /**
@@ -141,7 +143,8 @@ public @interface Property {
      */
     int maxLength() default -1;
 
-    // //////////////////////////////////////
+
+
 
 
     /**
@@ -166,7 +169,8 @@ public @interface Property {
     boolean notPersisted() default false;
 
 
-    // //////////////////////////////////////
+
+
 
     /**
      * Whether this property is optional or is mandatory (ie required).
@@ -180,7 +184,8 @@ public @interface Property {
     Optionality optionality() default Optionality.DEFAULT;
 
 
-    // //////////////////////////////////////
+
+
 
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
@@ -200,5 +205,20 @@ public @interface Property {
      * Replacement text for the pattern in generated error message.
      */
     String regexPatternReplacement() default "Doesn't match pattern";
+
+
+
+
+
+    /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     */
+    String fileAccept() default "";
 
 }

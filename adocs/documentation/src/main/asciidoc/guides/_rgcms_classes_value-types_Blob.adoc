@@ -5,4 +5,46 @@
 :_imagesdir: images/
 
 
-NOTE: TODO - the `org.apache.isis.applib.value.Blob` class.
+`Blob` (in the `org.apache.isis.applib.value` package) is a value type defined by the Apache Isis framework to
+represent a binary large object.  Conceptually you can consider it as a set of bytes (a picture, a video etc), though
+in fact it wraps three pieces of information:
+
+- the set of bytes
+- a name
+- a mime type.
+
+This is reflected in the class' constructors and properties:
+
+[source,java]
+----
+public final class Blob ... {
+    ...
+    public Blob(String name, String primaryType, String subtype, byte[] bytes) { ... }
+    public Blob(String name, String mimeTypeBase, byte[] bytes) { ... }
+    public Blob(String name, MimeType mimeType, byte[] bytes) { ... }
+    ...
+    public String getName() { ... }
+    public MimeType getMimeType() { ... }
+    public byte[] getBytes() { ... }
+    ...
+}
+----
+
+
+Properties of this type can be mapped to JDO/DataNucleus using:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+        @javax.jdo.annotations.Column(name = "someImage_name"),
+        @javax.jdo.annotations.Column(name = "someImage_mimetype"),
+        @javax.jdo.annotations.Column(name = "someImage_bytes", jdbcType = "BLOB", sqlType = "LONGVARBINARY")
+})
+private Blob someImage;
+----
+
+
+[TIP]
+====
+For character large objects, use xref:rgcms.adoc#_rgcms_classes_value-types_Clob][`Clob`] value type.
+====
