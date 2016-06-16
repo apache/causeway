@@ -32,6 +32,12 @@ It is also possible to apply the annotation to actions of domain services that a
 |whether a property can be modified or cleared from within the UI
 
 
+|xref:rgant.adoc#_rgant-Property_fileAccept[`fileAccept()`]
+|Media type or file extension
+|(`1.13.0-SNAPSHOT`) restrict the files to be uploaded to a xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
+ or xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
+
+
 |xref:rgant.adoc#_rgant-Property_hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
@@ -123,6 +129,7 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 include::_rgant-Property_domainEvent.adoc[leveloffset=+1]
 include::_rgant-Property_editing.adoc[leveloffset=+1]
+include::_rgant-Property_fileAccept.adoc[leveloffset=+1]
 include::_rgant-Property_hidden.adoc[leveloffset=+1]
 include::_rgant-Property_maxLength.adoc[leveloffset=+1]
 include::_rgant-Property_mustSatisfy.adoc[leveloffset=+1]

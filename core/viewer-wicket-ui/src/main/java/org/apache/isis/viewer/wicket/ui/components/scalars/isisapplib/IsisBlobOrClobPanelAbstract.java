@@ -18,14 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
-
-import javax.activation.MimeType;
-import javax.imageio.ImageIO;
-
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -47,18 +50,12 @@ import org.apache.wicket.request.resource.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.lang.CloseableExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+import javax.activation.MimeType;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract {
 
@@ -258,24 +255,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
     }
 
-	/**
-	 * Just a demo! <br/>
-	 * Fetches the desired filter from e.g. <br/><br/> 
-	 * {@code @ParameterLayout(named="File", describedAs=".xlsx")} 
-	 * @return the desired accept filter 
-	 */
 	private String getAcceptFilter(){
-		return scalarModel.getDescribedAs();
+		return scalarModel.getFileAccept();
 	}
 	
-	/**
-	 * HTML file input tags allow for the client-side file-open-dialog 
-	 * to filter for specific file types *.xyz via the {@code<input ... accept=".xyz"/>}
-	 * attribute.  
-	 * @param component 
-	 * @param filter should be of the form "file_extension|audio/*|video/*|image/*|media_type"
-	 * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-	 */
 	private void addAcceptFilterTo(Component component){
 		final String filter = getAcceptFilter();
 		if(filter==null || filter.isEmpty())

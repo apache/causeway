@@ -19,13 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -39,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -53,6 +48,11 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -256,6 +256,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
+            public String getFileAccept(ScalarModel scalarModel) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
+                final FileAcceptFacet facet = property.getFacet(FileAcceptFacet.class);
+                return facet != null? facet.value(): null;
+            }
+
+
+            @Override
             public void init(final ScalarModel scalarModel) {
                 reset(scalarModel);
             }
@@ -447,6 +456,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
             }
 
+
+            @Override
+            public String getFileAccept(ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
+                final FileAcceptFacet facet = actionParameter.getFacet(FileAcceptFacet.class);
+                return facet != null? facet.value(): null;
+            }
+
             @Override
             public void init(final ScalarModel scalarModel) {
                 // no-op
@@ -518,7 +536,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         public abstract Integer getScale(ScalarModel scalarModel);
 
         public abstract int getTypicalLength(ScalarModel scalarModel);
-        
+
+        public abstract String getFileAccept(ScalarModel scalarModel);
+
         public abstract void init(ScalarModel scalarModel);
         public abstract void reset(ScalarModel scalarModel);
 
@@ -691,6 +711,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
     public String getDescribedAs() {
         return kind.getDescribedAs(this);
+    }
+
+    public String getFileAccept() {
+        return kind.getFileAccept(this);
     }
 
     public boolean hasChoices() {

@@ -19,16 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
-import javax.annotation.Nullable;
-
-import org.apache.isis.applib.annotation.MaxLength;
-import org.apache.isis.applib.annotation.MustSatisfy;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -40,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
+import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
@@ -53,6 +45,10 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+
+import javax.annotation.Nullable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
@@ -81,7 +77,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         processParamsMustSatisfy(processParameterContext);
         processParamsRegEx(processParameterContext);
         processParamsOptional(processParameterContext);
-
+        processParamsFileAccept(processParameterContext);
     }
 
     void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
@@ -213,6 +209,24 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             }
         }
     }
+
+    void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
+
+        final Method method = processParameterContext.getMethod();
+        final int paramNum = processParameterContext.getParamNum();
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Parameter) {
+                final Parameter parameter = (Parameter) parameterAnnotation;
+                FacetUtil.addFacet(
+                        FileAcceptFacetForParameterAnnotation.create(parameter, holder));
+                return;
+            }
+        }
+    }
+
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
