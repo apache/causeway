@@ -315,7 +315,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        return internalLoadSpecification(type, null);
+        // superclasses tend to be loaded via this method, implicitly.
+        // what can happen is that a subclass domain service, eg a fake one such as FakeLocationLookupService
+        // can be registered first prior to the "real" implementation.  As belt-n-braces, if that superclass is
+        // annotated using @DomainService, then we ensure its own spec is created correctly as a service spec.
+        final DomainService domainServiceIfAny = type.getAnnotation(DomainService.class);
+        final NatureOfService natureOfServiceIfAny = domainServiceIfAny != null ? domainServiceIfAny.nature() : null;
+        return internalLoadSpecification(type, natureOfServiceIfAny);
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type, final NatureOfService nature) {
