@@ -31,14 +31,20 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Domain
 |
 
-|xref:rgant.adoc#_rgant-PostConstruct[`@javax.annotations.` +
+|xref:rgant.adoc#_rgant-Digits[`@javax.annotation.` +
+`Nullable`]
+|(`1.13.0-SNAPSHOT` Specify that a property/parameter is optional.
+|Domain
+|
+
+|xref:rgant.adoc#_rgant-PostConstruct[`@javax.annotation.` +
 `PostConstruct`]
 |Callback for domain services (either singleton or xref:rgant.adoc#_rgant-RequestScoped[request-scoped]) to initialize themselves once instantiated.
 
 |Domain
 |
 
-|xref:rgant.adoc#_rgant-PreDestroy[`@javax.annotations.` +
+|xref:rgant.adoc#_rgant-PreDestroy[`@javax.annotation.` +
 `PreDestroy`]
 |Callback for domain services (either singleton or xref:rgant.adoc#_rgant-RequestScoped[request-scoped]) to clean up resources prior to destruction.
 
