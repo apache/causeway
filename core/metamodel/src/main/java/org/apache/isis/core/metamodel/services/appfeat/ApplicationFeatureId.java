@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import com.google.common.io.BaseEncoding;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -45,6 +46,7 @@ import org.apache.isis.applib.util.TitleBuffer;
  *     {@link #getPackageName() package name}, {@link #getClassName() class name} and {@link #getMemberName() member name}.
  * </p>
  */
+@Value
 public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, Serializable {
 
 

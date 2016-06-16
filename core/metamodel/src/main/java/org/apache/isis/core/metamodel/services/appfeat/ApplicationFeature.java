@@ -49,8 +49,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<ApplicationFeature> {}
 
-    // //////////////////////////////////////
-
     //region > constants
 
     // using same value for all to neaten up rendering
@@ -58,8 +56,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public static final int TYPICAL_LENGTH_CLS_NAME = 50;
     public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
     //endregion
-
-    // //////////////////////////////////////
 
     //region > constructors
     public ApplicationFeature() {
@@ -69,8 +65,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         setFeatureId(featureId);
     }
     //endregion
-
-    // //////////////////////////////////////
 
     //region > featureId
     private ApplicationFeatureId featureId;
@@ -84,8 +78,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         this.featureId = applicationFeatureId;
     }
     //endregion
-
-    // //////////////////////////////////////
 
     //region > memberType
     private ApplicationMemberType memberType;
@@ -103,8 +95,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    // //////////////////////////////////////
-
     //region > returnTypeName (for: properties, collections, actions)
     private String returnTypeName;
 
@@ -121,8 +111,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    // //////////////////////////////////////
-
     //region > contributed (for: properties, collections, actions)
     private boolean contributed;
 
@@ -135,8 +123,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         this.contributed = contributed;
     }
     //endregion
-
-    // //////////////////////////////////////
 
     //region > derived (properties and collections)
     private Boolean derived;
@@ -154,8 +140,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    // //////////////////////////////////////
-
     //region > propertyMaxLength (properties only)
     private Integer propertyMaxLength;
 
@@ -171,8 +155,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         this.propertyMaxLength = propertyMaxLength;
     }
     //endregion
-
-    // //////////////////////////////////////
 
     //region > propertyTypicalLength (properties only)
     private Integer propertyTypicalLength;
@@ -190,8 +172,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    // //////////////////////////////////////
-
     //region > actionSemantics (actions only)
     private SemanticsOf actionSemantics;
 
@@ -207,8 +187,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         this.actionSemantics = actionSemantics;
     }
     //endregion
-
-    // //////////////////////////////////////
 
     //region > packages: Contents
     private final SortedSet<ApplicationFeatureId> contents = Sets.newTreeSet();
@@ -226,8 +204,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         this.contents.add(contentId);
     }
     //endregion
-
-    // //////////////////////////////////////
 
     //region > classes: Properties, Collections, Actions
     private final SortedSet<ApplicationFeatureId> properties = Sets.newTreeSet();
@@ -277,8 +253,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
     //endregion
 
-    // //////////////////////////////////////
-
     //region > Functions
 
     public static class Functions {
@@ -319,8 +293,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
 
     //endregion
-
-    // //////////////////////////////////////
 
     //region > equals, hashCode, compareTo, toString
 
