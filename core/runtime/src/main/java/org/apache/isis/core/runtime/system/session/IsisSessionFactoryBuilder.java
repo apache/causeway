@@ -178,8 +178,8 @@ public class IsisSessionFactoryBuilder {
 
 
                 // remaining functionality only done if metamodel is valid.
-                authenticationManager.init();
-                authorizationManager.init();
+                authenticationManager.init(deploymentCategory);
+                authorizationManager.init(deploymentCategory);
 
                 persistenceSessionFactory.init(specificationLoader);
 

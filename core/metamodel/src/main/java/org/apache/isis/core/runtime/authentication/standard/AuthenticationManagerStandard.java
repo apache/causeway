@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
@@ -41,11 +42,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = Maps.newHashMap();
 
-    /**
-     * Not final because may be set {@link #setAuthenticators(List)
-     * programmatically}.
-     */
-    private List<Authenticator> authenticators = Lists.newArrayList();
+    private final List<Authenticator> authenticators = Lists.newArrayList();
 
     private RandomCodeGenerator randomCodeGenerator;
     private final IsisConfiguration configuration;
@@ -62,16 +59,17 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * Will default the {@link #setRandomCodeGenerator(RandomCodeGenerator)
      * RandomCodeGenerator}, but {@link Authenticator}(s) must have been
      * {@link #addAuthenticator(Authenticator) added}.
+     * @param deploymentCategory
      */
     @Programmatic
-    public final void init() {
+    public final void init(final DeploymentCategory deploymentCategory) {
         defaultRandomCodeGeneratorIfNecessary();
         addDefaultAuthenticators();
         if (authenticators.size() == 0) {
             throw new IsisException("No authenticators specified");
         }
         for (final Authenticator authenticator : authenticators) {
-            authenticator.init();
+            authenticator.init(deploymentCategory);
         }
     }
 
@@ -150,7 +148,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         authenticators.add(authenticator);
     }
 
-    protected void addAuthenticatorToStart(final Authenticator authenticator) {
+    @Programmatic
+    public void addAuthenticatorToStart(final Authenticator authenticator) {
         authenticators.add(0, authenticator);
     }
 

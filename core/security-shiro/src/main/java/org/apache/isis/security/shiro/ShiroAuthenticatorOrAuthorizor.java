@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -69,6 +70,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     //region > constructor and fields
     private final IsisConfiguration configuration;
+    private DeploymentCategory deploymentCategory;
 
     public ShiroAuthenticatorOrAuthorizor(final IsisConfiguration configuration) {
         this.configuration = configuration;
@@ -83,13 +85,20 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     //region > init, shutdown
 
     @Override
-    public void init() {
+    public void init(final DeploymentCategory deploymentCategory) {
+        this.deploymentCategory = deploymentCategory;
     }
 
 
     @Override
     public void shutdown() {
     }
+
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
     //endregion
 
     //region > Authenticator API

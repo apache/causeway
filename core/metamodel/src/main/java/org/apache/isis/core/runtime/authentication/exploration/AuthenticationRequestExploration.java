@@ -24,10 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 
-/**
- * For testing purposes, requests corresponding to an {@link ExplorationSession}
- * .
- */
 public class AuthenticationRequestExploration extends AuthenticationRequestAbstract {
 
     private static final String EXPLORATION_USER = "exploration";

@@ -17,31 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authorization.standard;
+package org.apache.isis.core.runtime.authentication.standard;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-public abstract class AuthorizorAbstract implements Authorizor {
+public abstract class AuthenticatorDefault extends AuthenticatorAbstract {
 
-    private final IsisConfiguration configuration;
-
-    public AuthorizorAbstract(final IsisConfiguration configuration) {
-        this.configuration = configuration;
+    public AuthenticatorDefault(final IsisConfiguration configuration) {
+        super(configuration);
     }
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return false;
-    }
-
-    @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
-        return false;
-    }
 
 }

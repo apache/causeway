@@ -28,12 +28,11 @@ import java.util.StringTokenizer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
- * Creates a session suitable for {@link DeploymentType#SERVER_EXPLORATION exploration}
+ * Creates a session suitable for {@link org.apache.isis.core.metamodel.deployment.DeploymentCategory#PROTOTYPING}
  * mode.
  * 
  * <p>
@@ -44,14 +43,12 @@ import org.apache.isis.core.runtime.system.DeploymentType;
  * &lt;:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
  * </pre>
  */
-public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntime {
+public class ExplorationAuthenticator extends AuthenticatorAbstract {
 
+    //region > Constructor, fields
     private final Set<SimpleSession> registeredSessions = new LinkedHashSet<SimpleSession>();;
     private final String users;
 
-    // //////////////////////////////////////////////////////////////////
-    // Constructor
-    // //////////////////////////////////////////////////////////////////
 
     public ExplorationAuthenticator(final IsisConfiguration configuration) {
         super(configuration);
@@ -60,6 +57,8 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
             registeredSessions.addAll(parseUsers(users));
         }
     }
+
+    //endregion
 
     private List<SimpleSession> parseUsers(final String users) {
         final List<SimpleSession> registeredUsers = new ArrayList<SimpleSession>();
@@ -102,13 +101,9 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
         return AuthenticationRequestExploration.class.isAssignableFrom(authenticationRequestClass);
     }
 
-    /**
-     * Valid providing running in {@link DeploymentType#isExploring() 
-     * exploration} mode.
-     */
     @Override
     protected final boolean isValid(final AuthenticationRequest request) {
-        return getDeploymentType().isExploring();
+        return getDeploymentCategory().isExploring();
     }
 
     @Override

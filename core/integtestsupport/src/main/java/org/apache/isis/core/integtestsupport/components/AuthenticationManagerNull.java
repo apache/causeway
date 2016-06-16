@@ -21,6 +21,7 @@ package org.apache.isis.core.integtestsupport.components;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.Noop;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
@@ -28,7 +29,7 @@ import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 public class AuthenticationManagerNull implements AuthenticationManager, Noop {
 
     @Override
-    public void init() {
+    public void init(final DeploymentCategory deploymentCategory) {
     }
 
     @Override

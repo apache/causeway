@@ -20,10 +20,10 @@
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
@@ -42,7 +42,7 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         authorizor = new Authorizor() {
 
             @Override
-            public void init() {
+            public void init(final DeploymentCategory deploymentCategory) {
             }
 
             @Override
@@ -75,8 +75,8 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     // init, shutddown
     // /////////////////////////////////////////////////////////
 
-    public void init() {
-        authorizor.init();
+    public void init(final DeploymentCategory deploymentCategory) {
+        authorizor.init(deploymentCategory);
     }
 
     public void shutdown() {

@@ -20,12 +20,13 @@
 package org.apache.isis.core.security.authorization;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
 public class AuthorizorBypass implements Authorizor {
 
     @Override
-    public void init() {
+    public void init(final DeploymentCategory deploymentCategory) {
         // does nothing
     }
 

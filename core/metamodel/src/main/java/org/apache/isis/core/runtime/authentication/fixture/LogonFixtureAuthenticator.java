@@ -17,33 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authentication;
+package org.apache.isis.core.runtime.authentication.fixture;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 
-public abstract class AuthenticatorAbstractForDfltRuntime extends AuthenticatorAbstract {
+public class LogonFixtureAuthenticator extends AuthenticatorAbstract {
 
-    public AuthenticatorAbstractForDfltRuntime(final IsisConfiguration configuration) {
+    public LogonFixtureAuthenticator(final IsisConfiguration configuration) {
         super(configuration);
     }
 
-    // //////////////////////////////////////////////////////
-    // Helpers
-    // //////////////////////////////////////////////////////
-
     /**
-     * Helper method for convenience of implementations that depend on the
-     * {@link DeploymentType}.
+     * Can authenticate if a {@link AuthenticationRequestLogonFixture}.
      */
-    public DeploymentType getDeploymentType() {
-        final String deploymentTypeStr = getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-        if (deploymentTypeStr == null) {
-            throw new IllegalStateException("Expect value for '" + SystemConstants.DEPLOYMENT_TYPE_KEY + "' to be bound into IsisConfiguration");
-        }
-        return DeploymentType.lookup(deploymentTypeStr);
+    @Override
+    public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return AuthenticationRequestLogonFixture.class.isAssignableFrom(authenticationRequestClass);
     }
+
+    @Override
+    protected final boolean isValid(final AuthenticationRequest request) {
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
+        return deploymentCategory.isExploring() || deploymentCategory.isPrototyping();
+    }
+
 
 }
