@@ -24,6 +24,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -58,7 +61,10 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
         for (final BS3Tab bs3Tab : tablist) {
             final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
-            tabs.add(new AbstractTab(Model.of(bs3Tab.getName())) {
+            String translateContext = entityModel.getTypeOfSpecification().getFullIdentifier();
+            String bs3TabName = bs3Tab.getName();
+            String tabName = getTranslationService().translate(translateContext, bs3TabName);
+            tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -73,6 +79,10 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
             });
         }
         return tabs;
+    }
+
+    static TranslationService getTranslationService() {
+        return IsisContext.getSessionFactory().getServicesInjector().lookupService(TranslationService.class);
     }
 
     public TabGroupPanel(String id, final EntityModel entityModel) {
@@ -124,4 +134,8 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
             }
         });
     }
+
+
+
+
 }
