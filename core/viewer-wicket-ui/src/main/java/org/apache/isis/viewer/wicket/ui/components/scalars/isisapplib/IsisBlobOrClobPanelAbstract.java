@@ -26,6 +26,7 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.imageio.ImageIO;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -239,7 +240,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private void updateRegularFormComponents(final InputFieldVisibility visibility) {
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.get(ID_SCALAR_VALUE).setVisible(visibility == InputFieldVisibility.VISIBLE);
-
+        
+        addAcceptFilterTo(formComponent.get(ID_SCALAR_VALUE));
         fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
         updateClearLink(visibility);
@@ -255,6 +257,39 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             wicketImage.setVisible(visibility == InputFieldVisibility.NOT_VISIBLE);
         }
     }
+
+	/**
+	 * Just a demo! <br/>
+	 * Fetches the desired filter from e.g. <br/><br/> 
+	 * {@code @ParameterLayout(named="File", describedAs=".xlsx")} 
+	 * @return the desired accept filter 
+	 */
+	private String getAcceptFilter(){
+		return scalarModel.getDescribedAs();
+	}
+	
+	/**
+	 * HTML file input tags allow for the client-side file-open-dialog 
+	 * to filter for specific file types *.xyz via the {@code<input ... accept=".xyz"/>}
+	 * attribute.  
+	 * @param component 
+	 * @param filter should be of the form "file_extension|audio/*|video/*|image/*|media_type"
+	 * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+	 */
+	private void addAcceptFilterTo(Component component){
+		final String filter = getAcceptFilter();
+		if(filter==null || filter.isEmpty())
+			return; // ignore
+		class AcceptAttributeModel extends Model<String> {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getObject() {
+				return filter;
+			}
+		}
+		component.add(new AttributeModifier("accept", new AcceptAttributeModel()));
+	}
+
 
     private Label updateFileNameLabel(String idFileName, MarkupContainer formComponent) {
         class FileNameModel extends Model<String> {
