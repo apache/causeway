@@ -739,9 +739,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-                if (containsDoOpFacet(MixinFacet.class) || containsDoOpFacet(DomainServiceFacet.class)) {
+                final boolean containsMixin = containsDoOpFacet(MixinFacet.class);
+                final boolean containsDomainService = containsDoOpFacet(DomainServiceFacet.class);
+                final boolean isService = isService();
+                if (containsMixin || containsDomainService || isService) {
                     // don't contribute to mixins themselves!
-                    // don't contribute to services either (nb: can't use isService(), not necessarily setup)
+                    // don't contribute to services either
+                    // - isService() is sufficient check for internal services registered directly with ServicesInjector
+                    // - checking for DomainServiceFacet is for application services (isService() may not have been called, for these)
                 } else {
                     actions.addAll(createContributeeActions());
                     actions.addAll(createMixedInActions());
@@ -970,7 +975,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
 
-        final List<ObjectActionDefault> mixinActions = getObjectActions(specification);
+        final List<ObjectActionDefault> mixinActions = objectActionsOf(specification);
 
         final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList(
                 Iterables.transform(
@@ -995,7 +1000,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         toAppendTo.addAll(mixedInAssociations);
     }
 
-    private List getObjectActions(final ObjectSpecification specification) {
+    private List objectActionsOf(final ObjectSpecification specification) {
         return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
     }
 

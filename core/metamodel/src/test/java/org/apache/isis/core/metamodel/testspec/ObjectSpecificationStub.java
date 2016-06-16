@@ -370,10 +370,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void markAsService() {
-    }
-
-    @Override
     public List<ObjectAction> getObjectActions(final Contributed contributed) {
         return null;
     }

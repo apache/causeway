@@ -337,7 +337,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private synchronized ObjectSpecification loadSpecificationForSubstitutedClassSynchronized(
             final Class<?> type,
-            final NatureOfService nature) {
+            final NatureOfService natureOfService) {
 
         final String typeName = type.getName();
         final ObjectSpecification spec = cache.get(typeName);
@@ -345,10 +345,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             // because caller isn't synchronized.
             return spec;
         }
-        final ObjectSpecification specification = createSpecification(type);
-        if(nature != null) {
-            specification.markAsService();
-        }
+        final ObjectSpecification specification = createSpecification(type, natureOfService);
         if (specification == null) {
             throw new IsisException("Failed to create specification for class " + typeName);
         }
@@ -390,7 +387,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecification createSpecification(final Class<?> cls) {
+    private ObjectSpecification createSpecification(
+            final Class<?> cls,
+            final NatureOfService natureOfServiceIfAny) {
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
@@ -401,7 +400,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                     new FacetedMethodsBuilderContext(
                             this, facetProcessor, layoutMetadataReaders);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
-                    servicesInjector, facetProcessor);
+                    servicesInjector, facetProcessor, natureOfServiceIfAny);
         }
     }
 

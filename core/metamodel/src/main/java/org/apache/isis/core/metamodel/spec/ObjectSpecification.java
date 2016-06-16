@@ -348,7 +348,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     boolean isService();
 
-    public void markAsService();
 
 
     // //////////////////////////////////////////////////////////////
