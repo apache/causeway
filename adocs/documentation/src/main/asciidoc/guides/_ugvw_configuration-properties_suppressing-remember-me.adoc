@@ -24,12 +24,18 @@ image::{_imagesdir}wicket-viewer/suppress-remember-me/login-page-suppress-rememb
 
 == Configuration
 
-To suppress the 'remember me' checkbox, add the following configuration flag:
+To suppress the 'remember me' checkbox, add the following configuration flag (`1.13.0-SNAPSHOT`):
+
+[source,ini]
+----
+isis.viewer.wicket.rememberMe.suppress=true
+----
+
+Prior to `1.13.0-SNAPSHOT`, the configuration property is:
 
 [source,ini]
 ----
 isis.viewer.wicket.suppressRememberMe=true
-
 ----
 
 

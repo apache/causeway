@@ -134,6 +134,11 @@ If no value is set then (for safety) a random UUID will be used as the encryptio
 default is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have
 to log in again).
 
+|`isis.viewer.wicket.` +
+`rememberMe.suppress`
+| `true`,`false` (`_false_`)
+| (`1.13.0-SNAPSHOT`) Whether to suppress "remember me" checkbox on the login page.
+
 
 |`isis.viewer.wicket.` +
 `stripWicketTags`
@@ -148,7 +153,7 @@ to log in again).
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
 | `true`,`false` (`_false_`)
-|Whether to suppress "remember me" checkbox on the login page.
+|(Deprecated in `1.13.0-SNAPSHOT`, replaced by `rememberMe.suppress`).  Whether to suppress "remember me" checkbox on the login page.
 
 |`isis.viewer.wicket.` +
 `suppressSignUp`

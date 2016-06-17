@@ -37,7 +37,13 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS = "isis.viewer.wicket.rememberMe.suppress";
+    /**
+     * @deprecated - use {@link #ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS} instead.
+     */
+    @Deprecated
     public static final String ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME = "isis.viewer.wicket.suppressRememberMe";
+
     public static final String ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP = "isis.viewer.wicket.suppressSignUp";
     public static final String ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET = "isis.viewer.wicket.suppressPasswordReset";
     public static final String ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION = "isis.viewer.wicket.clearOriginalDestination";
@@ -78,7 +84,12 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     }
 
     protected SignInPanel addSignInPanel() {
-        final boolean suppressRememberMe = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME, false);
+
+        final boolean rememberMeSuppress = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS, false);
+        final boolean rememberMeSuppressDeprecated = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME, false);
+
+        final boolean suppressRememberMe = rememberMeSuppress || rememberMeSuppressDeprecated;
+
         final boolean suppressSignUpLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP, false);
         final boolean suppressPasswordResetLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET, false);
         final boolean clearOriginalDestination = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION, false);
