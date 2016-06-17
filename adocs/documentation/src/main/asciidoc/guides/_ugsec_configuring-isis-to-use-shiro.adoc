@@ -44,7 +44,7 @@ the Shiro subject - if found to be still authenticated - will be logged out anyw
 [WARNING]
 ====
 This auto-logout behaviour was the default prior to `1.13.0-SNAPSHOT`, but is believed to be the root cause of some
-exceptions caused by a possible race condition.  The should generally be no need to change this property from its
+exceptions caused by a possible race condition.  There should generally be no need to change this property from its
 default (`false`).
 ====
 
