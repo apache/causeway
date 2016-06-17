@@ -54,8 +54,11 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 final DataTable<?, ?> dataTable = getTable();
                 final CollectionContentsSortableDataProvider dataProvider = (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
                 final EntityCollectionModel collectionModel = dataProvider.getEntityCollectionModel();
-                collectionModel.clearToggleMementosList();
-                toggleboxColumn.clearToggles();
+
+                if(toggleboxColumn != null) {
+                    collectionModel.clearToggleMementosList();
+                    toggleboxColumn.clearToggles();
+                }
 
                 final UiHintContainer hintContainer = getUiHintContainer();
                 if(hintContainer != null) {
