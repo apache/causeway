@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.runtime.services.sessmgmt;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
@@ -40,15 +39,17 @@ public class SessionManagementServiceDefault implements SessionManagementService
         final AuthenticationSession authenticationSession =
                 isisSessionFactory.getCurrentSession().getAuthenticationSession();
 
-        isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager().endTransaction();
+        persistenceSessionServiceInternal.commit();
         isisSessionFactory.closeSession();
 
         isisSessionFactory.openSession(authenticationSession);
-        isisSessionFactory.getCurrentSession().getPersistenceSession().startTransaction();
+        persistenceSessionServiceInternal.beginTran();
     }
 
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

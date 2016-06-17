@@ -483,13 +483,23 @@ public class PersistenceSession implements
         final Command command = commandContext.getCommand();
         final Interaction interaction = interactionContext.getInteraction();
 
+
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
             // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
 
+            final Timestamp completedAt;
+            final Interaction.Execution priorExecution = interaction.getPriorExecution();
+            if (priorExecution != null) {
+                // copy over from the most recent (which will be the top-level) interaction
+                completedAt = priorExecution.getCompletedAt();
+            } else {
+                // this could arise as the result of calling SessionManagementService#nextSession within an action
+                // the best we can do is to use the current time
 
-            // copy over from the most recent (which will be the top-level) interaction
-            Interaction.Execution priorExecution = interaction.getPriorExecution();
-            final Timestamp completedAt = priorExecution.getCompletedAt();
+                // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
+                completedAt = clockService.nowAsJavaSqlTimestamp();
+            }
+
             command.setCompletedAt(completedAt);
         }
 
