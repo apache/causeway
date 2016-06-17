@@ -18,22 +18,25 @@ Apache Isis has two public mailing lists.
 
 |Mailing list
 |Email
-|ASF Archives
+|ASF Pony Mail archives
 |Markmail Archives
+|ASF mbox Archives (TLP only)
 |Subscribe
 
 
 |Users
 |link:mailto:users@isis.apache.org[users@isis.apache.org]
-|link:http://mail-archives.apache.org/mod_mbox/isis-users/[TLP only]
+|link:https://lists.apache.org/list.html?users@isis.apache.org[Pony mail]
 |link:http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[TLP + incubating]
+|link:http://mail-archives.apache.org/mod_mbox/isis-users/[TLP only]
 |link:mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
 
 
 |Contributors
 |mailto:dev@isis.apache.org[dev@isis.apache.org]
-|http://mail-archives.apache.org/mod_mbox/isis-dev/[TLP only]
+|link:https://lists.apache.org/list.html?dev@isis.apache.org[Pony mail]
 |http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[TLP + incubating]
+|http://mail-archives.apache.org/mod_mbox/isis-dev/[TLP only]
 |mailto:dev-subscribe@isis.apache.org[dev-subscribe@isis.apache.org]
 
 

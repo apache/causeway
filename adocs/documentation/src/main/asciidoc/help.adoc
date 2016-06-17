@@ -12,7 +12,8 @@ pass:[<br/><br/><br/>]
 == Help:
 
 * link:support.html[Mailing Lists]
-* link:http://isis.markmail.org/search/?q=[Mailing List Archives]
+
+* Mailing List Archives: link:https://lists.apache.org/list.html?users\@isis.apache.org[ASF Pony mail], link:http://isis.markmail.org/search/?q=[Markmail]
 * link:https://issues.apache.org/jira/browse/ISIS[JIRA]
 * link:http://github.com/apache/isis[Github mirror]
 * link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
