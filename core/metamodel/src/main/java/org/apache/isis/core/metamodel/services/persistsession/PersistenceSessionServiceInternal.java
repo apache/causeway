@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public interface PersistenceSessionServiceInternal extends AdapterManager {
 
@@ -157,6 +158,8 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
      */
     @Programmatic
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
+
+    void executeWithinTransaction(TransactionalClosure transactionalClosure);
 
 
     //endregion

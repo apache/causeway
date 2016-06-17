@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -171,6 +172,11 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     @Override
     public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
         return getPersistenceSession().firstMatchingQuery(query);
+    }
+
+    @Override
+    public void executeWithinTransaction(TransactionalClosure transactionalClosure) {
+        getTransactionManager().executeWithinTransaction(transactionalClosure);
     }
 
     protected PersistenceSession getPersistenceSession() {
