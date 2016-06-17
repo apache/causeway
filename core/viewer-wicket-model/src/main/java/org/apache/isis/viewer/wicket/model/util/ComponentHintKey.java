@@ -18,16 +18,16 @@
  */
 package org.apache.isis.viewer.wicket.model.util;
 
-import java.io.Serializable;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.wicket.Component;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Provider;
+import java.io.Serializable;
 
 /**
  * Scoped by the {@link Component component's path}.
@@ -36,23 +36,30 @@ public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static ComponentHintKey create( final Component path, final String key) {
-        return new ComponentHintKey(path, key, null);
+    public static ComponentHintKey create(final Provider<Component> pathProvider, final String key) {
+        return new ComponentHintKey(pathProvider, null, key, null);
+    }
+
+    public static ComponentHintKey create(final Component path, final String key) {
+        return new ComponentHintKey(null, path, key, null);
     }
 
     public static ComponentHintKey create(
             final String fullKey) {
-        return new ComponentHintKey(null, null, fullKey);
+        return new ComponentHintKey(null, null, null, fullKey);
     }
 
-    private final Component component;
+    private Provider<Component> componentProvider;
+    private Component component;
     private final String keyName;
     private final String fullKey;
 
     private ComponentHintKey(
+            final Provider<Component> componentProvider,
             final Component component,
             final String keyName,
             final String fullKey) {
+        this.componentProvider = componentProvider;
         this.component = component;
         this.keyName = keyName;
         this.fullKey = fullKey;
@@ -61,7 +68,7 @@ public class ComponentHintKey implements Serializable {
     public String getKey() {
         return fullKey != null
                     ? fullKey
-                    :  keyFor(component, keyName);
+                    :  keyFor(component != null? component : componentProvider.get(), keyName);
     }
 
     protected String keyFor(final Component component, final String keyName) {
@@ -115,7 +122,7 @@ public class ComponentHintKey implements Serializable {
 
 
     public static ComponentHintKey noop() {
-        return new ComponentHintKey(null, null, null) {
+        return new ComponentHintKey(null, null, null, null) {
             @Override
             public String getKey() {
                 return null;

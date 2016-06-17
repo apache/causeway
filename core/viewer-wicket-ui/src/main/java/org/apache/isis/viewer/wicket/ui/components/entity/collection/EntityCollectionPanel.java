@@ -39,11 +39,13 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import javax.inject.Provider;
 import java.util.List;
 
 /**
@@ -63,13 +65,24 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
     private final ComponentHintKey selectedItemHintKey;
 
+    CollectionSelectorPanel selectorDropdownPanel;
+
     final WebMarkupContainer div;
 
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemHintKey = ComponentHintKey.create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
+        selectedItemHintKey = ComponentHintKey.create(getSelectorDropdownPanel(), EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
         div = buildGui();
+    }
+
+    Provider<Component> getSelectorDropdownPanel() {
+        return new Provider<Component>() {
+            @Override
+            public Component get() {
+                return selectorDropdownPanel;
+            }
+        };
     }
 
     /**
@@ -136,9 +149,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
             if (componentFactories.size() <= 1) {
                 permanentlyHide(ID_SELECTOR_DROPDOWN);
             } else {
-                CollectionSelectorPanel selectorDropdownPanel =
-                        new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
-                                entityCollectionModel, selectedItemHintKey);
+                selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
+                        entityCollectionModel, selectedItemHintKey);
 
                 final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
