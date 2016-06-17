@@ -17,40 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collection;
+package org.apache.isis.viewer.wicket.ui.components.entity.collection;
 
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-
 /**
- * {@link ComponentFactory} for {@link CollectionPanel}.
+ * {@link ComponentFactory} for {@link EntityCollectionPanel}.
  */
-public class CollectionPanelFactory extends ComponentFactoryAbstract {
+public class EntityCollectionPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "labelled";
-
-    public CollectionPanelFactory() {
-        super(ComponentType.COLLECTION_NAME_AND_CONTENTS, NAME, CollectionPanel.class);
-    }
-
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof EntityCollectionModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        return ApplicationAdvice.APPLIES;
+    public EntityCollectionPanelFactory() {
+        super(ComponentType.ENTITY_COLLECTION, EntityCollectionPanel.class);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionPanel(id, collectionModel);
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityCollectionPanel(id, entityModel);
     }
 }

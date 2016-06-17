@@ -19,13 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.collection;
 
-import java.util.List;
-
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -46,6 +39,12 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
+
+import java.util.List;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -111,7 +110,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
                 CssClassAppender.appendCssClassTo(div, cssClass);
             }
 
-            final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
+            final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, entityCollectionModel);
             div.addOrReplace(collectionPanel);
 
 
@@ -155,6 +154,10 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
             }
         }
         return div;
+    }
+
+    protected CollectionPanel newCollectionModel(String id, EntityCollectionModel entityCollectionModel) {
+        return new CollectionPanel(id, entityCollectionModel);
     }
 
 
