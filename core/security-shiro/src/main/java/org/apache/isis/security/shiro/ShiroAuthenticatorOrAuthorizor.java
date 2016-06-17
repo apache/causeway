@@ -18,30 +18,7 @@
  */
 package org.apache.isis.security.shiro;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 import com.google.common.collect.Lists;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.UnavailableSecurityManagerException;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.CredentialsException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.Realm;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -54,6 +31,22 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authorization.IsisPermission;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
@@ -68,12 +61,20 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     private static final Logger LOG = LoggerFactory.getLogger(ShiroAuthenticatorOrAuthorizor.class);
 
+    private static final String ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY = "isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated";
+    private static final boolean ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT = false;
+
     //region > constructor and fields
     private final IsisConfiguration configuration;
+    private final boolean autoLogout;
+
     private DeploymentCategory deploymentCategory;
 
     public ShiroAuthenticatorOrAuthorizor(final IsisConfiguration configuration) {
         this.configuration = configuration;
+        autoLogout = configuration.getBoolean(
+                ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY,
+                ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT);
     }
 
     public IsisConfiguration getConfiguration() {
@@ -121,13 +122,20 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         
         final Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
-            // TODO: verify the code passed in that this session is still alive?
-            
-            // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and
-            // just retrieve it?
-            
-            // for now, just log them out.
-            currentSubject.logout();
+
+            if(autoLogout) {
+                // (this is preserving behaviour pre 1.13.0.  However, there is a suspicion that this might
+                // produce a race condition.  In 1.13.0 the default is to simply reuse the session.
+                //
+                // (See this thread for further info: http://markmail.org/message/hsjljwgkhhrzxbrm
+                currentSubject.logout();
+            } else {
+
+                // TODO: should we verify the code passed in that this session is still alive?
+                // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and just retrieve it?
+
+                return authenticationSessionFor(request, code, token, currentSubject);
+            }
         }
         try {
             currentSubject.login(token);
@@ -150,12 +158,16 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             LOG.error("Unable to authenticate", ae);
             return null;
         }
-        
+
+        return authenticationSessionFor(request, code, token, currentSubject);
+    }
+
+    AuthenticationSession authenticationSessionFor(AuthenticationRequest request, String code, AuthenticationToken token, Subject currentSubject) {
         List<String> roles = getRoles(currentSubject, token);
         // copy over any roles passed in
-        // (this is used by the Wicket viewer, for example).s
+        // (this is used by the Wicket viewer, for example).
         roles.addAll(request.getRoles());
-        
+
         return new SimpleSession(request.getName(), roles, code);
     }
 
