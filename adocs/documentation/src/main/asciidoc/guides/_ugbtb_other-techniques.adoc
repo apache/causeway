@@ -9,7 +9,6 @@
 This chapter pulls together a number of more advanced techniques that we've discovered and developed while building our own Isis applications.
 
 
-include::_ugbtb_other-techniques_overriding-jdo-annotations.adoc[leveloffset=+1]
 include::_ugbtb_other-techniques_mapping-rdbms-views.adoc[leveloffset=+1]
 include::_ugbtb_other-techniques_transactions-and-errors.adoc[leveloffset=+1]
 include::_ugbtb_other-techniques_multi-tenancy.adoc[leveloffset=+1]
