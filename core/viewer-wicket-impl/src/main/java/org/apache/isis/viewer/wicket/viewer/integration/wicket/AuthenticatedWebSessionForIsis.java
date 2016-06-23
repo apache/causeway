@@ -93,6 +93,10 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             userName = authenticationSession.getUserName();
         }
 
+        // similar code in Restful Objects viewer (UserResourceServerside#logout)
+        getAuthenticationManager().closeSession(authenticationSession);
+        getIsisSessionFactory().closeSession();
+
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 

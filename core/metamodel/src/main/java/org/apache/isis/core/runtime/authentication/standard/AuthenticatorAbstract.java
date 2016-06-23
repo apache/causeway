@@ -85,6 +85,12 @@ public abstract class AuthenticatorAbstract implements Authenticator {
      */
     protected abstract boolean isValid(AuthenticationRequest request);
 
+    @Override
+    public void logout(final AuthenticationSession session) {
+        // no-op
+    }
+
+
     //endregion
 
     //region > Injected (via constructor)

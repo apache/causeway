@@ -136,6 +136,10 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     @Programmatic
     @Override
     public void closeSession(final AuthenticationSession session) {
+        List<Authenticator> authenticators = getAuthenticators();
+        for (Authenticator authenticator : authenticators) {
+            authenticator.logout(session);
+        }
         userByValidationCode.remove(session.getValidationCode());
     }
 

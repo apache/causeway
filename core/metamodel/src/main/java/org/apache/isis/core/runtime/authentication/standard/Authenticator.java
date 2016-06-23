@@ -44,4 +44,5 @@ public interface Authenticator extends ApplicationScopedComponent {
      */
     AuthenticationSession authenticate(AuthenticationRequest request, String code);
 
+    void logout(AuthenticationSession session);
 }

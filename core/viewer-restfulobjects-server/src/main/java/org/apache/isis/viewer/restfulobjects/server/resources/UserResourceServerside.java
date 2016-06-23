@@ -80,9 +80,9 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         renderer.includesSelf();
 
         // we do the logout (removes this session from those valid)
+        // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
         final AuthenticationSession authenticationSession = getResourceContext().getAuthenticationSession();
         getAuthenticationManager().closeSession(authenticationSession);
-
         getIsisSessionFactory().closeSession();
 
         // we also redirect to home page with special query string; this allows the session filter

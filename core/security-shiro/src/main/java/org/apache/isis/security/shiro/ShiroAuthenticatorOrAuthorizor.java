@@ -18,7 +18,33 @@
  */
 package org.apache.isis.security.shiro;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import com.google.common.collect.Lists;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.CredentialsException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -31,22 +57,6 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authorization.IsisPermission;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.UnavailableSecurityManagerException;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.Realm;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
@@ -160,6 +170,14 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         }
 
         return authenticationSessionFor(request, code, token, currentSubject);
+    }
+
+    @Override
+    public void logout(final AuthenticationSession session) {
+        Subject currentSubject = SecurityUtils.getSubject();
+        if(currentSubject.isAuthenticated()) {
+            currentSubject.logout();
+        }
     }
 
     AuthenticationSession authenticationSessionFor(AuthenticationRequest request, String code, AuthenticationToken token, Subject currentSubject) {
