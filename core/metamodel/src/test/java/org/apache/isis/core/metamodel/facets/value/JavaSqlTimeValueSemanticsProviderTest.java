@@ -19,10 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-
 import java.sql.Time;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -31,6 +30,8 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
 
 public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -48,7 +49,7 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
         });
 
         final Calendar c = Calendar.getInstance();
-        // c.setTimeZone(TestClock.timeZone);
+        c.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         c.set(Calendar.MILLISECOND, 0);
 
