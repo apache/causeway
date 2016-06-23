@@ -19,6 +19,17 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.collection;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.inject.Provider;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -39,14 +50,6 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
-
-import javax.inject.Provider;
-import java.util.List;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -77,12 +80,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     }
 
     Provider<Component> getSelectorDropdownPanel() {
-        return new Provider<Component>() {
-            @Override
-            public Component get() {
-                return selectorDropdownPanel;
-            }
-        };
+        return new SelectorDropDownPanelProvider();
     }
 
     /**
@@ -179,4 +177,10 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         return visible;
     }
 
+    private class SelectorDropDownPanelProvider implements Provider<Component>, Serializable {
+        @Override
+        public Component get() {
+            return selectorDropdownPanel;
+        }
+    }
 }
