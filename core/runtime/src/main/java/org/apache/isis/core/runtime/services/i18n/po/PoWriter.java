@@ -26,6 +26,7 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 class PoWriter extends PoAbstract {
 
@@ -51,6 +52,14 @@ class PoWriter extends PoAbstract {
 
     @Override
     void shutdown() {
+        if(IsisContext.getMetaModelInvalidExceptionIfAny() != null) {
+            // suppress logging translations
+            return;
+        }
+        logTranslations();
+    }
+
+    private void logTranslations() {
         final StringBuilder buf = new StringBuilder();
 
         buf.append("\n");
