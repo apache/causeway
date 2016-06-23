@@ -21,10 +21,10 @@ For example:
 
 [source,java]
 ----
-@AutoComplete(
-    autoCompleteRepository=Customers.class
+@DomainObject(
+    autoCompleteRepository=CustomerRepository.class
 )
-public class Customer extends AbstractDomainObject {
+public class Customer {
    ....
 }
 ----
@@ -33,14 +33,13 @@ where:
 
 [source,java]
 ----
-public interface Customers {
-    @Programmatic                                // <1>
-    List<Customer> autoComplete(String search);  // <2>
+@DomainService
+public class CustomerRepository {
+    List<Customer> autoComplete(String search);  // <1>
     ...
 }
 ----
-<1> do not expose in the UI
-<2> is assumed to be called "autoComplete", and accepts a single string
+<1> is assumed to be called "autoComplete", and accepts a single string
 
 
 
@@ -53,22 +52,23 @@ For example:
 
 [source,java]
 ----
-@AutoComplete(
+@DomainObject(
     autoCompleteRepository=Customers.class,
-    autoCompleteAction="findByCustomerName"
+    autoCompleteAction="findByName"
 )
-public class Customer extends AbstractDomainObject {
+public class Customer {
    ....
 }
 ----
 
-where in this case `findByCustomerName` might be an existing method already defined:
+where in this case `findByName` might be an existing action already defined:
 
 [source,java]
 ----
-public interface Customers {
+@DomainService(natureOfService=VIEW_MENU_ONLY)
+public class Customers {
     @Action(semantics=SemanticsOf.SAFE)
-    List<Customer> findByCustomerName(@ParameterLayout(named="name") String name);
+    List<Customer> findByName(@ParameterLayout(named="name") String name);
     ...
 }
 ----
