@@ -20,7 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.pages.mmverror;
 
 import java.util.List;
+import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
@@ -35,6 +37,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -75,6 +78,10 @@ public class MmvErrorPage extends WebPage {
 
     private static final String ID_ERROR = "error";
     private static final String ID_ERROR_MESSAGE = "errorMessage";
+
+    public MmvErrorPage(Set<String> validationErrors) {
+        this(Model.ofList(Lists.newArrayList(validationErrors)));
+    }
 
     public MmvErrorPage(final IModel<List<? extends String>> model) {
         super(model);

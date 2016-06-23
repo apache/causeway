@@ -114,21 +114,16 @@ public class IsisSignInPanel extends SignInPanel {
     }
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
-        isisSessionFactory.doInSession(new Runnable() {
-            @Override
-            public void run() {
-                final UserRegistrationService userRegistrationService =
-                        servicesInjector.lookupService(UserRegistrationService.class);
-                final EmailNotificationService emailNotificationService1 =
-                        servicesInjector.lookupService(EmailNotificationService.class);
-                final boolean visibilityAllowed = userRegistrationService != null && emailNotificationService1.isConfigured();
-                for (final Component component: components) {
-                    if(component.isVisibilityAllowed()) {
-                        component.setVisibilityAllowed(visibilityAllowed);
-                    }
-                }
+        final UserRegistrationService userRegistrationService =
+                servicesInjector.lookupService(UserRegistrationService.class);
+        final EmailNotificationService emailNotificationService1 =
+                servicesInjector.lookupService(EmailNotificationService.class);
+        final boolean visibilityAllowed = userRegistrationService != null && emailNotificationService1.isConfigured();
+        for (final Component component: components) {
+            if(component.isVisibilityAllowed()) {
+                component.setVisibilityAllowed(visibilityAllowed);
             }
-        });
+        }
     }
 
     private MarkupContainer getSignInForm() {

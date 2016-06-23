@@ -76,6 +76,11 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
         this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
     }
 
+    @Programmatic
+    public boolean isInitialized() {
+        return this.applicationComponents != null;
+    }
+
     private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
             final IsisConfiguration configuration, final SpecificationLoader specificationLoader) {
 

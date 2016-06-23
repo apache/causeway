@@ -210,8 +210,6 @@ public class IsisWicketApplication
     private boolean determiningConfigurationType;
     private DeploymentTypeWicketAbstract deploymentType;
 
-    private final List<String> validationErrors = Lists.newArrayList();
-
 
     // /////////////////////////////////////////////////
     // constructor, init
@@ -312,8 +310,7 @@ public class IsisWicketApplication
 
             final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
             if(mmie != null) {
-                this.validationErrors.addAll(mmie.getValidationErrors());
-                log(this.validationErrors);
+                log(mmie.getValidationErrors());
             }
 
         } catch(RuntimeException ex) {
@@ -395,7 +392,7 @@ public class IsisWicketApplication
         return UUID.randomUUID().toString();
     }
 
-    private void log(final List<String> validationErrors) {
+    private void log(final Set<String> validationErrors) {
         log("");
         logBanner();
         log("");
@@ -665,13 +662,6 @@ public class IsisWicketApplication
 
     // //////////////////////////////////////
 
-    /**
-     * The validation errors, if any, that occurred on {@link #init() startup}.
-     */
-    public List<String> getValidationErrors() {
-        return validationErrors;
-    }
-    
     private void logError(String validationError) {
         log(validationError);
     }

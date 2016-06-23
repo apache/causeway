@@ -177,14 +177,6 @@ public class IsisSessionFactoryBuilder {
                 specificationLoader.validateAndAssert();
 
 
-                // remaining functionality only done if metamodel is valid.
-                authenticationManager.init(deploymentCategory);
-                authorizationManager.init(deploymentCategory);
-
-                persistenceSessionFactory.init(specificationLoader);
-
-                isisSessionFactory.constructServices();
-
             } catch (final MetaModelInvalidException ex) {
                 // no need to use a higher level, such as error(...); the calling code will expose any metamodel
                 // validation errors in their own particular way.
@@ -193,6 +185,23 @@ public class IsisSessionFactoryBuilder {
                 }
                 IsisContext.setMetaModelInvalidException(ex);
             }
+
+
+            // the remaining functionality is done even if metamodel is valid.
+            // so that can still call isisSessionFactory#doInSession
+            //
+            // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+            // (including the metamodel invalid page)
+            //
+            // at org.apache.isis.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+            // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+
+            authenticationManager.init(deploymentCategory);
+            authorizationManager.init(deploymentCategory);
+
+            persistenceSessionFactory.init(specificationLoader);
+
+            isisSessionFactory.constructServices();
 
 
         } catch (final IsisSystemException ex) {
