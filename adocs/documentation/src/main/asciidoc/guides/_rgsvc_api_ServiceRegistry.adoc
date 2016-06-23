@@ -31,7 +31,8 @@ public interface ServiceRegistry2 {
 <3> returns an `Iterable` in order to iterate over all registered services that implement the specified class
 <4> (`1.13.0-SNAPSHOT`) returns the list of all domain services that constitute the running application (including internal domain services).
 
-Service injection is done automatically if objects are created using the .adoc#_rgsvc_api_FactoryService[`FactoryService`]
+Service injection is done automatically if objects are created using the
+xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
 
 
 

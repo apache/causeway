@@ -37,7 +37,7 @@ public class SomeDomainObject {
 
 If using DataNucleus against an RDBMS (as you probably are) then we strongly recommend that you implement this test, for several reasons:
 
-* first, ``Set``s align more closely to the relational model than do `List`s. A `List` must have an additional index to specify order.
+* first, ``Set``s align more closely to the relational model than do ``List``s. A ``List`` must have an additional index to specify order.
 
 * second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer). +
 +
