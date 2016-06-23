@@ -22,6 +22,7 @@ package org.apache.isis.core.integtestsupport;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
@@ -44,10 +45,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -283,9 +284,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     private void initIfRequiredThenOpenSession(FireListeners fireListeners) throws Exception {
 
-        // exit as quickly as possible for this case... (will already have been logged)
-        if(IsisContext.getMetaModelInvalidExceptionIfAny() != null) {
-            fail("Metamodel invalid");
+        // exit as quickly as possible for this case...
+        final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+        if(mmie != null) {
+            final Set<String> validationErrors = mmie.getValidationErrors();
+            final String validationMsg = Joiner.on("\n").join(validationErrors);
+            fail(validationMsg);
             return;
         }
 
