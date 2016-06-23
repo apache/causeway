@@ -265,20 +265,30 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 entityLink.setRequired(getModel().isRequired());
                 select2Field = Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, model, getModel());
                 setProviderAndCurrAndPending(select2Field, getModel().getActionArgsHint());
-                if(!getModel().hasChoices()) {
-                    final Settings settings = select2Field.getSettings();
+
+                final Settings settings = select2Field.getSettings();
+
+                // one of these three case should be true
+                // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
+                if(getModel().hasChoices()) {
+
+                    settings.setPlaceholder(getModel().getName());
+
+                } else if(getModel().hasAutoComplete()) {
+
                     final int minLength = getModel().getAutoCompleteMinLength();
                     settings.setMinimumInputLength(minLength);
                     settings.setPlaceholder(getModel().getName());
-                }
-                if(hasObjectAutoComplete()) {
+
+                } else if(hasObjectAutoComplete()) {
                     final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
                     final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                    final Settings settings = select2Field.getSettings();
                     final int minLength = autoCompleteFacet.getMinLength();
                     settings.setMinimumInputLength(minLength);
                 }
+
                 entityLink.addOrReplace(select2Field);
+
             } else {
                 //
                 // the select2Field already exists, so the widget has been rendered before.  If it is
@@ -340,7 +350,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
             
             resetIfCurrentNotInChoices(select2Field, choiceMementos);
             
-        } else if(hasParamOrPropertyAutoComplete()) {
+        } else if(getModel().hasAutoComplete()) {
             select2Field.setProvider(providerForParamOrPropertyAutoComplete());
             getModel().clearPending();
         } else {
@@ -508,12 +518,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(getModel().isViewMode()) {
             return false;
         }
-        return getModel().hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
-    }
-
-    // called by isEditableWithEitherAutoCompleteOrChoices, also syncProviderAndCurrAndPending
-    private boolean hasParamOrPropertyAutoComplete() {
-        return getModel().hasAutoComplete();
+        return getModel().hasChoices() || getModel().hasAutoComplete() || hasObjectAutoComplete();
     }
 
     // called by isEditableWithEitherAutoCompleteOrChoices

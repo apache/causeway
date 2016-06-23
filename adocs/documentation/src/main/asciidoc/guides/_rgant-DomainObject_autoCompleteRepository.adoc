@@ -6,7 +6,8 @@
 
 
 
-The `autoCompleteRepository()` attribute nominates a single method on a domain service as the fallback means for lookuping up instances of the domain object using a simple string.
+The `autoCompleteRepository()` attribute nominates a single method on a domain service as the fallback means for
+looking up instances of the domain object using a simple string.
 
 For example, this might search for a customer by their name or number.  Or it could search for a country based on its ISO-3 code or user-friendly name.
 
@@ -68,11 +69,28 @@ where in this case `findByName` might be an existing action already defined:
 @DomainService(natureOfService=VIEW_MENU_ONLY)
 public class Customers {
     @Action(semantics=SemanticsOf.SAFE)
-    List<Customer> findByName(@ParameterLayout(named="name") String name);
+    public List<Customer> findByName(
+        @Parameter(minLength=3)             // <1>
+        @ParameterLayout(named="name")
+        String name);
     ...
 }
 ----
+<1> end-user must enter minimum number of characters to trigger the query
 
+(As of `1.13.0-SNAPSHOT`), the autocomplete action can also be a regular method, annotated using xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`]:
+
+[source,java]
+----
+@DomainService(natureOfService=VIEW_MENU_ONLY)
+public class Customers {
+    @Programmatic
+    public List<Customer> findByName(
+        @Parameter(minLength=3)
+        String name);
+    ...
+}
+----
 
 
 [IMPORTANT]

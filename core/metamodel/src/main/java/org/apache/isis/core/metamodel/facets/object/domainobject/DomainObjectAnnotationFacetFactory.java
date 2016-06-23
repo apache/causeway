@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -85,6 +86,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -100,6 +102,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation boundedValidator = new MetaModelValidatorForDeprecatedAnnotation(Bounded.class);
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
+    private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
 
 
 
@@ -189,26 +192,101 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processAutoComplete(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check for the deprecated @AutoComplete annotation first
-        final AutoComplete annotation = Annotations.getAnnotation(processClassContext.getCls(), AutoComplete.class);
-        Facet facet = autoCompleteValidator.flagIfPresent(
-                AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, facetHolder,
-                        servicesInjector
-                ));
+        final AutoComplete autoCompleteAnnot = Annotations.getAnnotation(cls, AutoComplete.class);
+        Facet facet = autoCompleteValidator.flagIfPresent(createFor(facetHolder, autoCompleteAnnot, cls));
 
         // else check from @DomainObject(auditing=...)
         if(facet == null) {
-            facet = AutoCompleteFacetForDomainObjectAnnotation.create(
-                    domainObject, facetHolder,
-                    servicesInjector
-            );
+            final DomainObject domainObjectAnnot = Annotations.getAnnotation(cls, DomainObject.class);
+            facet = createFor(domainObjectAnnot, facetHolder, cls);
         }
 
         // then add
         FacetUtil.addFacet(facet);
+    }
+
+    private AutoCompleteFacet createFor(
+            final FacetHolder facetHolder,
+            final AutoComplete annotation,
+            final Class<?> cls) {
+        if(annotation == null) {
+            return null;
+        }
+
+        final Class<?> repositoryClass = annotation.repository();
+        final String actionName = annotation.action();
+
+        if(!isServiceType(cls, "@AutoComplete", repositoryClass)) {
+            return null;
+        }
+        final Method repositoryMethod = findRepositoryMethod(cls, "@AutoComplete", repositoryClass, actionName);
+        if(repositoryMethod == null) {
+            return null;
+        }
+        return new AutoCompleteFacetForAutoCompleteAnnotation(
+                        facetHolder, repositoryClass, repositoryMethod, servicesInjector);
+    }
+
+    private AutoCompleteFacet createFor(
+            final DomainObject domainObject,
+            final FacetHolder facetHolder,
+            final Class<?> cls) {
+        if(domainObject == null) {
+            return null;
+        }
+
+        final Class<?> repositoryClass = domainObject.autoCompleteRepository();
+        if(repositoryClass == null || repositoryClass == Object.class) {
+            return null;
+        }
+        final String actionName = domainObject.autoCompleteAction();
+
+        if(!isServiceType(cls, "@DomainObject", repositoryClass)) {
+            return null;
+        }
+        final Method repositoryMethod = findRepositoryMethod(cls, "@DomainObject", repositoryClass, actionName);
+        if(repositoryMethod == null) {
+            return null;
+        }
+
+        return new AutoCompleteFacetForDomainObjectAnnotation(
+                        facetHolder, repositoryClass, repositoryMethod, servicesInjector);
+    }
+
+    private boolean isServiceType(
+            final Class<?> cls,
+            final String annotationName,
+            final Class<?> repositoryClass) {
+        final boolean isRegistered = servicesInjector.isRegisteredService(repositoryClass);
+        if(!isRegistered) {
+            autoCompleteInvalid.addFailure(
+                    "%s annotation on %s specifies unknown repository '%s'",
+                    annotationName, cls.getName(), repositoryClass.getName());
+        }
+        return isRegistered;
+    }
+
+    private Method findRepositoryMethod(
+            final Class<?> cls,
+            final String annotationName,
+            final Class<?> repositoryClass,
+            final String methodName) {
+        final Method[] methods = repositoryClass.getMethods();
+        for (Method method : methods) {
+            if(method.getName().equals(methodName)) {
+                final Class<?>[] parameterTypes = method.getParameterTypes();
+                if(parameterTypes.length == 1 && parameterTypes[0].equals(String.class)) {
+                    return method;
+                }
+            }
+        }
+        autoCompleteInvalid.addFailure(
+                "%s annotation on %s specifies action '%s' that does not exist in repository '%s'",
+                annotationName, cls.getName(), methodName, repositoryClass.getName());
+        return null;
     }
 
     void processBounded(final ProcessClassContext processClassContext) {
@@ -476,6 +554,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(boundedValidator);
         metaModelValidator.add(immutableValidator);
         metaModelValidator.add(objectTypeValidator);
+
+        metaModelValidator.add(autoCompleteInvalid);
     }
 
     // //////////////////////////////////////
