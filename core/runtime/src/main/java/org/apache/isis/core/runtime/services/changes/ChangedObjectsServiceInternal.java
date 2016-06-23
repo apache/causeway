@@ -24,7 +24,6 @@ import java.util.Set;
 
 import javax.enterprise.context.RequestScoped;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -33,11 +32,12 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.applib.services.WithTransactionScope;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
@@ -65,6 +65,12 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     // used for publishing
     private final Map<ObjectAdapter,PublishedObject.ChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
+
+    @Programmatic
+    public boolean isEnlisted(ObjectAdapter adapter) {
+        return changeKindByEnlistedAdapter.containsKey(adapter);
+    }
+
 
     /**
      * Auditing and publishing support: for object stores to enlist an object that has just been created,
@@ -172,9 +178,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
 
     /**
-     *
-     * @param adapter
-     * @param current
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
     private boolean enlistForPublishing(final ObjectAdapter adapter, final PublishedObject.ChangeKind current) {
@@ -247,15 +250,10 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
                 Sets.filter(processedObjectProperties1.entrySet(), PreAndPostValues.Predicates.CHANGED));
     }
 
-    private static final Predicate<ObjectAdapter> IS_TRANSACTION_ID = new Predicate<ObjectAdapter>() {
-        @Override
-        public boolean apply(ObjectAdapter input) {
-            return HasTransactionId.class.isAssignableFrom(input.getSpecification().getCorrespondingClass());
-        }
-    };
-
     protected boolean shouldIgnore(final ObjectAdapter adapter) {
-        return IS_TRANSACTION_ID.apply(adapter);
+        final ObjectSpecification adapterSpec = adapter.getSpecification();
+        final Class<?> adapterClass = adapterSpec.getCorrespondingClass();
+        return HasTransactionId.class.isAssignableFrom(adapterClass);
     }
 
 

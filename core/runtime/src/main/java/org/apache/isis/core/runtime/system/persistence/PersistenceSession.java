@@ -2283,10 +2283,17 @@ public class PersistenceSession implements
             return;
         }
 
-        CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-        postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
+        final boolean wasAlreadyEnlisted = changedObjectsServiceInternal.isEnlisted(adapter);
 
+        // we call this come what may;
+        // additional properties may now have been changed, and the changeKind for publishing might also be modified
         changedObjectsServiceInternal.enlistUpdating(adapter);
+
+        if(!wasAlreadyEnlisted) {
+            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
+            CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+            postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
+        }
 
         ensureRootObject(pojo);
     }
