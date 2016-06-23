@@ -169,10 +169,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return getFacetedMethod().getParameters().size();
     }
 
-    @Override
-    public boolean promptForParameters(final ObjectAdapter target) {
-        return getParameterCount() != 0;
-    }
 
     /**
      * Build lazily by {@link #getParameters()}.

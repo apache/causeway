@@ -52,11 +52,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectAction extends ObjectMember {
 
-
-        // //////////////////////////////////////////////////////
-    // semantics, realTarget, getOnType
-    // //////////////////////////////////////////////////////
-
+    //region > getSemantics, getOnType
     /**
      * The semantics of this action.
      */
@@ -67,19 +63,17 @@ public interface ObjectAction extends ObjectMember {
      * invoked upon.
      */
     ObjectSpecification getOnType();
+    //endregion
 
-    boolean promptForParameters(ObjectAdapter target);
-
-    // //////////////////////////////////////////////////////////////////
-    // Type
-    // //////////////////////////////////////////////////////////////////
+    //region > getType, isPrototype
 
     ActionType getType();
 
-    // //////////////////////////////////////////////////////////////////
-    // ReturnType
-    // //////////////////////////////////////////////////////////////////
+    boolean isPrototype();
 
+    //endregion
+
+    //region > ReturnType
     /**
      * Returns the specifications for the return type.
      */
@@ -91,9 +85,9 @@ public interface ObjectAction extends ObjectMember {
      */
     boolean hasReturn();
 
-    // //////////////////////////////////////////////////////////////////
-    // execute, executeWithRuleChecking
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > execute, executeWithRuleChecking
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -120,10 +114,9 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    // //////////////////////////////////////////////////////////////////
-    // valid
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > isProposedArgumentSetValid
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
@@ -133,9 +126,9 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    // //////////////////////////////////////////////////////
-    // Parameters (declarative)
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Parameters (declarative)
 
     /**
      * Returns the number of parameters used by this method.
@@ -175,9 +168,9 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectActionParameter getParameterByName(String paramName);
 
-    // //////////////////////////////////////////////////////
-    // Parameters (per instance)
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Parameters (per instance)
 
     /**
      * Returns the defaults references/values to be used for the action.
@@ -192,8 +185,9 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
+    //endregion
 
-
+    //region > setupBulkActionInvocationContext
     /**
      * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
      */
@@ -201,10 +195,9 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter targetAdapter);
 
 
-    // //////////////////////////////////////////////////////
-    // Utils
-    // //////////////////////////////////////////////////////
+    //endregion
 
+    //region > Utils
     public static final class Utils {
 
         private Utils() {
@@ -269,11 +262,9 @@ public interface ObjectAction extends ObjectMember {
 
     }
 
-    boolean isPrototype();
+    //endregion
 
-    // //////////////////////////////////////////////////////
-    // Predicates
-    // //////////////////////////////////////////////////////
+    //region > Predicates
 
     public static final class Predicates {
 
@@ -314,9 +305,9 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-    // //////////////////////////////////////////////////////
-    // Filters
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Filters
 
     public static final class Filters {
 
@@ -489,4 +480,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
     }
+
+    //endregion
+
 }
