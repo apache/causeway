@@ -18,13 +18,14 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.io.Serializable;
+import java.util.Iterator;
+
 import com.google.common.base.Splitter;
+
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
-
-import java.io.Serializable;
-import java.util.Iterator;
 
 /**
  * String representation of any persistent object managed by the framework.
@@ -102,6 +103,9 @@ public class Bookmark implements Serializable {
         }
 
         public static ObjectState from(final BookmarkObjectState objectState) {
+            if(objectState == null) {
+                return ObjectState.PERSISTENT;
+            }
             switch (objectState) {
             case TRANSIENT:
                 return ObjectState.TRANSIENT;
