@@ -13,30 +13,28 @@ pass:[<br/><br/><br/>]
 Apache Isis has two public mailing lists.
 
 .Table caption
-[cols="1,1,1,1,1", options="header"]
+[cols="2,3,2,3", options="header"]
 |===
 
 |Mailing list
 |Email
-|ASF Pony Mail archives
-|Markmail Archives
-|ASF mbox Archives (TLP only)
+|Mail archives
 |Subscribe
 
 
 |Users
-|link:mailto:users@isis.apache.org[users@isis.apache.org]
-|link:https://lists.apache.org/list.html?users@isis.apache.org[Pony mail]
-|link:http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[TLP + incubating]
-|link:http://mail-archives.apache.org/mod_mbox/isis-users/[TLP only]
-|link:mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
+|mailto:users@isis.apache.org[users@isis.apache.org]
+|https://lists.apache.org/list.html?users&#0064;isis.apache.org[Pony mail] +
+http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[Markmail] +
+http://mail-archives.apache.org/mod_mbox/isis-users/[mbox]
+|mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
 
 
 |Contributors
 |mailto:dev@isis.apache.org[dev@isis.apache.org]
-|link:https://lists.apache.org/list.html?dev@isis.apache.org[Pony mail]
-|http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[TLP + incubating]
-|http://mail-archives.apache.org/mod_mbox/isis-dev/[TLP only]
+|https://lists.apache.org/list.html?dev&#0064;isis.apache.org[Pony mail] +
+http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[Markmail] +
+http://mail-archives.apache.org/mod_mbox/isis-dev/[mbox]
 |mailto:dev-subscribe@isis.apache.org[dev-subscribe@isis.apache.org]
 
 

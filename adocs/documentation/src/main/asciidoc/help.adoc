@@ -13,10 +13,10 @@ pass:[<br/><br/><br/>]
 
 * link:support.html[Mailing Lists]
 
-* Mailing List Archives: link:https://lists.apache.org/list.html?users\@isis.apache.org[ASF Pony mail], link:http://isis.markmail.org/search/?q=[Markmail]
-* link:https://issues.apache.org/jira/browse/ISIS[JIRA]
-* link:http://github.com/apache/isis[Github mirror]
-* link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
+* Mailing List Archives: https://lists.apache.org/list.html?users&#0064;isis.apache.org[ASF Pony mail], http://isis.markmail.org/search/?q=[Markmail]
+* https://issues.apache.org/jira/browse/ISIS[JIRA]
+* http://github.com/apache/isis[Github mirror]
+* http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
 * link:guides/dg.html#_dg_contributing[How to contribute]
 
 
