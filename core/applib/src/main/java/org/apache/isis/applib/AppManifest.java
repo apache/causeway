@@ -345,6 +345,50 @@ public interface AppManifest {
                 return null;
             }
         }
+    }
+
+    public static class Util {
+
+        public static final String ISIS_PERSISTOR                   = "isis.persistor.";
+        public static final String ISIS_PERSISTOR_DATANUCLEUS       = ISIS_PERSISTOR + "datanucleus.";
+        public static final String ISIS_PERSISTOR_DATANUCLEUS_IMPL  = ISIS_PERSISTOR_DATANUCLEUS + "impl.";
+
+        public static Map<String,String> withJavaxJdoRunInMemoryProperties(final Map<String, String> map) {
+
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
+
+            return map;
+        }
+
+        public static Map<String,String> withDataNucleusProperties(final Map<String, String> map) {
+
+            // Don't do validations that consume setup time.
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.schema.autoCreateAll", "true");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.schema.validateAll", "false");
+
+            // other properties as per WEB-INF/persistor_datanucleus.properties
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.persistenceByReachabilityAtCommit", "false");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.identifier.case", "MixedCase");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.cache.level2.type"  ,"none");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "datanucleus.cache.level2.mode", "ENABLE_SELECTIVE");
+
+            return map;
+        }
+
+        public static Map<String,String> withIsisIntegTestProperties(final Map<String, String> map) {
+
+            // automatically install any fixtures that might have been registered
+            map.put(ISIS_PERSISTOR_DATANUCLEUS + "install-fixtures", "true");
+            map.put(ISIS_PERSISTOR + "enforceSafeSemantics", "false");
+            map.put("isis.deploymentType", "server_prototype");
+            map.put("isis.services.eventbus.allowLateRegistration", "true");
+
+            return map;
+        }
+
 
     }
 }

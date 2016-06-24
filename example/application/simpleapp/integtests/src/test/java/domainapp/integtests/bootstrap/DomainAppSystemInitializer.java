@@ -18,14 +18,13 @@
  */
 package domainapp.integtests.bootstrap;
 
+import java.util.Map;
+
 import com.google.common.collect.Maps;
+
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
 import domainapp.app.DomainAppAppManifest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class DomainAppSystemInitializer {
 
@@ -38,9 +37,9 @@ public class DomainAppSystemInitializer {
                         @Override
                         public Map<String, String> getConfigurationProperties() {
                             final Map<String, String> map = Maps.newHashMap();
-                            IsisConfigurationForJdoIntegTests.withJavaxJdoRunInMemoryProperties(map);
-                            IsisConfigurationForJdoIntegTests.withDatanucleusProperties(map);
-                            IsisConfigurationForJdoIntegTests.withIsisIntegTestProperties(map);
+                            Util.withJavaxJdoRunInMemoryProperties(map);
+                            Util.withDataNucleusProperties(map);
+                            Util.withIsisIntegTestProperties(map);
                             return map;
                         }
                     })

@@ -48,8 +48,6 @@ import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServi
  * <p>
  *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> will be used instead.
  * </p>
- *
- * @see
  */
 public class IsisConfigurationDefault implements ConfigurationServiceInternal {
     

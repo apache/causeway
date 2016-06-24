@@ -19,29 +19,29 @@
 
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import com.google.common.base.Joiner;
-
-import com.google.common.collect.Maps;
-import org.datanucleus.PropertyNames;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.persistence.PersistenceConstants;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.objectstore.jdo.service.RegisterEntities;
-
 import java.util.Map;
 import java.util.Properties;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Maps;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.apache.isis.objectstore.jdo.service.RegisterEntities;
+
 /**
- * If instantiated by the integration testing framework, this object will be registered as the implementation of
+ * If supplied to the integration testing framework, this object will be registered as the implementation of
  * the {@link ConfigurationServiceInternal} (internal) domain service, using
  * {@link ServicesInjector#addFallbackIfRequired(Class, Object)}.
+ *
+ * @deprecated - instead use {@link org.apache.isis.applib.AppManifest.Util} to set up configuration properties to run in-memory.
  */
 public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault {
 
@@ -70,12 +70,10 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
      */
     public IsisConfigurationForJdoIntegTests(final ResourceStreamSource resourceStreamSource) {
         super(resourceStreamSource);
-        addStandardProperties();
-    }
-
-    private void addStandardProperties() {
         final Map<String, String> map = Maps.newHashMap();
-        withStandardProperties(map);
+        AppManifest.Util.withJavaxJdoRunInMemoryProperties(map);
+        AppManifest.Util.withDataNucleusProperties(map);
+        AppManifest.Util.withIsisIntegTestProperties(map);
         add(asProperties(map), ContainsPolicy.IGNORE);
     }
 
@@ -85,15 +83,17 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         return properties;
     }
 
+    private final static String REGISTER_ENTITIES_PACKAGE_PREFIX = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
+
     @Programmatic
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
-        add(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        add("isis.persistor.datanucleus.impl." + key, value);
         return this;
     }
 
     @Programmatic
     public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
-        put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        put("isis.persistor.datanucleus.impl." + key, value);
         return this;
     }
 
@@ -104,7 +104,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
     @Programmatic
     public final IsisConfigurationForJdoIntegTests addRegisterEntitiesPackagePrefix(final String... packagePrefix) {
         final String commaSeparated = Joiner.on(',').join(packagePrefix);
-        add(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
+        add(REGISTER_ENTITIES_PACKAGE_PREFIX, commaSeparated);
         return this;
     }
 
@@ -115,52 +115,25 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
     @Programmatic
     public final IsisConfigurationForJdoIntegTests putRegisterEntitiesPackagePrefix(final String... packagePrefix) {
         final String commaSeparated = Joiner.on(',').join(packagePrefix);
-        put(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
+        put(REGISTER_ENTITIES_PACKAGE_PREFIX, commaSeparated);
         return this;
     }
 
 
-    private static void withStandardProperties(Map<String, String> map) {
-        withJavaxJdoRunInMemoryProperties(map);
-        withDatanucleusProperties(map);
-        withIsisIntegTestProperties(map);
-    }
-
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.AppManifest.Util#withJavaxJdoRunInMemoryProperties(Map)}.
+     */
+    @Deprecated
     public static Map<String,String> withJavaxJdoRunInMemoryProperties(final Map<String, String> map) {
-
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "javax.jdo.option.ConnectionUserName", "sa");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "javax.jdo.option.ConnectionPassword", "");
-
-        return map;
+        return AppManifest.Util.withJavaxJdoRunInMemoryProperties(map);
     }
 
-    public static Map<String,String> withDatanucleusProperties(final Map<String, String> map) {
-
-        // Don't do validations that consume setup time.
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL, "true");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, "false");
-
-        // other properties as per WEB-INF/persistor_datanucleus.properties
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "datanucleus.persistenceByReachabilityAtCommit", "false");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "datanucleus.identifier.case", "MixedCase");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "datanucleus.cache.level2.type","none");
-        map.put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + "datanucleus.cache.level2.mode","ENABLE_SELECTIVE");
-
-        return map;
-    }
-
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.AppManifest.Util#withIsisIntegTestProperties(Map)}.
+     */
+    @Deprecated
     public static Map<String,String> withIsisIntegTestProperties(final Map<String, String> map) {
-
-        // automatically install any fixtures that might have been registered
-        map.put(PersistenceSession.INSTALL_FIXTURES_KEY , "true");
-        map.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
-        map.put("isis.deploymentType", "server_prototype");
-        map.put("isis.services.eventbus.allowLateRegistration", "true");
-
-        return map;
+        return AppManifest.Util.withIsisIntegTestProperties(map);
     }
-
 
 }
