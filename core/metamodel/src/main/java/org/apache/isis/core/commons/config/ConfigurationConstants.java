@@ -22,7 +22,6 @@ package org.apache.isis.core.commons.config;
 public final class ConfigurationConstants {
 
     public static final String ROOT = "isis.";
-    public static final String SHOW_EXPLORATION_OPTIONS = ROOT + "exploration.show";
 
     public static final String LIST_SEPARATOR = ",";
     public static final String DELIMITER = ".";
