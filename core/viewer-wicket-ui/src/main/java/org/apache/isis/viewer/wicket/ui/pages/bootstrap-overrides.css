@@ -796,6 +796,11 @@ tr.headers th form input {
     margin-bottom: 10px;
 }
 
+.stringPanel .scalarValueInput .editing .edit {
+    margin-top: -20px;
+	z-index: 2;
+}
+
 .actions-right .scalarPlaceholder .scalarValueInput {
     width: 90%;
     float: left;
