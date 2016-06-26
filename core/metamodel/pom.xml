@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-core-metamodel</artifactId>
-    <name>Isis MetaModel</name>
+    <name>Apache Isis MetaModel</name>
 
     <dependencies>
         <dependency>

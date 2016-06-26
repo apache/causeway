@@ -28,8 +28,7 @@
 
 	<artifactId>isis-core-wrapper</artifactId>
 
-	<name>Isis Wrapper Service</name>
-	<description>Isis Wrapper Service</description>
+	<name>Apache Isis Wrapper Service</name>
 
 	<dependencies>
         <dependency>

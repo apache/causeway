@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>isis-core-webserver</artifactId>
-	<name>Isis WebServer</name>
+	<name>Apache Isis WebServer</name>
 
 	<dependencies>
 		<dependency>

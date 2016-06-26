@@ -28,7 +28,7 @@
 
     <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
 
-	<name>Isis RestfulObjects Viewer Rendering</name>
+	<name>Apache Isis RestfulObjects Viewer Rendering</name>
 
 	<dependencies>
 

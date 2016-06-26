@@ -31,7 +31,7 @@
 
     <packaging>maven-plugin</packaging>
 
-    <name>Isis Maven Plugin (isis-maven-plugin)</name>
+    <name>Apache Isis Maven Plugin (isis-maven-plugin)</name>
     <description>
         Maven plugin for Apache Isis, allowing the metamodel to be validated as part of the build process.
     </description>

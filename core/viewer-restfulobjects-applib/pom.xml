@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-	<name>Isis RestfulObjects Viewer AppLib</name>
+	<name>Apache Isis RestfulObjects Viewer AppLib</name>
 
 	<dependencies>
 		<dependency>

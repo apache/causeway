@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket-applib</artifactId>
-	<name>Isis Wicket Viewer Applib</name>
+	<name>Apache Isis Wicket Viewer Applib</name>
 
 	<build>
 		<resources>

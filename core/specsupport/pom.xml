@@ -19,7 +19,7 @@
     </parent>
 
     <artifactId>isis-core-specsupport</artifactId>
-    <name>Isis Spec Support</name>
+    <name>Apache Isis Spec Support</name>
 
     <dependencies>
         <dependency>

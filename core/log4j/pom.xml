@@ -19,7 +19,7 @@
     </parent>
 
     <artifactId>isis-core-log4j</artifactId>
-    <name>Isis Log4j Impls</name>
+    <name>Apache Isis Log4j Impls</name>
 
     <dependencies>
         <dependency>

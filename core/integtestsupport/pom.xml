@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-integtestsupport</artifactId>
-	<name>Isis Integration Testing Support</name>
+	<name>Apache Isis Integration Testing Support</name>
 
 	<dependencies>
         <dependency>

@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-runtime</artifactId>
-	<name>Isis Runtime</name>
+	<name>Apache Isis Runtime</name>
 
 	<build>
 		<resources>

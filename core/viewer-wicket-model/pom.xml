@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket-model</artifactId>
-	<name>Isis Wicket Viewer Model</name>
+	<name>Apache Isis Wicket Viewer Model</name>
 
 	<dependencies>
 

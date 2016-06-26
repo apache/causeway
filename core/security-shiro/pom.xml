@@ -30,7 +30,7 @@
 	<artifactId>isis-core-security-shiro</artifactId>
     <version>1.13.0-SNAPSHOT</version>
 
-	<name>Isis Security Shiro</name>
+	<name>Apache Isis Security Shiro</name>
 
 	<build>
 		<pluginManagement>
