@@ -68,14 +68,17 @@ import org.apache.isis.applib.util.ObjectContracts;
 )
 public class SimpleObject implements Comparable<SimpleObject> {
 
-    public static final int NAME_LENGTH = 40;
 
+    //region > title
 
     public TranslatableString title() {
         return TranslatableString.tr("Object: {name}", "name", getName());
     }
 
+    //endregion
 
+    //region > name (property)
+    public static final int NAME_LENGTH = 40;
 
     public static class NameDomainEvent extends PropertyDomainEvent<SimpleObject,String> {}
     @javax.jdo.annotations.Column(
@@ -99,7 +102,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return name != null && name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
     }
 
+    //endregion
 
+    //region > updateName (action)
 
     public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {}
     @Action(
@@ -120,7 +125,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return validateName(name);
     }
 
+    //endregion
 
+    //region > delete (action)
 
 
     public static class DeleteDomainEvent extends ActionDomainEvent<SimpleObject> {}
@@ -134,13 +141,21 @@ public class SimpleObject implements Comparable<SimpleObject> {
         repositoryService.remove(this);
     }
 
+    //endregion
 
-
+    //region > toString, compareTo
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "name");
+    }
     @Override
     public int compareTo(final SimpleObject other) {
         return ObjectContracts.compare(this, other, "name");
     }
 
+    //endregion
+
+    //region > injected dependencies
 
     @javax.inject.Inject
     RepositoryService repositoryService;
@@ -150,5 +165,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     @javax.inject.Inject
     MessageService messageService;
+
+    //endregion
 
 }
