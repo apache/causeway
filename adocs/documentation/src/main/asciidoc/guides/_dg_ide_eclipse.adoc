@@ -37,9 +37,9 @@ application into Eclipse and configure to use with the JDO Objectstore.
 
 We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:dg.adoc#_dg_ide_intellij_live-templates[IntelliJ live templates]):
 
-* `is` (Apache Isis domain objects).  link:../resources/templates/isis-templates.xml[Download]
-* `ju` (for JUnit tests) link:../resources/templates/junit4-templates.xml[Download]
-* `jm` (for JMock mocks or libraries) link:../resources/templates/jmock2-templates.xml[Download]
+* `is` (Apache Isis domain objects).  link:./resources/appendices/dev-env/eclipse/isis-templates.xml[Download]
+* `ju` (for JUnit tests) link:./resources/appendices/dev-env/eclipse/junit4-templates.xml[Download]
+* `jm` (for JMock mocks or libraries) link:./resources/appendices/dev-env/eclipse/jmock2-templates.xml[Download]
 
 
 To install, download each XML file, then go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
