@@ -110,6 +110,8 @@ public class EntityPage extends PageAbstract {
 
         this.model = entityModel;
         this.titleString = titleString;
+
+        buildPage();
     }
 
     private void addBreadcrumb(final EntityModel entityModel) {
@@ -133,14 +135,14 @@ public class EntityPage extends PageAbstract {
      */
     @Override
     protected void onBeforeRender() {
+
+
         ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                 new Runnable() {
                     @Override
                     public void run() {
                         EntityPage.this.model.load(ConcurrencyChecking.NO_CHECK);
                         EntityPage.super.onBeforeRender();
-
-                        buildPage();
                     }
                 }
         );
