@@ -29,19 +29,17 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
+        nature = NatureOfService.VIEW_MENU_ONLY,
         repositoryFor = SimpleObject.class
 )
 @DomainServiceLayout(
         menuOrder = "10"
 )
-public class SimpleObjects {
+public class SimpleObjectMenu {
 
     //region > title
     public TranslatableString title() {
@@ -50,7 +48,7 @@ public class SimpleObjects {
     //endregion
 
     //region > listAll (action)
-    public static class ListAllEvent extends ActionDomainEvent<SimpleObjects> {}
+    public static class ListAllEvent extends ActionDomainEvent<SimpleObjectMenu> {}
     @Action(
             semantics = SemanticsOf.SAFE,
             domainEvent = ListAllEvent.class
@@ -60,12 +58,12 @@ public class SimpleObjects {
     )
     @MemberOrder(sequence = "1")
     public List<SimpleObject> listAll() {
-        return repositoryService.allInstances(SimpleObject.class);
+        return simpleObjectRepository.listAll();
     }
     //endregion
 
     //region > findByName (action)
-    public static class FindByNameEvent extends ActionDomainEvent<SimpleObjects> {}
+    public static class FindByNameEvent extends ActionDomainEvent<SimpleObjectMenu> {}
     @Action(
             semantics = SemanticsOf.SAFE,
             domainEvent = FindByNameEvent.class
@@ -78,16 +76,12 @@ public class SimpleObjects {
             @ParameterLayout(named="Name")
             final String name
     ) {
-        return repositoryService.allMatches(
-                new QueryDefault<>(
-                        SimpleObject.class,
-                        "findByName",
-                        "name", name));
+        return simpleObjectRepository.findByName(name);
     }
     //endregion
 
     //region > create (action)
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjectMenu> {}
     @Action(
             domainEvent = CreateDomainEvent.class
     )
@@ -95,10 +89,7 @@ public class SimpleObjects {
     public SimpleObject create(
             @ParameterLayout(named="Name")
             final String name) {
-        final SimpleObject obj = repositoryService.instantiate(SimpleObject.class);
-        obj.setName(name);
-        repositoryService.persist(obj);
-        return obj;
+        return simpleObjectRepository.create(name);
     }
 
     //endregion
@@ -106,7 +97,7 @@ public class SimpleObjects {
     //region > injected services
 
     @javax.inject.Inject
-    RepositoryService repositoryService;
+    SimpleObjectRepository simpleObjectRepository;
 
     //endregion
 }

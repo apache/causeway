@@ -33,7 +33,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectsTest {
+public class SimpleObjectRepositoryTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -41,15 +41,15 @@ public class SimpleObjectsTest {
     @Mock
     RepositoryService mockRepositoryService;
     
-    SimpleObjects simpleObjects;
+    SimpleObjectRepository simpleObjectRepository;
 
     @Before
     public void setUp() throws Exception {
-        simpleObjects = new SimpleObjects();
-        simpleObjects.repositoryService = mockRepositoryService;
+        simpleObjectRepository = new SimpleObjectRepository();
+        simpleObjectRepository.repositoryService = mockRepositoryService;
     }
 
-    public static class Create extends SimpleObjectsTest {
+    public static class Create extends SimpleObjectRepositoryTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -70,7 +70,7 @@ public class SimpleObjectsTest {
             });
 
             // when
-            final SimpleObject obj = simpleObjects.create("Foobar");
+            final SimpleObject obj = simpleObjectRepository.create("Foobar");
 
             // then
             assertThat(obj).isEqualTo(simpleObject);
@@ -79,7 +79,7 @@ public class SimpleObjectsTest {
 
     }
 
-    public static class ListAll extends SimpleObjectsTest {
+    public static class ListAll extends SimpleObjectRepositoryTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -95,7 +95,7 @@ public class SimpleObjectsTest {
             });
 
             // when
-            final List<SimpleObject> list = simpleObjects.listAll();
+            final List<SimpleObject> list = simpleObjectRepository.listAll();
 
             // then
             assertThat(list).isEqualTo(all);

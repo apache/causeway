@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
 import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjects;
+import domainapp.dom.simple.SimpleObjectRepository;
 
 @ViewModel
 public class HomePageViewModel {
@@ -38,14 +38,14 @@ public class HomePageViewModel {
     //region > object (collection)
     @org.apache.isis.applib.annotation.HomePage
     public List<SimpleObject> getObjects() {
-        return simpleObjects.listAll();
+        return simpleObjectRepository.listAll();
     }
     //endregion
 
     //region > injected services
 
     @javax.inject.Inject
-    SimpleObjects simpleObjects;
+    SimpleObjectRepository simpleObjectRepository;
 
     //endregion
 }
