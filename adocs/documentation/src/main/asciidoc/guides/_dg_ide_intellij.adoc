@@ -571,6 +571,13 @@ The framework will automatically notice any changes to `.layout.xml` files, but 
 the classpath (the `target/classes` directory), not the source path.  With IntelliJ these can be copied over manually
 by invoking `Run > Reload Changed Classes`.  Once the browser is refreshed, the new layout will be rendered.
 
+[NOTE]
+====
+We've occasionally noticed that this interferes with Wicket's own javascript - switching tabs becomes unresponsive.
+ The work-around is just to reload the page.
+====
+
+
 To reduce the turn-around time there are therefore two steps to be automated:
 
 * the copying of the `.layout.xml` files over to the `target/classes` directory
