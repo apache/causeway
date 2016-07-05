@@ -41,16 +41,16 @@ import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.DomainAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectMenuIntegTest extends DomainAppIntegTest {
+public class SimpleObjectMenu_IntegTest extends DomainAppIntegTest {
 
     @Inject
     FixtureScripts fixtureScripts;
     @Inject
     TransactionService transactionService;
     @Inject
-    SimpleObjectMenu simpleObjectMenu;
+    SimpleObjectMenu menu;
 
-    public static class ListAll extends SimpleObjectMenuIntegTest {
+    public static class ListAll extends SimpleObjectMenu_IntegTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -61,7 +61,7 @@ public class SimpleObjectMenuIntegTest extends DomainAppIntegTest {
             transactionService.nextTransaction();
 
             // when
-            final List<SimpleObject> all = wrap(simpleObjectMenu).listAll();
+            final List<SimpleObject> all = wrap(menu).listAll();
 
             // then
             assertThat(all).hasSize(fs.getSimpleObjects().size());
@@ -79,14 +79,14 @@ public class SimpleObjectMenuIntegTest extends DomainAppIntegTest {
             transactionService.nextTransaction();
 
             // when
-            final List<SimpleObject> all = wrap(simpleObjectMenu).listAll();
+            final List<SimpleObject> all = wrap(menu).listAll();
 
             // then
             assertThat(all).hasSize(0);
         }
     }
 
-    public static class Create extends SimpleObjectMenuIntegTest {
+    public static class Create extends SimpleObjectMenu_IntegTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -97,10 +97,10 @@ public class SimpleObjectMenuIntegTest extends DomainAppIntegTest {
             transactionService.nextTransaction();
 
             // when
-            wrap(simpleObjectMenu).create("Faz");
+            wrap(menu).create("Faz");
 
             // then
-            final List<SimpleObject> all = wrap(simpleObjectMenu).listAll();
+            final List<SimpleObject> all = wrap(menu).listAll();
             assertThat(all).hasSize(1);
         }
 
@@ -111,14 +111,14 @@ public class SimpleObjectMenuIntegTest extends DomainAppIntegTest {
             FixtureScript fs = new SimpleObjectsTearDown();
             fixtureScripts.runFixtureScript(fs, null);
             transactionService.nextTransaction();
-            wrap(simpleObjectMenu).create("Faz");
+            wrap(menu).create("Faz");
             transactionService.nextTransaction();
 
             // then
             expectedExceptions.expectCause(causalChainContains(SQLIntegrityConstraintViolationException.class));
 
             // when
-            wrap(simpleObjectMenu).create("Faz");
+            wrap(menu).create("Faz");
             transactionService.nextTransaction();
         }
 
