@@ -81,6 +81,30 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
+    public void invalidateNow() {
+
+        // similar code in Restful Objects viewer (UserResourceServerside#logout)
+        // this needs to be done here because Wicket will expire the HTTP session
+        // while the Shiro authenticator uses the session to obtain the details of the principals for it to logout
+        //
+        //        org.apache.catalina.session.StandardSession.getAttribute(StandardSession.java:1195)
+        //        org.apache.catalina.session.StandardSessionFacade.getAttribute(StandardSessionFacade.java:108)
+        //        org.apache.shiro.web.session.HttpServletSession.getAttribute(HttpServletSession.java:146)
+        //        org.apache.shiro.session.ProxiedSession.getAttribute(ProxiedSession.java:121)
+        //        org.apache.shiro.subject.support.DelegatingSubject.getRunAsPrincipalsStack(DelegatingSubject.java:469)
+        //        org.apache.shiro.subject.support.DelegatingSubject.getPrincipals(DelegatingSubject.java:153)
+        //        org.apache.shiro.mgt.DefaultSecurityManager.logout(DefaultSecurityManager.java:547)
+        //        org.apache.shiro.subject.support.DelegatingSubject.logout(DelegatingSubject.java:363)
+        //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
+        //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
+
+        getAuthenticationManager().closeSession(authenticationSession);
+        getIsisSessionFactory().closeSession();
+
+        super.invalidateNow();
+    }
+
+    @Override
     public void onInvalidate() {
         super.onInvalidate();
 
@@ -92,10 +116,6 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         if (authenticationSession != null) {
             userName = authenticationSession.getUserName();
         }
-
-        // similar code in Restful Objects viewer (UserResourceServerside#logout)
-        getAuthenticationManager().closeSession(authenticationSession);
-        getIsisSessionFactory().closeSession();
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
