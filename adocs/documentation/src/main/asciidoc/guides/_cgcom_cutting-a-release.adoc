@@ -449,6 +449,7 @@ popd
 cp webapp/target/simpleapp.war $CATALINA_HOME/webapps/ROOT.war
 pushd $CATALINA_HOME/bin
 sh startup.sh
+tail -f ../logs/catalina.out
 ----
 +
 quit using:
