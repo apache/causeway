@@ -923,14 +923,9 @@ public class PersistenceSession implements
      *             when no object corresponding to the oid can be found
      */
     public ObjectAdapter loadObjectInTransaction(final RootOid oid) {
-        
-        // REVIEW: 
-        // this method does not account for the oid possibly being a view model
-        // alternatively, can call #adapterFor(oid); this code
-        // delegates to the PojoRecreator which *does* take view models into account
-        //
-        // it's possible, therefore, that existing callers to this method (the Scimpi viewer)
-        // could be refactored to use #adapterFor(...)
+
+        // can be either a view model or a persistent entity.
+
         ensureThatArg(oid, is(notNullValue()));
 
         final ObjectAdapter adapter = getAdapterFor(oid);
@@ -2327,7 +2322,7 @@ public class PersistenceSession implements
         if(adapter == null) {
             return null;
         }
-        if(fieldResetPolicy == BookmarkService2.FieldResetPolicy.RESET) {
+        if(fieldResetPolicy == BookmarkService2.FieldResetPolicy.RESET && !adapter.getSpecification().isViewModel()) {
             refreshRootInTransaction(adapter);
         } else {
             loadObjectInTransaction(oid);
