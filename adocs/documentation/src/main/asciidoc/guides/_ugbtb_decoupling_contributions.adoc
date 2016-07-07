@@ -8,16 +8,80 @@
 Contributed services provide many of the same benefits as xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins];
 indeed mixins are an evolution and refinement of the contributions concept.
 
+[WARNING]
+====
+It's possible that contributions may be deprecated and eventually removed in a future version of the framework, to be replaced entirely by mixins.
+====
+
 The main difference between contributed services and mixins is that the actions of a contributed service will
 contribute to _all_ the parameters of its actions, whereas a mixin only contributes to the type accepted in its
 constructor.  Also, contributed services are long-lived
 singletons, whereas mixins are instantiated as required (by the framework) and then discarded almost immediately.
 
-For more on contributed services:
+[NOTE]
+====
+There's further useful information on contributed services in the reference guide, discussing the xref:rgant.adoc#_rgant-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
+====
 
-* the syntax of writing contributed actions/properties/collections is described in this xref:ugfun.adoc#_ugfun_how-tos_contributed-members[how-to]
 
-* there's also useful information in the reference guide, discussing the xref:rgant.adoc#_rgant-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
+== Syntax
 
+Any n-parameter action provided by a service will automatically be contributed to the list of actions for each of its (entity) parameters. From the viewpoint of the entity the action is called a contributed action.
+
+For example, given a service:
+
+[source,java]
+----
+public interface Library {
+    public Loan borrow(Loanable l, Borrower b);
+}
+----
+
+and the entities:
+
+[source,java]
+----
+public class Book implements Loanable { ... }
+----
+
+and
+
+[source,java]
+----
+public class LibraryMember implements Borrower { ... }
+----
+
+then the `borrow(...)` action will be contributed to both `Book` and to `LibraryMember`.
+
+This is an important capability because it helps to decouple the concrete classes from the services.
+
+If necessary, though, this behaviour can be suppressed by annotating the service action with `@org.apache.isis.applib.annotations.NotContributed`.
+
+For example:
+
+[source,java]
+----
+public interface Library {
+    @NotContributed
+    public Loan borrow(Loanable l, Borrower b);
+}
+----
+
+If annotated at the interface level, then the annotation will be inherited by every concrete class. Alternatively the annotation can be applied at the implementation class level and only apply to that particular implementation.
+
+Note that an action annotated as being `@NotContributed` will still appear in the service menu for the service. If an action should neither be contributed nor appear in service menu items, then simply annotate it as `@Hidden`.
+
+
+## Contributed Action
+
+NOTE: TODO
+
+## Contributed Property
+
+NOTE: TODO
+
+## Contributed Collection
+
+NOTE: TODO
 
 

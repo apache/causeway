@@ -1,20 +1,9 @@
-[[_ugfun_how-tos]]
-= How tos
+[[_ugbtb_decoupling_contributed-members]]
+= Contributed Members
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
-This chapter provides a grab bag of "how-to"s and tips to help you go about actually developing Apache Isis domain applications.
 
-include::_ugfun_how-tos_class-structure.adoc[leveloffset=+1]
-include::_ugfun_how-tos_ui-hints.adoc[leveloffset=+1]
-include::_ugfun_how-tos_domain-services.adoc[leveloffset=+1]
-include::_ugfun_how-tos_crud.adoc[leveloffset=+1]
-include::_ugfun_how-tos_business-rules.adoc[leveloffset=+1]
-include::_ugfun_how-tos_derived-members.adoc[leveloffset=+1]
-include::_ugfun_how-tos_drop-downs-and-defaults.adoc[leveloffset=+1]
-include::_ugfun_how-tos_bulk-actions.adoc[leveloffset=+1]
-include::_ugfun_how-tos_simulating-collections-of-values.adoc[leveloffset=+1]
-include::_ugfun_how-tos_render-all-properties-in-tables.adoc[leveloffset=+1]
 

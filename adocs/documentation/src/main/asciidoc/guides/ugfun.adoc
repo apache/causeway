@@ -50,6 +50,7 @@ include::_ugfun_core-concepts.adoc[leveloffset=+1]
 include::_ugfun_getting-started.adoc[leveloffset=+1]
 
 include::_ugfun_how-tos.adoc[leveloffset=+1]
+include::_ugfun_jdo-mappings.adoc[leveloffset=+1]
 include::_ugfun_object-layout.adoc[leveloffset=+1]
 
 include::_ugfun_faqs.adoc[leveloffset=+1]
