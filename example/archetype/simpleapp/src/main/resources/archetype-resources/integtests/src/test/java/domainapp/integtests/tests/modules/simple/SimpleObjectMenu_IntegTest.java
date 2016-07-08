@@ -35,22 +35,25 @@ import org.junit.Test;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.xactn.TransactionService;
 
 import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjects;
+import domainapp.dom.simple.SimpleObjectMenu;
 import domainapp.fixture.dom.simple.SimpleObjectsTearDown;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.DomainAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectsIntegTest extends DomainAppIntegTest {
+public class SimpleObjectMenu_IntegTest extends DomainAppIntegTest {
 
     @Inject
     FixtureScripts fixtureScripts;
     @Inject
-    SimpleObjects simpleObjects;
+    TransactionService transactionService;
+    @Inject
+    SimpleObjectMenu menu;
 
-    public static class ListAll extends SimpleObjectsIntegTest {
+    public static class ListAll extends SimpleObjectMenu_IntegTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -58,10 +61,10 @@ public class SimpleObjectsIntegTest extends DomainAppIntegTest {
             // given
             RecreateSimpleObjects fs = new RecreateSimpleObjects();
             fixtureScripts.runFixtureScript(fs, null);
-            nextTransaction();
+            transactionService.nextTransaction();
 
             // when
-            final List<SimpleObject> all = wrap(simpleObjects).listAll();
+            final List<SimpleObject> all = wrap(menu).listAll();
 
             // then
             assertThat(all).hasSize(fs.getSimpleObjects().size());
@@ -76,17 +79,17 @@ public class SimpleObjectsIntegTest extends DomainAppIntegTest {
             // given
             FixtureScript fs = new SimpleObjectsTearDown();
             fixtureScripts.runFixtureScript(fs, null);
-            nextTransaction();
+            transactionService.nextTransaction();
 
             // when
-            final List<SimpleObject> all = wrap(simpleObjects).listAll();
+            final List<SimpleObject> all = wrap(menu).listAll();
 
             // then
             assertThat(all).hasSize(0);
         }
     }
 
-    public static class Create extends SimpleObjectsIntegTest {
+    public static class Create extends SimpleObjectMenu_IntegTest {
 
         @Test
         public void happyCase() throws Exception {
@@ -94,13 +97,13 @@ public class SimpleObjectsIntegTest extends DomainAppIntegTest {
             // given
             FixtureScript fs = new SimpleObjectsTearDown();
             fixtureScripts.runFixtureScript(fs, null);
-            nextTransaction();
+            transactionService.nextTransaction();
 
             // when
-            wrap(simpleObjects).create("Faz");
+            wrap(menu).create("Faz");
 
             // then
-            final List<SimpleObject> all = wrap(simpleObjects).listAll();
+            final List<SimpleObject> all = wrap(menu).listAll();
             assertThat(all).hasSize(1);
         }
 
@@ -110,16 +113,16 @@ public class SimpleObjectsIntegTest extends DomainAppIntegTest {
             // given
             FixtureScript fs = new SimpleObjectsTearDown();
             fixtureScripts.runFixtureScript(fs, null);
-            nextTransaction();
-            wrap(simpleObjects).create("Faz");
-            nextTransaction();
+            transactionService.nextTransaction();
+            wrap(menu).create("Faz");
+            transactionService.nextTransaction();
 
             // then
             expectedExceptions.expectCause(causalChainContains(SQLIntegrityConstraintViolationException.class));
 
             // when
-            wrap(simpleObjects).create("Faz");
-            nextTransaction();
+            wrap(menu).create("Faz");
+            transactionService.nextTransaction();
         }
 
         private static Matcher<? extends Throwable> causalChainContains(final Class<?> cls) {

@@ -61,15 +61,44 @@
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
+                    <directory>src/main/resources</directory>
+                    <includes>
+                        <include>**/*.xml</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/test/java</directory>
                     <includes>
                         <include>**/*.java</include>
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
+                    <directory>gradle/wrapper</directory>
+                    <includes>
+                        <include>**/*.properties</include>
+                    </includes>
+                </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory>gradle/wrapper</directory>
+                    <includes>
+                        <include>**/*.jar</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" encoding="UTF-8">
                     <directory/>
                     <includes>
                         <include>log4j.properties</include>
+                    </includes>
+                </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory/>
+                    <includes>
+                        <include>.gitignore</include>
+                        <include>build.gradle</include>
+                        <include>gradlew</include>
+                        <include>gradlew.bat</include>
+                        <include>layouts.gradle</include>
+                        <include>liveReload.gradle</include>
                     </includes>
                 </fileSet>
             </fileSets>

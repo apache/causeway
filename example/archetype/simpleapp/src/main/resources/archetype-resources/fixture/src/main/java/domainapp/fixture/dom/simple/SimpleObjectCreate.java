@@ -25,7 +25,7 @@ package domainapp.fixture.dom.simple;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjects;
+import domainapp.dom.simple.SimpleObjectMenu;
 
 public class SimpleObjectCreate extends FixtureScript {
 
@@ -62,13 +62,13 @@ public class SimpleObjectCreate extends FixtureScript {
 
         String name = checkParam("name", ec, String.class);
 
-        this.simpleObject = wrap(simpleObjects).create(name);
+        this.simpleObject = wrap(simpleObjectMenu).create(name);
 
         // also make available to UI
         ec.addResult(this, simpleObject);
     }
 
     @javax.inject.Inject
-    private SimpleObjects simpleObjects;
+    private SimpleObjectMenu simpleObjectMenu;
 
 }

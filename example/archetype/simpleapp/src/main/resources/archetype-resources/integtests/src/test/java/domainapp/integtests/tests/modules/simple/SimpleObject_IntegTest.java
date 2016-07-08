@@ -28,9 +28,11 @@ import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong;
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
@@ -39,49 +41,60 @@ import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.DomainAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectIntegTest extends DomainAppIntegTest {
+public class SimpleObject_IntegTest extends DomainAppIntegTest {
 
     @Inject
     FixtureScripts fixtureScripts;
+    @Inject
+    TransactionService transactionService;
 
-    RecreateSimpleObjects fs;
-    SimpleObject simpleObjectPojo;
-    SimpleObject simpleObjectWrapped;
+    SimpleObject simpleObject;
 
     @Before
     public void setUp() throws Exception {
         // given
-        fs = new RecreateSimpleObjects().setNumber(1);
+        RecreateSimpleObjects fs = new RecreateSimpleObjects().setNumber(1);
         fixtureScripts.runFixtureScript(fs, null);
+        transactionService.nextTransaction();
 
-        simpleObjectPojo = fs.getSimpleObjects().get(0);
+        simpleObject = fs.getSimpleObjects().get(0);
 
-        assertThat(simpleObjectPojo).isNotNull();
-        simpleObjectWrapped = wrap(simpleObjectPojo);
+        assertThat(simpleObject).isNotNull();
     }
 
-    public static class Name extends SimpleObjectIntegTest {
+    public static class Name extends SimpleObject_IntegTest {
 
         @Test
         public void accessible() throws Exception {
             // when
-            final String name = simpleObjectWrapped.getName();
+            final String name = wrap(simpleObject).getName();
+
             // then
-            assertThat(name).isEqualTo(fs.NAMES.get(0));
+            assertThat(name).isEqualTo(simpleObject.getName());
+        }
+
+        @Test
+        public void not_editable() throws Exception {
+            // expect
+            expectedExceptions.expect(DisabledException.class);
+
+            // when
+            wrap(simpleObject).setName("new name");
         }
 
     }
 
-    public static class UpdateName extends SimpleObjectIntegTest {
+    public static class UpdateName extends SimpleObject_IntegTest {
 
         @Test
-        public void canBeUpdatedDirectly() throws Exception {
+        public void can_be_updated_directly() throws Exception {
 
             // when
-            simpleObjectWrapped.setName("new name");
+            wrap(simpleObject).updateName("new name");
+            transactionService.nextTransaction();
 
             // then
-            assertThat(simpleObjectWrapped.getName()).isEqualTo("new name");
+            assertThat(wrap(simpleObject).getName()).isEqualTo("new name");
         }
 
         @Test
@@ -92,47 +105,48 @@ public class SimpleObjectIntegTest extends DomainAppIntegTest {
             expectedExceptions.expectMessage("Exclamation mark is not allowed");
 
             // when
-            simpleObjectWrapped.setName("new name!");
+            wrap(simpleObject).updateName("new name!");
         }
     }
 
 
-    public static class Title extends SimpleObjectIntegTest {
+    public static class Title extends SimpleObject_IntegTest {
 
         @Inject
-        DomainObjectContainer container;
+        TitleService titleService;
 
         @Test
         public void interpolatesName() throws Exception {
 
             // given
-            final String name = simpleObjectWrapped.getName();
+            final String name = wrap(simpleObject).getName();
 
             // when
-            final String title = container.titleOf(simpleObjectWrapped);
+            final String title = titleService.titleOf(simpleObject);
 
             // then
             assertThat(title).isEqualTo("Object: " + name);
         }
     }
 
-    public static class DataNucleusId extends SimpleObjectIntegTest {
+    public static class DataNucleusId extends SimpleObject_IntegTest {
 
         @Test
-        public void shouldBePopulated() throws Exception {
+        public void should_be_populated() throws Exception {
             // when
-            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObjectPojo).${symbol_dollar}${symbol_dollar}();
+            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObject).${symbol_dollar}${symbol_dollar}();
+
             // then
             assertThat(id).isGreaterThanOrEqualTo(0);
         }
     }
 
-    public static class DataNucleusVersionTimestamp extends SimpleObjectIntegTest {
+    public static class DataNucleusVersionTimestamp extends SimpleObject_IntegTest {
 
         @Test
-        public void shouldBePopulated() throws Exception {
+        public void should_be_populated() throws Exception {
             // when
-            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObjectPojo).${symbol_dollar}${symbol_dollar}();
+            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObject).${symbol_dollar}${symbol_dollar}();
             // then
             assertThat(timestamp).isNotNull();
         }

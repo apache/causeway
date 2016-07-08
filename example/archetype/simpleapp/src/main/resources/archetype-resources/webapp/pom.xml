@@ -38,21 +38,19 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>1.8</version>
-                  <executions>
+                <executions>
                     <execution>
-                      <phase>validate</phase>
-                      <goals>
-                        <goal>maven-version</goal>
-                      </goals>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>maven-version</goal>
+                        </goals>
                     </execution>
-                  </executions>
+                </executions>
             </plugin>
-
         </plugins>
     </build>
 
@@ -209,6 +207,7 @@
                 </dependency>
             </dependencies>
         </profile>
+
         <profile>
             <id>eclipse-m2e</id>
             <activation>
@@ -216,6 +215,12 @@
                     <name>m2e.version</name>
                 </property>
             </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.isis.core</groupId>
+                    <artifactId>isis-core-webserver</artifactId>
+                </dependency>
+            </dependencies>
             <build>
                 <pluginManagement>
                     <plugins>
