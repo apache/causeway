@@ -485,6 +485,8 @@
                             <exclude>**/test.data</exclude>
                             <exclude>**/fixture-data/**</exclude>
                             
+                            <exclude>**/application.js</exclude>
+
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
@@ -497,6 +499,13 @@
                             
                             <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
                             <exclude>**/datanucleus.log</exclude>
+                            <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+                            <exclude>**/gradlew</exclude>
+                            <exclude>**/gradlew.bat</exclude>
+                            <exclude>**/rebel.xml</exclude>
+                            <exclude>**/translations**.po</exclude>
+                            <exclude>**/integtests/translations.pot</exclude>
+                            <exclude>**/intellij/launch/*.xml</exclude>
                         </excludes>
                         <licenses>
                           <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
