@@ -136,6 +136,20 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
     //endregion
 
+    //region > delete (action)
+    public static class DeleteDomainEvent extends ActionDomainEvent<SimpleObject> {}
+    @Action(
+            domainEvent = DeleteDomainEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
+    )
+    public void delete() {
+        final String title = titleService.titleOf(this);
+        messageService.informUser(String.format("'%s' deleted", title));
+        repositoryService.remove(this);
+    }
+
+    //endregion
+
     //region > toString, compareTo
     @Override
     public String toString() {
