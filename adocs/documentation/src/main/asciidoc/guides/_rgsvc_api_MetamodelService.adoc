@@ -6,8 +6,7 @@
 
 
 
-The `MetaModelService2` (`MetaModelService2` sub-interface introduced in `1.13.0-SNAPSHOT`) provides access to
-a number of aspects of Apache Isis' internal metamodel.
+The `MetaModelService2` service provides access to a number of aspects of Apache Isis' internal metamodel.
 
 
 == API
@@ -35,7 +34,7 @@ public interface MetaModelService2 {
 <2> lookup of a domain class' object type
 <3> invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified domain type.
 <4> returns a list of representations of each of member of each domain class.
-<5> (`1.13.0-SNAPSHOT`) what sort of object a domain type is (or bookmark represents)
+<5> what sort of object a domain type is (or bookmark) represents
 
 
 == Implementation

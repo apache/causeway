@@ -23,8 +23,8 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
-xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] or
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`).
+xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (deprecated) or (its replacement)
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]
 
 
 |xref:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]

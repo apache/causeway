@@ -78,6 +78,6 @@ implementing a xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subs
 == Related Services
 
 This service has been deprecated and replaced by the equivalent
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`).
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
 
 

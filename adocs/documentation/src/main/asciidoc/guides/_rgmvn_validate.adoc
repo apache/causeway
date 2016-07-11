@@ -151,7 +151,7 @@ Running `mvn test` then generates this output:
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
 [INFO] ...
-[ERROR] Failed to execute goal org.apache.isis.tool:isis-maven-plugin:1.13.0-SNAPSHOT:validate (default) on project simpleapp-dom: 1 problems found. -> [Help 1]
+[ERROR] Failed to execute goal org.apache.isis.tool:isis-maven-plugin:1.13.0:validate (default) on project simpleapp-dom: 1 problems found. -> [Help 1]
 ----
 
 If one were to attempt to run the application, the same error would appear in the log files on startup (and the application would not boot).

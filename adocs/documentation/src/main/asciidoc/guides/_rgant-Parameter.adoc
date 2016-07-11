@@ -20,8 +20,10 @@ The table below summarizes the annotation's attributes.
 
 |xref:rgant.adoc#_rgant-Parameter_fileAccept[`fileAccept()`]
 |Media type or file extension
-|(`1.13.0-SNAPSHOT`) restrict the files to be uploaded to a xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
- or xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
+|Hints the file type to be uploaded for xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
+ or xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
+ +
+ Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 
 
 

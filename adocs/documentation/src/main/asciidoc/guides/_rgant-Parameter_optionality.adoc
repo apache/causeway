@@ -38,5 +38,5 @@ public class Customer {
 
 [NOTE]
 ====
-It is also possible to specify optionality using xref:rgant.adoc#_rgant_Nullable[`@Nullable`] annotation (`1.13.0-SNAPSHOT`).
+It is also possible to specify optionality using xref:rgant.adoc#_rgant_Nullable[`@Nullable`] annotation.
 ====

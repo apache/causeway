@@ -1,5 +1,5 @@
 [[_rgant-Property_publishing]]
-= `publishing()` (`1.13.0-SNAPSHOT`)
+= `publishing()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -9,7 +9,7 @@
 
 The `publishing()` attribute determines whether and how a property edit is published via the registered implementation
 of a xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`]) or
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`).  This attribute is also supported
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].  This attribute is also supported
 for xref:rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects are
 published as events, and for xref:rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`], where it controls
 whether property edits are published as events.

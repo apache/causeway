@@ -61,12 +61,12 @@ attributes), or to the (JDO) xref:rgant.adoc#_rgant-Discriminator[`@Discriminato
 is specified, then the fully qualified class name will be used.
 <4> the object identifier (aka primary key), converted to string form.
 <5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.  In previous versions
-of the schema the attribute was defaulted to "persistent"; as of `1.13.0-SNAPSHOT` the "persistent" state is assumed
-of the attribute is omitted.
+of the schema the attribute was defaulted to "persistent"; the "persistent" state is assumed
+if the attribute is omitted.
 <6> Models a list of OIDs.  This is used by the xref:rgcms.adoc#_rgcms_schema_cmd["cmd" schema] to represent the
 intention to perform a bulk actions (against a number of selected objects).
 
-In previous versions of the schema (prior to `1.13.0-SNAPSHOT`) the object type and object identifers of `oidDto` were
+In previous versions of the schema the object type and object identifers of `oidDto` were
 modelled as an element rather than an attribute.  The element form can still be used, but is deprecated.
 
 The `oidDto` complex type is used in a number of places by the framework:

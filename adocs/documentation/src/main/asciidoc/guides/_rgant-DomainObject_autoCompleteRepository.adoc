@@ -78,7 +78,7 @@ public class Customers {
 ----
 <1> end-user must enter minimum number of characters to trigger the query
 
-(As of `1.13.0-SNAPSHOT`), the autocomplete action can also be a regular method, annotated using xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`]:
+The autocomplete action can also be a regular method, annotated using xref:rgant.adoc#_rgant_Programmatic[`@Programmatic`]:
 
 [source,java]
 ----

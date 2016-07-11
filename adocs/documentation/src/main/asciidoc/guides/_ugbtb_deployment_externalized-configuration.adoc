@@ -17,8 +17,8 @@ then the subsequent configuration property will be ignored.
 
 [TIP]
 ====
-In addition (as of `1.13.0-SNAPSHOT`) the framework will also load the `overrides.properties` file.  This is intended
-to support deployment through Docker, as discussed xref:ugbtb.adoc#_ugbtb_deployment_docker[next].
+In addition the framework will also load the `overrides.properties` file.  This is intended to support deployment
+through Docker, as discussed xref:ugbtb.adoc#_ugbtb_deployment_docker[next].
 ====
 
 All of these files are read from the `WEB-INF` directory.  Having this configuration "baked into" the application is

@@ -66,7 +66,7 @@ In addition to Apache Isis' Shiro-based implementation of its authentication and
 ====
 A further aspect of security is auditing: recording what data was modified by which user.
 
-As of `1.13.0-SNAPSHOT` Apache Isis provides the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]
+Apache Isis provides the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]
 can be used to track the actions being invoked, and the xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]
 captures what data was modified as a result (auditing).  When ``Interaction``s are persisted (eg by way of
 (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module) this provides excellent

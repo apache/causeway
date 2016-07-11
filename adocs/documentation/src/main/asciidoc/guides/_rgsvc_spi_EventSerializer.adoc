@@ -9,8 +9,7 @@ The `EmailSerializer` service is a supporting service intended for use by (any i
 
 [WARNING]
 ====
-This service is deprecated, replaced with xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]
-(`1.13.0-SNAPSHOT`).
+This service is deprecated, replaced with xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].
 ====
 
 See xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] for further discussion.

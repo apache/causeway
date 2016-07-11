@@ -16,7 +16,7 @@ In addition, the two entities can be associated either without or with a join ta
 * without a join table is more common; a regular foreign key in the child table for `FermentationVessel` points back up to the associated parent `Batch`
 * with a join table; a link table holds the tuple representing the linkage.
 
-Testing in `1.13.0-SNAPSHOT` (against `dn-core 4.1.7`/`dn-rdbms 4.1.9`) has determined there are two main rules:
+Testing (as of `1.13.0`, against `dn-core 4.1.7`/`dn-rdbms 4.1.9`) has determined there are two main rules:
 
 * If not using `@Join`, then the association must be maintained by setting the child association on the parent. +
 +

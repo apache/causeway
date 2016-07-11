@@ -6,11 +6,6 @@
 :toc: right
 
 
-[NOTE]
-====
-Apache Isis 1.13.0 is not yet released (is still formally `1.13.0-SNAPSHOT`), but voting for RC1 is currently underway.
-====
-
 Apache Isis 1.13.0 improves and formalizes the support for commands and auditing, and introduces the new concept of an
 interaction.  A command now represents the _intention_ to interact with the application, either to invoke an action or
 to edit a property.  This is captured as a JAXB DTO.  An interaction on the other hand captures the fact that a
@@ -125,7 +120,7 @@ The release also includes a great deal of internal refactorings and simplificati
 * link:https://issues.apache.org/jira/browse/ISIS-1461[ISIS-1461] - More reliable fix to concurrency exception
 * link:https://issues.apache.org/jira/browse/ISIS-1458[ISIS-1458] - Possible incomplete auditing for "non-trivial" updates
 * link:https://issues.apache.org/jira/browse/ISIS-1454[ISIS-1454] - Hints for drop-downs in Wicket viewer not honoured.
-* link:https://issues.apache.org/jira/browse/ISIS-1453[ISIS-1453] - SessionManagementService#nextSession broken (in 1.13.0-SNAPSHOT)
+* link:https://issues.apache.org/jira/browse/ISIS-1453[ISIS-1453] - SessionManagementService#nextSession broken
 * link:https://issues.apache.org/jira/browse/ISIS-1452[ISIS-1452] - Throwing an exception (for -SNAPSHOT) does not abort the transaction.
 * link:https://issues.apache.org/jira/browse/ISIS-1444[ISIS-1444] - Mark applib FixtureScript.Execution methods as @Programmatic to avoid being added to the metamodel
 * link:https://issues.apache.org/jira/browse/ISIS-1436[ISIS-1436] - When executing a bulk action on a paginated collection items, chosen items can be ignored unintentionally

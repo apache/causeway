@@ -70,7 +70,7 @@ The xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] manages 
 |xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`o.a.i.applib.` +
 `services.iactn` +
 `InteractionContext`]
-|(`1.13.0-SNAPSHOT`) Request-scoped access to the current member execution (action invocation or property edit),
+|Request-scoped access to the current member execution (action invocation or property edit),
 represented as the `Interaction` context.
 |`InteractionContext` +
 ``o.a.i.core`` +

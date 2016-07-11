@@ -64,21 +64,12 @@ This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mai
 
 
 
-== Replacing the Prog. Model
 
-[WARNING]
+[NOTE]
 ====
-This property is ignored as of `1.13.0-SNAPSHOT`
+Previously (prior to `1.13.0`) the framework also supported the "isis.reflector.facets" configuration property, to
+specify a completely new implementation of the (internal API) `ProgrammingModel`.  This is no longer supported; use
+"isis.reflector.facets.include" and "isis.reflector.facet.exclude" to adjust the framework's default implementation
+(called `ProgrammingModelFacetsJava5`).
 ====
-
-If you want to make many changes to the programming model, then (rather than include/exclude lots of facet factories) you can specify a completely new programming model.  For this you'll first need an implementation of `ProgrammingModel`.
-
-One option is to subclass from `ProgrammingModelFacetsJava5`; in your subclass you could remove any ``FacetFactory``s that you wanted to exclude, as well as registering your own implementations.
-
-To tell Apache Isis to use your new programming model, use:
-
-[source,ini]
-----
-isis.reflector.facets=com.mycompany.myapp.isis.IsisProgrammingModel
-----
 

@@ -25,7 +25,7 @@ public interface HasTransactionId {
     public void setTransactionId(final UUID transactionId);
 }
 ----
-<1> unique identifier (a GUID) of this request/interaction (`1.13.0-SNAPSHOT`).
+<1> unique identifier (a GUID) of this request/interaction.
 
 
 Modules that either have domain entity that implement and/or services that contribute this interface are:

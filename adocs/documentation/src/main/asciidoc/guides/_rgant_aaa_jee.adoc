@@ -33,7 +33,7 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 
 |xref:rgant.adoc#_rgant-Digits[`@javax.annotation.` +
 `Nullable`]
-|(`1.13.0-SNAPSHOT` Specify that a property/parameter is optional.
+|Specify that a property/parameter is optional.
 |Domain
 |
 

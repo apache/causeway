@@ -33,13 +33,14 @@ Commands/Interactions/Background/Auditing/Publishing/Profiling:
 * xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_spi_CommandMementoService[`CommandMementoService`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] (SPI)
-* xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (SPI) (`1.13.0-SNAPSHOT`)
+* xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (SPI) (deprecated)
+* xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`]
 * xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublishererService`] (SPI) (`1.13.0-SNAPSHOT`)
+* xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] (SPI) (deprecated)
+* xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublishererService`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_api_MetricsService[`MetricsService`]
+
 
 Information Sharing:
 

@@ -9,7 +9,7 @@
 
 The `publishing()` attribute determines whether and how an action invocation is published via the registered
 implementation of a xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`]) or
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`).  This attribute is also
+xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].  This attribute is also
 supported for xref:rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects
 are published as events, and for xref:rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`], where it controls
 whether property edits are published as events.
@@ -62,8 +62,7 @@ this should avoid the necessity to query back for additional information.
 
 [WARNING]
 ====
-Be aware that this attribute is only honoured by the deprecated ( in `1.13.0-SNAPSHOT`)
-xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
+Be aware that this attribute is only honoured by the (deprecated) xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
 is ignored by the replacement xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`],
 ====
 

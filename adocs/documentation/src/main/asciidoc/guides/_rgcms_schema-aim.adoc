@@ -10,11 +10,11 @@ The "aim" schema defines the serialized form (or memento) of an action invocatio
 
 [WARNING]
 ====
-This schema has been removed in `1.13.0-SNAPSHOT`, replaced with xref:rgcms.adoc#_rgcms_schema-ixn[ixn.xsd] (for action
+This schema has been removed in `1.13.0`, replaced with xref:rgcms.adoc#_rgcms_schema-ixn[ixn.xsd] (for action
 invocations/property edits) and with xref:rgcms.adoc#_rgcms_schema-cmd[cmd.xsd] (commands, ie the __intention__ to
 invoke an action/edit a property).
 
-The remaining content on this page describes how `CommandContext` works up to v1.12.x.  However, as of `1.13.0-SNAPSHOT` the `CommandContext` uses its own `cmd.xsd` schema).
+The remaining content on this page describes how `CommandContext` works up to v1.12.x.  However, as of `1.13.0` the `CommandContext` uses its own `cmd.xsd` schema).
 ====
 
 Action invocations are captured (in memory rather than in serialized form) when the end-user invokes the action

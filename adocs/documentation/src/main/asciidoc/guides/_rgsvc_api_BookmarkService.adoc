@@ -24,7 +24,7 @@ For example, a `Bookmark` could be converted into a barcode, and then this used 
 ``Bookmark``s are used by several other domain services as a means of storing areference to an arbitrary object
 (a polymorphic relationship).  For example, the (non-ASF)
 http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module's implementation of
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`) uses bookmarks to capture the object
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] uses bookmarks to capture the object
 that is being audited.
 
 [TIP]
@@ -111,7 +111,7 @@ bookmark to capture the target object on which an action will be invoked subsequ
 Bookmarks are also used by the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing]
 module's implementation of xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], and by the
 (non-ASF) http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module's implementation of
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`).
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
 
 
 

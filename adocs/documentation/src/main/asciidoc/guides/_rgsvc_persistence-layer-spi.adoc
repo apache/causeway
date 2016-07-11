@@ -26,7 +26,7 @@ The table below summarizes the persistence layer SPIs defined by Apache Isis.  I
 |xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`o.a.i.applib.` +
 `services.audit` +
 `AuditerService`]
-|(`1.13.0-SNAPSHOT`) Create an audit record for every changed property of every changed object within a transaction.
+|Create an audit record for every changed property of every changed object within a transaction.
 |`AuditerServiceLogging` +
 also +
 `AuditerServiceUsingJdo` +
@@ -38,7 +38,7 @@ also +
 |xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`o.a.i.applib.` +
 `services.audit` +
 `AuditingService3`]
-|(deprecated in `1.13.0-SNAPSHOT`, replaced by xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]); creates
+|(deprecated, replaced by xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]); creates
 an audit record for every changed property of every changed object within a transaction.
 |
 |
@@ -47,7 +47,7 @@ an audit record for every changed property of every changed object within a tran
 |xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`o.a.i.applib.` +
 `services.publish` +
 `EventSerializer`]
-|(deprecated in `1.13.0-SNAPSHOT`) Creates a representation of either an action invocation or a changed object being published through the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|(deprecated, not used by replacement xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]) Creates a representation of either an action invocation or a changed object being published through the xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
 |`RestfulObjects-` +
 `SpecEventSerializer` +
 ``o.ia.m.publishing`` +
@@ -59,7 +59,7 @@ an audit record for every changed property of every changed object within a tran
 |xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`o.a.i.applib.` +
 `services.publish` +
 `PublisherService`]
-|(`1.13.0-SNAPSHOT`) Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
+|Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
 |`PublisherServiceLogging` +
 also +
 ``PublisherService-`` +
@@ -73,7 +73,7 @@ also +
 |xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`o.a.i.applib.` +
 `services.publish` +
 `PublishingService`]
-|(deprecated in `1.13.0-SNAPSHOT`) Publish any action invocations and changed objects, typically for interchange with an external system in a different bounded context.
+|(deprecated, replaced by xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]) Publish any action invocations and changed objects, typically for interchange with an external system in a different bounded context.
 |`PublishingService` +
 ``o.ia.m.publishing`` +
 ``isis-module-publishing``

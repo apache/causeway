@@ -11,7 +11,7 @@ The `CommandContext` service is a xref:rgant.adoc#_rgant-RequestScoped[request-s
 By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone. The optional
  supporting xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`]) the `Command` may then be persisted.
 
-As of `1.13.0-SNAPSHOT`, the primary use case for persistent ``Command``s is in support of background commands; they
+As of `1.13.0`, the primary use case for persistent ``Command``s is in support of background commands; they
 act as a parent to any background commands that can be persisted either explicitly using the
 xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`], or implicitly by way of the
 xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
@@ -19,17 +19,11 @@ xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
-* if xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] or
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`) is configured, they provide better traceability
-as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
-* if xref:rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] or
-         xref:rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] (`1.13.0-SNAPSHOT`) is configured, they provide better audit
-         information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
-         the action) through the `transactionId` GUID
+* if a xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] or xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] (the latter now deprecated) is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* if a xref:rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] or xref:rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] (the latter now deprecated) is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
 
-As of `1.13.0-SNAPSHOT`, these other uses cases are now more fully supported through the
-xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service and persistent implementations of the
-``Interaction`` object, eg as provided by the (non-ASF)
+As of `1.13.0`, these other uses cases are now more fully supported through the
+xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF)
 http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module.
 
 
@@ -114,7 +108,7 @@ public interface Command extends HasTransactionId {
 <15> `getParent()` - for actions created through the `BackgroundService`, captures the parent action
 <16> `getResult()` - bookmark to object returned by action, if any
 <17> `getException()` - exception stack trace if action threw exception
-<18> (as of `1.13.0-SNAPSHOT`) no longer used by the framework; see instead
+<18> No longer used by the framework; see instead
 xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] and `Interaction#next()`.
 
 

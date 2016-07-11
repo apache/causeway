@@ -10,11 +10,6 @@ Existing projects written against v1.12.x should run against v1.13.0 with few if
 any difficulties then let us know via the link:support.html[users mailing list], so we can support you and document
 issues here.
 
-[NOTE]
-====
-`1.13.0-SNAPSHOT` is currently still in development.
-====
-
 
 
 == Faster startup times

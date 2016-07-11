@@ -160,7 +160,7 @@ The above code could be improved by caching the delegateLocaleProvider once loca
 
 
 [[_rgsvc_intro_commands-and-events]]
-== Command and Events (`1.13.0-SNAPSHOT`)
+== Command and Events
 
 A good number of the domain services manage the execution of action invocations/property edits, along with the state
 of domain objects that are modified as a result of these.  These services capture information which can then be used
@@ -226,8 +226,8 @@ xref:rgsvc.adoc#_rgsvc_api_TransactionService[`TransactionService`].
 ====
 
 * Also at the end of each transaction, details of all changed properties are passed to any registered
-xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] or
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (`1.13.0-SNAPSHOT`) by way of the (internal)
+xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] or
+xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (the latter deprecated) by way of the (internal)
 xref:rgfis.adoc#_rgfis_spi_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
 
 Implementations of xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] can use the `Command#getMemento()`

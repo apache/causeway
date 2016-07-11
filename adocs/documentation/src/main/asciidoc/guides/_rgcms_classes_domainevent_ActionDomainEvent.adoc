@@ -49,7 +49,7 @@ annotation attribute.  Whether this raises an event or not depends upon the
 `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property.
 <2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
 <3> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
-<4> Deprecated, use xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] or (better)  xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] (`1.13.0-SNAPSHOT`) instead.
-<5> (`1.13.0-SNAPSHOT`) Populated only for mixins; holds the underlying domain object that the mixin contributes to.
+<4> Deprecated, use xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] or (better)  xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]instead.
+<5> Populated only for mixins; holds the underlying domain object that the mixin contributes to.
 <6> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
 <7> The value returned by the action; populated only in the executed phase.

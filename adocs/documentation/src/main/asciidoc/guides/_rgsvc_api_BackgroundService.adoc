@@ -7,14 +7,13 @@
 
 The `BackgroundService2` domain service, and also the companion
 xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands
-to be persisted such that they may be invoked in the background.  (The `BackgroundService2` and
-`BackgroundCommandService2` extensions to these services have been introduced in `1.13.0-SNAPSHOT`).
+to be persisted such that they may be invoked in the background.
 
 The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way,
 and persisting it rather than executing it directly.
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can
-capture the action to invoke and its arguments.  (As of `1.13.0-SNAPSHOT`), this is done using xref:rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (in previous releases it used (a private copy of) xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`]).
+capture the action to invoke and its arguments.  (As of `1.13.0`), this is done using xref:rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (in previous releases it used (a private copy of) xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`]).
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion
 `BackgroundCommandService2`.  One such implementation of `BackgroundCommandService` is provided by (non-ASF)
@@ -40,7 +39,7 @@ public interface BackgroundService2 {
 }
 ----
 <1> returns a proxy around the domain object; any methods executed against this proxy will result in a command (to invoke the corresponding action) being persisted by xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService2[`BackgroundCommandService2`]
-<2> (`1.13.0-SNAPSHOT`) returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService2[`BackgroundCommandService2`].
+<2> Returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService2[`BackgroundCommandService2`].
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
@@ -126,7 +125,7 @@ The `CommandContext` service is responsible for providing a parent `Command` wit
 
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way. The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides implementations of both (see xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] and xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`]).
 
-The xref:rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] (`1.13.0-SNAPSHOT`) is used to obtain
+The xref:rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`CommandDtoServiceInternal`] is used to obtain
 a memento of the command such that it can be persisted.  (In earlier versions, xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] was used for this purpose).
 
 

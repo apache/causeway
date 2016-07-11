@@ -1,5 +1,5 @@
 [[_rgsvc_spi_AuditerService]]
-= `AuditerService` (`1.13.0-SNAPSHOT`)
+= `AuditerService`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -12,7 +12,7 @@ The `AuditerService` auditing service provides a simple mechanism to capture cha
 [NOTE]
 ====
 This service is intended to replace the now-deprecated xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService3`].
-The difference between the two is that this service recognises that the `transactionId` is now (in `1.13.0-SNAPSHOT`)
+The difference between the two is that this service recognises that the `transactionId` is now (as of `1.13.0`)
 actually a request/interaction Id, and that an additional `sequence
 ====
 
@@ -123,8 +123,8 @@ execution captures the _cause_ of an interaction (an action was invoked, a prope
 
 [NOTE]
 ====
-Prior to `1.13.0-SNAPSHOT` the xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] performed a similar role,
-of capturing the cause.  As of `1.13.0-SNAPSHOT`, ``Command``s are now primarily to capture the _intent_ of an action,
+Prior to `1.13.0` the xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] performed a similar role,
+of capturing the cause.  As of `1.13.0`, ``Command``s are now primarily to capture the _intent_ of an action,
 not the actual action invocation itself.
 ====
 

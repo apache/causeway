@@ -194,11 +194,10 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 `applicationFeatures.init`
 | `lazy`, `eager` +
 (`lazy`)
-|(`1.13.0-SNAPSHOT`) Whether the application features repository (which surfaces the framework's metamodel) should be
+|Whether the application features repository (which surfaces the framework's metamodel) should be
 initialized lazily or eagerly.  +
 
-Lazy initialization can speed up bootstrapping, useful while developing and running tests.  The default prior to
-`1.13.0` was eager initialization.
+Lazy initialization can speed up bootstrapping, useful while developing and running tests.  The default prior to `1.13.0` was eager initialization.
 
 
 |`isis.services.` +
@@ -218,7 +217,7 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 |`isis.services.` +
 `command.properties`
 | `all`, `none` (`all`)
-|(`1.13.0-SNAPSHOT`) Whether property edits should be automatically reified into commands (for properties annotated with xref:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
+|(Whether property edits should be automatically reified into commands (for properties annotated with xref:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
 |`isis.services.` +
@@ -317,7 +316,7 @@ This implementation provides a default set of recognizers to convert RDBMS const
 `injector.injectPrefix`
 | `true`,`false`  +
 (`false`)
-|(`1.13.0-SNAPSHOT`) Whether the framework should support `inject...()` as a prefix for injecting domain services into other domain objects.
+|(Whether the framework should support `inject...()` as a prefix for injecting domain services into other domain objects.
 +
 By default this is disabled.  The default prior to `1.13.0` was enabled.  If the setting is left as disabled then this may reduce application start-up times.
 
@@ -326,7 +325,7 @@ By default this is disabled.  The default prior to `1.13.0` was enabled.  If the
 `injector.setPrefix`
 | `true`,`false`  +
 (`true`)
-|(`1.13.0-SNAPSHOT`) Whether the framework should support `set...()` as a prefix for injecting domain services into other domain objects.
+|Whether the framework should support `set...()` as a prefix for injecting domain services into other domain objects.
 +
 By default this is enabled (no change in `1.13.0`).  If the setting is changed to disabled then this may reduce application start-up times.
 
@@ -348,7 +347,7 @@ By default this is enabled (no change in `1.13.0`).  If the setting is changed t
 |`isis.services.` +
 `publish.properties`
 | `all`, `none` (`none`)
-|(`1.13.0-SNAPSHOT`) Whether properties should be automatically published (for properties annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether properties should be automatically published (for properties annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
 
 
 |`isis.services.` +
@@ -425,11 +424,10 @@ See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for 
 
 |`isis.reflector.facets`
 |`FQCN`
-|Fully qualified class names of a custom implementation of `ProgrammingModel` interface. +
+|This property is now ignored.  +
++
+To customize the programming model, use `facets.exclude` and `facets.include`. See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
-
-`1.13.0-SNAPSHOT` - this property is now ignored.  To customize the programming model, use `facets.exclude` and `facets.include`.
 
 
 
@@ -446,7 +444,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programmi
 `ignoreDeprecated`
 |`true`,`false` +
 (`false`)
-|(`1.13.0-SNAPSHOT`) whether deprecated facets should be ignored or honoured.  +
+|Whether deprecated facets should be ignored or honoured.  +
 +
 By default all deprecated facets are honoured; they remain part of the metamodel.  If instead this property is set to
 `true` then the facets are simply not loaded into the metamodel and their semantics will be excluded.  +
@@ -485,7 +483,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 (`true`)
 | Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast). +
 +
-See also `isis.reflector.facets.ignoreDeprecated` (`1.13.0-SNAPSHOT`).
+See also `isis.reflector.facets.ignoreDeprecated`.
 
 
 

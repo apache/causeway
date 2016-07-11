@@ -47,8 +47,8 @@ We use environment variables to parameterize as many of the steps as possible.  
 ----
 cd core
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV=1.14.0-SNAPSHOT
-export ISISREL=1.13.0
+export ISISDEV=1.15.0-SNAPSHOT
+export ISISREL=1.14.0
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
@@ -64,7 +64,7 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 
 [IMPORTANT]
 ====
-Note that the branch name is *not* the same any of the eventual tag names (eg `isis-1.13.0` or `simpleapp-archetype-1.13.0`).
+Note that the branch name is *not* the same any of the eventual tag names (eg `isis-1.14.0` or `simpleapp-archetype-1.14.0`).
 
 If they did have the same name, then what would happen is that the `maven-release-plugin` would checkout the (HEAD of the) branch and thus upload a SNAPSHOT to the snapshot repository.  What it should of course do is checkout the tag and then upload that to the release staging repository.
 ====
@@ -88,13 +88,13 @@ All release preparation is done locally; if we are successful, this branch will 
 
 Double check that the version number of the parent pom should reflect the branch name that you are now on (with a `-SNAPSHOT` suffix).  his will normally have been done already during earlier development; but confirm that it has been updated. If it has not, make the change.
 
-Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.  For example, if releasing version `1.13.0`, the POM should read:
+Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.  For example, if releasing version `1.14.0`, the POM should read:
 
 [source,xml]
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>1.13.0-SNAPSHOT</version>
+<version>1.14.0-SNAPSHOT</version>
 ----
 
 Also, check that there are no snapshot dependencies:
@@ -284,7 +284,7 @@ If there are any snags at this stage, then explicitly delete the generated `rele
 [[_cgcom_cutting-a-release_releasing-core_post-prepare-sanity-check]]
 === Post-prepare sanity check
 
-You should end up with artifacts in your local repo with the new version (eg `1.13.0`).  This is a good time to do some quick sanity checks; nothing has yet been uploaded:
+You should end up with artifacts in your local repo with the new version (eg `1.14.0`).  This is a good time to do some quick sanity checks; nothing has yet been uploaded:
 
 * unzip the source-release ZIP and check it builds.
 * Inspect the `DEPENDENCIES` file, and check it looks correct.
@@ -340,17 +340,17 @@ The custom `workingDirectory` prevents file path issues if releasing on Windows.
 [INFO] Performing a LOCAL checkout from scm:git:file:///C:\APACHE\isis-git-rw\co
 re
 [INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "git clone --branch release-1.13.0 file:///C:\APACHE\isis-git-rw\core C:\APACHE\isis-git-rw\core\target\checkout"
+[INFO] Executing: cmd.exe /X /C "git clone --branch release-1.14.0 file:///C:\APACHE\isis-git-rw\core C:\APACHE\isis-git-rw\core\target\checkout"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target
 [INFO] Performing a LOCAL checkout from scm:git:file:///C:\APACHE\isis-git-rw
 [INFO] Checking out the project to perform the release ...
-[INFO] Executing: cmd.exe /X /C "git clone --branch release-1.13.0 file:///C:\APACHE\isis-git-rw C:\APACHE\isis-git-rw\core\target\checkout"
+[INFO] Executing: cmd.exe /X /C "git clone --branch release-1.14.0 file:///C:\APACHE\isis-git-rw C:\APACHE\isis-git-rw\core\target\checkout"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target
 [INFO] Executing: cmd.exe /X /C "git ls-remote file:///C:\APACHE\isis-git-rw"
 [INFO] Working directory: C:\Users\ADMINI~1\AppData\Local\Temp
 [INFO] Executing: cmd.exe /X /C "git fetch file:///C:\APACHE\isis-git-rw"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
-[INFO] Executing: cmd.exe /X /C "git checkout release-1.13.0"
+[INFO] Executing: cmd.exe /X /C "git checkout release-1.14.0"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
 [INFO] Executing: cmd.exe /X /C "git ls-files"
 [INFO] Working directory: C:\APACHE\isis-git-rw\core\target\checkout
@@ -403,7 +403,7 @@ Update the parent `pom.xml` to reference the _released_ version of Apache Isis c
 [source,xml]
 ----
 <properties>
-    <isis.version>1.13.0</isis.version>
+    <isis.version>1.14.0</isis.version>
     ...
 </properties>
 ----
@@ -650,7 +650,7 @@ Use the following subject, eg:
 
 [source,bash]
 ----
-[VOTE] Apache Isis Core release 1.13.0 RC1
+[VOTE] Apache Isis Core release 1.14.0 RC1
 ----
 
 And use the following body:
@@ -659,17 +659,17 @@ And use the following body:
 ----
 I've cut a release for Apache Isis Core and the simpleapp archetype:
 
-* Core 1.13.0
-* SimpleApp Archetype 1.13.0
+* Core 1.14.0
+* SimpleApp Archetype 1.14.0
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org:
 
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/1.13.0/isis-1.13.0-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/1.13.0/simpleapp-archetype-1.13.0-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/1.14.0/isis-1.14.0-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/1.14.0/simpleapp-archetype-1.14.0-source-release.zip
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-1.13.0-RC1 and simpleapp-archetype-1.13.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
+In the source code repo the code has been tagged as isis-1.14.0-RC1 and simpleapp-archetype-1.14.0-RC1; see https://git-wip-us.apache.org/repos/asf?p=isis.git
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see http://isis.apache.org/guides/cgcom.html#_cgcom_verifying-releases
 
@@ -682,7 +682,7 @@ Please verify the release and cast your vote.  The vote will be open for a minim
 
 Remember to update:
 
-* the version number (1.13.0 or whatever)
+* the version number (1.14.0 or whatever)
 * the release candidate number (`RC1` or whatever)
 * the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
 

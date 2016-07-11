@@ -98,15 +98,7 @@ If the `AppManifest` is _not_ being used then there are number of other configur
 
 == Viewer Configuration
 
-Viewers are specified by way of the filters and servlets in the xref:ugbtb.adoc#_ugbtb_web-xml[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.  However, we can also hint to the framework as to which viewers are in use by way of a context parameter:
+Viewers are specified by way of the filters and servlets in the xref:ugbtb.adoc#_ugbtb_web-xml[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.
 
-[source,xml]
-----
-<context-param>
-    <param-name>isis.viewers</param-name>
-    <param-value>wicket,restfulobjects</param-value>
-</context-param>
-----
-
-As of `1.13.0-SNAPSHOT`, this configuration property has no effect: the `viewer_wicket.properties` and `viewer_restulobjects.properties` are always checked.  In previous versions, this context param was used to indicate which of the two config files should be read.
+In versions prior to `1.13.0`, the "isis.viewers" context parameter was used to hint which configuration files should be read (corresponding to the viewers in use).  As of `1.13.0`, however, the configuration property has no effect: the `viewer_wicket.properties` and `viewer_restulobjects.properties` are always loaded if available.
 

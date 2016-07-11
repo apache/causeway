@@ -51,9 +51,9 @@ xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s `instantiate(...)`
 ``RepositoryService``'s API too because instantiating and persisting objects are often done together.
 <2> test whether a particular domain object is persistent or not
 <3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
-<4> (`1.13.0-SNAPSHOT`) persist (ie save) and flush; same as `persist()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
+<4> persist (ie save) and flush; same as `persist()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
 <5> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
-<6> (`1.13.0-SNAPSHOT`) remove (delete) and flush;  same as `remove()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
+<6> remove (delete) and flush;  same as `remove()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
 <7> return all persisted instances of specified type.  Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.  The optional varargs parameters are for paging control; more on this below.
 <8> all persistence instances matching the specified `Query`.  Query itself is an Isis abstraction on top of JDO/DataNucleus' Query API.  *This is the primary API used for querying*
 <9> As the previous, but with client-side filtering using a `Predicate`.  Only really intended for prototyping.
@@ -93,8 +93,8 @@ In some cases, such as when using managed properties and collections for impleme
 the developer needs to invoke `flush()` to send the changes to the DataNucleus persistence mechanism.  These
 managed properties and collections and then updated.
 
-The `persistAndFlush(...)` and `removeAndFlush(...)` methods (introduced in `1.13.0-SNAPSHOT`) save the developer from
-having to call the `flush(...)` method.
+The `persistAndFlush(...)` and `removeAndFlush(...)` methods save the developer from
+having to additionally call the `flush(...)` method after calling `persist()` or `remove()`.
 
 For example, the following code requires a flush to occur, so uses these methods:
 

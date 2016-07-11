@@ -30,7 +30,7 @@ The figure above doesn't tell the whole story; we haven't yet seen how Shiro its
 
 == Configuring Isis' Shiro Authenticator
 
-The `ShiroAuthenticatorOrAuthorizor` class itself supports a single optional property (`1.13.0-SNAPSHOT`).  This can
+The `ShiroAuthenticatorOrAuthorizor` class itself supports a single optional property.  This can
 be configured in `authentication_shiro.properties` file:
 
 [source,ini]
@@ -43,7 +43,7 @@ the Shiro subject - if found to be still authenticated - will be logged out anyw
 
 [WARNING]
 ====
-This auto-logout behaviour was the default prior to `1.13.0-SNAPSHOT`, but is believed to be the root cause of some
+This auto-logout behaviour was the default prior to `1.13.0`, but is believed to be the root cause of some
 exceptions caused by a possible race condition.  There should generally be no need to change this property from its
 default (`false`).
 ====

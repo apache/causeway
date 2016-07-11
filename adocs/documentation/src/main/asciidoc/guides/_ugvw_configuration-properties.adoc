@@ -60,7 +60,7 @@ converted dynamically into the corresponding `moment.js` format.
 `datePicker.maxDate`
 | ISO format date +
 (`2100-01-01T00:00:00.000Z`)
-|(`1.13.0-SNAPSHOT`), specifies a maximum date after which dates may not be specified.
+|Specifies a maximum date after which dates may not be specified.
 
 See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for
 further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
@@ -70,7 +70,7 @@ for further details).
 `datePicker.minDate`
 | ISO format date +
 (`1900-01-01T00:00:00.000Z`)
-|(`1.13.0-SNAPSHOT`), specifies a minimum date before which dates may not be specified.
+|Specifies a minimum date before which dates may not be specified.
 
 See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[datetimepicker reference docs] for
 further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
@@ -89,7 +89,7 @@ for further details).
 |`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
-|(`1.13.0-SNAPSHOT`), specifies the URL if xref:dg.adoc#_dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
+|Specifies the URL if xref:dg.adoc#_dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
 
 `http://localhost:35729/livereload.js?snipver=1`
 
@@ -117,7 +117,7 @@ for further details).
 |`isis.viewer.wicket.` +
 `rememberMe.cookieKey`
 | ascii chars (`_isisWicketRememberMe_`)
-| (`1.13.0-SNAPSHOT`) Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
+|Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
 change this.  +
 
 Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
@@ -125,7 +125,7 @@ Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOver
 |`isis.viewer.wicket.` +
 `rememberMe.encryptionKey`
 | any string (a random UUID each time)
-| (`1.13.0-SNAPSHOT`) Encryption key is used to encrypt the rememberMe user/password.  +
+|Encryption key is used to encrypt the rememberMe user/password.  +
 
 It should be set to a unique and private value.  If a hard-coded and publicly known value is used, then it would be
 possible for rememberMe user/password to be intercepted and decrypted, compromising access.
@@ -137,7 +137,7 @@ to log in again).
 |`isis.viewer.wicket.` +
 `rememberMe.suppress`
 | `true`,`false` (`_false_`)
-| (`1.13.0-SNAPSHOT`) Whether to suppress "remember me" checkbox on the login page.
+|Whether to suppress "remember me" checkbox on the login page.
 
 
 |`isis.viewer.wicket.` +
@@ -153,7 +153,7 @@ to log in again).
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
 | `true`,`false` (`_false_`)
-|(Deprecated in `1.13.0-SNAPSHOT`, replaced by `rememberMe.suppress`).  Whether to suppress "remember me" checkbox on the login page.
+|(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).  Whether to suppress "remember me" checkbox on the login page.
 
 |`isis.viewer.wicket.` +
 `suppressSignUp`

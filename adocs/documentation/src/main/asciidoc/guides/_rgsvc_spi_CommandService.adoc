@@ -9,7 +9,7 @@
 The `CommandService` service supports the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service such
 that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
 
-As of `1.13.0-SNAPSHOT`, the primary use case for persistent ``Command``s is in support of background commands; they
+As of `1.13.0`, the primary use case for persistent ``Command``s is in support of background commands; they
 act as a parent to any background commands that can be persisted either explicitly using the
 xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`], or implicitly by way of the
 xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
@@ -17,15 +17,16 @@ xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
-* if xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] or
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] (`1.13.0-SNAPSHOT`) is configured, they provide better traceability
-as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
-* if xref:rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] or
-         xref:rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] (`1.13.0-SNAPSHOT`) is configured, they provide better audit
-         information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
-         the action) through the `transactionId` GUID
+* if xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] or
+xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] (latter deprecated) is configured, they provide
+better traceability as the `Command` is also correlated with any published events, again through the unique
+`transactionId` GUID
+* if xref:rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] or
+xref:rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] (latter deprecated) is configured, they provide better audit
+information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
+the action) through the `transactionId` GUID
 
-As of `1.13.0-SNAPSHOT`, these other uses cases are now more fully supported through the
+As of `1.13.0`, these other uses cases are now more fully supported through the
 xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service and persistent implementations of the
 ``Interaction`` object, eg as provided by the (non-ASF)
 http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module.
@@ -61,7 +62,7 @@ public interface CommandService {
 <1> Instantiate the appropriate instance of the `Command` (as defined by the
 xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service).  Its members will be populated automatically by
 the framework.
-<2> (as of `1.13.0-SNAPSHOT`) is *NO LONGER CALLED* and is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
+<2> this method (as of `1.13.0`) is *NO LONGER CALLED* and is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
 `user` and `transactionId` fields, so there is no need for the service implementation to initialize any of these.  In
 particular, the ``Command`` will already have been initialized with the provided `transactionId` argument.
 <3> Set the hint that the `Command` should be persisted if possible (when completed, see below).

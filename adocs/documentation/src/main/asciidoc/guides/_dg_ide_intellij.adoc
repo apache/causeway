@@ -630,8 +630,7 @@ from the command line (in the `dom` module):
 image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/005-gradle-output.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/005-gradle-output.png"]
 
 
-Live reload also requires that the `isis.viewer.wicket.liveReloadUrl` configuration property (`1.13.0-SNAPSHOT`) is set
-appropriately:
+Live reload also requires that the `isis.viewer.wicket.liveReloadUrl` configuration property is set appropriately:
 
 [source,ini]
 .`viewer_wicket.properties`

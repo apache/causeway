@@ -9,21 +9,21 @@ Most applications need to integrate with other apps in the enterprise.  To facil
 Apache Isis defines a number of standard XSD schemas:
 
 
-* the xref:rgcms.adoc#_rgcms_schema-cmd[command] schema (`1.13.0-SNAPSHOT`), which captures the __intention__ of a user
+* the xref:rgcms.adoc#_rgcms_schema-cmd[command] schema, which captures the __intention__ of a user
 to invoke an action or edit a property
 
-* the xref:rgcms.adoc#_rgcms_schema-ixn[interaction execution] schema (`1.13.0-SNAPSHOT`), which captures the actual execution of an action invocation/property edit
+* the xref:rgcms.adoc#_rgcms_schema-ixn[interaction execution] schema, which captures the actual execution of an action invocation/property edit
 
-* the xref:rgcms.adoc#_rgcms_schema-chg[changes] schema (`1.13.0-SNAPSHOT`), which captures which objects have been
+* the xref:rgcms.adoc#_rgcms_schema-chg[changes] schema, which captures which objects have been
 created, updated or deleted as the result of an execution of an action invocation/property edit
 
-* the xref:rgcms.adoc#_rgcms_schema-aim[action memento invocation] schema (deprecated in `1.13.0-SNAPSHOT`, replaced by
+* the xref:rgcms.adoc#_rgcms_schema-aim[action memento invocation] schema (deprecated in `1.13.0`, replaced by
 either "cmd" or "ixn"), which allows action invocations to be captured and reified.
 
 These each use XSD types defined by the xref:rgcms.adoc#_rgcms_schema-common[common schema] (most notably the `oidDto`
 complex type which identifies a domain object).
 
-(As of `1.13.0-SNAPSHOT`) the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] and
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] and
 http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] modules uses these schemas to reify
 corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedObjects`), either to persist or
 publishing using an link:http://activemq.apache.org[Apache ActiveMQ] message queue.
