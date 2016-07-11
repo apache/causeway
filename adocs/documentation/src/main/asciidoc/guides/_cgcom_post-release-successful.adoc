@@ -99,7 +99,7 @@ If necessary, checkout this directory structure:
 svn co https://dist.apache.org/repos/dist/release/isis isis-dist
 ----
 
-Next, add the new release into the appropriate directory, and delete any previous release.  The `upd.sh` script can be used to automate this:
+Next, add the new release into the appropriate directory, and delete any previous release.  The `upd.sh` script (also downloadable from link:https://gist.github.com/danhaywood/aa79c18d993df1b1e2c5a9933e48bcbc[this gist]) can be used to automate this:
 
 [source,bash]
 ----
