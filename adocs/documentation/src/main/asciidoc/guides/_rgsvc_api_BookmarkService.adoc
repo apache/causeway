@@ -46,15 +46,10 @@ public interface BookmarkService2 {
         RESET,
         DONT_RESET
     }
-    @Programmatic
     Object lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy policy);
-    @Programmatic
     Object lookup(Bookmark bookmark, FieldResetPolicy policy);
-    @Programmatic
     <T> T lookup(Bookmark bookmark, FieldResetPolicy policy, Class<T> cls);     // <2>
-    @Programmatic
     Bookmark bookmarkFor(Object domainObject);
-    @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 }
 ----
@@ -62,7 +57,7 @@ public interface BookmarkService2 {
 <2> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
 
 
-The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceDefault`
+The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`
 
 
 == `BookmarkHolder`

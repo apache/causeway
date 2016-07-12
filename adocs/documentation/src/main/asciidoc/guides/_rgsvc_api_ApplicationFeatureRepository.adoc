@@ -57,3 +57,10 @@ implementation of `ApplicationFeatureRepository` service is automatically regist
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+
+
+== Related Services
+
+The default implementation of this service - `ApplicationFeatureRepositoryDefault` uses the `ApplicationFeatureFactory` service to instantiate `ApplicationFeature` instances.
+
+

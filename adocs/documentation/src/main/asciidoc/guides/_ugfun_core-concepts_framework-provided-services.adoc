@@ -31,7 +31,6 @@ Commands/Interactions/Background/Auditing/Publishing/Profiling:
 
 * xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] (SPI)
-* xref:rgsvc.adoc#_rgsvc_spi_CommandMementoService[`CommandMementoService`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] (SPI)
 * xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (SPI) (deprecated)
 * xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] (SPI)

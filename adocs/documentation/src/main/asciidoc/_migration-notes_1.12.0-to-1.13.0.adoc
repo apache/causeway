@@ -34,8 +34,12 @@ was an amalgam of `cmd.xsd` and `ixn.xsd`).
 
 The reworked `CommandService` now properly supports property edits in the exact same way as action invocations.
 
-As a side-effect of this work, note also that the `CommandService#startTransaction(...)` SPI is *NO LONGER CALLED* by
-the framework.
+As a side-effect of this work, note also that:
+
+* the `CommandService#startTransaction(...)` SPI is *NO LONGER CALLED* by the framework.
+
+* the `BackgroundService#asActionInvocationMemento(...)` (not formally part of the API) is also no longer called by the
+framework; moreover the default implementation now throws an exception to this effect.
 
 
 == Auditing

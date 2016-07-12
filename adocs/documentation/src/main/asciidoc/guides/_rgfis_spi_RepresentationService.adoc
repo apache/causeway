@@ -27,25 +27,20 @@ The SPI defined by this service is:
 [source,java]
 ----
 public interface RepresentationService {
-    @Programmatic
     Response objectRepresentation(                  // <1>
             Context rendererContext,
             ObjectAdapter objectAdapter);
-    @Programmatic
     Response propertyDetails(                       // <2>
             Context rendererContext,
             ObjectAndProperty objectAndProperty,
             MemberReprMode memberReprMode);
-    @Programmatic
     Response collectionDetails(                     // <3>
             Context rendererContext,
             ObjectAndCollection objectAndCollection,
             MemberReprMode memberReprMode);
-    @Programmatic
     Response actionPrompt(                          // <4>
             Context rendererContext,
             ObjectAndAction objectAndAction);
-    @Programmatic
     Response actionResult(                          // <5>
             Context rendererContext,
             ObjectAndActionInvocation objectAndActionInvocation,
@@ -80,7 +75,7 @@ ie `MemberReprMode`
 
 == Implementation
 
-As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceForRestfulObjects`.   This delegates to xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.   This delegates to xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained

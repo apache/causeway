@@ -24,6 +24,16 @@ The table below summarizes the testing APIs defined by Apache Isis.  It also lis
 |Notes
 
 
+|xref:rgsvc.adoc#_rgsvc_api_ExecutionParametersService[`o.a.i.applib.` +
+`fixturescripts.` +
+`ExecutionParametersService`]
+|...
+|`ExecutionParametersService` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class
+
+
 |xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`o.a.i.applib.` +
 `services.` +
 `fixturespec` +
@@ -56,6 +66,16 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
+|xref:rgsvc.adoc#_rgsvc_api_SwitchUserService[`o.a.i.applib.` +
+`fixtures.switchuser` +
+`SwitchUserServiceService`]
+|(deprecated)
+|`SwitchUserServiceImpl` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
 
 
 |===
@@ -84,6 +104,8 @@ The table below summarizes the testing SPIs defined by Apache Isis.  It also lis
 
 
 
+include::_rgsvc_api_ExecutionParametersService.adoc[leveloffset=+1]
 include::_rgsvc_api_FixtureScriptsDefault.adoc[leveloffset=+1]
-include::_rgsvc_api_SudoService.adoc[leveloffset=+1]
 include::_rgsvc_spi_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
+include::_rgsvc_api_SudoService.adoc[leveloffset=+1]
+include::_rgsvc_api_SwitchUserService.adoc[leveloffset=+1]

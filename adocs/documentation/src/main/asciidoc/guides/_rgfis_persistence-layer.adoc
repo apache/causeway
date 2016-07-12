@@ -43,6 +43,17 @@ xref:rgfis.adoc#_rgfis_spi_AuditerService[`AuditerService`].
 |
 
 
+|xref:rgfis.adoc#_rgfis_spi_PersistenceSessionServiceInternal[`o.a.i.c.m.s.` +
+`persistsession.` +
+`PersistenceSessionServiceInternal`]
+|Acts as a facade to the underlying JDO persistence session / database connection.  As such it provides methods for
+querying and for persisting objects.
+|`PersistenceSessionService-` +
+`InternalDefault` +
+`isis-core-runtime`
+|
+
+
 |xref:rgfis.adoc#_rgfis_spi_PublishingServiceInternal[`o.a.i.c.m.s.publishing.` +
 `PublishingServiceInternal`]
 |Co-ordinates between
@@ -52,9 +63,19 @@ xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] and (deprecated)
 xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
 |`PublishingService-` +
 `InternalDefault` +
-`o.a.i.c.r.publishing` +
 `isis-core-runtime`
 |
+
+
+|xref:rgfis.adoc#_rgfis_spi_TransactionStateProviderInternal[`o.a.i.c.m.s.` +
+`transtate.` +
+`TransactionStateProviderInternal`]
+|Simply provides the ability to check as to the state of the current transaction.
+|`TransactionStateProvider-` +
+`InternalDefault` +
+`isis-core-runtime`
+|
+
 
 
 
@@ -72,4 +93,6 @@ Key:
 
 include::_rgfis_spi_AuditingServiceInternal.adoc[leveloffset=+1]
 include::_rgfis_spi_ChangedObjectsServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_spi_PersistenceSessionServiceInternal.adoc[leveloffset=+1]
 include::_rgfis_spi_PublishingServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_spi_TransactionStateProviderInternal.adoc[leveloffset=+1]

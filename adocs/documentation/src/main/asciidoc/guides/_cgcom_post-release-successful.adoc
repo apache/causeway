@@ -304,8 +304,8 @@ Because we release from a branch, the changes made in the branch (changes to `po
 git checkout master                           # update master with latest
 git pull
 git merge release-1.14.0-RC1                  # merge branch onto master
-git branch -d release-1.14.0-RC1              # branch no longer needed
 git push origin --delete release-1.14.0-RC1   # remote branch no longer needed
+git branch -d release-1.14.0-RC1              # branch no longer needed
 ----
 
 

@@ -86,7 +86,7 @@ log4j.appender.PublisherServiceLogging.layout=org.apache.log4j.PatternLayout
 log4j.appender.PublisherServiceLogging.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss.SSS} %m%n
 
 log4j.logger.org.apache.isis.applib.services.publish.PublisherServiceLogging=DEBUG,PublisherServiceLogging
-log4j.additivity.log4j.logger.org.apache.isis.applib.services.publish.PublisherServiceLogging=false
+log4j.additivity.org.apache.isis.applib.services.publish.PublisherServiceLogging=false
 ----
 
 

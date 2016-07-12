@@ -19,15 +19,13 @@ The API for the service is:
 [source,java]
 ----
 public interface EmailService {
-    @Programmatic
     boolean send(                                                   // <1>
         List<String> to, List<String> cc, List<String> bcc,         // <2>
         String subject,
         String body,                                                // <3>
         DataSource... attachments);
-    @Programmatic
     boolean isConfigured();                                         // <4>
-  }
+}
 ----
 <1> is the main API to send the email (and optional attachments). Will return `false` if failed to send
 <2> pass either `null` or `Collections.emptyList()` if not required

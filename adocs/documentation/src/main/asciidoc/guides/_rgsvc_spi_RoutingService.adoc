@@ -54,7 +54,7 @@ public interface RoutingService {
 
 == Implementation
 
-The framework provides a default implementation which will always return the original object provided, or the home page
+The framework provides a default implementation - `RoutingServiceDefault` - which will always return the original object provided, or the home page
 if a `null` or `void` was provided.  It uses the xref:rgsvc.adoc#_rgsvc_api_HomePageProviderService[`HomePageProviderService`].
 
 There can be multiple implementations of `RoutingService` registered.  These are checked in turn (chain of responsibility
@@ -75,5 +75,5 @@ default implementation of `RoutingService` service is automatically registered a
 
 == Related Services
 
-The default implementation of ths service uses the
+The default implementation of this service uses the
 xref:rgsvc.adoc#_rgsvc_api_HomePageProviderService[`HomePageProviderService`].
