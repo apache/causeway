@@ -12,7 +12,7 @@ Existing projects written against v1.7.0 should run against v1.8.0 without any c
 then let us know via the link:support.html[users mailing list], so we can support you and document issues here.
 
 That said, many of the existing annotations have been deprecated in 1.8.0, replaced with a simplified and rationalized
- set of annotations; see link:../../reference/recognized-annotations/about.html[here].  To help you migrate your application
+ set of annotations; see xref:guides/rgant.adoc#[here].  To help you migrate your application
  over to the new annotations, there is a new configuration property that can be set in `isis.properties`:
 
 [source,ini]

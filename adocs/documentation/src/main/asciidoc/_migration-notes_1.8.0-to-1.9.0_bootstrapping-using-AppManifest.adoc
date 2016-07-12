@@ -8,7 +8,7 @@
 
 Apache Isis 1.9.0 provides a simplified programmatic way of bootstrapping the application, that also unifies bootstrapping for integration tests.
 
-For now this new bootstrapping mechanism is optional (you don't have to change your code), but it may become mandatory in future releases.  The xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated to use this new mechanism.
+For now this new bootstrapping mechanism is optional (you don't have to change your code), but it may become mandatory in future releases.  The xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated to use this new mechanism.
 
 The instructions below assume that your application is structured as per the simpleapp archetype.  Adjust accordingly.
 
@@ -80,7 +80,7 @@ Since `myapp-fixture` will reference `myapp-dom` there's no need for a direct re
 </dependency>
 ----
 
-* if your application uses any of the (non-ASF) link:http://isisaddons.org[Isis Addons] modules, then add dependencies to these modules in the `pom.xml`.  You should be able to copy-and-paste the dependencies from the `pom.xml` of your `myapp-webapp` module.
+* if your application uses any of the (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules, then add dependencies to these modules in the `pom.xml`.  You should be able to copy-and-paste the dependencies from the `pom.xml` of your `myapp-webapp` module.
 
 Create a module class for the `myapp` module also:
 
@@ -118,7 +118,7 @@ public class MyAppAppManifest implements AppManifest {
     public Map<String, String> getConfigurationProperties() { return null; }
 }
 ----
-<1> the module classes, whose packages specify the existence of domain services and/or persistent entities.  If your app uses (non-ASF) link:http://isisaddons.org[Isis Addons] modules, then include the module classes for these addons in `getModules()`.   For example, the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module provides the `org.isisaddons.module.security.SecurityModule` class.
+<1> the module classes, whose packages specify the existence of domain services and/or persistent entities.  If your app uses (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules, then include the module classes for these addons in `getModules()`.   For example, the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module provides the `org.isisaddons.module.security.SecurityModule` class.
 <2> any additional services, as per `isis.services` configuration property.
 
 
