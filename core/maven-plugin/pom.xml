@@ -44,8 +44,6 @@
         <maven-core.version>3.3.9</maven-core.version>
         <maven-project.version>3.0-alpha-2</maven-project.version>
         <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
-        <plexus-sec-dispatcher.version>1.4</plexus-sec-dispatcher.version>
-        <plexus-utils.version>2.1</plexus-utils.version>
         <plexus-container-default.version>1.7</plexus-container-default.version>
     </properties>
 
@@ -124,12 +122,12 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>${maven-core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${plexus-utils.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-component-annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -152,6 +150,14 @@
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-utils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>:plexus-sec-dispatcher</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.inject</groupId>
+                    <artifactId>guice</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -265,18 +271,6 @@
                 <exclusion>
                     <groupId>com.google.collections</groupId>
                     <artifactId>google-collections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.sonatype.plexus</groupId>
-            <artifactId>plexus-sec-dispatcher</artifactId>
-            <version>${plexus-sec-dispatcher.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-utils</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
