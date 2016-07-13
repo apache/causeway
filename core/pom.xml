@@ -129,7 +129,7 @@
         <gson.version>2.7</gson.version>
         <swagger-core.version>1.5.9</swagger-core.version>
         <swagger-ui.version>2.1.4</swagger-ui.version>
-        <webjars-servlet-2.x.version>1.4</webjars-servlet-2.x.version>
+        <webjars-servlet-2.x.version>1.5</webjars-servlet-2.x.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
         <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
