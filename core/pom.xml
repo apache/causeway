@@ -155,7 +155,7 @@
 
         <dom4j.version>1.6.1</dom4j.version>
         <jdom.version>2.0.2</jdom.version>
-        <xstream.version>1.4.8</xstream.version>
+        <xstream.version>1.4.9</xstream.version>
         <htmlparser.version>2.1</htmlparser.version>
 
         <junit.version>4.12</junit.version>
