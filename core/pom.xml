@@ -133,7 +133,7 @@
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
         <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
-        <hsqldb.version>2.3.1</hsqldb.version>
+        <hsqldb.version>2.3.4</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <resteasy-jaxrs.version>3.0.17.Final</resteasy-jaxrs.version>
 
