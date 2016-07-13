@@ -39,8 +39,8 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  This intention is reified as a
- * {@link Command#getMemento() memento} by way of the (internal) <tt>CommandMementoService</tt>; typically corresponding
- * to the XML equivalent of a {@link CommandDto}.
+ * {@link Command#getMemento() memento} by way of the (internal) <tt>CommandDtoServiceInternal</tt> domain service;
+ * typically corresponding to the XML equivalent of a {@link CommandDto}.
  *
  * <p>
  *     The {@link Command} interface also captures details of the corresponding action invocation (or property edit),
