@@ -52,7 +52,7 @@ public interface BackgroundService {
     /**
      * Not API: for framework use only.
      *
-     * @deprecated - no longer called by the framework (moved to <tt>CommandMementoService</tt>, an internal SPI service).
+     * @deprecated - no longer called by the framework (moved to <tt>InteractionDtoServiceInternal</tt>, an internal SPI service).
      */
     @Deprecated
     @Programmatic
