@@ -273,7 +273,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     @Programmatic
     @Override
     public ActionInvocationMemento asActionInvocationMemento(Method method, Object domainObject, Object[] args) {
-        throw new RuntimeException("Replaced by CommandMementoService");
+        throw new RuntimeException("Replaced by InteractionDtoServiceInternal");
     }
 
 
