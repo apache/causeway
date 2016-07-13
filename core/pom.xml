@@ -137,7 +137,7 @@
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <resteasy-jaxrs.version>3.0.17.Final</resteasy-jaxrs.version>
 
-        <jetty.version>9.3.6.v20151106</jetty.version>
+        <jetty.version>9.3.10.v20160621</jetty.version>
 
         <wicket.version>6.23.0</wicket.version>
 
