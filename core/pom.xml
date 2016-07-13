@@ -102,7 +102,7 @@
 	-->
         <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
 
-        <shiro.version>1.2.3</shiro.version>
+        <shiro.version>1.2.6</shiro.version>
 
         <slf4j.version>1.7.13</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
