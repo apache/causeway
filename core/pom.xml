@@ -141,7 +141,7 @@
 
         <wicket.version>6.23.0</wicket.version>
 
-        <wicket-webjars.version>0.4.8</wicket-webjars.version>
+        <wicket-webjars.version>0.4.9</wicket-webjars.version>
         <wicket-bootstrap.version>0.9.15</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
