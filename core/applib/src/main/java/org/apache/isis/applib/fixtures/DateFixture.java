@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.fixtures;
 
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
 /**
  * Sole purpose is to set the date/time while object fixtures are being
  * installed.
@@ -34,9 +36,16 @@ package org.apache.isis.applib.fixtures;
  * {@link #resetClock()}.
  * 
  * @see SwitchUserFixture
+ *
+ * @deprecated - use {@link FixtureScript} instead.
  */
+@Deprecated
 public class DateFixture extends BaseFixture {
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public DateFixture(final int year, final int month, final int day, final int hour, final int minutes) {
         super(FixtureType.OTHER);
         this.year = year;
@@ -46,40 +55,68 @@ public class DateFixture extends BaseFixture {
         this.minute = minutes;
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public DateFixture(final int year, final int month, final int day) {
         this(year, month, day, 0, 0);
     }
 
     private final int year;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public int getYear() {
         return year;
     }
 
     private final int month;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public int getMonth() {
         return month;
     }
 
     private final int day;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public int getDay() {
         return day;
     }
 
     private final int hour;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public int getHour() {
         return hour;
     }
 
     private final int minute;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public int getMinute() {
         return minute;
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     @Override
     public void install() {
         setDate(year, month, day);

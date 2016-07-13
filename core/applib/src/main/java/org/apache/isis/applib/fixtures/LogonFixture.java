@@ -24,6 +24,8 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
 /**
  * Indicates that the demo or test should be run as the specified user, with the
  * specified roles.
@@ -39,39 +41,69 @@ import com.google.common.collect.Lists;
  * {@link SwitchUserFixture}.
  * 
  * @see SwitchUserFixture
+ * @deprecated - use {@link FixtureScript} instead.
  */
+@Deprecated
 public class LogonFixture implements InstallableFixture {
 
     private final String username;
     private final List<String> roles;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public LogonFixture(final String username, final String... roles) {
         this(username, Lists.newArrayList(roles));
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public LogonFixture(final String username, final List<String> roles) {
         this.username = username;
         this.roles = ImmutableList.copyOf(roles);
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public List<String> getRoles() {
         return roles;
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     @Override
     public final void install() {
         // does nothing; see comments above.
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     @Override
     public FixtureType getType() {
         return FixtureType.OTHER;
     }
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     @Override
     public String toString() {
         return "LogonFixture [user: " + getUsername() + ", roles: " + getRoles() + "]";

@@ -21,7 +21,17 @@ package org.apache.isis.applib.fixtures;
 
 import java.util.List;
 
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
+/**
+ * @deprecated - use {@link FixtureScript} instead.
+ */
+@Deprecated
 public interface CompositeFixture {
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public List<Object> getFixtures();
 }
