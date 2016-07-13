@@ -46,6 +46,7 @@
         <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
         <plexus-sec-dispatcher.version>1.3</plexus-sec-dispatcher.version>
         <plexus-utils.version>2.1</plexus-utils.version>
+        <plexus-container-default.version>1.7</plexus-container-default.version>
     </properties>
 
     <build>
@@ -251,7 +252,7 @@
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
-            <version>1.5.5</version>
+            <version>${plexus-container-default.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
