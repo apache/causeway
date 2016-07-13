@@ -145,8 +145,8 @@
         <wicket-bootstrap.version>0.9.15</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
-        <wicket-select2.version>6.20.0</wicket-select2.version>
-        <select2.version>3.5.2</select2.version>
+        <wicket-select2.version>6.23.0</wicket-select2.version>
+        <select2.version>3.5.4</select2.version>
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
         <guice.version>4.1.0</guice.version>
