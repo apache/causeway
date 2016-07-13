@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.system.session;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,24 +50,21 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 /**
- * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
- * 
- * Creates an implementation of
- * {@link IsisSessionFactory#openSession(AuthenticationSession)} to create an
- * {@link IsisSession}, but delegates to subclasses to actually obtain the
- * components that make up that {@link IsisSession}.
+ * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
+ * a thread-local.
  *
  * <p>
- * The idea is that one subclass can use the {@link IsisComponentProviderUsingInstallers.InstallerLookup} design to
- * lookup installers for components (and hence create the components
- * themselves), whereas another subclass might simply use Spring (or another DI
- * container) to inject in the components according to some Spring-configured
- * application context.
+ *     The class can in considered as analogous to (and is in many ways a wrapper for) a JDO
+ *     <code>PersistenceManagerFactory</code>.
+ * </p>
+ *
+ * <p>
+ *     The class is only instantiated once; it is also registered with {@link ServicesInjector}, meaning that
+ *     it can be {@link Inject}'d into other domain services.
+ * </p>
  */
-
 public class IsisSessionFactory implements ApplicationScopedComponent {
 
     @SuppressWarnings("unused")
