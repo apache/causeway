@@ -18,6 +18,9 @@ package org.apache.isis.core.metamodel.services.msgbroker;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * TODO: combine with MessageService
+ */
 public interface MessageBrokerServiceInternal {
 
     /**
