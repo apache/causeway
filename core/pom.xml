@@ -150,7 +150,7 @@
         <select2.version>3.5.2</select2.version>
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
-        <guice.version>4.0</guice.version>
+        <guice.version>4.1.0</guice.version>
         <picocontainer.version>2.15</picocontainer.version>
 
         <dom4j.version>1.6.1</dom4j.version>
