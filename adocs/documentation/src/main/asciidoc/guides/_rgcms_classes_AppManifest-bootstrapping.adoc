@@ -51,7 +51,7 @@ public final class MyAppDomainModule {
 }
 ----
 
-This tells the framework that the package and subpackages under `com.mycompany.myapp.dom` should be searched for domain services and entities.
+This tells the framework that the package and subpackages under `com.mycompany.myapp.dom` should be searched for domain services (annotated with `@DomainService`), mixins (`@Mixin`) and entities (`@PersistenceCapabable`).
 
 As is perhaps apparent, the `getModules()` method replaces and overrides both the `isis.services.ServicesInstallerFromAnnotation.packagePrefix` key (usually found in the `isis.properties`  file) and also the`isis.persistor.datanucleus.RegisterEntities.packagePrefix` key (usually found in the `persistor_datanucleus.properties` file).  The value of the `isis.services-installer` configuration property is also ignored.
 
@@ -179,11 +179,36 @@ We also strongly recommend that any application-layer domain services and view m
 What then remains is to update the bootstrapping code itself.
 
 
+
+
 === Integration Tests
 
-Bootstrapping integration tests is still performed using the `IsisSystemForTest.Builder`, but very often the bootstrapping code can be substantially simplified (compared to not using an `AppManifest`, that is).
+A `AppManifest.Util` helper class provides a number of static methods that can be used to set up configuration
+properties appropriate for integration testing (eg run using an in-memory database).  This allows the responsibility
+of returning the configuration properties to belong exlusively to the `AppManifest`.
 
-For example, this is the bootstrapping code for the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] looks something like:
+There are three such static methods:
+
+[source,java]
+----
+public interface AppManifest {
+  ...
+  public static class Util {
+    public static Map<String,String> 
+        withJavaxJdoRunInMemoryProperties(Map<String, String> map) { ... }   // <1>
+    public static Map<String,String> 
+        withDataNucleusProperties(Map<String, String> map) { ... }           // <2>
+    public static Map<String,String> 
+        withIsisIntegTestProperties(Map<String, String> map) { ... }         // <3>
+  }
+}
+----
+<1> sets up the `javax.jdo.option.Connection*` properties so as to run against an in-memory instance of HSQLDB
+<2> sets up DataNucleus to automatically create the databse schema, as well as a number of other standard properties
+(disable persistence by reachability, support mixed case identifiers, disable level 2 cache)
+<3> sets up standard properties for the Apache Isis framework, most specifically to enable fixtures to be installed.
+
+For example, the bootstrapping code for the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] looks something like:
 
 [source,java]
 ----
@@ -193,16 +218,27 @@ public class DomainAppSystemInitializer {
         if(isft == null) {
             isft = new IsisSystemForTest.Builder()
                     .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new MyAppAppManifest())
-                    .with(new IsisConfigurationForJdoIntegTests())
-                    .build()
-                    .setUpSystem();
+                    .with(new DomainAppAppManifest() {
+                        @Override
+                        public Map<String, String> getConfigurationProperties() {
+                            final Map<String, String> map = Maps.newHashMap();
+                            Util.withJavaxJdoRunInMemoryProperties(map);
+                            Util.withDataNucleusProperties(map);
+                            Util.withIsisIntegTestProperties(map);
+                            return map;
+                        }
+                    })
+                    .build();
+            isft.setUpSystem();
             IsisSystemForTest.set(isft);
         }
     }
 }
 ----
 
+
+Previously the `IsisConfigurationJdoIntegTests` (subclass of `IsisConfiguration`) was provided to set up these
+configuration properties.  This class is still supported, but is deprecated.
 
 
 
@@ -260,13 +296,11 @@ java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtur
 
 == Subsidiary Goals
 
-There are a number of subsidiary goals of the `AppManifest` class (though as of v1.9.0 these have not yet implemented):
+There are a number of subsidiary goals of the `AppManifest` class (though as of v1.13.0 these have not yet implemented):
 
 * Allow different integration tests to run with different manifests.
 
-** Normally the running application is shared (on a thread-local) between integration tests. What the framework could do is to be intelligent enough to keep track of the manifest in use for each integration test and tear down the shared state if the "next" test uses a different manifest
-
-* Speed up bootstrapping by only scanning for classes annotated by `@DomainService` and `@PersistenceCapable` once.
+** Normally the running application is shared (on a thread-local) between integration tests. What the framework could perhaps do is to be intelligent enough to keep track of the manifest in use for each integration test and tear down the shared state if the "next" test uses a different manifest
 
 * Provide a programmatic way to contribute elements of `web.xml`.
 
