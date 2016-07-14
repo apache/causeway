@@ -30,7 +30,7 @@ Run the simpleapp archetype to build an empty Isis application:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.12.2 \
+    -D archetypeVersion=1.13.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
