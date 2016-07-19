@@ -31,6 +31,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
@@ -128,6 +130,10 @@ public abstract class ResourceAbstract {
         return resourceContext;
     }
 
+
+    protected void setCommandExecutor(Command.Executor executor) {
+        getServicesInjector().lookupServiceElseFail(CommandContext.class).getCommand().setExecutor(executor);
+    }
 
     // //////////////////////////////////////////////////////////////
     // Isis integration
