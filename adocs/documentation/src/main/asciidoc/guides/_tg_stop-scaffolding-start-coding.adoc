@@ -64,6 +64,7 @@ Alternatively, you can run using the mvn-jetty-plugin:
 
 [source,bash]
 ----
+cd webapp
 mvn jetty:run
 ----
 
