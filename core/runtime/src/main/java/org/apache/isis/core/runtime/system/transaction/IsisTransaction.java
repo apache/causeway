@@ -484,10 +484,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         return abortCause;
     }
 
-    /**
-     * If the cause has been rendered higher up in the stack, then clear the cause so that
-     * it won't be picked up and rendered elsewhere.
-     */
+    @Override
     public void clearAbortCause() {
         abortCause = null;
     }
