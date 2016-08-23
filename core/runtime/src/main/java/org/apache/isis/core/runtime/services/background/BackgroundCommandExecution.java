@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -51,6 +52,7 @@ import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MemberDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
@@ -106,13 +108,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     private void execute(
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
-
-
-        //
-        // TODO: need to generalize so that can invoke property modifications also.
-        //
-
-
 
         transactionManager.executeWithinTransaction(
                 backgroundCommand,
@@ -332,7 +327,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     }
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
-        final List<ParamDto> params = actionDto.getParameters().getParameter();
+        final List<ParamDto> params = paramDtosFrom(actionDto);
         final List<ObjectAdapter> args = Lists.newArrayList(
                 Iterables.transform(params, new Function<ParamDto, ObjectAdapter>() {
                     @Override
@@ -343,6 +338,17 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 })
         );
         return args.toArray(new ObjectAdapter[]{});
+    }
+
+    private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {
+        final ParamsDto parameters = actionDto.getParameters();
+        if (parameters != null) {
+            final List<ParamDto> parameterList = parameters.getParameter();
+            if (parameterList != null) {
+                return parameterList;
+            }
+        }
+        return Collections.emptyList();
     }
 
     // //////////////////////////////////////
