@@ -73,6 +73,7 @@ public class AccountManagementPageAbstract extends WebPage {
      * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
     @com.google.inject.Inject
+    @Named("applicationName")
     private String applicationName;
 
     /**
