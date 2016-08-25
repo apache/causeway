@@ -53,4 +53,11 @@ public interface Transaction extends HasTransactionId {
     @Programmatic
     void flush();
 
+    /**
+     * If the cause has been rendered higher up in the stack, then clear the cause so that
+     * it won't be picked up and rendered elsewhere.
+     */
+    @Programmatic
+    void clearAbortCause();
+
 }
