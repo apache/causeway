@@ -47,6 +47,7 @@ public interface Transaction {
     UUID getTransactionId();            // <1>
     int getSequence();                  // <2>
     void flush();                       // <3>
+    void clearAbortCause();             // <4>
 }
 ----
 <1> is a unique identifier for the interaction/request, as defined by the
@@ -54,7 +55,29 @@ xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] mixin
 <2> there can actually be multiple transactions within such a request/interaction; the sequence is a (0-based) is used
 to distinguish such.
 <3> as per `TransactionService#flushTransaction()` described above.
+<4> If the cause has been rendered higher up in the stack, then clear the cause so that it won't be picked up and
+rendered elsewhere.
 
+[TIP]
+====
+One place where `clearAboutCause()` may be useful is for application-level handling of SQL integrity exceptions, eg as
+described in link:https://issues.apache.org/jira/browse/ISIS-1476[ISIS-1476]:
+
+[source,java]
+----
+try {
+    // do something...
+} catch (final JDODataStoreException e) {
+    if (Iterables.filter(Throwables.getCausalChain(e),
+        SQLIntegrityConstraintViolationException.class) != null) {
+        // ignore
+        this.transactionService.currentTransaction().clearAbortCause();
+    } else {
+        throw e;
+    }
+}
+----
+====
 
 
 == Implementation
