@@ -174,6 +174,16 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                     LOG.info("component installer not found; it will not be available: " + className);
                 } catch (final InstanceCreationClassException e) {
                     LOG.info("instance creation exception: " + e.getMessage());
+                } catch (final InstanceCreationException e) {
+                    try {
+                        final Installer object = (Installer) InstanceUtil.createInstance(className);
+                        LOG.debug("created component installer: " + object.getName() + " - " + className);
+                        installerList.add(object);
+                    } catch (final UnavailableClassException e2) {
+                        LOG.info("component installer not found; it will not be available: " + className);
+                    } catch (final InstanceCreationClassException e2) {
+                        LOG.info("instance creation exception: " + e2.getMessage());
+                    }
                 }
             }
         }
