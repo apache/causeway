@@ -173,7 +173,7 @@ For a German user, on the other hand, if the translation in the corresponding `.
 ----
 #: xxx.yyy.Whatever#context()
 msgid "My name is {lastName}, {firstName} {lastName}."
-msgstr "Iche heisse {firstName} {lastName}."
+msgstr "Ich heisse {firstName} {lastName}."
 ----
 
 then the translation would be: "Ich heisse James Bond".
