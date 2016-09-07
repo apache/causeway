@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -68,7 +67,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public boolean authenticate(final String username, final String password) {
+    public synchronized boolean authenticate(final String username, final String password) {
         AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
         authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
@@ -81,7 +80,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public void invalidateNow() {
+    public synchronized void invalidateNow() {
 
         // similar code in Restful Objects viewer (UserResourceServerside#logout)
         // this needs to be done here because Wicket will expire the HTTP session
@@ -105,7 +104,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public void onInvalidate() {
+    public synchronized void onInvalidate() {
         super.onInvalidate();
 
         SessionLoggingService.CausedBy causedBy = RequestCycle.get() != null
@@ -120,12 +119,12 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public AuthenticationSession getAuthenticationSession() {
+    public synchronized AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
 
     @Override
-    public Roles getRoles() {
+    public synchronized Roles getRoles() {
         if (!isSignedIn()) {
             return null;
         }
@@ -134,7 +133,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public void detach() {
+    public synchronized void detach() {
         breadcrumbModel.detach();
         super.detach();
     }
@@ -195,7 +194,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public void replaceSession() {
+    public synchronized void replaceSession() {
         // do nothing here because this will lead to problems with Shiro
         // see https://issues.apache.org/jira/browse/ISIS-1018
     }
