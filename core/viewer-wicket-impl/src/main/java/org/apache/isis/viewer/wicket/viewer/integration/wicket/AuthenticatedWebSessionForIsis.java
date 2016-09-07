@@ -183,14 +183,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     protected SessionLoggingService getSessionLoggingService() {
-        return getIsisSessionFactory().doInSession(new Callable<SessionLoggingService>() {
-            @Override
-            public SessionLoggingService call() throws Exception {
-
-                // REVIEW: I strongly suspect that this doesn't need to be done in a session anymore
-                return getIsisSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
-            }
-        });
+        return getIsisSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
     }
 
     @Override
