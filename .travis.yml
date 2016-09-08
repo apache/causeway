@@ -2,4 +2,5 @@ language: java
 jdk:
   - oraclejdk8
 install: 
+  - 
 script: "mvn clean install -Dskip.app -Dskip.arch"
