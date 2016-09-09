@@ -60,6 +60,7 @@ include::_dg_asciidoc.adoc[leveloffset=+1]
 include::_dg_contributing.adoc[leveloffset=+1]
 
 include::_dg_git-cookbook.adoc[leveloffset=+1]
+include::_dg_working-with-many-repos.adoc[leveloffset=+1]
 include::_dg_asciidoc-templates.adoc[leveloffset=+1]
 include::_dg_project-lombok.adoc[leveloffset=+1]
 include::_dg_agilej.adoc[leveloffset=+1]

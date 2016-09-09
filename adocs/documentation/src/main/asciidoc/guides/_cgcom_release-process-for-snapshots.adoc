@@ -6,9 +6,7 @@
 :toc: right
 
 
-
-
-Apache Isis consists of a number of separately releasable modules; see the main link:release-process.html[release process] documentation for full details. All the non-core components depend on the `core`, and use the `core`'s parent `pom.xml` as their parent pom.
+Snapshot releases allows the current `-SNAPSHOT` version of the `core` modules  of the framework to be released to the Maven snapshot repository maintained by Apache Software Foundation.
 
 [NOTE]
 ====
