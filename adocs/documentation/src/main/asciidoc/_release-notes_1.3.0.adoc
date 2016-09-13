@@ -213,7 +213,7 @@
 * link:https://issues.apache.org/jira/browse/ISIS-427[ISIS-427] - specific), with JDO implementation.
 * link:https://issues.apache.org/jira/browse/ISIS-450[ISIS-450] - session interaction between entities.
 * link:https://issues.apache.org/jira/browse/ISIS-459[ISIS-459] - Enhance IsisJdoSupport service to support integration testing (execute arbitrary SQL, delete all instances of an entity)
-* link:https://issues.apache.org/jira/browse/ISIS-488[ISIS-488] - Derive Apache Isis&#39; MandatoryFacet from JDO @Column(allowNulls=) annotation, and provide @Mandatory annotation as override
+* link:https://issues.apache.org/jira/browse/ISIS-488[ISIS-488] - Derive Apache Isis&#39; MandatoryFacet from JDO @Column(allowsNull=) annotation, and provide @Mandatory annotation as override
 * link:https://issues.apache.org/jira/browse/ISIS-553[ISIS-553] - Provide view model support, as sketched out in the Restful Objects spec
 
 
