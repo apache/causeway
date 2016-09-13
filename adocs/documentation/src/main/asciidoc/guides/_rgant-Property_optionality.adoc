@@ -12,14 +12,14 @@ By default, Apache Isis assumes that all properties of an domain object or view 
 
 That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rgant.adoc#_rgant-Column[`@Column`] should be specified. Apache Isis can infer the maxLength directly from the equivalent @Column#length() annotation.
 
-That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rgant.adoc#_rgant-Column[`@Column`] will in any case need to be specified.  Apache Isis can infer the `optionality` semantic directly from the equivalent `@Column#allowNulls()` annotation/attribute.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rgant.adoc#_rgant-Column[`@Column`] will in any case need to be specified.  Apache Isis can infer the `optionality` semantic directly from the equivalent `@Column#allowsNull()` annotation/attribute.
 
 For example:
 
 [source,java]
 ----
 public class Customer {
-    @javax.jdo.annotations.Column(allowNulls="true")
+    @javax.jdo.annotations.Column(allowsNull="true")
     public String getMiddleInitial() { ... }
     public void setMiddleInitial(String middleInitial) { ... }
     ...
@@ -31,9 +31,9 @@ In this case there is no need for the `@Property#optionality()` attribute.
 
 == Mismatched defaults
 
-If the `@Column#allowNulls()` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Isis' defaults and JDO's defaults differ.  Specifically, Isis always assumes properties are mandatory, whereas JDO specifies that primitives are mandatory, but all reference types are optional.
+If the `@Column#allowsNull()` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Isis' defaults and JDO's defaults differ.  Specifically, Isis always assumes properties are mandatory, whereas JDO specifies that primitives are mandatory, but all reference types are optional.
 
-When Apache Isis initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.  The fix is usually to add the `@Column#allowsNulls()` annotation/attribute.
+When Apache Isis initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.  The fix is usually to add the `@Column#allowsNull()` annotation/attribute.
 
 
 == Superclass inheritance type
@@ -53,7 +53,7 @@ public abstract class PaymentMethod {
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
     private String cardNumber;
-    @javax.jdo.annotations.Column(allowNulls="true")
+    @javax.jdo.annotations.Column(allowsNull="true")
     @Property(optionality=Optionality.MANDATORY)
     public String getCardNumber() { return this.cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
@@ -68,7 +68,7 @@ Alternatively, you could rely on the fact that Apache Isis never looks at fields
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
-    @javax.jdo.annotations.Column(allowNulls="true")
+    @javax.jdo.annotations.Column(allowsNull="true")
     private String cardNumber;
     public String getCardNumber() { return this.cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }

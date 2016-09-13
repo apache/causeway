@@ -29,7 +29,7 @@ For example:
 [source,java]
 ----
 public class Customer {
-    @javax.jdo.annotations.Column(allowNulls="true")
+    @javax.jdo.annotations.Column(allowsNull="true")
     public String getMiddleInitial() { ... }
     public void setMiddleInitial(String middleInitial) { ... }
 ----
@@ -54,7 +54,7 @@ public class Customer {
     @javax.jdo.annotations.Column(length=20)
     public String getFirstName() { ... }
     public void setFirstName(String firstName) { ... }
-    @javax.jdo.annotations.Column(allowNulls="true", length=1)
+    @javax.jdo.annotations.Column(allowsNull="true", length=1)
     public String getMiddleInitial() { ... }
     public void setMiddleInitial(String middleInitial) { ... }
     @javax.jdo.annotations.Column(length=30)
