@@ -25,7 +25,7 @@ certain other JEE annotations such as `@javax.inject.Inject` (used for dependenc
 
 The framework uses DataNucleus for its persistence mechanism.  This is an ORM that implements the JDO and JPA APIs, and
 which can map domain objects either to an RDBMS or to various NoSQL objectstores such as MongoDB or Neo4J.  Apache Isis
-recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowNulls=...)`.
+recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowsNull=...)`.
 
 In addition, the framework builds up the metamodel for each domain object using
 xref:ugfun.adoc#_ugfun_object-layout[layout hints], such as `Customer.layout.json`.  These provide metadata such as

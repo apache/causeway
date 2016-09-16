@@ -73,7 +73,7 @@ Property must also be annotated with `@javax.jdo.annotations.NotPersistent` in o
 |
 |specifies a property is optional rather than mandatory +
 
-In many/most cases you should however use xref:rgant.adoc#_rgant-Column[`@Column#allowNulls()`]
+In many/most cases you should however use xref:rgant.adoc#_rgant-Column[`@Column#allowsNull()`]
 
 
 
@@ -102,7 +102,7 @@ public class Customer {
             return EmailUtil.ensureValidEmail(proposed);    // <1>
         }
     }
-    @javax.jdo.annotations.Column(allowNulls="true")                // <2>
+    @javax.jdo.annotations.Column(allowsNull="true")                // <2>
     @Property(
         maxLength=30,
         minLength=5,
