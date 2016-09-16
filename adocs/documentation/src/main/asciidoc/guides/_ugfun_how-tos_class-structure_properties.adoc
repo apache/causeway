@@ -31,7 +31,7 @@ For example, rather than:
 
 [source,java]
 ----
-@javax.jdo.annotations.Column(allowNulls="true")
+@javax.jdo.annotations.Column(allowsNull="true")
 private LocalDate date;
 @Property(optionality=Optionality.OPTIONAL)
 public LocalDate getDate() { ... }
@@ -43,7 +43,7 @@ you should instead simply write:
 [source,java]
 ----
 private LocalDate date;
-@javax.jdo.annotations.Column(allowNulls="true")
+@javax.jdo.annotations.Column(allowsNull="true")
 public LocalDate getDate() { ... }
 public void setDate(LocalDate d) { ... }
 ----
@@ -84,7 +84,7 @@ For example:
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
 public class SomeSubtype extends SomeSuperType {
     private LocalDate date;
-    @javax.jdo.annotations.Column(allowNulls="true")
+    @javax.jdo.annotations.Column(allowsNull="true")
     @Property(optionality=Optionality.MANDATORY)
     public LocalDate getDate() { ... }
     public void setDate(LocalDate d) { ... }
@@ -102,7 +102,7 @@ An alternative way to achieve this is to leave the JDO annotation on the field (
 ----
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
 public class SomeSubtype extends SomeSuperType {
-    @javax.jdo.annotations.Column(allowNulls="true")
+    @javax.jdo.annotations.Column(allowsNull="true")
     private LocalDate date;
     // mandatory in Apache Isis by default
     public LocalDate getDate() { }
