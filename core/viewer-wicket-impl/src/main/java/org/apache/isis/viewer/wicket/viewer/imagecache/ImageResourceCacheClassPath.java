@@ -48,7 +48,7 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
 
     private static final long serialVersionUID = 1L;
     
-    private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg", ".svg");
+    private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg", "svg");
     private static final String FALLBACK_IMAGE = "Default.png";
 
     private final Map<ImageResourceCacheKey, ResourceReference> resourceReferenceByKey = Maps.newConcurrentMap();
