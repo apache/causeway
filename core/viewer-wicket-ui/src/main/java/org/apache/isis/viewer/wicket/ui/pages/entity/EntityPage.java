@@ -19,20 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.Strings;
-
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -43,6 +36,13 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.Application;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * Web page representing an entity.
@@ -167,12 +167,12 @@ public class EntityPage extends PageAbstract {
         }
 
         final ObjectSpecification objectSpec = model.getTypeOfSpecification();
-        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-        if(facet != null) {
+        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
+        if(gridFacet != null) {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final Grid unused = facet.getGrid();
+            final Grid unused = gridFacet.getGrid();
         }
 
         if(titleString == null) {
@@ -183,6 +183,13 @@ public class EntityPage extends PageAbstract {
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
         CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
         CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
+
+        CssClassFacet cssClassFacet = objectSpec.getFacet(CssClassFacet.class);
+        if(cssClassFacet != null) {
+            final String cssClass = cssClassFacet.cssClass(objectAdapter);
+            CssClassAppender.appendCssClassTo(entityPageContainer, cssClass);
+        }
+
         themeDiv.addOrReplace(entityPageContainer);
 
         addChildComponents(entityPageContainer, model);
