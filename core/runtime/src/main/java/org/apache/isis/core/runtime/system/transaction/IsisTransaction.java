@@ -472,8 +472,12 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
      * 
      * <p>
      * If the cause is subsequently rendered by code higher up the stack, then the
-     * cause can be {@link #clearAbortCause() cleared}.  However, it is not possible
-     * to change the state from {@link State#MUST_ABORT}.
+     * cause can be {@link #clearAbortCause() cleared}.  Note that this keeps the transaction in a state of
+     * {@link State#MUST_ABORT}.
+     *
+     * <p>
+     * If the cause is to be discarded completely (eg background command execution), then
+     * {@link #clearAbortCauseAndContinue()} can be used.
      */
     public void setAbortCause(IsisException abortCause) {
         setState(State.MUST_ABORT);
@@ -488,6 +492,13 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     public void clearAbortCause() {
         abortCause = null;
     }
+
+    public void clearAbortCauseAndContinue() {
+        setState(State.IN_PROGRESS);
+        clearAbortCause();
+    }
+
+
 
 
     //endregion

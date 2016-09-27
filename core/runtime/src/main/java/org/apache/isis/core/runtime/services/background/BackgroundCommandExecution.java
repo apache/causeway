@@ -217,18 +217,21 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     }
 
                 } catch (RuntimeException e) {
-                    // this doesn't really make sense if >1 action
-                    // in any case, the capturing of the action interaction should be the
-                    // responsibility of auditing/profiling
+                    // hmmm, this doesn't really make sense if >1 action
+                    //
+                    // in any case, the capturing of the result of the action invocation should be the
+                    // responsibility of the interaction...
                     backgroundCommand.setException(Throwables.getStackTraceAsString(e));
 
-                    // alternatively, could have used ...
-                    Exception unused = backgroundInteraction.getPriorExecution().getThrew();
-
-                    backgroundInteraction.getCurrentExecution().setThrew(e);
+                    // lower down the stack the IsisTransactionManager will have set the transaction to abort
+                    // however, we don't want that to occur (because any changes made to the backgroundCommand itself
+                    // would also be rolled back, and it would keep getting picked up again by a scheduler for
+                    // processing); instead we clear the abort cause and ensure we can continue.
+                    transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
                 }
 
-                backgroundCommand.setCompletedAt(backgroundInteraction.getPriorExecution().getCompletedAt());
+                final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                backgroundCommand.setCompletedAt(priorExecution.getCompletedAt());
             }
 
             private ObjectAction findObjectAction(
