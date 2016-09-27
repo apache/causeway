@@ -16,9 +16,9 @@
  */
 package org.apache.isis.core.runtime.sessiontemplate;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -27,6 +27,7 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.schema.common.v1.OidDto;
 
 public abstract class AbstractIsisSessionTemplate {
 
@@ -82,8 +83,27 @@ public abstract class AbstractIsisSessionTemplate {
     // //////////////////////////////////////
 
     protected ObjectAdapter adapterFor(final Object targetObject) {
+        if(targetObject instanceof OidDto) {
+            final OidDto oidDto = (OidDto) targetObject;
+            return adapterFor(oidDto);
+        }
+        if(targetObject instanceof Bookmark) {
+            final Bookmark bookmark = (Bookmark) targetObject;
+            return adapterFor(bookmark);
+        }
         return getPersistenceSession().adapterFor(targetObject);
     }
+
+    protected ObjectAdapter adapterFor(final OidDto oidDto) {
+        final Bookmark bookmark = Bookmark.from(oidDto);
+        return adapterFor(bookmark);
+    }
+
+    protected ObjectAdapter adapterFor(final Bookmark bookmark) {
+        final RootOid rootOid = RootOid.create(bookmark);
+        return adapterFor(rootOid);
+    }
+
     protected ObjectAdapter adapterFor(final RootOid rootOid) {
         return getPersistenceSession().adapterFor(rootOid);
     }
