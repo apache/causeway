@@ -23,20 +23,23 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
 
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
@@ -172,7 +175,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     //region > dependencies
 
     @javax.inject.Inject
-    private EmailServiceDefault emailService;
+    private EmailService emailService;
     //endregion
 
 }
