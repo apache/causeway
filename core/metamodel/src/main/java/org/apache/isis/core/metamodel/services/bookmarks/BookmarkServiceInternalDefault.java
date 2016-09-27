@@ -18,12 +18,20 @@
  */
 package org.apache.isis.core.metamodel.services.bookmarks;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -43,7 +51,6 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
 
     @Programmatic
-    @Override
     public Object lookup(
             final BookmarkHolder bookmarkHolder,
             final FieldResetPolicy fieldResetPolicy) {
@@ -58,9 +65,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
     }
 
 
-    @Programmatic
-    @Override
-    public Object lookup(
+    private Object lookupInternal(
             final Bookmark bookmark,
             final FieldResetPolicy fieldResetPolicy) {
         if(bookmark == null) {
@@ -72,6 +77,25 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
             return null;
         }
     }
+
+
+    @Programmatic
+    @Override
+    public Object lookup(
+            final Bookmark bookmark,
+            final FieldResetPolicy fieldResetPolicy) {
+        if(bookmark == null) {
+            return null;
+        }
+        final String objectType = bookmark.getObjectType();
+        final Object service = lookupService(objectType);
+        if(service != null) {
+            return service;
+        }
+        return lookupInternal(bookmark, fieldResetPolicy);
+    }
+
+
 
     @Programmatic
     @Override
@@ -120,10 +144,34 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
 
 
+
+
+    private Map<String,Object> servicesByClassName;
+    private Object lookupService(final String className) {
+        cacheServicesByClassNameIfNecessary();
+        return servicesByClassName.get(className);
+    }
+
+    private void cacheServicesByClassNameIfNecessary() {
+        if (servicesByClassName == null) {
+            final Map<String,Object> servicesByClassName = Maps.newHashMap();
+            final List<Object> registeredServices = serviceRegistry2.getRegisteredServices();
+            for (Object registeredService : registeredServices) {
+                final String serviceClassName = registeredService.getClass().getName();
+                servicesByClassName.put(serviceClassName, registeredService);
+            }
+            this.servicesByClassName = servicesByClassName;
+        }
+    }
+
+
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     @javax.inject.Inject
     private WrapperFactory wrapperFactory;
+
+    @Inject
+    ServiceRegistry2 serviceRegistry2;
 
 }
