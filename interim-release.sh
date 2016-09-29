@@ -27,6 +27,9 @@ popd >/dev/null
 echo "Committing changes"
 git commit -am "bumping to $VERSION"
 
+echo "Building"
+mvn clean install -o
+
 echo "tagging"
 git tag $TAG
 
