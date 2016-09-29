@@ -36,6 +36,16 @@ git tag $TAG
 echo "pushing tag"
 git push $REMOTE $TAG
 
+echo "removing any earlier remote branches"
+for a in `git ls-remote --heads $REMOTE  | sed 's?.*refs/heads/??' | grep interim`
+do
+    git push $REMOTE --delete $a
+done
+
+# need to push branch, so will be picked up for building by CI
+echo "pushing branch"
+git push $REMOTE $BRANCH
+
 echo "switching back to original branch"
 git checkout $CURR_BRANCH
 
