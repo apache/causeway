@@ -429,7 +429,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     }
 
 
-    public void commit() {
+    void commit() {
         assert getState().canCommit();
         assert abortCause == null;
 
