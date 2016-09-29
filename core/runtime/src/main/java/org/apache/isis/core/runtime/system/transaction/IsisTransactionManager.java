@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -118,7 +119,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * {@link IsisTransaction transaction}.
      * 
      * <p>
-     * If a transaction is {@link IsisContext#inTransaction() in progress}, then
+     * If a transaction is in progress, then
      * uses that. Otherwise will {@link #startTransaction() start} a transaction
      * before running the block and {@link #endTransaction() commit} it at the
      * end.
@@ -286,22 +287,52 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * exception in turn.
      */
     public void endTransaction() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("endTransaction: level " + (transactionLevel) + "->" + (transactionLevel - 1));
-        }
 
         final IsisTransaction transaction = getCurrentTransaction();
-        if (transaction == null || transaction.getState().isComplete()) {
+        if (transaction == null) {
             // allow this method to be called >1 with no adverse affects
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("endTransaction: level {} (no transaction exists)", transactionLevel);
+            }
+
             return;
+        } else if (transaction.getState().isComplete()) {
+            // allow this method to be called >1 with no adverse affects
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("endTransaction: level {} (previous transaction completed)", transactionLevel);
+            }
+
+            return;
+        } else {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("endTransaction: level {}->{}", transactionLevel, transactionLevel - 1);
+            }
         }
+
+
+        try {
+            endTransactionInternal();
+        } finally {
+            final IsisTransaction.State state = getCurrentTransaction().getState();
+            int transactionLevel = this.transactionLevel;
+            if(transactionLevel == 0 && !state.isComplete()) {
+                LOG.error("endTransaction: inconsistency detected between transactionLevel {} and transactionState '{}'", transactionLevel, state);
+            }
+        }
+    }
+
+    private void endTransactionInternal() {
+
+        final IsisTransaction transaction = getCurrentTransaction();
 
         // terminate the transaction early if an abort cause was already set.
         RuntimeException abortCause = this.getCurrentTransaction().getAbortCause();
         if(transaction.getState().mustAbort()) {
-            
+
             if (LOG.isDebugEnabled()) {
-                LOG.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '" + abortCause.getMessage() + "' has been set");
+                LOG.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '{}' has been set", abortCause.getMessage());
             }
             try {
                 abortTransaction();
@@ -309,12 +340,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 // just in case any different exception was raised...
                 abortCause = this.getCurrentTransaction().getAbortCause();
             } catch(RuntimeException ex) {
-                
+
                 // ... or, capture this most recent exception
                 abortCause = ex;
             }
-            
-            
+
+
             if(abortCause != null) {
                 // hasn't been rendered lower down the stack, so fall back
                 throw abortCause;
@@ -324,61 +355,66 @@ public class IsisTransactionManager implements SessionScopedComponent {
             }
         }
 
-        
-        transactionLevel--;
-        if (transactionLevel == 0) {
+        // we don't decrement the transactionLevel just yet, because an exception might end up being thrown
+        // (meaning there would be more faffing around to ensure that the transactionLevel
+        // and state of the currentTransaction remain in sync)
+        if ( (transactionLevel - 1) == 0) {
 
             //
             // TODO: granted, this is some fairly byzantine coding.  but I'm trying to account for different types
             // of object store implementations that could start throwing exceptions at any stage.
             // once the contract/API for the objectstore is better tied down, hopefully can simplify this...
             //
-            
+
             if(abortCause == null) {
-            
+
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("endTransaction: committing");
                 }
 
                 try {
                     getCurrentTransaction().preCommit();
-                } catch(RuntimeException ex) {
+                } catch(Exception ex) {
                     // just in case any new exception was raised...
-                    abortCause = ex;
-                    transactionLevel = 1; // because the transactionLevel was decremented earlier
-                }
-            }
-            
-            if(abortCause == null) {
-                try {
-                    persistenceSession.endTransaction();
-                } catch(RuntimeException ex) {
-                    // just in case any new exception was raised...
-                    abortCause = ex;
-                    
-                    // hacky... moving the transaction back to something other than COMMITTED
-                    transactionLevel = 1; // because the transactionLevel was decremented earlier
+
+                    // this bizarre code because an InvocationTargetException (which is not a RuntimeException) was
+                    // being thrown due to a coding error in a domain object
+                    abortCause = ex instanceof RuntimeException ? (RuntimeException) ex : new RuntimeException(ex);
+
                     getCurrentTransaction().setAbortCause(new IsisTransactionManagerException(ex));
                 }
             }
 
             if(abortCause == null) {
                 try {
-                    getCurrentTransaction().commit();
-                } catch(RuntimeException ex) {
+                    persistenceSession.endTransaction();
+                } catch(Exception ex) {
                     // just in case any new exception was raised...
-                    abortCause = ex;
-                    transactionLevel = 1; // because the transactionLevel was decremented earlier
+                    abortCause = ex instanceof RuntimeException ? (RuntimeException) ex : new RuntimeException(ex);
+
+                    // hacky... moving the transaction back to something other than COMMITTED
+                    getCurrentTransaction().setAbortCause(new IsisTransactionManagerException(ex));
                 }
             }
+
+
+            //
+            // ok, everything that could have thrown an exception is now done,
+            // so  it's safe to decrement the transaction level
+            //
+            transactionLevel = 0;
 
 
             // previously we called __isis_endRequest here on all RequestScopedServices.  This is now
             // done later, in PersistenceSession#close(). If we introduce support for @TransactionScoped
             // services, then this would be the place to finalize them.
 
+
+            //
+            // finally, if an exception was thrown, we rollback the transaction
+            //
             if(abortCause != null) {
-                
+
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("endTransaction: aborting instead, abort cause has been set");
                 }
@@ -389,16 +425,22 @@ public class IsisTransactionManager implements SessionScopedComponent {
                     // * we want the existing abortCause to be available
                     // * the transactionLevel is correctly now at 0.
                 }
-                
+
                 throw abortCause;
+            } else {
+
+                // keeping things in sync
+                getCurrentTransaction().commit();
             }
+
         } else if (transactionLevel < 0) {
-            LOG.error("endTransaction: transactionLevel=" + transactionLevel);
+            LOG.error("endTransaction: transactionLevel={}", transactionLevel);
             transactionLevel = 0;
-            throw new IllegalStateException(" no transaction running to end (transactionLevel < 0)");
+            IllegalStateException ex = new IllegalStateException(" no transaction running to end (transactionLevel < 0)");
+            getCurrentTransaction().setAbortCause(new IsisException(ex));
+            throw ex;
         }
     }
-
 
     public void abortTransaction() {
         if (getCurrentTransaction() != null) {
