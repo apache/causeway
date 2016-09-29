@@ -358,7 +358,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
         // we don't decrement the transactionLevel just yet, because an exception might end up being thrown
         // (meaning there would be more faffing around to ensure that the transactionLevel
         // and state of the currentTransaction remain in sync)
-        if ( (transactionLevel - 1) == 0) {
+        int nextTransactionLevel = transactionLevel - 1;
+        if ( nextTransactionLevel > 0) {
+            transactionLevel --;
+        } else if ( nextTransactionLevel == 0) {
 
             //
             // TODO: granted, this is some fairly byzantine coding.  but I'm trying to account for different types
@@ -433,7 +436,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 getCurrentTransaction().commit();
             }
 
-        } else if (transactionLevel < 0) {
+        } else {
+            // transactionLevel < 0
             LOG.error("endTransaction: transactionLevel={}", transactionLevel);
             transactionLevel = 0;
             IllegalStateException ex = new IllegalStateException(" no transaction running to end (transactionLevel < 0)");
