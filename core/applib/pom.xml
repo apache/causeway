@@ -114,6 +114,12 @@
             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-core</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- DataNucleus' standard JDO support -->
         <dependency>
             <groupId>javax.jdo</groupId>

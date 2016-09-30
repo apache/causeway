@@ -153,6 +153,7 @@
         <guice.version>4.0</guice.version>
         <picocontainer.version>2.15</picocontainer.version>
 
+
         <dom4j.version>1.6.1</dom4j.version>
         <jdom.version>2.0.2</jdom.version>
         <xstream.version>1.4.8</xstream.version>
@@ -1305,6 +1306,11 @@ ${license.additional-notes}
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.axonframework</groupId>
+                <artifactId>axon-core</artifactId>
+                <version>${axon-core.version}</version>
             </dependency>
 
             <!-- Logging -->

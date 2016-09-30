@@ -21,7 +21,6 @@ package org.apache.isis.applib.services.fixturespec;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -32,9 +31,12 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.events.system.FixturesInstalledEvent;
+import org.apache.isis.applib.events.system.FixturesInstallingEvent;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 
 /**
  * Default instance of {@link FixtureScripts}, instantiated automatically by the framework if no custom user-defined instance was
@@ -101,7 +103,12 @@ public class FixtureScriptsDefault extends FixtureScripts {
                 multiLine = 10)
             @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
-        return super.runFixtureScript(fixtureScript, parameters);
+        try {
+            eventBusService.post(new FixturesInstallingEvent(this));
+            return super.runFixtureScript(fixtureScript, parameters);
+        } finally {
+            eventBusService.post(new FixturesInstalledEvent(this));
+        }
     }
 
     /**
@@ -216,7 +223,9 @@ public class FixtureScriptsDefault extends FixtureScripts {
 
     //region > injected services
     @javax.inject.Inject
-    private FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider;
+    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider;
+    @javax.inject.Inject
+    EventBusService eventBusService;
     //endregion
 
 }
