@@ -136,7 +136,7 @@ class PoWriter extends PoAbstract {
         return null;
     }
 
-    private Block blockFor(final String msgId) {
+    private synchronized Block blockFor(final String msgId) {
         Block block = blocksByMsgId.get(msgId);
         if(block == null) {
             block = new Block(msgId);
