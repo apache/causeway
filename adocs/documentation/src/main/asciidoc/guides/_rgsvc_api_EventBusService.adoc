@@ -131,7 +131,7 @@ or if using Axonframework, the subscriber uses a different annotation:
 @DomainService(nature=NatureOfService.DOMAIN)
 public class MySubscribingDomainService
     @Programmatic
-    @org.axonframework.eventhandling.annotation.EventHandle
+    @org.axonframework.eventhandling.annotation.EventHandler
     public void on(ActionDomainEvent ev) { ... }
     ...
 }
