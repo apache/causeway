@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -214,6 +215,10 @@ public abstract class IntegrationTestAbstract {
                         isft.endTran();
                         isft.nextSession();
                     } catch(final Throwable e) {
+
+                        // if test failed to clean up after itself, then take care of it here.
+                        endTransactionTilDone();
+
                         isft.nextSession();
                         final List<Throwable> causalChain = Throwables.getCausalChain(e);
                         // if underlying cause is an applib-defined exception, throw that rather than Isis' wrapper exception
@@ -224,6 +229,21 @@ public abstract class IntegrationTestAbstract {
                             }
                         }
                         throw e;
+                    }
+                }
+
+                protected void endTransactionTilDone() {
+                    IsisTransactionManager tranMgr = isft.getIsisSessionFactory().getCurrentSession()
+                                                         .getPersistenceSession().getTransactionManager();
+                    int count = 0;
+                    while(tranMgr.getTransactionLevel() > 0 &&
+                          count++ < 10              // just in case, to prevent an infinite loop...
+                            ) {
+                        try {
+                            tranMgr.endTransaction();
+                        } catch(Exception ignore) {
+                            // ignore
+                        }
                     }
                 }
             };
