@@ -274,7 +274,7 @@ public class QueryResultsCache implements WithTransactionScope {
 
 
     @Inject
-    Control control;
+    protected Control control;
 
 
 }
