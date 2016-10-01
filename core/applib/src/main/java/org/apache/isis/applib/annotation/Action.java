@@ -186,4 +186,17 @@ public @interface Action {
     RestrictTo restrictTo() default RestrictTo.NO_RESTRICTIONS;
 
 
+    // //////////////////////////////////////
+
+
+    /**
+     * Whether the action is a Factory Method.
+     *
+     * <p>
+     *     A Factory Method creates new instances of the action's return type.
+     * </p>
+     */
+    boolean factoryMethod() default false;
+
+
 }

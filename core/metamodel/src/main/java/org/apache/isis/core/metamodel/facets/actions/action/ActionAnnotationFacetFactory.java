@@ -52,12 +52,14 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
-import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.disabled.DisabledFacetForDisabledAnnotationOnAction;
+import org.apache.isis.core.metamodel.facets.actions.action.factorymethod.FactoryMethodFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.factorymethod.FactoryMethodFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForHiddenAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -410,6 +412,18 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         if(facet == null) {
             facet = PublishedActionFacetForActionAnnotation.create(action, getConfiguration(), holder);
         }
+
+        FacetUtil.addFacet(facet);
+    }
+
+    void processFactoryMethod(final ProcessMethodContext processMethodContext) {
+
+        final Method method = processMethodContext.getMethod();
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        // search for @Action(factoryMethod=...)
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        FactoryMethodFacet facet = FactoryMethodFacetForActionAnnotation.create(action, method, holder);
 
         FacetUtil.addFacet(facet);
     }
