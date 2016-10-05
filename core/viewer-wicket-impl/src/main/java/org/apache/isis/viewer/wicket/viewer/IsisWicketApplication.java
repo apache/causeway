@@ -256,7 +256,7 @@ public class IsisWicketApplication
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
-            isisConfigurationBuilder.addDefaultConfigurationResources();
+            isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 

@@ -40,9 +40,9 @@ import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
@@ -84,7 +84,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainIsisConfigurationBuilder(servletContext);
-            isisConfigurationBuilder.addDefaultConfigurationResources();
+            isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
             final DeploymentType deploymentType = determineDeploymentType(servletContext, isisConfigurationBuilder);
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
