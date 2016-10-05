@@ -106,7 +106,12 @@ public final class IsisConfigurationBuilder {
         return composite;
     }
 
-    public void addDefaultConfigurationResources() {
+    public void addDefaultConfigurationResourcesAndPrimers() {
+        addDefaultConfigurationResources();
+        addDefaultPrimers();
+    }
+
+    private void addDefaultConfigurationResources() {
         IsisConfigurationDefault.ContainsPolicy ignorePolicy = IsisConfigurationDefault.ContainsPolicy.IGNORE;
         NotFoundPolicy continuePolicy = NotFoundPolicy.CONTINUE;
 
@@ -147,6 +152,11 @@ public final class IsisConfigurationBuilder {
         addConfigurationResource("overrides.properties", NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.OVERWRITE);
     }
 
+    private void addDefaultPrimers() {
+        primeWith(new PrimerForSystemProperties());
+        primeWith(new PrimerForEnvironmentVariablesIsisPrefix());
+        primeWith(new PrimerForEnvironmentVariableISIS_OPT());
+    }
 
     //endregion
 
@@ -300,11 +310,15 @@ public final class IsisConfigurationBuilder {
         return true;
     }
 
-    public void primeWith(final OptionHandler optionHandler) {
+    public interface Primer {
+        void prime(IsisConfigurationBuilder isisConfigurationBuilder);
+    }
+
+    public void primeWith(final Primer primer) {
         ensureNotLocked();
 
-        LOG.debug("priming configurations for '{}'", optionHandler);
-        optionHandler.prime(this);
+        LOG.debug("priming configurations for '{}'", primer);
+        primer.prime(this);
     }
 
     //endregion
@@ -375,6 +389,5 @@ public final class IsisConfigurationBuilder {
     }
 
     //endregion
-
 
 }

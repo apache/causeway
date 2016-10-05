@@ -16,19 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.commons.configbuilder;
 
-package org.apache.isis.core.runtime.optionhandler;
+import java.util.Map;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
-
-public interface OptionHandler extends IsisConfigurationBuilder.Primer {
-
-    void addOption(Options options);
-
-    boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options);
-
-
+public class PrimerForEnvironmentVariablesIsisPrefix implements IsisConfigurationBuilder.Primer {
+    @Override
+    public void prime(final IsisConfigurationBuilder builder) {
+        final Map<String, String> envVars = System.getenv();
+        for (Map.Entry<String, String> entry : envVars.entrySet()) {
+            final String envVarName = entry.getKey();
+            final String envVarValue = entry.getValue();
+            if (envVarName.startsWith("isis.")) {
+                builder.put(envVarName, envVarValue);
+            }
+        }
+    }
 }
