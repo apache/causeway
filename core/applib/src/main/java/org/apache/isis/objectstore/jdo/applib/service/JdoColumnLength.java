@@ -18,55 +18,153 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public final class JdoColumnLength {
 
     private JdoColumnLength() {
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public final static int TRANSACTION_ID = 36;
-    // ie OID str (based on the defacto limit of a request URL in web browsers such as IE8)
-    public final static int BOOKMARK = 2000; 
+
+    /**
+     * ie OID str (based on the defacto limit of a request URL in web browsers such as IE8)
+     *
+     * @deprecated
+     */
+    @Deprecated
+    public final static int BOOKMARK = 2000;
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final int MEMBER_IDENTIFIER = 255;
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final int USER_NAME = 50;
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public final static int TARGET_CLASS = 50;
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public final static int TARGET_ACTION = 50;
-    
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final int DESCRIPTION = 254;
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class SettingAbstract {
         private SettingAbstract(){}
-        
+
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int SETTING_KEY = 128;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int SETTING_TYPE = 20;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int VALUE_RAW = 255;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class Command {
         private Command() {
         }
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int EXECUTE_IN = 10;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class AuditEntry {
 
         private AuditEntry() {
         }
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int PROPERTY_ID = 50;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int PROPERTY_VALUE = 255;
     }
-    
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class PublishedEvent {
 
         private PublishedEvent() {
         }
-        
+
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int TITLE = 255;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int EVENT_TYPE = 20;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int STATE = 20;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class StatusMessage {
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int MESSAGE = 255;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int URI = BOOKMARK;
     }
 
