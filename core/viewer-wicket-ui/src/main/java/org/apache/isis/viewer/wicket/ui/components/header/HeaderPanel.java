@@ -49,18 +49,9 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 public class HeaderPanel extends PanelAbstract<Model<String>> {
 
     private static final String ID_USER_NAME = "userName";
-
     private static final String ID_PRIMARY_MENU_BAR = "primaryMenuBar";
     private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
     private static final String ID_TERTIARY_MENU_BAR = "tertiaryMenuBar";
-
-    @com.google.inject.Inject
-    @Named("applicationName")
-    private String applicationName;
-
-    @com.google.inject.Inject(optional = true)
-    @Named("brandLogo")
-    private String brandLogo;
 
     /**
      * Constructor.
