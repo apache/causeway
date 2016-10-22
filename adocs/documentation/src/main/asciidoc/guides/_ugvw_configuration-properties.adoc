@@ -43,6 +43,11 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 | number of pages to bookmark
 
 |`isis.viewer.wicket.` +
+`breadcrumbs.showChooser`
+| `true`,`false` (`_true_`)
+| Whether to show chooser for Breadcrumbs
+
+|`isis.viewer.wicket.` +
 `datePattern`
 | date format +
 (`dd-MM-yyyy`)
