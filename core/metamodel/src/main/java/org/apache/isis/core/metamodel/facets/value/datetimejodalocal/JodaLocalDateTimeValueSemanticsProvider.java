@@ -126,7 +126,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     private static final LocalDateTime DEFAULT_VALUE = null;
 
 
-    private final DateTimeFormatter encodingFormatter = ISODateTimeFormat.dateHourMinuteSecond();
+    private final DateTimeFormatter encodingFormatter = ISODateTimeFormat.dateHourMinuteSecondMillis();
     
     private DateTimeFormatter titleStringFormatter;
     private String titleStringFormatNameOrPattern;
