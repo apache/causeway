@@ -1,12 +1,12 @@
 [[_rgsvc_api_MetaModelService]]
-= `MetaModelService`
+= `MetaModelService3`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
 
-The `MetaModelService2` service provides access to a number of aspects of Apache Isis' internal metamodel.
+The `MetaModelService3` service provides access to a number of aspects of Apache Isis' internal metamodel.
 
 
 == API
@@ -17,17 +17,23 @@ The API defined by the service is:
 [source,java]
 ----
 public interface MetaModelService2 {
-    Class<?> fromObjectType(final String objectType);   // <1>
-    String toObjectType(final Class<?> domainType);     // <2>
-    void rebuild(final Class<?> domainType);            // <3>
-    List<DomainMember> export();                        // <4>
+    Class<?> fromObjectType(String objectType);   // <1>
+    String toObjectType(Class<?> domainType);     // <2>
+    void rebuild(Class<?> domainType);            // <3>
+    List<DomainMember> export();                  // <4>
 
-    enum Sort {                                         // <5>
+    enum Sort {                                   // <5>
         VIEW_MODEL, JDO_ENTITY, DOMAIN_SERVICE,
-        MIXIN, VALUE, COLLECTION;
+        MIXIN, VALUE, COLLECTION, UNKNOWN;
     }
-    Sort sortOf(final Class<?> domainType);
-    Sort sortOf(final Bookmark bookmark);
+    enum Mode {
+        STRICT,
+        RELAXED
+    }
+    Sort sortOf(Class<?> domainType);             // <6>
+    Sort sortOf(Bookmark bookmark);
+    Sort sortOf(Class<?> domainType, Mode mode);
+    Sort sortOf(Bookmark bookmark, Mode mode);
 }
 ----
 <1> reverse lookup of a domain class' object type
@@ -35,6 +41,7 @@ public interface MetaModelService2 {
 <3> invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified domain type.
 <4> returns a list of representations of each of member of each domain class.
 <5> what sort of object a domain type is (or bookmark) represents
+<6> whether to throw an exception or return `Sort.UNKNOWN` if the object type is not recognized.  (The overloads with no `Mode` parameter default to strict mode).
 
 
 == Implementation
