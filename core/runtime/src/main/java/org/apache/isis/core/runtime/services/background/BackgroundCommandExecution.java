@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
@@ -183,10 +184,15 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 final ObjectAdapter resultAdapter = objectAction.execute(
                                         targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
+                                //
                                 // for the result adapter, we could alternatively have used...
-                                Object unused = backgroundInteraction.getPriorExecution().getReturned();
+                                // (priorExecution populated by the push/pop within the interaction object)
+                                //
+                                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                                // Object unused = priorExecution.getReturned();
+                                //
 
-                                // this doesn't really make sense if >1 action
+                                // REVIEW: this doesn't really make sense if >1 action
                                 // in any case, the capturing of the action interaction should be the
                                 // responsibility of auditing/profiling
                                 if(resultAdapter != null) {
@@ -230,8 +236,14 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
                 }
 
+                // it's possible that there is no priorExecution, specifically if there was an exception
+                // invoking the action.  We therefore need to guard that case.
                 final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                backgroundCommand.setCompletedAt(priorExecution.getCompletedAt());
+                final Timestamp completedAt =
+                        priorExecution != null
+                                ? priorExecution.getCompletedAt()
+                                : clockService.nowAsJavaSqlTimestamp();  // close enough...
+                backgroundCommand.setCompletedAt(completedAt);
             }
 
             private ObjectAction findObjectAction(
