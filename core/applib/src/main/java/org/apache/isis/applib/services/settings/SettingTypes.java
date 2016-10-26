@@ -16,18 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.settings;
 
-package org.apache.isis.applib.services.publish;
+/**
+ * @deprecated  - used only by isis addons' settings module.
+ */
+@Deprecated
+public class SettingTypes {
 
-public enum EventType {
-    ACTION_INVOCATION,
-    OBJECT_CREATED,
-    OBJECT_UPDATED,
-    OBJECT_DELETED;
+    private SettingTypes() {}
 
-    public static class Type {
+    public static class KeyType {
 
-        private Type() {}
+        private KeyType() {}
 
         public static class Meta {
 
@@ -36,6 +37,34 @@ public enum EventType {
             private Meta() {}
 
         }
+
     }
 
+    public static class TypeType {
+
+        private TypeType() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 128;
+
+            private Meta() {}
+
+        }
+
+    }
+
+    public static class ValueRawType {
+
+        private ValueRawType() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 255;
+
+            private Meta() {}
+
+        }
+
+    }
 }

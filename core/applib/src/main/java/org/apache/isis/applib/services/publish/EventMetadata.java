@@ -169,6 +169,21 @@ public class EventMetadata {
         return title;
     }
 
+    public static class TitleType {
+
+        private TitleType() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 255;
+
+            private Meta() {}
+
+        }
+
+    }
+
+
     public EventType getEventType() {
         return eventType;
     }
@@ -238,6 +253,5 @@ public class EventMetadata {
     public String toString() {
         return getId();
     }
-
 
 }

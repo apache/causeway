@@ -58,4 +58,18 @@ public enum CommandExecuteIn {
         throw new IllegalArgumentException("Unrecognized : executeIn" + commandExecuteIn);
     }
 
+    public static class Type {
+
+        private Type() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 10;
+
+            private Meta() {}
+
+        }
+    }
+
+
 }
