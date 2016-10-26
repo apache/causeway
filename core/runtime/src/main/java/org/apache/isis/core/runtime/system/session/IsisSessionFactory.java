@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.system.session;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,9 +145,13 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
             //
             // translateServicesAndEnumConstants
             //
+
             final List<Object> services = servicesInjector.getRegisteredServices();
+            // take a copy of all services to avoid occasionall concurrent modification exceptions
+            // that can sometimes occur in the loop
+            final List<Object> copyOfServices = Lists.newArrayList(services);
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
-            for (Object service : services) {
+            for (Object service : copyOfServices) {
                 final String unused = titleService.titleOf(service);
             }
             for (final ObjectSpecification objSpec : servicesInjector.getSpecificationLoader().allSpecifications()) {
