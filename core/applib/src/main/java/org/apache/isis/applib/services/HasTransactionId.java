@@ -38,6 +38,17 @@ public interface HasTransactionId {
 
     void setTransactionId(final UUID transactionId);
 
-    
+    class TransactionIdType {
 
-}    
+        private TransactionIdType() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 36;
+
+            private Meta() {}
+
+        }
+
+    }
+}

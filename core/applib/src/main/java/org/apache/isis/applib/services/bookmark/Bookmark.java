@@ -201,4 +201,23 @@ public class Bookmark implements Serializable {
     public String toString() {
         return state.getCode() + objectType + SEPARATOR + identifier;
     }
+
+
+    public static class AsStringType {
+
+        private AsStringType() {}
+
+        public static class Meta {
+
+            /**
+             * Is based on the defacto limit of a request URL in web browsers such as IE8
+             */
+            public static final int MAX_LEN = 2000;
+
+            private Meta() {}
+
+        }
+
+    }
+
 }

@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.NotPersistable;
 @NotPersistable
 public final class UserMemento {
 
+    //region > constructors
     /**
      * Creates a new user with the specified name and no roles.
      */
@@ -57,13 +58,16 @@ public final class UserMemento {
         this.name = name;
         this.roles.addAll(roles);
     }
+    //endregion
 
-    // {{ Identification: Title
+    //region > title
     public String title() {
         return name;
     }
 
-    // }}
+    //endregion
+
+    //region > name, NameType
 
     // {{ (User) Name, isCurrentUser
     private final String name;
@@ -76,6 +80,23 @@ public final class UserMemento {
         return name;
     }
 
+    public static class NameType {
+
+        private NameType() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 50;
+
+            private Meta() {}
+
+        }
+
+    }
+
+    //endregion
+
+    //region > isCurrentUser
     /**
      * Determine if the specified name is this user.
      * 
@@ -90,9 +111,9 @@ public final class UserMemento {
         return name.equals(userName);
     }
 
-    // }}
+    //endregion
 
-    // {{ Roles
+    //region > roles
     private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
 
     /**
@@ -125,8 +146,9 @@ public final class UserMemento {
         return false;
     }
 
-    // }}
+    //endregion
 
+    //region > toString
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
@@ -135,5 +157,7 @@ public final class UserMemento {
         }
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
+
+    //endregion
 
 }
