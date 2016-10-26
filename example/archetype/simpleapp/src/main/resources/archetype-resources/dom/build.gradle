@@ -62,7 +62,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: '1.13.0-SNAPSHOT'
+    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: '1.14.0-SNAPSHOT'
 }
 task copyClasses << {
     copy {
