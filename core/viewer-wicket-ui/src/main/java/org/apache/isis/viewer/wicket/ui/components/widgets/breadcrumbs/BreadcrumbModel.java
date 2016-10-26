@@ -128,7 +128,6 @@ public class BreadcrumbModel implements Serializable {
 
     }
 
-
     void remove(final String rootOid) {
         final EntityModel existingModel = entityModelByOidStr.get(rootOid);
         if(existingModel != null) {

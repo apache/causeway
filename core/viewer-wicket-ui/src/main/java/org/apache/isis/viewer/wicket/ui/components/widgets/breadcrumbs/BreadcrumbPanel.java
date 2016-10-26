@@ -23,6 +23,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
@@ -43,6 +44,11 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
     private static final long serialVersionUID = 1L;
     
     private static final String ID_BREADCRUMBS = "breadcrumbs";
+    /**
+     * A configuration setting which value determines whether the breadcrumbs should be available in the footer
+     */
+    private static final String SHOW_BREADCRUMBS_KEY = "isis.viewer.wicket.breadcrumbs.showChooser";
+    private static final boolean SHOW_BREADCRUMBS_DEFAULT = true;
 
     public BreadcrumbPanel(String id) {
         super(id);
@@ -122,5 +128,15 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         addOrReplace(breadcrumbChoice);
     }
 
-    
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        boolean shouldShow = getConfiguration().getBoolean(SHOW_BREADCRUMBS_KEY, SHOW_BREADCRUMBS_DEFAULT);
+        setVisible(shouldShow);
+    }
+
+    private IsisConfiguration getConfiguration() {
+        return getIsisSessionFactory().getConfiguration();
+    }
 }
