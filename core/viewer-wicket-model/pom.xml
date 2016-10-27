@@ -27,15 +27,15 @@
 		<version>1.14.0-SNAPSHOT</version>
 	</parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-viewer-wicket-model</artifactId>
+    <groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-core-viewer-wicket-model</artifactId>
 	<name>Apache Isis Wicket Viewer Model</name>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-wicket-applib</artifactId>
 		</dependency>
 
 		<dependency>
