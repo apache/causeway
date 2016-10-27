@@ -20,7 +20,11 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.Component;
+<<<<<<< HEAD
 import org.apache.wicket.markup.html.IHeaderContributor;
+=======
+import org.apache.wicket.Session;
+>>>>>>> origin/ISIS-1223-upgrade-to-wicket-7
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -49,8 +53,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel
-            implements IHeaderContributor {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
 
     private static final long serialVersionUID = 1L;
 

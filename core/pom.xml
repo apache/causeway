@@ -139,14 +139,15 @@
 
         <jetty.version>9.3.10.v20160621</jetty.version>
 
-        <wicket.version>6.23.0</wicket.version>
+        <wicket.version>7.3.0</wicket.version>
 
-        <wicket-webjars.version>0.4.9</wicket-webjars.version>
-        <wicket-bootstrap.version>0.9.16</wicket-bootstrap.version>
-        <wicket-source.version>6.0.0.8</wicket-source.version>
+        <wicket-webjars.version>0.5.4</wicket-webjars.version>
+        <wicket-bootstrap.version>0.10.7</wicket-bootstrap.version>
+        <wicket-source.version>7.0.0</wicket-source.version>
 
-        <wicket-select2.version>6.23.0</wicket-select2.version>
-        <select2.version>3.5.4</select2.version>
+        <wicketstuff.version>7.3.0</wicketstuff.version>
+        <select2.version>4.0.0-2</select2.version>
+
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
         <guice.version>4.1.0</guice.version>
@@ -1528,6 +1529,10 @@ ${license.additional-notes}
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>commons-io</groupId>
+                        <artifactId>commons-io</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -1619,7 +1624,7 @@ ${license.additional-notes}
 
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-select2</artifactId>
-                <version>${wicket-select2.version}</version>
+                <version>${wicketstuff.version}</version>
                 <exclusions>
                     <exclusion>
                         <!-- for dependency convergence -->
