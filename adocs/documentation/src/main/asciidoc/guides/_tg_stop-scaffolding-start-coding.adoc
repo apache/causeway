@@ -253,7 +253,7 @@ Fixture scripts are used to setup the app into a known state. They are great for
 
 == Actions
 
-Most business functionality is implemented using actions� basically a `public` method accepting domain classes and primitives as its parameter types. The action can return a domain entity, or a collection of entities, or a primitive/String/value, or void. If a domain entity is returned then that object is rendered immediately; if a collection is returned then the Wicket viewer renders a table. Such collections are sometimes called "standalone" collections.
+Most business functionality is implemented using actions basically a `public` method accepting domain classes and primitives as its parameter types. The action can return a domain entity, or a collection of entities, or a primitive/String/value, or void. If a domain entity is returned then that object is rendered immediately; if a collection is returned then the Wicket viewer renders a table. Such collections are sometimes called "standalone" collections.
 
 * write an action to update the domain property (originally called `SimpleObject#name`, though renamed by now)
 * use the xref:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout(named=...)`] annotation to specify the name of action parameters
@@ -346,7 +346,7 @@ Quick detour: often we want to set up defaults to go with choices. Sensible defa
 
 == Collections
 
-Returning back to references, Isis also supports vector (multi-valued) references to another object instances� in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
+Returning back to references, Isis also supports vector (multi-valued) references to another object instances in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
 
 * Ensure that all domain classes implement `java.lang.Comparable`
 ** use the xref:rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
@@ -530,7 +530,7 @@ Thus:
 * Inject the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInteractionContext`] (request-scoped) service
 * Use the `ActionInteractionContext` service to determine whether the action was invoked in bulk or as a regular action.
 * return null if invoked on a collection; the Wicket viewer will go back to the original collection
-** (if return non-null, then Wicket viewer will navigate to the object of the last invocation� generally not what is required)
+** (if return non-null, then Wicket viewer will navigate to the object of the last invocation generally not what is required)
 
 The similar xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
 
