@@ -142,7 +142,7 @@
         <wicket.version>7.3.0</wicket.version>
 
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
-        <wicket-bootstrap.version>0.10.7</wicket-bootstrap.version>
+        <wicket-bootstrap.version>0.10.10</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
         <wicketstuff.version>7.3.0</wicketstuff.version>
@@ -1511,7 +1511,6 @@ ${license.additional-notes}
                 <version>${resteasy-jaxrs.version}</version>
             </dependency>
 
-            <!-- Wicket -->
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket</artifactId>
@@ -1525,7 +1524,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1542,7 +1540,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1555,7 +1552,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1568,7 +1564,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1581,7 +1576,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1594,7 +1588,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1607,7 +1600,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1621,13 +1613,11 @@ ${license.additional-notes}
 
             <!-- Wicket-Select2 -->
             <dependency>
-
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-select2</artifactId>
                 <version>${wicketstuff.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
                     </exclusion>
@@ -1659,7 +1649,6 @@ ${license.additional-notes}
                 <version>${wicket-webjars.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
                     </exclusion>
@@ -1747,6 +1736,18 @@ ${license.additional-notes}
                     <exclusion>
                         <groupId>com.google.javascript</groupId>
                         <artifactId>closure-compiler</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
+                <version>4.17.37-1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>momentjs</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
