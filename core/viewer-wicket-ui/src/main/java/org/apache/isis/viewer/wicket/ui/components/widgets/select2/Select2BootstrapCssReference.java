@@ -19,11 +19,14 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.util.List;
-import com.google.common.collect.Lists;
+
 import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.ApplicationSettings;
+
+import com.google.common.collect.Lists;
 
 /**
  * A CSS reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.css</a>
@@ -38,6 +41,7 @@ public class Select2BootstrapCssReference extends CssResourceReference {
 
     @Override
     public List<HeaderItem> getDependencies() {
-        return Lists.<HeaderItem>newArrayList(CssHeaderItem.forReference(new CssResourceReference(Select2Choice.class, "res/select2.css")));
+        CssReferenceHeaderItem select2CssReference = CssHeaderItem.forReference(new CssResourceReference(ApplicationSettings.class, "res/css/select2.css"));
+        return Lists.<HeaderItem>newArrayList(select2CssReference);
     }
 }

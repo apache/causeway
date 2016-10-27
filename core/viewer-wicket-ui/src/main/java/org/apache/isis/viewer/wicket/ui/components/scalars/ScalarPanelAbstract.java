@@ -412,6 +412,15 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return false;
     }
 
+    /**
+     * Repaints this panel of just some of its children
+     *
+     * @param target The Ajax request handler
+     */
+    public void repaint(AjaxRequestTarget target) {
+        target.add(this);
+    }
+
 
     // ///////////////////////////////////////////////////////////////////
 

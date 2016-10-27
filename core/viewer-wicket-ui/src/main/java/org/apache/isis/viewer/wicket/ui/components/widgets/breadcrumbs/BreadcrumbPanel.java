@@ -23,17 +23,19 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
-import org.wicketstuff.select2.TextChoiceProvider;
 
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -61,19 +63,21 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         
-        final IModel<EntityModel> entityModel = new Model<EntityModel>();
-        TextChoiceProvider<EntityModel> choiceProvider = new TextChoiceProvider<EntityModel>() {
+        final IModel<EntityModel> entityModel = new Model<>();
+        ChoiceProvider<EntityModel> choiceProvider = new ChoiceProvider<EntityModel>() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected String getDisplayText(EntityModel choice) {
+            public String getDisplayValue(EntityModel choice) {
                 return breadcrumbModel.titleFor(choice);
             }
 
             @Override
-            protected Object getId(EntityModel choice) {
-                return breadcrumbModel.getId(choice);
+            public String getIdValue(EntityModel choice) {
+                RootOid rootOid = breadcrumbModel.getId(choice);
+                String id = OidMarshaller.INSTANCE.marshal(rootOid);
+                return id;
             }
 
             @Override
@@ -83,7 +87,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         Iterables.filter(breadCrumbList, new Predicate<EntityModel>() {
                             @Override
                             public boolean apply(final EntityModel input) {
-                                final Object id = getId(input);
+                                final Object id = getIdValue(input);
                                 return id != null;
                             }
                         })
