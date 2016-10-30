@@ -194,7 +194,7 @@ The `1.9.0` version of the plugin requires slightly different configuration.  Ra
             <plugin>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>1.9.0-SNAPSHOT</version>
+                <version>1.9.0</version>
                 <configuration>
                     <isisConfigDir>../webapp/src/main/webapp/WEB-INF</isisConfigDir>    <!--2-->
                 </configuration>
@@ -202,7 +202,7 @@ The `1.9.0` version of the plugin requires slightly different configuration.  Ra
                     <dependency>
                         <groupId>org.apache.isis.example.application</groupId>
                         <artifactId>simpleapp-dom</artifactId>
-                        <version>1.9.0-SNAPSHOT</version>
+                        <version>1.9.0</version>
                     </dependency>
                     <!-- workaround to avoid conflict with plexus-default -->
                     <dependency>
