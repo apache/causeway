@@ -493,7 +493,7 @@ public class IsisWicketApplication
         try {
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
 
-            final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration();
+            final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration("isis.deploymentType");
             String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
             deploymentType = determineDeploymentType(deploymentTypeFromConfig);
         } finally {

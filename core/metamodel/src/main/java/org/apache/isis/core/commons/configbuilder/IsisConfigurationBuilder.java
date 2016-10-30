@@ -21,10 +21,18 @@ package org.apache.isis.core.commons.configbuilder;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.cli.BasicParser;
@@ -38,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -350,8 +359,19 @@ public final class IsisConfigurationBuilder {
      *     Used while bootstrapping, to obtain the web.server port etc.
      * </p>
      */
-    public IsisConfigurationDefault peekConfiguration() {
-        return new IsisConfigurationDefault(resourceStreamSourceChain);
+    public IsisConfiguration peekConfiguration(String...keys) {
+    	IsisConfigurationDefault cfg = new IsisConfigurationDefault(resourceStreamSourceChain);
+    	// no locking
+    	final Set<String> keysToCopy = new HashSet<String>(Arrays.asList(Optional.of(keys).or(new String[0])));
+    	Properties props = new Properties();
+    	props.putAll(Maps.filterEntries(configuration.asMap(), new Predicate<Entry<String, String>>() {
+			@Override
+			public boolean apply(Entry<String, String> entry) {
+				return keysToCopy.contains(entry.getKey());
+			}
+		}));
+    	cfg.add(props, ContainsPolicy.OVERWRITE);    	
+    	return cfg;
     }
 
     private void ensureNotLocked() {
