@@ -52,7 +52,7 @@ over the WAR file itself.
 
 == Using system properties
 
-(As of `1.13.1-SNAPSHOT`), the servlet context initializer will search for any system properties called `isis.xxx`
+The servlet context initializer will search for any system properties called `isis.xxx`
  and if present will use them as overrides.
 
 Thus, an alternative option for a Docker image is to bootstrap the servlet container (Tomcat, Jetty) with appropriate
@@ -63,9 +63,9 @@ The Docker's `ENTRYPOINT` therefore just needs to parse the Docker container's o
 create this file.
 
 
-== Using the `ISIS_OPT` environment variable
+== Using the `ISIS_OPTS` environment variable
 
-(As of `1.13.1-SNAPSHOT`), the servlet context initializer will search for an environment variable called `$ISIS_OPTS`
+The servlet context initializer will search for an environment variable called `$ISIS_OPTS`
  and if present will parse the content as a set of key/value pairs.  Each key/value pair is separated by "||".
 
 For example:

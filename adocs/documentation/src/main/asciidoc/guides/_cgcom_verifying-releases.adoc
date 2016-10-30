@@ -280,7 +280,7 @@ Assuming that everything builds ok, then test the archetypes (adjust version as 
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.13.0 \
+    -D archetypeVersion=1.14.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
