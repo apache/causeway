@@ -80,7 +80,10 @@ public @interface Command {
          * @deprecated - use {@link CommandExecuteIn#BACKGROUND}
          */
         @Deprecated
-        BACKGROUND
+        BACKGROUND;
+
+
+
     }
 
 

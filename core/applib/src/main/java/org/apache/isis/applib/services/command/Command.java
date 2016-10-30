@@ -74,7 +74,6 @@ public interface Command extends HasTransactionId {
     String ACTION_IDENTIFIER_FOR_EDIT = "(edit)";
 
 
-
     //region > user (property)
     /**
      * The user that created the command.
@@ -140,7 +139,7 @@ public interface Command extends HasTransactionId {
      * Implementation notes: set when the action is invoked (in <tt>ActionInvocationFacet</tt>) or in
      * property edited (in <tt>PropertySetterFacet</tt>).
      */
-    void setMemberIdentifier(String actionIdentifier);
+    void setMemberIdentifier(String memberIdentifier);
 
     //endregion
 

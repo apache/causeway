@@ -29,8 +29,8 @@
 
 	<name>Apache Isis Wicket Viewer Implementation</name>
 
-    <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-viewer-wicket-impl</artifactId>
+    <groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-core-viewer-wicket-impl</artifactId>
 
 	<build>
 		<resources>
@@ -53,8 +53,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-wicket-ui</artifactId>
 		</dependency>
 
 		<dependency>

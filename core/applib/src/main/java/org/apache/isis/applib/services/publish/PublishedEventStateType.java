@@ -16,26 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.publish;
 
-public enum EventType {
-    ACTION_INVOCATION,
-    OBJECT_CREATED,
-    OBJECT_UPDATED,
-    OBJECT_DELETED;
+/**
+ * @deprecated  - used only by isis addons' publishing module, for state of events being polled.
+ */
+@Deprecated
+public class PublishedEventStateType {
 
-    public static class Type {
+    private PublishedEventStateType() {}
 
-        private Type() {}
+    public static class Meta {
 
-        public static class Meta {
+        public static final int MAX_LEN = 20;
 
-            public static final int MAX_LEN = 20;
+        private Meta() {}
 
-            private Meta() {}
-
-        }
     }
 
 }

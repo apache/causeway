@@ -22,6 +22,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Settings;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -536,7 +540,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return getIsisSessionFactory().getConfiguration();
     }
 
-
-
-
+    /**
+     * Repaints just the Select2 component
+     *
+     * @param target The Ajax request handler
+     */
+    @Override
+    public void repaint(AjaxRequestTarget target) {
+        target.add(select2Field);
+    }
 }

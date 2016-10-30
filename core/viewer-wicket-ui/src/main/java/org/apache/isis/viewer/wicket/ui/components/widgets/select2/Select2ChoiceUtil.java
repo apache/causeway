@@ -35,12 +35,23 @@ public final class Select2ChoiceUtil  {
     public static Select2Choice<ObjectAdapterMemento> newSelect2Choice(String id, final IModel<ObjectAdapterMemento> modelObject, ScalarModel scalarModel) {
         Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<>(id, modelObject, EmptyChoiceProvider.INSTANCE);
         select2Choice.setRequired(scalarModel.isRequired());
+        select2Choice.setOutputMarkupPlaceholderTag(true);
         return select2Choice;
     }
 
     private static class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
 
         private static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
+
+        @Override
+        public String getDisplayValue(ObjectAdapterMemento object) {
+            return null;
+        }
+
+        @Override
+        public String getIdValue(ObjectAdapterMemento object) {
+            return null;
+        }
 
         @Override
         public void query(String term, int page, Response<ObjectAdapterMemento> response) {
@@ -55,6 +66,11 @@ public final class Select2ChoiceUtil  {
         @Override
         public Collection<ObjectAdapterMemento> toChoices(Collection<String> ids) {
             return null;
+        }
+
+        @Override
+        public void detach() {
+
         }
     }
 }

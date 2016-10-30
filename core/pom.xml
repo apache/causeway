@@ -139,14 +139,15 @@
 
         <jetty.version>9.3.10.v20160621</jetty.version>
 
-        <wicket.version>6.23.0</wicket.version>
+        <wicket.version>7.5.0</wicket.version>
 
-        <wicket-webjars.version>0.4.9</wicket-webjars.version>
-        <wicket-bootstrap.version>0.9.16</wicket-bootstrap.version>
-        <wicket-source.version>6.0.0.8</wicket-source.version>
+        <wicket-webjars.version>0.5.4</wicket-webjars.version>
+        <wicket-bootstrap.version>0.10.10</wicket-bootstrap.version>
+        <wicket-source.version>7.0.0</wicket-source.version>
 
-        <wicket-select2.version>6.23.0</wicket-select2.version>
-        <select2.version>3.5.4</select2.version>
+        <wicketstuff.version>7.5.0</wicketstuff.version>
+        <select2.version>4.0.2</select2.version>
+
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
         <guice.version>4.1.0</guice.version>
@@ -1244,42 +1245,42 @@ ${license.additional-notes}
             
             <!-- also for benefit of application developers, using scope=import -->
             <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-applib</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-applib</artifactId>
                 <version>1.14.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-model</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-model</artifactId>
                 <version>1.14.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-model</artifactId>
-                <version>1.14.0-SNAPSHOT</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.14.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-ui</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-model</artifactId>
                 <version>1.14.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-impl</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-ui</artifactId>
                 <version>1.14.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket-impl</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-ui</artifactId>
+                <version>1.14.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-impl</artifactId>
+                <version>1.14.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-wicket-impl</artifactId>
                 <version>1.14.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
@@ -1510,7 +1511,6 @@ ${license.additional-notes}
                 <version>${resteasy-jaxrs.version}</version>
             </dependency>
 
-            <!-- Wicket -->
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket</artifactId>
@@ -1524,9 +1524,12 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-io</groupId>
+                        <artifactId>commons-io</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1537,7 +1540,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1550,7 +1552,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1563,7 +1564,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1576,7 +1576,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1589,7 +1588,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1602,7 +1600,6 @@ ${license.additional-notes}
                 <version>${wicket.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
@@ -1616,13 +1613,11 @@ ${license.additional-notes}
 
             <!-- Wicket-Select2 -->
             <dependency>
-
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-select2</artifactId>
-                <version>${wicket-select2.version}</version>
+                <version>${wicketstuff.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
                     </exclusion>
@@ -1654,7 +1649,6 @@ ${license.additional-notes}
                 <version>${wicket-webjars.version}</version>
                 <exclusions>
                     <exclusion>
-                        <!-- for dependency convergence -->
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
                     </exclusion>
@@ -1742,6 +1736,18 @@ ${license.additional-notes}
                     <exclusion>
                         <groupId>com.google.javascript</groupId>
                         <artifactId>closure-compiler</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>Eonasdan-bootstrap-datetimepicker</artifactId>
+                <version>4.17.37-1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>momentjs</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

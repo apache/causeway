@@ -60,7 +60,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         owningPanel.convertInput();
     }
 

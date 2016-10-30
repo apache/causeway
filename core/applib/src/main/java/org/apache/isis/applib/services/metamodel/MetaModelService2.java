@@ -32,7 +32,8 @@ public interface MetaModelService2 extends MetaModelService {
         DOMAIN_SERVICE,
         MIXIN,
         VALUE,
-        COLLECTION;
+        COLLECTION,
+        UNKNOWN;
 
         public boolean isDomainService() {
             return this == DOMAIN_SERVICE;
@@ -58,11 +59,23 @@ public interface MetaModelService2 extends MetaModelService {
             return this == JDO_ENTITY;
         }
 
+        public boolean isUnknown() {
+            return this == UNKNOWN;
+        }
+
     }
 
+    /**
+     * @deprecated - use {@link MetaModelService3#sortOf(Class, org.apache.isis.applib.services.metamodel.MetaModelService3.Mode)}
+     */
+    @Deprecated
     @Programmatic
     Sort sortOf(final Class<?> domainType);
 
+    /**
+     * @deprecated - use {@link MetaModelService3#sortOf(Bookmark, org.apache.isis.applib.services.metamodel.MetaModelService3.Mode)}
+     */
+    @Deprecated
     @Programmatic
     Sort sortOf(final Bookmark bookmark);
 

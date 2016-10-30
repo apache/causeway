@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.Application;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -32,7 +33,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverte
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaUtilDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigDecimalConverterWithScale;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigIntegerConverter;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDateTime;
@@ -86,7 +86,7 @@ public class IsisConverterLocator {
         } else if (java.sql.Timestamp.class == correspondingClass) {
             converter = new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy);
         } else if (java.math.BigInteger.class == correspondingClass) {
-            converter = BigIntegerConverter.INSTANCE;
+            converter = new BigIntegerConverter();
         } else if (java.math.BigDecimal.class == correspondingClass) {
             final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
             Integer scale = null;

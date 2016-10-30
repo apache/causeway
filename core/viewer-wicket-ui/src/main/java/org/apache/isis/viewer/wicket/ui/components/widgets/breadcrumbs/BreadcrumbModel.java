@@ -116,7 +116,7 @@ public class BreadcrumbModel implements Serializable {
         }
     }
 
-    public Object getId(final EntityModel choice) {
+    public RootOid getId(final EntityModel choice) {
         try {
             final PageParameters pageParameters = choice.getPageParameters();
             final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
@@ -127,7 +127,6 @@ public class BreadcrumbModel implements Serializable {
         }
 
     }
-
 
     void remove(final String rootOid) {
         final EntityModel existingModel = entityModelByOidStr.get(rootOid);

@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -179,7 +180,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             final Predicate<ObjectAdapterMemento> lookupOam = new Predicate<ObjectAdapterMemento>() {
                 @Override
                 public boolean apply(ObjectAdapterMemento input) {
-                    final String id = (String) getId(input);
+                    final String id = getIdValue(input);
                     return ids.contains(id);
                 }
             };
@@ -250,6 +251,16 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
         setChoices(argsIfAvailable);
         return true;
+    }
+
+    /**
+     * Repaints just the Select2 component
+     *
+     * @param target The Ajax request handler
+     */
+    @Override
+    public void repaint(AjaxRequestTarget target) {
+        target.add(select2Field);
     }
 
     /**

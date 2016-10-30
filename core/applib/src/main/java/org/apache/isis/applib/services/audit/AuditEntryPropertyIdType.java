@@ -16,26 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.audit;
 
-package org.apache.isis.applib.services.publish;
+public class AuditEntryPropertyIdType {
 
-public enum EventType {
-    ACTION_INVOCATION,
-    OBJECT_CREATED,
-    OBJECT_UPDATED,
-    OBJECT_DELETED;
+    private AuditEntryPropertyIdType() {}
 
-    public static class Type {
+    public static class Meta {
 
-        private Type() {}
+        public static final int MAX_LEN = 50;
 
-        public static class Meta {
+        private Meta() {}
 
-            public static final int MAX_LEN = 20;
-
-            private Meta() {}
-
-        }
     }
 
 }

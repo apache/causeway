@@ -797,9 +797,19 @@ tr.headers th form input {
     margin-bottom: 10px;
 }
 
-.stringPanel .scalarValueInput .editing .edit {
+.scalarValueInput .editing .edit {
     margin-top: -20px;
-	z-index: 2;
+	z-index: 20000;
+}
+
+.booleanPanel .scalarValueInput .editing .edit {
+    margin-top: 0px;
+}
+
+@-moz-document url-prefix() {
+    .scalarValueInput .editing .edit {
+        margin-right: -17px;
+    }
 }
 
 .actions-right .scalarPlaceholder .scalarValueInput {

@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
 
 import org.datanucleus.enhancement.Persistable;
@@ -36,7 +34,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
-import org.apache.isis.applib.services.metamodel.MetaModelService2;
+import org.apache.isis.applib.services.metamodel.MetaModelService3;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -50,7 +48,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class MetaModelServiceDefault implements MetaModelService2 {
+public class MetaModelServiceDefault implements MetaModelService3 {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
@@ -156,11 +154,17 @@ public class MetaModelServiceDefault implements MetaModelService2 {
 
 
 
-
     // //////////////////////////////////////
 
     @Override
     public Sort sortOf(final Class<?> domainType) {
+        return sortOf(domainType, Mode.STRICT);
+    }
+
+
+    @Override
+    public Sort sortOf(
+            final Class<?> domainType, final Mode mode) {
         if(domainType == null) {
             return null;
         }
@@ -184,19 +188,26 @@ public class MetaModelServiceDefault implements MetaModelService2 {
         if(Persistable.class.isAssignableFrom(correspondingClass)) {
             return Sort.JDO_ENTITY;
         }
+        if(mode == Mode.RELAXED) {
+            return Sort.UNKNOWN;
+        }
         throw new IllegalArgumentException(String.format(
                 "Unable to determine what sort of domain object is '%s'", objectSpec.getFullIdentifier()));
     }
 
     @Override
     public Sort sortOf(final Bookmark bookmark) {
+        return sortOf(bookmark, Mode.STRICT);
+    }
+
+    @Override
+    public Sort sortOf(final Bookmark bookmark, final Mode mode) {
         if(bookmark == null) {
             return null;
         }
         final Class<?> domainType = this.fromObjectType(bookmark.getObjectType());
-        return sortOf(domainType);
+        return sortOf(domainType, mode);
     }
-
 
 
 

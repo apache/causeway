@@ -19,7 +19,7 @@
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"  
       lang="en">
     <body>
@@ -27,12 +27,13 @@
             <div class="valueChoicesSelect2Panel scalarNameAndValueComponentType">
                 <div class="form-group" wicket:id="scalarIfRegular">
                     <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
+
                     <span class="scalarValueWrapper">
                         <div class="scalarPlaceholder">
                             <span class="scalarValueInput">
                                 <span class="editing">
-                                    <input wicket:id="scalarValue" type="hidden" class="choices input-sm select2-remote" style="width: 99.8%; padding: 0"/>
-                                        <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+                                    <select wicket:id="scalarValue" class="choices input-sm select2-remote" style="width: 99.8%;"></select>
+                                    <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
                                 </span>
                             </span>
                             <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight"></span>
@@ -40,7 +41,7 @@
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
-                    <div class="clearfix"/>
+                    <div class="clearfix"></div>
                 </div>
                 <span wicket:id="scalarIfCompact"></span>
             </div>

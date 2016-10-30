@@ -16,26 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.metamodel;
 
-package org.apache.isis.applib.services.publish;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
-public enum EventType {
-    ACTION_INVOCATION,
-    OBJECT_CREATED,
-    OBJECT_UPDATED,
-    OBJECT_DELETED;
+/**
+ * This service provides a formal API into Isis' metamodel.
+ */
+public interface MetaModelService3 extends MetaModelService2 {
 
-    public static class Type {
-
-        private Type() {}
-
-        public static class Meta {
-
-            public static final int MAX_LEN = 20;
-
-            private Meta() {}
-
-        }
+    enum Mode {
+        /**
+         * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then throw an exception.
+         */
+        STRICT,
+        /**
+         * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link Sort#UNKNOWN}.
+         */
+        RELAXED
     }
+
+    @Programmatic
+    Sort sortOf(final Class<?> domainType, final Mode mode);
+
+    @Programmatic
+    Sort sortOf(final Bookmark bookmark, final Mode mode);
 
 }
