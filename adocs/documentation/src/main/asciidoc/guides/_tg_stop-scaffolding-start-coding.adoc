@@ -253,7 +253,7 @@ Fixture scripts are used to setup the app into a known state. They are great for
 
 == Actions
 
-Most business functionality is implemented using actions� basically a `public` method accepting domain classes and primitives as its parameter types. The action can return a domain entity, or a collection of entities, or a primitive/String/value, or void. If a domain entity is returned then that object is rendered immediately; if a collection is returned then the Wicket viewer renders a table. Such collections are sometimes called "standalone" collections.
+Most business functionality is implemented using actions basically a `public` method accepting domain classes and primitives as its parameter types. The action can return a domain entity, or a collection of entities, or a primitive/String/value, or void. If a domain entity is returned then that object is rendered immediately; if a collection is returned then the Wicket viewer renders a table. Such collections are sometimes called "standalone" collections.
 
 * write an action to update the domain property (originally called `SimpleObject#name`, though renamed by now)
 * use the xref:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout(named=...)`] annotation to specify the name of action parameters
@@ -299,7 +299,7 @@ Domain entities have state: either values (primitives, strings) or references to
 
 * add some xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties[value properties]; also:
 * for string properties
-** use the xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`@Property(multiLine=...)`] annotation to render a text area instead of a text box
+** use the xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`@PropertyLayout(multiLine=...)`] annotation to render a text area instead of a text box
 ** use the xref:rgant.adoc#_rgant-Property_maxLength[`@Property(maxLength=...)`] annotation to specify the maximum number of characters allowable
 ** use joda date/time properties, bigdecimals and blob/clob properties
 * use the xref:rgant.adoc#_rgant-Property_optionality[`@Column(allowsNull=...)`] annotation specify whether a property is optional or mandatory
@@ -308,7 +308,7 @@ Domain entities have state: either values (primitives, strings) or references to
 * for all non-optional properties will either need to prompt for a value, or calculate some suitable default
 * change the implementation of title, if need be
 * revisit the title, consider whether to use the xref:rgant.adoc#_rgant-Title[`@Title`] annotation
-** rather than the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] `title()` method
+** rather than the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method
 * order the properties using the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`], also `@MemberGroupLayout`
 ** see also the docs on xref:ugfun.adoc#_ugfun_object-layout_static[static layouts]
 * use the xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
@@ -346,11 +346,11 @@ Quick detour: often we want to set up defaults to go with choices. Sensible defa
 
 == Collections
 
-Returning back to references, Isis also supports vector (multi-valued) references to another object instances� in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
+Returning back to references, Isis also supports vector (multi-valued) references to another object instances in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
 
 * Ensure that all domain classes implement `java.lang.Comparable`
 ** use the xref:rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
-*** you can also `equals()`, `hashCode()`, `toString()`
+*** you can also implement `equals()`, `hashCode()`, `toString()`
 * Add a xref:ugfun.adoc#_ugfun_how-tos_class-structure_collections[collection] to one of the entities
 ** Use `SortedSet` as the class
 ** Use the xref:rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
@@ -530,7 +530,7 @@ Thus:
 * Inject the xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInteractionContext`] (request-scoped) service
 * Use the `ActionInteractionContext` service to determine whether the action was invoked in bulk or as a regular action.
 * return null if invoked on a collection; the Wicket viewer will go back to the original collection
-** (if return non-null, then Wicket viewer will navigate to the object of the last invocation� generally not what is required)
+** (if return non-null, then Wicket viewer will navigate to the object of the last invocation generally not what is required)
 
 The similar xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
 

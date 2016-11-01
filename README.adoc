@@ -1,6 +1,6 @@
 = Apache Isis
 
-_http://isis.apache.org[Apache Isis]� software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
+_http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
 Get started using our "simpleapp" https://isis.apache.org/guides/ugfun.html#_ugfun_getting-started_simpleapp-archetype[Maven archetype].
 
@@ -17,7 +17,7 @@ The todoapp also integrates with a number of other http://www.isisaddons.org[Isi
 
 === Sign-in
 
-Apache Isis integrates with http://shiro.apache.org[Apache Shiro]�. The core framework supports file-based realms, while the Isis Addons http://github.com/isisaddons/isis-module-security[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel. The example todoapp integrates with the security module.
+Apache Isis integrates with http://shiro.apache.org[Apache Shiro]. The core framework supports file-based realms, while the Isis Addons http://github.com/isisaddons/isis-module-security[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel. The example todoapp integrates with the security module.
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/010-login.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/010-login.png"]
 
@@ -80,7 +80,7 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 
 == Extensible Views
 
-The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket]�, and has been architected to be extensible. For example, when a collection of objects is rendered, this is just one several views, as shown in the selector drop-down:
+The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been architected to be extensible. For example, when a collection of objects is rendered, this is just one several views, as shown in the selector drop-down:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/070-pluggable-views.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/070-pluggable-views.png"]
 
