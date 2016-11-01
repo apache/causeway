@@ -17,14 +17,14 @@ For an action the signature of the supporting method is either:
 
 [source,java]
 ----
-public bool hideXxx(...) { ... }
+public boolean hideXxx(...) { ... }
 ----
 
 where the supporting method takes the same parameter types as the action itself, or more simply:
 
 [source,java]
 ----
-public bool hideXxx() { ... }
+public boolean hideXxx() { ... }
 ----
 
 with no parameters at all.  Returning `true` will hide the action, returning `false` leaves it visible.

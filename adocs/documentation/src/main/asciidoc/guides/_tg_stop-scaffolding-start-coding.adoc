@@ -299,7 +299,7 @@ Domain entities have state: either values (primitives, strings) or references to
 
 * add some xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties[value properties]; also:
 * for string properties
-** use the xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`@Property(multiLine=...)`] annotation to render a text area instead of a text box
+** use the xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`@PropertyLayout(multiLine=...)`] annotation to render a text area instead of a text box
 ** use the xref:rgant.adoc#_rgant-Property_maxLength[`@Property(maxLength=...)`] annotation to specify the maximum number of characters allowable
 ** use joda date/time properties, bigdecimals and blob/clob properties
 * use the xref:rgant.adoc#_rgant-Property_optionality[`@Column(allowsNull=...)`] annotation specify whether a property is optional or mandatory
@@ -308,7 +308,7 @@ Domain entities have state: either values (primitives, strings) or references to
 * for all non-optional properties will either need to prompt for a value, or calculate some suitable default
 * change the implementation of title, if need be
 * revisit the title, consider whether to use the xref:rgant.adoc#_rgant-Title[`@Title`] annotation
-** rather than the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] `title()` method
+** rather than the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method
 * order the properties using the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`], also `@MemberGroupLayout`
 ** see also the docs on xref:ugfun.adoc#_ugfun_object-layout_static[static layouts]
 * use the xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
@@ -350,7 +350,7 @@ Returning back to references, Isis also supports vector (multi-valued) reference
 
 * Ensure that all domain classes implement `java.lang.Comparable`
 ** use the xref:rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
-*** you can also `equals()`, `hashCode()`, `toString()`
+*** you can also implement `equals()`, `hashCode()`, `toString()`
 * Add a xref:ugfun.adoc#_ugfun_how-tos_class-structure_collections[collection] to one of the entities
 ** Use `SortedSet` as the class
 ** Use the xref:rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
