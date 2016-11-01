@@ -123,7 +123,7 @@ public class WebServer {
         // create and start
         jettyServer = createJettyServerAndBindConfig(isisConfigurationBuilder);
 
-        final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration(EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY);
+        final IsisConfiguration configuration = isisConfigurationBuilder.peekConfiguration();
         final String startupModeStr = configuration.getString(
                 EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT);
         final StartupMode startupMode = StartupMode.lookup(startupModeStr);
@@ -156,7 +156,7 @@ public class WebServer {
     private Server createJettyServerAndBindConfig(final IsisConfigurationBuilder configurationBuilder) {
 
         // the Isis system is actually bootstrapped by the ServletContextInitializer in the web.xml
-        final IsisConfiguration configuration = configurationBuilder.peekConfiguration(EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY);
+        final IsisConfiguration configuration = configurationBuilder.peekConfiguration();
         final int port = configuration.getInteger(
                 EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
         final String webappContextPath = configuration.getString(

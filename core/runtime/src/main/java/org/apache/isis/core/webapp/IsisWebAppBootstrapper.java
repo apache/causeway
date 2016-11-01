@@ -191,7 +191,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             return deploymentTypeStr;
         }
 
-        deploymentTypeStr = isisConfigurationBuilder.peekConfiguration(SystemConstants.DEPLOYMENT_TYPE_KEY).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        deploymentTypeStr = isisConfigurationBuilder.peekConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr != null) {
             return deploymentTypeStr;
         }
