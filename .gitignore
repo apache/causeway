@@ -3,6 +3,7 @@
 *.class
 bin/
 target/
+.asciidoctor/
 target-ide/
 logs/
 .settings/

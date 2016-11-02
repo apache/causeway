@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.services.tablecol;
 
-import java.util.Set;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -25,16 +25,16 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface TableColumnOrderService {
 
     @Programmatic
-    Set<String> orderParented(
+    List<String> orderParented(
             final Object parent,
             final String collectionId,
             final Class<?> collectionType,
-            final Set<String> propertyIds);
+            final List<String> propertyIds);
 
     @Programmatic
-    Set<String> orderStandalone(
+    List<String> orderStandalone(
             final Class<?> collectionType,
-            final Set<String> propertyIds);
+            final List<String> propertyIds);
 
     /**
      * Used as a fallback.
@@ -43,16 +43,18 @@ public interface TableColumnOrderService {
     public static class Default implements TableColumnOrderService {
 
         @Override
-        public Set<String> orderParented(
+        public List<String> orderParented(
                 final Object parent,
                 final String collectionId,
                 final Class<?> collectionType,
-                final Set<String> propertyIds) {
+                final List<String> propertyIds) {
             return propertyIds;
         }
 
         @Override
-        public Set<String> orderStandalone(final Class<?> collectionType, final Set<String> propertyIds) {
+        public List<String> orderStandalone(
+                final Class<?> collectionType,
+                final List<String> propertyIds) {
             return propertyIds;
         }
     }

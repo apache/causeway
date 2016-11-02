@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -192,29 +191,14 @@ public class CollectionContentsAsAjaxTablePanel
         for (final ObjectAssociation property : propertyList) {
             propertyById.put(property.getId(), property);
         }
-        Set<String> propertyIds = propertyById.keySet();
+        List<String> propertyIds = Lists.newArrayList(propertyById.keySet());
 
         // optional SPI to reorder
         final List<TableColumnOrderService> tableColumnOrderServices =
                 getServicesInjector().lookupServices(TableColumnOrderService.class);
 
-        Set<String> propertyReorderedIds = null;
-        for (TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
-            final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
-
-            final Class<?> collectionType = getModel().getTypeOfSpecification().getCorrespondingClass();
-
-            if(parentObjectAdapterMemento != null) {
-                final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento
-                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
-                final Object parent = parentObjectAdapter.getObject();
-                final String collectionId = getModel().getCollectionMemento().getId();
-                propertyReorderedIds =
-                        tableColumnOrderService.orderParented(parent, collectionId, collectionType, propertyIds);
-            } else {
-                propertyReorderedIds =
-                        tableColumnOrderService.orderStandalone(collectionType, propertyIds);
-            }
+        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
+            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
             if(propertyReorderedIds != null) {
                 propertyIds = propertyReorderedIds;
                 break;
@@ -225,6 +209,25 @@ public class CollectionContentsAsAjaxTablePanel
             final ObjectAssociation property = propertyById.get(propertyId);
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
             columns.add(nopc);
+        }
+    }
+
+    private List<String> reordered(
+            final TableColumnOrderService tableColumnOrderService,
+            final List<String> propertyIds) {
+
+        final Class<?> collectionType = getModel().getTypeOfSpecification().getCorrespondingClass();
+
+        final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
+        if(parentObjectAdapterMemento != null) {
+            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento
+                    .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
+            final Object parent = parentObjectAdapter.getObject();
+            final String collectionId = getModel().getCollectionMemento().getId();
+
+            return tableColumnOrderService.orderParented(parent, collectionId, collectionType, propertyIds);
+        } else {
+            return tableColumnOrderService.orderStandalone(collectionType, propertyIds);
         }
     }
 
