@@ -130,6 +130,18 @@ Used by the xref:ugvw.adoc#[Wicket viewer] only.
 
 
 
+|xref:rgsvc.adoc#_rgsvc_spi_TableColumnOrderService[`o.a.i.applib.` +
+`services.tablecol` +
+`TableColumn-` +
+`OrderService`]
+|Allows the columns of a parented or standalone table to be reordered, based upon the parent object, collection id and type of object in the collection..
+|`TableColumn-` +
+`OrderService.Default` +
+``o.a.i.core`` +
+``isis-core-applib``
+|
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_TranslationService[`o.a.i.applib.` +
 `services.i18n` +
 `TranslationService`]
@@ -195,6 +207,7 @@ include::_rgsvc_spi_GridService.adoc[leveloffset=+1]
 include::_rgsvc_spi_HintStore.adoc[leveloffset=+1]
 include::_rgsvc_spi_LocaleProvider.adoc[leveloffset=+1]
 include::_rgsvc_spi_RoutingService.adoc[leveloffset=+1]
+include::_rgsvc_spi_TableColumnOrderService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationsResolver.adoc[leveloffset=+1]
 include::_rgsvc_spi_UrlEncodingService.adoc[leveloffset=+1]
