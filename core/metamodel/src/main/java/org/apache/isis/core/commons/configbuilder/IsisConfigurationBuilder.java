@@ -22,22 +22,18 @@ package org.apache.isis.core.commons.configbuilder;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -45,6 +41,11 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsi
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 /**
  * Holds a mutable set of properties representing the configuration.
@@ -71,7 +72,7 @@ public final class IsisConfigurationBuilder {
 
     private final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
 
-    private final IsisConfigurationDefault configuration;
+    /* package */ final IsisConfigurationDefault configuration;
     private boolean locked;
 
     private final Set<String> configurationResourcesFound = Sets.newLinkedHashSet();
@@ -350,8 +351,13 @@ public final class IsisConfigurationBuilder {
      *     Used while bootstrapping, to obtain the web.server port etc.
      * </p>
      */
-    public IsisConfigurationDefault peekConfiguration() {
-        return new IsisConfigurationDefault(resourceStreamSourceChain);
+    public IsisConfiguration peekConfiguration() {
+    	IsisConfigurationDefault cfg = new IsisConfigurationDefault(resourceStreamSourceChain);
+    	// no locking
+    	Properties props = new Properties();
+    	props.putAll(configuration.asMap());
+    	cfg.add(props, ContainsPolicy.OVERWRITE);    	
+    	return cfg;
     }
 
     private void ensureNotLocked() {
