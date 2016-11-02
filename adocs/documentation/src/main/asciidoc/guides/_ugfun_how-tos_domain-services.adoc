@@ -36,7 +36,7 @@ The application provides the `@DomainService(nature=...)` annotation that helps 
 
 - `VIEW` indicates that the actions should appear both on the menu and also be used as contributions
 - `VIEW_MENU_ONLY` indicates that the actions should appear on the menu
-- `VIEW_CONTRIBUTED_ONLY` indicates that the actions should appear on the menu
+- `VIEW_CONTRIBUTIONS_ONLY` indicates that the actions should not appear on the menu
 - `DOMAIN` indicates that the actions are for other domain objects to invoke (either directly or indirectly through the event bus), but in any case should not be rendered at all in the UI
 
 Pulling all the above together, here are our suggestions as to how you should organize your domain services.

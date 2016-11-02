@@ -20,8 +20,11 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,12 +36,14 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -183,7 +188,41 @@ public class CollectionContentsAsAjaxTablePanel
                 associationDoesNotReferenceParent(parentSpecIfAny));
         
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED, filter);
+        final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
         for (final ObjectAssociation property : propertyList) {
+            propertyById.put(property.getId(), property);
+        }
+        Set<String> propertyIds = propertyById.keySet();
+
+        // optional SPI to reorder
+        final List<TableColumnOrderService> tableColumnOrderServices =
+                getServicesInjector().lookupServices(TableColumnOrderService.class);
+
+        Set<String> propertyReorderedIds = null;
+        for (TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
+            final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
+
+            final Class<?> collectionType = getModel().getTypeOfSpecification().getCorrespondingClass();
+
+            if(parentObjectAdapterMemento != null) {
+                final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento
+                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
+                final Object parent = parentObjectAdapter.getObject();
+                final String collectionId = getModel().getCollectionMemento().getId();
+                propertyReorderedIds =
+                        tableColumnOrderService.orderParented(parent, collectionId, collectionType, propertyIds);
+            } else {
+                propertyReorderedIds =
+                        tableColumnOrderService.orderStandalone(collectionType, propertyIds);
+            }
+            if(propertyReorderedIds != null) {
+                propertyIds = propertyReorderedIds;
+                break;
+            }
+        }
+
+        for (final String propertyId : propertyIds) {
+            final ObjectAssociation property = propertyById.get(propertyId);
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
             columns.add(nopc);
         }
@@ -240,6 +279,12 @@ public class CollectionContentsAsAjaxTablePanel
     protected WicketViewerSettings getSettings() {
         return settings;
     }
+
+
+    protected ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
 
     //endregion
 
