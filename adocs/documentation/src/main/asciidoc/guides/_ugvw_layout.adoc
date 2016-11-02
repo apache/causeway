@@ -6,7 +6,12 @@
 
 
 
-The wicket viewer has full support for the various methods of specifying the xref:ugfun.adoc#_ugfun_object-layout[layout of objects], either statically or dynamically.
+The layout of domain objects can be controlled either through annotations, or through the supplementary `layout.xml` file.
+Of these, the `layout.xml` file is superior; it offers more flexibility, and can be reloaded at runtime, thereby reducing the feedback loop.
+
+In addition, the layout can be fine-tuned using the xref:rgsvc.adoc#_rgsvc_spi_TableColumnOrderService[`TableColumnOrderService`] optional SPI service (`1.14.0-SNAPSHOT`).
+
+== `layout.xml`
 
 For more information, see:
 
@@ -18,5 +23,52 @@ For more information, see:
 
 * xref:rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
 
+
+
+== Reordering columns (`1.14.0-SNAPSHOT`)
+
+The optional xref:rgsvc.adoc#_rgsvc_spi_TableColumnOrderService[`TableColumnOrderService`] SPI service can be used to reorder columns in a table, either for a parented collection (owned by parent domain object) or a standalone collection (returned from an action invocation).
+
+For example, suppose there is a `Customer` and an `Order`:
+
+[plantuml, {_imagesdir}/wicket-viewer/layouts/customer-order, png]
+....
+Customer "1" *--> "many" Order : orders
+
+class Order {
+    int num
+    Date placedOn
+    Date shippedOn
+    State state
+}
+....
+
+The order of these properties of `Order`, when rendered in the context of its owning `Customer`, can be controlled using this implementation of `TableColumnOrderService`:
+
+[source,java]
+----
+@DomainService(
+    nature = NatureOfService.DOMAIN,
+    menuOrder = "100"                               // <1>
+)
+public class TableColumnOrderServiceForCustomerOrders
+                 implements TableColumnOrderService {
+    public List<String> orderParented(
+            final Object parent,
+            final String collectionId,
+            final Class<?> collectionType,
+            final List<String> propertyIds) {
+        return parent instanceof Customer && "orders".equals(collectionId)
+             ? Arrays.asList("num", "placedOn", "state", "shippedOn")
+             : null;
+    }
+    public List<String> orderStandalone(
+            final Class<?> collectionType,
+            final List<String> propertyIds) {
+        return null;
+    }
+}
+----
+<1> specifies the order in which the `TableColumnOrderService` implementations are called.
 
 
