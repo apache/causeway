@@ -47,6 +47,7 @@
         <asciidoctor.maven.plugin.version>1.5.3</asciidoctor.maven.plugin.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.11</asciidoctorj.pdf.version>
         <asciidoctorj.version>1.5.4</asciidoctorj.version>
+        <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
         <jruby.version>1.7.21</jruby.version>
 
         <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
@@ -122,7 +123,27 @@
                             <artifactId>asciidoctorj</artifactId>
                             <version>${asciidoctorj.version}</version>
                         </dependency>
+                        <dependency>
+                            <groupId>org.asciidoctor</groupId>
+                            <artifactId>asciidoctorj-diagram</artifactId>
+                            <version>${asciidoctorj.diagram.version}</version>
+                        </dependency>
                     </dependencies>
+                    <configuration>
+                        <!-- If you set baseDir to ${project.basedir}, top-level includes are resolved relative to the project root -->
+                        <!--
+                        <baseDir>${project.basedir}</baseDir>
+                        -->
+                        <!-- Attributes common to all output formats -->
+                        <attributes>
+                            <endpoint-url>http://isis.apache.org</endpoint-url>
+                            <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                            <project-version>${project.version}</project-version>
+                        </attributes>
+                        <requires>
+                            <require>asciidoctor-diagram</require>
+                        </requires>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
