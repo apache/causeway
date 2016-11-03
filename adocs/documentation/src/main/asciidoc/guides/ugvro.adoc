@@ -31,7 +31,7 @@ The user guides available are:
 * xref:ugfun.adoc#[Fundamentals]
 * xref:ugvw.adoc#[Wicket viewer]
 * xref:ugvro.adoc#[Restful Objects viewer] (this guide)
-* xref:ugvro.adoc#[DataNucleus object store]
+* xref:ugdno.adoc#[DataNucleus object store]
 * xref:ugsec.adoc#[Security]
 * xref:ugtst.adoc#[Testing]
 * xref:ugbtb.adoc#[Beyond the Basics]

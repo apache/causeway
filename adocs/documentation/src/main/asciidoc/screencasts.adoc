@@ -19,6 +19,8 @@ Or, if you have a little more time, you can watch the screencasts by playlist.  
 link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[ALL] of them one after the other, or you
 can use one of the themed playlists to explore particular aspects of the framework.  The table below indicates which screencasts are in which playlist.
 
+There are also a couple of screencasts on the Apache Isis documentation: link:https://www.youtube.com/watch?v=vJYeuVfrctc[using/searching^] docs, and link:https://www.youtube.com/watch?v=RQ_FFYd7npU[contributing patches/editing ^].
+
 Finally, you can also find some screencasts for earlier versions of the framework link:./screencasts-older.html[here].
 
 
