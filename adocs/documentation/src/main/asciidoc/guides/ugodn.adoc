@@ -59,6 +59,8 @@ for Apache Isis and contribute back to the project)
 
 
 
+
+include::_ugodn_configuring.adoc[leveloffset=+1]
 include::_ugodn_overriding-jdo-annotations.adoc[leveloffset=+1]
 include::_ugodn_java8.adoc[leveloffset=+1]
 

@@ -72,7 +72,7 @@ pass:[<br/>]
 
 * *link:./guides/rgant.html[Annotations^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgant.pdf"]
 * *link:./guides/rgsvc.html[Domain Services^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgsvc.pdf"]
-* link:./guides/rgcfg.html[Configuration Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg.pdf"]
+* link:./guides/rgcfg.html[Core Config'n Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg.pdf"]
 * link:./guides/rgcms.html[Classes, Methods and Schema^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcms.pdf"]
 * link:./guides/rgmvn.html[Apache Isis Maven plugin^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgmvn.pdf"]
 * link:./guides/rgfis.html[Framework Internal Services^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/fwsvc.pdf"]

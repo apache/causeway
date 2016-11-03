@@ -25,4 +25,4 @@ The xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] uses link:http:/
 
 == Using a JNDI Datasource
 
-See the guidance in the xref:rgcfg.adoc#_rgcfg_configuring-datanucleus_using-jndi-data-source[configuring datanucleus] section.
+See the guidance in the xref:ugodn.adoc#_ugodn_configuring_using-jndi-data-source[configuring datanucleus] section.
