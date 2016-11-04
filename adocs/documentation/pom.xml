@@ -44,10 +44,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <asciidoctor.maven.plugin.version>1.5.3</asciidoctor.maven.plugin.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.11</asciidoctorj.pdf.version>
         <asciidoctorj.version>1.5.4</asciidoctorj.version>
         <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
+        <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
         <jruby.version>1.7.21</jruby.version>
 
         <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
@@ -127,6 +129,11 @@
                             <groupId>org.asciidoctor</groupId>
                             <artifactId>asciidoctorj-diagram</artifactId>
                             <version>${asciidoctorj.diagram.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.incode.asciidoctor.monotree</groupId>
+                            <artifactId>incode-asciidoctor-extension-monotree</artifactId>
+                            <version>${incode-asciidoctor-extension-monotree.version}</version>
                         </dependency>
                     </dependencies>
                     <configuration>
