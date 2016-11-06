@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -60,6 +61,7 @@ public class MementoServiceDefaultTest {
         memento.set("someBigInteger", new BigInteger("123456789012345678901234567890"));
         memento.set("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
         memento.set("someLocalDate", new LocalDate(2013,9,3));
+        memento.set("someJavaUtilDate", new Date(300_000_000));
         
         memento.set("someBookmark", new Bookmark("CUS", "12345"));
         memento.set("someNullValue", null);
@@ -83,6 +85,7 @@ public class MementoServiceDefaultTest {
         assertThat(memento2.get("someBigInteger", BigInteger.class), is(new BigInteger("123456789012345678901234567890")));
         assertThat(memento2.get("someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.123456789")));
         assertThat(memento2.get("someLocalDate", LocalDate.class), is(new LocalDate(2013,9,3)));
+        assertThat(memento2.get("someJavaUtilDate", Date.class), is(new Date(300_000_000)));
         assertThat(memento2.get("someBookmark", Bookmark.class), is(new Bookmark("CUS", "12345")));
         
         // a nullValue can be grabbed as any type, will always succeed

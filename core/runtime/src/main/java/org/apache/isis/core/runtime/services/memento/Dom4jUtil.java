@@ -21,6 +21,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -101,7 +102,7 @@ class Dom4jUtil {
     }
 
     private static String encodeForNulls(final Object value) {
-        return value != null ? value.toString() : NULL_MARKER;
+        return value != null ? Parseable.format(value) : NULL_MARKER;
     }
     private static String decodeForNulls(final String valueStr) {
         return NULL_MARKER.equals(valueStr)? null: valueStr;
@@ -186,6 +187,17 @@ class Dom4jUtil {
                 return (T) new LocalDate(str);
             } 
         },
+        JAVA_UTIL_DATE(Date.class) {
+        	@SuppressWarnings({ "unchecked" })
+            @Override
+        	<T> T parseStr(String str, Class<T> cls) {
+                return (T) new Date(Long.parseLong(str));
+            }
+			@Override
+			<T> String format(Object o, Class<T> cls) {
+				return Long.toString(((Date) o).getTime());
+			}
+        },
         ENUM(Enum.class) {
             @SuppressWarnings({ "unchecked", "rawtypes" })
             @Override
@@ -212,11 +224,13 @@ class Dom4jUtil {
             return classes;
         }
         abstract <T> T parseStr(String str, Class<T> cls);
+        <T> String format(Object o, Class<T> cls) {
+        	return o.toString();
+        }
         
         // //////////////////////////////////////
 
-        @SuppressWarnings("unchecked")
-        static <T> T parse(final String str, final Class<?> cls) {
+        static <T> T parse(final String str, final Class<? extends T> cls) {
             assertSupported(cls);
             for (Parseable sc : values()) {
                 for (Class<?> eachCls: sc.getClasses()) {
@@ -228,6 +242,19 @@ class Dom4jUtil {
                 }
             }
             return null;
+        }
+        
+        static String format(final Object o) {
+        	if(isSupported(o.getClass())) {
+        		for (Parseable sc : values()) {
+            		for (Class<?> eachCls: sc.getClasses()) {
+            			if(eachCls.isAssignableFrom(o.getClass())) {
+            				return sc.format(o, o.getClass());
+            			}
+            		}
+            	}
+        	}
+        	return o.toString();
         }
 
         static boolean isSupported(final Class<?> cls) {
