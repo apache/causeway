@@ -48,7 +48,8 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
                                 : new AuditableFacetFromConfiguration(holder);
                 }
             case DISABLED:
-                return null;
+                // explicitly disable
+                return new AuditableFacetForDomainObjectAnnotation(Enablement.DISABLED, holder);
             case ENABLED:
                 return new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder);
         }
