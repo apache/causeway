@@ -802,6 +802,8 @@ tr.headers th form input {
 	z-index: 20000;
 }
 
+.isisBlobPanel .scalarValueInput .editing .edit,
+.isisClobPanel .scalarValueInput .editing .edit,
 .booleanPanel .scalarValueInput .editing .edit {
     margin-top: 0px;
 }
