@@ -205,7 +205,13 @@ update the private threads above
 ====
 
 
-=== Announce to the world.
+=== Update project metadata
+
+Update the `STATUS` file (in the root directory of the Apache Isis git repo) with the new committer details.
+
+
+
+=== Announce to the world
 
 Send an `[ANNOUNCE]` email TO `users@isis.apache.org` and to `dev@isis.apache.org`.
 
