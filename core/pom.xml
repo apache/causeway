@@ -142,7 +142,7 @@
         <wicket.version>7.5.0</wicket.version>
 
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
-        <wicket-bootstrap.version>0.10.10</wicket-bootstrap.version>
+        <wicket-bootstrap.version>0.10.11</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
         <wicketstuff.version>7.5.0</wicketstuff.version>
