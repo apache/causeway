@@ -188,7 +188,7 @@ public interface ObjectMember extends ObjectFeature {
             // fails if there are multiple members with the same id...
             //            return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
 
-            final HashMap<String, T> memberById = Maps.newHashMap();
+            final HashMap<String, T> memberById = Maps.newLinkedHashMap();
             for (T member : members) {
                 final String id = Functions.getId().apply(member);
                 // if there are multiple members with same id, just disregard
