@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<p class="intro">
+    <a href="http://isis.apache.org" target="_blank">Apache Isis</a>&trade; is a platform to let you rapidly develop
+    domain-driven apps in Java.
+    <br/>
+    <br/>
+    This app has been generated using Apache Isis'
+    <a href="http://isis.apache.org/intro/getting-started/simple%61pp-archetype.html" target="_blank">SimpleApp</a> archetype,
+    to create a purposefully minimal application that nevertheless includes fixture data, integration tests and BDD specs.
+    <br/>
+    <br/>
+    The application's business logic resides in a single (maven) module, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/modules/module-simple"  target="_blank"><code>module-simple</code></a>, that in turn contains a single domain entity, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/modules/module-simple/src/main/java/domainapp/modules/simple/dom/impl/SimpleObject.java"  target="_blank"><code>SimpleObject</code></a>.  The module has its own <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/modules/module-simple/src/main/java/domainapp/modules/simple/fixture" target="_blank">fixtures</a>, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/modules/module-simple/src/test/java/domainapp/modules/simple/dom/impl" target="_blank">unit tests</a> and <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/modules/module-simple/src/test/java/domainapp/modules/simple/integtests" target="_blank">integration tests</a>.  New modules can be created by copying this first simple module.
+    <br/>
+    <br/>
+    The app also defines the <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application"  target="_blank"><code>application</code></a> (maven) module; this holds <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/fixture"  target="_blank">fixtures</a>, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/test/java/domainapp/application/integtests" target="_blank">integration/smoke tests</a> and <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/test/java/domainapp/application/bdd" target="_blank">BDD specs</a> to exercise the entire application.  It also holds the <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/manifest/DomainAppAppManifest.java" target="_blank"><code>AppManifest</code></a> used to bootstrap the entire application, as well as application-scoped <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/services" target="_blank">domain services</a> (eg a home page service).
+    <br/>
+    <br/>
+    The app's <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/webapp"  target="_blank"><code>webapp</code></a> (maven) module is used to assemble the application into a WAR file.
+    <br/>
+    <br/>
+    For more details, see the <a href="http://isis.apache.org/documentation.html" target="_blank">Apache Isis website</a>.
+</p>
