@@ -19,6 +19,12 @@
 -->
 <archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" name="simpleapp" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory/>
+            <includes>
+                <include>pom-jdo-enhance-all.xml</include>
+            </includes>
+        </fileSet>
         <fileSet encoding="UTF-8">
             <directory/>
             <includes>
@@ -28,7 +34,7 @@
         </fileSet>
     </fileSets>
     <modules>
-        <module name="${rootArtifactId}-app" id="${rootArtifactId}-app" dir="app">
+        <module name="${rootArtifactId}-module-simple" id="${rootArtifactId}-module-simple" dir="modules/module-simple">
             <fileSets>
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/main/java</directory>
@@ -41,29 +47,6 @@
                     <directory>src/main/java</directory>
                     <includes>
                         <include>**/*.png</include>
-                    </includes>
-                </fileSet>
-            </fileSets>
-        </module>
-        <module name="${rootArtifactId}-dom" id="${rootArtifactId}-dom" dir="dom">
-            <fileSets>
-                <fileSet filtered="true" encoding="UTF-8">
-                    <directory>src/main/java</directory>
-                    <includes>
-                        <include>**/*.java</include>
-                        <include>**/*.xml</include>
-                    </includes>
-                </fileSet>
-                <fileSet encoding="UTF-8">
-                    <directory>src/main/java</directory>
-                    <includes>
-                        <include>**/*.png</include>
-                    </includes>
-                </fileSet>
-                <fileSet filtered="true" encoding="UTF-8">
-                    <directory>src/main/resources</directory>
-                    <includes>
-                        <include>**/*.xml</include>
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
@@ -73,21 +56,10 @@
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
-                    <directory>gradle/wrapper</directory>
-                    <includes>
-                        <include>**/*.properties</include>
-                    </includes>
-                </fileSet>
-                <fileSet encoding="UTF-8">
-                    <directory>gradle/wrapper</directory>
-                    <includes>
-                        <include>**/*.jar</include>
-                    </includes>
-                </fileSet>
-                <fileSet filtered="true" encoding="UTF-8">
                     <directory/>
                     <includes>
-                        <include>log4j.properties</include>
+                        <include>logging-dn-enhance.properties</include>
+                        <include>logging-integtest.properties</include>
                     </includes>
                 </fileSet>
                 <fileSet encoding="UTF-8">
@@ -99,22 +71,26 @@
                         <include>gradlew.bat</include>
                         <include>layouts.gradle</include>
                         <include>liveReload.gradle</include>
+                        <include>translations.pot</include>
                     </includes>
                 </fileSet>
             </fileSets>
         </module>
-        <module name="${rootArtifactId}-fixture" id="${rootArtifactId}-fixture" dir="fixture">
+        <module name="${rootArtifactId}-application" id="${rootArtifactId}-application" dir="application">
             <fileSets>
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/main/java</directory>
                     <includes>
                         <include>**/*.java</include>
+                        <include>**/*.xml</include>
                     </includes>
                 </fileSet>
-            </fileSets>
-        </module>
-        <module name="${rootArtifactId}-integtests" id="${rootArtifactId}-integtests" dir="integtests">
-            <fileSets>
+                <fileSet encoding="UTF-8">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>**/*.png</include>
+                    </includes>
+                </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/test/java</directory>
                     <includes>
@@ -127,16 +103,21 @@
                         <include>**/*.feature</include>
                     </includes>
                 </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory>lib</directory>
+                    <includes>
+                        <include>**/*.gitignore</include>
+                    </includes>
+                </fileSet>
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory/>
                     <includes>
-                        <include>logging.properties</include>
+                        <include>logging-integtest.properties</include>
                     </includes>
                 </fileSet>
                 <fileSet encoding="UTF-8">
                     <directory/>
                     <includes>
-                        <include>.gitignore</include>
                         <include>translations.pot</include>
                     </includes>
                 </fileSet>
@@ -148,11 +129,6 @@
                     <directory>src/main/java</directory>
                     <includes>
                         <include>**/*.java</include>
-                    </includes>
-                </fileSet>
-                <fileSet filtered="true" encoding="UTF-8">
-                    <directory>src/main/resources</directory>
-                    <includes>
                         <include>**/*.html</include>
                         <include>**/*.properties</include>
                     </includes>
@@ -183,24 +159,10 @@
                         <include>**/*.po</include>
                     </includes>
                 </fileSet>
-                <fileSet filtered="true" encoding="UTF-8">
-                    <directory>ide/intellij</directory>
-                    <includes>
-                        <include>**/*.txt</include>
-                        <include>**/*.xml</include>
-                    </includes>
-                </fileSet>
                 <fileSet encoding="UTF-8">
                     <directory>lib</directory>
                     <includes>
                         <include>**/*.gitignore</include>
-                    </includes>
-                </fileSet>
-                <fileSet filtered="true" encoding="UTF-8">
-                    <directory>ide/eclipse</directory>
-                    <includes>
-                        <include>**/*.gitignore</include>
-                        <include>**/*.launch</include>
                     </includes>
                 </fileSet>
             </fileSets>
