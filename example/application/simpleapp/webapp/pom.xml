@@ -34,15 +34,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <danhaywood-mavenmixin-isisswagger.appManifest>
-            domainapp.application.manifest.DomainAppAppManifest
-        </danhaywood-mavenmixin-isisswagger.appManifest>
-        <danhaywood-mavenmixin-isisswagger.format>
-            JSON
-        </danhaywood-mavenmixin-isisswagger.format>
-        <danhaywood-mavenmixin-jettywar.warName>
-            simpleapp
-        </danhaywood-mavenmixin-jettywar.warName>
+        <danhaywood-mavenmixin-isisswagger.appManifest>domainapp.application.manifest.DomainAppAppManifest</danhaywood-mavenmixin-isisswagger.appManifest>
+        <danhaywood-mavenmixin-isisswagger.dependency.artifactId>${project.parent.artifactId}-application</danhaywood-mavenmixin-isisswagger.dependency.artifactId>
+        <danhaywood-mavenmixin-jettywar.warName>${project.parent.artifactId}</danhaywood-mavenmixin-jettywar.warName>
     </properties>
 
     <build>
