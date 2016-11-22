@@ -236,8 +236,11 @@ public class WebServer {
         final String contextPath = handler.getContextPath();
 
         final StringBuilder buf = new StringBuilder();
-        final Formatter formatter = new Formatter(buf);
-        formatter.format("%s://%s:%d/%s", scheme, host, port, contextPath);
+        
+        try(final Formatter formatter = new Formatter(buf)) {
+        	formatter.format("%s://%s:%d/%s", scheme, host, port, contextPath);
+        }
+        
         return appendSlashIfRequired(buf).toString();
     }
 
