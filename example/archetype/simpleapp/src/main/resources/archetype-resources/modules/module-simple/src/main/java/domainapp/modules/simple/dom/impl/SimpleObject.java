@@ -203,7 +203,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
                 contributed = Contributed.AS_ACTION
         )
         public void ${symbol_dollar}${symbol_dollar}() {
-            final String title = titleService.titleOf(this);
+            final String title = titleService.titleOf(simpleObject);
             messageService.informUser(String.format("'%s' deleted", title));
             repositoryService.remove(simpleObject);
         }
