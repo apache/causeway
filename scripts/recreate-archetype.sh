@@ -83,3 +83,7 @@ mv target/generated-sources/archetype ../../archetype/$ISISCPN
 git add ../../archetype/$ISISCPN
 git commit -m "$JIRA: recreating $ISISCPN archetype"
 
+
+echo "building the newly created archetype ..."
+cd ../../archetype/$ISISCPN
+mvn clean install
