@@ -368,7 +368,19 @@ You may (again) be prompted for gpg passphrase.  All being well this command wil
 [[_cgcom_cutting-a-release_releasing-the-archetype]]
 == Releasing the Archetype
 
-Apache Isis archetypes are reverse engineered from example applications. Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
+Apache Isis archetypes are reverse engineered from example applications.
+Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
+
+
+[NOTE]
+====
+If releasing using Windows and Maven >= 3.3.3, then there is an issue that requires a small workaround.
+
+In Maven 3.3.3 the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
+However, `maven-archetype-plugin:2.4` only uses `mvn.bat`; this causes the `archetype:create-from-project` goal to fail.
+The fix is to simple: just copy `mvn.cmd` to `mvn.bat`.
+====
+
 
 Switch to the directory containing the `simpleapp` example:
 
