@@ -37,7 +37,7 @@
         <isis.version>1.14.0-SNAPSHOT</isis.version>
 
         <lombok.version>1.16.10</lombok.version>
-        <assertj-core.version>2.4.0</assertj-core.version>
+        <assertj-core.version>3.6.0</assertj-core.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -58,14 +58,41 @@
         <repository>
             <id>Cloudbees snapshots</id>
             <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+            <name>CloudBees Snapshots (and Interim Releases)</name>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>estatio.snapshots</id>
+            <name>CloudBees Snapshots (and Interim Releases)</name>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+            <layout>default</layout>
+        </pluginRepository>
+    </pluginRepositories>
 
     <modules>
         <module>modules/module-simple</module>
@@ -82,12 +109,6 @@
                 <version>${isis.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj-core.version}</version>
             </dependency>
 
             <!-- this project's own modules -->
@@ -107,6 +128,7 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
