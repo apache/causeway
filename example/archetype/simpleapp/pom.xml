@@ -47,4 +47,7 @@
         <version>1.14.0-SNAPSHOT</version>
         <relativePath>../../../core/pom.xml</relativePath>
     </parent>
+    <properties>
+        <archetype.test.skip>true</archetype.test.skip>
+    </properties>
 </project>
