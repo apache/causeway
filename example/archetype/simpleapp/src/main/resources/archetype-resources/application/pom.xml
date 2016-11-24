@@ -96,11 +96,15 @@
     </build>
 
     <dependencies>
+
+        <!-- this app -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>${rootArtifactId}-module-simple</artifactId>
         </dependency>
 
+
+        <!-- isis -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-wrapper</artifactId>
