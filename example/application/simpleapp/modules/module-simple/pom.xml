@@ -73,6 +73,16 @@
                     <mixins>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>standard</artifactId>
+                            <version>0.0.1</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>enforcerrelaxed</artifactId>
+                            <version>0.0.1-SNAPSHOT</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>datanucleusenhance</artifactId>
                             <version>0.0.2</version>
                         </mixin>
@@ -86,6 +96,16 @@
                             <artifactId>surefire</artifactId>
                             <version>0.0.2</version>
                         </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>sourceandjavadoc</artifactId>
+                            <version>0.0.1</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>staticanalysis</artifactId>
+                            <version>0.0.1</version>
+                        </mixin>
                     </mixins>
                 </configuration>
             </plugin>
@@ -96,6 +116,12 @@
         <danhaywood-mavenmixin-isisvalidate>
                 domainapp.modules.simple.SimpleModuleManifest
         </danhaywood-mavenmixin-isisvalidate>
+        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
+            ${project.basedir}/../checkstyle.xml
+        </danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
+        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
+            ${project.basedir}/../pmd.xml
+        </danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
     </properties>
 
     <dependencies>
