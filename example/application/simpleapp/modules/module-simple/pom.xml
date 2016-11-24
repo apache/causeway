@@ -117,10 +117,10 @@
                 domainapp.modules.simple.SimpleModuleManifest
         </danhaywood-mavenmixin-isisvalidate>
         <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-            ${project.basedir}/../checkstyle.xml
+            ${project.basedir}/../checks/checkstyle.xml
         </danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
         <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
-            ${project.basedir}/../pmd.xml
+            ${project.basedir}/../checks/pmd.xml
         </danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
     </properties>
 
