@@ -125,6 +125,11 @@ pomXml.appendNode {
 }
 pomXml.groupId='org.apache.isis.archetype'
 
+def fragmentToAdd = new XmlSlurper( false, true ).parseText( '''<properties>
+    <archetype.test.skip>true</archetype.test.skip>
+</properties>''' )
+pomXml.appendNode(fragmentToAdd)
+
 def pomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
     mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
     mkp.yield(pomXml)
