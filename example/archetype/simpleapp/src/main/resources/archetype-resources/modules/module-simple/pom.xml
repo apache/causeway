@@ -109,8 +109,8 @@
 
     <properties>
         <danhaywood-mavenmixin-isisvalidate>domainapp.modules.simple.SimpleModuleManifest</danhaywood-mavenmixin-isisvalidate>
-        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>${project.basedir}/../checkstyle.xml</danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>${project.basedir}/../pmd.xml</danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
+        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>${project.basedir}/../checks/checkstyle.xml</danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
+        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>${project.basedir}/../checks/pmd.xml</danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
     </properties>
 
     <dependencies>
