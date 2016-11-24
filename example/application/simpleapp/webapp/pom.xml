@@ -62,6 +62,19 @@
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>1.8</version>
                 <executions>
@@ -112,11 +125,14 @@
     </build>
 
     <dependencies>
+
+        <!-- this app -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-application</artifactId>
         </dependency>
 
+        <!-- isis -->
         <dependency>
             <groupId>com.danhaywood.mavendeps</groupId>
             <artifactId>isiswebapp</artifactId>
