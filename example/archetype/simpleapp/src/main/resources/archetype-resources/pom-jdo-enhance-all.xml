@@ -84,7 +84,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>modules/module-simple</module>
+                <module>module-simple</module>
             </modules>
         </profile>
     </profiles>

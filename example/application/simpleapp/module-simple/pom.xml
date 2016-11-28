@@ -16,25 +16,27 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>${groupId}</groupId>
-        <artifactId>${rootArtifactId}</artifactId>
-        <version>${version}</version>
-        <relativePath>../../pom.xml</relativePath>
+        <groupId>org.apache.isis.example.application</groupId>
+        <artifactId>simpleapp</artifactId>
+        <version>1.14.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>${artifactId}</artifactId>
+    <artifactId>simpleapp-module-simple</artifactId>
     <name>SimpleApp Simple Module</name>
 
     <build>
         <resources>
             <resource>
+                <filtering>false</filtering>
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
+                <filtering>false</filtering>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**</include>
@@ -46,9 +48,11 @@
         </resources>
         <testResources>
             <testResource>
+                <filtering>false</filtering>
                 <directory>src/test/resources</directory>
             </testResource>
             <testResource>
+                <filtering>false</filtering>
                 <directory>src/test/java</directory>
                 <includes>
                     <include>**</include>
@@ -108,9 +112,15 @@
     </build>
 
     <properties>
-        <danhaywood-mavenmixin-isisvalidate>domainapp.modules.simple.SimpleModuleManifest</danhaywood-mavenmixin-isisvalidate>
-        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>${project.basedir}/../checks/checkstyle.xml</danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>${project.basedir}/../checks/pmd.xml</danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
+        <danhaywood-mavenmixin-isisvalidate>
+                domainapp.modules.simple.SimpleModuleManifest
+        </danhaywood-mavenmixin-isisvalidate>
+        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
+            ${project.parent.basedir}/_checks/checkstyle.xml
+        </danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
+        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
+            ${project.parent.basedir}/_checks/pmd.xml
+        </danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
     </properties>
 
     <dependencies>

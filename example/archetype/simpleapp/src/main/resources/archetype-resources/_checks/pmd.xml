@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -32,15 +35,15 @@
     This ruleset checks the code for discouraged programming constructs.
   </description>
   
-  <rule ref="pmd-rulesets/basic.xml">
+  <rule ref="rulesets/java/basic.xml">
     <exclude name="EmptyCatchBlock"/>
   </rule>
-  <rule ref="pmd-rulesets/basic.xml/EmptyCatchBlock">
+  <rule ref="rulesets/java/basic.xml/EmptyCatchBlock">
     <properties>
       <property name="allowCommentedBlocks" value="true"/>
     </properties>
   </rule>
   
-  <rule ref="pmd-rulesets/unusedcode.xml"/>
-  <rule ref="pmd-rulesets/imports.xml"/>
+  <rule ref="rulesets/java/unusedcode.xml"/>
+  <rule ref="rulesets/java/imports.xml"/>
 </ruleset>
