@@ -23,7 +23,6 @@
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}</artifactId>
         <version>${version}</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>${artifactId}</artifactId>
@@ -109,8 +108,8 @@
 
     <properties>
         <danhaywood-mavenmixin-isisvalidate>domainapp.modules.simple.SimpleModuleManifest</danhaywood-mavenmixin-isisvalidate>
-        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>${project.basedir}/../checks/checkstyle.xml</danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>${project.basedir}/../checks/pmd.xml</danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
+        <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
+        <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>${project.parent.basedir}/_checks/pmd.xml</danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
     </properties>
 
     <dependencies>

@@ -20,10 +20,9 @@
 <archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" name="simpleapp" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <fileSets>
         <fileSet filtered="true" encoding="UTF-8">
-            <directory>modules/checks</directory>
+            <directory>_checks</directory>
             <includes>
                 <include>**/*.xml</include>
-                <include>**/*.properties</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
@@ -37,11 +36,12 @@
             <includes>
                 <include>.gitattributes</include>
                 <include>.gitignore</include>
+                <include>README.adoc</include>
             </includes>
         </fileSet>
     </fileSets>
     <modules>
-        <module name="${rootArtifactId}-module-simple" id="${rootArtifactId}-module-simple" dir="modules/module-simple">
+        <module name="${rootArtifactId}-module-simple" id="${rootArtifactId}-module-simple" dir="module-simple">
             <fileSets>
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/main/java</directory>
