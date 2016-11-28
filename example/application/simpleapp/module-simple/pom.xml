@@ -24,7 +24,6 @@
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
         <version>1.14.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>simpleapp-module-simple</artifactId>
@@ -117,10 +116,10 @@
                 domainapp.modules.simple.SimpleModuleManifest
         </danhaywood-mavenmixin-isisvalidate>
         <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-            ${project.basedir}/../checks/checkstyle.xml
+            ${project.parent.basedir}/_checks/checkstyle.xml
         </danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
         <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
-            ${project.basedir}/../checks/pmd.xml
+            ${project.parent.basedir}/_checks/pmd.xml
         </danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
     </properties>
 
