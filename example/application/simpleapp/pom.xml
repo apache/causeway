@@ -39,6 +39,18 @@
         <lombok.version>1.16.10</lombok.version>
         <assertj-core.version>3.6.0</assertj-core.version>
 
+        <danhaywood-mavenmixin-cucumberreporting.version>0.0.1</danhaywood-mavenmixin-cucumberreporting.version>
+        <danhaywood-mavenmixin-enforcerelaxed.version>0.0.1</danhaywood-mavenmixin-enforcerelaxed.version>
+        <danhaywood-mavenmixin-datanucleusenhance.version>0.0.3</danhaywood-mavenmixin-datanucleusenhance.version>
+        <danhaywood-mavenmixin-isisswagger.version>0.0.2</danhaywood-mavenmixin-isisswagger.version>
+        <danhaywood-mavenmixin-isisvalidate.version>0.0.1</danhaywood-mavenmixin-isisvalidate.version>
+        <danhaywood-mavenmixin-jettyconsole.version>0.0.1</danhaywood-mavenmixin-jettyconsole.version>
+        <danhaywood-mavenmixin-jettywar.version>0.0.1</danhaywood-mavenmixin-jettywar.version>
+        <danhaywood-mavenmixin-sourceandjavadoc.version>0.0.1</danhaywood-mavenmixin-sourceandjavadoc.version>
+        <danhaywood-mavenmixin-standard.version>0.0.1</danhaywood-mavenmixin-standard.version>
+        <danhaywood-mavenmixin-surefire.version>0.0.2</danhaywood-mavenmixin-surefire.version>
+        <danhaywood-mavenmixin-staticanalysis.version>0.0.1</danhaywood-mavenmixin-staticanalysis.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
