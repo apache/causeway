@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -151,7 +152,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
      */
     private void addPerPolicy(final String key, final String value, final ContainsPolicy policy) {
         if (value == null) {
-            LOG.debug("ignoring " + key + " as value is null");
+            LOG.debug("ignoring {} as value is null", key);
             return;
         }
         if (key == null) {
@@ -160,19 +161,28 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
         if (properties.containsKey(key)) {
             switch (policy) {
             case IGNORE:
-                LOG.info("ignoring " + key + "=" + value + " as value already set (with " + properties.get(key) + ")" );
+                LOG.info("ignoring {}={} as value already set (with {})", key, value, properties.get(key));
                 break;
             case OVERWRITE:
-                LOG.info("overwriting " + key + "=" + value + " (previous value was " + properties.get(key) + ")" );
+                LOG.info("overwriting {}={} (previous value was {})", key, value, properties.get(key));
                 properties.put(key, value);
                 break;
             case EXCEPTION:
-                throw new IllegalStateException("Configuration already has a key " + key + ", value of " + properties.get(key) );
+                throw new IllegalStateException(String.format(
+                        "Configuration already has a key {}, value of {}%s, value of %s", key, properties.get(key)));
             }
         } else {
-            LOG.info("adding " + key + "=" + value);
+            LOG.info("adding {} = {}", key , safe(key, value));
             properties.put(key, value);
         }
+    }
+
+    static String safe(final String key, final String value) {
+        return Strings.isNullOrEmpty(key)
+                ? value
+                : (key.toLowerCase().contains("password")
+                        ? "*******"
+                        : value);
     }
 
     @Override
