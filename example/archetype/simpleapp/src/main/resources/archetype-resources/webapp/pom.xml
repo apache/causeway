@@ -93,27 +93,27 @@
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>standard</artifactId>
-                            <version>0.0.1</version>
+                            <version>${danhaywood-mavenmixin-standard.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>enforcerrelaxed</artifactId>
-                            <version>0.0.1</version>
+                            <version>${danhaywood-mavenmixin-enforcerelaxed.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>isisswagger</artifactId>
-                            <version>0.0.2</version>
+                            <version>${danhaywood-mavenmixin-isisswagger.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>jettywar</artifactId>
-                            <version>0.0.1</version>
+                            <version>${danhaywood-mavenmixin-jettywar.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>jettyconsole</artifactId>
-                            <version>0.0.1</version>
+                            <version>${danhaywood-mavenmixin-jettyconsole.version}</version>
                         </mixin>
                     </mixins>
                 </configuration>
