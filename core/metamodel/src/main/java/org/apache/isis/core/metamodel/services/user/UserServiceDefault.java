@@ -43,27 +43,41 @@ public class UserServiceDefault implements UserService {
     @Programmatic
     @Override
     public UserMemento getUser() {
-        final AuthenticationSession session =
-                authenticationSessionProvider.getAuthenticationSession();
 
         final UserAndRoleOverrides userAndRoleOverrides = currentOverridesIfAny();
 
-        final String username = userAndRoleOverrides != null
-                ? userAndRoleOverrides.user
-                : session.getUserName();
-        final List<String> roles = userAndRoleOverrides != null
-                ? userAndRoleOverrides.roles != null
-                ? userAndRoleOverrides.roles
-                : session.getRoles()
-                : session.getRoles();
-        final List<RoleMemento> roleMementos = asRoleMementos(roles);
+        if (userAndRoleOverrides != null) {
 
-        final UserMemento user = new UserMemento(username, roleMementos);
-        return user;
+            final String username = userAndRoleOverrides.user;
+
+            final List<String> roles;
+            if (userAndRoleOverrides.roles != null) {
+                roles = userAndRoleOverrides.roles;
+            } else {
+                // preserve the roles if were not overridden
+                roles = previousRoles();
+            }
+
+            final List<RoleMemento> roleMementos = asRoleMementos(roles);
+            return new UserMemento(username, roleMementos);
+
+        } else {
+            final AuthenticationSession session =
+                    authenticationSessionProvider.getAuthenticationSession();
+            return session.createUserMemento();
+        }
     }
 
+    private List<String> previousRoles() {
+        final List<String> roles;
 
-    static class UserAndRoleOverrides {
+        final AuthenticationSession session =
+                authenticationSessionProvider.getAuthenticationSession();
+        roles = session.getRoles();
+        return roles;
+    }
+
+    public static class UserAndRoleOverrides {
         final String user;
         final List<String> roles;
 
@@ -75,6 +89,14 @@ public class UserServiceDefault implements UserService {
             this.user = user;
             this.roles = roles;
         }
+
+        public String getUser() {
+            return user;
+        }
+
+        public List<String> getRoles() {
+            return roles;
+        }
     }
 
     private final ThreadLocal<Stack<UserAndRoleOverrides>> overrides =
@@ -84,34 +106,31 @@ public class UserServiceDefault implements UserService {
                 }
             };
 
-    /**
-     * Not API; for use by the implementation of {@link SudoService}.
-     */
-    @Programmatic
-    public void overrideUser(final String user) {
-        overrideUserAndRoles(user, null);
-    }
-    /**
-     * Not API; for use by the implementation of {@link SudoService}.
-     */
-    @Programmatic
-    public void overrideUserAndRoles(final String user, final List<String> roles) {
+
+    private void overrideUserAndRoles(final String user, final List<String> rolesIfAny) {
+        final List<String> roles = rolesIfAny != null ? rolesIfAny : inheritRoles();
         this.overrides.get().push(new UserAndRoleOverrides(user, roles));
     }
-    /**
-     * Not API; for use by the implementation of {@link SudoService}.
-     */
-    @Programmatic
-    public void resetOverrides() {
+
+    private void resetOverrides() {
         this.overrides.get().pop();
     }
 
-
-    private UserAndRoleOverrides currentOverridesIfAny() {
+    /**
+     * Not API; for use by the implementation of sudo/runAs (see {@link SudoService} etc.
+     */
+    public UserAndRoleOverrides currentOverridesIfAny() {
         final Stack<UserAndRoleOverrides> userAndRoleOverrides = overrides.get();
         return !userAndRoleOverrides.empty()
                 ? userAndRoleOverrides.peek()
                 : null;
+    }
+
+    private List<String> inheritRoles() {
+        final UserAndRoleOverrides currentOverridesIfAny = currentOverridesIfAny();
+        return currentOverridesIfAny != null
+                ? currentOverridesIfAny.getRoles()
+                : authenticationSessionProvider.getAuthenticationSession().getRoles();
     }
 
     private static List<RoleMemento> asRoleMementos(final List<String> roles) {
@@ -124,6 +143,23 @@ public class UserServiceDefault implements UserService {
         return mementos;
     }
 
+
+    @DomainService(nature = NatureOfService.DOMAIN)
+    public static class SudoServiceSpi implements SudoService.Spi {
+
+        @Override
+        public void runAs(final String username, final List<String> roles) {
+            userServiceDefault.overrideUserAndRoles(username, roles);
+        }
+
+        @Override
+        public void releaseRunAs() {
+            userServiceDefault.resetOverrides();
+        }
+
+        @Inject
+        UserServiceDefault userServiceDefault;
+    }
 
     @javax.inject.Inject
     AuthenticationSessionProvider authenticationSessionProvider;

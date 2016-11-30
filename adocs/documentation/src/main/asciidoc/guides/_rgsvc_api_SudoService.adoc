@@ -6,11 +6,11 @@
 
 
 
-The `SudoService` allows the current user reported by the `DomainObjectContainer` to be temporarily changed to some
-other user. This is useful both for xref:ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
+The `SudoService` allows the current user reported by the xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`]  to be temporarily changed to some other user.
+This is useful both for xref:ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 
 
-== API & Implementation
+== API
 
 The API provided by the service is:
 
@@ -29,10 +29,24 @@ public interface SudoService {
 ----
 
 which will run the provided block of code (a `Runnable` or a `Callable`) in a way such that calls to
-`DomainObjectContainer#getUser()` will return the specified user (and roles, if specified)
+`UserService#getUser()` will return the specified user (and roles, if specified)
+
+As of `1.13.2-SNAPSHOT`:
+
+* if roles are not specified, then the roles of the current user are preserved.
+
+* the current user/role reported by the internal xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`] will also return the specified user/roles.
+
+[IMPORTANT]
+====
+Note however that this the "effective user" does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
+See the xref:rgsvc.adoc#_rgsvc_api_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
+====
+
+
+== Implementation
 
 The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.sudo.SudoServiceDefault`).
-
 
 
 
@@ -54,6 +68,63 @@ protected void execute(final ExecutionContext ec) {
     ...
 }
 ----
+
+
+[[_rgsvc_api_SudoService_ACCESS-ALL-ROLE]]
+=== ACCESS_ALL_ROLE" (`1.13.2-SNAPSHOT`)
+
+When `sudo(...)` is called the "effective user" is reported by both xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and (as of `1.13.2-SNAPSHOT`) by xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism].
+These continue to be evaluated according to the permissions of the current user.
+
+This can be a problem in certain use cases.
+For example if running a fixture script (which uses the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`]) from within an implementation of xref:rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
+
+In such cases, permission checking can simply be disabled by specifying `SudoService.ACCESS_ALL_ROLE` as one of the roles.
+For example:
+
+[source,java]
+----
+protected void execute(final ExecutionContext ec) {
+    ...
+    sudoService.sudo(getUsername(), Arrays.asList(SudoService.ACCESS_ALL_ROLE),
+            new Runnable() {
+                @Override
+                public void run() {
+                    wrap(toDoItem).completed();
+                }
+            });
+    ...
+}
+----
+
+[NOTE]
+====
+In the future this service may be used more deeply, eg to propagate permissions through to the Shiro security mechanism also.
+====
+
+
+
+
+== SPI (`1.13.2-SNAPSHOT`)
+
+The `SudoService.Spi` service (`1.13.2-SNAPSHOT`) allows implementations of `SudoService` to notify other services/components that the effective user and roles are different.
+The default implementation of xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] has been refactored to leverage this SPI.
+
+[source,java]
+----
+public interface SudoService {
+    ...
+    interface Spi {
+        void runAs(String username, List<String> roles);        // <1>
+        void releaseRunAs();                                    // <2>
+    }
+}
+----
+<1> Called by `SudoService#sudo(...)`, prior to invoking its `Runnable` or `Callable`.
+<2> Called by `SudoService#sudo(...)`, after its `Runnable` or `Callable` has been invoked.
+
+The names of these methods were chosen based on link:href:https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-[similar names within Shiro].
+
 
 
 
