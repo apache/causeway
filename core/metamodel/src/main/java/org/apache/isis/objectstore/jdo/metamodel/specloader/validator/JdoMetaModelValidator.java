@@ -31,37 +31,10 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 public class JdoMetaModelValidator extends MetaModelValidatorComposite {
 
     public JdoMetaModelValidator() {
-        addValidatorToEnsurePersistenceCapables();
         addValidatorToEnsureIdentityType();
         addValidatorToCheckForUnsupportedAnnotations();
     }
 
-    private void addValidatorToEnsurePersistenceCapables() {
-        final MetaModelValidatorVisiting.SummarizingVisitor ensurePersistenceCapables = new MetaModelValidatorVisiting.SummarizingVisitor(){
-
-            private boolean found = false;
-            @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                boolean containsFacet = objectSpec.containsFacet(JdoPersistenceCapableFacet.class);
-                if(containsFacet) {
-                    found = true;
-                    return false; // no need to keep searching
-                }
-                return true; // keep searching
-            }
-
-            @Override
-            public void summarize(ValidationFailures validationFailures) {
-                if(!found) {
-                    validationFailures.add("No @PersistenceCapable entities found. " +
-                            "(Are the entities referenced by the registered services? " + 
-                            "are all services registered? " + 
-                            "did the DataNucleus enhancer run?)");
-                }
-            }
-        };
-        add(new MetaModelValidatorVisiting(ensurePersistenceCapables));
-    }
 
     private void addValidatorToEnsureIdentityType() {
         MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
