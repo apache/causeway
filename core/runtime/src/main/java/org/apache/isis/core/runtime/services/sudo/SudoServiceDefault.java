@@ -22,91 +22,86 @@ package org.apache.isis.core.runtime.services.sudo;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
 public class SudoServiceDefault implements SudoService {
 
-    private UserServiceDefault userServiceDefault;
-
-    @Programmatic
-    @PostConstruct
-    public void init() {
-        if(userService instanceof UserServiceDefault) {
-            userServiceDefault = (UserServiceDefault) userService;
-        }
-    }
-
     @Programmatic
     @Override
-    public void sudo(final String user, final Runnable runnable) {
-        ensureContainerOk();
+    public void sudo(final String username, final Runnable runnable) {
         try {
-            userServiceDefault.overrideUser(user);
+            runAs(username, null);
             runnable.run();
         } finally {
-            userServiceDefault.resetOverrides();
+            releaseRunAs();
         }
     }
 
     @Programmatic
     @Override
-    public <T> T sudo(final String user, final Callable<T> callable) {
-        ensureContainerOk();
+    public <T> T sudo(final String username, final Callable<T> callable) {
         try {
-            userServiceDefault.overrideUser(user);
+            runAs(username, null);
             return callable.call();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            userServiceDefault.resetOverrides();
+            releaseRunAs();
         }
     }
 
     @Programmatic
     @Override
     public void sudo(final String username, final List<String> roles, final Runnable runnable) {
-        ensureContainerOk();
         try {
-            userServiceDefault.overrideUserAndRoles(username, roles);
+            runAs(username, roles);
             runnable.run();
         } finally {
-            userServiceDefault.resetOverrides();
+            releaseRunAs();
         }
     }
 
     @Programmatic
     @Override
     public <T> T sudo(final String username, final List<String> roles, final Callable<T> callable) {
-        ensureContainerOk();
         try {
-            userServiceDefault.overrideUserAndRoles(username, roles);
+            runAs(username, roles);
             return callable.call();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            userServiceDefault.resetOverrides();
+            releaseRunAs();
         }
     }
 
-    private void ensureContainerOk() {
-        if(userServiceDefault == null) {
-            throw new IllegalStateException("DomainObjectContainer does not support the user being overridden");
+    private void runAs(final String username, final List<String> roles) {
+        if(spiServices != null) {
+            for (SudoService.Spi spiService : spiServices) {
+                spiService.runAs(username, roles);
+            }
+        }
+    }
+
+    private void releaseRunAs() {
+        if(spiServices != null) {
+            for (SudoService.Spi spiService : spiServices) {
+                spiService.releaseRunAs();
+            }
         }
     }
 
 
     @javax.inject.Inject
     private UserService userService;
+
+    @javax.inject.Inject
+    private List<Spi> spiServices;
 
 }

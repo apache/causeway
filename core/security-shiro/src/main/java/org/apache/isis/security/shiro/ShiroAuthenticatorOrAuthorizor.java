@@ -134,10 +134,10 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         if(currentSubject.isAuthenticated()) {
 
             if(autoLogout) {
-                // (this is preserving behaviour pre 1.13.0.  However, there is a suspicion that this might
+                // this is preserving behaviour pre 1.13.0.  However, there is a suspicion that this might
                 // produce a race condition.  In 1.13.0 the default is to simply reuse the session.
                 //
-                // (See this thread for further info: http://markmail.org/message/hsjljwgkhhrzxbrm
+                // See this thread for further info: http://markmail.org/message/hsjljwgkhhrzxbrm
                 currentSubject.logout();
             } else {
 
@@ -150,19 +150,19 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         try {
             currentSubject.login(token);
         } catch ( UnknownAccountException uae ) { 
-            LOG.debug("Unable to authenticate", uae);
+            LOG.info("Unknown account: {}", request.getName());
             return null;
         } catch ( IncorrectCredentialsException ice ) {
-            LOG.debug("Unable to authenticate", ice);
+            LOG.info("Incorrect credentials for user: {}", request.getName());
             return null;
         } catch ( CredentialsException ice ) {
-            LOG.debug("Unable to authenticate", ice);
+            LOG.error("Unable to authenticate", ice);
             return null;
         } catch ( LockedAccountException lae ) {
-            LOG.info("Unable to authenticate", lae);
+            LOG.info("Locked account for user: {}", request.getName());
             return null;
         } catch ( ExcessiveAttemptsException eae ) { 
-            LOG.info("Unable to authenticate", eae);
+            LOG.info("Excessive attempts for user: {}", request.getName());
             return null;
         } catch ( AuthenticationException ae ) {
             LOG.error("Unable to authenticate", ae);
