@@ -20,8 +20,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -31,13 +29,13 @@ import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.system.FixturesInstalledEvent;
 import org.apache.isis.applib.events.system.FixturesInstallingEvent;
 import org.apache.isis.applib.services.WithTransactionScope;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -238,17 +236,7 @@ public class QueryResultsCache implements WithTransactionScope {
      * In separate class because {@link QueryResultsCache} itself is request-scoped
      */
     @DomainService(nature = NatureOfService.DOMAIN)
-    public static class Control {
-
-        @PostConstruct
-        public void postConstruct() {
-            eventBusService.register(this);
-        }
-
-        @PreDestroy
-        public void preDestroy() {
-            eventBusService.unregister(this);
-        }
+    public static class Control extends AbstractSubscriber {
 
         @Subscribe
         @org.axonframework.eventhandling.annotation.EventHandler
@@ -267,9 +255,6 @@ public class QueryResultsCache implements WithTransactionScope {
         public boolean isFixturesInstalling() {
             return fixturesInstalling;
         }
-
-        @Inject
-        EventBusService eventBusService;
     }
 
 
