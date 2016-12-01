@@ -55,6 +55,12 @@ xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]
 |whether the object's properties and collections can be edited or not (ie whether the instance should be considered to be immutable)
 
 
+|xref:rgant.adoc#_rgant-DomainObject_mixinMethod[`mixinMethod()`]
+|Method name within the mixin
+|(As of `1.13.2-SNAPSHOT`) How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+Typical examples are "exec", "execute", "invoke", "apply" and so on.
+
+
 |xref:rgant.adoc#_rgant-DomainObject_nature[`nature()`]
 |`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `MIXIN`, `VIEW_MODEL` (`NOT_SPECIFIED`)
 |whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.  If an entity, indicates how its persistence is managed.

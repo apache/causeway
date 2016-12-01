@@ -34,5 +34,28 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Mixin {
 
+    /**
+     * The default of {@link Mixin#method()}).
+     */
+    String DEFAULT_METHOD_NAME = "$$";
+
+    /**
+     * Specifies the name of the verb to use within the mixin, eg "exec", "invoke", "apply" and so on,
+     *
+     * <p>
+     *     This makes it easier to avoid silly spelling mistakes in supporting methods, with the name of the member
+     *     in essence specified in only just one place, namely the mixin class' name.
+     * </p>
+     * 
+     * <p>
+     *     If not specified, then the default value {@link #DEFAULT_METHOD_NAME} is used instead.
+     * </p>
+     *
+     * <p>
+     *     Remarks: originally intended to use a single (or perhaps two) underscore, however these may will not be
+     *     valid identifiers after Java 8.
+     * </p>
+     */
+    String method() default DEFAULT_METHOD_NAME;
 
 }
