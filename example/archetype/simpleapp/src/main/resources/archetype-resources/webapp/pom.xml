@@ -33,12 +33,14 @@
     <packaging>war</packaging>
 
     <properties>
-        <danhaywood-mavenmixin-isisswagger.appManifest>domainapp.application.manifest.DomainAppAppManifest</danhaywood-mavenmixin-isisswagger.appManifest>
-        <danhaywood-mavenmixin-isisswagger.dependency.artifactId>${project.parent.artifactId}-application</danhaywood-mavenmixin-isisswagger.dependency.artifactId>
-        <danhaywood-mavenmixin-jettywar.warName>${project.parent.artifactId}</danhaywood-mavenmixin-jettywar.warName>
 
-        <danhaywood-mavenmixin-jettyconsole.backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</danhaywood-mavenmixin-jettyconsole.backgroundImage>
+        <isis-maven-plugin.swagger.appManifest>domainapp.application.manifest.DomainAppAppManifest</isis-maven-plugin.swagger.appManifest>
+        <isis-maven-plugin.swagger.dependency.groupId>${project.groupId}</isis-maven-plugin.swagger.dependency.groupId>
+        <isis-maven-plugin.swagger.dependency.artifactId>${project.parent.artifactId}-application</isis-maven-plugin.swagger.dependency.artifactId>
 
+        <jetty-console-maven-plugin.backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</jetty-console-maven-plugin.backgroundImage>
+
+        <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
     </properties>
 
     <build>
@@ -93,27 +95,27 @@
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>standard</artifactId>
-                            <version>${danhaywood-mavenmixin-standard.version}</version>
+                            <version>${mavenmixin-standard.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>enforcerrelaxed</artifactId>
-                            <version>${danhaywood-mavenmixin-enforcerelaxed.version}</version>
+                            <version>${mavenmixin-enforcerrelaxed.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>isisswagger</artifactId>
-                            <version>${danhaywood-mavenmixin-isisswagger.version}</version>
+                            <version>${mavenmixin-isisswagger.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>jettywar</artifactId>
-                            <version>${danhaywood-mavenmixin-jettywar.version}</version>
+                            <version>${mavenmixin-jettywar.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>jettyconsole</artifactId>
-                            <version>${danhaywood-mavenmixin-jettyconsole.version}</version>
+                            <version>${mavenmixin-jettyconsole.version}</version>
                         </mixin>
                     </mixins>
                 </configuration>
@@ -133,14 +135,14 @@
         <dependency>
             <groupId>com.danhaywood.mavendeps</groupId>
             <artifactId>isiswebapp</artifactId>
-            <version>0.0.1</version>
+            <version>${mavendeps-isiswebapp.version}</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>com.danhaywood.mavendeps</groupId>
             <artifactId>isisintellij</artifactId>
-            <version>0.0.1</version>
+            <version>${mavendeps-isisintellij.version}</version>
             <type>pom</type>
         </dependency>
     </dependencies>

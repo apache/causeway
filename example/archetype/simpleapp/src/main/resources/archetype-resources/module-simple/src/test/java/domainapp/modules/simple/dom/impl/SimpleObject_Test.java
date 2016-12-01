@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObject_UnitTest {
+public class SimpleObject_Test {
 
     SimpleObject simpleObject;
 
@@ -33,7 +33,7 @@ public class SimpleObject_UnitTest {
         simpleObject = new SimpleObject("Foobar");
     }
 
-    public static class Name extends SimpleObject_UnitTest {
+    public static class Name extends SimpleObject_Test {
 
         @Test
         public void happyCase() throws Exception {

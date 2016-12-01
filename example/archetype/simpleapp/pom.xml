@@ -41,6 +41,11 @@
             </plugins>
         </pluginManagement>
     </build>
+    <scm>
+        <connection>scm:git:git@github.com:danhaywood/java-mavenmixin-standard.git</connection>
+        <developerConnection>scm:git:git@github.com:danhaywood/java-mavenmixin-standard.git</developerConnection>
+        <url>git@github.com:danhaywood/java-mavenmixin-standard.git</url>
+    </scm>
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>

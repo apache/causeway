@@ -23,7 +23,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2016-11-29 17:20:27+\n"
+"POT-Creation-Date: 2016-12-01 10:14:55+\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -96,6 +96,11 @@ msgid "Current"
 msgstr ""
 
 
+#: org.apache.isis.core.metamodel.services.user.UserServiceDefault#currentOverridesIfAny()
+msgid "Current Overrides If Any"
+msgstr ""
+
+
 #: domainapp.modules.simple.dom.impl.SimpleObject#delete()
 msgid "Delete"
 msgstr ""
@@ -131,8 +136,14 @@ msgid "Download Translations"
 msgstr ""
 
 
-#: domainapp.modules.simple.dom.impl.SimpleObject$_updateName#$$(java.lang.String)
+#: domainapp.modules.simple.dom.impl.SimpleObject$updateName#exec(java.lang.String)
 msgid "Exclamation mark is not allowed"
+msgstr ""
+
+
+#: domainapp.modules.simple.dom.impl.SimpleObject$delete#exec()
+#: domainapp.modules.simple.dom.impl.SimpleObject$updateName#exec()
+msgid "Exec"
 msgstr ""
 
 
@@ -237,7 +248,7 @@ msgstr ""
 
 
 #: domainapp.modules.simple.dom.impl.SimpleObject#name
-#: domainapp.modules.simple.dom.impl.SimpleObject$_updateName#$$(java.lang.String)
+#: domainapp.modules.simple.dom.impl.SimpleObject$updateName#exec(java.lang.String)
 #: domainapp.modules.simple.dom.impl.SimpleObjectMenu#create(java.lang.String)
 #: domainapp.modules.simple.dom.impl.SimpleObjectMenu#findByName(java.lang.String)
 msgid "Name"
@@ -340,6 +351,11 @@ msgid "Result key"
 msgstr ""
 
 
+#: org.apache.isis.core.metamodel.services.user.UserServiceDefault$UserAndRoleOverrides#roles
+msgid "Roles"
+msgstr ""
+
+
 #: org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript()
 #: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript()
 #: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete()
@@ -386,6 +402,11 @@ msgstr ""
 
 #: domainapp.modules.simple.dom.impl.SimpleObject#updateName()
 msgid "Update Name"
+msgstr ""
+
+
+#: org.apache.isis.core.metamodel.services.user.UserServiceDefault$UserAndRoleOverrides#user
+msgid "User"
 msgstr ""
 
 

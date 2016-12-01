@@ -30,7 +30,6 @@ import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -41,7 +40,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectRepository_UnitTest {
+public class SimpleObjectRepository_Test {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -61,7 +60,7 @@ public class SimpleObjectRepository_UnitTest {
         simpleObjectRepository.serviceRegistry = mockServiceRegistry;
     }
 
-    public static class Create extends SimpleObjectRepository_UnitTest {
+    public static class Create extends SimpleObjectRepository_Test {
 
         @Test
         public void happyCase() throws Exception {
@@ -104,7 +103,7 @@ public class SimpleObjectRepository_UnitTest {
         }
     }
 
-    public static class ListAll extends SimpleObjectRepository_UnitTest {
+    public static class ListAll extends SimpleObjectRepository_Test {
 
         @Test
         public void happyCase() throws Exception {
