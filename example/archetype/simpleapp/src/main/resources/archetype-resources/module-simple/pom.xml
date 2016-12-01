@@ -28,6 +28,14 @@
     <artifactId>${artifactId}</artifactId>
     <name>SimpleApp Simple Module</name>
 
+    <properties>
+        <isis-maven-plugin.validate.appManifest>domainapp.modules.simple.SimpleModuleManifest</isis-maven-plugin.validate.appManifest>
+
+        <maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
+        <maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
+
+    </properties>
+
     <build>
         <resources>
             <resource>
@@ -68,47 +76,43 @@
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>standard</artifactId>
-                            <version>${danhaywood-mavenmixin-standard.version}</version>
+                            <version>${mavenmixin-standard.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>enforcerrelaxed</artifactId>
-                            <version>${danhaywood-mavenmixin-enforcerelaxed.version}</version>
+                            <version>${mavenmixin-enforcerrelaxed.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>datanucleusenhance</artifactId>
-                            <version>${danhaywood-mavenmixin-datanucleusenhance.version}</version>
+                            <version>${mavenmixin-datanucleusenhance.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>isisvalidate</artifactId>
-                            <version>${danhaywood-mavenmixin-isisvalidate.version}</version>
+                            <version>${mavenmixin-isisvalidate.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>surefire</artifactId>
-                            <version>${danhaywood-mavenmixin-surefire.version}</version>
+                            <version>${mavenmixin-surefire.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>sourceandjavadoc</artifactId>
-                            <version>${danhaywood-mavenmixin-sourceandjavadoc.version}</version>
+                            <version>${mavenmixin-sourceandjavadoc.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>staticanalysis</artifactId>
-                            <version>${danhaywood-mavenmixin-staticanalysis.version}</version>
+                            <version>${mavenmixin-staticanalysis.version}</version>
                         </mixin>
                     </mixins>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <danhaywood-mavenmixin-isisvalidate.appManifest>domainapp.modules.simple.SimpleModuleManifest</danhaywood-mavenmixin-isisvalidate.appManifest>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -119,7 +123,7 @@
         <dependency>
             <groupId>com.danhaywood.mavendeps</groupId>
             <artifactId>isistesting</artifactId>
-            <version>0.0.2</version>
+            <version>${mavendeps-isistesting.version}</version>
             <type>pom</type>
             <scope>test</scope>
         </dependency>

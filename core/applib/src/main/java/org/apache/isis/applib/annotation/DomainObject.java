@@ -156,6 +156,16 @@ public @interface DomainObject {
     Nature nature() default Nature.NOT_SPECIFIED;
 
 
+
+    /**
+     * Equivalent to {@link Mixin#method()}.
+     *
+     * <p>
+     *     Applicable only if {@link #nature()} is {@link Nature#MIXIN}.
+     * </p>
+     */
+    String mixinMethod() default Mixin.DEFAULT_METHOD_NAME;
+
     // //////////////////////////////////////
 
 
@@ -236,6 +246,4 @@ public @interface DomainObject {
      * </p>
      */
     Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class;
-
-
 }

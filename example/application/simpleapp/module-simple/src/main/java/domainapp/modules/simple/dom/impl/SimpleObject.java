@@ -140,15 +140,15 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > updateName (action)
-    @Mixin
-    public static class _updateName {
+    @Mixin(method = "exec")
+    public static class updateName {
 
         public static class ActionDomainEvent extends SimpleModuleDomSubmodule.ActionDomainEvent<SimpleObject> {
         }
 
         private final SimpleObject simpleObject;
 
-        public _updateName(final SimpleObject simpleObject) {
+        public updateName(final SimpleObject simpleObject) {
             this.simpleObject = simpleObject;
         }
 
@@ -161,7 +161,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
         @ActionLayout(
                 contributed = Contributed.AS_ACTION
         )
-        public SimpleObject $$(
+        public SimpleObject exec(
                 @Parameter(maxLength = SimpleObject.NameType.Meta.MAX_LEN)
                 @ParameterLayout(named = "Name")
                 final String name) {
@@ -169,11 +169,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
             return simpleObject;
         }
 
-        public String default0$$() {
+        public String default0Exec() {
             return simpleObject.getName();
         }
 
-        public TranslatableString validate0$$(final String name) {
+        public TranslatableString validate0Exec(final String name) {
             return name != null && name.contains("!") ? TranslatableString.tr("Exclamation mark is not allowed") : null;
         }
 
@@ -181,14 +181,14 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > delete (action)
-    @Mixin
-    public static class _delete {
+    @Mixin(method = "exec")
+    public static class delete {
 
         public static class ActionDomainEvent extends SimpleModuleDomSubmodule.ActionDomainEvent<SimpleObject> {
         }
 
         private final SimpleObject simpleObject;
-        public _delete(final SimpleObject simpleObject) {
+        public delete(final SimpleObject simpleObject) {
             this.simpleObject = simpleObject;
         }
 
@@ -199,7 +199,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
         @ActionLayout(
                 contributed = Contributed.AS_ACTION
         )
-        public void $$() {
+        public void exec() {
             final String title = titleService.titleOf(simpleObject);
             messageService.informUser(String.format("'%s' deleted", title));
             repositoryService.remove(simpleObject);

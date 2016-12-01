@@ -20,8 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
-
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
@@ -335,7 +334,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     static String determineIdFrom(final ObjectActionDefault mixinAction) {
-        final String id = compress(suffix(mixinAction));
+        final String id = StringExtensions.asCamelLowerFirst(compress(suffix(mixinAction)));
         return id;
     }
 
@@ -348,17 +347,26 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     static String suffix(final String singularName) {
-        if (singularName.endsWith("_")) {
-            if (Objects.equal(singularName, "_")) {
-                return singularName;
-            }
-            return singularName;
+        final String deriveFromUnderscore = derive(singularName, "_");
+        if(!Objects.equals(singularName, deriveFromUnderscore)) {
+            return deriveFromUnderscore;
         }
-        final int indexOfUnderscore = singularName.lastIndexOf('_');
-        if (indexOfUnderscore == -1) {
-            return singularName;
+        final String deriveFromDollar = derive(singularName, "$");
+        if(!Objects.equals(singularName, deriveFromDollar)) {
+            return deriveFromDollar;
         }
-        return singularName.substring(indexOfUnderscore + 1);
+        return singularName;
+    }
+
+    private static String derive(final String singularName, final String separator) {
+        final int indexOfSeparator = singularName.lastIndexOf(separator);
+        return occursNotAtEnd(singularName, indexOfSeparator)
+                ? singularName.substring(indexOfSeparator + 1)
+                : singularName;
+    }
+
+    private static boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
+        return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
     }
 
     //endregion

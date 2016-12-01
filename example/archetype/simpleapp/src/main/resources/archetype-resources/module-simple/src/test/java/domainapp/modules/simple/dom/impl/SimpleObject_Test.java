@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 /**
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
@@ -21,7 +24,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObject_UnitTest {
+public class SimpleObject_Test {
 
     SimpleObject simpleObject;
 
@@ -30,7 +33,7 @@ public class SimpleObject_UnitTest {
         simpleObject = new SimpleObject("Foobar");
     }
 
-    public static class Name extends SimpleObject_UnitTest {
+    public static class Name extends SimpleObject_Test {
 
         @Test
         public void happyCase() throws Exception {

@@ -77,22 +77,22 @@
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>standard</artifactId>
-                            <version>${danhaywood-mavenmixin-standard.version}</version>
+                            <version>${mavenmixin-standard.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>enforcerrelaxed</artifactId>
-                            <version>${danhaywood-mavenmixin-enforcerelaxed.version}</version>
+                            <version>${mavenmixin-enforcerrelaxed.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>surefire</artifactId>
-                            <version>${danhaywood-mavenmixin-surefire.version}</version>
+                            <version>${mavenmixin-surefire.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>cucumberreporting</artifactId>
-                            <version>${danhaywood-mavenmixin-cucumberreporting.version}</version>
+                            <version>${mavenmixin-cucumberreporting.version}</version>
                         </mixin>
                     </mixins>
                 </configuration>
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>com.danhaywood.mavendeps</groupId>
             <artifactId>isistesting</artifactId>
-            <version>0.0.2</version>
+            <version>${mavendeps-isistesting.version}</version>
             <type>pom</type>
             <scope>test</scope>
         </dependency>

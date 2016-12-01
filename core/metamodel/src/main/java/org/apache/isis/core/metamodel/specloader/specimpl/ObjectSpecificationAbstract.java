@@ -994,7 +994,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                                 return true;
                             }
                         }),
-                        createMixedInAssociationFunctor(this, mixinType)
+                        createMixedInAssociationFunctor(this, mixinType, mixinFacet.value())
                 ));
 
         toAppendTo.addAll(mixedInAssociations);
@@ -1006,7 +1006,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
             final ObjectSpecification mixedInType,
-            final Class<?> mixinType) {
+            final Class<?> mixinType,
+            final String mixinMethodName) {
         return new Function<ObjectActionDefault, ObjectAssociation>(){
             @Override
             public ObjectAssociation apply(final ObjectActionDefault mixinAction) {
@@ -1020,10 +1021,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final ObjectSpecification returnType = mixinAction.getReturnType();
                 if (returnType.isNotCollection()) {
                     return new OneToOneAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, servicesInjector);
+                            mixinAction, mixedInType, mixinType, mixinMethodName, servicesInjector);
                 } else {
                     return new OneToManyAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, servicesInjector);
+                            mixinAction, mixedInType, mixinType, mixinMethodName, servicesInjector);
                 }
             }
         };
@@ -1137,11 +1138,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private void addMixedInActionsIfAny(
             final Class<?> mixinType,
             final List<ObjectAction> mixedInActionsToAppendTo) {
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(mixinType);
-        if (specification == this) {
+
+        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinType);
+        if (mixinSpec == this) {
             return;
         }
-        final MixinFacet mixinFacet = specification.getFacet(MixinFacet.class);
+        final MixinFacet mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; perhaps it would be more correct to throw an exception?
             return;
@@ -1151,7 +1153,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         final List<ObjectAction> actions = Lists.newArrayList();
-        final List<ObjectAction> mixinActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
+        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
                 .<ObjectAction>any());
         for (final ObjectAction mixinTypeAction : mixinActions) {
             if (isAlwaysHidden(mixinTypeAction)) {
@@ -1167,7 +1169,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
 
             ObjectActionMixedIn mixedInAction =
-                    new ObjectActionMixedIn(mixinType, mixinAction, this, servicesInjector);
+                    new ObjectActionMixedIn(mixinType, mixinFacet.value(), mixinAction, this, servicesInjector);
             facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
             actions.add(mixedInAction);
         }

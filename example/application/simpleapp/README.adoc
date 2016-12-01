@@ -77,7 +77,7 @@ mvn -f pom-jdo-enhance-all.xml datanucleus:enhance
 +
 [source,bash]
 ----
-mvn package -Ddanhaywood-mavenmixin-jettyconsole
+mvn package -Dmavenmixin-jettyconsole
 ----
 +
 This can then be run using: +
@@ -94,7 +94,7 @@ Add additional flags, eg ``--headless`` or ``--port 9999``, if required.
 +
 [source,bash]
 ----
-mvn clean package -Ddanhaywood-mavenmixin-sourceandjavadoc
+mvn clean package -Dmavenmixin-sourceandjavadoc
 ----
 +
 [NOTE]
@@ -106,7 +106,7 @@ This is configured only for the `module-simple` module.
 +
 [source,bash]
 ----
-mvn -pl module-simple site -Ddanhaywood-mavenmixin-sourceandjavadoc -Ddanhaywood-mavenmixin-staticanalysis
+mvn -pl module-simple site -Dmavenmixin-sourceandjavadoc -Dmavenmixin-staticanalysis
 ----
 +
 [NOTE]

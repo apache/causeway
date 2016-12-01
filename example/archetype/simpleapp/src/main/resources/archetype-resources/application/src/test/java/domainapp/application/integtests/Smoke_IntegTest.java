@@ -45,7 +45,7 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
     SimpleObjectMenu menu;
 
     @Test
-    public void create_() throws Exception {
+    public void create() throws Exception {
 
         // given
         DomainAppTearDown fs = new DomainAppTearDown();
@@ -84,7 +84,7 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
 
         // when
-        wrap(mixin(SimpleObject._updateName.class, fred)).${symbol_dollar}${symbol_dollar}("Freddy");
+        wrap(mixin(SimpleObject.updateName.class, fred)).exec("Freddy");
         transactionService.flushTransaction();
 
         // then
@@ -100,7 +100,7 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
 
         // when
-        wrap(mixin(SimpleObject._delete.class, fred)).${symbol_dollar}${symbol_dollar}();
+        wrap(mixin(SimpleObject.delete.class, fred)).exec();
         transactionService.flushTransaction();
 
 

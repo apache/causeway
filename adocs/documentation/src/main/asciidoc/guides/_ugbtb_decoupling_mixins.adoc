@@ -5,127 +5,214 @@
 :_imagesdir: images/
 
 
-A mixin object allows one class to contribute behaviour - actions, (derived) properties and
-(derived) collections - to another domain object, either a domain entity or view model.
+A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
 
-Some programming languages use the term "trait" instead of mixin, and some languages (such as AspectJ) define their own
-syntax for defining such constructs.  In Apache Isis a mixin is very similar to a domain service, however it also
-defines a single 1-arg constructor that defines the type of the domain objects that it contributes to.
+Some programming languages use the term "trait" instead of mixin, and some languages (such as AspectJ) define their own syntax for defining such constructs.
+In Apache Isis a mixin is very similar to a domain service, however it also defines a single 1-arg constructor that defines the type of the domain objects that it contributes to.
 
-Why do this?  The main reason is to allow the app to be decoupled, so that it doesn't degrade into the proverbial
-link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].  Mixins (and contributions) allow dependency
-to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+Why do this?
+Two reasons:
+
+* The main reason is to allow the app to be decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
+Mixins (and contributions) allow dependency to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+
+* However, there is another reason: mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
+
+Both use cases are discussed below.
+
+Syntactically, a mixin is defined using either the xref:rgant.adoc#_rgant_Mixin[`@Mixin`] annotation or using xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
 
 
+== Contributed Collection
 
-== Example
-
-This is probably best explained by way of an example.  Suppose we have the `Customer` domain object which implements
-a `DocumentHolder` interface:
+The example below shows how to contribute a collection:
 
 [source,java]
 ----
-public class Customer implements DocumentHolder {
-    ...
+@Mixin
+public class DocumentHolderDocuments {
+
+    private final DocumentHolder holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action(semantics=SemanticsOf.SAFE)                         // <1>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
+    @CollectionLayout(render = RenderType.EAGERLY)
+    public List<Document> documents() {                         // <3>
+        ...
+    }
+    public boolean hideDocuments() { ... }                      // <4>
 }
 ----
+<1> required; actions that have side-effects cannot be contributed as collections
+<2> required; otherwise the mixin will default to being rendered as an action
+<3> must accept no arguments.
+    The mixin is a collection rather than a property because the return type is a collection, not a scalar.
+<4> supporting methods follow the usual naming conventions.
+    (That said, in the case of collections, because the collection is derived/read-only, the only supporting method that is relevant is `hideXxx()`).
+
+The above will result in a contributed collection for all types that implement/extend from `DocumentHolder` (so is probably for a mixin across modules).
 
 
-We could then imagine a mixin that would contribute behaviour to list, add and remove the ``Document``s for this holder:
+
+== Contributed Property
+
+Contributed properties are defined similarly, for example:
 
 [source,java]
 ----
-@Mixin                                                          // <1>
-public class DocumentHolder_documents {
+@Mixin
+public class DocumentHolderMostRecentDocument {
+
     private final DocumentHolder holder;
-    public DocumentHolder_documents(DocumentHolder holder) {    // <2>
-        this.holder = holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action(semantics=SemanticsOf.SAFE)                         // <1>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
+    public Document> mostRecentDocument() {                     // <3>
+        ...
     }
+    public boolean hideMostRecentDocument() { ... }             // <4>
+}
+----
+<1> required; actions that have side-effects cannot be contributed as collections
+<2> required; otherwise the mixin will default to being rendered as an action
+<3> must accept no arguments.
+    The mixin is a property rather than a collection because the return type is a scalar.
+<4> supporting methods follow the usual naming conventions.
+    (That said, in the case of properties, because the property is derived/read-only, the only supporting method that is relevant is `hideXxx()`).
+
+
+== Contributed Action
+
+Contributed properties are defined similarly, for example:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolderAddDocument {
+
+    private final DocumentHolder holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action()
+    @ActionLayout(contributed = Contributed.AS_ACTION)          // <1>
+    public Document> addDocument(Document doc) {
+        ...
+    }
+    public boolean hideAddDocument() { ... }                    // <2>
+}
+----
+<1> recommended
+<2> supporting methods follow the usual naming conventions.
+
+
+== Inferred Name
+
+Where the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated to "$$".
+The mixin name is everything after the last '_'.
+
+For example:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolder_documents {
+
+    private final DocumentHolder holder;
+    public DocumentHolder_documents(DocumentHolder holder) { this.holder = holder; }
+
     @Action(semantics=SemanticsOf.SAFE)
     @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
     @CollectionLayout(render = RenderType.EAGERLY)
-    public List<Document> documents() {
-        ...                                                     // <3>
+    public List<Document> $$() {                                    // <1>
+        ...
     }
-    @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public DocumentHolder add(Document document) {
-        ...                                                     // <4>
-    }
-    @Action(semantics=SemanticsOf.IDEMPOTENT)
-    public DocumentHolder remove(Document document) {
-        ...                                                     // <5>
-    }
+    public boolean hide$$() { ... }                                 // <2>
 }
 ----
-<1> alternatively can use `@DomainObject(nature=Nature.MIXIN)`
-<2> constructor indicates the type that is contributed to
-<3> implementation could, for example, use the (non-ASF)
-http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module.
-<4> implementation would probably delegate to an injected repository to (ultimately) insert data into some table
-<5> implementation would probably delegate to an injected repository to (ultimately) delete data from some table
+<1> using "$$" as the reserved method name
+<2> supporting methods as usual
 
-The above example also omits any supporting methods, eg `hideXxx()`, `disableXxx()`, `validateXxx()`, etc.
-
-In the user interface the "documents" collection, the "add" and the "delete" actions will appear to be part of
-`Customer`.  In essence the framework constructs a composite UI from the parts of multiple objects.
+As of `1.13.2-SNAPSHOT`, "$" is also recognized as a separator between the mixin type and mixin name.
+This is useful for mixins implemented as nested static types, discussed below.
 
 
-[TIP]
-====
-The (non-ASF) http://github.com/incodehq/incode-module-note[Incode note] and
-http://github.com/incodehq/incode-module-commchannel[Incode commchannel] modules are real-world examples that use this
-technique throughout.
-====
+== As Nested Static Classes
 
+As noted in the introduction, while mixins were originally introduced as a means of allowing contributions from one module to the types of another module, they are also a convenient mechanism for grouping functionality/behaviour against a concrete type.
+All the methods and supporting methods end up in a single construct, and the dependency between that functionality and the rest of the object is made more explicit.
 
+When using mixins in this fashion, it is idiomatic to write the mixin as a nested static class, using the naming convention described above to reduce duplication.
 
-== Contributing a single member
-
-The mixin can contribute as much or as little behaviour as makes sense.  For example, in the example above it might be
-that ``Document``s are created through some other mechanism (eg scanned) and are never deleted.  In that case, the
-mixin might be simply:
+For example:
 
 [source,java]
 ----
-@Mixin
-public class DocumentHolder_documents {
-    ..
-    public List<Document> documents() { ... }
-    ...
+public class Customer {
+
+    @Mixin
+    public static class _placeOrder {                                            // <1>
+
+        private final Customer customer;
+        public documents(Customer customer) { this.customer = customer; }       // <2>
+
+        @Action
+        @ActionLayout(contributed = Contributed.AS_ACTION)
+        public List<Order> $$(Product p, int quantity) {                        // <3>
+            ...
+        }
+        public boolean hide$$() { ... }                                         // <4>
+        public String validate0$$(Product p) { ...  }
+    }
 }
 ----
+<1> must start with an "_" (the effective name of the class is `Customer$_placeOrder`.
+<2> typically contributed to concrete class
+<3> using the "$$" reserved name
+<4> supporting methods as usual
 
 
-For the case where there is only a single member being contributed, the special name "__" (that is, two underscores)
-can be used instead.  In this case, the contributee member's name will be inferred from the mixin's class name.  If the
-class name itself contains an underscore, then the last part of the class name will be used.
-
-Thus, for a mixin whose class name is `DocumentHolder_documents`, the effective member name is `documents`.  We could
-therefore rewrite the mixin as:
+As of `1.13.2-SNAPSHOT`, the leading "_" can be omitted because "$" is also recognized as an identifier.
+Moreover, the mixin class can be capitalized if desired.
+Thus:
 
 [source,java]
 ----
-@Mixin
-public class DocumentHolder_documents {
-    ..
-    public List<Document> __() { ... }
-    ...
+public class Customer {
+
+    @Mixin
+    public static class PlaceOrder {                                            // <1>
+
+        private final Customer customer;
+        public documents(Customer customer) { this.customer = customer; }       // <2>
+
+        @Action
+        @ActionLayout(contributed = Contributed.AS_ACTION)
+        public List<Order> $$(Product p, int quantity) {                        // <3>
+            ...
+        }
+        public boolean hide$$() { ... }                                         // <4>
+        public String validate0$$(Product p) { ...  }
+    }
 }
 ----
 
-The benefit of this is marginal unless there are supporting methods, in which case the removal of boilerplate is welcome:
 
-[source,java]
-----
-@Mixin
-public class DocumentHolder_documents {
-    ..
-    public List<Document> __() { ... }
-    public boolean hide__() { ... }
-    public String disable__() { ... }
-    ...
-}
-----
+In other words, all of the following are allowed (in `1.13.2-SNAPSHOT`):
+
+* `public static class Documents { ... }`
+* `public static class documents { ... }`
+* `public static class _Documents { ... }`
+* `public static class _documents { ... }`
+
+(As of `1.13.2-SNAPSHOT`), the reserved method name "$$" can also be changed using xref:rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
+
+
+
+
+
+
 
 
 == Programmatic usage

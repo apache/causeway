@@ -87,7 +87,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         public void can_be_updated_directly() throws Exception {
 
             // when
-            wrap(mixin(SimpleObject._updateName.class, simpleObject)).$$("new name");
+            wrap(mixin(SimpleObject.updateName.class, simpleObject)).exec("new name");
             transactionService.nextTransaction();
 
             // then
@@ -102,7 +102,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
             expectedExceptions.expectMessage("Exclamation mark is not allowed");
 
             // when
-            wrap(mixin(SimpleObject._updateName.class, simpleObject)).$$("new name!");
+            wrap(mixin(SimpleObject.updateName.class, simpleObject)).exec("new name!");
         }
     }
 

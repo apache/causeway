@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * {@link DomainObject#nature()} of {@link Nature#MIXIN}) and which have a 1-arg constructor accepting an object
  * (being the object this is a mix-in for).
  */
-public interface MixinFacet extends Facet {
+public interface MixinFacet extends SingleValueFacet<String> {
 
     boolean isMixinFor(Class<?> candidateDomainType);
 
@@ -49,4 +49,7 @@ public interface MixinFacet extends Facet {
      * Returns the mixin around the provided domain object
      */
     Object instantiate(Object domainPojo);
+
+
+
 }

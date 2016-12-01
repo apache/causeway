@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements MixinFacet {
+public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String> implements MixinFacet {
 
     private final Class<?> mixinType;
     private final Class<?> constructorType;
@@ -43,10 +43,10 @@ public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements 
 
     public MixinFacetAbstract(
             final Class<?> mixinType,
-            final Class<?> constructorType,
+            final String value, final Class<?> constructorType,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
-        super(type(), holder);
+        super(type(), value, holder);
         this.mixinType = mixinType;
         this.constructorType = constructorType;
         this.servicesInjector = servicesInjector;
