@@ -16,10 +16,10 @@ For example:
 public class Customer {
 
     @Mixin(method="execute")
-    public static class _placeOrder {
+    public static class placeOrder {
 
         Customer customer;
-        public _placeOrder(Customer customer) { this.customer = customer; }
+        public placeOrder(Customer customer) { this.customer = customer; }
 
         public Customer execute(Product p, int quantity) { ... }
         public String disableExecute() { ... }
@@ -35,7 +35,7 @@ When invoked programmatically, the code reads:
 
 [source,java]
 ----
-mixin(Customer._placeOrder.class, someCustomer).execute(someProduct, 3);
+mixin(Customer.placeOrder.class, someCustomer).execute(someProduct, 3);
 ----
 
 

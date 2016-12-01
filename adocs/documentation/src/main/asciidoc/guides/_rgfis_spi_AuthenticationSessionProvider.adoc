@@ -30,3 +30,5 @@ the current `AuthenticationSession` from `IsisSessionFactory` singleton service:
 isisSessionFactory.getCurrentSession().getAuthenticationSession();
 ----
 
+
+(As of `1.13.2-SNAPSHOT`), if xref:rgsvc.adoc#_rgsvc_api_SudoService[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values.

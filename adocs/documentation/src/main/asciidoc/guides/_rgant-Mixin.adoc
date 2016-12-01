@@ -20,6 +20,11 @@ The table below summarizes the annotation's attributes.
 |===
 
 
+| Attribute
+| Values (default)
+| Description
+
+
 |xref:rgant.adoc#_rgant-Mixin_method[`method()`]
 |Method name within the mixin
 |(As of `1.13.2-SNAPSHOT`) How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
