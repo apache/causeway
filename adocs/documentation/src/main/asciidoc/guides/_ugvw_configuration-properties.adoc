@@ -34,17 +34,20 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 
 |`isis.viewer.wicket.` +
 `ajaxDebugMode`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 | whether the Wicket debug mode should be enabled.
 
 |`isis.viewer.wicket.` +
 `bookmarkedPages`
-| +ve int (`_15_`)
+| +ve int +
+(`_15_`)
 | number of pages to bookmark
 
 |`isis.viewer.wicket.` +
 `breadcrumbs.showChooser`
-| `true`,`false` (`_true_`)
+| `true`,`false` +
+(`_true_`)
 | Whether to show chooser for Breadcrumbs
 
 |`isis.viewer.wicket.` +
@@ -83,12 +86,14 @@ for further details).
 
 |`isis.viewer.wicket.` +
 `disableDependentChoiceAutoSelection`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 | For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
 
 |`isis.viewer.wicket.` +
 `disableModalDialogs`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 |No longer supported.
 
 |`isis.viewer.wicket.` +
@@ -101,23 +106,32 @@ for further details).
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInParentedTables`
-| +ve integer, (`_12_`)
+| +ve integer +
+(`_12_`)
 | See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInStandaloneTables`
-| +ve integer, (`_12_`)
+| +ve integer, +
+(`_12_`)
 | See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInTables`
-| +ve integer, (`_12_`)
+| +ve integer, +
+(`_12_`)
 | See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `regularCase`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
+
+|`isis.viewer.wicket.` +
+`replaceDisabledTagWithReadonlyTag`
+| `true`,`false` (`_true_`)
+| (`1.13.2-SNAPSHOT`) Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
 
 |`isis.viewer.wicket.` +
 `rememberMe.cookieKey`
@@ -145,28 +159,33 @@ will have to log in again).
 
 |`isis.viewer.wicket.` +
 `rememberMe.suppress`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 |Whether to suppress "remember me" checkbox on the login page.
 
 
 |`isis.viewer.wicket.` +
 `stripWicketTags`
-| `true`,`false` (`_true_`)
+| `true`,`false` +
+(`_true_`)
 | Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_stripped-wicket-tags[below].
 
 |`isis.viewer.wicket.` +
 `suppressPasswordReset`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 |If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-password-reset[below].
 
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 |(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).  Whether to suppress "remember me" checkbox on the login page.
 
 |`isis.viewer.wicket.` +
 `suppressSignUp`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 |If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-sign-up[below].
 
 |`isis.viewer.wicket.` +
@@ -183,12 +202,14 @@ will have to log in again).
 
 |`isis.viewer.wicket.` +
 `themes.showChooser`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 | Whether to show chooser for Bootstrap themes.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
 
 |`isis.viewer.wicket.` +
 `wicketSourcePlugin`
-| `true`,`false` (`_false_`)
+| `true`,`false` +
+(`_false_`)
 | Whether the Wicketsource plugin should be enabled; by default it is not enabled.
 
 Prior to `1.12.0` this was enabled by default for prototyping (not production).  However it can significantly

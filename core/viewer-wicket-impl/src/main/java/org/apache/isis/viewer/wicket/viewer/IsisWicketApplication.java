@@ -389,7 +389,9 @@ public class IsisWicketApplication
      * app is restarted.
      */
     protected String defaultEncryptionKeyIfNotConfigured() {
-        return UUID.randomUUID().toString();
+        return getDeploymentCategory().isProduction()
+                ? UUID.randomUUID().toString()
+                : "PrototypingEncryptionKey";
     }
 
     private void log(final Set<String> validationErrors) {

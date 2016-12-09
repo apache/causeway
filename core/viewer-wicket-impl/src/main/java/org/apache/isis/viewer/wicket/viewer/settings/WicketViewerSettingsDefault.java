@@ -70,4 +70,9 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     public String getTimestampPattern() {
         return getConfiguration().getString("isis.viewer.wicket.timestampPattern", "yyyy-MM-dd HH:mm:ss.SSS");
     }
+
+    @Override
+    public boolean isReplaceDisabledTagWithReadonlyTag() {
+        return getConfiguration().getBoolean("isis.viewer.wicket.replaceDisabledTagWithReadonlyTag", true);
+    }
 }

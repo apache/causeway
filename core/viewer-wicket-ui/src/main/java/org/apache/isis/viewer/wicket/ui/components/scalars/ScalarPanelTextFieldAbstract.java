@@ -28,6 +28,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
@@ -61,6 +63,17 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     private static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
 
     protected final Class<T> cls;
+
+    protected static class ReplaceDisabledTagWithReadonlyTagBehaviour extends Behavior {
+        @Override public void onComponentTag(final Component component, final ComponentTag tag) {
+            super.onComponentTag(component, tag);
+            if(component.isEnabled()) {
+                return;
+            }
+            tag.remove("disabled");
+            tag.put("readonly","readonly");
+        }
+    }
 
     protected WebMarkupContainer scalarTypeContainer;
     private AbstractTextComponent<T> textField;
@@ -152,7 +165,18 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         // over the parsing (using custom subclasses of TextField etc)
     }
 
-
+    private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
+        if(!getSettings().isReplaceDisabledTagWithReadonlyTag()) {
+            return;
+        }
+        if (component == null) {
+            return;
+        }
+        if (!component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehaviour.class).isEmpty()) {
+            return;
+        }
+        component.add(new ReplaceDisabledTagWithReadonlyTagBehaviour());
+    }
 
     private MarkupContainer createFormComponentLabel() {
         Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
@@ -243,11 +267,13 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
         textField.setEnabled(false);
+        addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 
         final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
         if(disableReasonIfAny == null) {
             CssClassAppender.appendCssClassTo(this, "editable");
         }
+
 
         setTitleAttribute("");
     }
@@ -256,6 +282,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
         textField.setEnabled(false);
+        addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
         setTitleAttribute(disableReason);
     }
 
@@ -274,6 +301,17 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void addFormComponentBehavior(Behavior behavior) {
         textField.add(behavior);
     }
+
+
+    //region > dependencies
+
+    @com.google.inject.Inject
+    private WicketViewerSettings settings;
+    protected WicketViewerSettings getSettings() {
+        return settings;
+    }
+
+    //endregion
 
 }
 
