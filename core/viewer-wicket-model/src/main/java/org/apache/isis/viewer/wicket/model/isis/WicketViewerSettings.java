@@ -65,5 +65,10 @@ public interface WicketViewerSettings extends Serializable {
      */
     String getTimestampPattern();
 
-
+    /**
+     * in Firefox and more recent versions of Chrome 54+, cannot copy out of disabled fields; instead we use the
+     * readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
+     * This behaviour is enabled by default but can be disabled using this flag
+     */
+    boolean isReplaceDisabledTagWithReadonlyTag();
 }

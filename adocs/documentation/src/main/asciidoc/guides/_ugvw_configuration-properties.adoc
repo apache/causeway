@@ -120,6 +120,11 @@ for further details).
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
 
 |`isis.viewer.wicket.` +
+`replaceDisabledTagWithReadonlyTag`
+| `true`,`false` (`_true_`)
+| (`1.13.2-SNAPSHOT`) Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
+
+|`isis.viewer.wicket.` +
 `rememberMe.cookieKey`
 | ascii chars (`_isisWicketRememberMe_`)
 |Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
