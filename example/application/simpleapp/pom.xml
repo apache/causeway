@@ -53,7 +53,7 @@
 
         <mavenmixin-isisswagger.version>0.0.3</mavenmixin-isisswagger.version>
         <mavenmixin-isisvalidate.version>0.0.2</mavenmixin-isisvalidate.version>
-        <isis-maven-plugin.version>1.13.1</isis-maven-plugin.version>
+        <isis-maven-plugin.version>${isis.version}</isis-maven-plugin.version>
 
         <mavenmixin-jettyconsole.version>0.0.2</mavenmixin-jettyconsole.version>
         <jetty-console-maven-plugin.version>1.59</jetty-console-maven-plugin.version>
