@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.model.isis;
 
 import java.io.Serializable;
 
-
 public interface WicketViewerSettings extends Serializable {
 
     /**
@@ -71,4 +70,35 @@ public interface WicketViewerSettings extends Serializable {
      * This behaviour is enabled by default but can be disabled using this flag
      */
     boolean isReplaceDisabledTagWithReadonlyTag();
+
+    /**
+     * Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they
+     * do a double click.
+     *
+     * This behaviour is enabled by default, but can be disabled using this flag.
+     */
+    boolean isPreventDoubleClickForFormSubmit();
+
+    /**
+     * Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they
+     * do a double click.
+     *
+     * This behaviour is enabled by default, but can be disabled using this flag.
+     */
+    boolean isPreventDoubleClickForNoArgAction();
+
+    /**
+     * Whether to show an indicator for a form submit button that it has been clicked.
+     *
+     * This behaviour is enabled by default, but can be disabled using this flag.
+     */
+    boolean isUseIndicatorForFormSubmit();
+
+    /**
+     * Whether to show an indicator for a no-arg action button that it has been clicked.
+     *
+     * This behaviour is enabled by default, but can be disabled using this flag.
+     */
+    boolean isUseIndicatorForNoArgAction();
+
 }

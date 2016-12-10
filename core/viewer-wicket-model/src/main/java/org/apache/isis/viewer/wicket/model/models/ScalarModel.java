@@ -19,7 +19,13 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -49,11 +55,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
  * a {@link Kind#PARAMETER parameter}.
@@ -62,7 +63,7 @@ import java.util.List;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  */
-public class ScalarModel extends EntityModel implements LinksProvider {
+public class ScalarModel extends EntityModel implements LinksProvider,HasExecutingPanel {
 
     private static final long serialVersionUID = 1L;
 

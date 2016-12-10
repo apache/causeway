@@ -75,4 +75,24 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     public boolean isReplaceDisabledTagWithReadonlyTag() {
         return getConfiguration().getBoolean("isis.viewer.wicket.replaceDisabledTagWithReadonlyTag", true);
     }
+
+    @Override
+    public boolean isPreventDoubleClickForFormSubmit() {
+        return getConfiguration().getBoolean("isis.viewer.wicket.preventDoubleClickForFormSubmit", true);
+    }
+
+    @Override
+    public boolean isPreventDoubleClickForNoArgAction() {
+        return getConfiguration().getBoolean("isis.viewer.wicket.preventDoubleClickForNoArgAction", true);
+    }
+
+    @Override
+    public boolean isUseIndicatorForFormSubmit() {
+        return getConfiguration().getBoolean("isis.viewer.wicket.useIndicatorForFormSubmit", true);
+    }
+
+    @Override
+    public boolean isUseIndicatorForNoArgAction() {
+        return getConfiguration().getBoolean("isis.viewer.wicket.useIndicatorForNoArgAction", true);
+    }
 }

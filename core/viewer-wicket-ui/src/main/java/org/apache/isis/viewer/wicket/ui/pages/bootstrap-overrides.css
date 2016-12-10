@@ -59,6 +59,10 @@ body {
     filter: alpha(opacity=50);
 }
 
+#veil .text-center {
+    margin-top: 100px;
+}
+
 .table .table td {
     border: none;
 }
@@ -849,4 +853,11 @@ tr.headers th form input {
 .entityHeaderPanel .entityActions ul.additionalLinkList li.additionalLinkItem {
     padding-top: 3px;
     padding-bottom: 7px;
+}
+
+.propertyEditForm .buttons .wicket-ajax-indicator,
+.actionParametersForm .buttons .wicket-ajax-indicator,
+.additionalLinkList .wicket-ajax-indicator {
+    margin-left: 4px;
+    margin-right: 10px;
 }

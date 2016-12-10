@@ -23,6 +23,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
@@ -30,6 +31,8 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -41,6 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHead
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -61,7 +65,61 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
         final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 
-        final AbstractLink link = new AjaxLink<Object>(linkId) {
+        // TODO: could remove some of the copy-n-paste between IndicatingAjaxLink and AjaxLink
+        final AbstractLink link = getSettings().isUseIndicatorForNoArgAction()
+                ? new IndicatingAjaxLink<Object>(linkId) {
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+
+                        if (ajaxDeferredBehaviour != null) {
+                            ajaxDeferredBehaviour.initiate(target);
+                        }
+                        else {
+                            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
+                            final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
+                            final ActionPromptHeaderPanel titlePanel =
+                                    PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                                    new Callable<ActionPromptHeaderPanel>() {
+                                        @Override
+                                        public ActionPromptHeaderPanel call() throws Exception {
+                                            final String titleId = actionPrompt.getTitleId();
+                                            return new ActionPromptHeaderPanel(titleId, actionModel);
+                                        }
+                                    });
+                            final ActionPanel actionPanel =
+                                    (ActionPanel) getComponentFactoryRegistry().createComponent(
+                                            ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
+
+                            actionPanel.setShowHeader(false);
+
+                            actionPrompt.setTitle(titlePanel, target);
+                            actionPrompt.setPanel(actionPanel, target);
+                            actionPanel.setActionPrompt(actionPrompt);
+                            actionPrompt.showPrompt(target);
+                        }
+                    }
+
+                    @Override
+                    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                        super.updateAjaxAttributes(attributes);
+                        if(getSettings().isPreventDoubleClickForNoArgAction()) {
+                            PanelUtil.disableBeforeReenableOnComplete(attributes, this);
+                        }
+
+                        // allow the event to bubble so the menu is hidden after click on an item
+                        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
+                    }
+
+                    @Override
+                    protected void onComponentTag(ComponentTag tag) {
+                        super.onComponentTag(tag);
+
+                        Buttons.fixDisabledState(this, tag);
+                    }
+                } :
+                new AjaxLink<Object>(linkId) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -98,6 +156,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
+                if(getSettings().isPreventDoubleClickForNoArgAction()) {
+                    PanelUtil.disableBeforeReenableOnComplete(attributes, this);
+                }
 
                 // allow the event to bubble so the menu is hidden after click on an item
                 attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
@@ -188,9 +249,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, blobOrClob);
     }
 
-    // ////////////////////////////////////////////////////////////
-    // Dependencies
-    // ////////////////////////////////////////////////////////////
+
+    //region > dependencies
 
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();
@@ -199,5 +259,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     protected PageClassRegistry getPageClassRegistry() {
         return ((PageClassRegistryAccessor) Application.get()).getPageClassRegistry();
     }
+
+    protected WicketViewerSettings getSettings() {
+        return ((WicketViewerSettingsAccessor)Application.get()).getSettings();
+    }
+
+    //endregion
 
 }

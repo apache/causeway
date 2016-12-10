@@ -80,6 +80,7 @@ import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -137,7 +138,7 @@ import net.ftlines.wicketsource.WicketSource;
  */
 public class IsisWicketApplication
         extends AuthenticatedWebApplication
-        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
+        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor {
 
     private static final long serialVersionUID = 1L;
     
@@ -206,6 +207,10 @@ public class IsisWicketApplication
      */
     @com.google.inject.Inject
     private DeploymentCategory deploymentCategory;
+
+    @com.google.inject.Inject
+    private WicketViewerSettings settings;
+
 
     private boolean determiningConfigurationType;
     private DeploymentTypeWicketAbstract deploymentType;
@@ -858,6 +863,11 @@ public class IsisWicketApplication
 
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
+    }
+
+    @Override
+    public WicketViewerSettings getSettings() {
+        return settings;
     }
 
 }
