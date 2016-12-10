@@ -37,7 +37,7 @@
         <isis.version>1.13.2</isis.version>
 
         <lombok.version>1.16.10</lombok.version>
-        <assertj-core.version>3.6.0</assertj-core.version>
+        <assertj-core.version>3.6.1</assertj-core.version>
 
         <mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
         <maven-cucumber-reporting.dependency.log4j.version>2.7</maven-cucumber-reporting.dependency.log4j.version>
