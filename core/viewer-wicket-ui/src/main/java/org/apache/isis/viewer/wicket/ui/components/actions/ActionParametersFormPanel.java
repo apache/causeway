@@ -21,100 +21,71 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.ResourceModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  */
-public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
+public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_OK_BUTTON = "okButton";
-    private static final String ID_CANCEL_BUTTON = "cancelButton";
     private static final String ID_ACTION_PARAMETERS = "parameters";
-
-    private final ExecutingPanel executingPanel;
 
     public ActionParametersFormPanel(final String id, final ActionModel model) {
         super(id, model);
-
-        Ensure.ensureThatArg(model.getExecutingPanel(), is(not(nullValue())));
-
-        this.executingPanel = model.getExecutingPanel();
         buildGui();
     }
 
     private void buildGui() {
         ActionModel model = getModel();
-        // in case previously used, eg prompt displayed then cancelled
-        model.clearArguments();
-        
-        add(new ActionParameterForm("inputForm", model));
+        model.clearArguments();  // in case previously used, eg prompt displayed then cancelled
+        add(new ActionParameterForm("inputForm", this, model));
     }
 
-    class ActionParameterForm extends Form<ObjectAdapter> implements ScalarModelSubscriber  {
+    class ActionParameterForm extends PropertyEditFormPanel.FormAbstract<ActionModel> implements ScalarModelSubscriber  {
 
         private static final long serialVersionUID = 1L;
 
-        private static final String ID_FEEDBACK = "feedback";
-        
-        private final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
 
-        public ActionParameterForm(final String id, final ActionModel actionModel) {
-            super(id, actionModel);
-
-            setOutputMarkupId(true); // for ajax button
-            
-            addParameters();
-
-            FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
-            addOrReplace(formFeedback);
-            addButtons();
+        public ActionParameterForm(
+                final String id,
+                final PromptFormPanelAbstract<?> parentPanel,
+                final ActionModel actionModel) {
+            super(id, parentPanel, actionModel);
         }
 
         private ActionModel getActionModel() {
             return (ActionModel) super.getModel();
         }
 
-        private void addParameters() {
+        @Override
+        protected void addParameters() {
             final ActionModel actionModel = getActionModel();
             List<ActionParameterMemento> parameterMementos = actionModel.primeArgumentModels();
             
@@ -138,69 +109,15 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             }
         }
 
-
-        private void addButtons() {
-            AjaxButton okButton = new AjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    boolean succeeded = executingPanel.executeAndProcessResults(target, form);
-                    if(succeeded) {
-                        // the Wicket ajax callbacks will have just started to hide the veil
-                        // we now show it once more, so that a veil continues to be shown until the
-                        // new page is rendered.
-                        target.appendJavaScript("isisShowVeil();\n");
-
-                        send(getPage(), Broadcast.EXACT, new IsisActionCompletedEvent(getActionModel(), target, form));
-
-                        target.add(form);
-                    } else {
-                        //if (actionPromptIfAny != null) {
-                            
-                            final StringBuilder builder = new StringBuilder();
-
-                            // ensure any jGrowl errors are shown
-                            // (normally would be flushed when traverse to next page).
-                            String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(getAuthenticationSession().getMessageBroker());
-                            builder.append(errorMessagesIfAny);
-
-                            // append the JS to the response. 
-                            String buf = builder.toString();
-                            target.appendJavaScript(buf);
-                            target.add(form);
-                        //}
-                    }
-                };
-
-                /**
-                 * On validation error
-                 */
-                @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    super.onError(target, form);
-                    target.add(form);
-                }
-            };
-            okButton.add(new JGrowlBehaviour());
-            setDefaultButton(okButton);
-            add(okButton);
+        @Override
+        protected void configureButtons(final AjaxButton okButton) {
             applyAreYouSure(okButton);
+        }
 
-            AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
-                private static final long serialVersionUID = 1L;
 
-                @Override
-                public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-                    final ActionPrompt actionPromptIfAny = ActionPromptProvider.Util.getFrom(ActionParametersFormPanel.this).getActionPrompt();
-                    if(actionPromptIfAny != null) {
-                        actionPromptIfAny.closePrompt(target);
-                    }
-                }
-            };
-            // so can submit with invalid content (eg mandatory params missing)
-            cancelButton.setDefaultFormProcessing(false);
-            add(cancelButton);
+        @Override
+        protected Object newCompletedEvent(final AjaxRequestTarget target, final Form<?> form) {
+            return new IsisActionCompletedEvent(getActionModel(), target, form);
         }
 
         /**
@@ -260,13 +177,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             // get trampled over (ISIS-629).
         }
         
-        @Override
-        public void onError(AjaxRequestTarget target, ScalarModelProvider provider) {
-            if(provider instanceof Component) {
-                // ensure that any feedback error associated with the providing component is shown.
-                target.add((Component)provider); 
-            }
-        }
 
     }
 

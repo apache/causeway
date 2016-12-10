@@ -19,6 +19,10 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import com.google.common.base.Strings;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -67,5 +71,12 @@ public final class PanelUtil {
             string = "";
         }
         return simpleName + string + ".css";
+    }
+
+    public static void disableBeforeReenableOnComplete(
+            final AjaxRequestAttributes attributes, final Component ajaxButtonOrLink) {
+        attributes.getAjaxCallListeners().add(new AjaxCallListener()
+                .onBefore("$('#" + ajaxButtonOrLink.getMarkupId() + "').prop('disabled',true);")
+                .onComplete("$('#" + ajaxButtonOrLink.getMarkupId() + "').prop('disabled',false);"));
     }
 }

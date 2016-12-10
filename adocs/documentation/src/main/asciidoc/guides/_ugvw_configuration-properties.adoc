@@ -123,6 +123,18 @@ for further details).
 | See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
+`preventDoubleClickForFormSubmit`
+| `true`,`false` +
+(`_true_`)
+| (`1.13.2-SNAPSHOT`) Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click.
+
+|`isis.viewer.wicket.` +
+`preventDoubleClickForNoArgAction`
+| `true`,`false` +
+(`_true_`)
+| (`1.13.2-SNAPSHOT`) Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
+
+|`isis.viewer.wicket.` +
 `regularCase`
 | `true`,`false` +
 (`_false_`)
@@ -130,12 +142,14 @@ for further details).
 
 |`isis.viewer.wicket.` +
 `replaceDisabledTagWithReadonlyTag`
-| `true`,`false` (`_true_`)
+| `true`,`false` +
+(`_true_`)
 | (`1.13.2-SNAPSHOT`) Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
 
 |`isis.viewer.wicket.` +
 `rememberMe.cookieKey`
-| ascii chars (`_isisWicketRememberMe_`)
+| ascii chars +
+(`_isisWicketRememberMe_`)
 |Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
 change this.  +
 
@@ -143,19 +157,19 @@ Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOver
 
 |`isis.viewer.wicket.` +
 `rememberMe.encryptionKey`
-| any string (a random UUID each time)
+| any string +
+(in prod, a random UUID each time)
 |Encryption key is used to encrypt the rememberMe user/password.  +
 
 Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered
 user/passwords in an encrypted cookie.
 
-If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be
-possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.  This
-configuration property therefore allows a private key to be specified, baked into the application.
+If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
+This configuration property therefore allows a private key to be specified, baked into the application.
 
-If no value is set then (for safety) a random UUID will be used as the encryption key.  (The net effect of this
-fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user
-will have to log in again).
+If no value is set then, in production, a random UUID will be used as the encryption key.
+The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again.
+In prototype mode, though, (as of `1.13.2-SNAPSHOT`), a fixed key will still be used; this saves the developer having to login each time.
 
 |`isis.viewer.wicket.` +
 `rememberMe.suppress`
@@ -207,13 +221,25 @@ will have to log in again).
 | Whether to show chooser for Bootstrap themes.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
 
 |`isis.viewer.wicket.` +
+`useIndicatorForFormSubmit`
+| `true`,`false` +
+(`_true_`)
+| (`1.13.2-SNAPSHOT`) Whether to show an indicator for a form submit button that it has been clicked.
+
+|`isis.viewer.wicket.` +
+`useIndicatorForNoArgAction`
+| `true`,`false` +
+(`_true_`)
+| (`1.13.2-SNAPSHOT`) Whether to show an indicator for a no-arg action button that it has been clicked.
+
+|`isis.viewer.wicket.` +
 `wicketSourcePlugin`
 | `true`,`false` +
 (`_false_`)
-| Whether the Wicketsource plugin should be enabled; by default it is not enabled.
+| Whether the WicketSource plugin should be enabled; by default it is not enabled.
 
-Prior to `1.12.0` this was enabled by default for prototyping (not production).  However it can significantly
-slow down rendering, hence the introduction of this configuration setting.
+Prior to `1.12.0` this was enabled by default for prototyping (not production).
+However it can significantly slow down rendering, hence the introduction of this configuration setting.
 
 |===
 
