@@ -21,6 +21,14 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 | JIRA relnotes
 
+| xref:r1.13.2[1.13.2]
+| 14-dec-2016
+| Patch release, modular simpleapp archetype
+| 2
+| 9
+| 5
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338744[Release notes for v1.13.2]
+
 | xref:r1.13.1[1.13.1]
 | 30-oct-2016
 | Patch release, better support for docker
@@ -258,6 +266,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_1.13.2.adoc[leveloffset=+1]
 include::_release-notes_1.13.1.adoc[leveloffset=+1]
 include::_release-notes_1.13.0.adoc[leveloffset=+1]
 include::_release-notes_1.12.2.adoc[leveloffset=+1]

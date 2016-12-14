@@ -57,8 +57,9 @@ xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]
 
 |xref:rgant.adoc#_rgant-DomainObject_mixinMethod[`mixinMethod()`]
 |Method name within the mixin
-|(As of `1.13.2-SNAPSHOT`) How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+|How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
+The default "reserved" method name is `$$`.
 
 
 |xref:rgant.adoc#_rgant-DomainObject_nature[`nature()`]

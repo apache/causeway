@@ -421,15 +421,11 @@ Update the parent `pom.xml` to reference the _released_ version of Apache Isis c
 ----
 
 
+[NOTE]
+====
+Previously at this point we used to check for and fix any missing license header notices; however it doesn't make sense for the archetype to include the Apache rat-plugin, so this has been removed.
+====
 
-Check for and fix any missing license header notices:
-
-[source,bash]
-----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
-for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
-----
 
 
 Finally, double check that the app
@@ -449,9 +445,7 @@ mvn clean install
 +
 [source,bash]
 ----
-pushd webapp
-mvn jetty:run
-popd
+mvn -pl webapp jetty:run
 ----
 
 * can be deployed as a WAR
@@ -551,9 +545,8 @@ Build the newly generated app and test:
 [source,bash]
 ----
 cd myapp
-mvn clean install
-cd webapp
-mvn jetty:run                  # runs as mvn jetty plugin
+mvn clean install -o
+mvn -pl webapp jetty:run              # runs as mvn jetty plugin
 ----
 
 
