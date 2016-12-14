@@ -29,13 +29,10 @@ public interface SudoService {
 ----
 
 which will run the provided block of code (a `Runnable` or a `Callable`) in a way such that calls to
-`UserService#getUser()` will return the specified user (and roles, if specified)
+`UserService#getUser()` will return the specified user (and roles, if specified).
+(If roles are not specified, then the roles of the current user are preserved).
 
-As of `1.13.2-SNAPSHOT`:
-
-* if roles are not specified, then the roles of the current user are preserved.
-
-* the current user/role reported by the internal xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`] will also return the specified user/roles.
+The current user/role reported by the internal xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`] will also return the specified user/roles.
 
 [IMPORTANT]
 ====
@@ -71,9 +68,9 @@ protected void execute(final ExecutionContext ec) {
 
 
 [[_rgsvc_api_SudoService_ACCESS-ALL-ROLE]]
-=== ACCESS_ALL_ROLE" (`1.13.2-SNAPSHOT`)
+=== ACCESS_ALL_ROLE
 
-When `sudo(...)` is called the "effective user" is reported by both xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and (as of `1.13.2-SNAPSHOT`) by xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism].
+When `sudo(...)` is called the "effective user" is reported by both xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and by xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism].
 These continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.
@@ -105,9 +102,9 @@ In the future this service may be used more deeply, eg to propagate permissions 
 
 
 
-== SPI (`1.13.2-SNAPSHOT`)
+== SPI
 
-The `SudoService.Spi` service (`1.13.2-SNAPSHOT`) allows implementations of `SudoService` to notify other services/components that the effective user and roles are different.
+The `SudoService.Spi` service allows implementations of `SudoService` to notify other services/components that the effective user and roles are different.
 The default implementation of xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] has been refactored to leverage this SPI.
 
 [source,java]

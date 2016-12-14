@@ -126,13 +126,13 @@ for further details).
 `preventDoubleClickForFormSubmit`
 | `true`,`false` +
 (`_true_`)
-| (`1.13.2-SNAPSHOT`) Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click.
+| Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click.
 
 |`isis.viewer.wicket.` +
 `preventDoubleClickForNoArgAction`
 | `true`,`false` +
 (`_true_`)
-| (`1.13.2-SNAPSHOT`) Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
+| Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
 
 |`isis.viewer.wicket.` +
 `regularCase`
@@ -144,7 +144,7 @@ for further details).
 `replaceDisabledTagWithReadonlyTag`
 | `true`,`false` +
 (`_true_`)
-| (`1.13.2-SNAPSHOT`) Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
+| Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
 
 |`isis.viewer.wicket.` +
 `rememberMe.cookieKey`
@@ -169,7 +169,7 @@ This configuration property therefore allows a private key to be specified, bake
 
 If no value is set then, in production, a random UUID will be used as the encryption key.
 The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again.
-In prototype mode, though, (as of `1.13.2-SNAPSHOT`), a fixed key will still be used; this saves the developer having to login each time.
+In prototype mode, though, a fixed key will still be used; this saves the developer having to login each time.
 
 |`isis.viewer.wicket.` +
 `rememberMe.suppress`
@@ -224,13 +224,13 @@ In prototype mode, though, (as of `1.13.2-SNAPSHOT`), a fixed key will still be 
 `useIndicatorForFormSubmit`
 | `true`,`false` +
 (`_true_`)
-| (`1.13.2-SNAPSHOT`) Whether to show an indicator for a form submit button that it has been clicked.
+| Whether to show an indicator for a form submit button that it has been clicked.
 
 |`isis.viewer.wicket.` +
 `useIndicatorForNoArgAction`
 | `true`,`false` +
 (`_true_`)
-| (`1.13.2-SNAPSHOT`) Whether to show an indicator for a no-arg action button that it has been clicked.
+| Whether to show an indicator for a no-arg action button that it has been clicked.
 
 |`isis.viewer.wicket.` +
 `wicketSourcePlugin`

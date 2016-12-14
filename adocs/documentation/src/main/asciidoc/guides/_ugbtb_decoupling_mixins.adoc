@@ -134,7 +134,7 @@ public class DocumentHolder_documents {
 <1> using "$$" as the reserved method name
 <2> supporting methods as usual
 
-As of `1.13.2-SNAPSHOT`, "$" is also recognized as a separator between the mixin type and mixin name.
+The character "$" is also recognized as a separator between the mixin type and mixin name.
 This is useful for mixins implemented as nested static types, discussed below.
 
 
@@ -152,7 +152,7 @@ For example:
 public class Customer {
 
     @Mixin
-    public static class _placeOrder {                                            // <1>
+    public static class placeOrder {                                            // <1>
 
         private final Customer customer;
         public documents(Customer customer) { this.customer = customer; }       // <2>
@@ -167,13 +167,12 @@ public class Customer {
     }
 }
 ----
-<1> must start with an "_" (the effective name of the class is `Customer$_placeOrder`.
+<1> Prior to `1.13.2`, had to be prefixed by an "_"; this is no longer required because "$" is also recognized as a way of parsing the class name in order to infer the mixin's name (eg `Customer$placeOrder`).
 <2> typically contributed to concrete class
 <3> using the "$$" reserved name
 <4> supporting methods as usual
 
 
-As of `1.13.2-SNAPSHOT`, the leading "_" can be omitted because "$" is also recognized as an identifier.
 Moreover, the mixin class can be capitalized if desired.
 Thus:
 
@@ -199,14 +198,14 @@ public class Customer {
 ----
 
 
-In other words, all of the following are allowed (in `1.13.2-SNAPSHOT`):
+In other words, all of the following are allowed:
 
 * `public static class Documents { ... }`
 * `public static class documents { ... }`
 * `public static class _Documents { ... }`
 * `public static class _documents { ... }`
 
-(As of `1.13.2-SNAPSHOT`), the reserved method name "$$" can also be changed using xref:rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
+The reserved method name "$$" can also be changed using xref:rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
 
 
 

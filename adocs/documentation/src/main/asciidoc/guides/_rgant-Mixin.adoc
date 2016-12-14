@@ -27,8 +27,9 @@ The table below summarizes the annotation's attributes.
 
 |xref:rgant.adoc#_rgant-Mixin_method[`method()`]
 |Method name within the mixin
-|(As of `1.13.2-SNAPSHOT`) How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+|How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
+The default "reserved" method name is `$$`.
 
 |===
 
