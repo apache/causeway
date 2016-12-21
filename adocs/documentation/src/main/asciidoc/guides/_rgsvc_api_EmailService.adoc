@@ -8,7 +8,9 @@
 
 The `EmailService` provides the ability to send HTML emails, with attachments, to one or more recipients.
 
-Apache Isis provides a default implementation to send emails using an external SMTP provider.  Note that this must be configured (using a number of configuration properties) before it can be used.  The that sends email as an HTML message, using an external SMTP provider.
+Apache Isis provides a default implementation to send emails using an external SMTP provider.
+Note that this must be configured (using a number of configuration properties) before it can be used.
+The that sends email as an HTML message, using an external SMTP provider.
 
 
 
@@ -27,10 +29,12 @@ public interface EmailService {
     boolean isConfigured();                                         // <4>
 }
 ----
-<1> is the main API to send the email (and optional attachments). Will return `false` if failed to send
+<1> is the main API to send the email (and optional attachments).
+Will return `false` if failed to send
 <2> pass either `null` or `Collections.emptyList()` if not required
 <3> should be HTML text
-<4> indicates whether the implementation was configured and initialized correctly.  If this returns `false` then any attempt to call `send(...)` will fail.
+<4> indicates whether the implementation was configured and initialized correctly.
+If this returns `false` then any attempt to call `send(...)` will fail.
 
 As noted in the introduction, the core framework provides a default implementation (`EmailServiceDefault`) that sends email as an HTML message, using an external SMTP provider.
 
@@ -51,7 +55,8 @@ and these properties may optionally be configured (each has a default to use gma
 
 These configuration properties can be specified either in `isis.properties` or in an xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file].
 
-If prototyping (that is, running the app using `org.apache.isis.WebServer`), the configuration properties can also be specified as system properties. For example, if you create a test email account on gmail, you can configure the service using:
+If prototyping (that is, running the app using `org.apache.isis.WebServer`), the configuration properties can also be specified as system properties.
+For example, if you create a test email account on gmail, you can configure the service using:
 
 [source,ini]
 ----
@@ -67,10 +72,13 @@ where "xxx" is the gmail user account and "yyy" is its password
 
 If you wish to write an alternative implementation, be aware that it should process the message body as HTML (as opposed to plain text or any other format).
 
-Also, note that (unlike most Apache Isis domain services) the implementation is also instantiated and injected by Google Guice. This is because `EmailService` is used as part of the xref:ugvw.adoc#_ugvw_features_user-registration[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Apache Isis runtime. This implies a couple of additional constraints:
+Also, note that (unlike most Apache Isis domain services) the implementation is also instantiated and injected by Google Guice.
+This is because `EmailService` is used as part of the xref:ugvw.adoc#_ugvw_features_user-registration[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Apache Isis runtime.
+This implies a couple of additional constraints:
 
 * first, implementation class should also be annotated with `@com.google.inject.Singleton`
-* second, there may not be any Apache Isis session running. (If necessary, one can be created on the fly using `IsisContext.doInSession(...)`)
+* second, there may not be any Apache Isis session running.
+(If necessary, one can be created on the fly using `IsisContext.doInSession(...)`)
 
 To ensure that your alternative implementation takes the place of the default implementation, register it explicitly in `isis.properties`.
 
@@ -78,14 +86,9 @@ To ensure that your alternative implementation takes the place of the default im
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
-implementation of `EmailService` service is automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `EmailService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Related Services
