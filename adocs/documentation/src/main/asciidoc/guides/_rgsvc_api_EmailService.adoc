@@ -73,6 +73,18 @@ In addition (as of `1.13.3-SNAPSHOT`), the following properties can be set:
 Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
 This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
 
+* `isis.service.email.override.to` +
++
+Intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).
+
+* `isis.service.email.override.cc` +
++
+Similarly, to override the `cc` email address.
+
+* `isis.service.email.override.to` +
++
+Similarly, to override the `bcc` email address.
+
 * `isis.service.email.socketTimeout` +
 +
 The socket timeout, defaulting to 2000ms.

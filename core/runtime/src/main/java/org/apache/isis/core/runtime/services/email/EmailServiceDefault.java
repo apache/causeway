@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.services.email;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -79,6 +80,10 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT = "isis.service.email.socketConnectionTimeout";
     private static final int ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT = 2000;
 
+    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_TO = "isis.service.email.override.to";
+    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_CC = "isis.service.email.override.cc";
+    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_BCC = "isis.service.email.override.bcc";
+
     //endregion
 
     //region > init
@@ -135,6 +140,19 @@ public class EmailServiceDefault implements EmailService {
     protected int getSocketConnectionTimeout() {
         return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT);
     }
+
+    protected String getEmailOverrideTo() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_TO);
+    }
+
+    protected String getEmailOverrideCc() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_CC);
+    }
+
+    protected String getEmailOverrideBcc() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_BCC);
+    }
+
     //endregion
 
     //region > isConfigured
@@ -194,14 +212,22 @@ public class EmailServiceDefault implements EmailService {
                 }
             }
 
-            if(notEmpty(toList)) {
-                email.addTo(toList.toArray(new String[toList.size()]));
+
+            final String overrideTo = getEmailOverrideTo();
+            final String overrideCc = getEmailOverrideCc();
+            final String overrideBcc = getEmailOverrideBcc();
+
+            final String[] toListElseOverride = actually(toList, overrideTo);
+            if(notEmpty(toListElseOverride)) {
+                email.addTo(toListElseOverride);
             }
-            if(notEmpty(ccList)) {
-                email.addCc(ccList.toArray(new String[ccList.size()]));
+            final String[] ccListElseOverride = actually(ccList, overrideCc);
+            if(notEmpty(ccListElseOverride)) {
+                email.addCc(ccListElseOverride);
             }
-            if(notEmpty(bccList)) {
-                email.addBcc(bccList.toArray(new String[bccList.size()]));
+            final String[] bccListElseOverride = actually(bccList, overrideBcc);
+            if(notEmpty(bccListElseOverride)) {
+                email.addBcc(bccListElseOverride);
             }
 
             email.send();
@@ -219,9 +245,20 @@ public class EmailServiceDefault implements EmailService {
     }
     //endregion
 
+
     //region > helper methods
-    private boolean notEmpty(final List<String> toList) {
-        return toList != null && !toList.isEmpty();
+
+    static String[] actually(final List<String> original, final String overrideIfAny) {
+        final List<String> addresses = Strings.isNullOrEmpty(overrideIfAny)
+                ? original == null
+                    ? Collections.<String>emptyList()
+                    : original
+                : Collections.singletonList(overrideIfAny);
+        return addresses.toArray(new String[addresses.size()]);
+    }
+
+    static boolean notEmpty(final String[] addresses) {
+        return addresses != null && addresses.length > 0;
     }
     //endregion
 

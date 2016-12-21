@@ -247,6 +247,34 @@ If no configuration property is available, then the defaults is determined by th
 
 | `isis.service.` +
 `email.` +
+`override.bcc` +
+| email address
+|(`1.13.3-SNAPSHOT`) intended to simplify testing, if specified then the email's `bcc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`override.cc` +
+| email address
+|(`1.13.3-SNAPSHOT`) intended to simplify testing, if specified then the email's `cc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`override.to` +
+| email address
+|(`1.13.3-SNAPSHOT`) intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+
+| `isis.service.` +
+`email.` +
 `port` +
 | port number (`_587_`)
 |The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
