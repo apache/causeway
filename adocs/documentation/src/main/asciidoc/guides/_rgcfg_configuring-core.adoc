@@ -251,7 +251,8 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 | `isis.service.` +
 `email.sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
+|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
+*Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -267,7 +268,8 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 | `isis.service.` +
 `email.sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
+|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
+*Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
