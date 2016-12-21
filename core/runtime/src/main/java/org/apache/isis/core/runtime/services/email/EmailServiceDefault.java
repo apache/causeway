@@ -50,6 +50,13 @@ public class EmailServiceDefault implements EmailService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceDefault.class);
 
+    public static class EmailServiceException extends RuntimeException {
+        static final long serialVersionUID = 1L;
+        public EmailServiceException(final EmailException cause) {
+            super(cause);
+        }
+    }
+
     //region > constants
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
     private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
@@ -62,6 +69,9 @@ public class EmailServiceDefault implements EmailService {
 
     private static final String ISIS_SERVICE_EMAIL_TLS_ENABLED = "isis.service.email.tls.enabled";
     private static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
+
+    private static final String ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL = "isis.service.email.throwExceptionOnFail";
+    private static final boolean ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT = true;
 
     //endregion
 
@@ -106,6 +116,10 @@ public class EmailServiceDefault implements EmailService {
 
     protected Boolean getSenderEmailTlsEnabled() {
         return configuration.getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
+    }
+
+    protected Boolean isThrowExceptionOnFail() {
+        return configuration.getBoolean(ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL, ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT);
     }
     //endregion
 
@@ -174,7 +188,11 @@ public class EmailServiceDefault implements EmailService {
             email.send();
 
         } catch (EmailException ex) {
-            LOG.error("An error occurred while trying to send an email about user email verification", ex);
+            LOG.error("An error occurred while trying to send an email", ex);
+            final Boolean throwExceptionOnFail = isThrowExceptionOnFail();
+            if(throwExceptionOnFail) {
+                throw new EmailServiceException(ex);
+            }
             return false;
         }
 
