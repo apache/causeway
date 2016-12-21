@@ -241,21 +241,6 @@ If no configuration property is available, then the defaults is determined by th
 
 
 | `isis.service.` +
-`email.tls.enabled`
-|`true`,`false` +
-(`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
-
-NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
-
-| `isis.service.` +
-`email.sender.hostname` +
-| host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
-
-NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
-
-| `isis.service.` +
 `email.port` +
 | port number (`_587_`)
 |The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
@@ -270,10 +255,28 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
+
+| `isis.service.` +
+`email.sender.hostname` +
+| host (`_smtp.gmail.com_`)
+|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
 | `isis.service.` +
 `email.sender.password` +
 | email password
 |The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.tls.enabled`
+|`true`,`false` +
+(`true`)
+|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
