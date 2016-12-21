@@ -66,6 +66,13 @@ For example, if you create a test email account on gmail, you can configure the 
 where "xxx" is the gmail user account and "yyy" is its password
 
 
+In addition (as of `1.13.3-SNAPSHOT`), the following properties can be set:
+
+* `isis.service.email.throwExceptionOnFail` +
++
+Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
+This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
+
 
 
 == Alternative Implementations

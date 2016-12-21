@@ -275,6 +275,18 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 
 | `isis.service.` +
+`email.` +
+`throwExceptionOnFail`
+|`true`,`false` +
+(`true`)
+|(`1.13.3-SNAPSHOT`) Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
+
+This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
 `email.tls.enabled`
 |`true`,`false` +
 (`true`)
