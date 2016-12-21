@@ -191,7 +191,8 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 
 
 |`isis.services.` +
-`applicationFeatures.init`
+`applicationFeatures.` +
+`init`
 | `lazy`, `eager` +
 (`lazy`)
 |Whether the application features repository (which surfaces the framework's metamodel) should be
@@ -201,27 +202,31 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 
 
 |`isis.services.` +
-`audit.objects`
+`audit.` +
+`objects`
 | `all`, `none` +
 (`all`)
 |Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
-`command.actions`
+`command.` +
+`actions`
 | `all`, `ignoreSafe`, `none` (`all`)
 |Whether action invocations should be automatically reified into commands (for actions annotated with xref:rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
 |`isis.services.` +
-`command.properties`
+`command.` +
+`properties`
 | `all`, `none` (`all`)
 |(Whether property edits should be automatically reified into commands (for properties annotated with xref:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
 |`isis.services.` +
-`container.disableAutoFlush`
+`container.` +
+`disableAutoFlush`
 |`true`,`false` +
 (`false`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
@@ -241,7 +246,8 @@ If no configuration property is available, then the defaults is determined by th
 
 
 | `isis.service.` +
-`email.port` +
+`email.` +
+`port` +
 | port number (`_587_`)
 |The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
@@ -249,7 +255,8 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 
 | `isis.service.` +
-`email.sender.address` +
+`email.` +
+`sender.address` +
 | email address
 |The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
 *Mandatory*.  +
@@ -258,7 +265,8 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 
 | `isis.service.` +
-`email.sender.hostname` +
+`email.` +
+`sender.hostname` +
 | host (`_smtp.gmail.com_`)
 |The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
@@ -266,7 +274,8 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 
 | `isis.service.` +
-`email.sender.password` +
+`email.` +
+`sender.password` +
 | email password
 |The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
 *Mandatory*.  +
@@ -287,7 +296,8 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 
 | `isis.service.` +
-`email.tls.enabled`
+`email.` +
+`tls.enabled`
 |`true`,`false` +
 (`true`)
 |Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
@@ -296,13 +306,15 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 
 | `isis.services.` +
-`eventbus.implementation` +
+`eventbus.` +
+`implementation` +
 | `guava`, `axon`, +
 FQCN (`_guava_`)
 |which implementation to use by the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
-`eventbus.allowLateRegistration` +
+`eventbus.` +
+`allowLateRegistration` +
 |`true`,`false` +
 (`false`)
 |whether a domain service can register with the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
@@ -311,7 +323,8 @@ Since this almost certainly constitutes a bug in application code, by default th
 
 
 | `isis.services.` +
-`exceprecog.logRecognizedExceptions` +
+`exceprecog.` +
+`logRecognizedExceptions` +
 |`true`,`false` +
 (`false`)
 |whether recognized exceptions should also be logged. +
@@ -322,7 +335,8 @@ This property logs the exception anyway, useful for debugging.
 
 | `isis.services.` +
 `ExceptionRecognizerComposite-` +
-`ForJdoObjectStore.disable` +
+`ForJdoObjectStore.` +
+`disable` +
 |`true`,`false` +
 (`false`)
 |whether to disable the default recognizers registered by `ExceptionRecognizerCompositeForJdoObjectStore`. +
@@ -332,7 +346,8 @@ In the (probably remote) chance that this functionality isn't required, they can
 
 
 |`isis.services.` +
-`injector.injectPrefix`
+`injector.` +
+`injectPrefix`
 | `true`,`false`  +
 (`false`)
 |(Whether the framework should support `inject...()` as a prefix for injecting domain services into other domain objects.
@@ -343,7 +358,8 @@ If the setting is left as disabled then this may reduce application start-up tim
 
 
 |`isis.services.` +
-`injector.setPrefix`
+`injector.` +
+`setPrefix`
 | `true`,`false`  +
 (`true`)
 |Whether the framework should support `set...()` as a prefix for injecting domain services into other domain objects.
@@ -355,19 +371,22 @@ If the setting is changed to disabled then this may reduce application start-up 
 
 
 |`isis.services.` +
-`publish.objects`
+`publish.` +
+`objects`
 | `all`, `none` +
 (`all`)
 |Whether changed objects should be automatically published (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
-`publish.actions`
+`publish.` +
+`actions`
 | `all`, `ignoreSafe`, `none` (`none`)
 |Whether actions should be automatically published (for actions annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
 
 |`isis.services.` +
-`publish.properties`
+`publish.` +
+`properties`
 | `all`, `none` (`none`)
 |Whether properties should be automatically published (for properties annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
 
@@ -382,7 +401,8 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 
 
 |`isis.services.` +
-`translation.po.mode`
+`translation.` +
+`po.mode`
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
 
