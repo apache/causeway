@@ -73,6 +73,13 @@ In addition (as of `1.13.3-SNAPSHOT`), the following properties can be set:
 Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
 This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
 
+* `isis.service.email.socketTimeout` +
++
+The socket timeout, defaulting to 2000ms.
+
+* `isis.service.email.socketConnectionTimeout` +
++
+The socket connection timeout, defaulting to 2000ms.
 
 
 == Alternative Implementations

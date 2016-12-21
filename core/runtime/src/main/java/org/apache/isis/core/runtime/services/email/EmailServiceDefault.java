@@ -73,6 +73,12 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL = "isis.service.email.throwExceptionOnFail";
     private static final boolean ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT = true;
 
+    private static final String ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT = "isis.service.email.socketTimeout";
+    private static final int ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT_DEFAULT = 2000;
+
+    private static final String ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT = "isis.service.email.socketConnectionTimeout";
+    private static final int ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT = 2000;
+
     //endregion
 
     //region > init
@@ -121,6 +127,14 @@ public class EmailServiceDefault implements EmailService {
     protected Boolean isThrowExceptionOnFail() {
         return configuration.getBoolean(ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL, ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT);
     }
+
+    protected int getSocketTimeout() {
+        return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT_DEFAULT);
+    }
+
+    protected int getSocketConnectionTimeout() {
+        return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT);
+    }
     //endregion
 
     //region > isConfigured
@@ -147,12 +161,17 @@ public class EmailServiceDefault implements EmailService {
             final String senderEmailHostName = getSenderEmailHostName();
             final Integer senderEmailPort = getSenderEmailPort();
             final Boolean senderEmailTlsEnabled = getSenderEmailTlsEnabled();
+            final int socketTimeout = getSocketTimeout();
+            final int socketConnectionTimeout = getSocketConnectionTimeout();
 
             email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
             email.setHostName(senderEmailHostName);
             email.setSmtpPort(senderEmailPort);
             email.setStartTLSEnabled(senderEmailTlsEnabled);
             email.setDataSourceResolver(new DataSourceClassPathResolver("/", true));
+
+            email.setSocketTimeout(socketTimeout);
+            email.setSocketConnectionTimeout(socketConnectionTimeout);
 
             final Properties properties = email.getMailSession().getProperties();
 

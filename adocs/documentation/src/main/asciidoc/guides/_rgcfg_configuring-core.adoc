@@ -285,6 +285,27 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 | `isis.service.` +
 `email.` +
+`socketConnectionTimeout`
+|milliseconds +
+(2000)
+|(`1.13.3-SNAPSHOT`) The socket connection timeout
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.` +
+`socketTimeout`
+|milliseconds +
+(2000)
+|(`1.13.3-SNAPSHOT`) The socket timeout
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+
+| `isis.service.` +
+`email.` +
 `throwExceptionOnFail`
 |`true`,`false` +
 (`true`)
