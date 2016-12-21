@@ -63,9 +63,6 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_TLS_ENABLED = "isis.service.email.tls.enabled";
     private static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
 
-    private String senderEmailAddress;
-    private String senderEmailPassword;
-    private Integer senderEmailPort;
     //endregion
 
     //region > init
@@ -81,10 +78,6 @@ public class EmailServiceDefault implements EmailService {
         if(initialized) {
             return;
         }
-
-        senderEmailAddress = getSenderEmailAddress();
-        senderEmailPassword = getSenderEmailPassword();
-        senderEmailPort = getSenderEmailPort();
 
         initialized = true;
 
@@ -120,6 +113,8 @@ public class EmailServiceDefault implements EmailService {
 
     @Override
     public boolean isConfigured() {
+        final String senderEmailAddress = getSenderEmailAddress();
+        final String senderEmailPassword = getSenderEmailPassword();
         return !Strings.isNullOrEmpty(senderEmailAddress) && !Strings.isNullOrEmpty(senderEmailPassword);
     }
     //endregion
@@ -132,22 +127,28 @@ public class EmailServiceDefault implements EmailService {
 
         try {
             final ImageHtmlEmail email = new ImageHtmlEmail();
+
+            final String senderEmailAddress = getSenderEmailAddress();
+            final String senderEmailPassword = getSenderEmailPassword();
+            final String senderEmailHostName = getSenderEmailHostName();
+            final Integer senderEmailPort = getSenderEmailPort();
+            final Boolean senderEmailTlsEnabled = getSenderEmailTlsEnabled();
+
             email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
-            email.setHostName(getSenderEmailHostName());
+            email.setHostName(senderEmailHostName);
             email.setSmtpPort(senderEmailPort);
-            email.setStartTLSEnabled(getSenderEmailTlsEnabled());
+            email.setStartTLSEnabled(senderEmailTlsEnabled);
             email.setDataSourceResolver(new DataSourceClassPathResolver("/", true));
 
             final Properties properties = email.getMailSession().getProperties();
 
-            // TODO ISIS-987: check whether all these are required and extract as configuration settings
             properties.put("mail.smtps.auth", "true");
             properties.put("mail.debug", "true");
             properties.put("mail.smtps.port", "" + senderEmailPort);
             properties.put("mail.smtps.socketFactory.port", "" + senderEmailPort);
             properties.put("mail.smtps.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             properties.put("mail.smtps.socketFactory.fallback", "false");
-            properties.put("mail.smtp.starttls.enable", "" + getSenderEmailTlsEnabled());
+            properties.put("mail.smtp.starttls.enable", "" + senderEmailTlsEnabled);
 
             email.setFrom(senderEmailAddress);
 
