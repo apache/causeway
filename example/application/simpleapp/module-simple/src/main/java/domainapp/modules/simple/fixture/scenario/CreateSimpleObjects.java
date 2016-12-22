@@ -23,19 +23,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.fixture.data.SimpleObjectMenu_create;
-import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
+import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
-public class RecreateSimpleObjects extends FixtureScript {
+public class CreateSimpleObjects extends FixtureScript {
 
     public final List<String> NAMES = Collections.unmodifiableList(Arrays.asList(
             "Foo", "Bar", "Baz", "Frodo", "Froyo", "Fizz", "Bip", "Bop", "Bang", "Boo"));
@@ -43,6 +44,7 @@ public class RecreateSimpleObjects extends FixtureScript {
     /**
      * The number of objects to create, up to 10; optional, defaults to 3.
      */
+    @Nullable
     @Getter @Setter
     private Integer number;
 
@@ -64,13 +66,16 @@ public class RecreateSimpleObjects extends FixtureScript {
         }
 
         // execute
-        ec.executeChild(this, new SimpleModuleTearDown());
         for (int i = 0; i < number; i++) {
             final String name = NAMES.get(i);
-            final SimpleObjectMenu_create fs = new SimpleObjectMenu_create().setName(name);
-            ec.executeChild(this, fs.getName(), fs);
-            simpleObjects.add(fs.getSimpleObject());
+
+            final SimpleObject simpleObject = wrap(simpleObjectMenu).create(name);
+            ec.addResult(this, simpleObject);
+            simpleObjects.add(simpleObject);
         }
     }
+
+    @javax.inject.Inject
+    SimpleObjectMenu simpleObjectMenu;
 
 }

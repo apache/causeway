@@ -342,6 +342,12 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>simpleapp-module-simple</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>simpleapp-application</artifactId>
                 <version>${project.version}</version>
             </dependency>

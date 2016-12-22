@@ -22,25 +22,19 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.util.ObjectContracts;
 
-import domainapp.modules.simple.dom.SimpleModuleDomSubmodule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,171 +45,67 @@ import lombok.Setter;
 )
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="id")
+        column="id")
 @javax.jdo.annotations.Version(
         strategy= VersionStrategy.DATE_TIME,
         column="version")
 @javax.jdo.annotations.Queries({
         @javax.jdo.annotations.Query(
-                name = "findByName", language = "JDOQL",
+                name = "findByName",
                 value = "SELECT "
                         + "FROM domainapp.modules.simple.dom.impl.SimpleObject "
                         + "WHERE name.indexOf(:name) >= 0 ")
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject(
-        objectType = "simple.SimpleObject",
-        auditing = Auditing.ENABLED,
-        publishing = Publishing.ENABLED
+        objectType = "simple.SimpleObject"
 )
 public class SimpleObject implements Comparable<SimpleObject> {
 
-    //region > title
-    public TranslatableString title() {
-        return TranslatableString.tr("Object: {name}", "name", getName());
-    }
-    //endregion
-
-    //region > constructor
     public SimpleObject(final String name) {
         setName(name);
     }
-    //endregion
 
-    //region > name (read-only property)
-    public static class NameType {
-        private NameType() {
-        }
-
-        public static class Meta {
-            public static final int MAX_LEN = 40;
-
-            private Meta() {
-            }
-        }
-
-        public static class PropertyDomainEvent
-                extends SimpleModuleDomSubmodule.PropertyDomainEvent<SimpleObject, String> { }
-    }
-
-
-    @javax.jdo.annotations.Column(allowsNull = "false", length = NameType.Meta.MAX_LEN)
-    @Property(
-            editing = Editing.DISABLED,
-            domainEvent = NameType.PropertyDomainEvent.class
-    )
+    @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
+    @Property(editing = Editing.DISABLED)
     @Getter @Setter
+    @Title(prepend = "Object: ")
     private String name;
 
-    // endregion
-
-    //region > notes (editable property)
-    public static class NotesType {
-        private NotesType() {
-        }
-
-        public static class Meta {
-            public static final int MAX_LEN = 4000;
-
-            private Meta() {
-            }
-        }
-
-        public static class PropertyDomainEvent
-                extends SimpleModuleDomSubmodule.PropertyDomainEvent<SimpleObject, String> { }
-    }
-
-
-    @javax.jdo.annotations.Column(
-            allowsNull = "true",
-            length = NotesType.Meta.MAX_LEN
-    )
-    @Property(
-            command = CommandReification.ENABLED,
-            publishing = Publishing.ENABLED,
-            domainEvent = NotesType.PropertyDomainEvent.class
-    )
+    @javax.jdo.annotations.Column(allowsNull = "true", length = 4000)
+    @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private String notes;
-    //endregion
+
 
     //region > updateName (action)
-    @Mixin(method = "exec")
-    public static class updateName {
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public SimpleObject updateName(
+            @Parameter(maxLength = 40)
+            @ParameterLayout(named = "Name")
+            final String name) {
+        setName(name);
+        return this;
+    }
 
-        public static class ActionDomainEvent extends SimpleModuleDomSubmodule.ActionDomainEvent<SimpleObject> {
-        }
+    public String default0UpdateName() {
+        return getName();
+    }
 
-        private final SimpleObject simpleObject;
-
-        public updateName(final SimpleObject simpleObject) {
-            this.simpleObject = simpleObject;
-        }
-
-        @Action(
-                command = CommandReification.ENABLED,
-                publishing = Publishing.ENABLED,
-                semantics = SemanticsOf.IDEMPOTENT,
-                domainEvent = ActionDomainEvent.class
-        )
-        @ActionLayout(
-                contributed = Contributed.AS_ACTION
-        )
-        public SimpleObject exec(
-                @Parameter(maxLength = SimpleObject.NameType.Meta.MAX_LEN)
-                @ParameterLayout(named = "Name")
-                final String name) {
-            simpleObject.setName(name);
-            return simpleObject;
-        }
-
-        public String default0Exec() {
-            return simpleObject.getName();
-        }
-
-        public TranslatableString validate0Exec(final String name) {
-            return name != null && name.contains("!") ? TranslatableString.tr("Exclamation mark is not allowed") : null;
-        }
-
+    public TranslatableString validate0UpdateName(final String name) {
+        return name != null && name.contains("!") ? TranslatableString.tr("Exclamation mark is not allowed") : null;
     }
     //endregion
 
     //region > delete (action)
-    @Mixin(method = "exec")
-    public static class delete {
-
-        public static class ActionDomainEvent extends SimpleModuleDomSubmodule.ActionDomainEvent<SimpleObject> {
-        }
-
-        private final SimpleObject simpleObject;
-        public delete(final SimpleObject simpleObject) {
-            this.simpleObject = simpleObject;
-        }
-
-        @Action(
-                domainEvent = ActionDomainEvent.class,
-                semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
-        )
-        @ActionLayout(
-                contributed = Contributed.AS_ACTION
-        )
-        public void exec() {
-            final String title = titleService.titleOf(simpleObject);
-            messageService.informUser(String.format("'%s' deleted", title));
-            repositoryService.remove(simpleObject);
-        }
-
-        @javax.inject.Inject
-        RepositoryService repositoryService;
-
-        @javax.inject.Inject
-        TitleService titleService;
-
-        @javax.inject.Inject
-        MessageService messageService;
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+    public void delete() {
+        final String title = titleService.titleOf(this);
+        messageService.informUser(String.format("'%s' deleted", title));
+        repositoryService.remove(this);
     }
-
     //endregion
+
 
     //region > toString, compareTo
     @Override
@@ -227,7 +117,17 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public int compareTo(final SimpleObject other) {
         return ObjectContracts.compare(this, other, "name");
     }
+    //endregion
 
+    //region > injected services
+    @javax.inject.Inject
+    RepositoryService repositoryService;
+
+    @javax.inject.Inject
+    TitleService titleService;
+
+    @javax.inject.Inject
+    MessageService messageService;
     //endregion
 
 }

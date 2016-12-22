@@ -81,7 +81,7 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
 
         // when
-        wrap(mixin(SimpleObject.updateName.class, fred)).exec("Freddy");
+        wrap(fred).updateName("Freddy");
         transactionService.flushTransaction();
 
         // then
@@ -97,7 +97,7 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
 
         // when
-        wrap(mixin(SimpleObject.delete.class, fred)).exec();
+        wrap(fred).delete();
         transactionService.flushTransaction();
 
 
