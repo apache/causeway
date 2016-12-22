@@ -43,9 +43,8 @@
 
         <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
 
-        <docker-plugin.imageName>danhaywood/isis-app-simpleapp</docker-plugin.imageName>
+        <docker-plugin.imageName>DOCKER_REGISTRY_ACCOUNT/${project.parent.artifactId}</docker-plugin.imageName>
         <docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
-        <docker-plugin.maintainer>Apache Isis committers</docker-plugin.maintainer>
         <docker-plugin.serverId>docker-hub</docker-plugin.serverId>
         <docker-plugin.registryUrl>https://index.docker.io/v1/</docker-plugin.registryUrl>
 
@@ -128,75 +127,14 @@
                             <artifactId>jettyconsole</artifactId>
                             <version>${mavenmixin-jettyconsole.version}</version>
                         </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>docker</artifactId>
+                            <version>${mavenmixin-docker.version}</version>
+                        </mixin>
                     </mixins>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>build-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>tag-image</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>tag</goal>
-                        </goals>
-                        <configuration>
-                            <image>${docker-plugin.imageName}</image>
-                            <newName>${docker-plugin.imageName}:${project.version}</newName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>push-image</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <imageName>${docker-plugin.imageName}:${project.version}</imageName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>push-image-latest</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <imageName>${docker-plugin.imageName}:latest</imageName>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <imageName>${docker-plugin.imageName}</imageName>
-                    <dockerDirectory>${build.outputDirectory}/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>.</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${docker-plugin.resource.include}</include>
-                        </resource>
-                    </resources>
-                    <serverId>${docker-plugin.serverId}</serverId>
-                    <registryUrl>${docker-plugin.registryUrl}</registryUrl>
-                </configuration>
-            </plugin>
-
 
         </plugins>
     </build>
