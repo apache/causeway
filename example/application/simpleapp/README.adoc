@@ -230,3 +230,12 @@ mvn deploy -Dmavenmixin-docker
 +
 This once again assumes that the `${docker-plugin.imageName}` property has been defined, _and_ also that docker registry credentials have been specified in `~/.m2/settings.xml`.
 See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-configure[mavenmixin-docker] for further details.
+
+* To run a docker image previously packaged/uploaded: +
++
+[source,bash]
+----
+docker run -d -p 8080:8080 mycompany/myapp
+----
++
+See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-consume[mavenmixin-docker] for further details on how to consume docker images.
