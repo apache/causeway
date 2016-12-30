@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  It was originally written by Jeroen van der Wal.
+This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+It was originally written by Jeroen van der Wal.
 
 It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
 
@@ -14,15 +15,15 @@ image::{_imagesdir}tutorials/pet-clinic/domain-model.png[link="{_imagesdir}tutor
 
 This supports the following use cases:
 
-* register a Pet
-* register an Owner
-* maintain a Pet's details
-* check in a Pet to visit the clinic
-* enter a diagnosis
-
-check out a Pet to visit the clinic
+* register a `Pet`
+* register an `Owner`
+* maintain a ``Pet``'s details
+* check in a `Pet` to visit the clinic
+* enter a `Diagnosis`
+* check out a `Pet` after visiting the clinic
 
 Either follow along or check out the tags from the corresponding https://github.com/danhaywood/isis-app-petclinic[github repo].
+
 
 == Prerequisites
 
@@ -46,11 +47,8 @@ Throughout this tutorial you can, if you wish, just checkout from the github rep
 git checkout https://github.com/danhaywood/isis-app-petclinic/commit/249abe476797438d83faa12ff88365da2c362451
 ----
 
-====
-
-[NOTE]
-====
-This tutorial was developed against Apache Isis 1.8.0-SNAPSHOT.  Since then 1.8.0 has been released, so simply replace "1.8.0-SNAPSHOT" for "1.8.0" wherever it appears in the `pom.xml` files.
+Do note that the tutorial was originally developed against Apache Isis 1.8.0-SNAPSHOT; replace "1.8.0-SNAPSHOT" for the any version from 1.8.0 up to 1.13.1.
+(The structure of Apache Isis archetype changed in 1.13.2).
 ====
 
 
@@ -62,13 +60,20 @@ Run the simpleapp archetype to build an empty Isis application:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.13.2 \
+    -D archetypeVersion=1.13.1 \
     -D groupId=com.mycompany \
     -D artifactId=petclinic \
     -D version=1.0-SNAPSHOT \
     -D archetypeRepository=http://repository-estatio.forge.cloudbees.com/snapshot/ \
     -B
 ----
+
+[NOTE]
+====
+You can use 1.13.2 (or later) version of the archetype if you wish, however be aware that the structure of the solution repo (mentioned above) will be different from the structure for applications generated from 1.13.2.
+====
+
+
 
 This will generate the app in a `petclinic` directory. Move the contents back:
 
@@ -90,25 +95,26 @@ Start off by building the app from the command line:
 mvn clean install
 ----
 
-Once that's built then run using:
+
+You can run using the mvn-jetty-plugin:
 
 [source,bash]
 ----
-mvn antrun:run -P self-host
+mvn -pl webapp jetty:run
 ----
 
-A splash screen should appear offering to start up the app. Go ahead and start; the web browser should be opened at http://localhost:8080[http://localhost:8080]
+You can then browser to http://localhost:8080[http://localhost:8080]
 
-Alternatively, you can run using the mvn-jetty-plugin:
+
+If using 1.13.2 or later, then you can also use the link:https://github.com/danhaywood/java-mavenmixin-jettyconsole/blob/master/README.adoc[jetty-console] plugin:
 
 [source,bash]
 ----
-mvn jetty:run
+mvn clean install -Dmavenmixin-jettyconsole
+mvn -pl webapp antrun:run -Dmavenmixin-jettyconsole
 ----
 
-This will accomplish the same thing, though the webapp is mounted at a slightly different URL
-
-
+This packages the app as a standalone JAR, and then runs using the AntRun plugin.
 
 
 == Using the app
