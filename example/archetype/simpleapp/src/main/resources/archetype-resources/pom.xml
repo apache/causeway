@@ -87,6 +87,10 @@
         <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
         <findbugs-maven-plugin.version>2.5</findbugs-maven-plugin.version>
 
+        <mavenmixin-docker.version>0.0.2</mavenmixin-docker.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+
         <mavendeps-isistesting.version>0.0.2</mavendeps-isistesting.version>
         <mavendeps-isisintellij.version>0.0.1</mavendeps-isisintellij.version>
         <mavendeps-isiswebapp.version>0.0.1</mavendeps-isiswebapp.version>
@@ -231,6 +235,14 @@
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>${findbugs-maven-plugin.version}</version>
                 </plugin>
+
+                <!-- mavenmixin-docker -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
@@ -314,6 +326,12 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>${rootArtifactId}-module-simple</artifactId>
                 <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${rootArtifactId}-module-simple</artifactId>
+                <version>${version}</version>
+                <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
