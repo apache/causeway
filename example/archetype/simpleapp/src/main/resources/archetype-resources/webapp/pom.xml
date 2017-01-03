@@ -41,11 +41,18 @@
         <jetty-console-maven-plugin.backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</jetty-console-maven-plugin.backgroundImage>
 
         <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
+
+        <docker-plugin.imageName>DOCKER_REGISTRY_ACCOUNT/${project.parent.artifactId}</docker-plugin.imageName>
+        <docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
+        <docker-plugin.serverId>docker-hub</docker-plugin.serverId>
+        <docker-plugin.registryUrl>https://index.docker.io/v1/</docker-plugin.registryUrl>
+
     </properties>
 
     <build>
         <resources>
             <resource>
+                <filtering>true</filtering>
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
@@ -89,6 +96,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>com.github.odavid.maven.plugins</groupId>
                 <artifactId>mixin-maven-plugin</artifactId>
@@ -121,9 +129,15 @@
                             <artifactId>jettyconsole</artifactId>
                             <version>${mavenmixin-jettyconsole.version}</version>
                         </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>docker</artifactId>
+                            <version>${mavenmixin-docker.version}</version>
+                        </mixin>
                     </mixins>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -187,7 +201,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        <!--
         <profile>
             <id>jdbc-postgres</id>
             <activation>
@@ -203,7 +216,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        -->
         <!--
         <profile>
             <id>jdbc-mssql</id>

@@ -168,6 +168,12 @@
                     </includes>
                 </fileSet>
                 <fileSet encoding="UTF-8">
+                    <directory>src/main/resources</directory>
+                    <includes>
+                        <include>**/*.</include>
+                    </includes>
+                </fileSet>
+                <fileSet encoding="UTF-8">
                     <directory>src/main/jettyconsole</directory>
                     <includes>
                         <include>**/*.png</include>

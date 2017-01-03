@@ -32,23 +32,14 @@ import domainapp.modules.simple.dom.impl.SimpleObjectRepository;
 @ViewModel
 public class HomePageViewModel {
 
-    //region > title
     public TranslatableString title() {
         return TranslatableString.tr("{num} objects", "num", getObjects().size());
     }
-    //endregion
 
-    //region > object (collection)
-    @org.apache.isis.applib.annotation.HomePage
     public List<SimpleObject> getObjects() {
         return simpleObjectRepository.listAll();
     }
-    //endregion
-
-    //region > injected services
 
     @javax.inject.Inject
     SimpleObjectRepository simpleObjectRepository;
-
-    //endregion
 }

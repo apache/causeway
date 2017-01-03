@@ -1,6 +1,3 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -20,7 +17,15 @@
  *  under the License.
  */
 
-package domainapp.modules.simple.fixture.data;
+package domainapp.modules.simple.fixture.scenario;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
@@ -31,28 +36,43 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
-public class SimpleObjectMenu_create extends FixtureScript {
+public class CreateSimpleObjects extends FixtureScript {
+
+    public final List<String> NAMES = Collections.unmodifiableList(Arrays.asList(
+            "Foo", "Bar", "Baz", "Frodo", "Froyo", "Fizz", "Bip", "Bop", "Bang", "Boo"));
 
     /**
-     * Name of the object (required)
+     * The number of objects to create, up to 10; optional, defaults to 3.
      */
+    @Nullable
     @Getter @Setter
-    private String name;
+    private Integer number;
 
     /**
-     * The created simple object (output).
+     * The simpleobjects created by this fixture (output).
      */
     @Getter
-    private SimpleObject simpleObject;
-
+    private final List<SimpleObject> simpleObjects = Lists.newArrayList();
 
     @Override
     protected void execute(final ExecutionContext ec) {
 
-        String name = checkParam("name", ec, String.class);
+        // defaults
+        final int number = defaultParam("number", ec, 3);
 
-        this.simpleObject = wrap(simpleObjectMenu).create(name);
-        ec.addResult(this, simpleObject);
+        // validate
+        if(number < 0 || number > NAMES.size()) {
+            throw new IllegalArgumentException(String.format("number must be in range [0,%d)", NAMES.size()));
+        }
+
+        // execute
+        for (int i = 0; i < number; i++) {
+            final String name = NAMES.get(i);
+
+            final SimpleObject simpleObject = wrap(simpleObjectMenu).create(name);
+            ec.addResult(this, simpleObject);
+            simpleObjects.add(simpleObject);
+        }
     }
 
     @javax.inject.Inject

@@ -34,7 +34,8 @@ import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleu
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
-import domainapp.modules.simple.fixture.scenario.RecreateSimpleObjects;
+import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
+import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,7 +51,8 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
     @Before
     public void setUp() throws Exception {
         // given
-        RecreateSimpleObjects fs = new RecreateSimpleObjects().setNumber(1);
+        fixtureScripts.runFixtureScript(new SimpleModuleTearDown(), null);
+        CreateSimpleObjects fs = new CreateSimpleObjects().setNumber(1);
         fixtureScripts.runFixtureScript(fs, null);
         transactionService.nextTransaction();
 
@@ -87,7 +89,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         public void can_be_updated_directly() throws Exception {
 
             // when
-            wrap(mixin(SimpleObject.updateName.class, simpleObject)).exec("new name");
+            wrap(simpleObject).updateName("new name");
             transactionService.nextTransaction();
 
             // then
@@ -102,7 +104,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
             expectedExceptions.expectMessage("Exclamation mark is not allowed");
 
             // when
-            wrap(mixin(SimpleObject.updateName.class, simpleObject)).exec("new name!");
+            wrap(simpleObject).updateName("new name!");
         }
     }
 
