@@ -77,7 +77,7 @@ mvn -f pom-jdo-enhance-all.xml datanucleus:enhance
 +
 [source,bash]
 ----
-mvn package -Dmavenmixin-jettyconsole
+mvn install -Dmavenmixin-jettyconsole
 ----
 +
 This can then be run using: +
@@ -87,7 +87,7 @@ This can then be run using: +
 cd webapp/target && java -jar simpleapp-webapp-xxx-jetty-console.war
 ----
 +
-Add additional flags, eg ``--headless`` or ``--port 9999``, if required.
+Add additional arguments ``--headless`` or ``--port 9999``, if required.
 +
 It can also be run using: +
 +
@@ -128,7 +128,6 @@ mvn -pl module-simple site -Dmavenmixin-sourceandjavadoc -Dmavenmixin-staticanal
 ====
 This is intended to run only for the `module-simple` module, and will generate a website under`target/site/index.html`.
 ====
-
 
 
 * To disable the running of unit tests: +
@@ -174,7 +173,7 @@ By default, output of integration tests are in  `target/surefire-integbddspecs-r
 mvn -DskipTests 
 ----
 
-* To disable the running of the `isis:validate goal: +
+* To disable the running of the `isis:validate` goal: +
 +
 [source,bash]
 ----
@@ -220,13 +219,25 @@ Alternatively it can be specified on the command line using a system property, e
 ----
 mvn package -Dmavenmixin-docker -Ddocker-plugin.imageName=mycompany/myapp
 ----
++
+The packaged image can be viewed using `docker images`.
 
-* To upload the application as a docker image to link:https://hub.docker.com[docker hub]: +
+* To run a docker image previously packaged: +
++
+[source,bash]
+----
+docker run -d -p 8080:8080 mycompany/myapp
+----
++
+See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-consume[mavenmixin-docker] for further details on how to run docker images.
+
+* To upload the application as a docker image to link:https://hub.docker.com[docker hub] (or some other docker registry): +
 +
 [source,bash]
 ----
 mvn deploy -Dmavenmixin-docker
 ----
 +
-This once again assumes that the `${docker-plugin.imageName}` property has been defined, _and_ also that docker registry credentials have been specified in `~/.m2/settings.xml`.
+This assumes that the `${docker-plugin.imageName}` property has been defined, _and_ also that docker registry credentials have been specified in `~/.m2/settings.xml`.
 See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-configure[mavenmixin-docker] for further details.
+

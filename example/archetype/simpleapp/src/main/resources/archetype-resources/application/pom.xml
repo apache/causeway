@@ -102,7 +102,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>${rootArtifactId}-module-simple</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>${rootArtifactId}-module-simple</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 
         <!-- isis -->
         <dependency>

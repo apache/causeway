@@ -22,7 +22,6 @@
 package domainapp.application.fixture.teardown;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
 
@@ -32,9 +31,5 @@ public class DomainAppTearDown extends FixtureScript {
     protected void execute(ExecutionContext executionContext) {
         executionContext.executeChild(this, new SimpleModuleTearDown());
     }
-
-
-    @javax.inject.Inject
-    private IsisJdoSupport isisJdoSupport;
 
 }
