@@ -30,7 +30,7 @@ Core:
 
 Archetypes:
 
-* https://www.apache.org/dyn/closer.cgi/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.13.2-source-release.zip[simpleapp-archetype-1.13.2] (http://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.13.2-source-release.zip.asc[asc], http://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.13.2-source-release.zip.md5[md5])
+* https://www.apache.org/dyn/closer.cgi/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.13.2.1-source-release.zip[simpleapp-archetype-1.13.2.1] (http://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.13.2.1-source-release.zip.asc[asc], http://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.13.2.1-source-release.zip.md5[md5])
 
 
 
