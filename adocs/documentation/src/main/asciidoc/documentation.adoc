@@ -47,7 +47,7 @@ pass:[<br/>]
 
 *3rd-party add-ons (not ASF)*
 
-* http://isisaddons.org[Isis addons^]
+* http://www.isisaddons.org[Isis addons^]
 * http://catalog.incode.org[Incode Catalog^]
 
 
