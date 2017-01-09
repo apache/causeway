@@ -182,7 +182,17 @@ To remove a little bit of boilerplate, the `IsisConfigurationForJdoIntegTests` c
 |`isis.persistor.datanucleus.impl.` +
 `javax.jdo.option.ConnectionPassword`
 |<empty string>
-|Password
+|Password, possibly encrypted (see `datanucleus.ConnectionPasswordEncrypter`, below).
+
+|`isis.persistor.datanucleus.impl.` +
+`datanucleus.ConnectionPasswordEncrypter`
+|<empty string>
+|(As of `1.14.0-SNAPSHOT`) specify the `
+ datanucleus.ConnectionPasswordDecrypter
+ ` implementation used to decrypt the password.
+
+See the link:http://www.datanucleus.org/products/accessplatform_4_1/persistence_properties.html#ConnectionPasswordDecrypter[DataNucleus documentation] for further details.
+
 
 |`isis.persistor.datanucleus.impl.` +
 `datanucleus.schema.autoCreateAll`

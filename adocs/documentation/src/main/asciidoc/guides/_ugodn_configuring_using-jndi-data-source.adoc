@@ -12,7 +12,7 @@ Isis' JDO objectstore can be configured either to connect to the database using 
 
 Using a connection pool managed directly by the application (that is, by Apache Isis' JDO objectstore and ultimately by DataNucleus) requires a single set of configuration properties to be specified.
 
-In the `WEB-INF\persistor_datanucleus.properties` file, specify the connection driver, url, username and password.
+In either `WEB-INF\isis.properties` file (or `WEB-INF\persistor.properties`, or `WEB-INF\persistor_datanucleus.properties`), specify the connection driver, url, username and password.
 
 For example:
 
@@ -26,6 +26,9 @@ isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword=
 
 Those configuration properties that start with the prefix `isis.persistor.datanucleus.impl.` are passed through directly to DataNucleus (with the prefix removed).
 
+(As of `1.14.0-SNAPSHOT`) it is also possible to specify the `
+datanucleus.ConnectionPasswordDecrypter
+` property; see the link:http://www.datanucleus.org/products/accessplatform_4_1/persistence_properties.html#ConnectionPasswordDecrypter[DataNucleus documentation] for further details.
 
 
 
