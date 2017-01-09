@@ -44,7 +44,7 @@ public class Object_rebuildMetamodel {
             cssClassFa = "fa-refresh",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "800.1")
+    @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
     public void $$() {
         metaModelService.rebuild(object.getClass());
     }

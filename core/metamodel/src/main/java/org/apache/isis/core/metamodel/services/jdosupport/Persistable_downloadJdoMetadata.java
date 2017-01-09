@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.services.jdosupport;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 import javax.xml.bind.JAXBException;
@@ -57,7 +56,7 @@ public class Persistable_downloadJdoMetadata {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "710.1")
+    @MemberOrder(name = "datanucleusIdLong", sequence = "710.1")
     public Clob $$(
             @ParameterLayout(named = ".jdo file name")
             final String fileName) throws JAXBException, IOException {
