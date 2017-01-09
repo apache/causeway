@@ -36,6 +36,16 @@
     <category rdf:resource="http://projects.apache.org/category/web-framework" />
 
     
+    <!-- 2017-01-03 release -->
+    <release>
+      <Version>
+        <name>simpleapp-archetype</name>
+        <created>2017-01-03</created>
+        <revision>1.13.2.1</revision>
+      </Version>
+    </release>
+    
+
     <!-- 2016-12-14 releases -->
     <release>
       <Version>
@@ -51,7 +61,7 @@
         <revision>1.13.2</revision>
       </Version>
     </release>
-    
+
 
     <!-- 2016-10-30 releases -->
     <release>

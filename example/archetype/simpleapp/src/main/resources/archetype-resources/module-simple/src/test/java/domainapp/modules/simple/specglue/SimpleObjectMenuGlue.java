@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 /**
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
@@ -14,7 +17,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package domainapp.application.bdd.specglue;
+package domainapp.modules.simple.specglue;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,23 +31,26 @@ import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectGlue extends CukeGlueAbstract {
+public class SimpleObjectMenuGlue extends CukeGlueAbstract {
 
-    @Given("^there are.* (\\d+) simple objects$")
+    @Given("^there are.* (${symbol_escape}${symbol_escape}d+) simple objects${symbol_dollar}")
     public void there_are_N_simple_objects(int n) throws Throwable {
         try {
-            final List<SimpleObject> findAll = service(SimpleObjectMenu.class).listAll();
-            assertThat(findAll.size(), is(n));
-            putVar("list", "all", findAll);
-            
+            final List<SimpleObject> list = simpleObjectMenu().listAll();
+            assertThat(list.size(), is(n));
+            putVar("java.util.List", "simpleObjects", list);
         } finally {
             assertMocksSatisfied();
         }
     }
     
-    @When("^I create a new simple object$")
-    public void I_create_a_new_simple_object() throws Throwable {
-        service(SimpleObjectMenu.class).create(UUID.randomUUID().toString());
+    @When("^.*create a .*simple object${symbol_dollar}")
+    public void create_a_simple_object() throws Throwable {
+        simpleObjectMenu().create(UUID.randomUUID().toString());
     }
-    
+
+    private SimpleObjectMenu simpleObjectMenu() {
+        return service(SimpleObjectMenu.class);
+    }
+
 }

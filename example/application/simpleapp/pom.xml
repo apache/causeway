@@ -37,7 +37,7 @@
         <isis.version>1.14.0-SNAPSHOT</isis.version>
 
         <lombok.version>1.16.10</lombok.version>
-        <assertj-core.version>3.6.0</assertj-core.version>
+        <assertj-core.version>3.6.1</assertj-core.version>
 
         <mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
         <maven-cucumber-reporting.dependency.log4j.version>2.7</maven-cucumber-reporting.dependency.log4j.version>
@@ -53,7 +53,7 @@
 
         <mavenmixin-isisswagger.version>0.0.3</mavenmixin-isisswagger.version>
         <mavenmixin-isisvalidate.version>0.0.2</mavenmixin-isisvalidate.version>
-        <isis-maven-plugin.version>1.13.1</isis-maven-plugin.version>
+        <isis-maven-plugin.version>${isis.version}</isis-maven-plugin.version>
 
         <mavenmixin-jettyconsole.version>0.0.2</mavenmixin-jettyconsole.version>
         <jetty-console-maven-plugin.version>1.59</jetty-console-maven-plugin.version>
@@ -88,6 +88,10 @@
         <javancss-maven-plugin.version>2.1</javancss-maven-plugin.version>
         <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
         <findbugs-maven-plugin.version>2.5</findbugs-maven-plugin.version>
+
+        <mavenmixin-docker.version>0.0.2</mavenmixin-docker.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
 
         <mavendeps-isistesting.version>0.0.2</mavendeps-isistesting.version>
         <mavendeps-isisintellij.version>0.0.1</mavendeps-isisintellij.version>
@@ -233,6 +237,14 @@
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>${findbugs-maven-plugin.version}</version>
                 </plugin>
+
+                <!-- mavenmixin-docker -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
@@ -327,6 +339,12 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>simpleapp-module-simple</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>

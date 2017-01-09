@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-@RecreateSimpleObjects
+@DomainAppDemo
 Feature: List and Create New Simple Objects
 
   @integration

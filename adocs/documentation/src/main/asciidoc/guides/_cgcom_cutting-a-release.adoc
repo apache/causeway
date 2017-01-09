@@ -439,13 +439,25 @@ mvn clean install
 
 * can be run from an IDE
 ** mainClass=`org.apache.isis.WebServer`
-** args=`-m domainapp.app.DomainAppAppManifestWithFixtures`
+** args=`-m domainapp.application.manifest.DomainAppAppManifestWithFixtures`
+** run before: `mvn -f pom-jdo-enhance-all.xml datanucleus:enhance -o` in the root module
 
 * can be run using the mvn jetty plugin:
 +
 [source,bash]
 ----
 mvn -pl webapp jetty:run
+<<<<<<< Updated upstream
+=======
+----
+
+* can be packaged and run using the mvn jetty-console plugin:
++
+[source,bash]
+----
+mvn install -Dmavenmixin-jettyconsole
+mvn antrun:run -Dmavenmixin-jettyconsole
+>>>>>>> Stashed changes
 ----
 
 * can be deployed as a WAR
@@ -465,6 +477,15 @@ quit using:
 sh shutdown.sh
 popd
 ----
+
+* can be packaged and run using Docker:
++
+[source,bash]
+----
+mvn package -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
+docker run -p 8080:8080 -d --name simpleapp test/simpleapp
+----
+
 
 In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
 

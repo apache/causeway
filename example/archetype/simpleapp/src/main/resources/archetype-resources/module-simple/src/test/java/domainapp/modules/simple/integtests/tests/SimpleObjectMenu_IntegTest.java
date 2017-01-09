@@ -35,12 +35,11 @@ import org.junit.Test;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
-import domainapp.modules.simple.fixture.scenario.RecreateSimpleObjects;
+import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
 import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,8 +52,6 @@ public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
     TransactionService transactionService;
     @Inject
     SimpleObjectMenu menu;
-    @Inject
-    RepositoryService repositoryService;
 
     public static class ListAll extends SimpleObjectMenu_IntegTest {
 
@@ -62,7 +59,8 @@ public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
         public void happyCase() throws Exception {
 
             // given
-            RecreateSimpleObjects fs = new RecreateSimpleObjects();
+            fixtureScripts.runFixtureScript(new SimpleModuleTearDown(), null);
+            CreateSimpleObjects fs = new CreateSimpleObjects();
             fixtureScripts.runFixtureScript(fs, null);
             transactionService.nextTransaction();
 

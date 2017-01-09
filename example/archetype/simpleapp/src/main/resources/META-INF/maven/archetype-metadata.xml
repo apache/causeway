@@ -26,6 +26,25 @@
             </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
+            <directory>modules/module-simple</directory>
+            <includes>
+                <include>**/*.txt</include>
+                <include>**/*.java</include>
+                <include>**/*.xml</include>
+                <include>**/*.properties</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory>modules/module-simple</directory>
+            <includes>
+                <include>**/*.pot</include>
+                <include>**/*.png</include>
+                <include>**/*.jar</include>
+                <include>**/*.lst</include>
+                <include>**/*.class</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
             <directory/>
             <includes>
                 <include>pom-jdo-enhance-all.xml</include>
@@ -146,6 +165,12 @@
                         <include>**/*.xml</include>
                         <include>**/*.html</include>
                         <include>**/*.properties</include>
+                    </includes>
+                </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory>src/main/resources</directory>
+                    <includes>
+                        <include>**/*.</include>
                     </includes>
                 </fileSet>
                 <fileSet encoding="UTF-8">
