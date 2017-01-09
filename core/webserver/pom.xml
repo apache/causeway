@@ -35,9 +35,12 @@
 			<artifactId>isis-core-runtime</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty.aggregate</groupId>
-			<artifactId>jetty-all</artifactId>
-			<classifier>uber</classifier>
+			<groupId>org.eclipse.jetty</groupId>
+           	<artifactId>jetty-servlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+    		<artifactId>jetty-webapp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
