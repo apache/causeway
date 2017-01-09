@@ -1788,10 +1788,9 @@ ${license.additional-notes}
 
             <!-- Web development -->
             <dependency>
-                <groupId>org.eclipse.jetty.aggregate</groupId>
-                <artifactId>jetty-all</artifactId>
+				<groupId>org.eclipse.jetty</groupId>
+	           	<artifactId>jetty-servlet</artifactId>
                 <version>${jetty.version}</version>
-                <classifier>uber</classifier>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.jetty.orbit</groupId>
@@ -1799,6 +1798,12 @@ ${license.additional-notes}
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+    			<groupId>org.eclipse.jetty</groupId>
+    			<artifactId>jetty-webapp</artifactId>
+    			<version>${jetty.version}</version>
+			</dependency>
+            
 
             <!-- Testing libraries (not scope=test because used by isis-core-integtest) -->
             <dependency>
