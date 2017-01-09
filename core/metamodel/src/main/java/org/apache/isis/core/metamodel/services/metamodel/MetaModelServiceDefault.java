@@ -205,7 +205,23 @@ public class MetaModelServiceDefault implements MetaModelService3 {
         if(bookmark == null) {
             return null;
         }
-        final Class<?> domainType = this.fromObjectType(bookmark.getObjectType());
+
+        final Class<?> domainType;
+        switch (mode) {
+            case RELAXED:
+                try {
+                    domainType = this.fromObjectType(bookmark.getObjectType());
+                } catch (Exception e) {
+                    return Sort.UNKNOWN;
+                }
+                break;
+
+            case STRICT:
+                // fall through to...
+            default:
+                domainType = this.fromObjectType(bookmark.getObjectType());
+                break;
+        }
         return sortOf(domainType, mode);
     }
 
