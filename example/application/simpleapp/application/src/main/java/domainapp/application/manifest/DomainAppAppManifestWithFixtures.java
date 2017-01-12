@@ -39,7 +39,7 @@ public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
      */
     @Override
     public List<Class<? extends FixtureScript>> getFixtures() {
-        return Lists.newArrayList(CreateSimpleObjects.class);
+        return (List)Lists.newArrayList(CreateSimpleObjects.class);
     }
 
     /**
