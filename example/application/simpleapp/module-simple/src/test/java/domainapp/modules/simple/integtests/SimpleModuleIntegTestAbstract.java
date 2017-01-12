@@ -57,7 +57,7 @@ public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstr
                         }
 
                         @Override public List<Class<?>> getAdditionalServices() {
-                            return Lists.newArrayList(ModuleFixtureScriptsSpecificationProvider.class);
+                            return (List)Lists.newArrayList(ModuleFixtureScriptsSpecificationProvider.class);
                         }
                     })
 
