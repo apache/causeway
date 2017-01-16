@@ -1560,6 +1560,75 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     }
 
+
+    public static class FactoryMethod extends ActionAnnotationFacetFactoryTest {
+
+
+        @Test
+        public void withoutAnnotation() {
+
+            class Customer {
+
+                public void someAction() {
+                }
+
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processHidden(processMethodContext);
+
+            // then
+            final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
+            Assert.assertNotNull(hiddenFacet);
+            assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
+
+            final Facet hiddenFacetImpl = facetedMethod.getFacet(HiddenFacetForActionAnnotation.class);
+            Assert.assertNotNull(hiddenFacetImpl);
+            Assert.assertTrue(hiddenFacet == hiddenFacetImpl);
+        }
+
+        @Test
+        public void withAnnotation() {
+
+            class Customer {
+
+                public void someAction() {
+                }
+
+                @Action
+                public void someAnnotatedAction() {
+                }
+
+                @Action(factoryMethod = false)
+                public void aFactoryMethodAction() {
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processHidden(processMethodContext);
+
+            // then
+            final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
+            Assert.assertNotNull(hiddenFacet);
+            assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
+
+            final Facet hiddenFacetImpl = facetedMethod.getFacet(HiddenFacetForActionAnnotation.class);
+            Assert.assertNotNull(hiddenFacetImpl);
+            Assert.assertTrue(hiddenFacet == hiddenFacetImpl);
+        }
+
+    }
+
     void allowingCommandConfigurationToReturn(final String value) {
         context.checking(new Expectations() {
             {
