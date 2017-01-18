@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature;
 
 public class OneToManyActionParameterMixedIn
         extends ObjectActionParameterMixedInAbstract
@@ -30,6 +31,7 @@ public class OneToManyActionParameterMixedIn
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        throw new RuntimeException("TODO: not yet implemented");
+        final Class<?> underlyingClass = getSpecification().getCorrespondingClass();
+        return OneToManyFeature.Util.semanticsOf(underlyingClass);
     }
 }

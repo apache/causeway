@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * Base interface for {@link OneToManyAssociation} only.
@@ -68,4 +70,19 @@ public interface OneToManyFeature extends ObjectFeature {
     }
 
     CollectionSemantics getCollectionSemantics();
+
+    public static class Util {
+        public static CollectionSemantics semanticsOf(final Class<?> underlyingClass) {
+            if (!Collection.class.isAssignableFrom(underlyingClass)) {
+                return CollectionSemantics.ARRAY;
+            }
+            if (List.class.isAssignableFrom(underlyingClass)) {
+                return CollectionSemantics.LIST;
+            }
+            if (Set.class.isAssignableFrom(underlyingClass)) {
+                return CollectionSemantics.SET;
+            }
+            return CollectionSemantics.OTHER;
+        }
+    }
 }

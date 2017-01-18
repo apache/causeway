@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature;
 
 public class OneToManyActionParameterDefault extends ObjectActionParameterAbstract implements OneToManyActionParameter {
 
@@ -33,6 +34,9 @@ public class OneToManyActionParameterDefault extends ObjectActionParameterAbstra
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        throw new RuntimeException("TODO: not yet implemented");
+        final Class<?> underlyingClass = getSpecification().getCorrespondingClass();
+        return OneToManyFeature.Util.semanticsOf(underlyingClass);
     }
+
+
 }
