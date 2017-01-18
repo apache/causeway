@@ -58,7 +58,7 @@ public class GivenJdoDatastoreIdentityAnnotationFacetFactoryTest extends
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
         Assert.assertFalse(contains(featureTypes, FeatureType.ACTION));
         assertFalse(contains(featureTypes,
-                FeatureType.ACTION_PARAMETER));
+                FeatureType.ACTION_PARAMETER_SCALAR));
     }
 
     public void testDatastoreIdentityAnnotationPickedUpOnClass() {

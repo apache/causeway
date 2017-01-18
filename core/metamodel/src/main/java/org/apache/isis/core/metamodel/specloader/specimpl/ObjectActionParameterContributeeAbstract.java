@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public abstract class ObjectActionParameterContributeeAbstract
@@ -32,11 +33,11 @@ public abstract class ObjectActionParameterContributeeAbstract
     private final ObjectActionContributee contributeeAction;
 
     public ObjectActionParameterContributeeAbstract(
-            final ObjectAdapter serviceAdapter,
+            final FeatureType featureType, final ObjectAdapter serviceAdapter,
             final ObjectActionParameterAbstract serviceActionParameter,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
-        super(contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
+        super(featureType, contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
         this.serviceAdapter = serviceAdapter;
         this.serviceActionParameter = serviceActionParameter;
         this.contributeeAction = contributeeAction;

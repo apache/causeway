@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature;
 
@@ -29,7 +30,7 @@ public class OneToManyActionParameterContributee
             final ObjectActionParameterAbstract serviceActionParameter,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
-        super(serviceAdapter, serviceActionParameter, contributeeParamNumber, contributeeAction);
+        super(FeatureType.ACTION_PARAMETER_COLLECTION, serviceAdapter, serviceActionParameter, contributeeParamNumber, contributeeAction);
     }
 
     @Override

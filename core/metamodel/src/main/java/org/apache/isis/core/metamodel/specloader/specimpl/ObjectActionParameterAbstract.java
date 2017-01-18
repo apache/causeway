@@ -63,11 +63,17 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
+    private final FeatureType featureType;
     private final int number;
     private final ObjectActionDefault parentAction;
     private final TypedHolder peer;
 
-    protected ObjectActionParameterAbstract(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
+    protected ObjectActionParameterAbstract(
+            final FeatureType featureType,
+            final int number,
+            final ObjectActionDefault objectAction,
+            final TypedHolder peer) {
+        this.featureType = featureType;
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
@@ -75,7 +81,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public FeatureType getFeatureType() {
-        return FeatureType.ACTION_PARAMETER;
+        return featureType;
     }
 
 

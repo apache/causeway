@@ -531,9 +531,29 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //region > inferFromGenericParamType, inferFromGenericReturnType, inferFromArrayType
 
+    /**
+     * @return true means that either {@link #inferFromGenericParamType(Class, Type)} or {@link #inferFromArrayType(FacetHolder, Class)} will return a non-null value.
+     */
+    @Programmatic
+    public boolean isParamCollection(
+            final Class<?> parameterType,
+            final Type genericParameterType) {
+        return inferFromGenericParamType(parameterType, genericParameterType) != null || inferFromArrayType(parameterType) != null;
+    }
+
     @Programmatic
     public TypeOfFacet inferFromGenericParamType(
             final FacetHolder holder,
+            final Class<?> parameterType,
+            final Type genericParameterType) {
+        final Class<?> actualType = inferFromGenericParamType(parameterType, genericParameterType);
+        return actualType != null
+                ? new TypeOfFacetInferredFromGenerics(actualType, holder, this)
+                : null;
+    }
+
+    @Programmatic
+    public Class<?> inferFromGenericParamType(
             final Class<?> parameterType,
             final Type genericParameterType) {
 
@@ -549,7 +569,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                 final Type actualTypeArgument = actualTypeArguments[0];
                 if(actualTypeArgument instanceof Class) {
                     final Class<?> actualType = (Class<?>) actualTypeArgument;
-                    return new TypeOfFacetInferredFromGenerics(actualType, holder, this);
+                    return actualType;
                 }
             }
         }
@@ -616,12 +636,20 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     public TypeOfFacet inferFromArrayType(
             final FacetHolder holder,
             final Class<?> type) {
-        if(!org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(type)) {
+        final Class<?> componentType = inferFromArrayType(type);
+        return componentType != null
+                ? new TypeOfFacetInferredFromArray(componentType, holder, this)
+                : null;
+    }
+
+    @Programmatic
+    public Class<?> inferFromArrayType(final Class<?> type) {
+        if(!CollectionUtils.isArrayType(type)) {
             return null;
         }
         if (type.isArray()) {
             final Class<?> componentType = type.getComponentType();
-            return new TypeOfFacetInferredFromArray(componentType, holder, this);
+            return componentType;
         }
         return null;
     }

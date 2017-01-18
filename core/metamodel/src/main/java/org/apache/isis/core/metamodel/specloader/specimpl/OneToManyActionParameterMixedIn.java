@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature;
 
@@ -26,7 +27,7 @@ public class OneToManyActionParameterMixedIn
     public OneToManyActionParameterMixedIn(
             final ObjectActionParameterAbstract mixinParameter,
             final ObjectActionMixedIn mixedInAction) {
-        super(mixinParameter, mixedInAction);
+        super(FeatureType.ACTION_PARAMETER_COLLECTION, mixinParameter, mixedInAction);
     }
 
     @Override

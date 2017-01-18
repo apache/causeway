@@ -34,10 +34,11 @@ public interface TypedHolder extends FacetHolder {
     public FeatureType getFeatureType();
 
     /**
-     * The type of a {@link FeatureType#PROPERTY property}, the referenced type
+     * The type of a {@link FeatureType#PROPERTY property}, the referenced (element) type
      * of a {@link FeatureType#COLLECTION collection}, the return type of an
-     * {@link FeatureType#ACTION action} and for {@link FeatureType#ACTION_PARAMETER action parameter}s
-     * either the scalar type or the inferred generic type if a collection.
+     * {@link FeatureType#ACTION action}, the type of a
+     * {@link FeatureType#ACTION_PARAMETER_SCALAR scalar action parameter}s, and the inferred
+     * element type for a {@link FeatureType#ACTION_PARAMETER_COLLECTION collection action parameter}.
      */
     public Class<?> getType();
 

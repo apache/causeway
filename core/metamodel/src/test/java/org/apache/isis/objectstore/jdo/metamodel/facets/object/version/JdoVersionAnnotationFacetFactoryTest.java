@@ -51,7 +51,7 @@ public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
         assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER_SCALAR));
     }
 
     public void testVersionAnnotationPickedUpOnClass() {

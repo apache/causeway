@@ -53,7 +53,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
         assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER_SCALAR));
     }
 
     public void testDiscriminatorValueAnnotationPickedUpOnClass() {

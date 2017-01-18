@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -29,9 +30,9 @@ public abstract class ObjectActionParameterMixedInAbstract
     private final ObjectActionMixedIn mixedInAction;
 
     public ObjectActionParameterMixedInAbstract(
-            final ObjectActionParameterAbstract mixinParameter,
+            final FeatureType featureType, final ObjectActionParameterAbstract mixinParameter,
             final ObjectActionMixedIn mixedInAction) {
-        super(mixinParameter.getNumber(), mixedInAction, mixinParameter.getPeer());
+        super(featureType, mixinParameter.getNumber(), mixedInAction, mixinParameter.getPeer());
         this.mixinParameter = mixinParameter;
         this.mixedInAction = mixedInAction;
     }

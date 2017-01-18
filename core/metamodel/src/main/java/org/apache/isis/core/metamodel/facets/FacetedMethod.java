@@ -114,22 +114,29 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Class<?> parameterType = parameterTypes[paramNum];
             final Type genericParameterType = genericParameterTypes[paramNum];
 
-            final FacetedMethodParameter fmp = new FacetedMethodParameter(declaringType, actionMethod, parameterType);
+            final FeatureType featureType =
+                    specificationLoader.isParamCollection(parameterType, genericParameterType)
+                            ? FeatureType.ACTION_PARAMETER_COLLECTION
+                            : FeatureType.ACTION_PARAMETER_SCALAR;
+
+            final FacetedMethodParameter fmp = new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
             actionParams.add(fmp);
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
-            TypeOfFacet typeOfFacet = specificationLoader.inferFromGenericParamType(fmp, parameterType, genericParameterType);
+            if(featureType == FeatureType.ACTION_PARAMETER_COLLECTION) {
+                TypeOfFacet typeOfFacet = specificationLoader.inferFromGenericParamType(fmp, parameterType, genericParameterType);
 
-            if(typeOfFacet == null ) {
-                if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
-                    typeOfFacet = specificationLoader.inferFromArrayType(fmp, parameterType);
+                if(typeOfFacet == null ) {
+                    if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
+                        typeOfFacet = specificationLoader.inferFromArrayType(fmp, parameterType);
+                    }
                 }
-            }
 
-            // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-            if(typeOfFacet != null ) {
-                FacetUtil.addFacet(typeOfFacet);
-                fmp.setType(typeOfFacet.value());
+                // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
+                if(typeOfFacet != null ) {
+                    FacetUtil.addFacet(typeOfFacet);
+                    fmp.setType(typeOfFacet.value());
+                }
             }
 
         }

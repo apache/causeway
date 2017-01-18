@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -195,15 +194,16 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
         final List<ObjectActionParameter> parameters = Lists.newArrayList();
         for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
-            final TypedHolder paramPeer = paramPeers.get(paramNum);
+            final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
 
             final ObjectSpecification specification = ObjectMemberAbstract
                     .getSpecification(getSpecificationLoader(), paramPeer.getType());
 
             // previously we threw an exception here if the specification represented a collection.  No longer!
-            final ObjectActionParameter parameter = specification.isNotCollection() ?
-                    new OneToOneActionParameterDefault(paramNum, this, paramPeer) :
-                    new OneToManyActionParameterDefault(paramNum, this, paramPeer);
+            final ObjectActionParameter parameter =
+                    paramPeer.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                            ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
+                            : new OneToManyActionParameterDefault(paramNum, this, paramPeer);
 
             parameters.add(parameter);
         }

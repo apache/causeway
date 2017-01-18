@@ -29,8 +29,12 @@ public class FacetedMethodParameter extends TypedHolderDefault implements Identi
 
     private final Identifier identifier;
 
-    public FacetedMethodParameter(final Class<?> declaringType, final Method method, final Class<?> type) {
-        super(FeatureType.ACTION_PARAMETER, type);
+    public FacetedMethodParameter(
+            final FeatureType featureType,
+            final Class<?> declaringType,
+            final Method method,
+            final Class<?> type) {
+        super(featureType, type);
 
         // best we can do...
         this.identifier = FeatureType.ACTION.identifierFor(declaringType, method);
