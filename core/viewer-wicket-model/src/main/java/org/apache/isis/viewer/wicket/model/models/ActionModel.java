@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -434,10 +433,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
         final int i = apm.getNumber();
 		ActionArgumentModel actionArgumentModel = arguments.get(i);
         if (actionArgumentModel == null) {
-            final ObjectActionParameter actionParameter = apm.getActionParameter(getSpecificationLoader());
-            actionArgumentModel = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                    ? new ScalarModel(targetAdapterMemento, apm)
-                    : new ActionArgumentCollectionModel(targetAdapterMemento, apm);
+            actionArgumentModel = new ScalarModel(targetAdapterMemento, apm);
             final int number = actionArgumentModel.getParameterMemento().getNumber();
             arguments.put(number, actionArgumentModel);
         }
