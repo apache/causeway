@@ -19,11 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionInteraction;
@@ -51,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
@@ -90,6 +85,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -462,52 +458,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     private TypeOfFacet inferFromGenericReturnType(
             final ProcessMethodContext processMethodContext) {
 
+        final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
+        final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        final Type type = method.getGenericReturnType();
-        if (!(type instanceof ParameterizedType)) {
-            return null;
-        }
+        final SpecificationLoader specificationLoader = getSpecificationLoader();
 
-        final ParameterizedType methodParameterizedType = (ParameterizedType) type;
-        final Type[] methodActualTypeArguments = methodParameterizedType.getActualTypeArguments();
-
-        if (methodActualTypeArguments.length == 0) {
-            return null;
-        }
-
-        final Object methodActualTypeArgument = methodActualTypeArguments[0];
-        if (methodActualTypeArgument instanceof Class) {
-            final Class<?> actualType = (Class<?>) methodActualTypeArgument;
-            return new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLoader());
-        }
-
-        if (methodActualTypeArgument instanceof TypeVariable) {
-
-            final TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
-            final GenericDeclaration methodGenericClassDeclaration = methodTypeVariable.getGenericDeclaration();
-
-            // try to match up with the actual type argument of the generic superclass.
-            final Type genericSuperclass = processMethodContext.getCls().getGenericSuperclass();
-            if(genericSuperclass instanceof ParameterizedType) {
-                final ParameterizedType parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
-                if(parameterizedTypeOfSuperclass.getRawType() == methodGenericClassDeclaration) {
-                    final Type[] genericSuperClassActualTypeArguments = parameterizedTypeOfSuperclass.getActualTypeArguments();
-                    // simplification: if there's just one, then use it.
-                    if(methodActualTypeArguments.length == 1) {
-                        final Type actualType = genericSuperClassActualTypeArguments[0];
-                        if(actualType instanceof Class) {
-                            // just being safe
-                            final Class<?> actualCls = (Class<?>) actualType;
-                            return new TypeOfFacetInferredFromGenerics(actualCls, holder, getSpecificationLoader());
-                        }
-                    }
-                }
-            }
-            // otherwise, what to do?
-        }
-        return null;
+        return specificationLoader.inferFromGenericReturnType(cls, method, holder);
     }
 
     // ///////////////////////////////////////////////////////////////

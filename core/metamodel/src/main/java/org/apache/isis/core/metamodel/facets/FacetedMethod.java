@@ -93,6 +93,16 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         final List<FacetedMethodParameter> actionParams = Lists.newArrayList();
         for (final Class<?> parameterType : parameterTypes) {
             actionParams.add(new FacetedMethodParameter(declaringType, actionMethod, parameterType));
+
+            // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
+            if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isCollectionType(parameterType)) {
+
+            } else if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
+
+            } else {
+                continue;
+            }
+
         }
         return Collections.unmodifiableList(actionParams);
     }
