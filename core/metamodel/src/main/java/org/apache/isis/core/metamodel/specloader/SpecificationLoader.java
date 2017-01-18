@@ -45,7 +45,9 @@ import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -576,6 +578,17 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                 }
             }
             // otherwise, what to do?
+        }
+        return null;
+    }
+
+    @Programmatic
+    public TypeOfFacet inferForArray(
+            final FacetedMethod holder,
+            final Class<?> type) {
+        if (type.isArray()) {
+            final Class<?> componentType = type.getComponentType();
+            return new TypeOfFacetInferredFromArray(componentType, holder, this);
         }
         return null;
     }

@@ -46,10 +46,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.disabled.DisabledFacetForDisabledAnnotationOnAction;
@@ -85,7 +84,6 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -441,30 +439,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         // infer from return type
         if(facet == null) {
             final Class<?> returnType = method.getReturnType();
-            if (returnType.isArray()) {
-                final Class<?> componentType = returnType.getComponentType();
-                facet = new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLoader());
-            }
+            facet = getSpecificationLoader().inferForArray(holder, returnType);
         }
 
         // infer from generic return type
         if(facet == null) {
-            facet = inferFromGenericReturnType(processMethodContext);
+            final Class<?> cls = processMethodContext.getCls();
+            facet = getSpecificationLoader().inferFromGenericReturnType(cls, method, holder);
         }
 
         FacetUtil.addFacet(facet);
-    }
-
-    private TypeOfFacet inferFromGenericReturnType(
-            final ProcessMethodContext processMethodContext) {
-
-        final Class<?> cls = processMethodContext.getCls();
-        final Method method = processMethodContext.getMethod();
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        final SpecificationLoader specificationLoader = getSpecificationLoader();
-
-        return specificationLoader.inferFromGenericReturnType(cls, method, holder);
     }
 
     // ///////////////////////////////////////////////////////////////
