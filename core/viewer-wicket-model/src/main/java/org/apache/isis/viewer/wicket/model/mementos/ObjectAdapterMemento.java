@@ -175,7 +175,7 @@ public class ObjectAdapterMemento implements Serializable {
             @Override
             ObjectAdapter recreateAdapter(
                     final ObjectAdapterMemento oam,
-                    ConcurrencyChecking concurrencyChecking,
+                    final ConcurrencyChecking concurrencyChecking,
                     final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
                 return oam.transientMemento.recreateObject();
             }
@@ -197,22 +197,22 @@ public class ObjectAdapterMemento implements Serializable {
 
             @Override
             public void resetVersion(
-                    ObjectAdapterMemento objectAdapterMemento,
+                    final ObjectAdapterMemento objectAdapterMemento,
                     final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
             }
         };
 
         public ObjectAdapter getAdapter(
                 final ObjectAdapterMemento nom,
-                ConcurrencyChecking concurrencyChecking,
+                final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader) {
             return recreateAdapter(nom, concurrencyChecking, persistenceSession, specificationLoader);
         }
 
         abstract ObjectAdapter recreateAdapter(
-                ObjectAdapterMemento nom,
-                ConcurrencyChecking concurrencyChecking,
+                final ObjectAdapterMemento nom,
+                final ConcurrencyChecking concurrencyChecking,
                 final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader);
 
         public abstract boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other);
