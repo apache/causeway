@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -58,6 +59,8 @@ public class CollectionAccessorFacetViaAccessorFactory
                         getDeploymentCategory(), getConfiguration(), getSpecificationLoader(),
                         getAuthenticationSessionProvider(), adapterManager
                 ));
+
+        FacetUtil.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
     }
 
 

@@ -17,24 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.spec.feature;
+package org.apache.isis.core.metamodel.facets.collparam.semantics;
 
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 /**
- * Base interface for {@link OneToManyAssociation} only.
- * 
- * <p>
- * Introduced for symmetry with {@link OneToOneFeature}; if we ever support
- * collections as parameters then would also be the base interface for a
- * <tt>OneToManyActionParameter</tt>.
- * 
- * <p>
- * Is also the route up to the {@link ObjectFeature} superinterface.
- * 
+ * Represents the semantics of an collection.
  */
-public interface OneToManyFeature extends ObjectFeature {
-
-    CollectionSemantics getCollectionSemantics();
+public interface CollectionSemanticsFacet extends SingleValueFacet<CollectionSemantics> {
 
 }

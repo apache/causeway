@@ -18,8 +18,9 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature;
 
 public class OneToManyActionParameterContributee
         extends ObjectActionParameterContributeeAbstract
@@ -35,7 +36,6 @@ public class OneToManyActionParameterContributee
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        final Class<?> underlyingClass = getSpecification().getCorrespondingClass();
-        return OneToManyFeature.Util.semanticsOf(underlyingClass);
+        return getFacet(CollectionSemanticsFacet.class).value();
     }
 }

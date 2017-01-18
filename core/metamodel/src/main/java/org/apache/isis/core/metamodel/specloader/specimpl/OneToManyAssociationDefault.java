@@ -32,6 +32,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
@@ -44,7 +46,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature;
 
 public class OneToManyAssociationDefault extends ObjectAssociationAbstract implements OneToManyAssociation {
 
@@ -65,8 +66,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        final Class<?> underlyingClass = getSpecification().getCorrespondingClass();
-        return OneToManyFeature.Util.semanticsOf(underlyingClass);
+        return getFacet(CollectionSemanticsFacet.class).value();
     }
 
     //region > visible, usable

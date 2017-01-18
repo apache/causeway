@@ -37,6 +37,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
@@ -47,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsPr
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -280,6 +284,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
                         property.get(parentAdapter, InteractionInitiatedBy.USER);
                 scalarModel.setObject(associatedAdapter);
             }
+
+            @Override
+            public ObjectAdapter load(final ScalarModel scalarModel) {
+                return scalarModel.loadFromSuper();
+            }
         },
         PARAMETER {
             @Override
@@ -481,6 +490,29 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
                 final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter);
                 scalarModel.setObject(defaultAdapter);
             }
+
+            @Override
+            public ObjectAdapter load(final ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento
+                        .getActionParameter(scalarModel.getSpecificationLoader());
+                final ObjectAdapter objectAdapter = scalarModel.loadFromSuper();
+
+                if(objectAdapter != null) {
+                    return objectAdapter;
+                }
+                if(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
+                    return objectAdapter;
+                }
+
+                // return an empty collection
+                final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
+                final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
+                final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
+                final Class<?> elementType = typeOfFacet.value();
+                final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
+                return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
+            }
         };
 
         private static List<ObjectAdapter> choicesAsList(final ObjectAdapter[] choices) {
@@ -543,12 +575,22 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
         public abstract void init(ScalarModel scalarModel);
         public abstract void reset(ScalarModel scalarModel);
 
+        public abstract ObjectAdapter load(final ScalarModel scalarModel);
     }
 
     private final Kind kind;
     
     private final ObjectAdapterMemento parentObjectAdapterMemento;
-    
+
+    @Override
+    public ObjectAdapter load() {
+        return kind.load(this);
+    }
+
+    private ObjectAdapter loadFromSuper() {
+        return super.load();
+    }
+
 
     /**
      * Populated only if {@link #getKind()} is {@link Kind#PARAMETER}

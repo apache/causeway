@@ -32,6 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
@@ -124,6 +126,11 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
             if(featureType == FeatureType.ACTION_PARAMETER_COLLECTION) {
+
+                final CollectionSemanticsFacet semanticsFacet =
+                        CollectionSemanticsFacetDefault.forParamType(parameterType, fmp);
+                FacetUtil.addFacet(semanticsFacet);
+
                 TypeOfFacet typeOfFacet = specificationLoader.inferFromGenericParamType(fmp, parameterType, genericParameterType);
 
                 if(typeOfFacet == null ) {
