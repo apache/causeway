@@ -45,7 +45,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
     public void setUp() throws Exception {
         super.setUp();
-        this.facetFactory =  new ActionAnnotationFacetFactory();;
+        this.facetFactory =  new ActionAnnotationFacetFactory();
 
         facetFactory.setServicesInjector(stubServicesInjector);
 
@@ -144,7 +144,8 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod,
+                mockSpecificationLoader);
 
         facetFactory.processInvocation(new ProcessMethodContext(CustomerEx.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -200,7 +201,8 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod,
+                mockSpecificationLoader);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, null, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.processInvocation(processMethodContext);

@@ -418,37 +418,37 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
 
-        TypeOfFacet facet;
+        TypeOfFacet typeOfFacet = null;
 
         // check for deprecated @TypeOf
         final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
-        facet = typeOfValidator.flagIfPresent(
+        typeOfFacet = typeOfValidator.flagIfPresent(
                 TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder), processMethodContext);
 
         // check for @Action(typeOf=...)
-        if(facet == null) {
+        if(typeOfFacet == null) {
             final Action action = Annotations.getAnnotation(method, Action.class);
             if (action != null) {
                 final Class<?> typeOf = action.typeOf();
                 if(typeOf != null && typeOf != Object.class) {
-                    facet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
+                    typeOfFacet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
                 }
             }
         }
 
         // infer from return type
-        if(facet == null) {
+        if(typeOfFacet == null) {
             final Class<?> returnType = method.getReturnType();
-            facet = getSpecificationLoader().inferForArray(holder, returnType);
+            typeOfFacet = getSpecificationLoader().inferFromArrayType(holder, returnType);
         }
 
         // infer from generic return type
-        if(facet == null) {
+        if(typeOfFacet == null) {
             final Class<?> cls = processMethodContext.getCls();
-            facet = getSpecificationLoader().inferFromGenericReturnType(cls, method, holder);
+            typeOfFacet = getSpecificationLoader().inferFromGenericReturnType(cls, method, holder);
         }
 
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(typeOfFacet);
     }
 
     // ///////////////////////////////////////////////////////////////

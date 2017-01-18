@@ -45,7 +45,6 @@ import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
@@ -530,13 +529,44 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > inferFromGenericReturnType
+    //region > inferFromGenericParamType, inferFromGenericReturnType, inferFromArrayType
+
+    @Programmatic
+    public TypeOfFacet inferFromGenericParamType(
+            final FacetHolder holder,
+            final Class<?> parameterType,
+            final Type genericParameterType) {
+
+        if(!CollectionUtils.isCollectionType(parameterType)) {
+            return null;
+        }
+
+        if(genericParameterType instanceof ParameterizedType) {
+            System.out.println(genericParameterType);
+            final ParameterizedType parameterizedType = (ParameterizedType) genericParameterType;
+            final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if(actualTypeArguments.length == 1) {
+                final Type actualTypeArgument = actualTypeArguments[0];
+                if(actualTypeArgument instanceof Class) {
+                    final Class<?> actualType = (Class<?>) actualTypeArgument;
+                    return new TypeOfFacetInferredFromGenerics(actualType, holder, this);
+                }
+            }
+        }
+        return null;
+    }
 
     @Programmatic
     public TypeOfFacet inferFromGenericReturnType(
             final Class<?> cls,
             final Method method,
             final FacetHolder holder) {
+
+        final Class<?> methodReturnType = method.getReturnType();
+        if (!CollectionUtils.isCollectionType(methodReturnType)) {
+            return null;
+        }
+
         final Type type = method.getGenericReturnType();
         if (!(type instanceof ParameterizedType)) {
             return null;
@@ -583,15 +613,19 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     @Programmatic
-    public TypeOfFacet inferForArray(
-            final FacetedMethod holder,
+    public TypeOfFacet inferFromArrayType(
+            final FacetHolder holder,
             final Class<?> type) {
+        if(!org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(type)) {
+            return null;
+        }
         if (type.isArray()) {
             final Class<?> componentType = type.getComponentType();
             return new TypeOfFacetInferredFromArray(componentType, holder, this);
         }
         return null;
     }
+
     //endregion
 
 

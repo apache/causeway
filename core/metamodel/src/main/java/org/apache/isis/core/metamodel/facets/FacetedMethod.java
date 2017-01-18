@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,8 +28,11 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -66,10 +70,14 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     /**
      * Principally for testing purposes.
      */
-    public static FacetedMethod createForAction(final Class<?> declaringType, final String actionName, final Class<?>... parameterTypes) {
+    public static FacetedMethod createForAction(
+            final Class<?> declaringType,
+            final String actionName,
+            final SpecificationLoader specificationLoader,
+            final Class<?>... parameterTypes) {
         try {
             final Method method = declaringType.getMethod(actionName, parameterTypes);
-            return FacetedMethod.createForAction(declaringType, method);
+            return FacetedMethod.createForAction(declaringType, method, specificationLoader);
         } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
@@ -84,24 +92,42 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
     }
 
-    public static FacetedMethod createForAction(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(declaringType, method));
+    public static FacetedMethod createForAction(
+            final Class<?> declaringType,
+            final Method method,
+            final SpecificationLoader specificationLoader) {
+        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(declaringType, method,
+                specificationLoader));
     }
 
-    private static List<FacetedMethodParameter> getParameters(final Class<?> declaringType, final Method actionMethod) {
+    private static List<FacetedMethodParameter> getParameters(
+            final Class<?> declaringType,
+            final Method actionMethod,
+            final SpecificationLoader specificationLoader) {
+
         final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
+        final Type[] genericParameterTypes = actionMethod.getGenericParameterTypes();
         final List<FacetedMethodParameter> actionParams = Lists.newArrayList();
-        for (final Class<?> parameterType : parameterTypes) {
-            actionParams.add(new FacetedMethodParameter(declaringType, actionMethod, parameterType));
+
+        for (int paramNum = 0; paramNum < parameterTypes.length; paramNum++) {
+
+            final Class<?> parameterType = parameterTypes[paramNum];
+            final Type genericParameterType = genericParameterTypes[paramNum];
+
+            final FacetedMethodParameter fmp = new FacetedMethodParameter(declaringType, actionMethod, parameterType);
+            actionParams.add(fmp);
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
-            if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isCollectionType(parameterType)) {
+            TypeOfFacet typeOfFacet = specificationLoader.inferFromGenericParamType(fmp, parameterType, genericParameterType);
 
-            } else if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
-
-            } else {
-                continue;
+            if(typeOfFacet == null ) {
+                if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
+                    typeOfFacet = specificationLoader.inferFromArrayType(fmp, parameterType);
+                }
             }
+
+            FacetUtil.addFacet(typeOfFacet);
+            continue;
 
         }
         return Collections.unmodifiableList(actionParams);

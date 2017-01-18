@@ -70,7 +70,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
@@ -106,7 +106,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
@@ -142,7 +142,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
@@ -175,7 +175,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
@@ -206,7 +206,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
 
         // when
         facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
