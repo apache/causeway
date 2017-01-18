@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -35,7 +36,6 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -50,7 +50,8 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
@@ -79,7 +80,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
 
     private EntityLinkSelect2Panel entityLink;
-    Select2Choice<ObjectAdapterMemento> select2Field;
+
+    Select2 select2;
 
     private EntityLinkSimplePanel entitySimpleLink;
 
@@ -182,8 +184,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // called from buildGui
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
-        if(select2Field != null) {
-            select2Field.add(behavior);
+        if(select2 != null) {
+            select2.add(behavior);
         }
     }
 
@@ -259,14 +261,24 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
         // syncLinkWithInputIfAutoCompleteOrChoices
         if(isEditableWithEitherAutoCompleteOrChoices()) {
-            final IModel<ObjectAdapterMemento> model = Util.createModel(getModel().asScalarModelWithPending());       
-            
-            if(select2Field == null) {
-                entityLink.setRequired(getModel().isRequired());
-                select2Field = Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, model, getModel());
-                setProviderAndCurrAndPending(select2Field, getModel().getActionArgsHint());
 
-                final Settings settings = select2Field.getSettings();
+            if(select2 == null) {
+                entityLink.setRequired(getModel().isRequired());
+
+                if(getModel().isCollection()) {
+                    final IModel<ArrayList<ObjectAdapterMemento>> modelWithMultiPending =
+                            ScalarModelWithMultiPending.Util.createModel(getModel().asScalarModelWithMultiPending());
+                    select2 = Select2.with(Select2ChoiceUtil.newSelect2MultiChoice(ID_AUTO_COMPLETE, modelWithMultiPending,
+                            getModel()));
+                } else {
+                    final IModel<ObjectAdapterMemento> modelWithPending =
+                            ScalarModelWithPending.Util.createModel(getModel().asScalarModelWithPending());
+                    select2 = Select2.with(Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, modelWithPending,
+                            getModel()));
+                }
+                setProviderAndCurrAndPending(select2, getModel().getActionArgsHint());
+
+                final Settings settings = select2.getSettings();
 
                 // one of these three case should be true
                 // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
@@ -287,26 +299,26 @@ public class ReferencePanel extends ScalarPanelAbstract {
                     settings.setMinimumInputLength(minLength);
                 }
 
-                entityLink.addOrReplace(select2Field);
+                entityLink.addOrReplace(select2.component());
 
             } else {
                 //
-                // the select2Field already exists, so the widget has been rendered before.  If it is
+                // the select2Choice already exists, so the widget has been rendered before.  If it is
                 // being re-rendered now, it may be because some other property/parameter was invalid.
                 // when the form was submitted, the selected object (its oid as a string) would have
                 // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
-                // would be correctly converted and processed by the select2Field's choiceProvider.  However,
+                // would be correctly converted and processed by the select2Choice's choiceProvider.  However,
                 // an invalid property/parameter means that the webpage is re-rendered in another request,
                 // and the rawInput can no longer be interpreted.  The net result is that the field appears
                 // with no input.
                 //
-                // The fix is therefore (I think) simply to clear any rawInput, so that the select2Field
+                // The fix is therefore (I think) simply to clear any rawInput, so that the select2Choice
                 // renders its state from its model.
                 //
                 // see: FormComponent#getInputAsArray()
                 // see: Select2Choice#renderInitializationScript()
                 //
-                select2Field.clearInput();
+                select2.clearInput();
             }
 
             if(getComponentForRegular() != null) {
@@ -317,9 +329,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
 
             // syncUsability
-            if(select2Field != null) {
+            if(select2 != null) {
                 final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
-                select2Field.setEnabled(mutability);
+                select2.setEnabled(mutability);
             }
 
             Components.permanentlyHide(entityLink, "entityLinkIfNull");
@@ -327,7 +339,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
             Components.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
-            select2Field = null; // this forces recreation next time around
+            select2 = null; // this forces recreation next time around
         }
         
     }
@@ -338,23 +350,23 @@ public class ReferencePanel extends ScalarPanelAbstract {
     
     // called by syncWithInput, updateChoices
     private void setProviderAndCurrAndPending(
-            final Select2Choice<ObjectAdapterMemento> select2Field, 
+            final Select2 select2,
             final ObjectAdapter[] argsIfAvailable) {
         if (getModel().hasChoices()) {
             
             final List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
             ObjectAdapterMementoProviderAbstract providerForChoices = providerForChoices(choiceMementos);
 
-            select2Field.setProvider(providerForChoices);
+            select2.setProvider(providerForChoices);
             getModel().clearPending();
             
-            resetIfCurrentNotInChoices(select2Field, choiceMementos);
+            resetIfCurrentNotInChoices(select2, choiceMementos);
             
         } else if(getModel().hasAutoComplete()) {
-            select2Field.setProvider(providerForParamOrPropertyAutoComplete());
+            select2.setProvider(providerForParamOrPropertyAutoComplete());
             getModel().clearPending();
         } else {
-            select2Field.setProvider(providerForObjectAutoComplete());
+            select2.setProvider(providerForObjectAutoComplete());
             getModel().clearPending();
         }
     }
@@ -370,24 +382,33 @@ public class ReferencePanel extends ScalarPanelAbstract {
     }
 
     // called by setProviderAndCurrAndPending
-    private void resetIfCurrentNotInChoices(final Select2Choice<ObjectAdapterMemento> select2Field, final List<ObjectAdapterMemento> choiceMementos) {
-        final ObjectAdapterMemento curr = select2Field.getModelObject();
-        if(curr == null) {
-            select2Field.getModel().setObject(null);
-            getModel().setObject(null);
-            return;
-        }
-        
-        if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
-            if(!choiceMementos.isEmpty() && autoSelect()) {
-                final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
-                select2Field.getModel().setObject(newAdapterMemento);
-                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                        getPersistenceSession(), getSpecificationLoader()));
-            } else {
-                select2Field.getModel().setObject(null);
+    private void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
+        final ObjectAdapterMemento curr = select2.getModelObject(getPersistenceSession(), getSpecificationLoader());
+
+        if(!getModel().isCollection()) {
+
+            if(curr == null) {
+                select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(null);
                 getModel().setObject(null);
+                return;
             }
+
+            if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
+                if(!choiceMementos.isEmpty() && autoSelect()) {
+                    final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
+                    select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(newAdapterMemento);
+                    getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                            getPersistenceSession(), getSpecificationLoader()));
+                } else {
+                    select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(null);
+                    getModel().setObject(null);
+                }
+            }
+
+        } else {
+
+            // TODO
+
         }
     }
 
@@ -468,11 +489,12 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             // flush changes to pending
-            ObjectAdapterMemento convertedInput = select2Field.getConvertedInput();
+            ObjectAdapterMemento convertedInput =
+                    select2.getConvertedInput(getPersistenceSession(), getSpecificationLoader());
             
             getModel().setPending(convertedInput);
-            if(select2Field != null) {
-                select2Field.getModel().setObject(convertedInput);
+            if(select2 != null) {
+                select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(convertedInput);
             }
             
             final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
@@ -496,8 +518,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
      */
     @Override
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if(select2Field != null) {
-            setProviderAndCurrAndPending(select2Field, argsIfAvailable);
+        if(select2 != null) {
+            setProviderAndCurrAndPending(select2, argsIfAvailable);
             return true;
         } else {
             return false;

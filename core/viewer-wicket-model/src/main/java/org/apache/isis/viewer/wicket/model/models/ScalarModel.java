@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -289,6 +290,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
             public ObjectAdapter load(final ScalarModel scalarModel) {
                 return scalarModel.loadFromSuper();
             }
+
+            @Override
+            public boolean isCollection(final ScalarModel scalarModel) {
+                return false;
+            }
         },
         PARAMETER {
             @Override
@@ -506,12 +512,20 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
                 }
 
                 // return an empty collection
+                // TODO: this should probably move down into OneToManyActionParameter impl
                 final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
                 final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
                 final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
                 final Class<?> elementType = typeOfFacet.value();
                 final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
                 return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
+            }
+
+            @Override
+            public boolean isCollection(final ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
+                return actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
             }
         };
 
@@ -576,6 +590,8 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
         public abstract void reset(ScalarModel scalarModel);
 
         public abstract ObjectAdapter load(final ScalarModel scalarModel);
+
+        public abstract boolean isCollection(final ScalarModel scalarModel);
     }
 
     private final Kind kind;
@@ -649,6 +665,10 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
                 getPersistenceSession(), getSpecificationLoader());
         final ObjectAdapter associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
         setObject(associatedAdapter);
+    }
+
+    public boolean isCollection() {
+        return kind.isCollection(this);
     }
 
     /**
@@ -841,6 +861,36 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
             }
         };
     }
+
+    /**
+     * @return
+     */
+    public ScalarModelWithMultiPending asScalarModelWithMultiPending() {
+        return new ScalarModelWithMultiPending(){
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public ArrayList<ObjectAdapterMemento> getPending() {
+                final ObjectAdapterMemento pending = ScalarModel.this.getPending();
+                return Util.asMementoList(pending, getPersistenceSession(), getSpecificationLoader());
+            }
+
+            @Override
+            public void setPending(final ArrayList<ObjectAdapterMemento> pending) {
+                final ObjectAdapter list = Util.toAdapter(pending, getPersistenceSession(), getSpecificationLoader());
+                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.createOrNull(list);
+                ScalarModel.this.setPending(adapterMemento);
+            }
+
+            @Override
+            public ScalarModel getScalarModel() {
+                return ScalarModel.this;
+            }
+        };
+    }
+
+
 
 
     public String getReasonInvalidIfAny() {

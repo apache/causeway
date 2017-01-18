@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.model.mementos;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -323,7 +325,8 @@ public class ObjectAdapterMemento implements Serializable {
      */
     public ObjectAdapter getObjectAdapter(
             final ConcurrencyChecking concurrencyChecking,
-            final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
+            final PersistenceSession persistenceSession,
+            final SpecificationLoader specificationLoader) {
         return type.getAdapter(this, concurrencyChecking, persistenceSession, specificationLoader);
     }
 
@@ -495,6 +498,23 @@ public class ObjectAdapterMemento implements Serializable {
             };
         }
 
+        public static Function<? super ObjectAdapterMemento, Object> toPojo(
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
+            return new Function<ObjectAdapterMemento, Object>() {
+                @Nullable @Override public Object apply(@Nullable final ObjectAdapterMemento input) {
+                    if(input == null) {
+                        return null;
+                    }
+                    final ObjectAdapter objectAdapter = input
+                            .getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+                    if(objectAdapter == null) {
+                        return null;
+                    }
+                    return objectAdapter.getObject();
+                }
+            };
+        }
     }
 
 

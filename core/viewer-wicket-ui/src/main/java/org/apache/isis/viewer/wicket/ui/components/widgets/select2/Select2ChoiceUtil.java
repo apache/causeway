@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.wicket.ajax.json.JSONException;
@@ -24,6 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -34,6 +36,19 @@ public final class Select2ChoiceUtil  {
 
     public static Select2Choice<ObjectAdapterMemento> newSelect2Choice(String id, final IModel<ObjectAdapterMemento> modelObject, ScalarModel scalarModel) {
         Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<>(id, modelObject, EmptyChoiceProvider.INSTANCE);
+        select2Choice.setRequired(scalarModel.isRequired());
+        return select2Choice;
+    }
+
+    public static Select2MultiChoice<ObjectAdapterMemento> newSelect2MultiChoice(
+            final String id,
+            final IModel<ArrayList<ObjectAdapterMemento>> modelObject,
+            final ScalarModel scalarModel) {
+
+        // TODO: naughty..
+        final IModel<Collection<ObjectAdapterMemento>> modelObjectColl = (IModel)modelObject;
+
+        Select2MultiChoice<ObjectAdapterMemento> select2Choice = new Select2MultiChoice<>(id, modelObjectColl, EmptyChoiceProvider.INSTANCE);
         select2Choice.setRequired(scalarModel.isRequired());
         return select2Choice;
     }
@@ -57,4 +72,6 @@ public final class Select2ChoiceUtil  {
             return null;
         }
     }
+
+
 }
