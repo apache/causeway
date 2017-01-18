@@ -63,7 +63,7 @@ import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  */
-public class ScalarModel extends EntityModel implements LinksProvider,HasExecutingPanel {
+public class ScalarModel extends EntityModel implements LinksProvider,HasExecutingPanel, ActionArgumentModel {
 
     private static final long serialVersionUID = 1L;
 

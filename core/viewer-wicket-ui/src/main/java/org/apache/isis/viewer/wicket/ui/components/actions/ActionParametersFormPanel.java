@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
@@ -97,9 +97,10 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
                 final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
                 rv.add(container);
 
-                final ScalarModel argumentModel = actionModel.getArgumentModel(apm);
-                argumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
-                final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
+                final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
+                actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
+                final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE,
+                        actionArgumentModel);
                 final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
                 paramPanels.add(paramPanel);
                 if(paramPanel != null) {
