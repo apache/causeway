@@ -126,8 +126,11 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                 }
             }
 
-            FacetUtil.addFacet(typeOfFacet);
-            continue;
+            // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
+            if(typeOfFacet != null ) {
+                FacetUtil.addFacet(typeOfFacet);
+                fmp.setType(typeOfFacet.value());
+            }
 
         }
         return Collections.unmodifiableList(actionParams);

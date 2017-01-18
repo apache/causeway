@@ -40,7 +40,7 @@ public class TypedHolderDefault extends FacetHolderImpl implements TypedHolder {
     }
 
     /**
-     * For {@link FeatureType#COLLECTION collection}s, represents the element
+     * For {@link FeatureType#COLLECTION collection}s, and for some {@link FeatureType#ACTION_PARAMETER}s, represents the element
      * type.
      */
     @Override
