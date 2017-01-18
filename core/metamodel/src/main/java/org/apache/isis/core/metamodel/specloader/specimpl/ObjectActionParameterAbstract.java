@@ -42,8 +42,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -422,6 +424,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             
             final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
             final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);
+
+            // TODO: remove this eventually... need to introduce OneToManyParameter
+            if(paramWrappedSpec.isParentedOrFreeCollection()) {
+                final CollectionFacet collectionFacet = paramWrappedSpec.getFacet(CollectionFacet.class);
+                final TypeOfFacet typeOfFacet = collectionFacet.getTypeOfFacet();
+                final ObjectSpecification collectionOfParamSpec = typeOfFacet.valueSpec();
+                System.out.println(collectionOfParamSpec.getFullIdentifier());
+            }
             
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
                 throw new DomainModelException("Type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + choiceClass.getName());

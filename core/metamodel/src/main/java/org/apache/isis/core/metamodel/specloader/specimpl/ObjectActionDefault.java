@@ -196,13 +196,19 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
         for (int i = 0; i < parameterCount; i++) {
             final TypedHolder paramPeer = paramPeers.get(i);
+
+            @SuppressWarnings("unused")
             final ObjectSpecification specification = ObjectMemberAbstract
                     .getSpecification(getSpecificationLoader(), paramPeer.getType());
 
-            if (!specification.isNotCollection()) {
-                throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
+            // previously we threw an exception here if the specification represented a collection.  No longer!
+            final ObjectActionParameter parameter;
+            if(specification.isNotCollection()) {
+                parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
+            } else {
+                parameter = new OneToManyActionParameterDefault(i, this, paramPeer);
             }
-            final ObjectActionParameter parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
+
             parameters.add(parameter);
         }
         return parameters;

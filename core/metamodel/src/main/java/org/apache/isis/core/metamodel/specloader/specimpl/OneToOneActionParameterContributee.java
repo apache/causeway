@@ -22,8 +22,11 @@ import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
-public class OneToOneActionParameterContributee extends OneToOneActionParameterDefault implements ObjectActionParameterContributee{
+public class OneToOneActionParameterContributee
+        extends ObjectActionParameterAbstract
+        implements ObjectActionParameterContributee, OneToOneActionParameter {
 
     private final ObjectAdapter serviceAdapter;
     private final ObjectActionParameter serviceActionParameter;

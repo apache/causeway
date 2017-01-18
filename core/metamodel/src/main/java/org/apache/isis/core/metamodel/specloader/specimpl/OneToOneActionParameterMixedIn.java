@@ -20,8 +20,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
-public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefault implements ObjectActionParameterMixedIn {
+public class OneToOneActionParameterMixedIn
+        extends ObjectActionParameterAbstract
+        implements ObjectActionParameterMixedIn,
+                   OneToOneActionParameter {
 
     private final ObjectActionParameter mixinParameter;
     private final ObjectActionMixedIn mixedInAction;
