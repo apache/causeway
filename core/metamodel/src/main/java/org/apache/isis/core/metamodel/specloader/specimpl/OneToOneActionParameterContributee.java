@@ -16,56 +16,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
-import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterContributee
-        extends ObjectActionParameterAbstract
-        implements ObjectActionParameterContributee, OneToOneActionParameter {
-
-    private final ObjectAdapter serviceAdapter;
-    private final ObjectActionParameter serviceActionParameter;
-    private final ObjectActionContributee contributeeAction;
+        extends ObjectActionParameterContributeeAbstract
+        implements OneToOneActionParameter {
 
     public OneToOneActionParameterContributee(
             final ObjectAdapter serviceAdapter,
             final ObjectActionParameterAbstract serviceActionParameter,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
-        super(contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
-        this.serviceAdapter = serviceAdapter;
-        this.serviceActionParameter = serviceActionParameter;
-        this.contributeeAction = contributeeAction;
+        super(serviceAdapter, serviceActionParameter, contributeeParamNumber, contributeeAction);
     }
 
-    @Override
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter adapter,
-            final String searchArg,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg,
-                interactionInitiatedBy);
-    }
 
-    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
-        return serviceAdapter;
-    }
-
-    protected List<ObjectAdapter> argsForDefaultOrChoices(
-            final ObjectAdapter contributee,
-            final List<ObjectAdapter> argumentsIfAvailable) {
-
-        final List<ObjectAdapter> suppliedArgs = ListExtensions.mutableCopy(argumentsIfAvailable);
-        
-        final int contributeeParam = contributeeAction.getContributeeParam();
-        ListExtensions.insert(suppliedArgs, contributeeParam, contributee);
-        
-        return suppliedArgs;
-    }
-    
 }

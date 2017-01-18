@@ -16,59 +16,17 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterMixedIn
-        extends ObjectActionParameterAbstract
-        implements ObjectActionParameterMixedIn,
-                   OneToOneActionParameter {
-
-    private final ObjectActionParameter mixinParameter;
-    private final ObjectActionMixedIn mixedInAction;
+        extends ObjectActionParameterMixedInAbstract
+        implements OneToOneActionParameter {
 
     public OneToOneActionParameterMixedIn(
             final ObjectActionParameterAbstract mixinParameter,
             final ObjectActionMixedIn mixedInAction) {
-        super(mixinParameter.getNumber(), mixedInAction, mixinParameter.getPeer());
-        this.mixinParameter = mixinParameter;
-        this.mixedInAction = mixedInAction;
+        super(mixinParameter, mixedInAction);
     }
 
-    @Override
-    public ObjectAdapter[] getAutoComplete(
-            final ObjectAdapter mixedInAdapter,
-            final String searchArg,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinParameter.getAutoComplete(
-                mixinAdapterFor(mixedInAdapter), searchArg,
-                interactionInitiatedBy);
-    }
-
-    protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter mixedInAdapter) {
-        return mixinAdapterFor(mixedInAdapter);
-    }
-
-    private ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
-        return mixedInAction.mixinAdapterFor(mixedInAdapter);
-    }
-
-    @Override
-    public ActionArgValidityContext createProposedArgumentInteractionContext(
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] proposedArguments,
-            final int position,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        final ObjectAdapter targetObject = mixinAdapterFor(mixedInAdapter);
-
-        final ActionArgValidityContext actionArgValidityContext = new ActionArgValidityContext(
-                targetObject, mixedInAction.mixinAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
-        actionArgValidityContext.setMixedIn(mixedInAdapter);
-        return actionArgValidityContext;
-    }
 
 }
