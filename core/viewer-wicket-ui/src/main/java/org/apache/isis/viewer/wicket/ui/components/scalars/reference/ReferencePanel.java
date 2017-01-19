@@ -383,12 +383,12 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // called by setProviderAndCurrAndPending
     private void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
-        final ObjectAdapterMemento curr = select2.getModelObject(getPersistenceSession(), getSpecificationLoader());
+        final ObjectAdapterMemento curr = select2.getModelObject();
 
         if(!getModel().isCollection()) {
 
             if(curr == null) {
-                select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(null);
+                select2.getModel().setObject(null);
                 getModel().setObject(null);
                 return;
             }
@@ -396,11 +396,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
             if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
                 if(!choiceMementos.isEmpty() && autoSelect()) {
                     final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
-                    select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(newAdapterMemento);
+                    select2.getModel().setObject(newAdapterMemento);
                     getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
                             getPersistenceSession(), getSpecificationLoader()));
                 } else {
-                    select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(null);
+                    select2.getModel().setObject(null);
                     getModel().setObject(null);
                 }
             }
@@ -490,11 +490,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
             // flush changes to pending
             ObjectAdapterMemento convertedInput =
-                    select2.getConvertedInput(getPersistenceSession(), getSpecificationLoader());
+                    select2.getConvertedInput();
             
             getModel().setPending(convertedInput);
             if(select2 != null) {
-                select2.getModel(getPersistenceSession(), getSpecificationLoader()).setObject(convertedInput);
+                select2.getModel().setObject(convertedInput);
             }
             
             final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK,

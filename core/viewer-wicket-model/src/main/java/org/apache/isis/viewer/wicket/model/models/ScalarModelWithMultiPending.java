@@ -18,19 +18,11 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -101,47 +93,5 @@ public interface ScalarModelWithMultiPending extends Serializable {
             };
         }
 
-        public static ObjectAdapter toAdapter(
-                final ArrayList<ObjectAdapterMemento> ownerPending,
-                final PersistenceSession persistenceSession,
-                final SpecificationLoader specificationLoader) {
-            final ArrayList<Object> listOfPojos = Lists
-                    .newArrayList(FluentIterable.from(ownerPending).transform(
-                            ObjectAdapterMemento.Functions
-                                    .toPojo(persistenceSession, specificationLoader))
-                            .toList());
-            return persistenceSession.adapterFor(listOfPojos);
-        }
-
-        public static ArrayList<ObjectAdapterMemento> asMementoList(
-                final ObjectAdapterMemento objectAdapterMemento,
-                final PersistenceSession persistenceSession,
-                final SpecificationLoader specificationLoader) {
-
-            if(objectAdapterMemento == null) {
-                return Lists.newArrayList();
-            }
-
-            final ObjectAdapter objectAdapter = objectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                    persistenceSession, specificationLoader);
-            if(objectAdapter == null) {
-                return Lists.newArrayList();
-            }
-
-            final List<ObjectAdapter> objectAdapters = CollectionFacet.Utils.convertToAdapterList(objectAdapter);
-
-            return Lists.newArrayList(
-                FluentIterable.from(objectAdapters)
-                              .transform(ObjectAdapterMemento.Functions.fromAdapter())
-                              .toList());
-        }
-
-        public static ObjectAdapterMemento toAdapterMemento(
-                final Collection<ObjectAdapterMemento> modelObject,
-                final PersistenceSession persistenceSession,
-                final SpecificationLoader specificationLoader) {
-
-            return ObjectAdapterMemento.createForList(modelObject);
-        }
     }
 }

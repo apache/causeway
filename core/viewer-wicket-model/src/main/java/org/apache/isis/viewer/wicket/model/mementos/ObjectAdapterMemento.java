@@ -89,9 +89,10 @@ public class ObjectAdapterMemento implements Serializable {
             @Override
             public ObjectAdapter asAdapter(
                     final ObjectAdapterMemento oam,
+                    final ConcurrencyChecking concurrencyChecking,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
-                return oam.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader);
+                return oam.type.getAdapter(oam, concurrencyChecking, persistenceSession, specificationLoader);
             }
 
             @Override
@@ -124,7 +125,7 @@ public class ObjectAdapterMemento implements Serializable {
             @Override
             public ObjectAdapter asAdapter(
                     final ObjectAdapterMemento oam,
-                    final PersistenceSession persistenceSession,
+                    final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 final List<Object> listOfPojos =
                         Lists.newArrayList(
@@ -167,7 +168,7 @@ public class ObjectAdapterMemento implements Serializable {
 
         public abstract ObjectAdapter asAdapter(
                 final ObjectAdapterMemento oam,
-                final PersistenceSession persistenceSession,
+                final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
                 final SpecificationLoader specificationLoader);
 
         public abstract int hashCode(final ObjectAdapterMemento oam);
@@ -446,12 +447,6 @@ public class ObjectAdapterMemento implements Serializable {
         return list;
     }
 
-    public ObjectAdapter asAdapter(
-            final PersistenceSession persistenceSession,
-            final SpecificationLoader specificationLoader) {
-        return sort.asAdapter(this, persistenceSession, specificationLoader);
-    }
-
 
     public void resetVersion(
             final PersistenceSession persistenceSession,
@@ -480,8 +475,7 @@ public class ObjectAdapterMemento implements Serializable {
             final ConcurrencyChecking concurrencyChecking,
             final PersistenceSession persistenceSession,
             final SpecificationLoader specificationLoader) {
-        ensureScalar();
-        return type.getAdapter(this, concurrencyChecking, persistenceSession, specificationLoader);
+        return sort.asAdapter(this, concurrencyChecking, persistenceSession, specificationLoader);
     }
 
     /**

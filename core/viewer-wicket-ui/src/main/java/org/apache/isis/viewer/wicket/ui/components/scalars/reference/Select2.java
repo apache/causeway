@@ -30,10 +30,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 
 public class Select2 implements Serializable {
 
@@ -90,28 +87,24 @@ public class Select2 implements Serializable {
             select2MultiChoice.setProvider(providerForChoices);
     }
 
-    public ObjectAdapterMemento getModelObject(
-            final PersistenceSession persistenceSession,
-            final SpecificationLoader specificationLoader) {
+    public ObjectAdapterMemento getModelObject() {
         if (select2Choice != null) {
             return select2Choice.getModelObject();
         } else {
             final Collection<ObjectAdapterMemento> modelObject = select2MultiChoice.getModelObject();
-            return ScalarModelWithMultiPending.Util
-                    .toAdapterMemento(modelObject, persistenceSession, specificationLoader);
+
+            return ObjectAdapterMemento.createForList(modelObject);
         }
     }
 
-    public IModel<ObjectAdapterMemento> getModel(
-            final PersistenceSession persistenceSession,
-            final SpecificationLoader specificationLoader) {
+    public IModel<ObjectAdapterMemento> getModel() {
         if (select2Choice != null) {
             return select2Choice.getModel();
         } else {
             final IModel<Collection<ObjectAdapterMemento>> model = select2MultiChoice.getModel();
             final Collection<ObjectAdapterMemento> modelObject = model.getObject();
-            final ObjectAdapterMemento memento = ScalarModelWithMultiPending.Util
-                    .toAdapterMemento(modelObject, persistenceSession, specificationLoader);
+
+            final ObjectAdapterMemento memento = ObjectAdapterMemento.createForList(modelObject);
             return new IModel<ObjectAdapterMemento>() {
                 @Override
                 public ObjectAdapterMemento getObject() {
@@ -120,26 +113,25 @@ public class Select2 implements Serializable {
 
                 @Override
                 public void setObject(final ObjectAdapterMemento memento) {
-                    final ArrayList<ObjectAdapterMemento> mementos = ScalarModelWithMultiPending.Util
-                            .asMementoList(memento, persistenceSession, specificationLoader);
+
+                    final ArrayList<ObjectAdapterMemento> mementos = memento.getList();
                     model.setObject(mementos);
                 }
 
-                @Override public void detach() {
-
+                @Override
+                public void detach() {
                 }
             };
         }
     }
 
-    public ObjectAdapterMemento getConvertedInput(
-            final PersistenceSession persistenceSession,
-            final SpecificationLoader specificationLoader) {
+    public ObjectAdapterMemento getConvertedInput() {
         if (select2Choice != null) {
             return select2Choice.getConvertedInput();
         } else {
             final Collection<ObjectAdapterMemento> convertedInput = select2MultiChoice.getConvertedInput();
-            return ScalarModelWithMultiPending.Util.toAdapterMemento(convertedInput, persistenceSession, specificationLoader);
+
+            return ObjectAdapterMemento.createForList(convertedInput);
         }
     }
 }
