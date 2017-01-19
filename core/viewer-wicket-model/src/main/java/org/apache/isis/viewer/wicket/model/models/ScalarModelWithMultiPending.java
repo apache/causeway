@@ -19,10 +19,12 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -34,15 +36,19 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
  */
 public interface ScalarModelWithMultiPending extends Serializable {
 
-    public ArrayList<ObjectAdapterMemento> getPending();
-    public void setPending(ArrayList<ObjectAdapterMemento> pending);
+    public ArrayList<ObjectAdapterMemento> getMultiPending();
+    public void setMultiPending(ArrayList<ObjectAdapterMemento> pending);
 
     public ScalarModel getScalarModel();
 
     static class Util {
 
         private static final Logger LOG = LoggerFactory.getLogger(ScalarModelWithMultiPending.Util.class);
-        
+
+        public static IModel<ArrayList<ObjectAdapterMemento>> createModel(final ScalarModel model) {
+            return createModel(model.asScalarModelWithMultiPending());
+        }
+
         public static Model<ArrayList<ObjectAdapterMemento>> createModel(final ScalarModelWithMultiPending owner) {
             return new Model<ArrayList<ObjectAdapterMemento>>() {
 
@@ -50,7 +56,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                 @Override
                 public ArrayList<ObjectAdapterMemento> getObject() {
-                    final ArrayList<ObjectAdapterMemento> pending = owner.getPending();
+                    final ArrayList<ObjectAdapterMemento> pending = owner.getMultiPending();
                     if (pending != null) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("pending not null: " + pending.toString());
@@ -71,7 +77,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(String.format("setting to: %s", adapterMemento != null ? adapterMemento.toString() : null));
                     }
-                    owner.setPending(adapterMemento);
+                    owner.setMultiPending(adapterMemento);
 
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
                     final PersistenceSession persistenceSession = ownerScalarModel.getPersistenceSession();
@@ -80,13 +86,15 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     if(adapterMemento == null) {
                         ownerScalarModel.setObject(null);
                     } else {
-                        final ArrayList<ObjectAdapterMemento> ownerPending = owner.getPending();
+                        final ArrayList<ObjectAdapterMemento> ownerPending = owner.getMultiPending();
                         if (ownerPending != null) {
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug(String.format("setting to pending: %s", ownerPending.toString()));
                             }
+                            final ObjectSpecId objectSpecId = ownerScalarModel.getTypeOfSpecification().getSpecId();
                             ownerScalarModel.setObjectMemento(
-                                    ObjectAdapterMemento.createForList(adapterMemento), persistenceSession, specificationLoader);
+                                    ObjectAdapterMemento.createForList(adapterMemento, objectSpecId),
+                                    persistenceSession, specificationLoader);
                         }
                     }
                 }

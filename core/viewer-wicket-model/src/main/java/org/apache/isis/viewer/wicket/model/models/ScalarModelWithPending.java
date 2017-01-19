@@ -18,6 +18,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,11 @@ public interface ScalarModelWithPending extends Serializable {
     static class Util {
         
         private static final Logger LOG = LoggerFactory.getLogger(ScalarModelWithPending.Util.class);
-        
+
+        public static IModel<ObjectAdapterMemento> createModel(final ScalarModel model) {
+            return createModel(model.asScalarModelWithPending());
+        }
+
         public static Model<ObjectAdapterMemento> createModel(final ScalarModelWithPending owner) {
             return new Model<ObjectAdapterMemento>() {
 
@@ -90,5 +95,6 @@ public interface ScalarModelWithPending extends Serializable {
                 }
             };
         }
+
     }
 }

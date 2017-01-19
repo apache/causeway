@@ -72,12 +72,16 @@ public class ObjectAdapterMemento implements Serializable {
         return new ObjectAdapterMemento(rootOid);
     }
 
-    public static ObjectAdapterMemento createForList(final ArrayList<ObjectAdapterMemento> list) {
-        return new ObjectAdapterMemento(list);
+    public static ObjectAdapterMemento createForList(
+            final ArrayList<ObjectAdapterMemento> list,
+            final ObjectSpecId objectSpecId) {
+        return new ObjectAdapterMemento(list, objectSpecId);
     }
 
-    public static ObjectAdapterMemento createForList(final Collection<ObjectAdapterMemento> list) {
-        return list != null ? createForList(Lists.newArrayList(list)) :  null;
+    public static ObjectAdapterMemento createForList(
+            final Collection<ObjectAdapterMemento> list,
+            final ObjectSpecId objectSpecId) {
+        return list != null ? createForList(Lists.newArrayList(list), objectSpecId) :  null;
     }
 
     enum Sort {
@@ -335,16 +339,13 @@ public class ObjectAdapterMemento implements Serializable {
 
 
     private final Sort sort;
+    private final ObjectSpecId objectSpecId;
 
     /**
      * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     private Type type;
 
-    /**
-     * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
-     */
-    private ObjectSpecId objectSpecId;
     /**
      * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
@@ -387,9 +388,10 @@ public class ObjectAdapterMemento implements Serializable {
      */
     private ArrayList<ObjectAdapterMemento> list;
 
-    public ObjectAdapterMemento(final ArrayList<ObjectAdapterMemento> list) {
+    public ObjectAdapterMemento(final ArrayList<ObjectAdapterMemento> list, final ObjectSpecId objectSpecId) {
         this.sort = Sort.VECTOR;
         this.list = list;
+        this.objectSpecId = objectSpecId;
     }
 
     private ObjectAdapterMemento(final RootOid rootOid) {
@@ -481,9 +483,6 @@ public class ObjectAdapterMemento implements Serializable {
     /**
      * Updates the memento if the adapter's state has changed.
      * 
-     * <p>
-     * This is a no-op for
-     * 
      * @param adapter
      */
     public void setAdapter(final ObjectAdapter adapter) {
@@ -492,7 +491,6 @@ public class ObjectAdapterMemento implements Serializable {
     }
 
     public ObjectSpecId getObjectSpecId() {
-        ensureScalar();
         return objectSpecId;
     }
 

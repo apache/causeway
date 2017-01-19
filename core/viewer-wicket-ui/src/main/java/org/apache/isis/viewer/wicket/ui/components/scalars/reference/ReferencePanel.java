@@ -59,7 +59,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -266,15 +265,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 entityLink.setRequired(getModel().isRequired());
 
                 if(getModel().isCollection()) {
-                    final IModel<ArrayList<ObjectAdapterMemento>> modelWithMultiPending =
-                            ScalarModelWithMultiPending.Util.createModel(getModel().asScalarModelWithMultiPending());
-                    select2 = Select2.with(Select2ChoiceUtil.newSelect2MultiChoice(ID_AUTO_COMPLETE, modelWithMultiPending,
-                            getModel()));
+                    final IModel<ArrayList<ObjectAdapterMemento>> model =
+                            ScalarModelWithMultiPending.Util.createModel(getModel());
+                    select2 = Select2.newSelect2MultiChoice(ID_AUTO_COMPLETE, model, getModel());
                 } else {
-                    final IModel<ObjectAdapterMemento> modelWithPending =
-                            ScalarModelWithPending.Util.createModel(getModel().asScalarModelWithPending());
-                    select2 = Select2.with(Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, modelWithPending,
-                            getModel()));
+                    final IModel<ObjectAdapterMemento> modelObject =
+                            ScalarModelWithPending.Util.createModel(getModel());
+                    select2 = Select2.newSelect2Choice(ID_AUTO_COMPLETE, modelObject, getModel());
                 }
                 setProviderAndCurrAndPending(select2, getModel().getActionArgsHint());
 

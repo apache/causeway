@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
@@ -731,7 +732,29 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
 
     @Override
     public void setObject(final ObjectAdapter adapter) {
-        super.setObject(adapter); // associated value
+        if(adapter == null) {
+            super.setObject(null);
+            return;
+        }
+
+        final Object pojo = adapter.getObject();
+        if(pojo == null) {
+            super.setObject(null);
+            return;
+        }
+
+        if(isCollection()) {
+            final Iterable iterable = (Iterable) pojo;
+            final ArrayList<ObjectAdapterMemento> listOfMementos =
+                    Lists.newArrayList(FluentIterable.from(iterable)
+                          .transform(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
+                    .toList());
+            final ObjectAdapterMemento memento =
+                    ObjectAdapterMemento.createForList(listOfMementos, getTypeOfSpecification().getSpecId());
+            super.setObjectMemento(memento, getPersistenceSession(), getSpecificationLoader()); // associated value
+        } else {
+            super.setObject(adapter); // associated value
+        }
     }
 
     public void setObjectAsString(final String enteredText) {
@@ -874,14 +897,14 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public ArrayList<ObjectAdapterMemento> getPending() {
+            public ArrayList<ObjectAdapterMemento> getMultiPending() {
                 final ObjectAdapterMemento pending = ScalarModel.this.getPending();
                 return pending != null ? pending.getList() : null;
             }
 
             @Override
-            public void setPending(final ArrayList<ObjectAdapterMemento> pending) {
-                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.createForList(pending);
+            public void setMultiPending(final ArrayList<ObjectAdapterMemento> pending) {
+                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.createForList(pending, getScalarModel().getTypeOfSpecification().getSpecId());
                 ScalarModel.this.setPending(adapterMemento);
             }
 

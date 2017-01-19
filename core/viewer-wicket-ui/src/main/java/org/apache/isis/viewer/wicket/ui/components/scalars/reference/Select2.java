@@ -21,51 +21,69 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.ChoiceExt;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceExt;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2MultiChoiceExt;
 
+/**
+ * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
+ */
 public class Select2 implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    final Select2Choice<ObjectAdapterMemento> select2Choice;
-    final Select2MultiChoice<ObjectAdapterMemento> select2MultiChoice;
+    final Select2ChoiceExt select2Choice;
+    final Select2MultiChoiceExt select2MultiChoice;
 
-    public static Select2 with(final Select2Choice<ObjectAdapterMemento> select2Choice) {
-        return new Select2(select2Choice, null);
+    public static Select2 newSelect2Choice(
+            final String id,
+            final IModel<ObjectAdapterMemento> singleModel, final ScalarModel parentModel) {
+        return new Select2(
+                Select2ChoiceExt.create(id, singleModel, parentModel),
+                null
+        );
     }
 
-    public static Select2 with(final Select2MultiChoice<ObjectAdapterMemento> select2MultiChoice) {
-        return new Select2(null, select2MultiChoice);
+    public static Select2 newSelect2MultiChoice(
+            final String id,
+            final IModel<ArrayList<ObjectAdapterMemento>> multiModel,
+            final ScalarModel parentModel) {
+        return new Select2(
+                null,
+                Select2MultiChoiceExt.create(id, multiModel, parentModel)
+        );
     }
 
     private Select2(
-            final Select2Choice<ObjectAdapterMemento> select2Choice,
-            final Select2MultiChoice<ObjectAdapterMemento> select2MultiChoice) {
+            final Select2ChoiceExt select2Choice,
+            final Select2MultiChoiceExt select2MultiChoice) {
         this.select2Choice = select2Choice;
         this.select2MultiChoice = select2MultiChoice;
     }
 
-    public void add(final Behavior behavior) {
-        component().add(behavior);
-    }
-
-    HiddenField<?> component() {
+    public HiddenField<?> component() {
         return select2Choice != null
-                ? (HiddenField<ObjectAdapterMemento>) select2Choice
-                : (HiddenField<Collection<ObjectAdapterMemento>>) select2MultiChoice;
+                ? select2Choice
+                : select2MultiChoice;
     }
 
-    public Settings getSettings() {
-        return select2Choice != null ? select2Choice.getSettings() : select2MultiChoice.getSettings();
+    public ChoiceExt choiceExt() {
+        return select2Choice != null
+                ? select2Choice
+                : select2MultiChoice;
     }
 
     public void clearInput() {
@@ -76,15 +94,19 @@ public class Select2 implements Serializable {
         component().setEnabled(mutability);
     }
 
+    public void setRequired(final boolean required) {
+        component().setRequired(required);
+    }
     public boolean checkRequired() {
         return component().checkRequired();
     }
 
+    public Settings getSettings() {
+        return choiceExt().getSettings();
+    }
+
     public void setProvider(final ChoiceProvider<ObjectAdapterMemento> providerForChoices) {
-        if (select2Choice != null)
-            select2Choice.setProvider(providerForChoices);
-        else
-            select2MultiChoice.setProvider(providerForChoices);
+        choiceExt().setProvider(providerForChoices);
     }
 
     public ObjectAdapterMemento getModelObject() {
@@ -93,7 +115,7 @@ public class Select2 implements Serializable {
         } else {
             final Collection<ObjectAdapterMemento> modelObject = select2MultiChoice.getModelObject();
 
-            return ObjectAdapterMemento.createForList(modelObject);
+            return ObjectAdapterMemento.createForList(modelObject, select2MultiChoice.getSpecId());
         }
     }
 
@@ -104,7 +126,7 @@ public class Select2 implements Serializable {
             final IModel<Collection<ObjectAdapterMemento>> model = select2MultiChoice.getModel();
             final Collection<ObjectAdapterMemento> modelObject = model.getObject();
 
-            final ObjectAdapterMemento memento = ObjectAdapterMemento.createForList(modelObject);
+            final ObjectAdapterMemento memento = ObjectAdapterMemento.createForList(modelObject, select2MultiChoice.getSpecId());
             return new IModel<ObjectAdapterMemento>() {
                 @Override
                 public ObjectAdapterMemento getObject() {
@@ -113,6 +135,11 @@ public class Select2 implements Serializable {
 
                 @Override
                 public void setObject(final ObjectAdapterMemento memento) {
+
+                    if(memento == null) {
+                        model.setObject(null);
+                        return;
+                    }
 
                     final ArrayList<ObjectAdapterMemento> mementos = memento.getList();
                     model.setObject(mementos);
@@ -130,8 +157,25 @@ public class Select2 implements Serializable {
             return select2Choice.getConvertedInput();
         } else {
             final Collection<ObjectAdapterMemento> convertedInput = select2MultiChoice.getConvertedInput();
-
-            return ObjectAdapterMemento.createForList(convertedInput);
+            return ObjectAdapterMemento.createForList(convertedInput, select2MultiChoice.getSpecId());
         }
     }
+
+    public void setLabel(final Model<String> model) {
+        component().setLabel(model);
+    }
+
+    public void add(final Behavior behavior) {
+        component().add(behavior);
+    }
+
+    public <M extends Behavior> List<M> getBehaviors(Class<M> behaviorClass) {
+        return component().getBehaviors(behaviorClass);
+    }
+
+    public void remove(final Behavior behavior) {
+        component().remove(behavior);
+    }
+
+
 }
