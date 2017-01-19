@@ -78,10 +78,10 @@
                                 <configuration>
                                     <schemaDirectory>src/main/resources/org/apache/isis/schema</schemaDirectory>
                                     <schemaIncludes>
-                                        <schemaInclude>common/common-1.0.xsd</schemaInclude>
-                                        <schemaInclude>cmd/cmd-1.0.xsd</schemaInclude>
-                                        <schemaInclude>ixn/ixn-1.0.xsd</schemaInclude>
-                                        <schemaInclude>chg/chg-1.0.xsd</schemaInclude>
+                                        <schemaInclude>common/common-1.1.xsd</schemaInclude>
+                                        <schemaInclude>cmd/cmd-1.2.xsd</schemaInclude>
+                                        <schemaInclude>ixn/ixn-1.1.xsd</schemaInclude>
+                                        <schemaInclude>chg/chg-1.1.xsd</schemaInclude>
                                     </schemaIncludes>
                                     <bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
                                     <bindingIncludes>

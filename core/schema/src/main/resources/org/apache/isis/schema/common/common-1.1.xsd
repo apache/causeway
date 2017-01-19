@@ -42,6 +42,7 @@
             <xs:element name="timestamp" type="xs:dateTime"/>
             <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
+            <xs:element name="collection" type="collectionDto"/>
         </xs:choice>
     </xs:complexType>
 
@@ -65,6 +66,18 @@
         </xs:attribute>
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="id" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="collectionDto">
+        <xs:annotation>
+            <xs:documentation>A collection of (argument) values
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="value" type="valueDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="oidsDto">
@@ -112,10 +125,10 @@
             <xs:enumeration value="jodaLocalDateTime"/>
             <xs:enumeration value="enum"/>
             <xs:enumeration value="reference"/>
+            <xs:enumeration value="collection"/>
             <xs:enumeration value="void">
                 <xs:annotation>
-                    <xs:documentation>
-                        Not valid to be used as the parameter type of an action; can be used as its return type.
+                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
                     </xs:documentation>
                 </xs:annotation>
             </xs:enumeration>

@@ -23,11 +23,11 @@
            xmlns="http://isis.apache.org/schema/cmd"
            xmlns:com="http://isis.apache.org/schema/common">
 
-    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.0.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
 
     <xs:element name="commandDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.0 of this schema.
+            <xs:documentation>Represents v1.2 of this schema.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -38,9 +38,9 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="1">
+                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="2">
                     <xs:annotation>
-                        <xs:documentation>Introduced in v1.1. The minor version of the schema that an XML instance was created using.
+                        <xs:documentation>The minor version of the schema that an XML instance was created using.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>

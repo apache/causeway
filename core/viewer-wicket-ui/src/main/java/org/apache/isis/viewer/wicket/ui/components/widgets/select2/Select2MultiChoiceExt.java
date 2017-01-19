@@ -49,6 +49,7 @@ public class Select2MultiChoiceExt
             final ScalarModel scalarModel) {
         super(id, model, EmptyChoiceProvider.INSTANCE);
         specId = scalarModel.getTypeOfSpecification().getSpecId();
+
         setRequired(scalarModel.isRequired());
     }
 

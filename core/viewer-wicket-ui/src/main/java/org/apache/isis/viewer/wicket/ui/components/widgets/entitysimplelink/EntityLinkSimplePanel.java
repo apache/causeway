@@ -72,7 +72,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
     }
 
     private void syncWithInput() {
-        final ObjectAdapter adapter = getPendingElseCurrentAdapter();
+        final ObjectAdapter adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
 
         if (adapter != null) {
             final EntityModel entityModelForLink = new EntityModel(adapter);
@@ -81,21 +81,9 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
             
             final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
 
-            if(componentFactory instanceof UnknownModelPanelFactory) {
-
-//                // TODO: this is a workaround, because the UnknownModelPanelFactory isn't resolving correctly...
-//                addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(unknown)"));
-//                permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
-
-                final Component component = componentFactory.createComponent(ID_ENTITY_ICON_AND_TITLE, entityModelForLink);
-                addOrReplace(component);
-                permanentlyHide(ID_ENTITY_TITLE_NULL);
-            } else {
-                final Component component = componentFactory.createComponent(ID_ENTITY_ICON_AND_TITLE, entityModelForLink);
-                addOrReplace(component);
-                permanentlyHide(ID_ENTITY_TITLE_NULL);
-
-            }
+            final Component component = componentFactory.createComponent(ID_ENTITY_ICON_AND_TITLE, entityModelForLink);
+            addOrReplace(component);
+            permanentlyHide(ID_ENTITY_TITLE_NULL);
 
         } else {
             // represent no object by a simple label displaying '(none)'

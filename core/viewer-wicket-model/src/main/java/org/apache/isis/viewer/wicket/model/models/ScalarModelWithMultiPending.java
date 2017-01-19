@@ -69,7 +69,9 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                     final ScalarModel scalarModel = owner.getScalarModel();
                     final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
-                    return objectAdapterMemento != null? objectAdapterMemento.getList(): null;
+                    final ArrayList<ObjectAdapterMemento> mementos =
+                            objectAdapterMemento != null ? objectAdapterMemento.getList() : null;
+                    return mementos;
                 }
 
                 @Override

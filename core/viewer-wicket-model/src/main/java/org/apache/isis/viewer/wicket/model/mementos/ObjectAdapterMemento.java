@@ -62,6 +62,10 @@ public class ObjectAdapterMemento implements Serializable {
         if (adapter == null) {
             return null;
         }
+        final Object object = adapter.getObject();
+        if(object == null) {
+            return null;
+        }
         return new ObjectAdapterMemento(adapter);
     }
 
