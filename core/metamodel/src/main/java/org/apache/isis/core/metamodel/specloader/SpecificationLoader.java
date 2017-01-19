@@ -562,7 +562,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
 
         if(genericParameterType instanceof ParameterizedType) {
-            System.out.println(genericParameterType);
             final ParameterizedType parameterizedType = (ParameterizedType) genericParameterType;
             final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             if(actualTypeArguments.length == 1) {
