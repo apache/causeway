@@ -240,7 +240,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 
                 final ComponentFactory componentFactory = 
                         getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-                final Component component = componentFactory.createComponent(entityModelForLink);
+                final Component component = componentFactory.createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), entityModelForLink);
                 
                 componentForRegular.addOrReplace(component);
 

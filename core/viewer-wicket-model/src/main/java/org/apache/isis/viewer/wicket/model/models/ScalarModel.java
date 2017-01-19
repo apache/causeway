@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
@@ -51,7 +49,6 @@ import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsPr
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -511,14 +508,20 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
                     return objectAdapter;
                 }
 
-                // return an empty collection
-                // TODO: this should probably move down into OneToManyActionParameter impl
-                final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
-                final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
-                final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
-                final Class<?> elementType = typeOfFacet.value();
-                final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
-                return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
+
+                // hmmm... I think we should simply return null, as an indicator that there is no "pending" (see ScalarModelWithMultiPending)
+
+//                // return an empty collection
+//                // TODO: this should probably move down into OneToManyActionParameter impl
+//                final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
+//                final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
+//                final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
+//                final Class<?> elementType = typeOfFacet.value();
+//                final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
+//                return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
+
+                return objectAdapter;
+
             }
 
             @Override
@@ -873,13 +876,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
             @Override
             public ArrayList<ObjectAdapterMemento> getPending() {
                 final ObjectAdapterMemento pending = ScalarModel.this.getPending();
-                return Util.asMementoList(pending, getPersistenceSession(), getSpecificationLoader());
+                return pending != null ? pending.getList() : null;
             }
 
             @Override
             public void setPending(final ArrayList<ObjectAdapterMemento> pending) {
-                final ObjectAdapter list = Util.toAdapter(pending, getPersistenceSession(), getSpecificationLoader());
-                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.createOrNull(list);
+                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.createForList(pending);
                 ScalarModel.this.setPending(adapterMemento);
             }
 

@@ -43,6 +43,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -353,6 +355,14 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     public void setObject(final ObjectAdapter adapter) {
         super.setObject(adapter);
         adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
+    }
+
+    public void setObjectMemento(
+            final ObjectAdapterMemento memento,
+            final PersistenceSession persistenceSession,
+            final SpecificationLoader specificationLoader) {
+        super.setObject(memento.asAdapter(persistenceSession, specificationLoader));
+        adapterMemento = memento;
     }
 
 

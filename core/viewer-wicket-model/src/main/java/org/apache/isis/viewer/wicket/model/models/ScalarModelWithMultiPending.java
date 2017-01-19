@@ -58,11 +58,12 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                 @Override
                 public ArrayList<ObjectAdapterMemento> getObject() {
-                    if (owner.getPending() != null) {
+                    final ArrayList<ObjectAdapterMemento> pending = owner.getPending();
+                    if (pending != null) {
                         if (LOG.isDebugEnabled()) {
-                            LOG.debug("pending not null: " + owner.getPending().toString());
+                            LOG.debug("pending not null: " + pending.toString());
                         }
-                        return owner.getPending();
+                        return pending;
                     }
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("pending is null");
@@ -70,11 +71,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                     final ScalarModel scalarModel = owner.getScalarModel();
                     final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
-                    ArrayList<ObjectAdapterMemento> mementos = asMementoList(objectAdapterMemento,
-                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
-
-                    owner.setPending(mementos);
-                    return mementos;
+                    return objectAdapterMemento != null? objectAdapterMemento.getList(): null;
                 }
 
                 @Override
@@ -96,9 +93,8 @@ public interface ScalarModelWithMultiPending extends Serializable {
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug(String.format("setting to pending: %s", ownerPending.toString()));
                             }
-                            final ObjectAdapter objectAdapterOfListOfPojos =
-                                    toAdapter(ownerPending, persistenceSession, specificationLoader);
-                            ownerScalarModel.setObject(objectAdapterOfListOfPojos);
+                            ownerScalarModel.setObjectMemento(
+                                    ObjectAdapterMemento.createForList(adapterMemento), persistenceSession, specificationLoader);
                         }
                     }
                 }
@@ -142,10 +138,10 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
         public static ObjectAdapterMemento toAdapterMemento(
                 final Collection<ObjectAdapterMemento> modelObject,
-                final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
-            final ObjectAdapter objectAdapter = ScalarModelWithMultiPending.Util
-                    .toAdapter(Lists.newArrayList(modelObject), persistenceSession, specificationLoader);
-            return ObjectAdapterMemento.createOrNull(objectAdapter);
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
+
+            return ObjectAdapterMemento.createForList(modelObject);
         }
     }
 }
