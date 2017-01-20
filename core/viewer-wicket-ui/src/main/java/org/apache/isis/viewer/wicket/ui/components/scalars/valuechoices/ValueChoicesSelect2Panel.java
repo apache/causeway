@@ -283,7 +283,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     @Override
     public ArrayList<ObjectAdapterMemento> getMultiPending() {
-        return pending != null ? pending.getList() : null;
+        final ArrayList<ObjectAdapterMemento> mementos = pending != null ? pending.getList() : null;
+        return mementos == null || mementos.isEmpty() ? null : mementos;
     }
 
     @Override
