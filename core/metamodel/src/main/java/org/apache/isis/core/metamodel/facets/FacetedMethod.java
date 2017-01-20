@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.*;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -117,7 +117,8 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Type genericParameterType = genericParameterTypes[paramNum];
 
             final FeatureType featureType =
-                    specificationLoader.isParamCollection(parameterType, genericParameterType)
+                    org.apache.isis.core.metamodel.specloader.CollectionUtils
+                            .isParamCollection(parameterType, genericParameterType)
                             ? FeatureType.ACTION_PARAMETER_COLLECTION
                             : FeatureType.ACTION_PARAMETER_SCALAR;
 
@@ -131,11 +132,13 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                         CollectionSemanticsFacetDefault.forParamType(parameterType, fmp);
                 FacetUtil.addFacet(semanticsFacet);
 
-                TypeOfFacet typeOfFacet = specificationLoader.inferFromGenericParamType(fmp, parameterType, genericParameterType);
+                TypeOfFacet typeOfFacet = TypeOfFacet.Util
+                        .inferFromGenericParamType(fmp, parameterType, genericParameterType,
+                        specificationLoader);
 
                 if(typeOfFacet == null ) {
                     if (org.apache.isis.core.metamodel.specloader.CollectionUtils.isArrayType(parameterType)) {
-                        typeOfFacet = specificationLoader.inferFromArrayType(fmp, parameterType);
+                        typeOfFacet = TypeOfFacet.Util.inferFromArrayType(fmp, parameterType, specificationLoader);
                     }
                 }
 

@@ -69,13 +69,6 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
         Assert.assertThat(mementos.iterator().next(), is(mockMemento1));
     }
 
-    @Test
-    public void whenNullPlaceholder() throws Exception {
-        final Collection<ObjectAdapterMemento> mementos = provider.toChoices(Collections.singletonList("$$_isis_null_$$"));
-        Assert.assertThat(mementos.size(), is(1));
-        Assert.assertThat(mementos.iterator().next(), is(nullValue()));
-    }
-
     private ObjectAdapterMemento mock(final String id) {
         final ObjectAdapterMemento mock = context.mock(ObjectAdapterMemento.class, id);
         context.checking(new Expectations() {{

@@ -439,13 +439,14 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         // infer from return type
         if(typeOfFacet == null) {
             final Class<?> returnType = method.getReturnType();
-            typeOfFacet = getSpecificationLoader().inferFromArrayType(holder, returnType);
+            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(holder, returnType, getSpecificationLoader());
         }
 
         // infer from generic return type
         if(typeOfFacet == null) {
             final Class<?> cls = processMethodContext.getCls();
-            typeOfFacet = getSpecificationLoader().inferFromGenericReturnType(cls, method, holder);
+            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, holder,
+                    getSpecificationLoader());
         }
 
         FacetUtil.addFacet(typeOfFacet);
