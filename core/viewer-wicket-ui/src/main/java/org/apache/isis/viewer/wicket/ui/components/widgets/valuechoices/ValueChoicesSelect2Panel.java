@@ -20,10 +20,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.AttributeModifier;
@@ -36,7 +35,6 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -189,23 +187,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
                     return ids.contains(id);
                 }
             };
-
-            final Function<String, ObjectAdapterMemento> toOam = new Function<String, ObjectAdapterMemento>() {
-                @Override
-                public ObjectAdapterMemento apply(String input) {
-                    if (NULL_PLACEHOLDER.equals(input)) {
-                        return null;
-                    }
-                    final Collection<ObjectAdapterMemento> filteredCollection = Collections2.filter(mementos, lookupOam);
-                    return filteredCollection.iterator().next();
-                }
-            };
-            return Collections2.transform(ids, toOam);
+            return Lists.newArrayList(FluentIterable.from(mementos).filter(lookupOam).toList());
         }
 
         @Override
         protected List<ObjectAdapterMemento> obtainMementos(String term) {
-            // return choicesMementos;  // ISIS-1020: as of Jan 2015
             return obtainMementos(term, choicesMementos);
         }
 
@@ -259,15 +245,16 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     }
 
     /**
-     * sets up the choices, also ensuring that any currently held value
-     * is compatible.
+     * sets up the choices, also ensuring that any currently held value is compatible.
      */
     private void setChoices(ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
         
         final ChoiceProvider<ObjectAdapterMemento> provider = newChoiceProvider(choicesMementos);
         select2.setProvider(provider);
+
         getModel().clearPending();
+
         final ObjectAdapterMemento objectAdapterMemento = getModel().getObjectAdapterMemento();
         if(objectAdapterMemento == null) {
             select2.getModel().setObject(null);
@@ -275,28 +262,20 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
             if(!getModel().isCollection()) {
 
+                // if currently held value is not compatible with choices, then replace with the first choice
                 if(!choicesMementos.contains(objectAdapterMemento)) {
 
-                    final ObjectAdapterMemento newAdapterMemento;
-                    if (!choicesMementos.isEmpty()) {
-                        newAdapterMemento = choicesMementos.get(0);
-                    } else {
-                        newAdapterMemento = null;
-                    }
+                    final ObjectAdapterMemento newAdapterMemento =
+                            choicesMementos.isEmpty()
+                                    ? null
+                                    : choicesMementos.get(0);
 
-                    final IModel<ObjectAdapterMemento> model = select2.getModel();
-                    model.setObject(newAdapterMemento);
-                    if (newAdapterMemento != null) {
-                        getModel().setObject(
-                                newAdapterMemento.getObjectAdapter(
-                                        ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader()));
-                    } else {
-                        getModel().setObject(null);
-                    }
+                    select2.getModel().setObject(newAdapterMemento);
+                    getModel().setObjectMemento(newAdapterMemento, getPersistenceSession(), getSpecificationLoader());
                 }
 
             } else {
-                // TODO
+
             }
         }
     }

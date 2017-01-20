@@ -361,7 +361,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             final ObjectAdapterMemento memento,
             final PersistenceSession persistenceSession,
             final SpecificationLoader specificationLoader) {
-        super.setObject(memento.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader));
+        super.setObject(
+                memento != null
+                        ? memento.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader)
+                        : null);
         adapterMemento = memento;
     }
 
