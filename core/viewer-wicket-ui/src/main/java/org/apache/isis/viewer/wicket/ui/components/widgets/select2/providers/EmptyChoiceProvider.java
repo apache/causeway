@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
+package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 
@@ -25,9 +25,9 @@ import org.wicketstuff.select2.Response;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
-class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
+public class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
 
-    static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
+    public static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
 
     @Override
     public void query(String term, int page, Response<ObjectAdapterMemento> response) {

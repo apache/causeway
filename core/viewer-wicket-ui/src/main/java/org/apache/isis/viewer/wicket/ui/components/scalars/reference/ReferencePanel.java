@@ -41,7 +41,6 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -56,9 +55,12 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -349,22 +351,27 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private void setProviderAndCurrAndPending(
             final Select2 select2,
             final ObjectAdapter[] argsIfAvailable) {
-        if (getModel().hasChoices()) {
-            
-            final List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
-            ObjectAdapterMementoProviderAbstract providerForChoices = providerForChoices(choiceMementos);
 
-            select2.setProvider(providerForChoices);
-            getModel().clearPending();
-            
-            resetIfCurrentNotInChoices(select2, choiceMementos);
-            
+        ChoiceProvider<ObjectAdapterMemento> providerForChoices;
+        if (getModel().hasChoices()) {
+            List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
+            providerForChoices =
+                    new ObjectAdapterMementoProviderForReferenceChoices(getModel(), wicketViewerSettings, choiceMementos);
+
         } else if(getModel().hasAutoComplete()) {
-            select2.setProvider(providerForParamOrPropertyAutoComplete());
-            getModel().clearPending();
+            providerForChoices =
+                    new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel(), wicketViewerSettings);
         } else {
-            select2.setProvider(providerForObjectAutoComplete());
-            getModel().clearPending();
+            providerForChoices =
+                    new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel(), wicketViewerSettings);
+        }
+
+        select2.setProvider(providerForChoices);
+        getModel().clearPending();
+
+        if(providerForChoices instanceof ObjectAdapterMementoProviderForReferenceChoices) {
+            final ObjectAdapterMementoProviderForReferenceChoices provider = (ObjectAdapterMementoProviderForReferenceChoices) providerForChoices;
+            resetIfCurrentNotInChoices(select2, provider.getChoiceMementos());
         }
     }
 
@@ -374,7 +381,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession(), getDeploymentCategory()));
         }
-        // take a copy otherwise is only lazily evaluated
+        // take a copy (otherwise is only lazily evaluated)
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
     }
 
@@ -415,60 +422,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoSelect;
     }
 
-    // called by setProviderAndCurrAndPending
-    private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
-                final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                final List<ObjectAdapter> autoCompleteAdapters =
-                        autoCompleteFacet.execute(term,
-                                InteractionInitiatedBy.USER);
-                // take a copy otherwise so is eagerly evaluated and memento objects correctly built
-                return Lists.newArrayList(
-                        Lists.transform(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter()));
-            }
-        };
-    }
-
-    // called by setProviderAndCurrAndPending
-    private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
-            
-            private static final long serialVersionUID = 1L;
-            
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final List<ObjectAdapter> autoCompleteChoices = Lists.newArrayList();
-                if(getScalarModel().hasAutoComplete()) {
-                    final List<ObjectAdapter> autoCompleteAdapters =
-                            getScalarModel().getAutoComplete(term, getAuthenticationSession(), getDeploymentCategory());
-                    autoCompleteChoices.addAll(autoCompleteAdapters);
-                }
-                // take a copy otherwise so is eagerly evaluated and memento objects correctly built
-                return Lists.newArrayList(
-                        Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
-            }
-            
-        };
-    }
-
-    // called by setProviderAndCurrAndPending
-    private ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
-        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                return obtainMementos(term, choiceMementos);
-            }
-        };
-    }
-
-    
     // //////////////////////////////////////
     // getInput, convertInput
     // //////////////////////////////////////
@@ -554,8 +507,5 @@ public class ReferencePanel extends ScalarPanelAbstract {
     IsisConfiguration getConfiguration() {
         return getIsisSessionFactory().getConfiguration();
     }
-
-
-
 
 }

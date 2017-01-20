@@ -14,15 +14,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.AttributeModifier;
@@ -44,9 +41,9 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.reference.Select2;
-import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending, ScalarModelWithMultiPending {
@@ -76,7 +73,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             }
 
             final ObjectAdapter[] actionArgsHint = scalarModel.getActionArgsHint();
-            setChoices(actionArgsHint);
+            setProviderAndCurrAndPending(select2, actionArgsHint);
             addStandardSemantics();
         } else {
             select2.clearInput();
@@ -160,41 +157,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     
     protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
-        return new FixedObjectAdapterMementoProvider(scalarModel, choicesMementos, wicketViewerSettings);
-    }
-
-    static class FixedObjectAdapterMementoProvider extends ObjectAdapterMementoProviderAbstract {
-
-        private static final long serialVersionUID = 1L;
-        private final List<ObjectAdapterMemento> choicesMementos;
-
-        public FixedObjectAdapterMementoProvider(
-                final ScalarModel scalarModel,
-                final List<ObjectAdapterMemento> choicesMementos,
-                final WicketViewerSettings wicketViewerSettings) {
-            super(scalarModel, wicketViewerSettings);
-            this.choicesMementos = choicesMementos;
-        }
-
-        @Override
-        public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-            final List<ObjectAdapterMemento> mementos = obtainMementos(null);
-
-            final Predicate<ObjectAdapterMemento> lookupOam = new Predicate<ObjectAdapterMemento>() {
-                @Override
-                public boolean apply(ObjectAdapterMemento input) {
-                    final String id = (String) getId(input);
-                    return ids.contains(id);
-                }
-            };
-            return Lists.newArrayList(FluentIterable.from(mementos).filter(lookupOam).toList());
-        }
-
-        @Override
-        protected List<ObjectAdapterMemento> obtainMementos(String term) {
-            return obtainMementos(term, choicesMementos);
-        }
-
+        return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos, wicketViewerSettings);
     }
 
     @Override
@@ -240,21 +203,37 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     @Override
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        setChoices(argsIfAvailable);
-        return true;
+        if(select2 != null) {
+            setProviderAndCurrAndPending(select2, argsIfAvailable);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setChoices(ObjectAdapter[] argsIfAvailable) {
-        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
-        
-        final ChoiceProvider<ObjectAdapterMemento> provider = newChoiceProvider(choicesMementos);
-        select2.setProvider(provider);
+    private void setProviderAndCurrAndPending(final Select2 select2, ObjectAdapter[] argsIfAvailable) {
 
+        final ChoiceProvider<ObjectAdapterMemento> provider;
+
+        // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
+        // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
+        final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
+        provider = newChoiceProvider(choicesMementos);
+
+        select2.setProvider(provider);
         getModel().clearPending();
 
+        if(provider instanceof ObjectAdapterMementoProviderForValueChoices) {
+            final ObjectAdapterMementoProviderForValueChoices providerFixed = (ObjectAdapterMementoProviderForValueChoices) provider;
+            final List<ObjectAdapterMemento> choicesMementos1 = providerFixed.getChoicesMementos();
+            resetIfCurrentNotInChoices(select2, choicesMementos1);
+        }
+    }
+
+    private void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {
         final ObjectAdapterMemento objectAdapterMemento = getModel().getObjectAdapterMemento();
         if(objectAdapterMemento == null) {
             select2.getModel().setObject(null);
@@ -276,11 +255,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
             } else {
 
+                // nothing to do
             }
         }
     }
 
-    
     // //////////////////////////////////////
 
     @Override

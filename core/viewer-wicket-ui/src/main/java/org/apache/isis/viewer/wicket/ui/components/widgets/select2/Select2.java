@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
+package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,9 +34,6 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.ChoiceExt;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceExt;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2MultiChoiceExt;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.

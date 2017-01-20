@@ -22,6 +22,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
 public class Select2ChoiceExt extends Select2Choice<ObjectAdapterMemento> implements ChoiceExt {
 

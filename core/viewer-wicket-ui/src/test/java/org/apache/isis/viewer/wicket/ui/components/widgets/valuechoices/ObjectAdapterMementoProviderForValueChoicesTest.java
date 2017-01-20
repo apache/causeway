@@ -21,20 +21,24 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class FixedObjectAdapterMementoProviderTest {
+public class ObjectAdapterMementoProviderForValueChoicesTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -43,7 +47,7 @@ public class FixedObjectAdapterMementoProviderTest {
 
     private ObjectAdapterMemento mockMemento1;
     private ObjectAdapterMemento mockMemento2;
-    private ValueChoicesSelect2Panel.FixedObjectAdapterMementoProvider provider;
+    private ObjectAdapterMementoProviderForValueChoices provider;
 
     @Before
     public void setUp() throws Exception {
@@ -55,7 +59,7 @@ public class FixedObjectAdapterMementoProviderTest {
         );
 
         WicketViewerSettings wicketViewerSettings = context.mock(WicketViewerSettings.class);
-        provider = new ValueChoicesSelect2Panel.FixedObjectAdapterMementoProvider(null, mementos, wicketViewerSettings);
+        provider = new ObjectAdapterMementoProviderForValueChoices(null, mementos, wicketViewerSettings);
     }
 
     @Test
