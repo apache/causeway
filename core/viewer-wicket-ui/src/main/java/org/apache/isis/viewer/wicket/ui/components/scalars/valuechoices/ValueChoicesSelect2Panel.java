@@ -61,7 +61,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     @Override
     protected MarkupContainer addComponentForRegular() {
 
-
         // same pattern as in ReferencePanel
         if(select2 == null) {
             if(getModel().isCollection()) {

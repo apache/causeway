@@ -57,10 +57,10 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Enti
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -83,6 +83,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private EntityLinkSelect2Panel entityLink;
 
     Select2 select2;
+
 
     private EntityLinkSimplePanel entitySimpleLink;
 
@@ -115,7 +116,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return labelIfCompact;
     }
 
-
     // First called as a side-effect of {@link #beforeRender()}
     @Override
     protected FormGroup addComponentForRegular() {
@@ -123,26 +123,70 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final String name = scalarModel.getName();
         
         entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), this);
+
+        // create select2
+        entityLink.setRequired(getModel().isRequired());
+
+        if(getModel().isCollection()) {
+            final IModel<ArrayList<ObjectAdapterMemento>> model =
+                    ScalarModelWithMultiPending.Util.createModel(getModel());
+            this.select2 = Select2.newSelect2MultiChoice(ID_AUTO_COMPLETE, model, getModel());
+        } else {
+            final IModel<ObjectAdapterMemento> modelObject =
+                    ScalarModelWithPending.Util.createModel(getModel());
+            this.select2 = Select2.newSelect2Choice(ID_AUTO_COMPLETE, modelObject, getModel());
+        }
+
+        setProviderAndCurrAndPending(select2, getModel().getActionArgsHint());
+
+        final Settings settings = select2.getSettings();
+
+        // one of these three case should be true
+        // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
+        if(getModel().hasChoices()) {
+
+            settings.setPlaceholder(getModel().getName());
+
+        } else if(getModel().hasAutoComplete()) {
+
+            final int minLength = getModel().getAutoCompleteMinLength();
+            settings.setMinimumInputLength(minLength);
+            settings.setPlaceholder(getModel().getName());
+
+        } else if(hasObjectAutoComplete()) {
+            final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+            final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+            final int minLength = autoCompleteFacet.getMinLength();
+            settings.setMinimumInputLength(minLength);
+        }
+
+        entityLink.addOrReplace(select2.component());
+
+        // end create select2
+
+
         syncWithInput();
 
         setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
-        entityLink.setLabel(Model.of(name));
+        select2.component().setOutputMarkupId(true);
+        select2.component().setLabel(Model.of(name));
 
         final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
-        
+
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
-        
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
+
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
         labelIfRegular.add(scalarName);
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
         if (namedFacet != null) {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
         }
+
 
         // find the links...
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
@@ -150,7 +194,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         addPositioningCssTo(labelIfRegular, entityActions);
 
         addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, entityLink);
+        addFeedbackOnlyTo(labelIfRegular, select2.component()); // this is a placeholder; when select2.component() is available, we use that instead
         addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
@@ -264,42 +308,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             if(select2 == null) {
-                entityLink.setRequired(getModel().isRequired());
-
-                if(getModel().isCollection()) {
-                    final IModel<ArrayList<ObjectAdapterMemento>> model =
-                            ScalarModelWithMultiPending.Util.createModel(getModel());
-                    select2 = Select2.newSelect2MultiChoice(ID_AUTO_COMPLETE, model, getModel());
-                } else {
-                    final IModel<ObjectAdapterMemento> modelObject =
-                            ScalarModelWithPending.Util.createModel(getModel());
-                    select2 = Select2.newSelect2Choice(ID_AUTO_COMPLETE, modelObject, getModel());
-                }
-                setProviderAndCurrAndPending(select2, getModel().getActionArgsHint());
-
-                final Settings settings = select2.getSettings();
-
-                // one of these three case should be true
-                // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
-                if(getModel().hasChoices()) {
-
-                    settings.setPlaceholder(getModel().getName());
-
-                } else if(getModel().hasAutoComplete()) {
-
-                    final int minLength = getModel().getAutoCompleteMinLength();
-                    settings.setMinimumInputLength(minLength);
-                    settings.setPlaceholder(getModel().getName());
-
-                } else if(hasObjectAutoComplete()) {
-                    final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
-                    final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                    final int minLength = autoCompleteFacet.getMinLength();
-                    settings.setMinimumInputLength(minLength);
-                }
-
-                entityLink.addOrReplace(select2.component());
-
+                throw new IllegalStateException("select2 should be created already");
             } else {
                 //
                 // the select2Choice already exists, so the widget has been rendered before.  If it is
@@ -338,7 +347,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
             Components.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
-            select2 = null; // this forces recreation next time around
+            // setSelect2(null); // this forces recreation next time around
         }
         
     }
