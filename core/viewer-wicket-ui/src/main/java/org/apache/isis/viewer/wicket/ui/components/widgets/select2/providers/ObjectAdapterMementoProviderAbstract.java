@@ -14,23 +14,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets;
+package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -104,7 +103,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
      * @param choicesMementos The collections of choices to filter
      * @return A list of all matching choices
      */
-    protected List<ObjectAdapterMemento> obtainMementos(String term, Collection<ObjectAdapterMemento> choicesMementos) {
+    protected final List<ObjectAdapterMemento> obtainMementos(String term, Collection<ObjectAdapterMemento> choicesMementos) {
         List<ObjectAdapterMemento> matches = Lists.newArrayList();
         if (Strings.isEmpty(term)) {
             matches.addAll(choicesMementos);
@@ -122,22 +121,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         return matches;
     }
 
-    @Override
-    public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-        final Function<String, ObjectAdapterMemento> function = new Function<String, ObjectAdapterMemento>() {
 
-            @Override
-            public ObjectAdapterMemento apply(final String input) {
-                if(NULL_PLACEHOLDER.equals(input)) {
-                    return null;
-                }
-                final RootOid oid = RootOid.deString(input);
-                return ObjectAdapterMemento.createPersistent(oid);
-            }
-        };
-        return Collections2.transform(ids, function);
-    }
-    
     protected ScalarModel getScalarModel() {
         return scalarModel;
     }
@@ -156,8 +140,17 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    private IsisSessionFactory getIsisSessionFactory() {
+    protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
+
+    public AuthenticationSession getAuthenticationSession() {
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+    }
+
+    public DeploymentCategory getDeploymentCategory() {
+        return getIsisSessionFactory().getDeploymentCategory();
+    }
+
 
 }

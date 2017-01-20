@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -36,6 +32,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
@@ -68,21 +66,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        final Class<?> underlyingClass = getSpecification().getCorrespondingClass();
-        return semanticsOf(underlyingClass);
-    }
-
-    private static CollectionSemantics semanticsOf(final Class<?> underlyingClass) {
-        if (!Collection.class.isAssignableFrom(underlyingClass)) {
-            return CollectionSemantics.ARRAY;
-        }
-        if (List.class.isAssignableFrom(underlyingClass)) {
-            return CollectionSemantics.LIST;
-        }
-        if (Set.class.isAssignableFrom(underlyingClass)) {
-            return CollectionSemantics.SET;
-        }
-        return CollectionSemantics.OTHER;
+        return getFacet(CollectionSemanticsFacet.class).value();
     }
 
     //region > visible, usable

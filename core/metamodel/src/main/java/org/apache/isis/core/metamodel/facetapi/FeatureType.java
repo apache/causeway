@@ -77,7 +77,16 @@ public enum FeatureType {
             return Identifier.actionIdentifier(type.getName(), fullMethodName, parameterTypes);
         }
     },
-    ACTION_PARAMETER("Parameter") {
+    ACTION_PARAMETER_SCALAR("Scalar Parameter") {
+        /**
+         * Always returns <tt>null</tt>.
+         */
+        @Override
+        public Identifier identifierFor(final Class<?> type, final Method method) {
+            return null;
+        }
+    },
+    ACTION_PARAMETER_COLLECTION("Collection Parameter") {
         /**
          * Always returns <tt>null</tt>.
          */
@@ -99,7 +108,7 @@ public enum FeatureType {
     public final static List<FeatureType> COLLECTIONS_ONLY = ImmutableList.of(COLLECTION);
     public final static List<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableList.of(COLLECTION, ACTION);
     public final static List<FeatureType> ACTIONS_ONLY = ImmutableList.of(ACTION);
-    public final static List<FeatureType> PARAMETERS_ONLY = ImmutableList.of(ACTION_PARAMETER);
+    public final static List<FeatureType> PARAMETERS_ONLY = ImmutableList.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
     public final static List<FeatureType> PROPERTIES_ONLY = ImmutableList.of(PROPERTY);
     public final static List<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableList.of(PROPERTY, ACTION);
     public final static List<FeatureType> OBJECTS_ONLY = ImmutableList.of(OBJECT);
@@ -111,7 +120,8 @@ public enum FeatureType {
     public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableList.of(OBJECT, PROPERTY, COLLECTION);
     public final static List<FeatureType> OBJECTS_POST_PROCESSING_ONLY = ImmutableList.of(OBJECT_POST_PROCESSING);
 
-    public static final List<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableList.of(ACTION, ACTION_PARAMETER);
+    public static final List<FeatureType> ACTIONS_AND_PARAMETERS =
+            ImmutableList.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
@@ -122,7 +132,8 @@ public enum FeatureType {
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static List<FeatureType> EVERYTHING = ImmutableList.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER);
+    public final static List<FeatureType> EVERYTHING =
+            ImmutableList.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER_SCALAR);
 
     private final String name;
 
@@ -149,7 +160,7 @@ public enum FeatureType {
     }
 
     public boolean isActionParameter() {
-        return this == ACTION_PARAMETER;
+        return this == ACTION_PARAMETER_SCALAR || this == ACTION_PARAMETER_COLLECTION;
     }
 
     /**

@@ -19,7 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
+import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * The type of the collection or the action.
@@ -30,4 +40,88 @@ import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
  * <tt>@TypeOf</tt> annotation.
  */
 public interface TypeOfFacet extends SingleClassValueFacet {
+
+    public static class Util {
+        private Util(){}
+
+        @Programmatic
+        public static TypeOfFacet inferFromGenericReturnType(
+                final Class<?> cls,
+                final Method method,
+                final FacetHolder holder,
+                final SpecificationLoader specificationLoader) {
+
+            final Class<?> methodReturnType = method.getReturnType();
+            if (!CollectionUtils.isCollectionType(methodReturnType)) {
+                return null;
+            }
+
+            final Type type = method.getGenericReturnType();
+            if (!(type instanceof ParameterizedType)) {
+                return null;
+            }
+
+            final ParameterizedType methodParameterizedType = (ParameterizedType) type;
+            final Type[] methodActualTypeArguments = methodParameterizedType.getActualTypeArguments();
+
+            if (methodActualTypeArguments.length == 0) {
+                return null;
+            }
+
+            final Object methodActualTypeArgument = methodActualTypeArguments[0];
+            if (methodActualTypeArgument instanceof Class) {
+                final Class<?> actualType = (Class<?>) methodActualTypeArgument;
+                return new TypeOfFacetInferredFromGenerics(actualType, holder, specificationLoader);
+            }
+
+            if (methodActualTypeArgument instanceof TypeVariable) {
+
+                final TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
+                final GenericDeclaration methodGenericClassDeclaration = methodTypeVariable.getGenericDeclaration();
+
+                // try to match up with the actual type argument of the generic superclass.
+                final Type genericSuperclass = cls.getGenericSuperclass();
+                if(genericSuperclass instanceof ParameterizedType) {
+                    final ParameterizedType parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
+                    if(parameterizedTypeOfSuperclass.getRawType() == methodGenericClassDeclaration) {
+                        final Type[] genericSuperClassActualTypeArguments = parameterizedTypeOfSuperclass.getActualTypeArguments();
+                        // simplification: if there's just one, then use it.
+                        if(methodActualTypeArguments.length == 1) {
+                            final Type actualType = genericSuperClassActualTypeArguments[0];
+                            if(actualType instanceof Class) {
+                                // just being safe
+                                final Class<?> actualCls = (Class<?>) actualType;
+                                return new TypeOfFacetInferredFromGenerics(actualCls, holder, specificationLoader);
+                            }
+                        }
+                    }
+                }
+                // otherwise, what to do?
+            }
+            return null;
+        }
+
+        @Programmatic
+        public static TypeOfFacet inferFromArrayType(
+                final FacetHolder holder,
+                final Class<?> type,
+                final SpecificationLoader specificationLoader) {
+            final Class<?> componentType = CollectionUtils.inferFromArrayType(type);
+            return componentType != null
+                    ? new TypeOfFacetInferredFromArray(componentType, holder, specificationLoader)
+                    : null;
+        }
+
+        @Programmatic
+        public static TypeOfFacet inferFromGenericParamType(
+                final FacetHolder holder,
+                final Class<?> parameterType,
+                final Type genericParameterType,
+                final SpecificationLoader specificationLoader) {
+            final Class<?> actualType = CollectionUtils.inferFromGenericParamType(parameterType, genericParameterType);
+            return actualType != null
+                    ? new TypeOfFacetInferredFromGenerics(actualType, holder, specificationLoader)
+                    : null;
+        }
+    }
 }

@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -191,18 +190,21 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             return parameters;
         }
         final int parameterCount = getParameterCount();
-        final List<ObjectActionParameter> parameters = Lists.newArrayList();
         final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
 
-        for (int i = 0; i < parameterCount; i++) {
-            final TypedHolder paramPeer = paramPeers.get(i);
+        final List<ObjectActionParameter> parameters = Lists.newArrayList();
+        for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
+            final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
+
             final ObjectSpecification specification = ObjectMemberAbstract
                     .getSpecification(getSpecificationLoader(), paramPeer.getType());
 
-            if (!specification.isNotCollection()) {
-                throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
-            }
-            final ObjectActionParameter parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
+            // previously we threw an exception here if the specification represented a collection.  No longer!
+            final ObjectActionParameter parameter =
+                    paramPeer.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                            ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
+                            : new OneToManyActionParameterDefault(paramNum, this, paramPeer);
+
             parameters.add(parameter);
         }
         return parameters;

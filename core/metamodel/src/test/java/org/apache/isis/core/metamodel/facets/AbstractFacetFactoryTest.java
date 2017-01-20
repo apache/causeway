@@ -104,7 +104,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
-                facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
+                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
+        );
 
         methodRemover = new ProgrammableMethodRemover();
 

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -42,7 +42,14 @@ public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
         }
         final ScalarModel scalarModel = (ScalarModel) model;
         final boolean hasChoices = scalarModel.hasChoices();
-        return appliesIf(hasChoices);
+
+        // autoComplete not supported on values, only references
+        // this is because there is no easy way in the ChoiceProvider to convert the list of Ids (strings)
+        // into corresponding ObjectAdapterMemento's.
+        // see subclasses of ObjectAdapterMementoProviderAbstract
+
+        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
+        return appliesIf(hasChoices /* || hasAutoComplete */);
     }
 
     @Override

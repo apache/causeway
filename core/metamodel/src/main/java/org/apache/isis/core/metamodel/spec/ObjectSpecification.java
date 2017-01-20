@@ -265,7 +265,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
      * therefore will return NOT {@link #isParentedOrFreeCollection()}
      * 
-     * @see #isCollection().
+     * @see #isParentedOrFreeCollection().
      */
     boolean isNotCollection();
 

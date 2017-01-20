@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
@@ -71,7 +72,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
     }
 
     private void syncWithInput() {
-        final ObjectAdapter adapter = getPendingElseCurrentAdapter();
+        final ObjectAdapter adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
 
         if (adapter != null) {
             final EntityModel entityModelForLink = new EntityModel(adapter);
@@ -79,10 +80,11 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
             entityModelForLink.setRenderingHint(getEntityModel().getRenderingHint());
             
             final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-            final Component component = componentFactory.createComponent(entityModelForLink);
+
+            final Component component = componentFactory.createComponent(ID_ENTITY_ICON_AND_TITLE, entityModelForLink);
             addOrReplace(component);
-            
             permanentlyHide(ID_ENTITY_TITLE_NULL);
+
         } else {
             // represent no object by a simple label displaying '(none)'
             addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(none)"));

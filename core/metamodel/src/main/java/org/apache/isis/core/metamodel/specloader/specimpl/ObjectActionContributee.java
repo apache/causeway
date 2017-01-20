@@ -32,6 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -111,8 +113,9 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         }
 
         final List<ObjectActionParameter> serviceParameters = serviceAction.getParameters();
-        final List<ObjectActionParameter> contributeeParameters = Lists.newArrayList();
+        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
 
+        final List<ObjectActionParameter> contributeeParameters = Lists.newArrayList();
         int contributeeParamNum = 0;
 
         for (int serviceParamNum = 0; serviceParamNum < serviceParameters.size(); serviceParamNum++ ) {
@@ -121,13 +124,20 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                 continue;
             }
 
+            final TypedHolder paramPeer = paramPeers.get(serviceParamNum);
+            final ObjectSpecification specification = ObjectMemberAbstract
+                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
+
             final ObjectActionParameterAbstract serviceParameter =
                     (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
 
-            final ObjectActionParameterContributee contributedParam;
-            contributedParam = new OneToOneActionParameterContributee(
-                    getServiceAdapter(), serviceParameter,
-                    contributeeParamNum, this);
+            final ObjectActionParameterContributee contributedParam =
+                    specification.isNotCollection()
+                            ? new OneToOneActionParameterContributee(
+                                    getServiceAdapter(), serviceParameter, contributeeParamNum, this)
+                            : new OneToManyActionParameterContributee(
+                                    getServiceAdapter(), serviceParameter, contributeeParamNum, this);
+
             contributeeParameters.add(contributedParam);
 
             contributeeParamNum++;

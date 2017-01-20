@@ -57,17 +57,23 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
+    private final FeatureType featureType;
     private final int number;
     private final ObjectActionDefault parentAction;
     private final TypedHolder peer;
 
-    protected ObjectActionParameterAbstract(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
+    protected ObjectActionParameterAbstract(
+            final FeatureType featureType,
+            final int number,
+            final ObjectActionDefault objectAction,
+            final TypedHolder peer) {
+        this.featureType = featureType;
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
@@ -75,7 +81,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public FeatureType getFeatureType() {
-        return FeatureType.ACTION_PARAMETER;
+        return featureType;
     }
 
 
@@ -422,9 +428,13 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             
             final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
             final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);
-            
+
+
+            // TODO: should implement this instead as a MetaModelValidator
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
-                throw new DomainModelException("Type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + choiceClass.getName());
+                throw new DomainModelException(String.format(
+                        "Type incompatible with parameter type; expected %s, but was %s",
+                                paramSpec.getFullIdentifier(), choiceClass.getName()));
             }
         }
     }

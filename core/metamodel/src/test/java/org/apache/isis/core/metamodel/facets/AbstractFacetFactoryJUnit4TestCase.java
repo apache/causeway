@@ -145,7 +145,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
         facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
+        facetedMethodParameter = new FacetedMethodParameter(FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
+        );
     }
     
     @After

@@ -30,6 +30,8 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -128,13 +130,22 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             return parameters;
         }
         final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
+        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
+
         final List<ObjectActionParameter> mixedInParameters = Lists.newArrayList();
 
-        for (ObjectActionParameter mixinActionParameter : mixinActionParameters) {
+        for(int paramNum = 0; paramNum < mixinActionParameters.size(); paramNum++) {
+
             final ObjectActionParameterAbstract mixinParameter =
-                    (ObjectActionParameterAbstract) mixinActionParameter;
-            final ObjectActionParameterMixedIn mixedInParameter;
-            mixedInParameter = new OneToOneActionParameterMixedIn(mixinParameter, this);
+                    (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
+
+            final TypedHolder paramPeer = paramPeers.get(paramNum);
+            final ObjectSpecification specification = ObjectMemberAbstract
+                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
+
+            final ObjectActionParameterMixedIn mixedInParameter = specification.isNotCollection()
+                    ? new OneToOneActionParameterMixedIn(mixinParameter, this)
+                    : new OneToManyActionParameterMixedIn(mixinParameter, this);
             mixedInParameters.add(mixedInParameter);
         }
         return mixedInParameters;

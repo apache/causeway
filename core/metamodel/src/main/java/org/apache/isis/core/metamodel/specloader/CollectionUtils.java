@@ -19,6 +19,13 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+
 /**
  * Defines the types which are considered to be collections.
  * 
@@ -40,6 +47,46 @@ public final class CollectionUtils {
         return cls.isArray();
     }
 
+    public static Class<?> inferFromArrayType(final Class<?> type) {
+        if(!isArrayType(type)) {
+            return null;
+        }
+        if (type.isArray()) {
+            final Class<?> componentType = type.getComponentType();
+            return componentType;
+        }
+        return null;
+    }
 
+    @Programmatic
+    public static Class<?> inferFromGenericParamType(
+            final Class<?> parameterType,
+            final Type genericParameterType) {
 
+        if(!isCollectionType(parameterType)) {
+            return null;
+        }
+
+        if(genericParameterType instanceof ParameterizedType) {
+            final ParameterizedType parameterizedType = (ParameterizedType) genericParameterType;
+            final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if(actualTypeArguments.length == 1) {
+                final Type actualTypeArgument = actualTypeArguments[0];
+                if(actualTypeArgument instanceof Class) {
+                    final Class<?> actualType = (Class<?>) actualTypeArgument;
+                    return actualType;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return true means that either {@link CollectionUtils#inferFromGenericParamType(Class, Type)} or {@link TypeOfFacet.Util#inferFromArrayType(FacetHolder, Class, SpecificationLoader)} will return a non-null value.
+     */
+    public static boolean isParamCollection(
+            final Class<?> parameterType,
+            final Type genericParameterType) {
+        return inferFromGenericParamType(parameterType, genericParameterType) != null || inferFromArrayType(parameterType) != null;
+    }
 }

@@ -269,11 +269,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
     private final ActionMemento actionMemento;
     private Mode actionMode;
 
-
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
-    private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
+    private final Map<Integer, ActionArgumentModel> arguments = Maps.newHashMap();
 
 
     private ActionModel(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
@@ -336,8 +335,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
         //this.actionPrompt = actionModel.actionPrompt;
         
         primeArgumentModels();
-        final Map<Integer, ScalarModel> argumentModelByIdx = actionModel.arguments;
-        for (final Map.Entry<Integer,ScalarModel> argumentModel : argumentModelByIdx.entrySet()) {
+        final Map<Integer, ActionArgumentModel> argumentModelByIdx = actionModel.arguments;
+        for (final Map.Entry<Integer,ActionArgumentModel> argumentModel : argumentModelByIdx.entrySet()) {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
 
@@ -425,20 +424,20 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
         final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
         final ObjectActionParameter actionParam = action.getParameters().get(paramNum);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
-        final ScalarModel argumentModel = getArgumentModel(apm);
-        argumentModel.setObject(argumentAdapter);
+        final ActionArgumentModel actionArgumentModel = getArgumentModel(apm);
+        actionArgumentModel.setObject(argumentAdapter);
     }
 
 
-    public ScalarModel getArgumentModel(final ActionParameterMemento apm) {
+    public ActionArgumentModel getArgumentModel(final ActionParameterMemento apm) {
         final int i = apm.getNumber();
-		ScalarModel scalarModel = arguments.get(i);
-        if (scalarModel == null) {
-            scalarModel = new ScalarModel(targetAdapterMemento, apm);
-            final int number = scalarModel.getParameterMemento().getNumber();
-            arguments.put(number, scalarModel);
+		ActionArgumentModel actionArgumentModel = arguments.get(i);
+        if (actionArgumentModel == null) {
+            actionArgumentModel = new ScalarModel(targetAdapterMemento, apm);
+            final int number = actionArgumentModel.getParameterMemento().getNumber();
+            arguments.put(number, actionArgumentModel);
         }
-        return scalarModel;
+        return actionArgumentModel;
     }
 
     public ObjectAdapter getTargetAdapter() {
@@ -523,8 +522,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
         final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] arguments = new ObjectAdapter[objectAction.getParameterCount()];
         for (int i = 0; i < arguments.length; i++) {
-            final ScalarModel scalarModel = this.arguments.get(i);
-            arguments[i] = scalarModel.getObject();
+            final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
+            arguments[i] = actionArgumentModel.getObject();
         }
         return arguments;
     }
@@ -534,8 +533,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
     }
 
     public void clearArguments() {
-        for (final ScalarModel argumentModel : arguments.values()) {
-            argumentModel.reset();
+        for (final ActionArgumentModel actionArgumentModel : arguments.values()) {
+            actionArgumentModel.reset();
         }
         this.actionMode = determineMode(actionMemento.getAction(getSpecificationLoader()));
     }
@@ -702,7 +701,5 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
     ServicesInjector getServicesInjector() {
         return getIsisSessionFactory().getServicesInjector();
     }
-
-
 
 }
