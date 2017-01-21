@@ -5,16 +5,18 @@
 :_imagesdir: images/
 
 
-We use Java packages as a way to group related domain objects together; the package name forms a namespace. We can then
-reason about all the classes in that package/namespace as a single unit, or module.
+We use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
+By convention there will be a single top-level package corresponding to the module.
 
-This section describes how to use Apache Isis' features to ensure that your domain application remains decoupled.  The techniques described here are also the ones that have been adopted by the various http://github.com/isisaddons[Isis Addons] modules (not ASF) for security, commands, auditing etc.
+
+This section describes how to use Apache Isis' features to ensure that your domain application remains decoupled.
+The techniques described here are also the ones that have been adopted by the various http://github.com/isisaddons[Isis Addons] modules (not ASF) for security, commands, auditing etc.
 
 The following sections describe how to re-assemble an application, in particular where some modules are in-house but others are potentially third-party (eg the Isis Addons modules).
 
 [NOTE]
 ====
-There is some overlap with OSGi and Java 9's Jigsaw concepts of "module"; in the future we expect to refactor Apache Isis to leverage these module systems.
+There is some overlap with Java 9's Jigsaw concepts of "module"; in the future we expect to refactor Apache Isis to build on top of this module system.
 ====
 
 include::_ugbtb_decoupling_db-schemas.adoc[leveloffset=+1]

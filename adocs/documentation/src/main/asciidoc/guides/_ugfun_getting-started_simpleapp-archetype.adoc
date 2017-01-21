@@ -100,8 +100,7 @@ First, you could run the WAR in a Maven-hosted Jetty instance, though you need t
 
 [source,bash]
 ----
-cd webapp
-mvn jetty:run
+mvn -pl webapp jetty:run
 ----
 
 
@@ -109,8 +108,7 @@ You can also provide a system property to change the port:
 
 [source,bash]
 ----
-cd webapp
-mvn jetty:run -D jetty.port=9090
+mvn -pl webapp jetty:run -D jetty.port=9090
 ----
 
 

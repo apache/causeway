@@ -32,8 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
-        repositoryFor = SimpleObject.class
+        nature = NatureOfService.VIEW_MENU_ONLY
 )
 @DomainServiceLayout(
         named = "Simple Objects",

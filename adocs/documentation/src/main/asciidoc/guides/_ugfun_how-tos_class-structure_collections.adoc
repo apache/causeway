@@ -5,22 +5,91 @@
 :_imagesdir: images/
 
 
-NOTE: TODO
+A collection is an instance variable of a domain object, of a collection type that holds references to other domain objects.
+For example, a `Customer` may have a collection of ``Order``s).
 
+It's ok for a xref:ugfun.adoc#_ugfun_how-tos_class-structure_class-definition_entities[domain entity] to reference another domain entity, and for a xref:ugfun.adoc#_ugfun_how-tos_class-structure_class-definition_view-models[view model] to reference both view model and domain entities.
+However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
+
+Formally speaking, a collection is simply a regular JavaBean getter, returning a collection type (subtype of `java.util.Collection`).
+Most collections (those that are modifiable) will also have a setter and (if persisted) a backing instance field.
+And collections properties will also have a number of annotations:
+
+* Apache Isis defines its own set own `@Collection` annotation for capturing domain semantics.
+It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ugfun.adoc#_ugfun_object-layout[`.layout.xml`] file
+
+* the collections of domain entities are often annotated with various JDO/DataNucleus annotations, most notable `javax.jdo.annotations.Persistent`.
+This and other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
+
+* for the collections of view models, then JAXB annotations such as `@javax.xml.bind.annotation.XmlElementWrapper` and `@javax.xml.bind.annotation.XmlElement` will be present
+
+Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
+
+Unlike xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties[properties], the framework (at least, the xref:ugvw.adoc[Wicket viewer]) does not allow collections to be "edited".
+Instead, xref:ugfun.adoc#_ugfun_how-tos_class-structure_actions[action]s can be written that will modify the contents of the collection as a side-effect.
+For example, a `placeOrder(...)` action will likely add to an `Order` to the `Customer#orders` collection.
+
+Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
+
+
+== Value vs Reference Types
+
+Apache Isis can (currently) only provide a UI for collections of references.
+While you can use DataNucleus to persist collections/arrays of value types, such properties must be annotated as `@Programmatic` so that they are ignored by Apache Isis.
+
+If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:ugfun.adoc#_ugfun_how-tos_simulating-collections-of-values[elsewhere].
+
+
+== One-to-many collections
+
+Bidirectional one-to-many collections are one of the most common collection types.
+In the parent object, the collection can be defined as:
+
+[source,java]
+----
+public class ParentObject
+        implements Comparable<ParentObject>{
+
+    @javax.jdo.annotations.Persistent(
+        mappedBy = "parent",                                                // <1>
+        dependentElement = "false"                                          // <2>
+    )
+    @Collection                                                             // <3>
+    @lombok.Getter @lombok.Setter
+    private SortedSet<ChildObject> children = new TreeSet<ChildObject>();   // <4>
+
+}
+----
+<1> indicates a bidirectional association; the foreign key pointing back to the `Parent` will be in the table for `ChildObject`
+<2> disable cascade delete
+<3> (not actually required in this case, because no attributes are set, but acts as a useful reminder that this collection will be rendered in the UI by Apache Isis)
+<3> uses a `SortedSet` (as opposed to some other collection type; discussion below)
+
+while in the child object you will have:
+
+[source,java]
+----
+public class ChildObject
+        implements Comparable<ChildObject> {    // <1>
+
+    @javax.jdo.annotations.Column(
+        allowsNull = "false"                    // <2>
+    )
+    @Property(editing = Editing.DISABLED)       // <3>
+    @lombok.Getter @lombok.Setter
+    private ParentObject parent;
+}
+----
+<1> implements `Comparable` because is mapped using a `SortedSet`
+<2> mandatory; every child must reference its parent
+<3> cannot be edited directly
+
+Generally speaking you should use `SortedSet` for collection types (as opposed to `Set`, `List` or `Collection`).
+JDO/Datanucleus does support the mapping of these other types, but RDBMS are set-oriented, so using this type introduces the least friction.
 
 [NOTE]
 ====
-While Apache Isis support collections of references, the framework (currently) does not support collections of values. That is, it isn't possible to define a collection of type `Set<String>`.
-
-Or, actually, you can, because that is a valid mapping supported by JDO/DataNucleus .  However, Apache Isis has no default visualization.
-
-One workaround is to mark the collection as xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`].  This ensures that the collection is ignored by Apache Isis.
-
-Another workaround is to wrap each value in a view model, as explained in this xref:ugfun.adoc#_ugfun_how-tos_simulating-collections-of-values[tip].
+JDO/DataNucleus does also support `java.util.Map` as a collection type, but this is not supported by Apache Isis.
+If you do use this collection type, then annotate the getter with `@Programmatic` so that it is ignored by the Apache Isis framework.
 ====
-
-
-
-
-
 
