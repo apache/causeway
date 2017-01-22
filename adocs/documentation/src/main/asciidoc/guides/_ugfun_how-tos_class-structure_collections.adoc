@@ -32,17 +32,9 @@ For example, a `placeOrder(...)` action will likely add to an `Order` to the `Cu
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
 
 
-== Value vs Reference Types
+== Mapping bidir 1:m
 
-Apache Isis can (currently) only provide a UI for collections of references.
-While you can use DataNucleus to persist collections/arrays of value types, such properties must be annotated as `@Programmatic` so that they are ignored by Apache Isis.
-
-If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:ugfun.adoc#_ugfun_how-tos_simulating-collections-of-values[elsewhere].
-
-
-== One-to-many collections
-
-Bidirectional one-to-many collections are one of the most common collection types.
+Bidirectional one-to-many collections are one of the most common types of associations between two entities.
 In the parent object, the collection can be defined as:
 
 [source,java]
@@ -89,7 +81,19 @@ JDO/Datanucleus does support the mapping of these other types, but RDBMS are set
 
 [NOTE]
 ====
-JDO/DataNucleus does also support `java.util.Map` as a collection type, but this is not supported by Apache Isis.
-If you do use this collection type, then annotate the getter with `@Programmatic` so that it is ignored by the Apache Isis framework.
+For further details on mapping associations, see the JDO/DataNucleus documentation for link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/one_to_many.html[one-to-many] associations, link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/many_to_one.html[many-to-one] associations, link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/many_to_many.html[many-to-many] associations, and so on.
+
+Also, while JDO/DataNucleus itself supports `java.util.Map` as a collection type, this is not supported by Apache Isis.
+If you do wish to use this collection type, then annotate the getter with `@Programmatic` so that it is ignored by the Apache Isis framework.
 ====
+
+
+
+== Value vs Reference Types
+
+Apache Isis can (currently) only provide a UI for collections of references.
+While you can use DataNucleus to persist collections/arrays of value types, such properties must be annotated as `@Programmatic` so that they are ignored by Apache Isis.
+
+If you want to visualize an array of value types in Apache Isis, then one option is to wrap value in a view model, as explained xref:ugfun.adoc#_ugfun_how-tos_simulating-collections-of-values[elsewhere].
+
 

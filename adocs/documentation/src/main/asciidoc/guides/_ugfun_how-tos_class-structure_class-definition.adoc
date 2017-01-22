@@ -161,6 +161,7 @@ In the example above the menu is named "Simple Objects" (otherwise it would have
 The implementation delegates to an `SimpleObjectRepository` service, which is injected.
 <4> The `javax.inject.Inject` annotation instructs Apache Isis framework to inject the `SimpleObjectRepository` service into this domain object.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
+There is further discussion of service injection xref:ugfun.adoc#_ugfun_how-tos_class-structure_inject-services[below].
 
 
 [[_ugfun_how-tos_class-structure_class-definition_view-models]]

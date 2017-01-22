@@ -5,7 +5,16 @@
 :_imagesdir: images/
 
 
-Apache Isis autowires (automatically injects) domain services into each entity, as well as into the domain services themselves, using either method injection or field injection. The applib `DomainObjectContainer` is also a service, so can be injected in exactly the same manner.
+Apache Isis autowires (automatically injects) domain services into each entity, as well as into the domain services themselves, using either method injection or field injection.
+The framework defines many additional services (such as xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`]); these are injected in exactly the same manner.
+
+Sometimes there may be multiple services that implement a single type.
+This is common for example for SPI service, whereby one module defines an SPI service, and other module(s) in the application implement that service.
+To support this, the framework also allows lists of services to be injected.
+
+When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:rgant.adoc#_rgant_DomainService_menuOrder[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
+If a list of services are injected, then that list will be ordered according to `menuOrder`, again lowest first.
+
 
 
 [NOTE]
@@ -18,17 +27,28 @@ If you find a requirement to inject two instances of type `SomeService`, say, th
 
 == Field Injection
 
-Field injection is recommended, using the `@javax.inject.Inject` annotation. For example:
+Field injection is recommended, using the `@javax.inject.Inject` annotation.
+For example:
 
 [source,java]
 ----
 public class Customer {
+    ...
     @javax.inject.Inject
     OrderRepository orderRepository;
-    ...
 }
 ----
 
+To inject a list of services, use:
+
+[source,java]
+----
+public class DocumentService {
+    ...
+    @javax.inject.Inject
+    List<PaperclipFactory> paperclipFactories;
+}
+----
 
 We recommend using default rather than `private` visibility so that the field can be mocked out within unit tests (placed in the same package as the code under test).
 
@@ -37,9 +57,9 @@ We recommend using default rather than `private` visibility so that the field ca
 
 == Method Injection
 
-Isis also supports two forms of method injection.  All that is required to inject a service into a entity/service is to provide an appropriate method or field. The name
-of the method does not matter, only that it is prefixed either `set` or `inject`, is
-public, and has a single parameter of the correct type.
+The framework also supports two forms of method injection.
+All that is required to inject a service into a entity/service is to provide an appropriate method or field.
+The name of the method does not matter, only that it is prefixed either `set` or `inject`, is public, and has a single parameter of the correct type.
 
 For example:
 
@@ -67,9 +87,9 @@ public class Customer {
 }
 ----
 
+Lists of services can be injected in a similar manner.
+
 Note that the method name can be anything; it doesn't need to be related to the type being injected.
-
-
 
 
 == Constructor injection
