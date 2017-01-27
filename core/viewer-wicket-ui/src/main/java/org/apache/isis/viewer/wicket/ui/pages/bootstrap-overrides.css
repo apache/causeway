@@ -861,3 +861,7 @@ tr.headers th form input {
     margin-left: 4px;
     margin-right: 10px;
 }
+
+.select2-container-multi.input-sm {
+    height: inherit;
+}
