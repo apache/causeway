@@ -156,7 +156,7 @@ public final class IsisConfigurationBuilder {
     private void addDefaultPrimers() {
         primeWith(new PrimerForSystemProperties());
         primeWith(new PrimerForEnvironmentVariablesIsisPrefix());
-        primeWith(new PrimerForEnvironmentVariableISIS_OPT());
+        primeWith(new PrimerForEnvironmentVariableISIS_OPTS());
     }
 
     //endregion
