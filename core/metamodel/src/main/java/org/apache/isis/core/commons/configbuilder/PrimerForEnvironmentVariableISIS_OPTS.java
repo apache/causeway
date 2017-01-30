@@ -22,10 +22,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class PrimerForEnvironmentVariableISIS_OPT implements IsisConfigurationBuilder.Primer {
+public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationBuilder.Primer {
 
     public static final String OPT_ENV = "ISIS_OPTS";
     public static final String SEPARATOR_ENV = "ISIS_OPTS_SEPARATOR";
@@ -34,7 +36,8 @@ public class PrimerForEnvironmentVariableISIS_OPT implements IsisConfigurationBu
     @Override
     public void prime(final IsisConfigurationBuilder builder) {
         final String separator = determineSeparator();
-        final String env = System.getenv(OPT_ENV);
+        final String optEnv = OPT_ENV;
+        final String env = getEnv(optEnv);
         for (Map.Entry<String, String> entry : fromEnv(env, separator).entrySet()) {
             final String envVarName = entry.getKey();
             final String envVarValue = entry.getValue();
@@ -42,8 +45,15 @@ public class PrimerForEnvironmentVariableISIS_OPT implements IsisConfigurationBu
         }
     }
 
-    private static String determineSeparator() {
-        final String separator = System.getenv(SEPARATOR_ENV);
+    /**
+     * Factored out for testing
+     */
+    String getEnv(final String optEnv) {
+        return System.getenv(optEnv);
+    }
+
+    private String determineSeparator() {
+        final String separator = getEnv(SEPARATOR_ENV);
         if (separator != null) {
             return separator;
         }
@@ -55,9 +65,14 @@ public class PrimerForEnvironmentVariableISIS_OPT implements IsisConfigurationBu
         if (env != null) {
             final List<String> keyAndValues = Splitter.on(separator).splitToList(env);
             for (String keyAndValue : keyAndValues) {
-                final List<String> parts = Splitter.on("=").splitToList(keyAndValue);
-                if (parts.size() == 2) {
-                    map.put(parts.get(0), parts.get(1));
+                final List<String> parts = Lists.newArrayList(Splitter.on("=").splitToList(keyAndValue));
+
+                if (parts.size() >= 2) {
+                    String key = parts.get(0);
+                    parts.remove(0);
+                    final String value = Joiner.on("=").join(parts);
+
+                    map.put(key, value);
                 }
             }
         }
