@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
@@ -143,9 +144,10 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final ObjectSpecification specification = ObjectMemberAbstract
                     .getSpecification(getSpecificationLoader(), paramPeer.getType());
 
-            final ObjectActionParameterMixedIn mixedInParameter = specification.isNotCollection()
-                    ? new OneToOneActionParameterMixedIn(mixinParameter, this)
-                    : new OneToManyActionParameterMixedIn(mixinParameter, this);
+            final ObjectActionParameterMixedIn mixedInParameter =
+                    mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                            ? new OneToOneActionParameterMixedIn(mixinParameter, this)
+                            : new OneToManyActionParameterMixedIn(mixinParameter, this);
             mixedInParameters.add(mixedInParameter);
         }
         return mixedInParameters;
