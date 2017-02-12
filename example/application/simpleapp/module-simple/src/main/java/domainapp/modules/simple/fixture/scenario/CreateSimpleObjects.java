@@ -19,8 +19,6 @@
 
 package domainapp.modules.simple.fixture.scenario;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -38,9 +36,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class CreateSimpleObjects extends FixtureScript {
 
-    public final List<String> NAMES = Collections.unmodifiableList(Arrays.asList(
-            "Foo", "Bar", "Baz", "Frodo", "Froyo", "Fizz", "Bip", "Bop", "Bang", "Boo"));
-
     /**
      * The number of objects to create, up to 10; optional, defaults to 3.
      */
@@ -49,7 +44,7 @@ public class CreateSimpleObjects extends FixtureScript {
     private Integer number;
 
     /**
-     * The simpleobjects created by this fixture (output).
+     * The objects created by this fixture (output).
      */
     @Getter
     private final List<SimpleObject> simpleObjects = Lists.newArrayList();
@@ -57,19 +52,20 @@ public class CreateSimpleObjects extends FixtureScript {
     @Override
     protected void execute(final ExecutionContext ec) {
 
+        int max = SimpleObjectData.values().length;
+
         // defaults
         final int number = defaultParam("number", ec, 3);
 
         // validate
-        if(number < 0 || number > NAMES.size()) {
-            throw new IllegalArgumentException(String.format("number must be in range [0,%d)", NAMES.size()));
+        if(number < 0 || number > max) {
+            throw new IllegalArgumentException(String.format("number must be in range [0,%d)", max));
         }
 
         // execute
         for (int i = 0; i < number; i++) {
-            final String name = NAMES.get(i);
-
-            final SimpleObject simpleObject = wrap(simpleObjectMenu).create(name);
+            final SimpleObjectData data = SimpleObjectData.values()[i];
+            final SimpleObject simpleObject =  data.createWith(wrap(simpleObjectMenu));
             ec.addResult(this, simpleObject);
             simpleObjects.add(simpleObject);
         }
