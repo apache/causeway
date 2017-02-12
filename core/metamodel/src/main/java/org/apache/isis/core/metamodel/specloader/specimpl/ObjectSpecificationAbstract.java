@@ -681,7 +681,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return oa;
             }
         }
-        throw new ObjectSpecificationException("No association called '" + id + "' in '" + getSingularName() + "'");
+        throw new ObjectSpecificationException(
+                String.format("No association called '%s' in '%s'", id, getSingularName()));
     }
 
     private ObjectAssociation getAssociationWithId(final String id) {

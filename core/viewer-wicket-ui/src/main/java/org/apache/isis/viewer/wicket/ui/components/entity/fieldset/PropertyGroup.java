@@ -40,6 +40,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -106,11 +108,21 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                 .transform(new Function<PropertyLayoutData, ObjectAssociation>() {
                     @Override
                     public ObjectAssociation apply(final PropertyLayoutData propertyLayoutData) {
-                        return  adapter.getSpecification().getAssociation(propertyLayoutData.getId());
+                        ObjectSpecification adapterSpecification = adapter.getSpecification();
+                        try {
+                            // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
+                            // suggesting that in some cases the GridService can get it wrong.  This is therefore a hack...
+                            return adapterSpecification.getAssociation(propertyLayoutData.getId());
+                        } catch (ObjectSpecificationException e) {
+                            return null;
+                        }
                     }
                 })
                 .filter(new Predicate<ObjectAssociation>() {
                     @Override public boolean apply(@Nullable final ObjectAssociation objectAssociation) {
+                        if(objectAssociation == null) {
+                            return false;
+                        }
                         final Consent visibility =
                                 objectAssociation .isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
                         return visibility.isAllowed();
