@@ -16,14 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.manifest;
 
-/**
- * Bypasses security, meaning any user/password combination can be used to login.
- */
-public class DomainAppAppManifestWithFixturesBypassSecurity extends DomainAppAppManifestWithFixtures {
+package org.apache.isis.core.metamodel.facets.properties.property.disabled;
 
-    public DomainAppAppManifestWithFixturesBypassSecurity() {
-        super("bypass");
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
+
+public class DisabledFacetForPropertyAnnotationInvertedSemantics extends DisabledFacetAbstractImpl {
+
+    DisabledFacetForPropertyAnnotationInvertedSemantics(final FacetHolder holder) {
+        super(When.ALWAYS, Where.EVERYWHERE, null, holder, Semantics.ENABLED);
     }
+
 }

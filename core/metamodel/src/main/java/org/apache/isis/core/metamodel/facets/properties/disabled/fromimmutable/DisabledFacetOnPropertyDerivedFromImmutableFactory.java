@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -44,6 +45,11 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
         if (spec.containsDoOpFacet(ImmutableFacet.class)) {
             final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+            DisabledFacet facet = facetHolder.getFacet(DisabledFacet.class);
+            if(facet != null && facet.isInvertedSemantics()) {
+                // @Property(editing=ENABLED)
+                return;
+            }
             FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromImmutable(immutableFacet, facetHolder));
         }
     }

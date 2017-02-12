@@ -67,7 +67,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
     @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
-    @Property(editing = Editing.DISABLED)
+    @Property() // editing disabled by default, see isis.properties
     @Getter @Setter
     @Title(prepend = "Object: ")
     private String name;

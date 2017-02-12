@@ -34,8 +34,17 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
         this(when, where, null, holder);
     }
 
+    public DisabledFacetAbstractImpl(final When when, final Where where, final FacetHolder holder, final Semantics semantics) {
+        this(when, where, null, holder, semantics);
+    }
+
     public DisabledFacetAbstractImpl(final When when, final Where where, final String reason, final FacetHolder holder) {
         super(when, where, holder);
+        this.reason = reason;
+    }
+
+    public DisabledFacetAbstractImpl(final When when, final Where where, final String reason, final FacetHolder holder, final Semantics semantics) {
+        super(when, where, holder, semantics);
         this.reason = reason;
     }
 
@@ -70,5 +79,6 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
     public String getReason() {
         return reason;
     }
+
 
 }
