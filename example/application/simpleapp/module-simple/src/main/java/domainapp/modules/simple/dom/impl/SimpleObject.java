@@ -40,8 +40,7 @@ import lombok.Setter;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
-        schema = "simple",
-        table = "SimpleObject"
+        schema = "simple"
 )
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
@@ -57,9 +56,7 @@ import lombok.Setter;
                         + "WHERE name.indexOf(:name) >= 0 ")
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
-@DomainObject(
-        objectType = "simple.SimpleObject"
-)
+@DomainObject() // objectType inferred from @PersistenceCapable#schema
 public class SimpleObject implements Comparable<SimpleObject> {
 
     public SimpleObject(final String name) {

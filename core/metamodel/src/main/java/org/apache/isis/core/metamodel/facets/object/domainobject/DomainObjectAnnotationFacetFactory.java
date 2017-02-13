@@ -521,7 +521,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             @Override
             public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
 
-                if(!isEntityOrViewModel(thisSpec)) {
+                if(!thisSpec.isPersistenceCapableOrViewModel()) {
                     return true;
                 }
 
@@ -533,7 +533,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                         continue;
                     }
 
-                    if(!isEntityOrViewModel(otherSpec)) {
+                    if(!otherSpec.isPersistenceCapableOrViewModel()) {
                         continue;
                     }
 
@@ -556,11 +556,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 return true;
             }
 
-            public boolean isEntityOrViewModel(final ObjectSpecification thisSpec) {
-                ViewModelFacet facet = thisSpec.getFacet(ViewModelFacet.class);
-                JdoPersistenceCapableFacet facet1 = thisSpec.getFacet(JdoPersistenceCapableFacet.class);
-                return facet != null || facet1 != null;
-            }
         }));
 
         metaModelValidator.add(publishedObjectValidator);

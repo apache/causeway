@@ -40,8 +40,8 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -410,11 +410,19 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return false;
     }
 
+    @Override
+    public boolean isPersistenceCapable() {
+        return false;
+    }
+
+    @Override
+    public boolean isPersistenceCapableOrViewModel() {
+        return false;
+    }
 
     @Override
     public String toString() {
         return getFullIdentifier();
     }
-
 
 }

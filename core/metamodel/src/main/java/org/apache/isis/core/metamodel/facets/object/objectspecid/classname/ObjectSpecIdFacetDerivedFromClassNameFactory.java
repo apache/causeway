@@ -19,14 +19,27 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract {
+public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract implements
+        MetaModelValidatorRefiner {
+
+    public static final String ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY =
+            "isis.reflector.validator.explicitObjectType";
+    public static final boolean ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_DEFAULT = false;
+
 
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
@@ -44,6 +57,45 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
         final Class<?> originalClass = processClassContaxt.getCls();
         final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
         FacetUtil.addFacet(new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder));
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+
+        final boolean doCheck = configuration.getBoolean(
+                ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY,
+                ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_DEFAULT);
+
+        if(!doCheck) {
+            return;
+        }
+
+        final MetaModelValidator validator = new MetaModelValidatorVisiting(
+                new MetaModelValidatorVisiting.Visitor() {
+                    @Override
+                    public boolean visit(
+                            final ObjectSpecification objectSpec,
+                            final ValidationFailures validationFailures) {
+                        validate(objectSpec, validationFailures);
+                        return true;
+                    }
+
+                    private void validate(
+                            final ObjectSpecification objectSpec,
+                            final ValidationFailures validationFailures) {
+                        if(!objectSpec.isPersistenceCapable()) {
+                            return;
+                        }
+                        ObjectSpecIdFacet objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
+                        if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
+                            validationFailures.add(
+                                    "The object type must be specified explicitly, none was found for class: '%s'.  "
+                                    + "Defaulting the object type from the package/class/package name can lead to data migration issues for apps deployed to production (if the class is subsequently refactored).  Use @Discriminator, @DomainObject(objectType=...) or @PersistenceCapable(schema=...) to specify explicitly.",
+                                    objectSpec.getFullIdentifier());
+                        }
+                    }
+                });
+        metaModelValidator.add(validator);
     }
 
 }
