@@ -577,6 +577,22 @@ If not, then a metamodel validation error will be triggered, meaning the app won
 +
 See also `isis.reflector.facets.ignoreDeprecated`.
 
+|`isis.reflector.validator.` +
+`jdoqlFromClause`
+|`true`,`false` +
+(`true`)
+| (`1.14.0-SNAPSHOT`) Whether to check that the class name in JDOQL `FROM` clause matches or is a supertype of the class on which it is annotated. +
++
+Only "SELECT" queries are validated; "UPDATE" queries etc are simply ignored.
+
+|`isis.reflector.validator.` +
+`jdoqlVariablesClause`
+|`true`,`false` +
+(`true`)
+| (`1.14.0-SNAPSHOT`) Whether to check that the class name in JDOQL `VARIABLES` clause is a recognized class. +
++
+Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently the validator only checks the first class name found.
+
 
 
 |`isis.viewers.` +
