@@ -118,7 +118,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
                             final String className = objectSpec.getCorrespondingClass().getName();
                             if(!getSpecificationLoader().loaded(fromClassName)) {
                                 validationFailures.add(
-                                        "Error in JDOQL query on %s, class name for FROM clause not recognized (JDOQL : %s)",
+                                        "%s: error in JDOQL query, class name for FROM clause not recognized (JDOQL : %s)",
                                         className, query);
                                 return;
 
@@ -133,7 +133,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
                                 return;
                             }
                             validationFailures.add(
-                                    "Error in JDOQL query on %s, class name after FROM clause should be same as class name on which annotated, or one of its supertypes (JDOQL : %s)",
+                                    "%s: error in JDOQL query, class name after FROM clause should be same as class name on which annotated, or one of its supertypes (JDOQL : %s)",
                                     className, query);
                         }
 
@@ -182,7 +182,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
                             if(!getSpecificationLoader().loaded(variablesClassName)) {
                                 validationFailures.add(
-                                        "Error in JDOQL query on %s, class name for VARIABLES clause not recognized (JDOQL : %s)",
+                                        "%s: error in JDOQL query, class name for VARIABLES clause not recognized (JDOQL : %s)",
                                         className, query);
                                 return;
                             }
@@ -193,7 +193,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
                             if(persistenceCapableFacet == null) {
                                 validationFailures.add(
-                                        "Error in JDOQL query on %s, class name for VARIABLES clause is not annotated as @PersistenceCapable (JDOQL : %s)",
+                                        "%s: error in JDOQL query, class name for VARIABLES clause is not annotated as @PersistenceCapable (JDOQL : %s)",
                                         className, query);
                                 return;
                             }

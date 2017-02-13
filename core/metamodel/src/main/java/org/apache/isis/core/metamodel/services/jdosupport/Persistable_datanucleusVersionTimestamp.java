@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
-@Mixin
+@Mixin(method = "exec")
 public class Persistable_datanucleusVersionTimestamp {
 
     private final Persistable persistable;
@@ -54,13 +54,13 @@ public class Persistable_datanucleusVersionTimestamp {
             hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "Metadata", sequence = "800.2")
-    public java.sql.Timestamp $$() {
+    public java.sql.Timestamp exec() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;
     }
 
-    public boolean hide$$() {
-        return $$() == null;
+    public boolean hideExec() {
+        return exec() == null;
     }
 
 }

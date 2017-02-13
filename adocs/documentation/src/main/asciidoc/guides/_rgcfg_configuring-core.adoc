@@ -531,6 +531,16 @@ This configuration property can be used to enforce a rule that the object type m
 Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently the validator only checks the first class name found.
 
 |`isis.reflector.validator.` +
+`mixinsOnly`
+|`true`,`false` +
+(`false`)
+| (`1.14.0-SNAPSHOT`) Mixins provide a simpler programming model to contributed domain services. +
+
+If enabled, this configuration property will treat any contributed service as invalid.
+This is by way of possibly deprecating and eventually moving contributed services from the Apache Isis programming model.
+
+
+|`isis.reflector.validator.` +
 `noParamsOnly`
 |`true`,`false` +
 (`false`)

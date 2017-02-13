@@ -16,51 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.jdosupport;
+package org.apache.isis.applib.services.bookmark;
 
-import javax.jdo.JDOHelper;
-
-import org.datanucleus.enhancement.Persistable;
-
+import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
 
 @Mixin(method = "exec")
-public class Persistable_datanucleusVersionLong {
+public class BookmarkHolder_lookup {
 
-    private final Persistable persistable;
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_lookup> {}
 
-    public Persistable_datanucleusVersionLong(final Persistable persistable) {
-        this.persistable = persistable;
+    private final BookmarkHolder bookmarkHolder;
+
+    public BookmarkHolder_lookup(final BookmarkHolder bookmarkHolder) {
+        this.bookmarkHolder = bookmarkHolder;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Persistable_datanucleusVersionLong> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
-            contributed = Contributed.AS_ASSOCIATION
+            contributed = Contributed.AS_ACTION,
+            cssClassFa = "fa-bookmark"
     )
-    @PropertyLayout(
-            named = "Version",
-            hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "Metadata", sequence = "800.2")
-    public Long exec() {
-        final Object version = JDOHelper.getVersion(persistable);
-        return version != null && version instanceof Long ? (Long) version : null;
+    public Object exec() {
+        return bookmarkService.lookup(bookmarkHolder);
     }
 
-    public boolean hideExec() {
-        return exec() == null;
-    }
+
+
+    @javax.inject.Inject
+    private BookmarkService bookmarkService;
 
 }

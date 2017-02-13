@@ -16,27 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.services.homepage;
+package org.apache.isis.applib.services.bookmark;
 
+import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.factory.FactoryService;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN // trick to suppress the actions from the top-level menu
-)
-public class HomePageService {
+@Mixin(method = "exec")
+public class BookmarkHolder_object {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @HomePage
-    public HomePageViewModel homePage() {
-        return factoryService.instantiate(HomePageViewModel.class);
+    private final BookmarkHolder bookmarkHolder;
+
+    public BookmarkHolder_object(final BookmarkHolder bookmarkHolder) {
+        this.bookmarkHolder = bookmarkHolder;
+    }
+
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolder_object> {}
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            domainEvent = BookmarkHolder_object.ActionDomainEvent.class
+    )
+    @ActionLayout(
+        contributed = Contributed.AS_ASSOCIATION
+    )
+    public Object exec() {
+        return bookmarkService.lookup(bookmarkHolder);
     }
 
 
     @javax.inject.Inject
-    FactoryService factoryService;
+    private BookmarkService bookmarkService;
+
 }

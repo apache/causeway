@@ -89,7 +89,9 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
                             final String explanation =
                                     objectAction.getParameterCount() > 0 && noParamsOnly &&
                                     (Objects.equals(prefix, MethodPrefixConstants.HIDE_PREFIX) || Objects.equals(prefix, MethodPrefixConstants.DISABLE_PREFIX))
-                                    ? " (note that such methods must have no parameters)"
+                                    ? " (note that such methods must have no parameters, '"
+                                            + ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY
+                                            + "' config property)"
                                     : "";
 
                             String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
