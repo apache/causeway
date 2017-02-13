@@ -6,10 +6,12 @@
 
 
 
-The `validate...()` supporting method is called for properties, actions and action parameters.  It allows the proposed new value for a property to be rejected, or the proposed argument of an action parameter to be rejected, or to reject a whole set of action arguments for an actio invocation.
+The `validate...()` supporting method is called for properties, actions and action parameters.
+It allows the proposed new value for a property to be rejected, or the proposed argument of an action parameter to be rejected, or to reject a whole set of action arguments for an actio invocation.
 
 
-The reason for vetoing a modification/invocation is normally returned as a string.  However, Apache Isis' xref:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized if required.
+The reason for vetoing a modification/invocation is normally returned as a string.
+However, Apache Isis' xref:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized if required.
 
 
 
@@ -23,6 +25,16 @@ public String validateNXxx(T proposed) { ... }
 ----
 
 where the returned string is the reason why the argument is rejected (or `null` if not vetoed).
+
+
+For i18n, the supporting method returns a `TranslatableString`:
+
+[source,java]
+----
+public TranslatableString validateNXxx(T proposed) { ... }
+----
+
+The returned string is then automatically translated to the locale of the current user.
 
 
 For example:
@@ -49,7 +61,8 @@ public class Customer {
 
 == Action Parameter Set
 
-In addition to validating a single single action argument, it is also possible to validate a complete set of action arguments.  The signature is:
+In addition to validating a single single action argument, it is also possible to validate a complete set of action arguments.
+The signature is:
 
 [source,java]
 ----
@@ -57,6 +70,14 @@ public String validateXxx(...) { ... }
 ----
 
 where the returned string is the reason why the argument is rejected (or `null` if not vetoed), and the supporting method takes the same parameter types as the action itself.
+
+
+For i18n, the supporting method returns a `TranslatableString`:
+
+[source,java]
+----
+public TranslatableString validateXxx(...) { ... }
+----
 
 
 For example:
@@ -94,7 +115,12 @@ public String validateXxx(T proposed) { ... }
 
 where the returned string is the reason the modification is vetoed (or `null` if not vetoed).
 
+For i18n, the supporting method returns a `TranslatableString`:
 
+[source,java]
+----
+public TranslatableString validateXxx(T proposed) { ... }
+----
 
 For example:
 
