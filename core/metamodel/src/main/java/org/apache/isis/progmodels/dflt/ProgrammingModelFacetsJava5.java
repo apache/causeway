@@ -19,6 +19,7 @@ package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -523,7 +524,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(new DisabledFacetOnPropertyInferredFactory());
 
-        
+
+        addFactory(new ActionChoicesForCollectionParameterFacetFactory());
+
         addFactory(new AuditableFacetMarkerInterfaceFactory());
 
         addFactory(new FacetsFacetAnnotationFactory());

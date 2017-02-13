@@ -521,6 +521,10 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             @Override
             public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
 
+                if(!isEntityOrViewModel(thisSpec)) {
+                    return true;
+                }
+
                 final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
                 final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
                 for (final ObjectSpecification otherSpec : allSpecifications) {
@@ -528,6 +532,11 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                     if(thisSpec == otherSpec) {
                         continue;
                     }
+
+                    if(!isEntityOrViewModel(otherSpec)) {
+                        continue;
+                    }
+
                     final ObjectSpecId objectSpecId = otherSpec.getSpecId();
                     if (objectSpecId == null) {
                         continue;
@@ -545,6 +554,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 }
 
                 return true;
+            }
+
+            public boolean isEntityOrViewModel(final ObjectSpecification thisSpec) {
+                ViewModelFacet facet = thisSpec.getFacet(ViewModelFacet.class);
+                JdoPersistenceCapableFacet facet1 = thisSpec.getFacet(JdoPersistenceCapableFacet.class);
+                return facet != null || facet1 != null;
             }
         }));
 
