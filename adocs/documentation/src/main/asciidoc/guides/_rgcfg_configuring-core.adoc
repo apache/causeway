@@ -520,12 +520,11 @@ Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently
 |`isis.reflector.validator.` +
 `noParamsOnly`
 |`true`,`false` +
-(`true`)
-| (`1.14.0-SNAPSHOT`) When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version. +
+(`false`)
+| (`1.14.0-SNAPSHOT`) When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
-The previous behaviour also searched for a methods that had the exact set of arguments as the method it was supporting.
-However, the parameter arguments when called are always set to null, so serve no real purpose.
-
+If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting.
+Note that this in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
 
 
 

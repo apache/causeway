@@ -86,10 +86,9 @@ public class Customer {
 
 [NOTE]
 ====
-(As of `1.14.0-SNAPSHOT`), by default only supporting methods with no parameters are recognized.
-By enabling `isis.reflector.validator.noParamsOnly` configuration property, the framework will also match the supporting method if its parameter types are the same as that of the action.
-However, this functionality may be removed in the future (the arguments are always set to null so of no practical use).
+In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
+(As of `1.14.0-SNAPSHOT`) enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
+
+Note that enabling this configuration property in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
 ====
-
-
 
