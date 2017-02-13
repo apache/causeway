@@ -91,11 +91,11 @@ public @interface DomainObject {
 
 
     /**
-     * The action to use in order to perform the auto-complete search
+     * The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search
      * (defaults to &quot;autoComplete&quot;).
      *
      * <p>
-     * The action is required to accept a single string parameter, and must return
+     * The method is required to accept a single string parameter, and must return a list of the domain type.
      */
     String autoCompleteAction() default "autoComplete";
 

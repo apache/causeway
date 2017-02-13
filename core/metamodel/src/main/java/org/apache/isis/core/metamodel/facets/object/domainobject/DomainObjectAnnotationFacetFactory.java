@@ -239,7 +239,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         final Class<?> repositoryClass = domainObject.autoCompleteRepository();
-        if(repositoryClass == null || repositoryClass == Object.class) {
+        if(repositoryClass == Object.class) {
             return null;
         }
         final String actionName = domainObject.autoCompleteAction();
@@ -284,7 +284,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             }
         }
         autoCompleteInvalid.addFailure(
-                "%s annotation on %s specifies action '%s' that does not exist in repository '%s'",
+                "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
     }
@@ -521,8 +521,13 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             @Override
             public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
 
+                validate(thisSpec, validationFailures);
+                return true;
+            }
+
+            private void validate(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
                 if(!thisSpec.isPersistenceCapableOrViewModel()) {
-                    return true;
+                    return;
                 }
 
                 final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
@@ -546,14 +551,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                         continue;
                     }
                     validationFailures.add(
-                            "%s: cannot have two entities with same object type (@DomainObject(objectType=...) or @ObjectType); %s " +
+                            "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
                             "has same value (%s).",
                             existingSpec.getFullIdentifier(),
                             otherSpec.getFullIdentifier(),
                             objectSpecId);
                 }
-
-                return true;
             }
 
         }));
