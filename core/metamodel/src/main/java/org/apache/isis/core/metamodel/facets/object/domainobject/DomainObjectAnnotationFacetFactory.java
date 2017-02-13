@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -76,6 +77,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.Publ
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
+import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
@@ -103,6 +105,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
+    private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
 
 
@@ -358,19 +361,36 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(facet);
     }
 
+
     void processNature(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+
+        if(domainObject == null) {
+            return;
+        }
+
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
                 domainObject, getSpecificationLoader(), persistenceSessionServiceInternal, servicesInjector,
                 facetHolder, postConstructMethodCache);
-        FacetUtil.addFacet(recreatableObjectFacet);
 
-        final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(cls, facetHolder, servicesInjector);
-        FacetUtil.addFacet(mixinFacet);
+        if(recreatableObjectFacet != null) {
+            FacetUtil.addFacet(recreatableObjectFacet);
+        } else {
+            if(domainObject.nature() == Nature.MIXIN) {
+
+                if(!mixinTypeValidator.ensureMixinType(cls)) {
+                    return;
+                }
+
+                final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(domainObject, cls, facetHolder, servicesInjector);
+                FacetUtil.addFacet(mixinFacet);
+            }
+        }
+
     }
 
 
@@ -569,6 +589,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(objectTypeValidator);
 
         metaModelValidator.add(autoCompleteInvalid);
+        metaModelValidator.add(mixinTypeValidator);
     }
 
     // //////////////////////////////////////

@@ -20,11 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
-public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract  {
+public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+
+    private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@Mixin");
 
     public MixinFacetForMixinAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -39,11 +44,21 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract  {
         if(mixinAnnotation == null) {
             return;
         }
+
+        if (!mixinTypeValidator.ensureMixinType(candidateMixinType)) {
+            return;
+        }
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final MixinFacet mixinFacet = MixinFacetForMixinAnnotation.create(candidateMixinType, facetHolder,
                 servicesInjector);
         facetHolder.addFacet(mixinFacet);
+    }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(mixinTypeValidator);
     }
 
 }
