@@ -536,9 +536,17 @@ Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently
 (`false`)
 | (`1.14.0-SNAPSHOT`) When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
-If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting.
+If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
 Note that this in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
 
+
+|`isis.reflector.validator.` +
+`serviceActionsOnly`
+|`true`,`false` +
+(`false`)
+| (`1.14.0-SNAPSHOT`) Domain services are stateless (at least conceptually) and so should not have any properties or collections; any that are defined will not be rendered by the viewers. +
+
+If enabled, this configuration property will ensure that domain services only declare actions.
 
 
 |===
