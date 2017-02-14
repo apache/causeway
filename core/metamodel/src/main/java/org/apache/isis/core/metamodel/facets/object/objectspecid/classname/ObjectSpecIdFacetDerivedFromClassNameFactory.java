@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlType;
+
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -30,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -126,35 +129,48 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
                         return !check(objectSpec);
                     }
 
-                    private boolean check(final ObjectSpecification objectSpec) {
-                        if(objectSpec.isAbstract()) {
-                            return false;
-                        }
-                        if (objectSpec.isPersistenceCapable()) {
-                            return true;
-                        }
-                        if (objectSpec.isViewModel()) {
-                            return true;
-                        }
-                        if (objectSpec.isService()) {
-                            // don't care about domain services.
-                            DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
-                            if(domainServiceFacet != null && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN) {
-                                return false;
-                            }
 
-                            // we don't care about services that have only programmatic methods
-                            List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
-                            if(objectActions.isEmpty()) {
-                                return false;
-                            }
-
-                            return true;
-                        }
-                        return false;
-                    }
                 });
         metaModelValidator.add(validator);
     }
 
+    public static boolean check(final ObjectSpecification objectSpec) {
+        if(objectSpec.isAbstract()) {
+            return false;
+        }
+        if (objectSpec.isPersistenceCapable()) {
+            return true;
+        }
+        if (objectSpec.isViewModel()) {
+            final ViewModelFacet viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
+            // don't check JAXB DTOs
+            final XmlType xmlType = objectSpec.getCorrespondingClass().getAnnotation(XmlType.class);
+            if(xmlType != null) {
+                return false;
+            }
+            return true;
+        }
+        if(objectSpec.isMixin()) {
+            return false;
+        }
+        if (objectSpec.isService()) {
+            // don't check if domain service isn't a target in public API (UI/REST)
+            final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
+            if(domainServiceFacet != null) {
+                if(domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN ||
+                        domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+                    return false;
+                }
+            }
+
+            // don't check if domain service has only programmatic methods
+            final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
+            if(objectActions.isEmpty()) {
+                return false;
+            }
+
+            return true;
+        }
+        return false;
+    }
 }
