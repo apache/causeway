@@ -27,6 +27,13 @@ The table below summarizes the annotation's attributes.
 |the nature of this service: providing actions for menus, or as contributed actions, or for the xref:ugvro.adoc#[RestfulObjects REST API], or neither
 
 
+|xref:rgant.adoc#_rgant-DomainService_objectType[`objectType()`]
+|
+|(`1.14.0-SNAPSHOT`) equivalent to xref:rgant.adoc#_rgant_DomainObject_objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
+
+The instanceId for services is always "1".
+
+
 |xref:rgant.adoc#_rgant-DomainService_repositoryFor[`repositoryFor()`]
 |
 |if this domain service acts as a repository for an entity type, specify that entity type.  This is used to determine an icon to use for the service (eg as shown in action prompts).
@@ -57,6 +64,7 @@ public class LoanRepository {
 
 
 include::_rgant-DomainService_nature.adoc[leveloffset=+1]
+include::_rgant-DomainService_objectType.adoc[leveloffset=+1]
 include::_rgant-DomainService_repositoryFor.adoc[leveloffset=+1]
 
 

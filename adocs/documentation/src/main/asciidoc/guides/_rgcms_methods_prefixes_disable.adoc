@@ -7,7 +7,8 @@
 
 
 
-The `disable...()` supporting method is called for properties, collections and actions.  It allows the modification of the property/collection to be vetoed (ie made read-only) and to prevent the invocation of the action ("grey it out").
+The `disable...()` supporting method is called for properties, collections and actions.
+It allows the modification of the property/collection to be vetoed (ie made read-only) and to prevent the invocation of the action ("grey it out").
 
 [NOTE]
 ====
@@ -17,24 +18,32 @@ Directly mutable collections are not currently supported by the xref:ugvw.adoc#[
 Typically modification/invocation is vetoed based on the state of the domain object being interacted with, though it could be any reason at all (eg the current date/time of the interaction, or the state of some other related data such as stock levels, or the identity of the calling user).
 
 
-The reason for vetoing a modification/invocation is normally returned as a string.  However, Apache Isis' xref:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized.
+The reason for vetoing a modification/invocation is normally returned as a string.
+However, Apache Isis' xref:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized.
 
 
 
-== Actions
-
-For an action the signature of the supporting method is:
+The signature of the supporting method is simply:
 
 [source,java]
 ----
-public String disableXxx(...) { ... }
+public String disableXxx() { ... }
 ----
 
-where the returned string is the reason the action invocation is vetoed (or `null` if not vetoed), and the supporting method takes the same parameter types as the action itself.
+where the returned string is the reason the property cannot be edited, or the action invoked.
 
 
+For i18n, the supporting method returns a `TranslatableString`:
 
-For example:
+[source,java]
+----
+public TranslatableString disableXxx() { ... }
+----
+
+The returned string is then automatically translated to the locale of the current user.
+
+
+For example, to disable an action:
 
 [source,java]
 ----
@@ -47,10 +56,7 @@ public class Customer {
             final int quantity) {
         ...
     }
-    public String disablePlaceOrder(
-            final Product product,
-            final int quantity
-            ) {
+    public String disablePlaceOrder() {
         return isBlacklisted()
                     ? "Blacklisted customers cannot place orders"
                     : null;
@@ -60,21 +66,7 @@ public class Customer {
 ----
 
 
-
-== Properties and Collections
-
-For both properties and collections the signature of the supporting method is:
-
-[source,java]
-----
-public String disableXxx() { ... }
-----
-
-where the returned string is the reason the modification is vetoed (or `null` if not vetoed).
-
-
-
-For example:
+Or, to disable a property:
 
 [source,java]
 ----
@@ -91,3 +83,12 @@ public class Customer {
     ...
 }
 ----
+
+[NOTE]
+====
+In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
+(As of `1.14.0-SNAPSHOT`) enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
+
+Note that enabling this configuration property in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
+====
+

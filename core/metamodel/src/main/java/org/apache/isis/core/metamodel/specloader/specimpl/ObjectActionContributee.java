@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -132,7 +133,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                     (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
 
             final ObjectActionParameterContributee contributedParam =
-                    specification.isNotCollection()
+                    serviceParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
                             ? new OneToOneActionParameterContributee(
                                     getServiceAdapter(), serviceParameter, contributeeParamNum, this)
                             : new OneToManyActionParameterContributee(

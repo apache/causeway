@@ -23,13 +23,7 @@ package domainapp.application.manifest;
  */
 public class DomainAppAppManifestWithFixturesBypassSecurity extends DomainAppAppManifestWithFixtures {
 
-    @Override
-    public String getAuthenticationMechanism() {
-        return "bypass";
-    }
-
-    @Override
-    public String getAuthorizationMechanism() {
-        return "bypass";
+    public DomainAppAppManifestWithFixturesBypassSecurity() {
+        super("bypass");
     }
 }

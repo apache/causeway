@@ -6,31 +6,23 @@
 
 
 
-The `hide...()` supporting method is called for properties, collections and actions.  It allows the property/collection to be completely hidden from view.
+The `hide...()` supporting method is called for properties, collections and actions.
+It allows the property/collection to be completely hidden from view.
 
 It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:rgcms.adoc#_rgcms_methods_prefixes_disable[disabled], ie greyed out).
 
 
-== Actions
-
-For an action the signature of the supporting method is either:
-
-[source,java]
-----
-public boolean hideXxx(...) { ... }
-----
-
-where the supporting method takes the same parameter types as the action itself, or more simply:
+The signature of the supporting method is simply:
 
 [source,java]
 ----
 public boolean hideXxx() { ... }
 ----
 
-with no parameters at all.  Returning `true` will hide the action, returning `false` leaves it visible.
+Returning `true` will hide the property, collection or action, returning `false` leaves it visible.
 
 
-For example:
+For example, to hide an action:
 
 [source,java]
 ----
@@ -51,21 +43,7 @@ public class Customer {
 ----
 
 
-
-== Properties and Collections
-
-For both properties and collections the signature of the supporting method is:
-
-[source,java]
-----
-public boolean hideXxx() { ... }
-----
-
-where returning `true` will hide the property/collection, returning `false` leaves it visible.
-
-
-
-For example:
+Or, to hide a property:
 
 [source,java]
 ----
@@ -80,3 +58,13 @@ public class Customer {
     ...
 }
 ----
+
+
+[NOTE]
+====
+In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
+(As of `1.14.0-SNAPSHOT`) enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
+
+Note that enabling this configuration property in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
+====
+

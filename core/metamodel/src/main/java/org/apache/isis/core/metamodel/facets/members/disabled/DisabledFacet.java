@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
@@ -37,4 +39,11 @@ public interface DisabledFacet extends WhenAndWhereValueFacet, DisablingInteract
      * or <tt>null</tt> if enabled.
      */
     public String disabledReason(ObjectAdapter target);
+
+    /**
+     * Indicates that the implementation is overridding the usual semantics, in
+     * other words that the {@link FacetHolder} to which this {@link Facet} is
+     * attached is <i>not</i> mandatory.
+     */
+    public boolean isInvertedSemantics();
 }

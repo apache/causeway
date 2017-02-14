@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -76,6 +77,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.Publ
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
+import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
@@ -103,6 +105,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
     private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
+    private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
 
 
@@ -239,7 +242,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         final Class<?> repositoryClass = domainObject.autoCompleteRepository();
-        if(repositoryClass == null || repositoryClass == Object.class) {
+        if(repositoryClass == Object.class) {
             return null;
         }
         final String actionName = domainObject.autoCompleteAction();
@@ -284,7 +287,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             }
         }
         autoCompleteInvalid.addFailure(
-                "%s annotation on %s specifies action '%s' that does not exist in repository '%s'",
+                "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
     }
@@ -358,19 +361,36 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(facet);
     }
 
+
     void processNature(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+
+        if(domainObject == null) {
+            return;
+        }
+
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
                 domainObject, getSpecificationLoader(), persistenceSessionServiceInternal, servicesInjector,
                 facetHolder, postConstructMethodCache);
-        FacetUtil.addFacet(recreatableObjectFacet);
 
-        final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(cls, facetHolder, servicesInjector);
-        FacetUtil.addFacet(mixinFacet);
+        if(recreatableObjectFacet != null) {
+            FacetUtil.addFacet(recreatableObjectFacet);
+        } else {
+            if(domainObject.nature() == Nature.MIXIN) {
+
+                if(!mixinTypeValidator.ensureMixinType(cls)) {
+                    return;
+                }
+
+                final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(domainObject, cls, facetHolder, servicesInjector);
+                FacetUtil.addFacet(mixinFacet);
+            }
+        }
+
     }
 
 
@@ -521,6 +541,15 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             @Override
             public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
 
+                validate(thisSpec, validationFailures);
+                return true;
+            }
+
+            private void validate(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
+                if(!thisSpec.isPersistenceCapableOrViewModel()) {
+                    return;
+                }
+
                 final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
                 final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
                 for (final ObjectSpecification otherSpec : allSpecifications) {
@@ -528,6 +557,11 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                     if(thisSpec == otherSpec) {
                         continue;
                     }
+
+                    if(!otherSpec.isPersistenceCapableOrViewModel()) {
+                        continue;
+                    }
+
                     final ObjectSpecId objectSpecId = otherSpec.getSpecId();
                     if (objectSpecId == null) {
                         continue;
@@ -537,15 +571,14 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                         continue;
                     }
                     validationFailures.add(
-                            "%s: cannot have two entities with same object type (@DomainObject(objectType=...) or @ObjectType); %s " +
+                            "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
                             "has same value (%s).",
                             existingSpec.getFullIdentifier(),
                             otherSpec.getFullIdentifier(),
                             objectSpecId);
                 }
-
-                return true;
             }
+
         }));
 
         metaModelValidator.add(publishedObjectValidator);
@@ -556,6 +589,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(objectTypeValidator);
 
         metaModelValidator.add(autoCompleteInvalid);
+        metaModelValidator.add(mixinTypeValidator);
     }
 
     // //////////////////////////////////////

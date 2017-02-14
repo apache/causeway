@@ -97,6 +97,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
@@ -681,7 +682,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return oa;
             }
         }
-        throw new ObjectSpecificationException("No association called '" + id + "' in '" + getSingularName() + "'");
+        throw new ObjectSpecificationException(
+                String.format("No association called '%s' in '%s'", id, getSingularName()));
     }
 
     private ObjectAssociation getAssociationWithId(final String id) {
@@ -1249,6 +1251,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public boolean isValueOrIsParented() {
         return isValue() || isParented();
+    }
+
+    @Override
+    public boolean isPersistenceCapable() {
+        return containsFacet(JdoPersistenceCapableFacet.class);
+    }
+
+    @Override
+    public boolean isPersistenceCapableOrViewModel() {
+        return isViewModel() || isPersistenceCapable();
     }
 
 

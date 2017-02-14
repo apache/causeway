@@ -42,9 +42,10 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
     }
 
     public static MixinFacet create(
-            final Class<?> candidateMixinType, final FacetHolder facetHolder,
+            final DomainObject domainObject,
+            final Class<?> candidateMixinType,
+            final FacetHolder facetHolder,
             final ServicesInjector servicesInjector) {
-        final DomainObject domainObject = candidateMixinType.getAnnotation(DomainObject.class);
         if(domainObject == null) {
             return null;
         }

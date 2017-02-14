@@ -171,29 +171,23 @@ public class IsisSessionFactoryBuilder {
 
 
             // time to initialize...
-            try {
-                // first, initial metamodel (may throw exception if invalid)
-                specificationLoader.init();
-                specificationLoader.validateAndAssert();
+            specificationLoader.init();
 
-
-            } catch (final MetaModelInvalidException ex) {
-                // no need to use a higher level, such as error(...); the calling code will expose any metamodel
-                // validation errors in their own particular way.
-                if(LOG.isDebugEnabled()) {
-                    LOG.debug("Meta model invalid", ex);
-                }
-                IsisContext.setMetaModelInvalidException(ex);
-            }
-
-
-            // the remaining functionality is done even if metamodel is valid.
-            // so that can still call isisSessionFactory#doInSession
+            // we need to do this before checking if the metamodel is valid.
+            //
+            // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+            // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
+            //
+            // also, required so that can still call isisSessionFactory#doInSession
             //
             // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
             // (including the metamodel invalid page)
-            //
-            // at org.apache.isis.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+            // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
             // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
 
             authenticationManager.init(deploymentCategory);
@@ -202,6 +196,27 @@ public class IsisSessionFactoryBuilder {
             persistenceSessionFactory.init(specificationLoader);
 
             isisSessionFactory.constructServices();
+
+
+            isisSessionFactory.doInSession(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                specificationLoader.validateAndAssert();
+
+                            } catch (final MetaModelInvalidException ex) {
+                                // no need to use a higher level, such as error(...); the calling code will expose any metamodel
+                                // validation errors in their own particular way.
+                                if(LOG.isDebugEnabled()) {
+                                    LOG.debug("Meta model invalid", ex);
+                                }
+                                IsisContext.setMetaModelInvalidException(ex);
+                            }
+
+                        }
+                    }
+            );
 
 
         } catch (final IsisSystemException ex) {

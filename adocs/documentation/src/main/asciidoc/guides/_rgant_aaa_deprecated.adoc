@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-As Apache Isis has evolved and grown, we found ourselves adding more and more annotations; but most of these related to either an object type (entity, view model, service) or an object member (property, collection, action).  Over time it became harder and harder for end programmers to discover these new features.
+As Apache Isis has evolved and grown, we found ourselves adding more and more annotations; but most of these related to either an object type (entity, view model, service) or an object member (property, collection, action).
+Over time it became harder and harder for end programmers to discover these new features.
 
 Accordingly, (in v1.8.0) we decided to unify the semantics into the main (core) annotations listed xref:rgant.adoc#_rgant-aaa_main[above].
 
@@ -149,7 +150,8 @@ For domain service, use xref:rgant.adoc#_rgant-DomainService_nature[`@DomainServ
 |
 
 |`@Immutable`
-|An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from). Actions can still be invoked.
+|An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from).
+Actions can still be invoked.
 |xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]
 |Domain
 |
@@ -198,7 +200,8 @@ For domain service, use xref:rgant.adoc#_rgant-DomainService_nature[`@DomainServ
 |Yes
 
 |`@NotContributed`
-|Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters. For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
+|Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters.
+For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
 |Use xref:rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
 For individual actions, use xref:rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout#` +
 `contributedAs()`] to specify whether any individual action should be contributed only as an action or as an association (property or collection).
@@ -218,7 +221,8 @@ For individual actions, use xref:rgant.adoc#_rgant-ActionLayout_contributedAs[`@
 |
 
 |`@ObjectType`
-|For constructing the external identifier (URI) of an entity instance (part of its URL in both Wicket viewer and Restful Objects viewer). Also part of the toString representation of bookmarks, if using the Bookmark Service
+|For constructing the external identifier (URI) of an entity instance (part of its URL in both Wicket viewer and Restful Objects viewer).
+Also part of the toString representation of bookmarks, if using the Bookmark Service
 |xref:rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`]
 |Domain
 |

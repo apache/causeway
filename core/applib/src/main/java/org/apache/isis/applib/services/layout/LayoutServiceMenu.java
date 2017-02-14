@@ -18,7 +18,6 @@ package org.apache.isis.applib.services.layout;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -32,7 +31,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY
+        nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "isisApplib.LayoutServiceMenu"
 )
 @DomainServiceLayout(
         named = "Prototyping",

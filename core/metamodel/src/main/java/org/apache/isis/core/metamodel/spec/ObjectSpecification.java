@@ -358,4 +358,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     boolean isMixin();
     boolean isViewModelCloneable(ObjectAdapter targetAdapter);
     boolean isWizard();
+
+    boolean isPersistenceCapable();
+    boolean isPersistenceCapableOrViewModel();
 }

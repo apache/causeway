@@ -53,6 +53,8 @@ public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstr
                             Util.withJavaxJdoRunInMemoryProperties(map);
                             Util.withDataNucleusProperties(map);
                             Util.withIsisIntegTestProperties(map);
+                            // same as in isis.properties
+                            map.put("isis.objects.editing","false");
                             return map;
                         }
 

@@ -119,8 +119,8 @@ public class FixtureScriptsDefault extends FixtureScripts {
     }
 
     @Override
-    public String disableRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
-        return super.disableRunFixtureScript(fixtureScript, parameters);
+    public String disableRunFixtureScript() {
+        return super.disableRunFixtureScript();
     }
 
     @Override
@@ -171,8 +171,8 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return hideIfPolicyNot(FixtureScriptsSpecification.DropDownPolicy.AUTO_COMPLETE);
     }
 
-    public String disableRunFixtureScriptWithAutoComplete(final FixtureScript fixtureScript, final String parameters) {
-        return disableRunFixtureScript(fixtureScript, parameters);
+    public String disableRunFixtureScriptWithAutoComplete() {
+        return disableRunFixtureScript();
     }
 
     public FixtureScript default0RunFixtureScriptWithAutoComplete() {

@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import javax.inject.Inject;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -40,7 +39,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY
+        nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "isisApplib.MetaModelServicesMenu"
 )
 @DomainServiceLayout(
         named = "Prototyping",

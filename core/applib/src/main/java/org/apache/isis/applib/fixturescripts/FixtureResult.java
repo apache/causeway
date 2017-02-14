@@ -20,7 +20,10 @@ package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.*;
 
-@ViewModel
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        objectType = "isisApplib.FixtureResult"
+)
 @ViewModelLayout(paged=500)
 public class FixtureResult {
 

@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 )
 public class SimpleObjectMenu {
 
+    public String getId() { return "simpleObjects"; }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)

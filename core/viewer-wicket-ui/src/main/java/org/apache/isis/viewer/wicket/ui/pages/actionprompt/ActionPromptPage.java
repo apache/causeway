@@ -24,6 +24,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -49,10 +50,17 @@ public class ActionPromptPage extends PageAbstract {
         addBookmarkedPages(themeDiv);
     }
 
+    /**
+     * Required for bookmarking of actions.
+     */
+    public ActionPromptPage(final PageParameters pageParameters) {
+        this(pageParameters, IsisContext.getSessionFactory().getSpecificationLoader());
+    }
+
     public ActionPromptPage(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
         this(pageParameters, buildModel(pageParameters, specificationLoader));
     }
-    
+
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
         super(pageParameters, model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);

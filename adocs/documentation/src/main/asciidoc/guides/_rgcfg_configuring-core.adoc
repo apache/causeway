@@ -240,7 +240,7 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 | `true`,`false` +
 (depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
-+
+
 If no configuration property is available, then the defaults is determined by the xref:rgcfg.adoc#_rgcfg_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
 
 
@@ -249,7 +249,7 @@ If no configuration property is available, then the defaults is determined by th
 `email.` +
 `override.bcc` +
 | email address
-|(`1.13.3-SNAPSHOT`) intended to simplify testing, if specified then the email's `bcc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+|(`1.14.0-SNAPSHOT`) intended to simplify testing, if specified then the email's `bcc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -258,7 +258,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `override.cc` +
 | email address
-|(`1.13.3-SNAPSHOT`) intended to simplify testing, if specified then the email's `cc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+|(`1.14.0-SNAPSHOT`) intended to simplify testing, if specified then the email's `cc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -267,7 +267,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `override.to` +
 | email address
-|(`1.13.3-SNAPSHOT`) intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+|(`1.14.0-SNAPSHOT`) intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -313,10 +313,11 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 | `isis.service.` +
 `email.` +
-`socketConnectionTimeout`
+`socket` +
+`ConnectionTimeout`
 |milliseconds +
 (2000)
-|(`1.13.3-SNAPSHOT`) The socket connection timeout
+|(`1.14.0-SNAPSHOT`) The socket connection timeout
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -326,7 +327,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `socketTimeout`
 |milliseconds +
 (2000)
-|(`1.13.3-SNAPSHOT`) The socket timeout
+|(`1.14.0-SNAPSHOT`) The socket timeout
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -337,7 +338,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `throwExceptionOnFail`
 |`true`,`false` +
 (`true`)
-|(`1.13.3-SNAPSHOT`) Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
+|(`1.14.0-SNAPSHOT`) Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
 
 This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
 
@@ -363,7 +364,8 @@ FQCN (`_guava_`)
 
 | `isis.services.` +
 `eventbus.` +
-`allowLateRegistration` +
+`allowLate` +
+`Registration` +
 |`true`,`false` +
 (`false`)
 |whether a domain service can register with the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
@@ -373,7 +375,8 @@ Since this almost certainly constitutes a bug in application code, by default th
 
 | `isis.services.` +
 `exceprecog.` +
-`logRecognizedExceptions` +
+`logRecognized` +
+`Exceptions` +
 |`true`,`false` +
 (`false`)
 |whether recognized exceptions should also be logged. +
@@ -383,8 +386,9 @@ This property logs the exception anyway, useful for debugging.
 
 
 | `isis.services.` +
-`ExceptionRecognizerComposite-` +
-`ForJdoObjectStore.` +
+`ExceptionRecognizer` +
+`CompositeFor` +
+`JdoObjectStore.` +
 `disable` +
 |`true`,`false` +
 (`false`)
@@ -417,8 +421,6 @@ By default this is enabled (no change in `1.13.0`).
 If the setting is changed to disabled then this may reduce application start-up times.
 
 
-
-
 |`isis.services.` +
 `publish.` +
 `objects`
@@ -441,7 +443,8 @@ If the setting is changed to disabled then this may reduce application start-up 
 
 
 |`isis.services.` +
-`ServicesInstallerFromAnnotation.` +
+`ServicesInstaller` +
+`FromAnnotation.` +
 `packagePrefix`
 |fully qualified package names (CSV)
 |to search for domain services (including all subpackages).
@@ -456,6 +459,104 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 |Whether to force the `TranslationService` into either read or write mode. +
 
 See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+
+
+|===
+
+
+
+[[_rgcfg_configuring-core_metamodel-validation]]
+== MetaModel Validation
+
+
+.Other Core Configuration Properties
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.reflector.validator`
+|`FQCN`
+|Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
+
+See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
+
+|`isis.reflector.validator.` +
+`actionCollection` +
+`ParameterChoices`
+|`true`,`false` +
+(`true`)
+| (`1.14.0-SNAPSHOT`) Whether to check that collection action parameters have a corresponding choices or autoComplete facet. +
+
+In the current implementation such a facet is always required, so this configuration option has only been introduced as a feature flag in case it needs to be disabled for some reason.
+
+|`isis.reflector.validator.` +
+`allowDeprecated`
+|`true`,`false` +
+(`true`)
+| Whether deprecated annotations or naming conventions are tolerated or not.
+If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast). +
+
+See also `isis.reflector.facets.ignoreDeprecated`.
+
+|`isis.reflector.validator.` +
+`jdoqlFromClause`
+|`true`,`false` +
+(`true`)
+| (`1.14.0-SNAPSHOT`) Whether to check that the class name in JDOQL `FROM` clause matches or is a supertype of the class on which it is annotated. +
+
+Only "SELECT" queries are validated; "UPDATE" queries etc are simply ignored.
+
+|`isis.reflector.validator.` +
+`explicitObjectType`
+|`true`,`false` +
+(`false`)
+| (`1.14.0-SNAPSHOT`) Whether to check that the class has an object type explicitly specified somehow.
+
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ugvw.adoc#[Wicket viewer] and xref:ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
+
+If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
+
+This configuration property can be used to enforce a rule that the object type must always be specified (for persistent entities and view models).
+
+|`isis.reflector.validator.` +
+`jdoqlVariablesClause`
+|`true`,`false` +
+(`true`)
+| (`1.14.0-SNAPSHOT`) Whether to check that the class name in JDOQL `VARIABLES` clause is a recognized class. +
+
+Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently the validator only checks the first class name found.
+
+|`isis.reflector.validator.` +
+`mixinsOnly`
+|`true`,`false` +
+(`false`)
+| (`1.14.0-SNAPSHOT`) Mixins provide a simpler programming model to contributed domain services. +
+
+If enabled, this configuration property will treat any contributed service as invalid.
+This is by way of possibly deprecating and eventually moving contributed services from the Apache Isis programming model.
+
+
+|`isis.reflector.validator.` +
+`noParamsOnly`
+|`true`,`false` +
+(`false`)
+| (`1.14.0-SNAPSHOT`) When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
+
+If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
+Note that this in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
+
+
+|`isis.reflector.validator.` +
+`serviceActionsOnly`
+|`true`,`false` +
+(`false`)
+| (`1.14.0-SNAPSHOT`) Domain services are stateless (at least conceptually) and so should not have any properties or collections; any that are defined will not be rendered by the viewers. +
+
+If enabled, this configuration property will ensure that domain services only declare actions.
 
 
 |===
@@ -482,7 +583,8 @@ See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translatio
 
 
 |`isis.persistor.` +
-`disableConcurrencyChecking`
+`disable` +
+`ConcurrencyChecking`
 |`true`,`false` +
 (`false`)
 | Disables concurrency checking globally.  +
@@ -519,8 +621,6 @@ See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for 
 +
 To customize the programming model, use `facets.exclude` and `facets.include`.
 See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
-
-
 
 
 
@@ -561,21 +661,6 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programmi
 See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 
-
-|`isis.reflector.validator`
-|`FQCN`
-|Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
-
-See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
-
-|`isis.reflector.validator.` +
-`allowDeprecated`
-|`true`,`false` +
-(`true`)
-| Whether deprecated annotations or naming conventions are tolerated or not.
-If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast). +
-+
-See also `isis.reflector.facets.ignoreDeprecated`.
 
 
 

@@ -194,7 +194,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
                 @Override
                 public String apply(String input) {
-                    return "Requested page is no longer available. Please navigate back to the home page or select an object from the bookmark bar.";
+                    return "Requested page is no longer available.";
                 }
             });
 

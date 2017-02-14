@@ -37,16 +37,32 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
         return DisabledFacet.class;
     }
 
-    public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder) {
-        this(type(), when, where, holder);
+    private final Semantics semantics;
+
+    public enum Semantics {
+        DISABLED,
+        ENABLED;
     }
 
-    private DisabledFacetAbstract(final Class<? extends Facet> type, final When when, Where where, final FacetHolder holder) {
+    public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder) {
+        this(when, where, holder, Semantics.DISABLED);
+    }
+
+    public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder, final Semantics semantics) {
+        this(type(), when, where, holder, semantics);
+    }
+
+    private DisabledFacetAbstract(final Class<? extends Facet> type, final When when, Where where, final FacetHolder holder, final Semantics semantics) {
         super(type, holder, when, where);
+        this.semantics = semantics;
     }
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+        if(isInvertedSemantics()) {
+            return null;
+        }
+
         if(ic instanceof ActionUsabilityContext && (getFacetHolder() instanceof OneToOneAssociationContributee || getFacetHolder() instanceof OneToManyAssociationContributee)) {
             // otherwise ends up vetoing the invocation of the contributing action
             return null;
@@ -61,6 +77,11 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
             return underlyingFacet.disabledReason(target);
         }
         return null;
+    }
+
+    @Override
+    public boolean isInvertedSemantics() {
+        return semantics == Semantics.ENABLED;
     }
 
 }

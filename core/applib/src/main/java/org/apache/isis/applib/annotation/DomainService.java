@@ -33,6 +33,17 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainService {
 
+
+
+    /**
+     * Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always &quot;1&quot;).
+     *
+     * <p>
+     * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
+     */
+    String objectType() default "";
+
+
     /**
      * If this domain service acts as a repository for an entity type, specify that entity type.
      */

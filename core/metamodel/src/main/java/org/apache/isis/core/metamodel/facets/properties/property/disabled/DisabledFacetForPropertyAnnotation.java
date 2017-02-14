@@ -36,7 +36,6 @@ public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImp
         }
 
         final Editing editing = property.editing();
-        final String disabledReason = property.editingDisabledReason();
 
         switch (editing) {
             case AS_CONFIGURED:
@@ -48,9 +47,10 @@ public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImp
                 return null;
 
             case DISABLED:
+                final String disabledReason = property.editingDisabledReason();
                 return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
             case ENABLED:
-                return null;
+                return new DisabledFacetForPropertyAnnotationInvertedSemantics(holder);
         }
         return null;
     }

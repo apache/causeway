@@ -238,12 +238,14 @@ public class QueryResultsCache implements WithTransactionScope {
     @DomainService(nature = NatureOfService.DOMAIN)
     public static class Control extends AbstractSubscriber {
 
+        @Programmatic
         @Subscribe
         @org.axonframework.eventhandling.annotation.EventHandler
         public void on(FixturesInstallingEvent ev) {
             fixturesInstalling = true;
         }
 
+        @Programmatic
         @Subscribe
         @org.axonframework.eventhandling.annotation.EventHandler
         public void on(FixturesInstalledEvent ev) {
@@ -251,7 +253,7 @@ public class QueryResultsCache implements WithTransactionScope {
         }
 
         private boolean fixturesInstalling;
-
+        @Programmatic
         public boolean isFixturesInstalling() {
             return fixturesInstalling;
         }

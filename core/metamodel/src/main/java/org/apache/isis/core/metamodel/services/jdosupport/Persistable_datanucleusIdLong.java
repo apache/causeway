@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 
-@Mixin
+@Mixin(method = "exec")
 public class Persistable_datanucleusIdLong {
 
     private final Persistable persistable;
@@ -55,7 +55,7 @@ public class Persistable_datanucleusIdLong {
             hidden = Where.ALL_TABLES
     )
     @MemberOrder(name = "Metadata", sequence = "800.1")
-    public Long $$() {
+    public Long exec() {
         final Object objectId = JDOHelper.getObjectId(persistable);
         if(objectId instanceof DatastoreId) {
             final DatastoreId datastoreId = (DatastoreId) objectId;
@@ -65,8 +65,8 @@ public class Persistable_datanucleusIdLong {
         return null;
     }
 
-    public boolean hide$$() {
-        return $$() == null;
+    public boolean hideExec() {
+        return exec() == null;
     }
 
 
