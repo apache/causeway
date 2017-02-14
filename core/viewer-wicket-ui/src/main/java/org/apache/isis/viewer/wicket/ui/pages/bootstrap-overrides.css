@@ -798,7 +798,6 @@ tr.headers th form input {
 .editing .edit {
     padding-top: 2px;
     float: right;
-/*    margin-bottom: 10px;*/
 }
 
 .multiLineStringPanel .scalarValueInput .editing .edit {
@@ -834,10 +833,6 @@ tr.headers th form input {
 }
 .multiLineStringPanel .actions-right .scalarPlaceholder .scalarValueInput {
     margin-bottom: 4px;
-}
-
-.actions-right .additionalLinkListInline {
-    /*margin-top: -22px;*/
 }
 
 
