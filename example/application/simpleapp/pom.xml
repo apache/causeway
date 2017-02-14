@@ -23,7 +23,7 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>1.14.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
 
     <name>SimpleApp Parent</name>
 
@@ -34,7 +34,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.14.0-SNAPSHOT</isis.version>
+        <isis.version>1.15.0-SNAPSHOT</isis.version>
 
         <lombok.version>1.16.10</lombok.version>
         <assertj-core.version>3.6.1</assertj-core.version>
