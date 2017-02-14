@@ -42,3 +42,9 @@ Only properties supported by the configured xref:rgsvc.adoc#_rgsvc_api_MementoSe
 * collections (of either view models or entities) are ignored.
 
 
+[WARNING]
+====
+The `@ViewModel` does not allow the objectType to be specified, meaning (as of `1.14.0-SNAPSHOT`) that it is incompatible with the metamodel validation check ennabled by the xref:rgcfg.adoc#_rgcfg_configuring-core_metamodel-validation[`explicitObjectType`] configuration property.
+
+Instead, use xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:rgant.adoc#_rgant_DomainObject_objectType[`@DomainObject#objectType()`].
+====

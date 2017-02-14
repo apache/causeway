@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN, // trick to suppress the actions from the top-level menu
-        objectType = "internals.HomePageService"
+        objectType = "homepage.HomePageService"
 )
 public class HomePageService {
 

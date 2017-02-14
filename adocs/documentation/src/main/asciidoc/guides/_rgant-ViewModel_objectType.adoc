@@ -40,7 +40,7 @@ public class Order {
 The rules of precedence are:
 
 1. xref:rgant.adoc#_rgant_Discriminator[`@Discriminator`]
-2. `@DomainObject#objectType`, or xref:rgant.adoc#_rgant_aaa_deprecated[`@ObjectType`] (deprecated)
+2. `@DomainObject#objectType`, or xref:rgant.adoc#_rgant_ViewModel_objectType[`@ViewModel#objectType()`] (`1.14.0-SNAPSHOT`), or xref:rgant.adoc#_rgant_aaa_deprecated[`@ObjectType`] (deprecated)
 3. xref:rgant.adoc#_rgant_PersistenceCapable[`@PersistenceCapable`], if at least the `schema` attribute is defined.  +
 +
 If both `schema` and `table` are defined, then the value is "`schema.table`".

@@ -127,7 +127,13 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
                     }
 
                     private boolean check(final ObjectSpecification objectSpec) {
+                        if(objectSpec.isAbstract()) {
+                            return false;
+                        }
                         if (objectSpec.isPersistenceCapable()) {
+                            return true;
+                        }
+                        if (objectSpec.isViewModel()) {
                             return true;
                         }
                         if (objectSpec.isService()) {
