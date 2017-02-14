@@ -30,6 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -134,6 +136,11 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
                             return true;
                         }
                         if (objectSpec.isViewModel()) {
+                            ViewModelFacet viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
+                            if(viewModelFacet instanceof RecreatableObjectFacetForXmlRootElementAnnotation) {
+                                // JAXB DTOs are excluded
+                                return false;
+                            }
                             return true;
                         }
                         if (objectSpec.isService()) {
