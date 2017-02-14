@@ -137,7 +137,7 @@ public @interface DomainObject {
 
 
     /**
-     * Provides a unique abbreviation for the object type, eg &quot;CUS&quot; for Customer.
+     * Provides a unique abbreviation for the object type, eg &quot;customer.Customer&quot; for Customer.
      *
      * <p>
      * This value, if specified, is used in the serialized form of the object's OID.  An OID is

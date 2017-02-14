@@ -5,15 +5,53 @@
 :_imagesdir: images/
 
 
-The `getId()` method applies only to domain services, and allows a unique identifer to be provided for that service.
+The `getId()` method applies only to domain services, and is used to provide a unique alias for the domain service's class name.
 
-This identifier corresponds in many ways to the xref:rgant.adoc#_rgant-DomainObject_objectType[`objectType()`] attribute for domain objects; it is used as an internal identifier but also appears in URLs within the xref:ugvro.adoc#[RestfulObjects viewer]'s REST API.
+This value is used internally to generate a string representation of an service identity (the `Oid`).
+This can appear in several contexts, including:
 
-If the identifier is omitted, the services fully qualified class name is used.
+* as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
+ (see xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`])
+* in the serialization of `OidDto` in the xref:rgcms.adoc#_rgcms_schema-cmd[command] and xref:rgcms.adoc#_rgcms_schema-ixn[interaction] schemas
+* in the URLs of the xref:ugvro.adoc#[RestfulObjects viewer]
+* in the URLs of the xref:ugvw.adoc#[Wicket viewer] (specifically, for bookmarked actions)
+
+
+
+== Example
+
+For example:
+
+[source,java]
+----
+@DomainService
+public class OrderMenu {
+    ...
+    public String getId() { return "orders.OrderMenu"; }
+}
+----
+
+
+
+== Precedence
+
+The rules of precedence are:
+
+1. xref:rgant.adoc#_rgant_DomainService_objectType[`@DomainService#objectType()`]
+2. xref:rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
+3. The fully qualified class name.
+
 
 [TIP]
 ====
-Unlike domain objects, where the use of an object type is strongly encouraged (eg using xref:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`]), it matters much less if an id is specified for domain services.  The principle benefit is shorter URLs in the REST API.
+This might be obvious, but to make explicit: we recommend that you always specify an object type for your domain services.
+
+Otherwise, if you refactor your code (change class name or move package), then any externally held references to the OID of the service will break.
+At best this will require a data migration in the database; at worst it could cause external clients accessing data through the xref:ugvro.adoc#[Restful Objects] viewer to break.
 ====
 
-
+[NOTE]
+====
+If the object type is not unique across all domain classes then the framework will fail-fast and fail to boot.
+An error message will be printed in the log to help you determine which classes have duplicate object tyoes.
+====

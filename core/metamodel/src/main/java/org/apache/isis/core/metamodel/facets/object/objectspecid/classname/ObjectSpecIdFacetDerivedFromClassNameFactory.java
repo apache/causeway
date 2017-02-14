@@ -56,7 +56,23 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
         }
         final Class<?> originalClass = processClassContaxt.getCls();
         final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
-        FacetUtil.addFacet(new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder));
+
+        final boolean isService = isService(facetHolder);
+        ObjectSpecIdFacet objectSpecIdFacet = isService
+                ? new ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId(substitutedClass, facetHolder)
+                : new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder);
+        FacetUtil.addFacet(objectSpecIdFacet);
+    }
+
+    private boolean isService(final FacetHolder facetHolder) {
+        boolean service;
+        if(facetHolder instanceof ObjectSpecification) {
+            ObjectSpecification objectSpecification = (ObjectSpecification) facetHolder;
+            service = objectSpecification.isService();
+        } else {
+            service = false;
+        }
+        return service;
     }
 
     @Override

@@ -22,6 +22,9 @@ package org.apache.isis.core.metamodel.services;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.google.common.base.Strings;
+
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ServiceUtil {
@@ -29,16 +32,58 @@ public final class ServiceUtil {
     private ServiceUtil() {
     }
 
-    public static String id(final Object object) {
-        final Class<?> cls = object.getClass();
+    public static String id(final Class<?> serviceClass) {
+        final String serviceType = serviceTypeOf(serviceClass);
+        if (serviceType != null) {
+            return serviceType;
+        }
+
         try {
-            final Method m = cls.getMethod("getId");
+            Object object = serviceClass.newInstance();
+            return getIdOf(object);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+            return fqcnOf(serviceClass);
+        }
+    }
+
+    public static String id(final Object object) {
+        final Class<?> serviceClass = object.getClass();
+        final String serviceType = serviceTypeOf(serviceClass);
+        if(serviceType != null) {
+            return serviceType;
+        }
+
+        try {
+            return getIdOf(object);
+        } catch (final NoSuchMethodException e) {
+            return fqcnOf(serviceClass);
+        }
+    }
+
+    private static String serviceTypeOf(final Class<?> serviceClass) {
+        final String serviceType;
+        final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
+        if(domainService != null) {
+            serviceType = domainService.objectType();
+            if(!Strings.isNullOrEmpty(serviceType)) {
+                return serviceType;
+            }
+        }
+        return null;
+    }
+
+    private static String getIdOf(final Object object) throws NoSuchMethodException {
+        try {
+            final Class<?> objectClass = object.getClass();
+            final Method m = objectClass.getMethod("getId");
             return (String) m.invoke(object);
         } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             throw new IsisException(e);
-        } catch (final NoSuchMethodException e) {
-            final String id = object.getClass().getName();
-            return id.substring(id.lastIndexOf('.') + 1);
         }
     }
+
+    private static String fqcnOf(final Class<?> serviceClass) {
+        return serviceClass.getName();
+    }
+
 }
