@@ -798,7 +798,7 @@ tr.headers th form input {
 .editing .edit {
     padding-top: 2px;
     float: right;
-    margin-bottom: 10px;
+/*    margin-bottom: 10px;*/
 }
 
 .multiLineStringPanel .scalarValueInput .editing .edit {
@@ -826,11 +826,21 @@ tr.headers th form input {
 .actions-right .scalarPlaceholder .scalarValueInput {
     width: 90%;
     float: left;
+    margin-bottom: 0px;
+}
+
+.characterPanel .actions-right .scalarPlaceholder .scalarValueInput {
+    margin-bottom: 4px;
+}
+.multiLineStringPanel .actions-right .scalarPlaceholder .scalarValueInput {
+    margin-bottom: 4px;
 }
 
 .actions-right .additionalLinkListInline {
-    margin-top: -22px;
+    /*margin-top: -22px;*/
 }
+
+
 
 .booleanPanel .actions-right .additionalLinkListInline {
     margin-top: 0px;
