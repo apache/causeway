@@ -19,14 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -57,22 +64,27 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
         final Class<?> originalClass = processClassContaxt.getCls();
         final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
 
-        final boolean isService = isService(facetHolder);
-        ObjectSpecIdFacet objectSpecIdFacet = isService
-                ? new ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId(substitutedClass, facetHolder)
-                : new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder);
+        ObjectSpecIdFacet objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitutedClass);
         FacetUtil.addFacet(objectSpecIdFacet);
     }
 
-    private boolean isService(final FacetHolder facetHolder) {
-        boolean service;
+    private static ObjectSpecIdFacet createObjectSpecIdFacet(final FacetHolder facetHolder, final Class<?> substitutedClass) {
+        final boolean isService = isService(facetHolder);
+        if (isService) {
+            final String id = ServiceUtil.id(substitutedClass);
+            if (id != null) {
+                return new ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId(id, facetHolder);
+            }
+        }
+        return new ObjectSpecIdFacetDerivedFromClassName(substitutedClass, facetHolder);
+    }
+
+    private static boolean isService(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {
             ObjectSpecification objectSpecification = (ObjectSpecification) facetHolder;
-            service = objectSpecification.isService();
-        } else {
-            service = false;
+            return objectSpecification.isService();
         }
-        return service;
+        return false;
     }
 
     @Override
@@ -99,7 +111,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
                     private void validate(
                             final ObjectSpecification objectSpec,
                             final ValidationFailures validationFailures) {
-                        if(!objectSpec.isPersistenceCapable()) {
+                        if(skip(objectSpec)) {
                             return;
                         }
                         ObjectSpecIdFacet objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
@@ -108,6 +120,32 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
                                     "%s: the object type must be specified explicitly ('%s' config property).  Defaulting the object type from the package/class/package name can lead to data migration issues for apps deployed to production (if the class is subsequently refactored).  Use @Discriminator, @DomainObject(objectType=...) or @PersistenceCapable(schema=...) to specify explicitly.",
                                     objectSpec.getFullIdentifier(), ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY);
                         }
+                    }
+
+                    private boolean skip(final ObjectSpecification objectSpec) {
+                        return !check(objectSpec);
+                    }
+
+                    private boolean check(final ObjectSpecification objectSpec) {
+                        if (objectSpec.isPersistenceCapable()) {
+                            return true;
+                        }
+                        if (objectSpec.isService()) {
+                            // don't care about domain services.
+                            DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
+                            if(domainServiceFacet != null && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN) {
+                                return false;
+                            }
+
+                            // we don't care about services that have only programmatic methods
+                            List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
+                            if(objectActions.isEmpty()) {
+                                return false;
+                            }
+
+                            return true;
+                        }
+                        return false;
                     }
                 });
         metaModelValidator.add(validator);

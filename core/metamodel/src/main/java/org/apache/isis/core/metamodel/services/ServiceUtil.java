@@ -42,7 +42,7 @@ public final class ServiceUtil {
             Object object = serviceClass.newInstance();
             return getIdOf(object);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            return fqcnOf(serviceClass);
+            return null;
         }
     }
 

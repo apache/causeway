@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.DomainService;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ServiceUtil_Test {
@@ -91,13 +92,13 @@ public class ServiceUtil_Test {
     }
 
     @Test
-    public void fallback_to_fqcn() throws Exception {
+    public void fallback_to_fqcn_for_obj_but_to_null_for_service() throws Exception {
         assertThat(
                 ServiceUtil.id(new SomeServiceWithoutAnnotationOrId()),
                 is(equalTo("org.apache.isis.core.metamodel.services.ServiceUtil_Test$SomeServiceWithoutAnnotationOrId")));
         assertThat(
                 ServiceUtil.id(SomeServiceWithoutAnnotationOrId.class),
-                is(equalTo("org.apache.isis.core.metamodel.services.ServiceUtil_Test$SomeServiceWithoutAnnotationOrId")));
+                is(nullValue()));
     }
 
 }

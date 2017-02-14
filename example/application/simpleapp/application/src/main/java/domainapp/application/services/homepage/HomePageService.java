@@ -26,7 +26,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN // trick to suppress the actions from the top-level menu
+        nature = NatureOfService.DOMAIN, // trick to suppress the actions from the top-level menu
+        objectType = "internals.HomePageService"
 )
 public class HomePageService {
 

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.runtime.services.i18n.po;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -33,7 +31,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY
+        nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "isisApplib.TranslationServicePoMenu"
 )
 @DomainServiceLayout(
         named = "Prototyping",
