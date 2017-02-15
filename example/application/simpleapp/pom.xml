@@ -34,7 +34,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.14.0-SNAPSHOT</isis.version>
+        <isis.version>1.14.0</isis.version>
 
         <lombok.version>1.16.10</lombok.version>
         <assertj-core.version>3.6.1</assertj-core.version>
