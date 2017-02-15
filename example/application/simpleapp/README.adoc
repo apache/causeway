@@ -177,7 +177,7 @@ mvn -DskipTests
 +
 [source,bash]
 ----
-mvn -Dskip.danhaywood-mavenmixin-isisvalidate  
+mvn -Dskip.mavenmixin-isisvalidate  
 ----
 
 
@@ -185,7 +185,7 @@ mvn -Dskip.danhaywood-mavenmixin-isisvalidate
 +
 [source,bash]
 ----
-mvn -Dskip.danhaywood-mavenmixin-cucumberreporting
+mvn -Dskip.mavenmixin-cucumberreporting
 ----
 +
 [TIP]
@@ -197,7 +197,7 @@ By default, cucumber reports are generated at `target/cucumber-html-reports/over
 +
 [source,bash]
 ----
-mvn -Dskip.danhaywood-mavenmixin-isisswagger
+mvn -Dskip.mavenmixin-isisswagger
 ----
 +
 [TIP]
@@ -209,7 +209,7 @@ By default, Swagger spec files are generated at `target/generated-resources/isis
 +
 [source,bash]
 ----
-mvn package -Dmavenmixin-docker
+mvn install -Dmavenmixin-docker
 ----
 +
 This assumes that the `${docker-plugin.imageName}` property has been defined in the `webapp` module.
@@ -217,7 +217,7 @@ Alternatively it can be specified on the command line using a system property, e
 +
 [source,bash]
 ----
-mvn package -Dmavenmixin-docker -Ddocker-plugin.imageName=mycompany/myapp
+mvn install -Dmavenmixin-docker -Ddocker-plugin.imageName=mycompany/myapp
 ----
 +
 The packaged image can be viewed using `docker images`.
@@ -235,7 +235,7 @@ See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-consume[mav
 +
 [source,bash]
 ----
-mvn deploy -Dmavenmixin-docker
+mvn -pl webapp deploy -Dmavenmixin-docker
 ----
 +
 This assumes that the `${docker-plugin.imageName}` property has been defined, _and_ also that docker registry credentials have been specified in `~/.m2/settings.xml`.
