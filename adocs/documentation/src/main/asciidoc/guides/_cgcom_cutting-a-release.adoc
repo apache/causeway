@@ -447,8 +447,6 @@ mvn clean install
 [source,bash]
 ----
 mvn -pl webapp jetty:run
-<<<<<<< Updated upstream
-=======
 ----
 
 * can be packaged and run using the mvn jetty-console plugin:
@@ -457,7 +455,6 @@ mvn -pl webapp jetty:run
 ----
 mvn install -Dmavenmixin-jettyconsole
 mvn antrun:run -Dmavenmixin-jettyconsole
->>>>>>> Stashed changes
 ----
 
 * can be deployed as a WAR

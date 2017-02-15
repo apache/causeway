@@ -13,23 +13,28 @@ This section (appendix) describes the prerequisites for the xref:cgcom.adoc#_cgc
 
 == Configure toolchains plugin
 
-Apache Isis releases are built using Java 7, enforced using the maven toolchains plugin.  Ensure that Java 7 is
-installed and the toolchains plugin is configured, as described in the
-xref:_dg_building-isis_configure-maven-toolchains-plugin[contributors' guide].
+Apache Isis releases are built using Java 7, enforced using the maven toolchains plugin.
+Ensure that Java 7 is installed and the toolchains plugin is configured, as described in the xref:_dg_building-isis_configure-maven-toolchains-plugin[contributors' guide].
 
 
 
 == Public/private key
 
-The most important configuration you require is to set up public/private key pair. This is used by the `maven-release-plugin` to sign the code artifacts. See the page on xref:cgcom.adoc#_cgcom_key-generation[key generation] for more details.
+The most important configuration you require is to set up public/private key pair.
+This is used by the `maven-release-plugin` to sign the code artifacts.
+See the page on xref:cgcom.adoc#_cgcom_key-generation[key generation] for more details.
 
 In order to prepare the release, you'll (need to) have a `~/.gnupg` directory with the relevant files (`gpg.conf`, `pubring.gpg`, `secring.gpg` etc), and have `gpg` on your operating system PATH.
 
 
 [NOTE]
 ====
-If on Windows, the equivalent directory is `c:\users\xxx\appdata\roaming\gnupg`. For `gpg`, use either http://cygwin.com[cygwin.com] or http://www.gpg4win.org[gpg4win.org]. Note also that the mSysGit version of `gpg` (as provided by GitHub's bash client) is not compatible with that provided by cygwin; move it to one side and check that `gpg.exe` being used is that from gpg4win.
+If on Windows, the equivalent directory is `c:\users\xxx\appdata\roaming\gnupg`.
+For `gpg`, use either http://cygwin.com[cygwin.com] or http://www.gpg4win.org[gpg4win.org].
 
+Note also that the mSysGit version of `gpg.exe` (as provided by GitHub's bash client) is not compatible with that provided by cygwin; move it to one side and check that `gpg.exe` being used is that from gpg4win.
+
+If you use Atlassian's SourceTree, this also bundles a version of `gpg.exe` that is not compatible (in `C:\Users\xxx\AppData\Local\Atlassian\SourceTree\git_local\usr\bin`); again, move it to one side and instead use the one provided by gpg4win.
 ====
 
 
@@ -53,12 +58,14 @@ During the release process the `maven-deploy-plugin` uploads the generated artif
 </settings>
 ----
 
-where `xxxxxxx` and `yyyyyyy` are your Apache LDAP username and password. For more information, see these http://www.apache.org/dev/publishing-maven-artifacts.html#dev-env[ASF docs].
+where `xxxxxxx` and `yyyyyyy` are your Apache LDAP username and password.
+For more information, see these http://www.apache.org/dev/publishing-maven-artifacts.html#dev-env[ASF docs].
 
 
 [NOTE]
 ====
-It is also possible to configure to use `.ssh` secure keys, and thereby avoid hardcoding your Apache LDAP password into your `.m2/settings.xml` file. A description of how to do this can be found, for example, http://bval.apache.org/release-setup.html[here].
+It is also possible to configure to use `.ssh` secure keys, and thereby avoid hardcoding your Apache LDAP password into your `.m2/settings.xml` file.
+A description of how to do this can be found, for example, http://bval.apache.org/release-setup.html[here].
 ====
 
 
@@ -82,7 +89,4 @@ Also, set up keyphrase for `gpg`; this avoids being prompted during release:
   ...
 </activeProfiles>
 ----
-
-
-
 
