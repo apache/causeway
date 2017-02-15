@@ -55,13 +55,25 @@ public class TaggerTest {
         @Test
         public void isisAddons() throws Exception {
             String tag = new Tagger().tagFor("org.isisaddons.module.security.app.feature.ApplicationClass", null);
-            assertThat(tag, is(equalTo("isisaddons security")));
+            assertThat(tag, is(equalTo("isisaddons.org security")));
+        }
+
+        @Test
+        public void incodeCatalog() throws Exception {
+            String tag = new Tagger().tagFor("org.incode.module.communications.foo.bar.FooBar", null);
+            assertThat(tag, is(equalTo("catalog.incode.org communications")));
+        }
+
+        @Test
+        public void internals() throws Exception {
+            String tag = new Tagger().tagFor("org.apache.isis.applib.fixturescripts.FixtureResult", null);
+            assertThat(tag, is(equalTo("> apache isis internals")));
         }
 
         @Test
         public void applib() throws Exception {
-            String tag = new Tagger().tagFor("org.apache.isis.applib.fixturescripts.FixtureResult", null);
-            assertThat(tag, is(equalTo("> apache isis internals")));
+            String tag = new Tagger().tagFor("isisApplib.ConfigurationServiceMenu", null);
+            assertThat(tag, is(equalTo("> apache isis applib")));
         }
 
     }

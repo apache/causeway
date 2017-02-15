@@ -81,6 +81,7 @@ public class UserServiceDefault implements UserService {
         final String user;
         final List<String> roles;
 
+
         UserAndRoleOverrides(final String user) {
             this(user, null);
         }
@@ -119,6 +120,7 @@ public class UserServiceDefault implements UserService {
     /**
      * Not API; for use by the implementation of sudo/runAs (see {@link SudoService} etc.
      */
+    @Programmatic
     public UserAndRoleOverrides currentOverridesIfAny() {
         final Stack<UserAndRoleOverrides> userAndRoleOverrides = overrides.get();
         return !userAndRoleOverrides.empty()

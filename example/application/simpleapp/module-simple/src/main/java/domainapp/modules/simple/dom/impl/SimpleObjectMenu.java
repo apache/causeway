@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "simple.SimpleObjectMenu",
         repositoryFor = SimpleObject.class
 )
 @DomainServiceLayout(
@@ -40,8 +41,6 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
         menuOrder = "10"
 )
 public class SimpleObjectMenu {
-
-    public String getId() { return "simpleObjects"; }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
