@@ -226,8 +226,10 @@ The packaged image can be viewed using `docker images`.
 +
 [source,bash]
 ----
-docker run -d -p 8080:8080 mycompany/myapp
+docker container run -d -p 8080:8080 mycompany/myapp
 ----
++
+This can then be accessed at link:http://localhost:8080[localhost:8080].
 +
 See link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-consume[mavenmixin-docker] for further details on how to run docker images.
 
