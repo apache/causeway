@@ -32,7 +32,9 @@ import domainapp.application.fixture.scenarios.DomainAppDemo;
 /**
  * Specifies where to find fixtures, and other settings.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class DomainAppFixtureScriptsSpecificationProvider implements FixtureScriptsSpecificationProvider {
     @Override
     public FixtureScriptsSpecification getSpecification() {

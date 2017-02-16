@@ -37,7 +37,9 @@ import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleu
 import org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp;
 
 import domainapp.modules.simple.dom.impl.SimpleObject;
+import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
 import domainapp.modules.simple.fixture.scenario.CreateSimpleObjects;
+import domainapp.modules.simple.fixture.scenario.SimpleObjectData;
 import domainapp.modules.simple.fixture.teardown.SimpleModuleTearDown;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,6 +48,8 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
 
     @Inject
     FixtureScripts fixtureScripts;
+    @Inject
+    SimpleObjectMenu simpleObjectMenu;
     @Inject
     TransactionService transactionService;
 
@@ -59,7 +63,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         fixtureScripts.runFixtureScript(fs, null);
         transactionService.nextTransaction();
 
-        simpleObject = fs.getSimpleObjects().get(0);
+        simpleObject = SimpleObjectData.FOO.findWith(wrap(simpleObjectMenu));
 
         assertThat(simpleObject).isNotNull();
     }
@@ -136,7 +140,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         @Test
         public void should_be_populated() throws Exception {
             // when
-            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObject).${symbol_dollar}${symbol_dollar}();
+            final Long id = mixin(Persistable_datanucleusIdLong.class, simpleObject).exec();
 
             // then
             assertThat(id).isGreaterThanOrEqualTo(0);
@@ -148,7 +152,7 @@ public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
         @Test
         public void should_be_populated() throws Exception {
             // when
-            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObject).${symbol_dollar}${symbol_dollar}();
+            final Timestamp timestamp = mixin(Persistable_datanucleusVersionTimestamp.class, simpleObject).exec();
             // then
             assertThat(timestamp).isNotNull();
         }

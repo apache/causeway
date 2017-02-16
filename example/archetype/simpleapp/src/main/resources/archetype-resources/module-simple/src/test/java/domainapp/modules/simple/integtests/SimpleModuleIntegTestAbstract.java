@@ -56,11 +56,13 @@ public abstract class SimpleModuleIntegTestAbstract extends IntegrationTestAbstr
                             Util.withJavaxJdoRunInMemoryProperties(map);
                             Util.withDataNucleusProperties(map);
                             Util.withIsisIntegTestProperties(map);
+                            // same as in isis.properties
+                            map.put("isis.objects.editing","false");
                             return map;
                         }
 
                         @Override public List<Class<?>> getAdditionalServices() {
-                            return Lists.newArrayList(ModuleFixtureScriptsSpecificationProvider.class);
+                            return (List)Lists.newArrayList(ModuleFixtureScriptsSpecificationProvider.class);
                         }
                     })
 

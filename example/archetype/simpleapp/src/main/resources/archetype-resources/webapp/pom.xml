@@ -44,8 +44,11 @@
 
         <docker-plugin.imageName>DOCKER_REGISTRY_ACCOUNT/${project.parent.artifactId}</docker-plugin.imageName>
         <docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
-        <docker-plugin.serverId>docker-hub</docker-plugin.serverId>
-        <docker-plugin.registryUrl>https://index.docker.io/v1/</docker-plugin.registryUrl>
+
+        <docker-plugin.releaseServerId>docker-hub</docker-plugin.releaseServerId>
+        <docker-plugin.releaseRegistryUrl>https://index.docker.io/v1/</docker-plugin.releaseRegistryUrl>
+        <docker-plugin.snapshotServerId>docker-hub</docker-plugin.snapshotServerId>
+        <docker-plugin.snapshotRegistryUrl>https://index.docker.io/v1/</docker-plugin.snapshotRegistryUrl>
 
     </properties>
 

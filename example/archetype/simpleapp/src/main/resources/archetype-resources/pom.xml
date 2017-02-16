@@ -32,12 +32,13 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.13.2</isis.version>
+        <isis.version>1.14.0</isis.version>
 
         <lombok.version>1.16.10</lombok.version>
         <assertj-core.version>3.6.1</assertj-core.version>
 
         <mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
+        <maven-cucumber-reporting.version>3.2.0</maven-cucumber-reporting.version>
         <maven-cucumber-reporting.dependency.log4j.version>2.7</maven-cucumber-reporting.dependency.log4j.version>
 
         <mavenmixin-datanucleusenhance.version>0.0.4</mavenmixin-datanucleusenhance.version>
@@ -66,7 +67,7 @@
         <maven-jxr-plugin.version>2.4</maven-jxr-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 
-        <mavenmixin-standard.version>0.0.2</mavenmixin-standard.version>
+        <mavenmixin-standard.version>0.0.3</mavenmixin-standard.version>
         <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
         <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
         <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
@@ -87,13 +88,17 @@
         <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
         <findbugs-maven-plugin.version>2.5</findbugs-maven-plugin.version>
 
-        <mavenmixin-docker.version>0.0.2</mavenmixin-docker.version>
+        <mavenmixin-docker.version>0.0.3</mavenmixin-docker.version>
         <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
         <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <gmavenplus-plugin.version>1.5</gmavenplus-plugin.version>
 
         <mavendeps-isistesting.version>0.0.2</mavendeps-isistesting.version>
         <mavendeps-isisintellij.version>0.0.1</mavendeps-isisintellij.version>
         <mavendeps-isiswebapp.version>0.0.1</mavendeps-isiswebapp.version>
+
+        <compiler-plugin.source>1.7</compiler-plugin.source>
+        <compiler-plugin.target>1.7</compiler-plugin.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -241,6 +246,11 @@
                     <groupId>com.spotify</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>${docker-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.gmavenplus</groupId>
+                    <artifactId>gmavenplus-plugin</artifactId>
+                    <version>${gmavenplus-plugin.version}</version>
                 </plugin>
 
             </plugins>
