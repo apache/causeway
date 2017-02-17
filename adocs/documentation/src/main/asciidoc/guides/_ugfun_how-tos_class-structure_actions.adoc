@@ -139,9 +139,9 @@ public class PaymentMethodType ... {
 
 
 [[_ugfun_how-tos_class-structure_actions_collection-parameter-types]]
-== Collection Parameter types (`1.14.0-SNAPSHOT`)
+== Collection Parameter types
 
-As of `1.14.0-SNAPSHOT` Apache Isis action parameters can be collections of types scalar (values such as `String`, `int`, or references such as `Customer`).
+Action parameters can also be collections of values (for example `List<String>`), or can be collections of references (such as `List<Customer>`).
 
 For example:
 

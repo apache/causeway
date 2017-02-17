@@ -6,7 +6,7 @@
 
 
 
-The `TableColumnOrderService` (`1.14.0-SNAPSHOT`) provides the ability to reorder (or suppress) columns in both parented- and standalone tables.
+The `TableColumnOrderService` provides the ability to reorder (or suppress) columns in both parented- and standalone tables.
 
 
 == SPI

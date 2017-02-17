@@ -76,7 +76,7 @@ First, the usual boilerplate:
     <parent>
         <groupId>org.isisaddons.app</groupId>
         <artifactId>todoapp</artifactId>
-        <version>1.14.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>todoapp-xsd</artifactId>

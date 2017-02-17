@@ -25,7 +25,7 @@ For more information, see:
 
 
 
-== Reordering columns (`1.14.0-SNAPSHOT`)
+== Reordering columns
 
 The optional xref:rgsvc.adoc#_rgsvc_spi_TableColumnOrderService[`TableColumnOrderService`] SPI service can be used to reorder columns in a table, either for a parented collection (owned by parent domain object) or a standalone collection (returned from an action invocation).
 

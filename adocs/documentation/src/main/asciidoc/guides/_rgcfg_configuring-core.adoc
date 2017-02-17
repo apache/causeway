@@ -249,7 +249,7 @@ If no configuration property is available, then the defaults is determined by th
 `email.` +
 `override.bcc` +
 | email address
-|(`1.14.0-SNAPSHOT`) intended to simplify testing, if specified then the email's `bcc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+|intended to simplify testing, if specified then the email's `bcc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -258,7 +258,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `override.cc` +
 | email address
-|(`1.14.0-SNAPSHOT`) intended to simplify testing, if specified then the email's `cc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+|intended to simplify testing, if specified then the email's `cc` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -267,7 +267,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `override.to` +
 | email address
-|(`1.14.0-SNAPSHOT`) intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
+|intended to simplify testing, if specified then the email's `to` address will be that specified (rather than the email address(es) passed in as an argument to `EmailService#send(...)`).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -317,7 +317,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `ConnectionTimeout`
 |milliseconds +
 (2000)
-|(`1.14.0-SNAPSHOT`) The socket connection timeout
+|The socket connection timeout
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -327,7 +327,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `socketTimeout`
 |milliseconds +
 (2000)
-|(`1.14.0-SNAPSHOT`) The socket timeout
+|The socket timeout
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -338,7 +338,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `throwExceptionOnFail`
 |`true`,`false` +
 (`true`)
-|(`1.14.0-SNAPSHOT`) Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
+|Whether to throw an exception if there the email cannot be sent (probably because of some misconfiguration).
 
 This behaviour is (now) the default; the old behaviour (of just returning `false` from the `send()` method) can be re-enabled by setting this property to `false`.
 
@@ -469,7 +469,7 @@ See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translatio
 == MetaModel Validation
 
 
-.Other Core Configuration Properties
+.Metamodel Validation
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -488,7 +488,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 `ParameterChoices`
 |`true`,`false` +
 (`true`)
-| (`1.14.0-SNAPSHOT`) Whether to check that collection action parameters have a corresponding choices or autoComplete facet. +
+| Whether to check that collection action parameters have a corresponding choices or autoComplete facet. +
 
 In the current implementation such a facet is always required, so this configuration option has only been introduced as a feature flag in case it needs to be disabled for some reason.
 
@@ -502,18 +502,10 @@ If not, then a metamodel validation error will be triggered, meaning the app won
 See also `isis.reflector.facets.ignoreDeprecated`.
 
 |`isis.reflector.validator.` +
-`jdoqlFromClause`
-|`true`,`false` +
-(`true`)
-| (`1.14.0-SNAPSHOT`) Whether to check that the class name in JDOQL `FROM` clause matches or is a supertype of the class on which it is annotated. +
-
-Only "SELECT" queries are validated; "UPDATE" queries etc are simply ignored.
-
-|`isis.reflector.validator.` +
 `explicitObjectType`
 |`true`,`false` +
 (`false`)
-| (`1.14.0-SNAPSHOT`) Whether to check that the class has an object type explicitly specified somehow.
+| Whether to check that the class has an object type explicitly specified somehow.
 
 The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ugvw.adoc#[Wicket viewer] and xref:ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
@@ -523,10 +515,18 @@ If the object type is not specified explicitly, then this can cause data migrati
 This configuration property can be used to enforce a rule that the object type must always be specified (for persistent entities and view models).
 
 |`isis.reflector.validator.` +
+`jdoqlFromClause`
+|`true`,`false` +
+(`true`)
+| Whether to check that the class name in JDOQL `FROM` clause matches or is a supertype of the class on which it is annotated. +
+
+Only "SELECT" queries are validated; "UPDATE" queries etc are simply ignored.
+
+|`isis.reflector.validator.` +
 `jdoqlVariablesClause`
 |`true`,`false` +
 (`true`)
-| (`1.14.0-SNAPSHOT`) Whether to check that the class name in JDOQL `VARIABLES` clause is a recognized class. +
+| Whether to check that the class name in JDOQL `VARIABLES` clause is a recognized class. +
 
 Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently the validator only checks the first class name found.
 
@@ -534,7 +534,7 @@ Note that although JDOQL syntax supports multiple `VARIABLES` classes, currently
 `mixinsOnly`
 |`true`,`false` +
 (`false`)
-| (`1.14.0-SNAPSHOT`) Mixins provide a simpler programming model to contributed domain services. +
+| Mixins provide a simpler programming model to contributed domain services. +
 
 If enabled, this configuration property will treat any contributed service as invalid.
 This is by way of possibly deprecating and eventually moving contributed services from the Apache Isis programming model.
@@ -544,7 +544,7 @@ This is by way of possibly deprecating and eventually moving contributed service
 `noParamsOnly`
 |`true`,`false` +
 (`false`)
-| (`1.14.0-SNAPSHOT`) When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
+| When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
 Note that this in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
@@ -554,7 +554,7 @@ Note that this in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins
 `serviceActionsOnly`
 |`true`,`false` +
 (`false`)
-| (`1.14.0-SNAPSHOT`) Domain services are stateless (at least conceptually) and so should not have any properties or collections; any that are defined will not be rendered by the viewers. +
+| Domain services are stateless (at least conceptually) and so should not have any properties or collections; any that are defined will not be rendered by the viewers. +
 
 If enabled, this configuration property will ensure that domain services only declare actions.
 

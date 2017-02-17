@@ -6,26 +6,39 @@
 
 
 
-== Rename of isis-viewer-wicket artifacts
+== New metamodel validations
 
-The `<groupId>` and `<artifactId>` of the xref:ugvw.adoc#[Wicket viewer] have been made consistent with other artifacts:
+This release defines a number of metamodel validations.
+These can be enabled or disabled using configuration properties:
 
-* the `<groupId>` has been changed from `org.apache.isis.viewer` to `org.apache.isis.core`
-* the `<artifactId>` has been changed from `isis-viewer-wicket-???` to `isis-core-viewer-wicket-???`
+* `isis.reflector.validator.explicitObjectType` +
 
+Whether to check that the class has an object type explicitly specified somehow.
+This is strongly recommended, but is disabled by default to prevent migration issues.
 
-For example:
+* `isis.reflector.validator.jdoqlFromClause` +
++
+Whether to check that the class name in JDOQL `FROM` clause matches or is a supertype of the class on which it is annotated.
+This is enabled by default.
 
-[source,xml]
-----
-<groupId>org.apache.isis.viewer</groupId>
-<artifactId>isis-viewer-wicket-applib</artifactId>
-----
+* `isis.reflector.validator.jdoqlVariablesClause` +
 
-has been renamed to:
+Whether to check that the class name in JDOQL `VARIABLES` clause is a recognized class.
+This is enabled by default.
 
-[source,xml]
-----
-<groupId>org.apache.isis.core</groupId>
-<artifactId>isis-core-viewer-wicket-applib</artifactId>
-----
+* `isis.reflector.validator.mixinsOnly` +
++
+This is disabled by default; if enabled, this configuration property will treat any contributed service as invalid; instead use mixins (as a simpler/less confusing programming model).
+
+* `isis.reflector.validator.noParamsOnly` +
++
+When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] supporting methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
++
+This is disabled by default; if enabled then this makes for a simpler programming model.
+
+* `isis.reflector.validator.serviceActionsOnly` +
+
+Domain services are stateless (at least conceptually) and so should not have any properties or collections; any that are defined will not be rendered by the viewers. +
+
+This is disabled by default; if enabled, then this ensure that domain services only declare actions and so makes for a simpler programming model.
+

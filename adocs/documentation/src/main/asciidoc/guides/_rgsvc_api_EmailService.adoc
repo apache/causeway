@@ -66,7 +66,7 @@ For example, if you create a test email account on gmail, you can configure the 
 where "xxx" is the gmail user account and "yyy" is its password
 
 
-In addition (as of `1.14.0-SNAPSHOT`), the following properties can be set:
+In addition the following properties can be set:
 
 * `isis.service.email.throwExceptionOnFail` +
 +

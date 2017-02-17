@@ -413,7 +413,7 @@ Using this https://gist.github.com/danhaywood/ff17946ee05652402cfb[gist] to invo
 +
 [source,bash]
 ----
-sh forsub.sh sh bumpver_isis.sh 1.14.0
+foreach -g isisaddons bumpver_isis.sh 1.14.0
 ----
 
 * update the README for each repository
@@ -429,13 +429,13 @@ sh forsub.sh sh bumpver_isis.sh 1.14.0
 +
 [source,bash]
 ----
-sh forsub.sh sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g isisaddons sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * update its dependency on Apache Isis to reference the next SNAPSHOT version: +
 +
 [source,bash]
 ----
-sh forsub.sh sh bumpver_isis.sh "1.15.0-SNAPSHOT"
+foreach -g isisaddons sh bumpver_isis.sh "1.15.0-SNAPSHOT"
 ----
 

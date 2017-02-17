@@ -26,7 +26,7 @@ isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword=
 
 Those configuration properties that start with the prefix `isis.persistor.datanucleus.impl.` are passed through directly to DataNucleus (with the prefix removed).
 
-(As of `1.14.0-SNAPSHOT`) it is also possible to specify the `
+It is also possible to specify the `
 datanucleus.ConnectionPasswordDecrypter
 ` property; see the link:http://www.datanucleus.org/products/accessplatform_4_1/persistence_properties.html#ConnectionPasswordDecrypter[DataNucleus documentation] for further details.
 

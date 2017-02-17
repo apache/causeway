@@ -21,13 +21,21 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 | JIRA relnotes
 
+| xref:r1.14.0[1.14.0]
+| 19-02-2017
+| Actions with collection parameters, metamodel validations.
+| 3
+| 11
+| 11
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338898[Release notes for v1.14.0]
+
 | xref:r1.13.2.1[1.13.2.1]
 | 03-jan-2017
 | Patch release for simpleapp archetype only (docker images, regular actions instead of mixins)
 | 0
 | 2
 | 0
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338937[Release notes for v1.13.2.1]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338937[Release notes for v1.13.2.1]
 
 | xref:r1.13.2.1[1.13.2]
 | 14-dec-2016
@@ -35,7 +43,7 @@ This table summarises all releases of Apache Isis to date.
 | 2
 | 9
 | 5
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338744[Release notes for v1.13.2]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338744[Release notes for v1.13.2]
 
 | xref:r1.13.1[1.13.1]
 | 30-oct-2016
@@ -43,7 +51,7 @@ This table summarises all releases of Apache Isis to date.
 | 1
 | 13
 | 21
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12337967[Release notes for v1.13.1]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12337967[Release notes for v1.13.1]
 
 | xref:r1.13.0[1.13.0]
 | 11-jul-2016
@@ -51,7 +59,7 @@ This table summarises all releases of Apache Isis to date.
 | 27
 | 50
 | 23
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335362[Release notes for v1.13.0]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335362[Release notes for v1.13.0]
 
 | xref:r1.12.2[1.12.2]
 | 06-jun-2016
@@ -59,7 +67,7 @@ This table summarises all releases of Apache Isis to date.
 | 0
 | 0
 | 2
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335949[Release notes for v1.12.2]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335949[Release notes for v1.12.2]
 
 | xref:r1.12.1[1.12.1]
 | 12-apr-2016
@@ -67,7 +75,7 @@ This table summarises all releases of Apache Isis to date.
 | 0
 | 0
 | 4
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335484[Release notes for v1.12.1]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335484[Release notes for v1.12.1]
 
 | xref:r1.12.0[1.12.0]
 | 29-mar-2016
@@ -75,7 +83,7 @@ This table summarises all releases of Apache Isis to date.
 | 7
 | 21
 | 21
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327483[Release notes for v1.12.0]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327483[Release notes for v1.12.0]
 
 | xref:r1.11.1[1.11.1]
 | 17-jan-2016
@@ -83,7 +91,7 @@ This table summarises all releases of Apache Isis to date.
 | 0
 | 0
 | 1
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12334640[Release notes for v1.11.1]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12334640[Release notes for v1.11.1]
 
 | xref:r1.11.0[1.11.0]
 | 02-jan-2016
@@ -91,7 +99,7 @@ This table summarises all releases of Apache Isis to date.
 | 9
 | 19
 | 12
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333974[Release notes for v1.11.0]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333974[Release notes for v1.11.0]
 
 | xref:r1.10.0[1.10.0]
 | 10-nov-2015
@@ -99,7 +107,7 @@ This table summarises all releases of Apache Isis to date.
 | 7
 | 18
 | 12
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333354[Release notes for 1.10.0]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333354[Release notes for 1.10.0]
 
 | xref:r1.9.0[1.9.0]
 | 1-sep-2015
@@ -107,7 +115,7 @@ This table summarises all releases of Apache Isis to date.
 | 18
 | 50
 | 25
-| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12332806[Release notes for 1.9.0]
+| link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12332806[Release notes for 1.9.0]
 
 | xref:r1.8.0[1.8.0]
 | 24-feb-2015
@@ -274,6 +282,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_1.14.0.adoc[leveloffset=+1]
 include::_release-notes_1.13.2.1.adoc[leveloffset=+1]
 include::_release-notes_1.13.2.adoc[leveloffset=+1]
 include::_release-notes_1.13.2.adoc[leveloffset=+1]
