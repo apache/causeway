@@ -38,7 +38,8 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY
+        nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "prototyping.HsqlDbManagerMenu"
 )
 @DomainServiceLayout(
         named = "Prototyping",

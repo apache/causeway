@@ -19,28 +19,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.services.homepage;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.factory.FactoryService;
+package domainapp.modules.simple.fixture.scenario;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN, // trick to suppress the actions from the top-level menu
-        objectType = "homepage.HomePageService"
-)
-public class HomePageService {
+import domainapp.modules.simple.dom.impl.SimpleObject;
+import domainapp.modules.simple.dom.impl.SimpleObjectMenu;
+import lombok.AllArgsConstructor;
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @HomePage
-    public HomePageViewModel homePage() {
-        return factoryService.instantiate(HomePageViewModel.class);
+@AllArgsConstructor
+public enum SimpleObjectData {
+
+    FOO("Foo"),
+    BAR("Bar"),
+    BAZ("Baz"),
+    FRODO("Frodo"),
+    FROYO("Froyo"),
+    FIZZ("Fizz"),
+    BIP("Bip"),
+    BOP("Bop"),
+    BANG("Bang"),
+    BOO("Boo");
+
+    private final String name;
+
+    public SimpleObject createWith(final SimpleObjectMenu menu) {
+        return menu.create(name);
     }
 
-
-    @javax.inject.Inject
-    FactoryService factoryService;
+    public SimpleObject findWith(final SimpleObjectMenu menu) {
+        return menu.findByName(name).get(0);
+    }
 }

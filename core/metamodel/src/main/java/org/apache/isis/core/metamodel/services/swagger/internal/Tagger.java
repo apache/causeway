@@ -24,19 +24,24 @@ import java.util.regex.Pattern;
 class Tagger {
 
     static Pattern tagPatternIsisAddons = Pattern.compile("^org\\.isisaddons\\.module\\.([^\\.]+)\\.(.+)$");
+    static Pattern tagPatternIncodeCatalog = Pattern.compile("^org\\.incode\\.module\\.([^\\.]+)\\.(.+)$");
     static Pattern tagPatternForFqcn = Pattern.compile("^.*\\.([^\\.]+)\\.([^\\.]+)$");
-    static Pattern tagPatternForSchemaTable = Pattern.compile("^([^\\.]+)\\.([^\\.]+)$");
+    static Pattern tagPatternForTwoParts = Pattern.compile("^([^\\.]+)\\.([^\\.]+)$");
     static Pattern tagPatternForJaxbDto = Pattern.compile("^.*\\.([^\\.]+)\\.(v[0-9][^\\.]*)\\.([^\\.]+)$");
 
     String tagFor(final String str, final String fallback) {
-        if (str.startsWith("org.apache.isis")) {
+        if (str.startsWith("org.apache.isis.")) {
             return "> apache isis internals";
         }
 
         Matcher matcher;
         matcher = tagPatternIsisAddons.matcher(str);
         if (matcher.matches()) {
-            return "isisaddons " + matcher.group(1);
+            return "isisaddons.org " + matcher.group(1);
+        }
+        matcher = tagPatternIncodeCatalog.matcher(str);
+        if (matcher.matches()) {
+            return "catalog.incode.org " + matcher.group(1);
         }
         matcher = tagPatternForJaxbDto.matcher(str);
         if (matcher.matches()) {
@@ -46,9 +51,12 @@ class Tagger {
         if (matcher.matches()) {
             return matcher.group(1);
         }
-        matcher = tagPatternForSchemaTable.matcher(str);
+        matcher = tagPatternForTwoParts.matcher(str);
         if (matcher.matches()) {
-            // special cases for other Isis addons
+            if (str.startsWith("isisApplib")) {
+                return "> apache isis applib";
+            }
+            // special cases for other Isis addons, eg "isissecurity"
             if (str.startsWith("isis")) {
                 return "isisaddons " + str.substring(4, str.indexOf("."));
             }
