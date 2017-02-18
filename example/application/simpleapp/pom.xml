@@ -103,10 +103,6 @@
         <compiler-plugin.target>1.7</compiler-plugin.target>
         <compiler-plugin.compilerArgument></compiler-plugin.compilerArgument>
 
-        <compiler-plugin.source>1.7</compiler-plugin.source>
-        <compiler-plugin.target>1.7</compiler-plugin.target>
-        <compiler-plugin.compilerArgument></compiler-plugin.compilerArgument>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
