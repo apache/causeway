@@ -12,7 +12,7 @@ This release defines a number of metamodel validations.
 These can be enabled or disabled using configuration properties:
 
 * `isis.reflector.validator.explicitObjectType` +
-
++
 Whether to check that the class has an object type explicitly specified somehow.
 This is strongly recommended, but is disabled by default to prevent migration issues.
 
@@ -22,7 +22,7 @@ Whether to check that the class name in JDOQL `FROM` clause matches or is a supe
 This is enabled by default.
 
 * `isis.reflector.validator.jdoqlVariablesClause` +
-
++
 Whether to check that the class name in JDOQL `VARIABLES` clause is a recognized class.
 This is enabled by default.
 
@@ -37,8 +37,8 @@ When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx(
 This is disabled by default; if enabled then this makes for a simpler programming model.
 
 * `isis.reflector.validator.serviceActionsOnly` +
-
++
 Domain services are stateless (at least conceptually) and so should not have any properties or collections; any that are defined will not be rendered by the viewers. +
-
++
 This is disabled by default; if enabled, then this ensure that domain services only declare actions and so makes for a simpler programming model.
 

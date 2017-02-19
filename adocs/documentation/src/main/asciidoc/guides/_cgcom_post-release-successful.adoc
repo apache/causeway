@@ -407,7 +407,7 @@ git push
 
 Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
 
-Using this https://gist.github.com/danhaywood/ff17946ee05652402cfb[gist] to invoke operations across all (or selected) addons:
+Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c91cb[gist] to invoke operations across all (or selected) addons:
 
 * update its dependency on Apache Isis to reference the newly released version: +
 +
@@ -425,11 +425,47 @@ foreach -g isisaddons bumpver_isis.sh 1.14.0
 
 ** update the "Change Log" section
 
-* release to mvn central (contains a sanity check before hand that everything compiles): +
+* release the metamodel/module/wicket modules to mvn central (contains a sanity check before hand that everything compiles): +
 +
 [source,bash]
 ----
-foreach -g isisaddons sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g isisaddons/isis-[mw] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+----
+
+* update its dependency on Apache Isis to reference the next SNAPSHOT version: +
++
+[source,bash]
+----
+foreach -g isisaddons sh bumpver_isis.sh "1.15.0-SNAPSHOT"
+----
+
+== Release Incode Catalog Modules
+
+Similarly, all of the (non-ASF) link:http://catalog.incode.org[Incode Catalog] modules should also be released.
+
+Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c91cb[gist] to invoke operations across all (or selected) addons:
+
+* update its dependency on Apache Isis to reference the newly released version: +
++
+[source,bash]
+----
+foreach -g incodehq/incode- bumpver_isis.sh 1.14.0
+----
+
+* update the README for each repository
+
+** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
+
+*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
+*** replace 1.13.0          with 1.14.0
+
+** update the "Change Log" section
+
+* release the `incode-module-???` modules to mvn central (contains a sanity check before hand that everything compiles): +
++
+[source,bash]
+----
+foreach -g incodehq/incode-[a-w] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * update its dependency on Apache Isis to reference the next SNAPSHOT version: +
