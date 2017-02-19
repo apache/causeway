@@ -9,7 +9,7 @@
 The layout of domain objects can be controlled either through annotations, or through the supplementary `layout.xml` file.
 Of these, the `layout.xml` file is superior; it offers more flexibility, and can be reloaded at runtime, thereby reducing the feedback loop.
 
-In addition, the layout can be fine-tuned using the xref:rgsvc.adoc#_rgsvc_spi_TableColumnOrderService[`TableColumnOrderService`] optional SPI service (`1.14.0-SNAPSHOT`).
+In addition, the layout can be fine-tuned using the xref:rgsvc.adoc#_rgsvc_spi_TableColumnOrderService[`TableColumnOrderService`] optional SPI service.
 
 == `layout.xml`
 
