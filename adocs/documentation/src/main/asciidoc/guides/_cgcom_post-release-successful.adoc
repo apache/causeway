@@ -403,7 +403,55 @@ git push
 ----
 
 
-== Release Isis Addons
+
+[[_cgcom_post-release-successful_release-non-asf-modules]]
+== Release (non-ASF) Modules
+
+There are two libraries of modules, both non-ASF but open source, that should be released.
+
+* link:http://isisaddons.org[Isis Addons] - modules addressing technical concerns
+* link:http://catalog.incodehq.org[Incode Catalog] - modules for various generic business subdomains
+
+These each use a common parent, `org.incode:incode-parent`.
+This must be released first, then both set of modules afterwards.
+
+
+[[_cgcom_post-release-successful_release-non-asf-modules_prereqs]]
+=== Prereqs
+
+Save this link:https://gist.github.com/danhaywood/e80daf6d25f5c1fb1093effba85d088a[gist] as `last_modified.sh` in an appropriate parent directory of both sets of repos.
+
+For example, if the isisaddons modules are cloned to `/c/github/isisaddons/isis-module-xxx` and the incode catalog modules are cloned to `/c/github/incodehq/incode-module-xxx`, then save in `/c/github`.
+
+
+
+[[_cgcom_post-release-successful_release-non-asf-modules_incode-parent]]
+=== Release `incode-parent`
+
+The `org.incode:incode-parent` Maven module is used as a parent for both sets of modules:
+
+* Open up `pom.xml`, and manually edit `<isis.version>` property to the latest release
+
+* update the README
+
+** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
+
+*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
+*** replace 1.13.0          with 1.14.0
+
+** update the "Change Log" section
+
+* Release using: +
++
+[source,bash]
+----
+sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
+----
+
+
+
+[[_cgcom_post-release-successful_release-non-asf-modules_isisaddons]]
+=== Release Isis Addons
 
 Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
 
@@ -413,15 +461,38 @@ Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c9
 +
 [source,bash]
 ----
-foreach -g isisaddons bumpver_isis.sh 1.14.0
+foreach -g isisaddons sh bumpver_isis.sh 1.14.0
 ----
++
+and use: +
++
+[source,bash]
+----
+foreach -g isisaddons git diff HEAD^ HEAD
+----
++
+and: +
++
+[source,bash]
+----
+foreach -g isisaddons git status --branch --porcelain
+----
++
+to review changes made.
 
-* update the README for each repository
+* update the README for each repository.
+
+** if using Windows, then: +
++
+[source,bash]
+----
+"C:\Program Files (x86)\Notepad++\notepad++.exe" isisaddons/isis-m*/README.adoc  isisaddons/isis-w*/README.adoc
+----
 
 ** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
-*** replace 1.13.0          with 1.14.0
+*** replace `1.14.0` with `1.15.0`
+*** replace `1.13.0` with `1.14.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
 
@@ -432,14 +503,28 @@ foreach -g isisaddons bumpver_isis.sh 1.14.0
 foreach -g isisaddons/isis-[mw] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
-* update its dependency on Apache Isis to reference the next SNAPSHOT version: +
+* In the parent directory where the `last_modified.sh` script has been saved (see xref:cgcom.adoc#_cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
-foreach -g isisaddons sh bumpver_isis.sh "1.15.0-SNAPSHOT"
+foreach -g isisaddons/isis-[mw] sh ../../last-modified.sh 1.14.0
+----
++
+[IMPORTANT]
+====
+Wait at least 10 minutes to check; sync'ing to Maven central from the Sonatype OSS repository isn't instaneous.
+====
+
+* Assuming everything did get published ok, then push branch and tag: +
++
+[source,bash]
+----
+foreach -g isisaddons/isis-[mw] "git push origin master && git push origin 1.14.0"
 ----
 
-== Release Incode Catalog Modules
+
+[[_cgcom_post-release-successful_release-non-asf-modules_incode-catalog]]
+=== Release Incode Catalog Modules
 
 Similarly, all of the (non-ASF) link:http://catalog.incode.org[Incode Catalog] modules should also be released.
 
@@ -449,29 +534,90 @@ Using this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c9
 +
 [source,bash]
 ----
-foreach -g incodehq/incode- bumpver_isis.sh 1.14.0
+foreach -g incodehq/incode-module sh bumpver_isis.sh 1.14.0
 ----
 
-* update the README for each repository
+* update the README for each repository. +
++
+eg if using Windows, then:
++
+[source,bash]
+----
+"C:\Program Files (x86)\Notepad++\notepad++.exe" incodehq/incode-*/README.adoc
+----
 
-** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
+** Replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
 
-*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
-*** replace 1.13.0          with 1.14.0
+*** replace `1.14.0` with `1.15.0`
+*** replace `1.13.0` with `1.14.0` as necessary (pretty much everywhere apart from the "Change Log")
 
 ** update the "Change Log" section
+
+* update cross-module dependencies +
++
+Some of the incode catalog modules depend on isisaddons modules, and also on each other. +
++
+eg if using Windows, then: +
++
+[source,bash]
+----
+"C:\Program Files (x86)\Notepad++\notepad++.exe" incodehq/incode-module*/pom.xml  incodehq/incode-module-*/dom/pom.xml incodehq/incode-module-*/module/pom.xml
+----
++
+[TIP]
+====
+See xref:cgcom.adoc#_cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies[below] for a list of the dependencies to update.
+====
+
+* If necessary, adjust the `_repos.txt` file (used by `foreach` function) so that repositories are released in the correct sequence (with respect to their mutual dependencies).
+For example, `incode-module-base` must be released prior to `incode-module-alias`.
 
 * release the `incode-module-???` modules to mvn central (contains a sanity check before hand that everything compiles): +
 +
 [source,bash]
 ----
-foreach -g incodehq/incode-[a-w] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+foreach -g incodehq/incode-module-[a-w] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
-* update its dependency on Apache Isis to reference the next SNAPSHOT version: +
+* In the parent directory where the `last_modified.sh` script has been saved (see xref:cgcom.adoc#_cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
-foreach -g isisaddons sh bumpver_isis.sh "1.15.0-SNAPSHOT"
+foreach -g incodehq/incode-module-[a-w] sh ../../last-modified.sh 1.14.0
 ----
++
+[IMPORTANT]
+====
+Wait at least 10 minutes to check; sync'ing to Maven central from the Sonatype OSS repository isn't instaneous.
+====
+
+* Assuming everything did get published ok, then push branch and tag: +
++
+[source,bash]
+----
+foreach -g incodehq/incode-module-[a-w] "git push origin master && git push origin 1.14.0"
+----
+
+
+[[_cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies]]
+==== Cross-module dependencies
+
+As of v1.14.0, the list of dependencies that needed to be updated (across all modules) were:
+
+** `<isis-module-fakedata.version>1.14.0</isis-module-fakedata.version>`
+** `<isis-module-freemarker.version>1.14.0</isis-module-freemarker.version>`
+** `<isis-wicket-fullcalendar2-cpt.version>1.14.0</isis-wicket-fullcalendar2-cpt.version>`
+** `<isis-wicket-gmap3-cpt.version>1.14.0</isis-wicket-gmap3-cpt.version>`
+** `<isis-module-poly.version>1.14.0</isis-module-poly.version>`
+** `<isis-module-security.version>1.14.0</isis-module-security.version>`
+** `<incode-module-base.version>1.14.0</incode-module-base.version>`
+** `<incode-module-fixturesupport.version>1.14.0</incode-module-fixturesupport.version>`
+** `<incode-module-unittestsupport.version>1.14.0</incode-module-unittestsupport.version>`
+** `<incode-module-integtestsupport.version>1.14.0</incode-module-integtestsupport.version>`
+** `<incode-module-country.version>1.14.0</incode-module-country.version>`
+** `<incode-module-document.version>1.14.0</incode-module-document.version>`
+** `<incode-module-docrendering-freemarker.version>1.14.0</incode-module-docrendering-freemarker.version>`
+** `<incode-module-docrendering-stringinterpolator.version>1.14.0</incode-module-docrendering-stringinterpolator.version>`
+** `<incode-module-docrendering-xdocreport.version>1.14.0</incode-module-docrendering-xdocreport.version>`
+
 
