@@ -430,7 +430,12 @@ For example, if the isisaddons modules are cloned to `/c/github/isisaddons/isis-
 
 The `org.incode:incode-parent` Maven module is used as a parent for both sets of modules:
 
-* Open up `pom.xml`, and manually edit `<isis.version>` property to the latest release
+* update its dependency on Apache Isis to reference the newly released version: +
++
+[source,bash]
+----
+sh bumpver_isis.sh 1.14.0
+----
 
 * update the README
 
@@ -446,6 +451,43 @@ The `org.incode:incode-parent` Maven module is used as a parent for both sets of
 [source,bash]
 ----
 sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
+----
+
+
+
+[[_cgcom_post-release-successful_release-non-asf-modules_incode-mavendeps]]
+=== Release `incode-mavendeps`
+
+The three `org.incode:mavendeps-isisXXX` module should be released next.
+
+* update its dependency on Apache Isis to reference the newly released version: +
++
+[source,bash]
+----
+foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.14.0
+----
+
+* update the README
+
+** replace each version with next (ie the "How to Configure/Use" section, and the "Release to Maven Central" section at the end):
+
+*** replace 1.14.0-SNAPSHOT with 1.15.0-SNAPSHOT
+*** replace 1.13.0          with 1.14.0
+
+** update the "Change Log" section
+
+* Release using: +
++
+[source,bash]
+----
+foreach -g incodehq/mavendeps sh sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
+----
+
+* update its dependency on Apache Isis to reference the next SNAPSHOT: +
++
+[source,bash]
+----
+foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.15.0-SNAPSHOT
 ----
 
 
