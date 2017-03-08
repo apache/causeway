@@ -7,8 +7,6 @@
 
 
 
-pass:[<br/><br/>]
-
 
 The following presentation, available in multiple formats, provides some background on Apache Isis:
 
@@ -17,7 +15,7 @@ The following presentation, available in multiple formats, provides some backgro
 
 [WARNING]
 ====
-Our apologies, this presentation is somewhat out-of-date...
+This presentation is somewhat out-of-date...
 ====
 
 

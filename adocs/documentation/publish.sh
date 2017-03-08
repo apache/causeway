@@ -5,4 +5,6 @@ else
 	MSG=$1
 fi
 echo $MSG
-mvn clean install -D message="$MSG"
+mvn clean 
+mvn install -f pom-pdf.xml -D message="$MSG"
+mvn install                -D message="$MSG"

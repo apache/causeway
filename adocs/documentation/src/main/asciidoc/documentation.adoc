@@ -5,7 +5,6 @@
 :_imagesdir: images/
 :toc: right
 
-pass:[<br/><br/><br/>]
 
 pass:[<div class="extended-quote-first"><p>]Perfection is finally attained not when there is no longer anything to add but when there is no longer anything to take away.
 pass:[</p></div>]

@@ -6,8 +6,6 @@
 :toc: right
 
 
-pass:[<br/><br/>]
-
 
 This screencast explains how Apache Isis builds a webapp from the underlying domain object model...
 

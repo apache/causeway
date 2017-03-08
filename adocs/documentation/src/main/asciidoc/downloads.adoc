@@ -6,16 +6,16 @@
 :toc: right
 
 
-pass:[<br/><br/><br/>]
-
-Apache Isis&trade; software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or RESTful API. Use for prototyping or production.
+Apache Isis&trade; software is a framework for rapidly developing domain-driven apps in Java.
+Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or RESTful API. Use for prototyping or production.
 
 
 
 
 == Getting Started
 
-If you just want to get going quickly, we suggest using our Maven archetype.  For more information, see xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype][here].
+If you just want to get going quickly, we suggest using our Maven archetype.
+For more information, see xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype][here].
 
 
 
@@ -36,9 +36,11 @@ Archetypes:
 
 == Verifying Releases
 
-It is essential that you verify the integrity of any downloaded files using the PGP or MD5 signatures. For more information on signing artifacts and why we do it, check out the http://www.apache.org/dev/release-signing.html[Release Signing FAQ].
+It is essential that you verify the integrity of any downloaded files using the PGP or MD5 signatures.
+For more information on signing artifacts and why we do it, check out the http://www.apache.org/dev/release-signing.html[Release Signing FAQ].
 
-The PGP signatures can be verified using PGP or GPG. First download the http://www.apache.org/dist/isis/KEYS[KEYS] as well as the asc signature file for the artifact. Make sure you get these files from the http://www.apache.org/dist/isis/[main distribution directory], rather than from a mirror.
+The PGP signatures can be verified using PGP or GPG. First download the http://www.apache.org/dist/isis/KEYS[KEYS] as well as the asc signature file for the artifact.
+Make sure you get these files from the http://www.apache.org/dist/isis/[main distribution directory], rather than from a mirror.
 
 Then verify the signatures using a command such as:
 
@@ -67,7 +69,10 @@ gpg –verify isis-1.13.2-source-release.zip.asc
 
 
 
-Alternatively, you can verify the MD5 signature on the files. A Unix/Linux program called `md5` or `md5sum` is included in most distributions. It is also available as part of http://www.gnu.org/software/textutils/textutils.html[GNU Textutils].   Windows users can get binary md5 programs from these (and likely other) places:
+Alternatively, you can verify the MD5 signature on the files.
+A Unix/Linux program called `md5` or `md5sum` is included in most distributions.
+It is also available as part of http://www.gnu.org/software/textutils/textutils.html[GNU Textutils].
+Windows users can get binary md5 programs from these (and likely other) places:
 
 * http://www.md5summer.org/[http://www.md5summer.org/]
 * http://www.fourmilab.ch/md5/[http://www.fourmilab.ch/md5/]
@@ -93,7 +98,8 @@ git clone http://git.apache.org/isis.git
 ----
 
 
-The code is also mirrored on http://github.com/apache/isis[github], where you can browse it or fork it. And if you're interested in contributing back to Apache Isis, see link:contributors/contributing.html[here].
+The code is also mirrored on http://github.com/apache/isis[github], where you can browse it or fork it.
+And if you're interested in contributing back to Apache Isis, see link:contributors/contributing.html[here].
 
 
 
@@ -112,6 +118,12 @@ You can browse the repo https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis
 
 
 
-== Isis add-ons
+== Isis add-ons & Incode Catalog
 
-There are also a number of (open source, but not ASF) supporting modules and extensions for you to use; see link:http://www.isisaddons.org/[Isis Add-ons].
+There are also a number of (open source, but not ASF) supporting modules and extensions for you to use:
+
+* the link:http://www.isisaddons.org/[Isis Add-ons] provide technical extensions, such as security, commands, auditing and feature toggles
+
+* the link:http://catalog.incode.org[Incode Catalog] provides business modules, such as documents, notes and communications.
+
+Each module is in a separate github repo, with a demo app to illustrate the module's functionality.

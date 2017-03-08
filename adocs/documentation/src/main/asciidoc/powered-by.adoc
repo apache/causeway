@@ -7,9 +7,6 @@
 
 
 
-pass:[<br/><br/>]
-
-
 Deciding whether to use a full stack framework such as Apache Isis means in large part determining to what extent the
 applications you need to develop align with the strengths and philosophy of the framework.
 

@@ -7,9 +7,8 @@
 
 
 
-pass:[<br/><br/>]
-
-These screencasts refer to older versions of the framework, but you may still find them of use.  More recent screencasts can be found link:./screencasts.html[here].
+These screencasts refer to older versions of the framework, but you may still find them of use.
+More recent screencasts can be found link:./screencasts.html[here].
 
 
 == Getting Started

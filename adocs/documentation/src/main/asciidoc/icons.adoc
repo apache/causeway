@@ -7,10 +7,10 @@
 
 
 
-pass:[<br/><br/>]
 
-
-Most Apache Isis viewers use icons to help identify domain objects in the user interface. It's a good idea to ensure that these are styled consistently. Here are some open source icon sets for both personal and commercial use (though some require a link back to the authors website):
+Most Apache Isis viewers use icons to help identify domain objects in the user interface.
+It's a good idea to ensure that these are styled consistently.
+Here are some open source icon sets for both personal and commercial use (though some require a link back to the authors website):
 
 * http://icons8.com/[icons8] (as used in the link:../powered-by/powered-by.html[Estatio] app) - styled for Win8, Android and MacOS
 * http://tango.freedesktop.org/Tango_Icon_Library[tango desktop] icon set - as used in Linux GNOME and KDE desktops
