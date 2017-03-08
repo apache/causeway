@@ -28,7 +28,7 @@ it knows how to bootstrap an Isis runtime.  This is discussed below, followed by
 
 
 
-[[_rgmvn_intro_app-manifest]]
+[[__rgmvn_intro_app-manifest]]
 == `AppManifest`
 
 As noted in the introduction, all the goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]

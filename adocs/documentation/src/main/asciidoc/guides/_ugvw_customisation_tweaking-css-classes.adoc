@@ -106,7 +106,7 @@ Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you 
 
 
 
-[[_ugvw_customisation_tweaking-css-classes_columns-in-tables]]
+[[__ugvw_customisation_tweaking-css-classes_columns-in-tables]]
 == Table columns
 
 Sometimes you may want to apply styling to specific columns of tables.  For example, you might want to adjust width so that
@@ -126,7 +126,7 @@ In each of these cases the Wicket viewer adds CSS classes either to containing `
 
 
 
-[[_ugvw_customisation_tweaking-css-classes_columns-in-tables_globally]]
+[[__ugvw_customisation_tweaking-css-classes_columns-in-tables_globally]]
 === Applying styles globally
 
 Every rendered collection containing a domain class will be wrapped in a `<div>` that lists that domain class (in CSS safe
@@ -197,7 +197,7 @@ For example:
 </div>
 ----
 <1> the parent class identifier
-<2> the collection identifier. This element's class also has the entity type within the collection (as xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
+<2> the collection identifier. This element's class also has the entity type within the collection (as xref:ugvw.adoc#__ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
 
 Using this, the `productRef` property could be targeted using:
 
@@ -241,7 +241,7 @@ Standalone collections will be wrapped in a ``<div>`` that identifies the action
     </div>
 </div>
 ----
-<1> action identifier.  This element's class also identifies the entity type within the collection (as xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
+<1> action identifier.  This element's class also identifies the entity type within the collection (as xref:ugvw.adoc#__ugvw_customisation_tweaking-css-classes_columns-in-tables_globally[discussed above]).
 
 Using this, the `quantity` property could be targeted using:
 

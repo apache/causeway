@@ -9,7 +9,7 @@ The framework provides a single mixin that contributes to simply `java.lang.Obje
 
 
 
-[[_rgcms_classes_mixins_Object_clearHints]]
+[[__rgcms_classes_mixins_Object_clearHints]]
 == `clearHints()`
 
 When a domain object is rendered the end-user can select different tabs, and for collections can sort the columns,
@@ -44,7 +44,7 @@ each rendered object, per user.
 
 
 
-[[_rgcms_classes_mixins_Object_downloadLayoutXml]]
+[[__rgcms_classes_mixins_Object_downloadLayoutXml]]
 == `downloadLayoutXml()`
 
 The `Object_downloadLayoutXml` mixin provides an action to download the xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout XML] for the current domain object.  It has the following signature:
@@ -79,7 +79,7 @@ This mixin calls xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] to ob
 
 
 
-[[_rgcms_classes_mixins_Object_rebuildMetamodel]]
+[[__rgcms_classes_mixins_Object_rebuildMetamodel]]
 == `rebuildMetamodel()`
 
 The `Object_rebuildMetamodel` mixin provides the ability to discard the current internal metamodel data (an instance

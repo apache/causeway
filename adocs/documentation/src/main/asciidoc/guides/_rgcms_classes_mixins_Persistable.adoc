@@ -9,7 +9,7 @@ All domain entities automatically implement the DataNucleus `Persistable` role i
 process (the fully qualified class name is `org.datanucleus.enhancement.Persistable`).  So as a developer you do not
 need to write any code to obtain the mixins that contribute to this interface.
 
-[[_rgcms_classes_mixins_Persistable_downloadJdoMetadata]]
+[[__rgcms_classes_mixins_Persistable_downloadJdoMetadata]]
 == `downloadJdoMetadata()`
 
 The `Persistable_downloadJdoMetadata` mixin provides an action which allows the
@@ -38,7 +38,7 @@ The mixin delegates to the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSup
 a reference to the JDO `PersistenceManagerFactory`.
 
 
-[[_rgcms_classes_mixins_Persistable_datanucleusXxx]]
+[[__rgcms_classes_mixins_Persistable_datanucleusXxx]]
 == `datanucleusXxx`
 
 The framework provides a number of mixins that expose the datanucleus Id and version of a persistable domain entity.  Several implementations are provided to support different datatypes:

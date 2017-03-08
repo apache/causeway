@@ -7,7 +7,7 @@
 
 
 
-[[_rgsvc_intro_types-of-domain-services]]
+[[__rgsvc_intro_types-of-domain-services]]
 == Types of Domain Service
 
 The domain services also group into various broad categories.  Many support functionality of the various layers of the
@@ -32,7 +32,7 @@ service.
 
 
 
-[[_rgsvc_intro_public-api]]
+[[__rgsvc_intro_public-api]]
 == Public API vs Internal Services
 
 The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-core-applib`
@@ -48,7 +48,7 @@ are documented in the xref:rgfis.adoc#[Framework Internal Services] guide.
 
 
 
-[[_rgsvc_intro_using-the-services]]
+[[__rgsvc_intro_using-the-services]]
 == Using the services
 
 Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service
@@ -89,7 +89,7 @@ xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s ``in
 
 
 
-[[_rgsvc_intro_overriding-the-services]]
+[[__rgsvc_intro_overriding-the-services]]
 == Overriding the services
 
 The framework provides default implementations for many of the domain services.  This is convenient, but sometimes you
@@ -159,7 +159,7 @@ The above code could be improved by caching the delegateLocaleProvider once loca
 
 
 
-[[_rgsvc_intro_commands-and-events]]
+[[__rgsvc_intro_commands-and-events]]
 == Command and Events
 
 A good number of the domain services manage the execution of action invocations/property edits, along with the state

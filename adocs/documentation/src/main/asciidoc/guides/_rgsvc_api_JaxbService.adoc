@@ -13,7 +13,7 @@ unmarshalled from XML back into domain objects.
 
 
 
-[[_rgsvc_api_JaxbService_api-and-implementation]]
+[[__rgsvc_api_JaxbService_api-and-implementation]]
 == API & Implementation
 
 The API defined by `JaxbService` is:
@@ -64,5 +64,5 @@ so no further configuration is required.
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 

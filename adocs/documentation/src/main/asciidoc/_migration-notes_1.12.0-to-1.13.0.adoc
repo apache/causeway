@@ -20,7 +20,7 @@ The main feature in `1.13.0` is the xref:guides/rgsvc.adoc#_rgsvc_api_Interactio
 to represent an action invocation/property edit, with the re-positioning of
 xref:guides/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] to represent the _intention_ to invoke an action/edit a
 property.  You can read more about this design in the reference guide on domain services, in the
-xref:guides/rgsvc.adoc#_rgsvc_intro_commands-and-events[commands and events] section.
+xref:guides/rgsvc.adoc#__rgsvc_intro_commands-and-events[commands and events] section.
 
 This refactoring completely overhauls the structure of the XML mementos passed to
 xref:guides/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] (to persist) and to
@@ -256,7 +256,7 @@ the file type to upload for a blob or clob.
 +
 The `isis.viewer.wicket.liveReloadUrl` configuration property allows live reloading of objects if the layout is updated,
 reducing feedback times.  Further guidance on setting this up can be found
-xref:guides/dg.adoc#_dg_ide_intellij_advanced_gradle-liveReload[here].
+xref:guides/dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[here].
 
 * Docker support +
 +

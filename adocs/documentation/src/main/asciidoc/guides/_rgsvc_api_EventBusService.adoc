@@ -24,7 +24,7 @@ Two implementations are available, using either link:https://code.google.com/p/g
 
 
 
-[[_rgsvc_api_EventBusService_api-and-implementation]]
+[[__rgsvc_api_EventBusService_api-and-implementation]]
 == API & Implementation
 
 The API defined by `EventBusService` is:
@@ -52,7 +52,7 @@ Isis provides a default implementation of the service, `o.a.i.objectstore.jdo.da
 
 == Registering Subscribers
 
-The `register()` method should be called in the xref:rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] lifecycle method.  It is valid and probably the least confusing to readers to also "unregister" in the xref:rgant.adoc#_rgant-PreDestroy[`@PreDestroy`] lifecycle method (though as noted xref:rgsvc.adoc#_rgsvc_api_EventBusService_api-and-implementation[above], unregistering is actually a no-op).
+The `register()` method should be called in the xref:rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] lifecycle method.  It is valid and probably the least confusing to readers to also "unregister" in the xref:rgant.adoc#_rgant-PreDestroy[`@PreDestroy`] lifecycle method (though as noted xref:rgsvc.adoc#__rgsvc_api_EventBusService_api-and-implementation[above], unregistering is actually a no-op).
 
 For example:
 
@@ -149,7 +149,7 @@ public class LibraryMember {
     ...
 }
 ----
-<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.  The topic of subclassing is discussed in more detail xref:rgsvc.adoc#_rgsvc_api_EventBusService_event-hierarchy[below].
+<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.  The topic of subclassing is discussed in more detail xref:rgsvc.adoc#__rgsvc_api_EventBusService_event-hierarchy[below].
 
 Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.  For example:
 
@@ -173,7 +173,7 @@ This design allows the `libraryMember` module to be decoupled from the `book` mo
 
 
 
-[[_rgsvc_api_EventBusService_event-hierarchy]]
+[[__rgsvc_api_EventBusService_event-hierarchy]]
 == Event hierarchy
 
 By creating domain event subtypes we can be more semantically precise and in turn providesmore flexibility for subscribers: they can choose whether to be broadly applicable (by subscribing to a superclass) or to be tightly focussed (by subscribing to a subclass).
@@ -315,7 +315,7 @@ public class ReserveStockSubscriber {
 
 == Implementation SPI
 
-The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.  Which is used is specified through configuration property (described xref:rgsvc.adoc#_rgsvc_api_EventBusService_Configuration[below]).
+The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.  Which is used is specified through configuration property (described xref:rgsvc.adoc#__rgsvc_api_EventBusService_Configuration[below]).
 
 [NOTE]
 .Guava vs Axon, which to use?
@@ -343,7 +343,7 @@ If you do provide your own implementation of this SPI, be aware that your subscr
 
 
 
-[[_rgsvc_api_EventBusService_Configuration]]
+[[__rgsvc_api_EventBusService_Configuration]]
 == Configuration
 
 The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
@@ -393,7 +393,7 @@ implementation of `EventBusService` service is automatically registered and inje
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

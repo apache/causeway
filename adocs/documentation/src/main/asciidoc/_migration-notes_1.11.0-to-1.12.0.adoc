@@ -37,15 +37,15 @@ If you wish to migrate all your domain objects to use XML layouts, this can be d
 
 (As mentioned above), 1.12.0 provides a number of new mixin actions and properties:
 
-* xref:guides/rgcms.adoc#_rgcms_classes_mixins_Object_clearHints[clear hints] action
+* xref:guides/rgcms.adoc#__rgcms_classes_mixins_Object_clearHints[clear hints] action
 
-* xref:guides/rgcms.adoc#_rgcms_classes_mixins_Object_downloadLayoutXml[download Layout XML] action (prototype mode)
+* xref:guides/rgcms.adoc#__rgcms_classes_mixins_Object_downloadLayoutXml[download Layout XML] action (prototype mode)
 
-* xref:guides/rgcms.adoc#_rgcms_classes_mixins_Object_rebuildMetamodel[rebuild metamodel] action (prototype mode)
+* xref:guides/rgcms.adoc#__rgcms_classes_mixins_Object_rebuildMetamodel[rebuild metamodel] action (prototype mode)
 
-* xref:guides/rgcms.adoc#_rgcms_classes_mixins_Persistable_datanucleusXxx[id and version] properties (for domain entities only)
+* xref:guides/rgcms.adoc#__rgcms_classes_mixins_Persistable_datanucleusXxx[id and version] properties (for domain entities only)
 
-These are in addition to the xref:guides/rgcms.adoc#_rgcms_classes_mixins_Persistable_downloadJdoMetadata[download JDO metadata] mixin action (prototype mode) provided in earlier versions of the framework.
+These are in addition to the xref:guides/rgcms.adoc#__rgcms_classes_mixins_Persistable_downloadJdoMetadata[download JDO metadata] mixin action (prototype mode) provided in earlier versions of the framework.
 
 The properties are grouped in a "metadata" fieldset, and the mixin actions associated with that fieldset.  If the
 domain object is a view model rather than an entity (that is, has no id or version) then the actions will instead be rendered

@@ -42,7 +42,7 @@ other standard plugins in order to generate both XSDs and DTOs.  The `pom.xml` d
 to separate out these two responsibilities.
 
 
-[[_rgmvn_xsd]]
+[[__rgmvn_xsd]]
 == `xsd` submodule
 
 We recommend creating a new submodule that will perform the following build steps:

@@ -42,7 +42,7 @@ public class DomainAppFixturesProvider implements FixtureScriptsSpecificationPro
 }
 ----
 <1> search for all fixture scripts under the package containing this class
-<2> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
+<2> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ugtst.adoc#__ugtst_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
 <3> specify the fixture script class to provide as the default for the service's "run fixture script" action
 <4> whether the service's "run fixture script" action should display other fixture scripts using a choices drop down or (if there are very many of them) using an auto-complete
 <5> if present, enables a "recreate objects and return first" action to be displayed in the UI
@@ -80,7 +80,7 @@ public class DomainAppFixturesService extends FixtureScripts {     // <3>
 <2> ... under the "Prototyping" menu
 <3> inherit from `org.apache.isis.applib.fixturescripts.FixtureScripts`
 <4> search for all fixture scripts under the "domainapp" package; in your code this would probably be "com.mycompany.myapp" or similar
-<5> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
+<5> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ugtst.adoc#__ugtst_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
 <6> (optional) specify a default fixture script to run, in this case `RecreateSimpleObjects` fixture script (see below)
 <7> make all fixture scripts found available as a drop-down (by increasing the visibility of this method to `public`)
 
@@ -291,7 +291,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
 
 
-[[_ugtst_fixture-scripts_api-and-usage_organizing]]
+[[__ugtst_fixture-scripts_api-and-usage_organizing]]
 == Organizing Fixture scripts
 
 There are lots of ways to organize fixture scripts, but we've used them as either:

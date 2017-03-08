@@ -42,7 +42,7 @@ The table below summarizes the annotation's attributes.
 
 Defaults is `LEFT`, unless xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
 
-It is also possible to change the default through a xref:rgcfg.adoc#_rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
+It is also possible to change the default through a xref:rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
 |xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine()`]

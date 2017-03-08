@@ -27,7 +27,7 @@ The Apache Isis framework also provides numerous in-built domain services.  Thes
 
 
 
-[[_ugfun_how-tos_domain-services_organizing-services]]
+[[__ugfun_how-tos_domain-services_organizing-services]]
 == Organizing Services
 
 In larger applications we have found it worthwhile to ensure that our domain services only act aligned with these responsibilities, employing a naming convention so that it is clear what the responsibilities of each domain service is.
@@ -207,7 +207,7 @@ public CustomerOrderSubscriptions {
 
 == Prototyping
 
-While for long-term maintainability we do recommend the naming conventions described xref:ugfun.adoc#_ugfun_how-tos_domain-services_organizing-services[above], you can get away with far fewer services when just prototyping a domain.
+While for long-term maintainability we do recommend the naming conventions described xref:ugfun.adoc#__ugfun_how-tos_domain-services_organizing-services[above], you can get away with far fewer services when just prototyping a domain.
 
 If the domain service nature is not specified (or is left to its default, `VIEW`), then the service's actions will
 appear in the UI both as menu items _and_ as contributions (and the service can of course be injected into other domain objects for programmatic invocation).

@@ -7,7 +7,7 @@
 
 
 
-[[_ugvw]]
+[[__ugvro]]
 == Restful Objects Viewer
 
 Apache Isis' Restful Objects viewer is an implementation of the link:http://restfulobjects.org[Restful Objects spec],

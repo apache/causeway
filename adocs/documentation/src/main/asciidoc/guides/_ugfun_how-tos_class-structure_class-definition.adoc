@@ -33,7 +33,7 @@ Within the module there may be various subpackages, but its the module defines t
 In the same way that the Java module act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 
 
-[[_ugfun_how-tos_class-structure_class-definition_entities]]
+[[__ugfun_how-tos_class-structure_class-definition_entities]]
 == Entities
 
 Entities are persistent domain objects.
@@ -113,7 +113,7 @@ However, there is no need to provide such a no-arg constructor; it is added by t
 <11> The `ObjectContracts` utility class also provides assistance for `toString()`, useful when debugging in an IDE.
 
 
-[[_ugfun_how-tos_class-structure_class-definition_domain-services]]
+[[__ugfun_how-tos_class-structure_class-definition_domain-services]]
 == Domain Services
 
 Domain services are generally singletons that are automatically injected into other domain services.
@@ -164,7 +164,7 @@ The framework can inject into not just other domain services but will also autom
 There is further discussion of service injection xref:ugfun.adoc#_ugfun_how-tos_class-structure_inject-services[below].
 
 
-[[_ugfun_how-tos_class-structure_class-definition_view-models]]
+[[__ugfun_how-tos_class-structure_class-definition_view-models]]
 == View Models
 
 xref:ugbtb.adoc#_ugbtb_view-models[View model]s are similar to entities in that (unlike domain services) there can be many instances of any given type; but they differ from entities in that they are not persisted into a database.

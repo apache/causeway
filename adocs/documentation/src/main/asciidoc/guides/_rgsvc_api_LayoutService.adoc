@@ -7,11 +7,11 @@
 
 
 The `LayoutService` provides the ability to obtain the XML layout for a single domain object or for all domain
-objects.  This functionality is surfaced through the user interface through a related xref:_rgsvc_api_LayoutService_related-mixins-and-menus[mixin and menu action].
+objects.  This functionality is surfaced through the user interface through a related xref:__rgsvc_api_LayoutService_related-mixins-and-menus[mixin and menu action].
 
 
 
-[[_rgsvc_api_LayoutService_api-and-implementation]]
+[[__rgsvc_api_LayoutService_api-and-implementation]]
 == API & Implementation
 
 The API defined by `LayoutService` is:
@@ -83,7 +83,7 @@ As a developer, you therefore have a choice as to how you provide the metadata r
 
 
 
-[[_rgsvc_api_LayoutService_related-mixins-and-menus]]
+[[__rgsvc_api_LayoutService_related-mixins-and-menus]]
 == Related Mixins and Menus
 
 The service's functionality is exposed in the UI through a mixin (per object) and a menu action (for all objects):
@@ -99,7 +99,7 @@ desired.
 
 
 
-[[_rgsvc_api_LayoutService_related-domain-services]]
+[[__rgsvc_api_LayoutService_related-domain-services]]
 == Related Domain Services
 
 The xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] is responsible for loading and normalizing layout XML for

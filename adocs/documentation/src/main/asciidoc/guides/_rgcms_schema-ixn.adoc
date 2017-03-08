@@ -20,7 +20,7 @@ implementation of the action is defined by a mixin is an implementation detail o
 ====
 
 
-[[_rgcms_schema-ixn_interactionDto]]
+[[__rgcms_schema-ixn_interactionDto]]
 == `interactionDto`
 
 The `interactionDto` root element is defined as:
@@ -72,11 +72,11 @@ The `InteractionDto` DTO corresponding to the `interactionDto` root element can 
 
 
 
-[[_rgcms_schema-ixn_memberExecutionDto]]
+[[__rgcms_schema-ixn_memberExecutionDto]]
 == `memberExecutionDto`
 
 The `memberExecutionDto` complex type is an abstract type representing either the invocation an action or the editing
-of a property.  It corresponds to the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`] of the "cmd" schema;
+of a property.  It corresponds to the xref:rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`] of the "cmd" schema;
 some elements are copied directly:
 
 [source,xml]
@@ -111,11 +111,11 @@ some elements are copied directly:
 <2> uniquely identifies this execution within the transaction.  Can be combined with `transactionId` to create a unique
 identifier (across all other interaction executions and also changed objects events) of this particular interaction
 execution.
-<3> the target object, corresponding to one of the elements of the `targets` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
-<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
-<5> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`memberDto`]
+<3> the target object, corresponding to one of the elements of the `targets` element of the xref:rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
+<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
+<5> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
 <6> the current "human-friendly" title of the target object
-<7> the set of metrics captured for this execution, of type `metricsDto` defined xref:rgcms.adoc#_rgcms_schema-ixn_ancillary[below].
+<7> the set of metrics captured for this execution, of type `metricsDto` defined xref:rgcms.adoc#__rgcms_schema-ixn_ancillary[below].
 <8> if the action invocation/property edit threw an exception, then this is captured here.
 <9> if any sub-actions or sub-edits were performed via the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`], then these are captured in the `childExecutions` element.
 <10> the `interactionType` attribute indicates whether the member is an action or a property (similar attribute exists for the "cmd" schema).
@@ -154,18 +154,18 @@ The `actionInvocationDto` and `propertyEditDto` are the concrete subtypes:
 </xs:schema>
 ----
 <1> the `actionInvocationDto` inherits from `memberExecutionDto`.  It corresponds to the similar
-xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`actionDto`] complex type of the "cmd" schema
+xref:rgcms.adoc#__rgcms_schema-cmd_memberDto[`actionDto`] complex type of the "cmd" schema
 <2> the `parameters` element captures the parameter and argument values; for the top-level execution it is a direct
 copy of the corresponding `parameters` element of the `actionDto` complex type of the "cmd" schema.
 <3> the `returned` element captures the returned value (if not void).  It is not valid for both this element and the
 inherited `threw` element to both be populated.
 <4> the `propertyEditDto` inherits from `memberExecutionDto`.  It corresponds to the similar
-xref:rgcms.adoc#_rgcms_schema-cmd_memberDto[`propertyDto`] complex type of the "cmd" schema
+xref:rgcms.adoc#__rgcms_schema-cmd_memberDto[`propertyDto`] complex type of the "cmd" schema
 <5> the `newValue` element captures the new value; for the top-level execution it is a direct
 copy of the corresponding `newValue` element of the `propertyDto` complex type of the "cmd" schema.
 
 
-[[_rgcms_schema-ixn_ancillary]]
+[[__rgcms_schema-ixn_ancillary]]
 == Ancillary types
 
 The schema also defines a small number of supporting types:

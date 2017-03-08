@@ -68,7 +68,7 @@ This contract test automatically checks that bidirectional 1:m or 1:1 associatio
 
 [TIP]
 ====
-(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ugfun.adoc#_ugfun_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[here].  Also check out the templates in the developers' guide (xref:dg.adoc#_dg_ide_intellij_live-templates[live templates for IntelliJ] / xref:dg.adoc#_dg_ide_eclipse_editor-templates[editor templates for Eclipse]) for further guidance.
+(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ugfun.adoc#_ugfun_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[here].  Also check out the templates in the developers' guide (xref:dg.adoc#__dg_ide_intellij_live-templates[live templates for IntelliJ] / xref:dg.adoc#__dg_ide_eclipse_editor-templates[editor templates for Eclipse]) for further guidance.
 ====
 
 For example, suppose that `ParentDomainObject` and `ChildDomainObject` have a 1:m relationship (`ParentDomainObject#children` / `ChildDomainObject#parent`), and also `PeerDomainObject` has a 1:1 relationship with itself (`PeerDomainObject#next` / `PeerDomainObject#previous`).

@@ -99,7 +99,7 @@ for further details).
 |`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
-|Specifies the URL if xref:dg.adoc#_dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
+|Specifies the URL if xref:dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
 
 `http://localhost:35729/livereload.js?snipver=1`
 

@@ -68,12 +68,12 @@ If the menu items are not required then these can be suppressed either using sec
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
 
-[[_rgsvc_api_LayoutService_related-mixins-and-menus]]
+[[__rgsvc_api_LayoutService_related-mixins-and-menus]]
 == Related Menus
 
 The `TranslationServicePoMenu` menu exposes the `TranslationServicePo` service's `toPot()` method so that all

@@ -37,7 +37,7 @@ The current user/role reported by the internal xref:rgfis.adoc#_rgfis_spi_Authen
 [IMPORTANT]
 ====
 Note however that this the "effective user" does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
-See the xref:rgsvc.adoc#_rgsvc_api_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
+See the xref:rgsvc.adoc#__rgsvc_api_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
 
@@ -67,7 +67,7 @@ protected void execute(final ExecutionContext ec) {
 ----
 
 
-[[_rgsvc_api_SudoService_ACCESS-ALL-ROLE]]
+[[__rgsvc_api_SudoService_ACCESS-ALL-ROLE]]
 === ACCESS_ALL_ROLE
 
 When `sudo(...)` is called the "effective user" is reported by both xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and by xref:rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism].
@@ -134,4 +134,4 @@ implementation of `SudoService` service is automatically registered and injected
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

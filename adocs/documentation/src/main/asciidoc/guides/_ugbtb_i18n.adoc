@@ -14,7 +14,7 @@ The xref:ugvw.adoc#[Wicket viewer] (that is, its labels and messages) is also in
 Isis does not translate the values of your domain objects, though.  So, if you have a domain concept such as `Country` whose name is intended to be localized according to the current user, you will need to model this yourself.
 
 
-[[_ugbtb_i18n_implementation-approach]]
+[[__ugbtb_i18n_implementation-approach]]
 == Implementation Approach
 
 Most Java frameworks tackle i18n by using Java's own `ResourceBundle` API.  However, there are some serious drawbacks in this approach, including:
@@ -50,7 +50,7 @@ In Apache Isis' implementation, if the translation is missing from the `.po` fil
 
 
 
-[[_ugbtb_i18n_translation-service]]
+[[__ugbtb_i18n_translation-service]]
 == `TranslationService`
 
 The cornerstone of Apache Isis' support for i18n is the `TranslationService` service. This is defined in the applib with the following API:
@@ -102,7 +102,7 @@ When running in write mode the original text is returned to the caller untransla
 
 
 
-[[_ugbtb_i18n_imperative-messages]]
+[[__ugbtb_i18n_imperative-messages]]
 == Imperative messages
 
 The `TranslationService` is used internally by Apache Isis when building up the metamodel; the name and description of every class, property, collection, action and action parameter is automatically translated.  Thus the simple act of bootstrapping Apache Isis will cause most of the messages requiring translation (that is: those for the Apache Isis metamodel) to be captured by the `TranslationService`.
@@ -220,7 +220,7 @@ public interface TranslatableException {
 
 
 
-[[_ugbtb_i18n_wicket-viewer]]
+[[__ugbtb_i18n_wicket-viewer]]
 == Wicket Viewer
 
 The xref:ugvw.adoc#[Wicket viewer] (its labels and messages) is also internationalized using
@@ -474,7 +474,7 @@ msgstr "Username"
 
 
 
-[[_ugbtb_i18n_integration-testing]]
+[[__ugbtb_i18n_integration-testing]]
 == Integration Testing
 
 So much for the API; but as noted, it is also necessary to ensure that the required translations are recorded (by the `TranslationService`) into the `.pot` file.
@@ -558,7 +558,7 @@ public Integer getQuantity() { ... }
 
 
 
-[[_ugbtb_i18n_configuration]]
+[[__ugbtb_i18n_configuration]]
 == Configuration
 
 There are several different aspects of the translation service that can be configured.

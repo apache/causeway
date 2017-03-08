@@ -17,7 +17,7 @@ Not all of the REST API exposed by the xref:ugvro.adoc#[Restful Objects viewer] 
 
 
 
-[[_rgsvc_api_SwaggerService_api-and-implementation]]
+[[__rgsvc_api_SwaggerService_api-and-implementation]]
 == API & Implementation
 
 The API defined by `SwaggerService` is:

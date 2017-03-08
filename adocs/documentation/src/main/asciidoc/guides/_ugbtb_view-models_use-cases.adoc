@@ -9,7 +9,7 @@ When developing an Apache Isis application you will most likely start off with t
 `Customer`, `Order`, `Product`, and so on.  For some applications this may well suffice.  However, if the application
 needs to integrate with other systems, or if the application needs to support reasonably complex business processes, then you may need to look beyond just domain entities.  This section explores these use cases.
 
-[[_ugbtb_view-models_use-cases_externally-managed-entities]]
+[[__ugbtb_view-models_use-cases_externally-managed-entities]]
 == Externally-managed entities
 
 Sometimes the entities that make up your application are persisted not in the local JDO/DataNucleus database
@@ -37,7 +37,7 @@ desirable in any case).
 ====
 
 
-[[_ugbtb_view-models_use-cases_in-memory-entities]]
+[[__ugbtb_view-models_use-cases_in-memory-entities]]
 == In-memory entities
 
 As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose
@@ -47,7 +47,7 @@ A simple example might be read-only configuration data that is read from a confi
 definitions) but thereafter is presented in the UI just like any other entity.
 
 
-[[_ugbtb_view-models_use-cases_application-layer-view-models]]
+[[__ugbtb_view-models_use-cases_application-layer-view-models]]
 == Application-layer view models
 
 Domain entities (whether locally persisted using JDO/DataNucleus or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are
@@ -90,12 +90,12 @@ what the use cases are that those domain entities are trying to support.  You ce
 domain layer that could support every conceivable use case before starting to think about view models.
 
 Instead, you should iterate.  Identify the use case/story/end-user objective that you will deliver value to the
-business.  Then build out the minimum domain entities to support that use case (refining the xref:ugfun.adoc#_ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you
+business.  Then build out the minimum domain entities to support that use case (refining the xref:ugfun.adoc#__ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you
 go).  Then, identify if there any view models that could be introduced which would simplify the end-user interactions
 with the system (perhaps automating several related use cases together).
 ****
 
-[[_ugbtb_view-models_use-cases_dtos]]
+[[__ugbtb_view-models_use-cases_dtos]]
 == DTOs
 
 DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carry data between processes".
@@ -113,7 +113,7 @@ easily changed by the producer.
 To support this use case, a view model can be defined such that it can act as a DTO.  This is done by annotating the
 class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding
 XSD schema describing the structure of that XML.  A discussion of how that might be done using an ESB such as
-link:http://camel.apache.org[Apache Camel(TM)] follows xref:ugbtb.adoc#_ugbtb_view-models_use-cases_dtos_consumers[below].
+link:http://camel.apache.org[Apache Camel(TM)] follows xref:ugbtb.adoc#__ugbtb_view-models_use-cases_dtos_consumers[below].
 
 In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc#[Wicket viewer] just like any other.  In fact (as the xref:ugbtb.adoc#_ugbtb_view-models_programming-model[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
@@ -123,7 +123,7 @@ The view model simply needs to implement the xref:rgcms.adoc#_rgcms_classes_mixi
 framework has xref:rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.
 
 
-[[_ugbtb_view-models_use-cases_dtos_consumers]]
+[[__ugbtb_view-models_use-cases_dtos_consumers]]
 === DTO Consumers
 
 The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly,

@@ -20,7 +20,7 @@ xref:ugvro.adoc#_ugvro_architecture[architecture] chapter.
 
 
 
-[[_ugvro_simplified-representations_apache-isis-profile]]
+[[__ugvro_simplified-representations_apache-isis-profile]]
 == The Apache Isis "Profile"
 
 The RO spec uses the standard `Accept` header for content negotiation, and defines its own "profile" for the standard
@@ -51,7 +51,7 @@ The link:https://www.youtube.com/watch?v=HMSqapQDY_4[screencast] demonstrates th
 The sections below explain in a little more detail what is returned when this profile is activated.
 
 
-[[_ugvro_simplified-representations_domain-object]]
+[[__ugvro_simplified-representations_domain-object]]
 == Domain Object
 
 If a domain object resource (section 14) is accessed with the Apache Isis profile, the resultant representation is a
@@ -137,7 +137,7 @@ Content-Type: application/json;
 ----
 
 
-[[_ugvro_simplified-representations_object-collection]]
+[[__ugvro_simplified-representations_object-collection]]
 == Domain Object Collection
 
 If a domain object collection (section 17) is accessed with this profile, then the resultant representation is as
@@ -214,7 +214,7 @@ Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="objec
 ----
 
 
-[[_ugvro_simplified-representations_action-invocation]]
+[[__ugvro_simplified-representations_action-invocation]]
 == Action Invocation
 
 When an action is invoked, it can return a domain object, a list, a scalar, or return nothing.
@@ -222,7 +222,7 @@ When an action is invoked, it can return a domain object, a list, a scalar, or r
 === Returning an Object
 
 If the action returned an object, then the domain object representation described
-xref:ugvro.adoc#_ugvro_simplified-representations_domain-object[above] is returned.
+xref:ugvro.adoc#__ugvro_simplified-representations_domain-object[above] is returned.
 
 For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
 this resource:
@@ -273,7 +273,7 @@ Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="objec
 
 On the other hand if the action returned a list (a "standalone" collection, then an array representation is returned.
 This is very similar to that returned by a
-xref:ugvro.adoc#_ugvro_simplified-representations_object-collection[(parented) object collection], though with a
+xref:ugvro.adoc#__ugvro_simplified-representations_object-collection[(parented) object collection], though with a
 slightly different `Content-Type` to distinguish.
 
 For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
@@ -337,7 +337,7 @@ Note that actions returning scalar values or nothing (which includes `void` acti
 regular RO spec representation will be returned.
 
 
-[[_ugvro_simplified-representations_other-representations]]
+[[__ugvro_simplified-representations_other-representations]]
 == Supporting other Representations
 
 Sometimes though you may want to extend or change the representations generated.  This might be because you want to
@@ -371,6 +371,6 @@ significantly over the last few years.
 
 
 
-include::_ugvro_simplified-representations_configuration-properties.adoc[leveloffset=+1]
+include::__ugvro_simplified-representations_configuration-properties.adoc[leveloffset=+1]
 
 

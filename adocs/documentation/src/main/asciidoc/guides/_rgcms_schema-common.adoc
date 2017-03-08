@@ -8,7 +8,7 @@
 The "common" schema defines a number of complex types that are used by other higher-level schemas.
 
 
-[[_rgcms_schema-common_oidDto]]
+[[__rgcms_schema-common_oidDto]]
 == `oidDto`
 
 The `oidDto` complex type captures an object's type and its identifier.  This is basically a formal XML equivalent to
@@ -16,7 +16,7 @@ the `Bookmark` object obtained from the xref:rgsvc.adoc#_rgsvc_api_BookmarkServi
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by
 a given Apache Isis application.  With it, we have the ability to lookup any arbitrary object.  Further discussion and
-examples can be found xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_oid[here].
+examples can be found xref:ugfun.adoc#__ugfun_core-concepts_building-blocks_oid[here].
 
 The `oidDto` complex type is defined as:
 
@@ -85,7 +85,7 @@ They are also used to represent references to any action arguments/properties th
 property edit, as described by the xref:rgcms.adoc#_rgcms_schema-ixn["ixn" (interaction)] schema.
 
 
-[[_rgcms_schema-common_valueDto]]
+[[__rgcms_schema-common_valueDto]]
 == `valueDto` etc
 
 The common schema also defines two types representing values: the `valueDto` complex type, the `valueType` simple type
@@ -144,7 +144,7 @@ formal parameter to an action.
 
 
 
-[[_rgcms_schema-common_ancillary]]
+[[__rgcms_schema-common_ancillary]]
 == Ancillary types
 
 The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by

@@ -96,7 +96,7 @@ The xref:guides/ugvw.adoc#[Wicket viewer] (its labels, buttons, messages etc) ca
 xref:guides/rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`].
 
 To enable this, new ``msgId``s and corresponding translations must be added to the `translations.po` file.  Full
-details of these ``msgId``s can be found in xref:guides/ugbtb.adoc#_ugbtb_i18n_wicket-viewer[i18n] section of the "beyond the basics" guide.
+details of these ``msgId``s can be found in xref:guides/ugbtb.adoc#__ugbtb_i18n_wicket-viewer[i18n] section of the "beyond the basics" guide.
 
 If no translations are available, then the fallback is to use the previous mechanism, ie Wicket's original resource bundles.
 This feature can therefore be considered as optional.

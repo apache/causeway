@@ -159,4 +159,4 @@ implementation of `WrapperFactory` service is automatically registered and injec
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

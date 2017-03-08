@@ -12,7 +12,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 ====
 
 
-[[_rgcfg_configuring-core_domain-events]]
+[[__rgcfg_configuring-core_domain-events]]
 == Domain Events
 
 .Core Configuration Properties for Domain Events
@@ -50,7 +50,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 |===
 
 
-[[_rgcfg_configuring-core_lifecycle-events]]
+[[__rgcfg_configuring-core_lifecycle-events]]
 == Lifecycle Events
 
 
@@ -127,7 +127,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 
 
 
-[[_rgcfg_configuring-core_ui-events]]
+[[__rgcfg_configuring-core_ui-events]]
 == UI Events
 
 
@@ -168,7 +168,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 
 
 
-[[_rgcfg_configuring-core_services]]
+[[__rgcfg_configuring-core_services]]
 == Services
 
 
@@ -465,7 +465,7 @@ See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translatio
 
 
 
-[[_rgcfg_configuring-core_metamodel-validation]]
+[[__rgcfg_configuring-core_metamodel-validation]]
 == MetaModel Validation
 
 
@@ -563,7 +563,7 @@ If enabled, this configuration property will ensure that domain services only de
 
 
 
-[[_rgcfg_configuring-core_other]]
+[[__rgcfg_configuring-core_other]]
 == Other Config Properties
 
 
@@ -579,7 +579,7 @@ If enabled, this configuration property will ensure that domain services only de
 `editing`
 |`true`,`false` +
 (`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rgcfg.adoc#_rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
 
 
 |`isis.persistor.` +
@@ -613,7 +613,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 (`true`)
 |Whether objects should be filtered for visibility. +
 
-See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for further discussion.
+See xref:rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section below] for further discussion.
 
 |`isis.reflector.facets`
 |`FQCN`
@@ -685,7 +685,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metad
 
 
 
-[[_rgcfg_configuring-core_filterVisibility]]
+[[__rgcfg_configuring-core_filterVisibility]]
 === Filtering visibility
 
 The framework provides the `isis.reflector.facet.filterVisibility` configuration property that influences whether a returned object is visible to the end-user:
@@ -730,7 +730,7 @@ This could conceivably have a performance impact in some cases.
 
 
 
-[[_rgcfg_configuring-core_isis-objects-editing]]
+[[__rgcfg_configuring-core_isis-objects-editing]]
 === `objects.editing`
 
 This configuration property in effect allows editing to be disabled globally for an application:
@@ -744,7 +744,7 @@ We recommend enabling this feature; it will help drive out the underlying busine
 
 
 
-[[_rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition]]
+[[__rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition]]
 === `propertyLayout.labelPosition`
 
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.

@@ -12,7 +12,7 @@ The following sections discuss the functionality provided by the service, broken
 
 
 
-[[_rgsvc_api_IsisJdoSupport_executing-sql]]
+[[__rgsvc_api_IsisJdoSupport_executing-sql]]
 == Executing SQL
 
 You can use the `IsisJdoSupportService` to perform arbitrary SQL SELECTs or UPDATEs:
@@ -50,13 +50,13 @@ The returned value is the number of rows updated.
 
 [TIP]
 ====
-As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport_type-safe-query-api[below].
+As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-query-api[below].
 ====
 
 
 
 
-[[_rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries]]
+[[__rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries]]
 == Type-safe JDOQL Queries
 
 DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO],  so that JDOQL queries can be built up and executed using a set of type-safe classes.
@@ -129,10 +129,10 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 
 
 
-[[_rgsvc_api_IsisJdoSupport_fixture-support]]
+[[__rgsvc_api_IsisJdoSupport_fixture-support]]
 == Fixture support
 
-When writing xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport_executing-sql[above].
+When writing xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 
@@ -173,7 +173,7 @@ is temporarily disabled while this method is performed.
 
 
 
-[[_rgsvc_api_IsisJdoSupport_reloading-entities]]
+[[__rgsvc_api_IsisJdoSupport_reloading-entities]]
 == Reloading entities
 
 An http://www.datanucleus.org/products/datanucleus/jdo/orm/relationships.html[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
@@ -234,7 +234,7 @@ The `ensureLoaded(...)` method allows a collection of domain objects to be loade
 
 
 
-[[_rgsvc_api_IsisJdoSupport_jdo-persistencemanager]]
+[[__rgsvc_api_IsisJdoSupport_jdo-persistencemanager]]
 == JDO `PersistenceManager`
 
 The functionality provided by `IsisJdoSupport` focus only on the most common use cases.  If you require more flexibility than this, eg for dynamically constructed queries, then you can use the service to access the underlying JDO `PersistenceManager` API:
@@ -273,4 +273,4 @@ implementation of `IsisJdoSupport` service is automatically registered and injec
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#_rgsvc_intro_overriding-the-services[introduction] to this guide).
+in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

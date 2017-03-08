@@ -404,7 +404,7 @@ git push
 
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules]]
+[[__cgcom_post-release-successful_release-non-asf-modules]]
 == Release (non-ASF) Modules
 
 There are two libraries of modules, both non-ASF but open source, that should be released.
@@ -416,7 +416,7 @@ These each use a common parent, `org.incode:incode-parent`.
 This must be released first, then both set of modules afterwards.
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules_prereqs]]
+[[__cgcom_post-release-successful_release-non-asf-modules_prereqs]]
 === Prereqs
 
 Save this link:https://gist.github.com/danhaywood/e80daf6d25f5c1fb1093effba85d088a[gist] as `last_modified.sh` in an appropriate parent directory of both sets of repos.
@@ -425,7 +425,7 @@ For example, if the isisaddons modules are cloned to `/c/github/isisaddons/isis-
 
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules_incode-parent]]
+[[__cgcom_post-release-successful_release-non-asf-modules_incode-parent]]
 === Release `incode-parent`
 
 The `org.incode:incode-parent` Maven module is used as a parent for both sets of modules:
@@ -455,7 +455,7 @@ sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is
 
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules_incode-mavendeps]]
+[[__cgcom_post-release-successful_release-non-asf-modules_incode-mavendeps]]
 === Release `incode-mavendeps`
 
 The three `org.incode:mavendeps-isisXXX` module should be released next.
@@ -492,7 +492,7 @@ foreach -g incodehq/mavendeps sh bumpver_isis.sh 1.15.0-SNAPSHOT
 
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules_isisaddons]]
+[[__cgcom_post-release-successful_release-non-asf-modules_isisaddons]]
 === Release Isis Addons
 
 Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
@@ -545,7 +545,7 @@ to review changes made.
 foreach -g isisaddons/isis-[mw] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
-* In the parent directory where the `last_modified.sh` script has been saved (see xref:cgcom.adoc#_cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
+* In the parent directory where the `last_modified.sh` script has been saved (see xref:cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
@@ -565,7 +565,7 @@ foreach -g isisaddons/isis-[mw] "git push origin master && git push origin 1.14.
 ----
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules_incode-catalog]]
+[[__cgcom_post-release-successful_release-non-asf-modules_incode-catalog]]
 === Release Incode Catalog Modules
 
 Similarly, all of the (non-ASF) link:http://catalog.incode.org[Incode Catalog] modules should also be released.
@@ -608,7 +608,7 @@ eg if using Windows, then: +
 +
 [TIP]
 ====
-See xref:cgcom.adoc#_cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies[below] for a list of the dependencies to update.
+See xref:cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies[below] for a list of the dependencies to update.
 ====
 
 * If necessary, adjust the `_repos.txt` file (used by `foreach` function) so that repositories are released in the correct sequence (with respect to their mutual dependencies).
@@ -621,7 +621,7 @@ For example, `incode-module-base` must be released prior to `incode-module-alias
 foreach -g incodehq/incode-module-[a-w] sh release.sh "1.14.0" "1.15.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
-* In the parent directory where the `last_modified.sh` script has been saved (see xref:cgcom.adoc#_cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
+* In the parent directory where the `last_modified.sh` script has been saved (see xref:cgcom.adoc#__cgcom_post-release-successful_release-non-asf-modules_prereqs[above]), use to check that all modules were released successfully: +
 +
 [source,bash]
 ----
@@ -641,7 +641,7 @@ foreach -g incodehq/incode-module-[a-w] "git push origin master && git push orig
 ----
 
 
-[[_cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies]]
+[[__cgcom_post-release-successful_release-non-asf-modules_incode-catalog_cross-module-dependencies]]
 ==== Cross-module dependencies
 
 As of v1.14.0, the list of dependencies that needed to be updated (across all modules) were:

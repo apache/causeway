@@ -21,7 +21,7 @@ All of the classes in this package are JAXB-annotated, meaning that they can be 
 
 
 
-[[_rgcms_classes_layout_component]]
+[[__rgcms_classes_layout_component]]
 == Component
 
 The component classes reside in the `org.apache.isis.applib.layout.component` package, and consist of:
@@ -45,7 +45,7 @@ In addition, the component package includes `Grid`, representing the top level c
 
 
 
-[[_rgcms_classes_layout_grid-bootstrap3]]
+[[__rgcms_classes_layout_grid-bootstrap3]]
 == Bootstrap3 Grid
 
 As noted above, the default bootstrap3 grid classes are modelled closely on link:http://getbootstrap.com[Bootstrap 3].

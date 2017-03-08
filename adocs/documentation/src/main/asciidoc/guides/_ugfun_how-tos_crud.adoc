@@ -17,7 +17,7 @@ NOTE: TODO - using xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repo
 
 ### Using DataNucleus type-safe queries
 
-NOTE: TODO - as described xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries[here]
+NOTE: TODO - as described xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries[here]
 
 
 

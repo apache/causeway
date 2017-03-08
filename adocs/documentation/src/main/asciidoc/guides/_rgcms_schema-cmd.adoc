@@ -15,7 +15,7 @@ Mixin actions are represented as regular actions on the mixed-in object.  In oth
 implementation of the action is defined by a mixin is an implementation detail only.
 ====
 
-[[_rgcms_schema-cmd_commandDto]]
+[[__rgcms_schema-cmd_commandDto]]
 == `commandDto`
 
 The `commandDto` root element is defined as:
@@ -67,7 +67,7 @@ The `CommandDto` DTO corresponding to the `commandDto` root element can be marsh
 `CommandDtoUtils` class.
 
 
-[[_rgcms_schema-cmd_memberDto]]
+[[__rgcms_schema-cmd_memberDto]]
 == `memberDto` and subtypes
 
 The `memberDto` complex type is an abstract type representing the intention to either invoke an action or to edit a
@@ -110,17 +110,17 @@ property.  The `actionDto` and `propertyDto` are the concrete subtypes:
 property).
 <2> the `interactionType` attribute indicates whether the member is an action or a property.
 <3> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to
-invoke the action.  The `paramsDto` type is defined xref:rgcms.adoc#_rgcms_schema-cmd_ancillary[below].
+invoke the action.  The `paramsDto` type is defined xref:rgcms.adoc#__rgcms_schema-cmd_ancillary[below].
 <4> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
 
 
-Note also that there is a corresponding xref:rgcms.adoc#_rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]
+Note also that there is a corresponding xref:rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]
 complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the
 return value if an action invocation).
 
 
 
-[[_rgcms_schema-cmd_ancillary]]
+[[__rgcms_schema-cmd_ancillary]]
 == Ancillary types
 
 The schema also defines a small number of supporting types:

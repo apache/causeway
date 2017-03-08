@@ -53,10 +53,10 @@ rm -rf ~/.m2/repository/org/apache/isis
 
 == Verifying source artifacts
 
-You can either verify the source artifacts xref:cgcom.adoc#_cgcom_verifying-releases_manual-procedure[manuall], or use a script that xref:cgcom.adoc#_cgcom_verifying-releases_automated-procedure[automates] the steps.
+You can either verify the source artifacts xref:cgcom.adoc#__cgcom_verifying-releases_manual-procedure[manuall], or use a script that xref:cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
 
 
-[[_cgcom_verifying-releases_manual-procedure]]
+[[__cgcom_verifying-releases_manual-procedure]]
 === Manual procedure
 
 The following section describes the steps to perform to manually verify a release.
@@ -134,7 +134,7 @@ Once the vote has completed, the staging repositories will be removed and so you
 
 
 
-[[_cgcom_verifying-releases_automated-procedure]]
+[[__cgcom_verifying-releases_automated-procedure]]
 === Automated procedure
 
 To save some time in verifying an Apache Isis release we've assembled a script to automate the process. The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
@@ -249,7 +249,7 @@ Execute...
 
 
 
-[[_cgcom_verifying-releases_creadur]]
+[[__cgcom_verifying-releases_creadur]]
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.

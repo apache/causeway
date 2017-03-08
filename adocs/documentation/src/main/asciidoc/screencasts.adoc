@@ -214,7 +214,7 @@ include::_screencasts-playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
 Demonstrates how Apache Isis' xref:guides/ugvw.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
- application can clear these UI hints using the (framework-provided) xref:guides/rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action.
+ application can clear these UI hints using the (framework-provided) xref:guides/rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action.
 |||x||||||||
 
 
@@ -260,7 +260,7 @@ Using a domain event xref:guides/rgcms.adoc#_rgcms_classes_super_AbstractSubscri
 
 |link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
 Using a domain event xref:guides/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to hide functionality, in this
-  case the xref:guides/rgcms.adoc#_rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
+  case the xref:guides/rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
 ||||||||||x|
 
 

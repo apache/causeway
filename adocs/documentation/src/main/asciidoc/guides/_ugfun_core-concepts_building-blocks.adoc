@@ -6,7 +6,7 @@
 
 In this section we run through the main building blocks that make up an Apache Isis application.
 
-[[_ugfun_core-concepts_building-blocks_metamodel]]
+[[__ugfun_core-concepts_building-blocks_metamodel]]
 == A MetaModel
 
 At its core, Apache Isis is a metamodel that is built at runtime from the domain classes (eg `Customer.java`), along
@@ -40,7 +40,7 @@ sources.
 ====
 
 
-[[_ugfun_core-concepts_building-blocks_types-of-domain-objects]]
+[[__ugfun_core-concepts_building-blocks_types-of-domain-objects]]
 == Type of Domain Objects
 
 Most domain objects that the end-user interacts with are *domain entities*, such as `Customer`, `Order`, `Product` and
@@ -120,7 +120,7 @@ stateless.  If a domain service does hold state (eg the `Scratchpad` service not
 
 
 
-[[_ugfun_core-concepts_building-blocks_objects-members]]
+[[__ugfun_core-concepts_building-blocks_objects-members]]
 == Object Members
 
 Every domain object in Apache Isis consists of (at most) three types of members:
@@ -234,7 +234,7 @@ For further discussion on view models, see xref:ugbtb.adoc#_ugbtb_view-models[th
 
 
 
-[[_ugfun_core-concepts_building-blocks_domain-services]]
+[[__ugfun_core-concepts_building-blocks_domain-services]]
 == Domain Services
 
 Domain services consist of a set of logically grouped actions, and as such follow the same conventions as for entities. However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
@@ -259,7 +259,7 @@ In Apache Isis these are all implemented as domain services.  Indeed, it is quit
 
 
 
-[[_ugfun_core-concepts_building-blocks_mixins-and-contributions]]
+[[__ugfun_core-concepts_building-blocks_mixins-and-contributions]]
 == Mixins & Contributions
 
 NOTE: TODO
@@ -270,7 +270,7 @@ xref:ugbtb.adoc#_ugbtb_decoupling_mixins[this topic on mixin]s.
 
 
 
-[[_ugfun_core-concepts_building-blocks_domain-events]]
+[[__ugfun_core-concepts_building-blocks_domain-events]]
 == Domain Events
 
 NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_domainevent[domain event] classes.
@@ -284,10 +284,10 @@ NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 
 
 
-[[_ugfun_core-concepts_building-blocks_oid]]
+[[__ugfun_core-concepts_building-blocks_oid]]
 == OIDs
 
-As well as defining a xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain
+As well as defining a xref:ugfun.adoc#__ugfun_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain
 classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
 
 When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an
@@ -330,7 +330,7 @@ xref:rgcms.adoc#_rgcms_schema-common[common schema] XSD defines the `oidDto` com
 
 
 
-[[_ugfun_core-concepts_building-blocks_value-objects]]
+[[__ugfun_core-concepts_building-blocks_value-objects]]
 == Value Objects (Primitives)
 
 NOTE: TODO

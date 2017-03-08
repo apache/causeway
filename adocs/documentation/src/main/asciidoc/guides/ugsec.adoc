@@ -6,7 +6,7 @@
 :numbered:
 
 
-[[_ugsec]]
+[[__ugsec]]
 == Security
 
 This guide describes the authentication and authorization features available to secure your Apache Isis application.

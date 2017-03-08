@@ -40,7 +40,7 @@ The following sections detail these various listeners, filters and servlets in m
 
 
 
-[[_ugbtb_web-xml_servlet-context-listeners]]
+[[__ugbtb_web-xml_servlet-context-listeners]]
 == Servlet Context Listeners
 
 Servlet context listeners are used to perform initialization on application startup.  Both Shiro (if configured as the security mechanism) and RestEasy (for the Restful Objects viewer) require their own context listener.  In addition, if the Wicket viewer is _not_ being used, then additional Apache Isis-specific listener is required for bootstrapping of the Apache Isis framework itself.
@@ -120,7 +120,7 @@ There are two relevant context parameters:
 
 
 
-[[_ugbtb_web-xml_servlets]]
+[[__ugbtb_web-xml_servlets]]
 == Servlets
 
 Servlets process HTTP requests and return corresponding responses.
@@ -213,7 +213,7 @@ Its mapping is:
 
 
 
-[[_ugbtb_web-xml_filters]]
+[[__ugbtb_web-xml_filters]]
 == Filters
 
 The order in which filters appear in `web.xml` matters: first to last they define a pipeline.  This is shown in the
@@ -473,7 +473,7 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 
 
 
-[[_ugbtb_web-xml_context-parameters]]
+[[__ugbtb_web-xml_context-parameters]]
 == Configuration Files
 
 However Apache Isis is bootstrapped (using the `IsisWicketApplication` or using `IsisWebAppBootstrapper`), it will
