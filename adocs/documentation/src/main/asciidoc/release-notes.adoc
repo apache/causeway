@@ -6,7 +6,7 @@
 :toc: right
 
 
-
+[[__release-notes_summary]]
 == Summary
 
 This table summarises all releases of Apache Isis to date.

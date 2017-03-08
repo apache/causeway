@@ -1,7 +1,4 @@
-
-
-
-[[r1.13.2.1]]
+[[_release-notes_1.13.2.1]]
 = 1.13.2.1
 
 Update for the simpleapp archetype only, which improves docker support as well as reducing amount of boilerplate by backing out some of the mixins.
