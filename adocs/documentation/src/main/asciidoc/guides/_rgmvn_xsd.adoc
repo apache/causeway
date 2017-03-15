@@ -74,7 +74,7 @@ First, the usual boilerplate:
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.isisaddons.app</groupId>
+        <groupId>mleder.analistappb</groupId>
         <artifactId>todoapp</artifactId>
         <version>1.15.0-SNAPSHOT</version>
     </parent>
