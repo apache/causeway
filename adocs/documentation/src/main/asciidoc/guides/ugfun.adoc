@@ -6,7 +6,7 @@
 :numbered:
 
 
-[[_ugfun]]
+[[__ugfun]]
 == Fundamentals
 
 This guide introduces the xref:ugfun.adoc#_ugfun_core-concepts[core concepts] and ideas behind Apache Isis,
