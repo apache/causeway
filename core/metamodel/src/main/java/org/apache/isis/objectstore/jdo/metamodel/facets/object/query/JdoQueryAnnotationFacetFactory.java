@@ -45,7 +45,7 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
     public static final String ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_KEY = "isis.reflector.validator.jdoqlFromClause";
     public static final boolean ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_DEFAULT = true;
 
-    public static final String ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_KEY = "isis.reflector.validator.variablesFromClause";
+    public static final String ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_KEY = "isis.reflector.validator.jdoqlVariablesClause";
     public static final boolean ISIS_REFLECTOR_VALIDATOR_JDOQL_VARIABLES_CLAUSE_DEFAULT = true;
 
     public JdoQueryAnnotationFacetFactory() {
