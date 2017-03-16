@@ -33,7 +33,7 @@
 
     <groupId>org.apache.isis.docs</groupId>
     <artifactId>isis-documentation</artifactId>
-    <version>1.14.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache Isis Docs</name>
@@ -50,7 +50,7 @@
         <asciidoctorj.version>1.5.4.1</asciidoctorj.version>
         <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
         <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
-        <incode-asciidoctor-extension-improvethisdoc.version>0.0.2-SNAPSHOT</incode-asciidoctor-extension-improvethisdoc.version>
+        <incode-asciidoctor-extension-improvethisdoc.version>0.0.2</incode-asciidoctor-extension-improvethisdoc.version>
 
         <jruby.version>9.1.8.0</jruby.version>
         <!--<jruby.version>1.7.21</jruby.version>-->
