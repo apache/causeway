@@ -8,7 +8,7 @@
 A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_entities[domain entity] or a xref:ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_view-models[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
-All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are immutable).
+All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
 Properties that do _not_ have a setter method are derived properties, and so are not persisted.
 
 Formally speaking, a property is simply a regular JavaBean getter, returning a scalar value recognized by the framework.
