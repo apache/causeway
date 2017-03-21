@@ -33,7 +33,7 @@ The xref:guides/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp 
 [[__ugfun_how-tos_class-structure_properties_value-vs-reference-types]]
 == Value vs Reference Types
 
-Properties can be either a value types (strings, int, date and so on) or be a reference to another object (for example, an `Order` referencing the `Customer` that placed it).
+Properties can be either a value type (strings, int, date and so on) or be a reference to another object (for example, an `Order` referencing the `Customer` that placed it).
 
 For example, to map a string value type:
 
@@ -53,7 +53,7 @@ You could also add the `@Property` annotation if you wished:
 private String notes;
 ----
 
-Although in this case it is not required in this case (none of its attributes have been set).
+Although in this case it is not required (none of its attributes have been set).
 
 Or to map a reference type:
 
@@ -367,7 +367,7 @@ whereby a single table corresponds to the superclass, and also holds the propert
 
 * "table per class" (`InheritanceStrategy.NEW_TABLE`) +
 +
-whereby is a table for both superclass and subclass, in 1:1 correspondence
+whereby there is a table for both superclass and subclass, in 1:1 correspondence
 
 * "rolldown" (`InheritanceStrategy.SUBCLASS_TABLE`) +
 +
