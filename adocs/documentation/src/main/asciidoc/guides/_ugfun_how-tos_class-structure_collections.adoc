@@ -27,7 +27,7 @@ Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB an
 
 Unlike xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties[properties], the framework (at least, the xref:ugvw.adoc[Wicket viewer]) does not allow collections to be "edited".
 Instead, xref:ugfun.adoc#_ugfun_how-tos_class-structure_actions[action]s can be written that will modify the contents of the collection as a side-effect.
-For example, a `placeOrder(...)` action will likely add to an `Order` to the `Customer#orders` collection.
+For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
 
