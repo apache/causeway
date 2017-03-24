@@ -38,29 +38,19 @@ To run, we typically just use:
 
 [source,bash]
 ----
-sh monitor.sh
+sh preview-html.sh
 ----
 
-This script simply runs `mvn clean compile && ruby monitor.rb -b`.  The `mvn` command performs a clean rebuild of the site, and then the ruby script monitors for any further changes under `src/main/asciidoc`.
+This script just runs `mvn compile` for HTML files only, then calls `python` to start the web browser and run a simple web server (on port 8000).
 
-The script also starts up a web server on port 4000 so you can review results.  If any `.adoc` changes, then the appropriate HTML will be regenerated.  And, if any new assets (CSS, images etc) are added, they will be copied across.  The `-b` flag passed through means that the script also starts a web browser pointing at the newly generated docs.
-
-The `monitor.rb` script has a couple of other options, use `-h` flag for usage:
+If you want to double-check the PDFs also, then use:
 
 [source,bash]
 ----
-ruby monitor.rb -h
+sh preview-pdf.sh
 ----
 
-which should print:
 
-[source]
-----
-usage: monitor.rb [options]
-    -p, --port       port (default: 4000)
-    -b, --browser    launch browser
-    -h, --help       help
-----
 
 
 
