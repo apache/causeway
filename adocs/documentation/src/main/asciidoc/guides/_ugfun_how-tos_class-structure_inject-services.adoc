@@ -58,7 +58,7 @@ We recommend using default rather than `private` visibility so that the field ca
 == Method Injection
 
 The framework also supports two forms of method injection.
-All that is required to inject a service into a entity/service is to provide an appropriate method and field.
+All that is required to inject a service into a entity/service is to provide an appropriate method or field.
 The name of the method does not matter, only that it is prefixed either `set` or `inject`, is public, and has a single parameter of the correct type.
 
 For example:
