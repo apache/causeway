@@ -865,7 +865,7 @@ Asciidoctor includes support for the link:http://plantuml.com/[plantuml], allowi
 For example:
 
 ....
-[plantuml,_images/mydiagram,png]
+[plantuml,_images/plantuml-demo,png]
 --
 class Car
 
@@ -877,7 +877,7 @@ Car -- Person : < owns
 
 renders as:
 
-[plantuml,_images/mydiagram,png]
+[plantuml,_images/plantuml-demo,png]
 --
 class Car
 
@@ -897,7 +897,7 @@ Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], 
 For example:
 
 ....
-[ditaa]
+[ditaa,_images/ditaa-demo,png]
 ----
     +--------+   +-------+    +-------+
     |        | --+ ditaa +--> |       |
@@ -913,7 +913,7 @@ For example:
 
 renders as:
 
-[ditaa]
+[ditaa,_images/ditaa-demo,png]
 ----
     +--------+   +-------+    +-------+
     |        | --+ ditaa +--> |       |
@@ -936,7 +936,7 @@ Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], 
 For example:
 
 ....
-[graphviz]
+[graphviz,_images/graphviz-demo,png]
 ----
 digraph automata_0 {
   size ="8.5, 11";
@@ -956,7 +956,7 @@ digraph automata_0 {
 
 renders as:
 
-[graphviz]
+[graphviz,_images/graphviz-demo,png]
 ----
 digraph automata_0 {
   size ="8.5, 11";
