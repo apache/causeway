@@ -11,9 +11,9 @@ While xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties[properties] and 
 An application whose domain objects have only/mostly "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
 Such applications are often called CRUD applications (create/read/update/delete).
 
-In more complex domains, it's not realistic/feasible to expect the end-user to have to remember all the different business rules that govern the valid states for each domain objects.
+In more complex domains, it's not realistic/feasible to expect the end-user to have to remember all the different business rules that govern the valid states for each domain object.
 So instead actions allow those business rules to be encoded programmatically.
-An Apache Isis doesn't try to constrain the end-user as to way in which they interact with the user (it doesn't attempt to define a rigid business process) but it does aim to ensure that business rule invariants are maintained, that is that business objects aren't allowed to go into an invalid state.
+An Apache Isis application doesn't try to constrain the end-user as to way in which they interact with the user (it doesn't attempt to define a rigid business process) but it does aim to ensure that business rule invariants are maintained, that is that business objects aren't allowed to go into an invalid state.
 
 For simple domain applications, you may want to start prototyping only with properties, and only later introduce actions (representing the most common business operations).
 But an alternative approach, recommended for more complex applications, is actually to start the application with all properties non-editable.
@@ -114,7 +114,7 @@ public class Product ... {
 (As noted above), if the number of available instances of the reference type is a small number (in other words, all of which could comfortably be shown in a drop-down) then instead the `choicesNXxx()` supporting method can be used.
 This too can be avoided by annotating the referenced class.
 
-For example, support we have an action to specify the `PaymentMethodType`, where there only 10 or so such (Visa, Mastercard, Amex, Paypal etc).
+For example, suppose we have an action to specify the `PaymentMethodType`, where there are only 10 or so such (Visa, Mastercard, Amex, Paypal etc).
 We could define this as:
 
 [source,java]
@@ -227,7 +227,7 @@ public Customer updateName(
 
 [IMPORTANT]
 ====
-Incidentally, note in the above example that the new value is assigned to the properties using the setter methods; the action does not simply use set the instance field directly.
+Incidentally, note in the above example that the new value is assigned to the properties using the setter methods; the action does not simply set the instance field directly.
 This is important, because it allows JDO/DataNucleus to keep track that this instance variable is "dirty" and so needs flushing to the database table before the transaction completes.
 ====
 
