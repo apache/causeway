@@ -55,7 +55,7 @@ public class ParentObject
 <1> indicates a bidirectional association; the foreign key pointing back to the `Parent` will be in the table for `ChildObject`
 <2> disable cascade delete
 <3> (not actually required in this case, because no attributes are set, but acts as a useful reminder that this collection will be rendered in the UI by Apache Isis)
-<3> uses a `SortedSet` (as opposed to some other collection type; discussion below)
+<4> uses a `SortedSet` (as opposed to some other collection type; discussion below)
 
 while in the child object you will have:
 

@@ -83,6 +83,7 @@ pass:[<br/>]
 * *link:./guides/dg.html[Developers' Guide^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/dg.pdf"]
 ** Setting up link:./guides/dg.html#_dg_ide_intellij[IntelliJ^] or link:./guides/dg.html#_dg_ide_eclipse[Eclipse^]
 ** link:./guides/dg.html#_dg_contributing[Contributing patches^] (pull requests)
+** link:./guides/dg.html#_dg_asciidoc-syntax[Asciidoc syntax^]
 
 * link:./guides/cgcom.html[Committers' Guide^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/cgcom.pdf"]
 ** link:./guides/cgcom.html#_cgcom_cutting-a-release[Cutting a release^]

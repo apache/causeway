@@ -11,51 +11,64 @@ This appendix lists the (IntelliJ) live templates available for xref:dg.adoc#_dg
 
 In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
 
-== Callouts
+== Admonitions (Callouts)
 
-The Asciidoctor terminology is an "admonition".
 
-[cols="1,4,2a", options="header"]
+[cols="1,4a,2a", options="header"]
 |===
 | Abbrev.
 | Produces
 | Example
 
 |`adadmimportant`
-| `[IMPORTANT] +
-==== +
-xxx +
-====`
+|....
+[IMPORTANT]
+====
+xxx
+====
+....
+
 |[IMPORTANT]
 ====
 xxx
 ====
 
 |`adadmnote`
-| `[NOTE] +
-==== +
-xxx +
-====`
+|....
+[NOTE]
+====
+xxx
+====
+....
+
 |[NOTE]
 ====
 xxx
 ====
+....
 
 |`adadmtip`
-| `[TIP] +
-==== +
-xxx +
-====`
+|....
+[TIP]
+====
+xxx
+====
+....
+
 |[TIP]
 ====
 xxx
 ====
+....
 
 |`adadmwarning`
-| `[WARNING] +
-==== +
-xxx +
-====`
+|....
+[WARNING]
+====
+xxx
+====
+....
+
 |[WARNING]
 ====
 xxx
@@ -75,11 +88,16 @@ Add as a placeholder for documentation still to be written or which is work-in-p
 | Example
 
 |`adtodo`
-|pass:[<pre>NOTE: TODO</pre>]
+|....
+NOTE: TODO
+....
+
 |NOTE: TODO
 
 |`adwip`
-|pass:[<pre>NOTE: WIP - xxx</pre>]
+|....
+NOTE: WIP - xxx
+....
 
 where:
 
@@ -104,7 +122,7 @@ Cross-references (links) to the various guides
 
 
 |`adcgcom`
-|pass:[<pre>xref:cgcom.adoc#xxx[ttt\]</pre>]
+|`\xref:cgcom.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the committers' guide, where:
 
@@ -113,10 +131,10 @@ a hyperlink to a bookmark within the committers' guide, where:
 
 for example:
 
-pass:[<pre>xref:dg.adoc#_cgcom_cutting-a-release[Cutting a release\]</pre>]
+`\xref:dg.adoc#_cgcom_cutting-a-release[Cutting a release\]`
 
 |`addg`
-|pass:[<pre>xref:dg.adoc#xxx[ttt\]</pre>]
+|`\xref:dg.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the developers' guide, where:
 
@@ -125,14 +143,14 @@ a hyperlink to a bookmark within the developers' guide, where:
 
 for example:
 
-pass:[<pre>xref:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]</pre>]
+`\xref:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]`
 
 |xref:dg.adoc#_dg_asciidoc-templates[Asciidoc templates]
 
 
 
 |`adrgant`
-|pass:[<pre>xref:rgant.adoc#xxx[ttt\]</pre>]
+|`\xref:rgant.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for annotations, where:
 
@@ -141,14 +159,14 @@ a hyperlink to a bookmark within the reference guide for annotations, where:
 
 for example:
 
-pass:[<pre>xref:rgant.adoc#_rgant-aaa_main[Core annotations\]</pre>]
+`\xref:rgant.adoc#_rgant-aaa_main[Core annotations]`
 
 |xref:rgant.adoc#_rgant-aaa_main[Core annotations]
 
 
 
 |`adrgcfg`
-|pass:[<pre>xref:rgcfg.adoc#xxx[ttt\]</pre>]
+|`\xref:rgcfg.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for configuration properties guide, where:
 
@@ -157,14 +175,14 @@ a hyperlink to a bookmark within the reference guide for configuration propertie
 
 for example:
 
-pass:[<pre>xref:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core\]</pre>]
+`\xref:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]`
 
 |xref:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
 
 
 
 |`adrgcms`
-|pass:[<pre>xref:rgcms.adoc#xxx[ttt\]</pre>]
+|`\xref:rgcms.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for classes, methods and schema, where:
 
@@ -173,14 +191,14 @@ a hyperlink to a bookmark within the reference guide for classes, methods and sc
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`\]</pre>]
+`\xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]`
 
 |xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
 
 
 
 |`adrgsvc`
-|pass:[<pre>xref:rgsvc.adoc#xxx[ttt\]</pre>]
+|`\xref:rgsvc.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for domain services, where:
 
@@ -189,14 +207,14 @@ a hyperlink to a bookmark within the reference guide for domain services, where:
 
 for example:
 
-pass:[<pre>xref:rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping\]</pre>]
+`\xref:rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
 
-|xref:xref:rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
+|xref:rgsvc.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
 
 
 
 |`adrgmvn`
-|pass:[<pre>xref:rgmvn.adoc#xxx[ttt\]</pre>]
+|`\xref:rgmvn.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for the maven plugin, where:
 
@@ -205,14 +223,14 @@ a hyperlink to a bookmark within the reference guide for the maven plugin, where
 
 for example:
 
-pass:[<pre>xref:rgmvn.adoc#_rgmvn_validate[validate goal\]</pre>]
+`\xref:rgmvn.adoc#_rgmvn_validate[validate goal]`
 
 |xref:rgmvn.adoc#_rgmvn_validate[validate goal]
 
 
 
 |`adrgna`
-|pass:[<pre>xref:rgant.adoc#_rgant-xxx[`@xxx`]</pre>]
+|`\xref:rgant.adoc#_rgant-xxx[`@xxx`]`
 
 a hyperlink to the "man page" for an annotation within the reference guide for annotations, where:
 
@@ -220,14 +238,14 @@ a hyperlink to the "man page" for an annotation within the reference guide for a
 
 for example:
 
-pass:[<pre>xref:rgant.adoc#_rgant-Action[`@Action`\]</pre>]
+`\xref:rgant.adoc#_rgant-Action[`@Action`]`
 
 |xref:rgant.adoc#_rgant-Action[`@Action`]
 
 
 
 |`adrgnt`
-|pass:[<pre>xref:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]</pre>]
+|`\xref:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]`
 
 a hyperlink to the "man page" for the specific attribute (field) of an annotation within the reference guide for annotations, where:
 
@@ -236,14 +254,14 @@ a hyperlink to the "man page" for the specific attribute (field) of an annotatio
 
 for example:
 
-pass:[<pre>xref:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`\]</pre>]
+`\xref:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]`
 
 |xref:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
 
 
 
 |`adrgsa`
-|pass:[<pre></pre>]
+|`\xref:rgsvc.adoc#_rgsvc_api_xxx[`xxx`]`
 
 a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
 
@@ -251,14 +269,14 @@ a hyperlink to the "man page" for an (API) domain service within the reference g
 
 for example:
 
-pass:[<pre>xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`\]</pre>]
+`\xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]`
 
 |xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]
 
 
 
 |`adrgss`
-|pass:[<pre></pre>]
+|`\xref:rgsvc.adoc#_rgsvc_spi_xxx[`xxx`]`
 
 a hyperlink to the "man page" for an (SPI) domain service within the reference guide for domain services, where:
 
@@ -266,14 +284,15 @@ a hyperlink to the "man page" for an (SPI) domain service within the reference g
 
 for example:
 
-pass:[<pre>xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`\]</pre>]
+`\xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]`
+
 |xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]
 
 
 
 
 |`adugfun`
-|pass:[<pre>xref:ugfun.adoc#xxx[ttt\]</pre>]
+|`\xref:ugfun.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the fundamentals users' guide, where:
 
@@ -282,7 +301,7 @@ a hyperlink to a bookmark within the fundamentals users' guide, where:
 
 for example:
 
-pass:[<pre>xref:ugfun.adoc#_ugfun_core-concepts[Core concepts\]</pre>]
+`\xref:ugfun.adoc#_ugfun_core-concepts[Core concepts]`
 
 |xref:ugfun.adoc#_ugfun_core-concepts[Core concepts]
 
@@ -290,7 +309,7 @@ pass:[<pre>xref:ugfun.adoc#_ugfun_core-concepts[Core concepts\]</pre>]
 
 
 |`adugvw`
-|pass:[<pre>xref:ugvw.adoc#xxx[ttt\]</pre>]
+|`\xref:ugvw.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Wicket viewer guide, where:
 
@@ -299,13 +318,13 @@ A hyperlink to a bookmark within the Wicket viewer guide, where:
 
 for example:
 
-pass:[<pre>xref:ugvw.adoc#_ugvw_customisation[Customisation\]</pre>]
+`\xref:ugvw.adoc#_ugvw_customisation[Customisation]`
 
 |xref:ugvw.adoc#_ugvw_customisation[Customisation]
 
 
 |`adugvro`
-|pass:[<pre>xref:ugvro.adoc#xxx[ttt\]</pre>]
+|`\xref:ugvro.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 
@@ -314,14 +333,14 @@ A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 
 for example:
 
-pass:[<pre>xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification\]</pre>]
+`\xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
 
 |xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
 
 
 
 |`adugsec`
-|pass:[<pre>xref:ugsec.adoc#xxx[ttt\]</pre>]
+|`\xref:ugsec.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Secrurity guide, where:
 
@@ -330,13 +349,13 @@ A hyperlink to a bookmark within the Secrurity guide, where:
 
 for example:
 
-pass:[<pre>xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features\]</pre>]
+`\xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]`
 
 |xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]
 
 
 |`adugtst`
-|pass:[<pre>xref:ugtst.adoc#xxx[ttt\]</pre>]
+|`\xref:ugtst.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Testing guide, where:
 
@@ -345,13 +364,13 @@ A hyperlink to a bookmark within the Testing guide, where:
 
 for example:
 
-pass:[<pre>xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support\]</pre>]
+`\xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
 
 |xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
 
 
 |`adugbtb`
-|pass:[<pre>xref:ugbtb.adoc#xxx[ttt\]</pre>]
+|`\xref:ugbtb.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 
@@ -360,7 +379,7 @@ A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 
 for example:
 
-pass:[<pre>xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration\]</pre>]
+`\xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
 
 |xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
 
@@ -384,7 +403,7 @@ Links to (non-ASF) link:http://isisaddons.org[Isis Addons]
 
 
 |`adlinkaddons`
-|pass:[<pre>(non-ASF) link:http://isisaddons.org[Isis Addons\]</pre>]
+|`(non-ASF) \link:\http://isisaddons.org[[Isis Addons]]`
 
 link to the Isis Addons website.
 
@@ -393,7 +412,7 @@ link to the Isis Addons website.
 
 
 |`adlinkaddonsapp`
-|pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-app-xxx[Isis addons' xxx]</pre>]
+|`(non-ASF) \link:\http://github.com/isisaddons/isis-app-xxx[[Isis addons' xxx]]`
 
 link to the github repo for an example app from the Isis addons; where:
 
@@ -401,14 +420,14 @@ link to the github repo for an example app from the Isis addons; where:
 
 for example:
 
-pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp\]</pre>]
+pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]`
 
 |(non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]
 
 
 
 |`adlinkaddonsmodule`
-|pass:[<pre></pre>]
+|`(non-ASF) \http://github.com/isisaddons/isis-module-xxx[[Isis addons' xxx]] module`
 
 link to the github repo for a module from the Isis addons; where:
 
@@ -416,14 +435,14 @@ link to the github repo for a module from the Isis addons; where:
 
 for example:
 
-pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security\] module</pre>]
+`(non-ASF) \http://github.com/isisaddons/isis-module-security[[Isis addons' security]] module`
 
 |(non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module
 
 
 
 |`adlinkaddonswicket`
-|pass:[<pre></pre>]
+|`(non-ASF) \http://github.com/isisaddons/isis-wicket-xxx[[Isis addons' xxx]] wicket extension`
 
 link to the github repo for a wicket UI component from the Isis addons; where:
 
@@ -431,7 +450,7 @@ link to the github repo for a wicket UI component from the Isis addons; where:
 
 for example:
 
-pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 \] wicket extension</pre>]
+`(non-ASF) \http://github.com/isisaddons/isis-wicket-gmap3[[Isis addons' gmap3]] wicket extension`
 
 
 |(non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 ] wicket extension
@@ -450,10 +469,12 @@ pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons'
 | Example
 
 |`adsrcjava`
-|`[source,java] +
----- +
-xxx +
-----`
+|....
+[source,java]
+----
+xxx
+----
+....
 
 where:
 
@@ -474,10 +495,12 @@ public class Foo {
 
 
 |`adsrcjavascript`
-|`[source,javascript] +
----- +
-xxx +
-----`
+|....
+[source,javascript]
+----
+xxx
+----
+....
 
 where:
 
@@ -498,10 +521,12 @@ $(document).ready(function() {
 |
 
 |`adsrcother`
-|`[source,nnn] +
----- +
-xxx +
-----`
+|....
+[source,nnn]
+----
+xxx
+---
+....
 
 where:
 
@@ -517,10 +542,13 @@ where:
 |
 
 |`adsrcxml`
-|`[source,javascript] +
----- +
-xxx +
-----`
+|....
+[source,javascript]
+----
+xxx
+----
+....
+
 
 where:
 
@@ -552,7 +580,7 @@ where:
 | Example
 
 |`adimgfile`
-|pass:[<pre>image::{_imagesdir}xxx/yyy.png[width="WWWpx",link="{_imagesdir}xxx/yyy.png"\]</pre>]
+|`\image:{_imagesdir}xxx/yyy.png[width="WWWpx",link="{_imagesdir}xxx/yyy.png"]`
 
 embeds specified image, where:
 
@@ -562,9 +590,9 @@ embeds specified image, where:
 
 for example:
 
-pass:[<pre>image::{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"\]</pre>]
+`\image:{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]`
 
-|image::{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]
+|image:{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]
 
 
 
@@ -574,7 +602,7 @@ pass:[<pre>image::{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300
 
 
 |`adimgurl`
-|pass:[<pre>image::xxx[width="WWWpx",link="xxx"\]</pre>]
+|`\image:xxx[width="WWWpx",link="xxx"]`
 
 embeds image from specified URL, where:
 
@@ -605,7 +633,7 @@ Embedded youtube screencasts.  (Don't use these in guides, as they cannot be ren
 | Example
 
 |`adyoutube`
-|pass:[<pre>video::xxx[youtube,width="WWWpx",height="HHHpx"\]</pre>]
+|`video:xxx[youtube,width="WWWpx",height="HHHpx"]`
 
 where:
 
@@ -615,7 +643,7 @@ where:
 
 for example:
 
-pass:[<pre>video::bj8735nBRR4[youtube,width="210px",height="118px"\] </pre>]
+`video::bj8735nBRR4[youtube,width="210px",height="118px"]`
 
 |video::bj8735nBRR4[youtube,width="210px",height="118px"]
 
@@ -652,7 +680,7 @@ pass:[<pre>video::bj8735nBRR4[youtube,width="210px",height="118px"\] </pre>]
 | Example
 
 |`adai`
-|pass:[<pre>Apache Isis</pre>] +
+|`Apache Isis` +
 
 That is, the literal text "Apache Isis".
 |Apache Isis
@@ -660,7 +688,7 @@ That is, the literal text "Apache Isis".
 
 
 |`adlink`
-|pass:[<pre>link:xxx[ttt\]</pre>]
+|`\link:xxx[ttt]`
 
 , where:
 
@@ -669,7 +697,7 @@ That is, the literal text "Apache Isis".
 
 for example:
 
-pass:[<pre>link:http://isis.apache.org[Apache Isis website\]</pre>]
+`\link:\http://isis.apache.org[[Apache Isis website]]`
 
 |link:http://isis.apache.org[Apache Isis website]
 
@@ -677,7 +705,7 @@ pass:[<pre>link:http://isis.apache.org[Apache Isis website\]</pre>]
 
 
 |`adanchany`
-|pass:[<pre>= anchor:[xxx\]</pre>]
+|`= anchor:[xxx]`
 
 defines an inline anchor to any heading, where:
 
@@ -685,18 +713,20 @@ defines an inline anchor to any heading, where:
 
 For example:
 
-pass:[<pre>= anchor:[_ugfun_i18n\] Internationalization</pre>]
+`= anchor:[_ugfun_i18n] Internationalization`
 
 An alternative (more commonly used in our documentation) is to use the `[[...]]` directly above the heading:
 
-pass:[<pre>[[_ugfun_i18n\]\]
-= Internationalization</pre>]
+....
+[[_ugfun_i18n]]
+= Internationalization
+....
 
 |
 
 
 |`adxrefany`
-|pass:[<pre>xref:[xxx\]</pre>]
+|`\xref:[xxx]`
 
 cross-reference to any document/anchor, where:
 
@@ -706,15 +736,14 @@ cross-reference to any document/anchor, where:
 
 
 |`adfootnote`
-|pass:[<pre>.footnote:[\]</pre>]
+|`\footnote:[xxx]`
 
 defines a footnote
-|.footnote:[this is a footnote]
+
+|footnote:[this is a footnote]
 
 
 
 |===
-
-
 
 
