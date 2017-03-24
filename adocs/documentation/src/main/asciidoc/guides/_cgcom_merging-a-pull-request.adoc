@@ -58,14 +58,26 @@ The syntax is:
 
 [source,bash]
 ----
-github-pr.sh isis 1162 31
+github-pr.sh -j 1162 -g 31 [-s] [-p ISIS]
 ----
 
 where:
 
-* `isis` is the JIRA project and repo
-* `1162` is the JIRA ticket number
-* `31`   is the gthub PR issue number
+* `-j 1162` +
++
+is the JIRA ticket number
+
+* `-g 31`   +
++
+is the github PR issue number
+
+* `-s` +
++
+will optionally skip the build and auto-merge
+
+* `-p ISIS` +
++
+optionally overrids the JIRA project (defaults to 'ISIS')
 
 
 
