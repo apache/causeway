@@ -13,7 +13,7 @@ This is common for example for SPI service, whereby one module defines an SPI se
 To support this, the framework also allows lists of services to be injected.
 
 When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:rgant.adoc#_rgant_DomainService_menuOrder[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
-If a list of services are injected, then that list will be ordered according to `menuOrder`, again lowest first.
+If a list of services is injected, then that list will be ordered according to `menuOrder`, again lowest first.
 
 
 
@@ -58,7 +58,7 @@ We recommend using default rather than `private` visibility so that the field ca
 == Method Injection
 
 The framework also supports two forms of method injection.
-All that is required to inject a service into a entity/service is to provide an appropriate method or field.
+All that is required to inject a service into a entity/service is to provide an appropriate method and field.
 The name of the method does not matter, only that it is prefixed either `set` or `inject`, is public, and has a single parameter of the correct type.
 
 For example:
