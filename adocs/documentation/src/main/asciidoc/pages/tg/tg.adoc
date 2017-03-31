@@ -1,0 +1,26 @@
+[[tg]]
+= Tutorials
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+:numbered:
+
+
+[[_tg]]
+== Tutorials
+
+This page contains a couple of tutorials for you to follow.
+
+* the xref:tg.adoc#_tg_tutorials_pet-clinic["petclinic"] tutorial takes you step-by-step through building a simple application of just three classes.  There are example solutions in the github repo in case you get lost.
+
+* an xref:tg.adoc#_tg_tutorials_pet-clinic-extended[extended version] of the "petclinic" tutorial, (with the text hosted on github repo).
+
+* the xref:tg.adoc#_tg_tutorials_stop-scaffolding-start-coding["stop scaffolding, start coding"] tutorial is taken from a conference workshop.  It has less hand-holding, but lists out the steps for you to follow.  It's a good cookbook to follow when you're readng to take things further.
+
+Have fun!
+
+
+
+include::_tg_pet-clinic.adoc[leveloffset=+1]
+include::_tg_pet-clinic-extended.adoc[leveloffset=+1]
+include::_tg_stop-scaffolding-start-coding.adoc[leveloffset=+1]

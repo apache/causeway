@@ -1,0 +1,254 @@
+[[_ugvw_configuration-properties]]
+= Configuration Properties
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+Wicket configuration properties alter the way in which Apache Isis' Wicket viewer renders domain objects.  They are typically stored in `WEB-INF/viewer_wicket.properties`.
+
+[NOTE]
+====
+To tell Apache Isis that the Wicket viewer is in use (and should therefore search for the `viewer_wicket.properties` file), add the following to `WEB-INF/web.xml`:
+
+[source, xml]
+----
+<context-param>
+    <param-name>isis.viewers</param-name>
+    <param-value>wicket</param-value>
+</context-param>
+----
+
+====
+
+If you prefer you can place all configuration properties into `WEB-INF/isis.properties` (the configuration properties from all config files are merged together).
+
+
+.Wicket Viewer Configuration Properties
+[cols="2a,1,3", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket.` +
+`ajaxDebugMode`
+| `true`,`false` +
+(`_false_`)
+| whether the Wicket debug mode should be enabled.
+
+|`isis.viewer.wicket.` +
+`bookmarkedPages`
+| +ve int +
+(`_15_`)
+| number of pages to bookmark
+
+|`isis.viewer.wicket.` +
+`breadcrumbs.showChooser`
+| `true`,`false` +
+(`_true_`)
+| Whether to show chooser for Breadcrumbs
+
+|`isis.viewer.wicket.` +
+`datePattern`
+| date format +
+(`dd-MM-yyyy`)
+|The `SimpleDateFormat` used to render dates.  For the date picker (which uses `moment.js` library), this is converted
+dynamically into the corresponding `moment.js` format.
+
+|`isis.viewer.wicket.` +
+`dateTimePattern`
+| date/time format +
+(`dd-MM-yyyy HH:mm`)
+|The `SimpleDateFormat` used to render date/times.  For the date picker (which uses `moment.js` library), this is
+converted dynamically into the corresponding `moment.js` format.
+
+|`isis.viewer.wicket.` +
+`datePicker.maxDate`
+| ISO format date +
+(`2100-01-01T00:00:00.000Z`)
+|Specifies a maximum date after which dates may not be specified.
+
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for
+further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+for further details).
+
+|`isis.viewer.wicket.` +
+`datePicker.minDate`
+| ISO format date +
+(`1900-01-01T00:00:00.000Z`)
+|Specifies a minimum date before which dates may not be specified.
+
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[datetimepicker reference docs] for
+further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+for further details).
+
+|`isis.viewer.wicket.` +
+`disableDependentChoiceAutoSelection`
+| `true`,`false` +
+(`_false_`)
+| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+
+|`isis.viewer.wicket.` +
+`disableModalDialogs`
+| `true`,`false` +
+(`_false_`)
+|No longer supported.
+
+|`isis.viewer.wicket.` +
+`liveReloadUrl`
+| URL
+|Specifies the URL if xref:dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
+
+`http://localhost:35729/livereload.js?snipver=1`
+
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInParentedTables`
+| +ve integer +
+(`_12_`)
+| See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInStandaloneTables`
+| +ve integer, +
+(`_12_`)
+| See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInTables`
+| +ve integer, +
+(`_12_`)
+| See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+
+|`isis.viewer.wicket.` +
+`preventDoubleClickForFormSubmit`
+| `true`,`false` +
+(`_true_`)
+| Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click.
+
+|`isis.viewer.wicket.` +
+`preventDoubleClickForNoArgAction`
+| `true`,`false` +
+(`_true_`)
+| Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
+
+|`isis.viewer.wicket.` +
+`regularCase`
+| `true`,`false` +
+(`_false_`)
+| Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
+
+|`isis.viewer.wicket.` +
+`replaceDisabledTagWithReadonlyTag`
+| `true`,`false` +
+(`_true_`)
+| Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
+
+|`isis.viewer.wicket.` +
+`rememberMe.cookieKey`
+| ascii chars +
+(`_isisWicketRememberMe_`)
+|Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
+change this.  +
+
+Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
+
+|`isis.viewer.wicket.` +
+`rememberMe.encryptionKey`
+| any string +
+(in prod, a random UUID each time)
+|Encryption key is used to encrypt the rememberMe user/password.  +
+
+Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered
+user/passwords in an encrypted cookie.
+
+If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
+This configuration property therefore allows a private key to be specified, baked into the application.
+
+If no value is set then, in production, a random UUID will be used as the encryption key.
+The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again.
+In prototype mode, though, a fixed key will still be used; this saves the developer having to login each time.
+
+|`isis.viewer.wicket.` +
+`rememberMe.suppress`
+| `true`,`false` +
+(`_false_`)
+|Whether to suppress "remember me" checkbox on the login page.
+
+
+|`isis.viewer.wicket.` +
+`stripWicketTags`
+| `true`,`false` +
+(`_true_`)
+| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_stripped-wicket-tags[below].
+
+|`isis.viewer.wicket.` +
+`suppressPasswordReset`
+| `true`,`false` +
+(`_false_`)
+|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-password-reset[below].
+
+|`isis.viewer.wicket.` +
+`suppressRememberMe`
+| `true`,`false` +
+(`_false_`)
+|(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).  Whether to suppress "remember me" checkbox on the login page.
+
+|`isis.viewer.wicket.` +
+`suppressSignUp`
+| `true`,`false` +
+(`_false_`)
+|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-sign-up[below].
+
+|`isis.viewer.wicket.` +
+`timestampPattern`
+| date/time format +
+(`yyyy-MM-dd HH:mm:ss.SSS`)
+|The `SimpleDateFormat` used to render timestamps.
+
+
+|`isis.viewer.wicket.` +
+`themes.enabled`
+| comma separated list ...
+| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below].
+
+|`isis.viewer.wicket.` +
+`themes.showChooser`
+| `true`,`false` +
+(`_false_`)
+| Whether to show chooser for Bootstrap themes.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
+
+|`isis.viewer.wicket.` +
+`useIndicatorForFormSubmit`
+| `true`,`false` +
+(`_true_`)
+| Whether to show an indicator for a form submit button that it has been clicked.
+
+|`isis.viewer.wicket.` +
+`useIndicatorForNoArgAction`
+| `true`,`false` +
+(`_true_`)
+| Whether to show an indicator for a no-arg action button that it has been clicked.
+
+|`isis.viewer.wicket.` +
+`wicketSourcePlugin`
+| `true`,`false` +
+(`_false_`)
+| Whether the WicketSource plugin should be enabled; by default it is not enabled.
+
+Prior to `1.12.0` this was enabled by default for prototyping (not production).
+However it can significantly slow down rendering, hence the introduction of this configuration setting.
+
+|===
+
+
+
+include::_ugvw_configuration-properties_abbreviating-titles.adoc[leveloffset=+1]
+include::_ugvw_configuration-properties_suppressing-remember-me.adoc[leveloffset=+1]
+include::_ugvw_configuration-properties_suppressing-sign-up.adoc[leveloffset=+1]
+include::_ugvw_configuration-properties_suppressing-password-reset.adoc[leveloffset=+1]
+include::_ugvw_configuration-properties_stripped-wicket-tags.adoc[leveloffset=+1]
+include::_ugvw_configuration-properties_showing-theme-chooser.adoc[leveloffset=+1]
+

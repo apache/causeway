@@ -1,0 +1,277 @@
+[[_ugbtb_decoupling_mixins]]
+= Mixins
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
+
+Some programming languages use the term "trait" instead of mixin, and some languages (such as AspectJ) define their own syntax for defining such constructs.
+In Apache Isis a mixin is very similar to a domain service, however it also defines a single 1-arg constructor that defines the type of the domain objects that it contributes to.
+
+Why do this?
+Two reasons:
+
+* The main reason is to allow the app to be decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
+Mixins (and contributions) allow dependency to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+
+* However, there is another reason: mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
+
+Both use cases are discussed below.
+
+Syntactically, a mixin is defined using either the xref:rgant.adoc#_rgant_Mixin[`@Mixin`] annotation or using xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
+
+
+== Contributed Collection
+
+The example below shows how to contribute a collection:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolderDocuments {
+
+    private final DocumentHolder holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action(semantics=SemanticsOf.SAFE)                         // <1>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
+    @CollectionLayout(render = RenderType.EAGERLY)
+    public List<Document> documents() {                         // <3>
+        ...
+    }
+    public boolean hideDocuments() { ... }                      // <4>
+}
+----
+<1> required; actions that have side-effects cannot be contributed as collections
+<2> required; otherwise the mixin will default to being rendered as an action
+<3> must accept no arguments.
+    The mixin is a collection rather than a property because the return type is a collection, not a scalar.
+<4> supporting methods follow the usual naming conventions.
+    (That said, in the case of collections, because the collection is derived/read-only, the only supporting method that is relevant is `hideXxx()`).
+
+The above will result in a contributed collection for all types that implement/extend from `DocumentHolder` (so is probably for a mixin across modules).
+
+
+
+== Contributed Property
+
+Contributed properties are defined similarly, for example:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolderMostRecentDocument {
+
+    private final DocumentHolder holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action(semantics=SemanticsOf.SAFE)                         // <1>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
+    public Document> mostRecentDocument() {                     // <3>
+        ...
+    }
+    public boolean hideMostRecentDocument() { ... }             // <4>
+}
+----
+<1> required; actions that have side-effects cannot be contributed as collections
+<2> required; otherwise the mixin will default to being rendered as an action
+<3> must accept no arguments.
+    The mixin is a property rather than a collection because the return type is a scalar.
+<4> supporting methods follow the usual naming conventions.
+    (That said, in the case of properties, because the property is derived/read-only, the only supporting method that is relevant is `hideXxx()`).
+
+
+== Contributed Action
+
+Contributed properties are defined similarly, for example:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolderAddDocument {
+
+    private final DocumentHolder holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action()
+    @ActionLayout(contributed = Contributed.AS_ACTION)          // <1>
+    public Document> addDocument(Document doc) {
+        ...
+    }
+    public boolean hideAddDocument() { ... }                    // <2>
+}
+----
+<1> recommended
+<2> supporting methods follow the usual naming conventions.
+
+
+== Inferred Name
+
+Where the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated to "$$".
+The mixin name is everything after the last '_'.
+
+For example:
+
+[source,java]
+----
+@Mixin
+public class DocumentHolder_documents {
+
+    private final DocumentHolder holder;
+    public DocumentHolder_documents(DocumentHolder holder) { this.holder = holder; }
+
+    @Action(semantics=SemanticsOf.SAFE)
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)
+    @CollectionLayout(render = RenderType.EAGERLY)
+    public List<Document> $$() {                                    // <1>
+        ...
+    }
+    public boolean hide$$() { ... }                                 // <2>
+}
+----
+<1> using "$$" as the reserved method name
+<2> supporting methods as usual
+
+The character "$" is also recognized as a separator between the mixin type and mixin name.
+This is useful for mixins implemented as nested static types, discussed below.
+
+
+== As Nested Static Classes
+
+As noted in the introduction, while mixins were originally introduced as a means of allowing contributions from one module to the types of another module, they are also a convenient mechanism for grouping functionality/behaviour against a concrete type.
+All the methods and supporting methods end up in a single construct, and the dependency between that functionality and the rest of the object is made more explicit.
+
+When using mixins in this fashion, it is idiomatic to write the mixin as a nested static class, using the naming convention described above to reduce duplication.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    @Mixin
+    public static class placeOrder {                                            // <1>
+
+        private final Customer customer;
+        public documents(Customer customer) { this.customer = customer; }       // <2>
+
+        @Action
+        @ActionLayout(contributed = Contributed.AS_ACTION)
+        public List<Order> $$(Product p, int quantity) {                        // <3>
+            ...
+        }
+        public boolean hide$$() { ... }                                         // <4>
+        public String validate0$$(Product p) { ...  }
+    }
+}
+----
+<1> Prior to `1.13.2`, had to be prefixed by an "_"; this is no longer required because "$" is also recognized as a way of parsing the class name in order to infer the mixin's name (eg `Customer$placeOrder`).
+<2> typically contributed to concrete class
+<3> using the "$$" reserved name
+<4> supporting methods as usual
+
+
+Moreover, the mixin class can be capitalized if desired.
+Thus:
+
+[source,java]
+----
+public class Customer {
+
+    @Mixin
+    public static class PlaceOrder {                                            // <1>
+
+        private final Customer customer;
+        public documents(Customer customer) { this.customer = customer; }       // <2>
+
+        @Action
+        @ActionLayout(contributed = Contributed.AS_ACTION)
+        public List<Order> $$(Product p, int quantity) {                        // <3>
+            ...
+        }
+        public boolean hide$$() { ... }                                         // <4>
+        public String validate0$$(Product p) { ...  }
+    }
+}
+----
+
+
+In other words, all of the following are allowed:
+
+* `public static class Documents { ... }`
+* `public static class documents { ... }`
+* `public static class _Documents { ... }`
+* `public static class _documents { ... }`
+
+The reserved method name "$$" can also be changed using xref:rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
+
+
+
+
+
+
+
+
+== Programmatic usage
+
+When a domain object is rendered, the framework will automatically instantiate all required mixins and delegate to them
+dynamically.  If writing integration tests or fixtures, or (sometimes) just regular domain logic, then you may need to
+instantiate mixins directly.
+
+For this you can use the
+xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)`
+method.  For example:
+
+[source,java]
+----
+DocumentHolder_documents mixin = container.mixin(DocumentHolder_documents.class, customer);
+----
+
+The xref:ugtst.adoc#__ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
+xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience
+method.
+
+
+
+== Other reasons to use mixins
+
+In the introduction to this topic we mentioned that mixins are most useful for ensuring that the domain app remains
+decoupled.  This applies to the case where the contributee (eg `Customer`, being mixed into) is in one module, while
+the contributor mixin (`DocumentHolder_documents`) is in some other module.  The `customer` module knows about the
+`document` module, but not vice versa.
+
+However, you might also want to consider moving behaviour out of entities even within the same module, perhaps even
+within the same Java package.  And the reason for this is to support hot-reloading of Java classes, so that you can
+modify and recompile your application without having to restart it.  This can provide substantial productivity gains.
+
+The Hotspot JVM has limited support for hot reloading; generally you can change method implementations but you cannot
+introduce new methods.  However, the link:https://dcevm.github.io/[DCEVM] open source project will patch the JVM to
+support much more complete hot reloading support.  There are also, of course, commercial products such as JRebel.
+
+The main snag in all this is the DataNucleus enhancer... any change to entities is going to require the entity to be
+re-enhanced, and the JDO metamodel recreated, which usually "stuffs things up".  So hot-reloading of an app whose
+fundamental structure is changing is likely to remain a no-no.
+
+However, chances are that the structure of your domain objects (the data) will change much less rapidly than
+the behaviour of those domain objects.  Thus, it's the behaviour that you're most likely wanting to change while the
+app is still running.  If you move that behaviour out into xref:rgcms.adoc#_rgcms_classes_mixins[mixins] (or
+xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services]), then these can be reloaded happily.
+(When running in prototype mode), Apache Isis will automatically recreate the portion of the metamodel for any domain
+object as it is rendered.
+
+
+
+== Related reading
+
+Mixins are an implementation of the link:http://www.artima.com/articles/dci_vision.html[DCI architecture] architecture, as formulated and described by link:https://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug] and link:https://en.wikipedia.org/wiki/Jim_Coplien[Jim Coplien].  Reenskaug was the inventor of the MVC pattern (and also the external
+examiner for Richard Pawson's PhD thesis), while Coplien has a long history in object-orientation, C++ and patterns.
+
+DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where
+behaviour is bound to objects dynamically rather than statically in some context or other.  The `@Mixin`
+pattern is Apache Isis' straightforward take on the same basic concept.
+
+You might also wish to check out link:http://zest.apache.org[Apache Zest] (formerly Qi4J), which implements a much more
+general purpose implementation of the same concepts.
+

@@ -19,7 +19,7 @@ Apache Software Foundation:
 
 Thanks to companies and other third parties that have in one way or another supported Apache Isis' development:
 
-* link:./more-thanks.html[More thanks]
+* xref:./pages/more-thanks/more-thanks.adoc#[More thanks]
 
 
 
