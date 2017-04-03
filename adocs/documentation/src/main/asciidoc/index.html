@@ -228,6 +228,22 @@
             footer {
             margin-top: 200px;
             }
+
+            .searchLink {
+                font-size: larger;
+                color:#10B061;
+            }
+
+            .searchScore {
+                font-size: 12px;
+                color: #D5810A;
+            }
+
+            .searchDescription {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
         </style>
 
         <style>
@@ -370,17 +386,13 @@
                     <ul class="right">
 
                         <li class="has-form">
-                           <FORM class="searchbox navbar-form navbar-right" id="searchbox_012614087480249044419:dn-q5gtwxya" action="http://www.google.com/cse">
-                            <div class="row collapse">
-                                <input type="hidden" name="cx" value="012614087480249044419:dn-q5gtwxya">
-                                <INPUT type="hidden" name="cof" value="FORID:0">
-                                <INPUT class="form-control" name="q" type="text" placeholder="Search">
-                            </div>
-                        </FORM>
-                         </li>
+                            <form id="hello-world" action="sayhello">
+                                <input class="form-control" id="searchfield" type="text" length="30" placeholder="Search"/>
+                            </form>
 
+                        </li>
                     </ul>
-
+                    
                     <!-- Left Nav Section -->
                     <ul class="left">
 
@@ -402,6 +414,17 @@
             <br/>
             <br/>
             <br/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 medium-12 columns">
+            <div id="search-results"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 medium-12 columns">
 
             <div class="panel radius">
 
@@ -809,6 +832,10 @@ mvn archetype:generate  \
 <script src="./js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
 
 <script src="./js/slick/1.5.0/slick.min.js"></script>
+
+<script src="./js/elasticlunr/elasticlunr.min.js"></script>
+
+<script type="text/javascript" src="js/app.js"></script>
 
 
 <script type="text/javascript">
