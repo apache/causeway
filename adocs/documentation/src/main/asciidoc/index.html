@@ -6,6 +6,8 @@
 
     <title>Apache Isis</title>
 
+    <base href="." />
+
     <!--
         Licensed to the Apache Software Foundation (ASF) under one
         or more contributor license agreements.  See the NOTICE file
@@ -32,11 +34,11 @@
 
 
     <!-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
-    <link href="./css/foundation/5.5.1/foundation.css" rel="stylesheet" />
-    <script src="./js/foundation/5.5.1/vendor/modernizr.js"></script>
-    <link href="./css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="./css/slick/1.5.0/slick.css" rel="stylesheet">
-    <link href="./css/slick/1.5.0/slick-theme.css" rel="stylesheet">
+    <link href="css/foundation/5.5.1/foundation.css" rel="stylesheet" />
+    <script src="js/foundation/5.5.1/vendor/modernizr.js"></script>
+    <link href="css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/slick/1.5.0/slick.css" rel="stylesheet">
+    <link href="css/slick/1.5.0/slick-theme.css" rel="stylesheet">
 
 
 
@@ -375,7 +377,7 @@
                 <ul class="title-area">
                     <li class="name">
                         <h1>
-                            <a href="./index.html">Apache Isis&trade;</a>
+                            <a href="index.html">Apache Isis&trade;</a>
                         </h1>
                     </li>
                     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
@@ -386,8 +388,8 @@
                     <ul class="right">
 
                         <li class="has-form">
-                            <form id="hello-world" action="sayhello">
-                                <input class="form-control" id="searchfield" type="text" length="30" placeholder="Search"/>
+                            <form id="search-form">
+                                <input class="form-control" id="search-field" type="text" length="30" placeholder="Search"/>
                             </form>
 
                         </li>
@@ -396,10 +398,10 @@
                     <!-- Left Nav Section -->
                     <ul class="left">
 
-                        <li><a href="./documentation.html">Documentation</a></li>
-                        <li><a href="./downloads.html">Downloads</a></li>
-                        <li><a href="./help.html">Help</a></li>
-                        <li><a href="./asf.html">@ASF</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="downloads.html">Downloads</a></li>
+                        <li><a href="help.html">Help</a></li>
+                        <li><a href="asf.html">@ASF</a></li>
 
                     </ul>
 
@@ -430,7 +432,7 @@
 
                 <div class="row">
                     <div class="large-6 medium-6 columns">
-                        <img class="logo" src="./images/isis-logo-568x286.png" alt="Apache Isis"/>
+                        <img class="logo" src="images/isis-logo-568x286.png" alt="Apache Isis"/>
                     </div>
                     <div class="large-1 medium-1 columns">
                         &nbsp;
@@ -644,7 +646,7 @@ And I must say this: "Great Support from the development team"</p>
                            <h3 class="legend">Domain Driven Applications, Quickly</h3>
                             <p>Apache Isis&trade; is a framework for rapidly developing domain-driven apps in Java.  Write your business logic in entities, domain services or view models, and the framework dynamically generates a representation of that domain model as a webapp or a rich hypermedia REST API.</p>
 
-                            <p><a class="button btn btn-primary btn-lg learn-more" href="./documentation.html" role="button">Learn more »</a></p>
+                            <p><a class="button btn btn-primary btn-lg learn-more" href="documentation.html" role="button">Learn more »</a></p>
                         </div>
                     </div>
                 </div>
@@ -659,14 +661,14 @@ And I must say this: "Great Support from the development team"</p>
                         <p>Apache Isis dynamically builds both a generic UI and also a rich hypermedia REST API directly from the underlying domain objects.
                             This makes for extremely rapid prototyping and a short feedback cycle, perfect for agile development.
                             The UI can also be extended for specific use cases, and can be themed using <a href="http://getbootstrap.com">Bootstrap</a>.</p>
-                        <p><a class="button small info radius" href="./isis-in-pictures.html" role="button">See Apache Isis in action »</a></p>
+                        <p><a class="button small info radius" href="isis-in-pictures.html" role="button">See Apache Isis in action »</a></p>
                     </div>
                     <div class="large-4 medium-4 columns">
                         <h2>Domain-Driven</h2>
                         <p>The core of an Apache Isis application are the domain objects, either persisted entities or view models.
                             Business rules can be associated directly with domain objects, or can be factored out into separate
                             services.  Apache Isis performs dependency injection everywhere to ensure that the application remains decoupled.</p>
-                        <p><a class="button small info radius" href="./documentation.html" role="button">Read the docs »</a></p>
+                        <p><a class="button small info radius" href="documentation.html" role="button">Read the docs »</a></p>
                     </div>
                     <div class="large-4 medium-4 columns">
                         <h2>Add-ons <small>(non ASF)</small></h2>
@@ -690,7 +692,7 @@ And I must say this: "Great Support from the development team"</p>
 
                 <div class="row">
                     <div class="large-offset-1 large-10 medium-offset-1 medium-10 columns">
-                        <a href="./images/todoapp/todoitem.png"><img src="./images/todoapp/todoitem.png"
+                        <a href="images/todoapp/todoitem.png"><img src="images/todoapp/todoitem.png"
                             style="padding: 2px;border: 1px solid #021a40;"
                         /></a>
                     </div>
@@ -706,7 +708,7 @@ And I must say this: "Great Support from the development team"</p>
 
                 <div class="row">
                     <div class="large-offset-1 large-10 medium-offset-1 medium-10 columns">
-                        <a href="./images/todoapp/dashboard.png"><img src="./images/todoapp/dashboard.png" style="padding: 2px;border: 1px solid #021a40;" /></a>
+                        <a href="images/todoapp/dashboard.png"><img src="images/todoapp/dashboard.png" style="padding: 2px;border: 1px solid #021a40;" /></a>
                     </div>
                 </div>
 
@@ -720,7 +722,7 @@ And I must say this: "Great Support from the development team"</p>
 
                 <div class="row">
                     <div class="large-offset-1 large-10 medium-offset-1 medium-10 columns">
-                        <a href="./images/todoapp/swagger-ui.png"><img src="./images/todoapp/swagger-ui.png" style="padding: 2px;border: 1px solid #021a40;" /></a>
+                        <a href="images/todoapp/swagger-ui.png"><img src="images/todoapp/swagger-ui.png" style="padding: 2px;border: 1px solid #021a40;" /></a>
                     </div>
                 </div>
 
@@ -823,19 +825,19 @@ mvn archetype:generate  \
 
 
 
-<script src="./js/foundation/5.5.1/vendor/jquery.js"></script>
-<script src="./js/foundation/5.5.1/foundation.min.js"></script>
+<script src="js/foundation/5.5.1/vendor/jquery.js"></script>
+<script src="js/foundation/5.5.1/foundation.min.js"></script>
 
 
-<link href="./css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
-<script src="./js/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script src="./js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
+<link href="css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
+<script src="js/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
 
-<script src="./js/slick/1.5.0/slick.min.js"></script>
+<script src="js/slick/1.5.0/slick.min.js"></script>
 
-<script src="./js/elasticlunr/elasticlunr.min.js"></script>
+<script src="js/elasticlunr/elasticlunr.min.js"></script>
 
-<script type="text/javascript" src="js/app.js"></script>
+<script src="js/app.js"></script>
 
 
 <script type="text/javascript">

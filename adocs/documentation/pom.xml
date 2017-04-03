@@ -301,10 +301,14 @@
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="using npm (node) to rebuild search index"/>
-                                        <exec executable="npm" dir="${isis-site-search.dir}">
-                                            <arg value="run"/>
-                                            <arg value="index"/>
+                                        <echo message="using node to rebuild search index"/>
+                                        <exec executable="node" dir="${isis-site-search.dir}">
+                                            <arg value="--max_old_space_size=2048"/>
+                                            <arg value="_scripts/index.js"/>
+                                            <arg value="../content/"/>
+                                            <arg value="-o"/>
+                                            <arg value="../content/elasticlunr/index.json"/>
+                                            <arg value="-V"/>
                                         </exec>
 
                                         <echo message=""/>
