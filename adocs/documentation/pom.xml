@@ -59,8 +59,8 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-        <isis-site.dir>../../../isis-site/content</isis-site.dir>
-        <redirects.dir>../redirects/content</redirects.dir>
+        <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
+        <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
@@ -253,10 +253,10 @@
                                     <target>
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="deleting everything in ${isis-site.dir}"/>
+                                        <echo message="deleting everything in ${isis-site-content.dir}"/>
                                         <echo message=""/>
                                         <delete includeemptydirs="true">
-                                            <fileset dir="${isis-site.dir}" includes="**/*"/>
+                                            <fileset dir="${isis-site-content.dir}" includes="**/*"/>
                                         </delete>
                                     </target>
                                 </configuration>
@@ -290,33 +290,36 @@
                                     <target>
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${redirects.dir} to ${isis-site.dir}"/>
-                                        <echo message=""/>
-                                        <copy todir="${isis-site.dir}">
-                                            <fileset dir="${redirects.dir}"/>
-                                        </copy>
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
+                                        <echo message="copying from ${build.dir} to ${isis-site-content.dir}"/>
                                         <echo message=""/>
-                                        <copy todir="${isis-site.dir}" overwrite="true" force="true">
+                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
                                             <fileset dir="${build.dir}"/>
                                         </copy>
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="converting CRLF to LF for all text files under ${isis-site.dir}"/>
+                                        <echo message="using npm (node) to rebuild search index"/>
+                                        <exec executable="npm" dir="${isis-site-search.dir}">
+                                            <arg value="run"/>
+                                            <arg value="index"/>
+                                        </exec>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="converting CRLF to LF for all text files under ${isis-site-content.dir}"/>
 
                                         <echo message="... .html files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.html"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="true"/>
 
                                         <echo message="... .xml files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.xml"
                                                  eol="lf"
                                                  eof="remove"
@@ -324,56 +327,56 @@
 
 
                                         <echo message="... .xsd files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.xsd"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .css files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.css"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .svg files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.svg"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .less files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.less"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .scss files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.scss"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .js files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.js"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .sh files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.sh"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .rdf files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.rdf"
                                                  eol="lf"
                                                  eof="remove"
@@ -383,9 +386,9 @@
                                              apply fixcrlf, so just copy over again... -->
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site.dir}"/>
+                                        <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site-content.dir}"/>
                                         <echo message=""/>
-                                        <copy todir="${isis-site.dir}" overwrite="true" force="true">
+                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
                                             <fileset dir="${build.dir}"  includes="**/css/slick/**/*"/>
                                         </copy>
 
@@ -423,7 +426,7 @@
                                 </goals>
                                 <configuration>
                                     <source>
-                                        def siteDir = new File("${isis-site.dir}", "..")
+                                        def siteDir = new File("${isis-site-content.dir}", "..")
 
                                         "git add content --all".execute(null, siteDir).in.text
                                         "git reset content/guides".execute(null, siteDir).in.text
@@ -463,7 +466,7 @@
                                         <echo message=""/>
                                         <echo message="git commit -m '${message}' "/>
                                         <echo message=""/>
-                                        <exec executable="git" dir="${isis-site.dir}">
+                                        <exec executable="git" dir="${isis-site-content.dir}">
                                             <arg value="commit"/>
                                             <arg value="-m"/>
                                             <arg value="${message}"/>
@@ -473,7 +476,7 @@
                                         <echo message=""/>
                                         <echo message="git reset --hard"/>
                                         <echo message=""/>
-                                        <exec executable="git" dir="${isis-site.dir}">
+                                        <exec executable="git" dir="${isis-site-content.dir}">
                                             <arg value="reset"/>
                                             <arg value="--hard"/>
                                         </exec>
