@@ -94,20 +94,6 @@
     </style>
 
     <style>
-    .github-fork-ribbon-wrapper.right {
-        position: fixed;
-    }
-    .github-fork-ribbon {
-        background: #090;
-    }
-    .github-fork-ribbon a:hover {
-        background:#0D0;
-        color:#fff;
-        font-size: 1.1em;
-    }
-    </style>
-
-    <style>
         @media only screen and (min-width: 40.063em) {
           .top-bar {
             .contain-to-grid .top-bar {
@@ -246,9 +232,20 @@
                 margin-bottom: 0px;
             }
 
-        </style>
+            #search-panel {
+                display: none;
+                border: lightgray solid 1px;
+                padding: 10px;
+                margin-top: 10px;                
+                margin-bottom: 10px;
+            }
 
-        <style>
+            #search-panel.active {
+                display: inherit;
+            }
+    </style>
+
+    <style>
         /* overriding colony.css stylesheet */
         .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] {
            /*padding: 1.25em 1.5625em 1.125em 1.5625em;*/
@@ -363,11 +360,6 @@
 </head>
 <body>
 
-<div class="github-fork-ribbon-wrapper right" style="position: fixed;">
-    <div class="github-fork-ribbon">
-        <a href="https://github.com/apache/isis#fork-destination-box">Fork me on GitHub</a>
-    </div>
-</div>
 
 <div class="homepage">
     <div class="row">
@@ -421,7 +413,13 @@
 
     <div class="row">
         <div class="large-12 medium-12 columns">
-            <div id="search-results"/>
+            <div id="search-panel">
+                <div id="search-results"></div>
+                <div>
+                    <br/>
+                    <a href=".">clear</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -808,14 +806,14 @@ mvn archetype:generate  \
             </div>
 
 
-            <footer>
-              <hr>
-              <p class="small">
-              Copyright &copy; 2010~2016 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
-              <br/>
-              Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
-              </p>
-            </footer>
+        <footer>
+          <hr>
+          <p class="small">
+          Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
+          <br/>
+          Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
+          </p>
+        </footer>
 
         </div>
 

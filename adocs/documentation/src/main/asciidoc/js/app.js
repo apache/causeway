@@ -4,29 +4,25 @@ $('#search-form').submit(function(ev) {
 
     var searchField = $('#search-field');
     var searchText = searchField.val()
-
+    if(!searchText) {
+        $("#search-panel").removeClass("active");
+    }
 
     $.getJSON('/elasticlunr/index.json', function (data) {
 
         var index = elasticlunr.Index.load(data);
-        var searchResults = index.search(searchText 
-        /*,{
-            fields: {
-                title: {boost: 3},
-                description: {boost: 2},
-                body: {boost: 1}
-        }}
-        */
-        );
+        var searchResults = index.search(searchText);
 
         $('#search-results').empty();
         if(searchResults.length === 0) {
 
             if(searchText) {
+                $("#search-panel").addClass("active");
                 $('#search-results').append("<br/>No matches found for '" + searchText + "'<br/><br/>");
             }
 
         } else {
+            $("#search-panel").addClass("active");
             for (var i = 0; i < Math.min(searchResults.length, 20); i++) {
 
                 var searchResult = searchResults[i];

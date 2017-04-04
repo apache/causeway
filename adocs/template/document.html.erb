@@ -58,52 +58,7 @@
 
     <style>
 
-    <!--
-    <style type="text/css">
-        <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
 
-        pre.CodeRay code {
-            background-color: inherit;
-            border-style: none;
-        }
-
-        pre.CodeRay code > span:first-child {
-            margin-left: -5px;
-        }
-
-        .literalblock pre,
-        .listingblock pre:not(.highlight),
-        .listingblock pre[class="highlight"],
-        .listingblock pre[class^="highlight "],
-        .listingblock pre.CodeRay,
-        .listingblock pre.prettyprint {
-            background: rgb(253, 250, 246);
-         }
-        .sidebarblock .literalblock pre,
-        .sidebarblock .listingblock pre:not(.highlight),
-        .sidebarblock .listingblock pre[class="highlight"],
-        .sidebarblock .listingblock pre[class^="highlight "],
-        .sidebarblock .listingblock pre.CodeRay,
-        .sidebarblock .listingblock pre.prettyprint {
-            background: rgb(253, 250, 246);
-         }
-
-    <style>
-    -->
-
-    <style>
-    .github-fork-ribbon-wrapper.right {
-        position: fixed;
-    }
-    .github-fork-ribbon {
-        background: #090;
-    }
-    .github-fork-ribbon a:hover {
-        background:#0D0;
-        color:#fff;
-        font-size: 1.1em;
-    }
-    </style>
 
     <style>
         @media only screen and (min-width: 40.063em) {
@@ -141,7 +96,6 @@
             color: #003b6b;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-        
     </style>
 
     <style>
@@ -250,6 +204,17 @@
             margin-bottom: 0px;
         }
 
+            #search-panel {
+                display: none;
+                border: lightgray solid 1px;
+                padding: 10px;
+                margin-top: 10px;                
+                margin-bottom: 10px;
+            }
+
+            #search-panel.active {
+                display: inherit;
+            }
     </style>
 
     <style>
@@ -387,7 +352,7 @@
             <ul class="title-area">
                 <li class="name">
                     <h1>
-                        <a href="<%= (attr :sitebasedir) %>/index.html">Apache Isis&trade;</a>
+                        <a href="index.html">Apache Isis&trade;</a>
                     </h1>
                 </li>
                 <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
@@ -409,10 +374,10 @@
                 <!-- Left Nav Section -->
                 <ul class="left">
 
-                    <li><a href="<%= (attr :sitebasedir) %>/documentation.html">Documentation</a></li>
-                    <li><a href="<%= (attr :sitebasedir) %>/downloads.html">Downloads</a></li>
-                    <li><a href="<%= (attr :sitebasedir) %>/help.html">Help</a></li>
-                    <li><a href="<%= (attr :sitebasedir) %>/asf.html">@ASF</a></li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li><a href="downloads.html">Downloads</a></li>
+                        <li><a href="help.html">Help</a></li>
+                        <li><a href="asf.html">@ASF</a></li>
 
                 </ul>
 
@@ -431,7 +396,13 @@
 
     <div class="row">
         <div class="large-12 medium-12 columns">
-            <div id="search-results"/>
+            <div id="search-panel">
+                <div id="search-results"></div>
+                <div>
+                    <br/>
+                    <a href=".">clear</a>
+                </div>
+            </div>
         </div>
     </div>
 
