@@ -6,8 +6,6 @@
 
     <title><%= document.name %></title>
 
-    <base href="<%= (attr :_basedir) %>" />
-    
     <!--
         Licensed to the Apache Software Foundation (ASF) under one
         or more contributor license agreements.  See the NOTICE file
@@ -34,11 +32,11 @@
 
 
     <!-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
-    <link href="css/foundation/5.5.1/foundation.css" rel="stylesheet" />
-    <script src="js/foundation/5.5.1/vendor/modernizr.js"></script>
-    <link href="css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/asciidoctor/colony.css" rel="stylesheet">
-    <link href="css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css" rel="stylesheet" />
+    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
+    <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="<%= (attr :_basedir) %>css/asciidoctor/colony.css" rel="stylesheet">
+    <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
 
 
@@ -347,12 +345,16 @@
 
 <div class="row">
 
+    <!-- pass the basedir through to app.js -->
+    <div id="basedir" style="display:none;"><%= (attr :_basedir) %></div>
+    
+
     <div class="fixed contain-to-grid header">
         <nav class="top-bar" data-topbar role="navigation" style="max-width: 80rem">
             <ul class="title-area">
                 <li class="name">
                     <h1>
-                        <a href="index.html">Apache Isis&trade;</a>
+                        <a href="<%= (attr :_basedir) %>index.html">Apache Isis&trade;</a>
                     </h1>
                 </li>
                 <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
@@ -437,19 +439,19 @@
 </div>
 
 
-<script src="js/foundation/5.5.1/vendor/jquery.js"></script>
-<script src="js/foundation/5.5.1/foundation.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/jquery.js"></script>
+<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
 
 
-<link href="css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
-<script src="js/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script src="js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
+<link href="<%= (attr :_basedir) %>css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
+<script src="<%= (attr :_basedir) %>js/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
 
-<script src="js/slick/1.5.0/slick.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/slick/1.5.0/slick.min.js"></script>
 
-<script src="js/elasticlunr/elasticlunr.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/elasticlunr/elasticlunr.min.js"></script>
 
-<script src="js/app.js"></script>
+<script src="<%= (attr :_basedir) %>js/app.js"></script>
 
 
 <script type="text/javascript">

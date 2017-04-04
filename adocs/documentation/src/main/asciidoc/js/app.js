@@ -2,6 +2,8 @@ $('#search-form').submit(function(ev) {
     ev.preventDefault(); // to stop the form from submitting
     /* Validations go here */
 
+    var basedir = $('#basedir').text().trim();
+
     var searchField = $('#search-field');
     var searchText = searchField.val()
     if(!searchText) {
@@ -32,7 +34,7 @@ $('#search-form').submit(function(ev) {
 
                 var title = doc.title;
                 var description = doc.description;
-                var url = doc.url;
+                var url = basedir + doc.url;
                 var score = searchResult['score'];
                 var percentScore = score.toFixed(2);
 
