@@ -1,8 +1,9 @@
 $('#search-form').submit(function(ev) {
     ev.preventDefault(); // to stop the form from submitting
-    /* Validations go here */
 
     var basedir = $('#basedir').text().trim();
+    var docname = $('#docname').text().trim();
+    var filetype = $('#filetype').text().trim();
 
     var searchField = $('#search-field');
     var searchText = searchField.val()
@@ -25,6 +26,8 @@ $('#search-form').submit(function(ev) {
 
         } else {
             $("#search-panel").addClass("active");
+            $("#search-panel a").attr("href", docname + "." + filetype)
+            
             for (var i = 0; i < Math.min(searchResults.length, 20); i++) {
 
                 var searchResult = searchResults[i];

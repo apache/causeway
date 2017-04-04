@@ -345,8 +345,10 @@
 
 <div class="row">
 
-    <!-- pass the basedir through to app.js -->
+    <!-- pass through to app.js -->
     <div id="basedir" style="display:none;"><%= (attr :_basedir) %></div>
+    <div id="docname" style="display:none;"><%= (attr :docname) %></div>
+    <div id="filetype" style="display:none;"><%= (attr :filetype) %></div>
     
 
     <div class="fixed contain-to-grid header">
@@ -402,10 +404,7 @@
                 <div id="search-results"></div>
                 <div>
                     <br/>
-                    <!--
-                    TODO: need to compute the filename of this rendered document (derive from attr:docfile ?)
                     <a href=".">clear</a>
-                    -->
                 </div>
             </div>
         </div>

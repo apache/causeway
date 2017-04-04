@@ -57,7 +57,8 @@
 
         <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
 
-        <build.dir>${project.basedir}/target/site</build.dir>
+        <build.relative.dir>target/site</build.relative.dir>
+        <build.dir>${project.basedir}/${build.relative.dir}</build.dir>
 
         <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
         <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
@@ -396,6 +397,47 @@
                                             <fileset dir="${build.dir}"  includes="**/css/slick/**/*"/>
                                         </copy>
 
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>reindex</id>
+            <activation>
+                <property>
+                    <name>reindex</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>compile</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <target>
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="using node to rebuild search index"/>
+                                        <exec executable="node" dir=".">
+                                            <arg value="--max_old_space_size=2048"/>
+                                            <arg value="${isis-site-search.dir}/_scripts/index.js"/>
+                                            <arg value="target/site"/>
+                                            <arg value="-o"/>
+                                            <arg value="target/site/elasticlunr/index.json"/>
+                                            <arg value="-V"/>
+                                        </exec>
                                     </target>
                                 </configuration>
                                 <goals>
