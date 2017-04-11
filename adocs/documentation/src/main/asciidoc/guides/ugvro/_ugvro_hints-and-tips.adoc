@@ -21,11 +21,11 @@ This link:https://www.youtube.com/watch?v=_-TOvVYWCHc[screencast] shows how to e
 
 
 
-== AngularJS Tips
+== Angular Tips
 
 The hypermedia API exposed by Apache Isis' Restful Objects viewer is intended be support both bespoke custom-written viewers as well as generic viewers. Indeed, we expect most clients consuming the API will be bespoke, not generic.
 
-This page captures one or two tips on using AngularJS to write such a bespoke client.
+This page captures one or two tips on using Angular to write such a bespoke client.
 
 
 === Invoking a GET link (eg invoking a query action)
@@ -62,7 +62,7 @@ Restful Objects will expose this as action with the following link that looks so
 }
 ----
 
-You can then invoke this using AngularJs' `$resource` service as follows.
+You can then invoke this using Angular' `$resource` service as follows.
 
 [source,javascript]
 ----

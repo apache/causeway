@@ -8,7 +8,9 @@
 From this link:http://markmail.org/message/4kcu7sml4ufdsah3[thread] on the Apache Isis users mailing list:
 
 * _I am trying to display an image in a JavaScript client app, the image comes from
-   an Isis RO web service as a string, but it won't show.  Is there something I should do to change the message?_
+   an Isis RO web service as a string, but it won't show.
+Is there something I should do to change the message?_
+
 
 The RO viewer returns the image as a string, in the form:
 

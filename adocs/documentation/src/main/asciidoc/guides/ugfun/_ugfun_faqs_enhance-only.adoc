@@ -15,3 +15,11 @@ Yes, you can; here's one way:
 ** the one where the main class is `org.apache.isis.WebServer`
 ** there's a button for this on the run configurations dialog.
 * then, on your copy change the main class to `org.apache.isis.Dummy`
+
+Or, you could just write a small shell script and run from the command line:
+
+[source,bash]
+.enhance.sh
+----
+mvn -pl dom datanucleus:enhance -o
+----

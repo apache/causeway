@@ -6,31 +6,44 @@
 
 
 
-The case for  _DDD_ might be compelling, but that doesn't necessarily make it easy to do. Let's take a look at some of the
-challenges that  _DDD_ throws up and see how Apache Isis (and its implementation of the naked objects pattern) helps address them.
+The case for _DDD_ might be compelling, but that doesn't necessarily make it easy to do.
+Let's take a look at some of the challenges that  _DDD_ throws up and see how Apache Isis (and its implementation of the naked objects pattern) helps address them.
+
+
 
 == DDD takes a conscious effort
 
 Here's what Eric Evans says about ubiquitous language:
 
-pass:[<div class="extended-quote-first"><p>]With a conscious effort by the [development] team the domain model can provide the backbone for [the] common [ubiquitous] language...connecting team communication to the software implementation."
-pass:[</p></div>]
+____
+With a conscious effort by the [development] team the domain model can provide the backbone for [the] common [ubiquitous] language...connecting team communication to the software implementation.
+____
 
-pass:[<div class="extended-quote-attribution"><p>]-- Eric Evans
-pass:[</p></div>]
 
-The word to pick up on here is *conscious*.  It takes a conscious effort by the entire team to develop the ubiquitous language. Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking. This takes willingness on the part of all involved, not to mention some practice.
+The word to pick up on here is *conscious*.
+It takes a _conscious_ effort by the entire team to develop the ubiquitous language.
+Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking.
+This takes willingness on the part of all involved, not to mention some practice.
 
-With Apache Isis, though, the  ubiquitous language evolves with scarcely any effort at all. For the business experts, the Apache Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion. Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes. There's no technology to get distracted by; there is literally nothing else for the developers to work on.
+With Apache Isis, though, the ubiquitous language evolves with scarcely any effort at all.
+For the business experts, the Apache Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion.
+Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes.
+There's no technology to get distracted by; there is literally nothing else for the developers to work on.
 
 
 == DDD must be grounded
 
-Employing a  model-driven design isn't necessarily straightforward, and the development processes used by some organizations positively hinder it. It's not sufficient for the business analysts or architects to come up with some idealized representation of the business domain and then chuck it over the wall for the programmers to do their best with.
+Employing a model-driven design isn't necessarily straightforward, and the development processes used by some organizations positively hinder it.
+It's not sufficient for the business analysts or architects to come up with some idealized representation of the business domain and then chuck it over the wall for the programmers to do their best with.
 
-Instead, the concepts in the model must have a very literal representation in code. If we fail to do this, then we open up the communication divide, and our  ubiquitous language is lost. There is literally no point having a domain model that cannot be represented in code. We cannot invent our ubiquitous language in a vacuum, and the developers must ensure that the model remains grounded in the doable.
+Instead, the concepts in the model must have a very literal representation in code.
+If we fail to do this, then we open up the communication divide, and our ubiquitous language is lost.
+There is literally no point having a domain model that cannot be represented in code.
+We cannot invent our ubiquitous language in a vacuum, and the developers must ensure that the model remains grounded in the doable.
 
-In Apache Isis, we have a very pure one-to-one correspondence between the domain concepts and its implementation. Domain concepts are represented as classes and interfaces, easily demonstrated back to the business. If the model is clumsy, then the application will be clumsy too, and so the team can work together to find a better implementable model.
+In Apache Isis, we have a very pure one-to-one correspondence between the domain concepts and its implementation.
+Domain concepts are represented as classes and interfaces, easily demonstrated back to the business.
+If the model is clumsy, then the application will be clumsy too, and so the team can work together to find a better implementable model.
 
 
 

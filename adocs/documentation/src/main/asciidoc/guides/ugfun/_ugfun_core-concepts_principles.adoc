@@ -5,12 +5,19 @@
 :_imagesdir: images/
 
 
+
+Apache Isis is primarily aimed at custom-built "enterprise" applications.
+The UI provided by the xref:ugvw.adoc#[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
+The REST API exposed by the xref:ugvro.adoc#[RestfulObjects viewer] allows custom apps to be developed -- eg using Angular or similar -- for use by those requiring more guidance; typically end-users outside of the organization.
 This section describes some of the core principles and values that the framework aims to honour and support.
 
-The first of these relate to how we believe your domain application should be written: it should be decoupled, testable and so on).  Others relate to the implementation of the framework itself.
 
-The section concludes by contrasting the framework with some other open source frameworks commonly used.
 
-include::_ugfun_core-concepts_principles_your-apps.adoc[leveloffset=+1]
-include::_ugfun_core-concepts_principles_isis-itself.adoc[leveloffset=+1]
-include::_ugfun_core-concepts_principles_apache-isis-vs.adoc[leveloffset=+1]
+include::_ugfun_core-concepts_principles_build-not-buy.adoc[leveloffset=+1]
+include::_ugfun_core-concepts_principles_for-the-long-term.adoc[leveloffset=+1]
+
+// TODO: incomplete
+//include::_ugfun_core-concepts_principles_testable.adoc[leveloffset=+1]
+//include::_ugfun_core-concepts_principles_lego-blocks.adoc[leveloffset=+1]
+//include::_ugfun_core-concepts_principles_isis-itself.adoc[leveloffset=+1]
+

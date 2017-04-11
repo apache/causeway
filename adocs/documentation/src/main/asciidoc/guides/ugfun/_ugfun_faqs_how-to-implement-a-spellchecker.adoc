@@ -23,8 +23,7 @@ You'll need some way to know which fields should be spell checked.  Two ways spr
 
 * either look at the domain event's identifier
 
-* or subclass the domain event (recommended anyway) and have those subclass events implement some sort of marker
-interface, eg a `SpellCheckEvent`.
+* or subclass the domain event (recommended anyway) and have those subclass events implement some sort of marker interface, eg a `SpellCheckEvent`.
 
 And you'll (obviously) also need some sort of spell checker implementation to call.
 

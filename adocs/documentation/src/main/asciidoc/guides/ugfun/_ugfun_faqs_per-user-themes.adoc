@@ -4,14 +4,17 @@
 :_basedir: ../../
 :_imagesdir: images/
 
+
 From link:http://isis.markmail.org/thread/kb4442niwwbnghey[this thread] on the Apache Isis users mailing list:
 
-* _Is it possible to have each of our resellers (using our Isis application) use there own theme/branding with their own logo and colors? Would this also be possible for the login page, possibly depending on the used host name?_
+* _Is it possible to have each of our resellers (using our Isis application) use there own theme/branding with their own logo and colors?
+Would this also be possible for the login page, possibly depending on the used host name?_
 
 
 Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
 
 The http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] (non-ASF) actually link:https://github.com/isisaddons/isis-app-todoapp/tree/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the http://github.com/isisaddons/isis-module-settings[Isis addons' settings module] settings modules:
+
 
 [source,java]
 .IActiveThemeProvider implementation
@@ -24,10 +27,11 @@ public class UserSettingsThemeProvider implements ActiveThemeProvider {
             final String themeName = IsisContext.doInSession(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    final Class<UserSettingsService> serviceClass = UserSettingsService.class;
-                    final UserSettingsService userSettingsService = lookupService(serviceClass);
+                    final UserSettingsService userSettingsService =
+                        lookupService(UserSettingsService.class);
                     final UserSetting activeTheme = userSettingsService.find(
-                            IsisContext.getAuthenticationSession().getUserName(), ACTIVE_THEME);
+                            IsisContext.getAuthenticationSession().getUserName(),
+                            ACTIVE_THEME);
                     return activeTheme != null ? activeTheme.valueAsString() : null;
                 }
             });
@@ -40,11 +44,13 @@ public class UserSettingsThemeProvider implements ActiveThemeProvider {
         IsisContext.doInSession(new Runnable() {
             @Override
             public void run() {
-                final String currentUsrName = IsisContext.getAuthenticationSession().getUserName();
+                final String currentUsrName =
+                    IsisContext.getAuthenticationSession().getUserName();
                 final UserSettingsServiceRW userSettingsService =
                         lookupService(UserSettingsServiceRW.class);
                 final UserSettingJdo activeTheme =
-                        (UserSettingJdo) userSettingsService.find(currentUsrName, ACTIVE_THEME);
+                        (UserSettingJdo) userSettingsService.find(
+                                                currentUsrName, ACTIVE_THEME);
                 if(activeTheme != null) {
                     activeTheme.updateAsString(themeName);
                 } else {

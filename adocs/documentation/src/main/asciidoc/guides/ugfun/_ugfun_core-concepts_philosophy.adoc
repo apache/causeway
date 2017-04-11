@@ -14,6 +14,7 @@ include::_ugfun_core-concepts_philosophy_hexagonal-architecture.adoc[leveloffset
 
 include::_ugfun_core-concepts_philosophy_aop.adoc[leveloffset=+1]
 
+// TODO
 // include::_ugfun_core-concepts_philosophy_dci.adoc[leveloffset=+1]
 
 include::_ugfun_core-concepts_philosophy_how-eases-ddd.adoc[leveloffset=+1]

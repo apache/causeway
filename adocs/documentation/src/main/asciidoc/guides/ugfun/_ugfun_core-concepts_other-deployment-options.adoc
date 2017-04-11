@@ -57,7 +57,7 @@ There are a number of use cases for deploying Isis as a REST API, including:
 
 * to allow a custom UI to be built against the RESTful API +
 +
-For example, using AngularJS or some other RIA technology such as Flex, JavaFX, Silverlight
+For example, using Angular or some other RIA technology such as Flex, JavaFX, Silverlight
 
 * to enable integration between systems +
 +

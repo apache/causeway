@@ -27,7 +27,7 @@ $('#search-form').submit(function(ev) {
         } else {
             $("#search-panel").addClass("active");
             $("#search-panel a").attr("href", docname + "." + filetype)
-            
+
             for (var i = 0; i < Math.min(searchResults.length, 20); i++) {
 
                 var searchResult = searchResults[i];

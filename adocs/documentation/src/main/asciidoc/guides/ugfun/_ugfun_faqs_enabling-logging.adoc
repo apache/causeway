@@ -4,7 +4,8 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-Sometimes you just need to see what is going on. There are various ways in which logging can be enabled, here are the ones we tend to use.
+Sometimes you just need to see what is going on.
+There are various ways in which logging can be enabled, here are the ones we tend to use.
 
 * In Apache Isis +
 +
@@ -16,7 +17,8 @@ As per the http://www.datanucleus.org/products/accessplatform/logging.html[DN lo
 
 * In the JDBC Driver +
 +
-Configure `log4jdbc` JDBC rather than the vanilla driver (see `WEB-INF/persistor_datanucleus.properties`) and configure log4j logging (see `WEB-INF/logging.properties`).  There are examples of both in the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+Configure `log4jdbc` JDBC rather than the vanilla driver (see `WEB-INF/persistor_datanucleus.properties`) and configure log4j logging (see `WEB-INF/logging.properties`).
+There are examples of both in the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 
 * In the database +
 +

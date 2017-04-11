@@ -5,11 +5,12 @@
 :_imagesdir: images/
 
 
-The link:http://www.isisaddons.org[Isis Addons] website provides a number of reusable modules and other extensions for Apache Isis.  This chapter focuses just on the modules, all of which have a name of the form `isis-module-xxx`.
+The link:http://www.isisaddons.org[Isis Addons] website provides a number of reusable modules and other extensions for Apache Isis.
+This chapter focuses just on the modules, all of which have a name of the form `isis-module-xxx`.
 
 [WARNING]
 ====
-Note that Isis addons, while maintained by Apache Isis committers, are not part of the ASF.
+Note that Isis Addons, although maintained by Apache Isis committers, are not part of the ASF.
 ====
 
 
