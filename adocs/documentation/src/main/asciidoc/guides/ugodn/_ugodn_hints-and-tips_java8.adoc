@@ -1,23 +1,29 @@
-[[_ugsec_configuring-isis-to-use-bypass]]
-= Bypassing security
+[[_ugodn_hints-and-tips_java8]]
+= Java8
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
-The bypass security component consists of an implementation of both the `AuthenticationManager` and `AuthorizationManager` APIs, and are intended for prototyping use only.
 
-The authentication manager allows access with any credentials (in a sense, "bypassing" authentication), while the authorization manager provides access to all class members (in a sense, "bypassing" authorization).
+DataNucleus 4.x supports Java 7, but can also be used with Java 8, eg for streams support against collections managed
+by DataNucleus.
 
+Just include within `<dependencies>` of your `dom` module's `pom.xml`:
 
-To tell Apache Isis to bypass security, just update the `WEB-INF/isis.properties` file:
-
-[source,ini]
+[source,xml]
 ----
-isis.authentication=bypass
-isis.authorization=bypass
+<dependency>
+    <groupId>org.datanucleus</groupId>
+    <artifactId>datanucleus-java8</artifactId>
+    <version>4.2.0-release</version>t
+</dependency>
 ----
 
-This installs the appropriate no-op implementations for both authentication and authorization:
+[NOTE]
+====
+The DataNucleus website includes a link:http://www.datanucleus.org/products/accessplatform/compatibility.html[page]
+listing version compatibility of these extensions vis-a-vis the core DataNucleus platform.
+====
 
-image::{_imagesdir}security/security-apis-impl/configure-isis-to-use-bypass.PNG[width="600px"]
+

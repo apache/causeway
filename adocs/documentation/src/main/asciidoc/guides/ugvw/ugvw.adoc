@@ -53,8 +53,8 @@ include::_ugvw_features.adoc[leveloffset=+1]
 include::_ugvw_configuration-properties.adoc[leveloffset=+1]
 include::_ugvw_layout.adoc[leveloffset=+1]
 include::_ugvw_customisation.adoc[leveloffset=+1]
-
 include::_ugvw_extending.adoc[leveloffset=+1]
+include::_ugvw_hints-and-tips.adoc[leveloffset=+1]
 
 include::_ugvw_isis-addons.adoc[leveloffset=+1]
 

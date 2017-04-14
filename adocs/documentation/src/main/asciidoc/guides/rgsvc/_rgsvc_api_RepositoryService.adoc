@@ -136,7 +136,7 @@ public abstract class Warehouse extends SalesVIPEntity<Marketplace> {
 <2> Needed for updating the managed properties and collections.
 <3> injected services and other methods ommited
 
-On the “addExcludedProduct()” action, if the user didn’t flush, the following test would fail because the managed
+On the “addExcludedProduct()” action, if the user didn't flush, the following test would fail because the managed
 collection would not containing the given product:
 
 [source,java]

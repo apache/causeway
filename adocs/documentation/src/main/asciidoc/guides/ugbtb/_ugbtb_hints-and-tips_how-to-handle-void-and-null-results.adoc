@@ -1,4 +1,4 @@
-[[_dg_hints-and-tips_how-to-handle-void-and-null-results]]
+[[_ugbtb_hints-and-tips_how-to-handle-void-and-null-results]]
 = How to handle void/null results
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
@@ -8,12 +8,12 @@
 
 From this link:http://isis.markmail.org/thread/yf7qdeiu3vrvk2ei[thread] on the Apache Isis users mailing list:
 
-* _When using a `void` action, let’s say a remove action, the user is redirected to a
+* _When using a `void` action, let's say a remove action, the user is redirected to a
 page "no results".
-When clicking the back button in the browser the user sees "Object not found" (since you’ve just deleted this object)._
+When clicking the back button in the browser the user sees "Object not found" (since you've just deleted this object)._
 
 * _You can return a list for example to prevent the user from being redirect to a
-  "No results" page, but I think it’s not the responsibility of the controllers in
+  "No results" page, but I think it's not the responsibility of the controllers in
   the domain model._
 
 * _A solution could be that wicket viewer goes back one page when

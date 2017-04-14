@@ -59,6 +59,5 @@ The remaining guides are:
 
 include::_ugodn_configuring.adoc[leveloffset=+1]
 include::_ugodn_jdo-mappings.adoc[leveloffset=+1]
-include::_ugodn_overriding-jdo-annotations.adoc[leveloffset=+1]
-include::_ugodn_java8.adoc[leveloffset=+1]
+include::_ugodn_hints-and-tips.adoc[leveloffset=+1]
 
