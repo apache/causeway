@@ -43,7 +43,7 @@ This link:https://www.youtube.com/watch?v=MxewC5Pve5k[screencast] describes the 
 Probably the easiest way to understand dynamic XML layouts is by example.  For this we'll use the `ToDoItem` from the
 (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
-image::{_imagesdir}ugfun/_ugvw_layout_dynamic_xml/ToDoItem.png[width="940px",link="{_imagesdir}ugfun/_ugvw_layout_dynamic_xml/ToDoItem.png"]
+image::{_imagesdir}layout-dynamic-xml/ToDoItem.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoItem.png"]
 
 
 === Namespaces
