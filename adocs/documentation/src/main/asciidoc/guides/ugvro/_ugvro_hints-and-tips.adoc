@@ -15,7 +15,7 @@ See also hints-n-tips chapters in the:
 
 * the xref:../ugvro/ugvro.adoc#_ugvro_hints-and-tips[Restful Objects viewer] guide (this chapter)
 
-* the xref:../ugvro/ugodn.adoc#_ugodn_hints-and-tips[Datanucleus ObjectStore] guide
+* the xref:../ugodn/ugodn.adoc#_ugodn_hints-and-tips[Datanucleus ObjectStore] guide
 
 * the xref:../ugsec/ugsec.adoc#_ugsec_hints-and-tips[Security] guide
 
