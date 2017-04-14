@@ -8,7 +8,7 @@
 
 == Rename of isis-viewer-wicket artifacts
 
-The `<groupId>` and `<artifactId>` of the xref:ugvw.adoc#[Wicket viewer] have been made consistent with other artifacts:
+The `<groupId>` and `<artifactId>` of the xref:../guides/ugvw/ugvw.adoc#[Wicket viewer] have been made consistent with other artifacts:
 
 * the `<groupId>` has been changed from `org.apache.isis.viewer` to `org.apache.isis.core`
 * the `<artifactId>` has been changed from `isis-viewer-wicket-???` to `isis-core-viewer-wicket-???`

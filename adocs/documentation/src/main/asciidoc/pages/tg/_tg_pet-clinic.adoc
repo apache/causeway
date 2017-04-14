@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 It was originally written by Jeroen van der Wal.
 
 It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
@@ -162,7 +162,7 @@ Go back to the splash screen, and quit the app. Note that the database runs in-m
 
 == Dev environment
 
-Set up xref:dg.adoc#_dg_ide[an IDE] and import the project to be able to run and debug the app.
+Set up xref:../../guides/dg/dg.adoc#_dg_ide[an IDE] and import the project to be able to run and debug the app.
 
 Then set up a launch configuration so that you can run the app from within the IDE. To save having to run the fixtures
 every time, specify the following system properties:
