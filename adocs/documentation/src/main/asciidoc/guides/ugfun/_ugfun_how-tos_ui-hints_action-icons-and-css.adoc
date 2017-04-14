@@ -11,7 +11,7 @@ These UI hint can be applied either to individual actions, or can be applied en-
 
 == Per action
 
-NOTE: TODO - xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
 
 
 Alternatively, you can specify these hints dynamically in the xref:ugvw.adoc#_ugvw_layout[`Xxx.layout.json`] for the entity.

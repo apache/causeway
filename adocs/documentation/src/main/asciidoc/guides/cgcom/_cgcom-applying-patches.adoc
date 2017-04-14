@@ -16,7 +16,7 @@ If a patch is received on a JIRA ticket, then it should be reviewed and applied.
 
 If a diff file has been provided, then it can easily be applied using eGit's wizards (Eclipse's Git integration)…
 
-NOTE: TODO - this stuff needs fleshing out ...
+NOTE: FIXME - this stuff needs fleshing out ...
 
 
 

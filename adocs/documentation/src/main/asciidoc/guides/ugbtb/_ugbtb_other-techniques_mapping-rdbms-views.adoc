@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-NOTE: TODO - as used in link:http://github.com/estatio/estatio[Estatio]
+NOTE: FIXME - as used in link:http://github.com/estatio/estatio[Estatio]
 

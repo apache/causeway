@@ -4,26 +4,26 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: FIXME
 
 
 ## Instantiating and Persisting Objects
 
-NOTE: TODO - using ``DomainObjectContainer``'s support for  xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[creation] and xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[persistence]
+NOTE: FIXME - using ``DomainObjectContainer``'s support for  xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[creation] and xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[persistence]
 
 ## Finding Objects
 
-NOTE: TODO - using xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
+NOTE: FIXME - using xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
 
 ### Using DataNucleus type-safe queries
 
-NOTE: TODO - as described xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries[here]
+NOTE: FIXME - as described xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries[here]
 
 
 
 ## Deleting Objects
 
-NOTE: TODO using ``DomainObjectContainer``'s support for  xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[persistence]
+NOTE: FIXME using ``DomainObjectContainer``'s support for  xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[persistence]
 
 
 

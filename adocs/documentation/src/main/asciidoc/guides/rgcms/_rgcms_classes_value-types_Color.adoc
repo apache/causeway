@@ -5,4 +5,4 @@
 :_imagesdir: images/
 
 
-NOTE: TODO - the `org.apache.isis.applib.value.Color` class.
+NOTE: FIXME - the `org.apache.isis.applib.value.Color` class.

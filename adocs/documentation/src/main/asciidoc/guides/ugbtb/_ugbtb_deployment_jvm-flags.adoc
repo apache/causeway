@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: FIXME
 
 
 The default JVM configuration will most likely not be appropriate for running Isis as a webapp.  The table below suggests some JVM args that you will probably want to modify:

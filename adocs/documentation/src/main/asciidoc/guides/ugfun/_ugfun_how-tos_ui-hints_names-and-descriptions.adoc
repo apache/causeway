@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: FIXME
 
 
 
@@ -12,29 +12,29 @@ NOTE: see also xref:ugbtb.adoc#_ugbtb_i18n[Internationalization]
 
 == Class (object)
 
-NOTE: TODO - xref:rgant.adoc#_rgant-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:rgant.adoc#_rgant-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:rgant.adoc#_rgant-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
 
 
 == Property
 
-NOTE: TODO - xref:rgant.adoc#_rgant-PropertyLayout_named[`@PropertyLayout#named()`], xref:rgant.adoc#_rgant-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-PropertyLayout_named[`@PropertyLayout#named()`], xref:rgant.adoc#_rgant-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
 
 
 
 == Collections
 
-NOTE: TODO - xref:rgant.adoc#_rgant-CollectionLayout_named[`@CollectionLayout#named()`], xref:rgant.adoc#_rgant-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-CollectionLayout_named[`@CollectionLayout#named()`], xref:rgant.adoc#_rgant-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
 
 
 
 == Actions
 
-NOTE: TODO - xref:rgant.adoc#_rgant-ActionLayout_named[`@ActionLayout#named()`], xref:rgant.adoc#_rgant-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-ActionLayout_named[`@ActionLayout#named()`], xref:rgant.adoc#_rgant-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
 
 
 == Action Parameters
 
-NOTE: TODO - xref:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout#named()`], xref:rgant.adoc#_rgant-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout#named()`], xref:rgant.adoc#_rgant-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
 
 
 [TIP]

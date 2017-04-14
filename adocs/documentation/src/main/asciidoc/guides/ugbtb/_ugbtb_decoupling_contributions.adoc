@@ -74,14 +74,14 @@ Note that an action annotated as being `@NotContributed` will still appear in th
 
 ## Contributed Action
 
-NOTE: TODO
+NOTE: FIXME
 
 ## Contributed Property
 
-NOTE: TODO
+NOTE: FIXME
 
 ## Contributed Collection
 
-NOTE: TODO
+NOTE: FIXME
 
 

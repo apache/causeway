@@ -7,11 +7,11 @@
 
 By default, collections all rendered lazily, in other words in a "collapsed" table view:
 
-NOTE: TODO - screenshot here
+NOTE: FIXME - screenshot here
 
 For the more commonly used collections we want to show the table expanded:
 
-NOTE: TODO - screenshot here
+NOTE: FIXME - screenshot here
 
 For this we annotate the collection using the `@CollectionLayout(render=RenderType.EAGERLY`; for example
 

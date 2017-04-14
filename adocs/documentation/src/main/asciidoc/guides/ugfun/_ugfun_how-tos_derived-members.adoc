@@ -4,21 +4,21 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: FIXME
 
 
 
 
 == Derived Property
 
-NOTE: TODO
+NOTE: FIXME
 
 
 
 
 == Derived Collection
 
-NOTE: TODO
+NOTE: FIXME
 
 While derived properties and derived collections typically "walk the graph" to associated objects, there is nothing to prevent the returned value being the result of invoking a repository (domain service) action.
 
@@ -39,10 +39,10 @@ public class Customer {
 
 == Trigger on property change
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
 
 
 
 == Trigger on collection change
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]

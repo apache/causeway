@@ -223,7 +223,7 @@ For convenience you can inherit from AbstractService or one of its subclasses, b
 
 === Domain Services vs View Services
 
-NOTE: TODO
+NOTE: FIXME
 
 `@DomainService(nature=...)`
 
@@ -241,7 +241,7 @@ Indeed, it is quite common to have a domain service that acts as both a factory 
 [[__ugfun_core-concepts_building-blocks_mixins-and-contributions]]
 == Mixins & Contributions
 
-NOTE: TODO
+NOTE: FIXME
 
 
 For more information, see xref:ugbtb.adoc#_ugbtb_decoupling_contributions[this topic on contribution]s, and xref:ugbtb.adoc#_ugbtb_decoupling_mixins[this topic on mixin]s.
@@ -251,13 +251,13 @@ For more information, see xref:ugbtb.adoc#_ugbtb_decoupling_contributions[this t
 [[__ugfun_core-concepts_building-blocks_domain-events]]
 == Domain Events
 
-NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_domainevent[domain event] classes.
+NOTE: FIXME; see xref:rgcms.adoc#_rgcms_classes_domainevent[domain event] classes.
 
 
 
 === UI Events
 
-NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
+NOTE: FIXME; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 
 
 
@@ -309,6 +309,6 @@ The xref:rgcms.adoc#_rgcms_schema-common[common schema] XSD defines the `oidDto`
 [[__ugfun_core-concepts_building-blocks_value-objects]]
 == Value Objects (Primitives)
 
-NOTE: TODO
+NOTE: FIXME
 
 

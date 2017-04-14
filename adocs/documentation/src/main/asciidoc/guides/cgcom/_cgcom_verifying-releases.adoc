@@ -160,7 +160,7 @@ Copy the following script, save to `verify-isis-release.sh`:
 # -Create an empty directory
 # -Put a .txt file in it containing a list of all the urls of the zip files
 # -Run this script
-# TODO: enhance this script so it will stop when something is broken
+# FIXME: enhance this script so it will stop when something is broken
 _download(){
     for fil in `cat *.txt`
     do

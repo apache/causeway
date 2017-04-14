@@ -4,13 +4,13 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: FIXME
 
 
 
 == Visibility ("see it")
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`]
 
 ### Hide a Property
 
@@ -27,7 +27,7 @@ NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`]
 
 == Usability ("use it")
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
 
 ### Disable a Property
 
@@ -53,7 +53,7 @@ In the Wicket viewer this means disabling the edit button.
 
 == Validity ("do it")
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`] and xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`] and xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`]
 
 
 ### Validate (change to) a Property
@@ -66,7 +66,7 @@ NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`], 
 
 ### Declarative validation
 
-NOTE: TODO - using xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`], xref:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`]
+NOTE: FIXME - using xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`], xref:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`]
 
 
 

@@ -5,5 +5,5 @@
 :_imagesdir: images/
 :toc: right
 
-NOTE: TODO
+NOTE: FIXME
 

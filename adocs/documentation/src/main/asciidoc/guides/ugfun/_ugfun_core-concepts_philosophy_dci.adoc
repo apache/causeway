@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-NOTE: TODO ... Trygve Reenskaug
+NOTE: FIXME ... Trygve Reenskaug
 

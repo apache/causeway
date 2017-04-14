@@ -4,47 +4,47 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: FIXME
 
 
 == For Properties
 
-NOTE: TODO
+NOTE: FIXME
 
 ### Choices for Property
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
 ### Auto-complete for property
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
 
 ### Default for property
 
-NOTE: TODO -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
+NOTE: FIXME -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
 
 
 
 
 == For Action Parameters
 
-NOTE: TODO
+NOTE: FIXME
 
 ### Choices for action parameter
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
 ### Dependent choices for action params
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
 ### Auto-complete for action param
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
+NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
 
 ### Default for action param
 
-NOTE: TODO -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
+NOTE: FIXME -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
 
 
 
@@ -52,12 +52,12 @@ NOTE: TODO -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
 
 == For both Properties and Action Parameters
 
-NOTE: TODO
+NOTE: FIXME
 
 
 ### Drop-down for limited number of instances
 
-NOTE: TODO - xref:rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
+NOTE: FIXME - xref:rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
 
 
 ### Auto-complete (repository-based)
