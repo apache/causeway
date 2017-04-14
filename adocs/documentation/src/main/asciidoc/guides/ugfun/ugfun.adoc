@@ -14,7 +14,7 @@ and tells you how to xref:ugfun.adoc#_ugfun_getting-started[get started] with a 
 
 It also describes a number of xref:ugfun.adoc#_ugfun_how-tos[how-to]s, describes how to influence the
 xref:ugvw.adoc#_ugvw_layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
- catalogues various xref:ugfun.adoc#_ugfun_faqs.adoc[FAQ]s.
+ catalogues various xref:dg.adoc#_dg_hints-and-tips.adoc[FAQ]s.
 
 === Other Guides
 
