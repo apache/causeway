@@ -349,9 +349,9 @@ A hyperlink to a bookmark within the Secrurity guide, where:
 
 for example:
 
-`\xref:../ugsec/ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]`
+`\xref:../ugsec/ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]`
 
-|xref:../ugsec/ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]
+|xref:../ugsec/ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]
 
 
 |`adugtst`

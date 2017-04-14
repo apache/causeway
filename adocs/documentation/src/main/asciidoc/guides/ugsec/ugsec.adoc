@@ -82,13 +82,9 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] used to c
 
 include::_ugsec_configuring-isis-to-use-shiro.adoc[leveloffset=+1]
 
-include::_ugsec_shiro-ini-realm.adoc[leveloffset=+1]
+include::_ugsec_shiro-realm-implementations.adoc[leveloffset=+1]
 
-include::_ugsec_shiro-isis-ldap-realm.adoc[leveloffset=+1]
 
-include::_ugsec_shiro-isisaddons-security-module-realm.adoc[leveloffset=+1]
-
-include::_ugsec_shiro-jdbc-realm.adoc[leveloffset=+1]
 
 include::_ugsec_shiro-isis-enhanced-wildcard-permission.adoc[leveloffset=+1]
 

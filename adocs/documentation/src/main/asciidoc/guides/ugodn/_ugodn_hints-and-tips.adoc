@@ -9,7 +9,7 @@ This chapter provides some solutions for problems we've encountered ourselves or
 
 See also hints-n-tips chapters in the:
 
-* the xref:../dg/dg.adoc#_ugvw_hints-and-tips[Developers'] guide
+* the xref:../dg/dg.adoc#_dg_hints-and-tips[Developers'] guide
 
 * the xref:../ugvw/ugvw.adoc#_ugvw_hints-and-tips[Wicket viewer] guide
 
