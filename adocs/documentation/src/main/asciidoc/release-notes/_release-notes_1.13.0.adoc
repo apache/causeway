@@ -42,7 +42,7 @@ now removed/unsupported.  We therefore do recommend that you read and keep in mi
 * link:https://issues.apache.org/jira/browse/ISIS-1421[ISIS-1421] - Possible object deadlock when under load.
 * link:https://issues.apache.org/jira/browse/ISIS-1420[ISIS-1420] - To support dockerization, have any overrides.properties file take precedence over any other config properties
 * link:https://issues.apache.org/jira/browse/ISIS-1418[ISIS-1418] - Support @Nullable for parameters and properties
-* link:https://issues.apache.org/jira/browse/ISIS-1413[ISIS-1413] - Gradle script (and docs) in simpleapp archetype to auto-enhance and for dynamic layouts, also liveReload
+* link:https://issues.apache.org/jira/browse/ISIS-1413[ISIS-1413] - Gradle script (and docs) in simpleapp archetype to auto-enhance and for file-based layouts, also liveReload
 * link:https://issues.apache.org/jira/browse/ISIS-1399[ISIS-1399] - MetricsService to capture within InteractionContext, for profiling.
 * link:https://issues.apache.org/jira/browse/ISIS-1390[ISIS-1390] - Provide a default CommandService, to return CommandDefault.
 * link:https://issues.apache.org/jira/browse/ISIS-1389[ISIS-1389] - New InteractionContext service and Interaction to handle the execution of commands.

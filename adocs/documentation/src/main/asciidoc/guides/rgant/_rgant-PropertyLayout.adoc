@@ -102,19 +102,11 @@ It is also possible to apply the annotation to actions of domain services that a
 
 
 
-As an alternative to using the `@PropertyLayout` annotation, a dynamic layout using  xref:ugvw.adoc#_ugvw_layout_dynamic[`.layout.json`] file can be specified; for example:
+[TIP]
+====
+As an alternative to using the `@PropertyLayout` annotation, a xref:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+====
 
-[source,javascript]
-----
-"description": {
-    "propertyLayout": {
-        "cssClass": "x-key",
-        "describedAs": "What needs to be done",
-        "labelPosition": "LEFT",
-        "typicalLength": 80
-    }
-}
-----
 
 
 

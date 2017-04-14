@@ -1,12 +1,12 @@
-[[_ugvw_layout_dynamic_xml]]
-= Dynamic (XML) Layout
+[[_ugvw_layout_file-based]]
+= File-based Layouts
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
 
-Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_static[statically], using annotations, or dynamically using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
+Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_annotation-based[statically], using annotations, or dynamically using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
 
 The `Xxx.layout.xml` file is just the serialized form of a xref:rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.  These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
@@ -15,7 +15,11 @@ It is also possible to download an initial `.layout.xml` - capturing any existin
 
 [NOTE]
 ====
-It is also possible to describe dynamic layouts using a `.layout.json` file, as discussed xref:ugvw.adoc#_ugvw_layout_dynamic[here].  The `.layout.json` file should be considered as deprecated: the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
+It is also possible to describe layouts using a `.layout.json` file.
+However, `.layout.json` support is deprecated; the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
+
+If you have an application with older `.layout.json` files, then it is possible to download initial `.layout.xml` files using the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
+The `.layout.json` file will be ignored once a `.layout.xml` file is present.
 ====
 
 == Grids vs Components

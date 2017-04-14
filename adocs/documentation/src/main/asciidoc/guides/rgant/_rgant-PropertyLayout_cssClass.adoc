@@ -23,7 +23,7 @@ public class ToDoItem {
 
 
 
-As an alternative to using the annotation, the dynamic xref:ugvw.adoc#_ugvw_layout_dynamic[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

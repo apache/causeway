@@ -49,6 +49,6 @@ In such cases, though, it would probably make more sense to annotate the action 
 
 [NOTE]
 ====
-Unlike other `@ActionLayout` attributes, this attribute _cannot_ be specified dynamically in the `.layout.json` xref:ugvw.adoc#_ugvw_layout_dynamic[dynamic layout file] because it relates to the contributor domain service, not the contributee domain object.
+Unlike other `@ActionLayout` attributes, this attribute _cannot_ be specified using a file-based layout because it relates to the contributor domain service, not the contributee domain object.
 ====
 

@@ -27,8 +27,8 @@
 * link:https://issues.apache.org/jira/browse/ISIS-463[ISIS-463] - scope, respectively)
 * link:https://issues.apache.org/jira/browse/ISIS-468[ISIS-468] - Provide better layout management of pages in the Wicket viewer.
 * link:https://issues.apache.org/jira/browse/ISIS-469[ISIS-469] - Provide implementations of certain layout facets that read from a &quot;Xxx.layout.properties&quot; file
-* link:https://issues.apache.org/jira/browse/ISIS-470[ISIS-470] - Provide the ability to rebuild the metamodel for individual classes, thus allowing dynamic layout capability...
-* link:https://issues.apache.org/jira/browse/ISIS-475[ISIS-475] - Dynamic layout using JSON, using an Xxx.layout.json file
+* link:https://issues.apache.org/jira/browse/ISIS-470[ISIS-470] - Provide the ability to rebuild the metamodel for individual classes, thus allowing file-based layout capability...
+* link:https://issues.apache.org/jira/browse/ISIS-475[ISIS-475] - File-based layout using JSON, using an `Xxx.layout.json` file
 * link:https://issues.apache.org/jira/browse/ISIS-478[ISIS-478] - Provide conditional choices, defaults and validation between action parameters
 * link:https://issues.apache.org/jira/browse/ISIS-484[ISIS-484] - Contract test for ensuring that injectXxx methods are final and not overridable
 * link:https://issues.apache.org/jira/browse/ISIS-497[ISIS-497] - Allow service actions to be rendered as contributed collections or as contributed properties.
@@ -113,7 +113,7 @@
 * link:https://issues.apache.org/jira/browse/ISIS-447[ISIS-447] - In Wicket viewer, distinguish prototype/exploration actions in the app menu
 * link:https://issues.apache.org/jira/browse/ISIS-457[ISIS-457] - New annotation @CssClass for class member, should render in the HTML markup for that member.
 * link:https://issues.apache.org/jira/browse/ISIS-468[ISIS-468] - Provide better layout management of pages in the Wicket viewer.
-* link:https://issues.apache.org/jira/browse/ISIS-475[ISIS-475] - Dynamic layout using JSON, using an Xxx.layout.json file
+* link:https://issues.apache.org/jira/browse/ISIS-475[ISIS-475] - File-based layout using JSON, using an `Xxx.layout.json` file
 * link:https://issues.apache.org/jira/browse/ISIS-478[ISIS-478] - Provide conditional choices, defaults and validation between action parameters
 * link:https://issues.apache.org/jira/browse/ISIS-497[ISIS-497] - Allow service actions to be rendered as contributed collections or as contributed properties.
 * link:https://issues.apache.org/jira/browse/ISIS-498[ISIS-498] - Enhance Wicket&#39;s BlobPanel so that, if an image is uploaded as the blob, then it is displayed in thumbnail form.

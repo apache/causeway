@@ -65,7 +65,7 @@ Walking through the main classes that make up the SimpleApp: `SimpleObject` pers
 
 
 |link:https://www.youtube.com/watch?v=KCJ1ZPPB3pA[004^] +
-Using the optional `Xxx.layout.xml` file to provide xref:guides/ugvw.adoc#_ugvw_layout_dynamic_xml[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
+Using the optional `Xxx.layout.xml` file to provide xref:guides/ugvw.adoc#_ugvw_layout_file-based[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
 ||x|||||||||
 
 
@@ -140,7 +140,7 @@ include::_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:guides/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotations or using xref:guides/ugvw.adoc#_ugvw_layout_dynamic_xml[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:guides/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotations or using xref:guides/ugvw.adoc#_ugvw_layout_file-based[dynamic (XML) layouts].
 |x||||||||x||
 
 
@@ -199,7 +199,7 @@ Extending a xref:guides/ugtst.adoc#_ugtst_fixture-scripts[fixture script] to mor
 
 
 |link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
-Using xref:guides/ugvw.adoc#_ugvw_layout_dynamic_xml[dynamic (XML) layouts] to specify the page size for a domain object's collection.
+Using xref:guides/ugvw.adoc#_ugvw_layout_file-based[dynamic (XML) layouts] to specify the page size for a domain object's collection.
 ||||x|||||||
 
 

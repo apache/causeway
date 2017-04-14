@@ -35,7 +35,7 @@ within the metamodel.
 |xref:rgsvc.adoc#_rgsvc_api_LayoutService[`o.a.i.applib.` +
 `services.layout` +
 `LayoutService`]
-|Provides the ability to download dynamic layout XML files, in various styles.
+|Provides the ability to download `Xxx.layout.xml` files, in various styles.
 |`LayoutServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``

@@ -6,14 +6,18 @@
 
 
 
-Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_static[statically], using annotations, or dynamically, using either a xref:ugvw.adoc#_ugvw_layout_dynamic_xml[``layout.xml``] file or (as described here) a `.layout.json` file.
+Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_annotation-based[statically], using annotations, or dynamically, using either a xref:ugvw.adoc#_ugvw_layout_file-based[``layout.xml``] file or (as described here) a `.layout.json` file.
+
 
 
 [IMPORTANT]
 ====
-The use of dynamic layouts through the `.layout.json` is DEPRECATED.  Instead, use the
-``.layout.xml`` file, which enables much more sophisticated custom layouts than those provided by ``.layout.json``.
+The use of layouts through the `.layout.json` is DEPRECATED.
+Instead, use the ``.layout.xml`` file, which enables much more sophisticated custom layouts than those provided by ``.layout.json``.
+====
 
+[TIP]
+====
 It is possible to download initial `.layout.xml` files - which will capture all the metadata originally in the `.layout.json` file - using the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
 The `.layout.json` file will be ignored once a `.layout.xml` file is present.
 ====

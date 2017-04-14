@@ -98,22 +98,12 @@ public class ToDoItems {
 <2> default value, so could be omitted
 
 
+[TIP]
+====
+As an alternative to using the `@ActionLayout` annotation, a xref:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+====
 
 
-As an alternative to using the `@ActionLayout` annotation, a dynamic layout using  xref:ugvw.adoc#_ugvw_layout_dynamic[`.layout.json`] file can be specified; for example:
-
-[source,javascript]
-----
-"notYetComplete": {
-    "actionLayout": {
-        "bookmarking": "AS_ROOT",
-        "cssClass": "x-key",
-        "cssClassFa": "fa-checkbox",
-        "describedAs": "Mark the todo item as not complete after all",
-        "hidden": "NOWHERE"
-    }
-}
-----
 
 
 
