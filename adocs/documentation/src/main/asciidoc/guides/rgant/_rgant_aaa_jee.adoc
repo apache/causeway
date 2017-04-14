@@ -16,7 +16,7 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Annotation
 |Purpose
 |Layer
-|xref:ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
 |xref:../rgant/rgant.adoc#_rgant-Digits[`@javax.validation.` +
 `constraints.` +

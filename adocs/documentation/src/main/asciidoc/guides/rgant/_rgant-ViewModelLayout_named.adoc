@@ -31,5 +31,5 @@ public class PieChartAnalysisViewModel {
 
 [TIP]
 ====
-The framework also provides a separate, powerful mechanism for xref:ugbtb.adoc#_ugbtb_i18n[internationalization].
+The framework also provides a separate, powerful mechanism for xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[internationalization].
 ====

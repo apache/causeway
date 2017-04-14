@@ -7,7 +7,7 @@
 
 The `@XmlRootElement` annotation provides an alternative way to define a
 xref:rg.adoc#_ugbtb_view-models[view model], in particular one intended to act as a DTO for use within
-xref:ugvro.adoc#[RestfulObjects viewer], or which contains arbitrarily complex state.
+xref:../ugvro/ugvro.adoc#[RestfulObjects viewer], or which contains arbitrarily complex state.
 
 A view model is a non-persisted domain object whose state is converted to/from a string memento.  In the case of a
 JAXB-annotated object this memento is its XML representation.  JAXB generally requires that the root element of the
@@ -18,7 +18,7 @@ xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] annotation, using `@XmlR
 significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the
-xref:ugvro.adoc#[RestfulObjects viewer] in combination with the
+xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] in combination with the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]. +
 +
 This provides a stable and
@@ -74,10 +74,10 @@ public class ToDoItemDto implements Dto {
 Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep
 the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins] (annotated with
+Behaviour can therefore be provided using xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[mixins] (annotated with
 xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`]), while xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent[UI events] can be used
 to obtain title, icons and so on.
 
-For a more complete discussion of writing JAXB view models/DTOs, see xref:ugbtb.adoc#_ugbtb_view-models[this topic]
+For a more complete discussion of writing JAXB view models/DTOs, see xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[this topic]
 in the user guide.
 

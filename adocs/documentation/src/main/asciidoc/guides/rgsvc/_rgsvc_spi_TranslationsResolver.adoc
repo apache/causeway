@@ -13,7 +13,7 @@ The role of the service itself is locate and return translations.
 
 [NOTE]
 ====
-For the "big picture" and further details on Apache Isis' i18n support, see xref:ugbtb.adoc#_ugbtb_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[here].
 ====
 
 
@@ -33,11 +33,11 @@ public interface TranslationsResolver {
 
 == Implementation
 
-Isis' xref:ugvw.adoc#[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
+Isis' xref:../ugvw/ugvw.adoc#[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
 
 [NOTE]
 ====
-Currently there is no equivalent implementation for the xref:ugvro.adoc#[RestfulObjects viewer].
+Currently there is no equivalent implementation for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 ====
 
 
@@ -47,7 +47,7 @@ Currently there is no equivalent implementation for the xref:ugvro.adoc#[Restful
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the xref:ugvw.adoc#[Wicket viewer] is being used, then an implementation of `TranslationsResolver` is
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the xref:../ugvw/ugvw.adoc#[Wicket viewer] is being used, then an implementation of `TranslationsResolver` is
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use

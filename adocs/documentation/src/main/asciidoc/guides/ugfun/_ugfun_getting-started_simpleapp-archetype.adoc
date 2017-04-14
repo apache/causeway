@@ -89,7 +89,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ugvw.adoc#[Wicket viewer] and the xref:ugvro.adoc#[Restful Objects viewer].  The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].  The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
 
@@ -130,7 +130,7 @@ image::{_imagesdir}getting-started/simpleapp-webapp.png[width="600px",link="{_im
 
 == Running with Fixtures
 
-It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
+It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
 
 If you are running the app from an IDE, then you can specify the fixture script using the `--fixture` flag.  The archetype provides the `domainapp.fixture.scenarios.RecreateSimpleObjects` fixture script, for example:
 
@@ -149,7 +149,7 @@ These screenshots are for v1.10.0.
 ====
 
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ugvw.adoc#[Wicket viewer] or the xref:ugvro.adoc#[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]:
 
 image::{_imagesdir}getting-started/using-simple-app/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/010-root-page.png"]
 
@@ -158,7 +158,7 @@ The Wicket viewer provides a human usable web UI (implemented, as you might have
 
 image::{_imagesdir}getting-started/using-simple-app/020-login-to-wicket-viewer.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/020-login-to-wicket-viewer.png"]
 
-The app itself is configured to run using xref:ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+The app itself is configured to run using xref:../ugsec/ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
 
 * username: _sven_
 * password: _pass_
@@ -266,10 +266,10 @@ As noted above, the generated app is a very simple application consisting of a s
 |Domain object fixtures used for initializing the system when being demo'ed or for unit testing.
 
 |`myapp-integtests`
-|End-to-end xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] that exercise from the UI through to the database
+|End-to-end xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests] that exercise from the UI through to the database
 
 |`myapp-webapp`
-|Run as a webapp (from `web.xml`) hosting the xref:ugvw.adoc#[Wicket viewer] and/or the xref:ugvro.adoc#[RestfulObjects viewer]
+|Run as a webapp (from `web.xml`) hosting the xref:../ugvw/ugvw.adoc#[Wicket viewer] and/or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]
 
 |===
 

@@ -35,7 +35,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`]'s `pe
 framework actually queues up the work and only performs the persistence command either at the end of the transaction
 or immediately prior to the next query.  Performing a flush will cause any pending calls to be performed immediately.
 
-The `nextTransaction()` is also used by the xref:ugvw.adoc#[Wicket viewer]'s support for bulk actions; each action
+The `nextTransaction()` is also used by the xref:../ugvw/ugvw.adoc#[Wicket viewer]'s support for bulk actions; each action
 is invoked in its own transaction.
 
 The `Transaction` object - as obtained by `currentTransaction()` method, above - is a minimal wrapper around the

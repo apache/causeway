@@ -18,7 +18,7 @@ then the subsequent configuration property will be ignored.
 [TIP]
 ====
 In addition the framework will also load the `overrides.properties` file.  This is intended to support deployment
-through Docker, as discussed xref:ugbtb.adoc#_ugbtb_deployment_docker[next].
+through Docker, as discussed xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_docker[next].
 ====
 
 All of these files are read from the `WEB-INF` directory.  Having this configuration "baked into" the application is
@@ -91,7 +91,7 @@ Note that running the app using Apache Isis' `org.apache.isis.WebServer` bootstr
 [[__ugbtb_deployment_externalized-configuration_Shiro]]
 == Shiro Config
 
-If using Apache Isis' xref:ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file. By default this also resides in `WEB-INF`.
+If using Apache Isis' xref:../ugsec/ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file. By default this also resides in `WEB-INF`.
 
 Similar to Apache Isis, Shiro lets this configuration directory be altered, by specifying the `shiroConfigLocations` context parameter.
 

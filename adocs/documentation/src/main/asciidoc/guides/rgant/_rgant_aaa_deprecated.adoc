@@ -20,7 +20,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Purpose
 |Use instead
 |Layer
-|xref:ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
 |`@ActionOrder`
 |Order of buttons and menu items representing actions.
@@ -99,7 +99,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 |`@Debug`
 |Action only invokable in debug mode.
-|Not supported by either the xref:ugvw.adoc#[Wicket viewer] or the xref:ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
+|Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
 |UI
 |
 
@@ -117,7 +117,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 |`@Exploration`
 |Action available in special 'exploration' mode.
-|Not supported by either the xref:ugvw.adoc#[Wicket viewer] or the xref:ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
+|Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
 |UI
 |
 
@@ -170,13 +170,13 @@ Actions can still be invoked.
 
 |`@MemberGroups`
 |Layout of properties and collections of a domain object or view model object.
-|xref:ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
 |UI
 |Yes
 
 |@MemberGroupLayout`
 |Grouping of properties into groups, and organizing of properties, collections into columns.
-|xref:ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
 |UI
 |Yes
 

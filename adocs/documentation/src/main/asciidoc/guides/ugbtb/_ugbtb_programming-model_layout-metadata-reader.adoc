@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The metadata for domain objects is obtained both xref:ugvw.adoc#_ugvw_layout_annotation-based[annotations] and xref:ugvw.adoc#_ugvw_layout_file-based[files].
+The metadata for domain objects is obtained both xref:../ugvw/ugvw.adoc#_ugvw_layout_annotation-based[annotations] and xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[files].
 There is also deprecated support for reading layouts from `.layout.json` files.
 This service provides an SPI (and default implementation) for reading layouts defined in this fashion.
 

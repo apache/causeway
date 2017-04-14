@@ -108,19 +108,19 @@ for further details).
 `maxTitleLengthInParentedTables`
 | +ve integer +
 (`_12_`)
-| See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+| See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInStandaloneTables`
 | +ve integer, +
 (`_12_`)
-| See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+| See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInTables`
 | +ve integer, +
 (`_12_`)
-| See discussion xref:ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+| See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `preventDoubleClickForFormSubmit`
@@ -182,13 +182,13 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 `stripWicketTags`
 | `true`,`false` +
 (`_true_`)
-| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_stripped-wicket-tags[below].
+| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_stripped-wicket-tags[below].
 
 |`isis.viewer.wicket.` +
 `suppressPasswordReset`
 | `true`,`false` +
 (`_false_`)
-|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-password-reset[below].
+|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_suppressing-password-reset[below].
 
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
@@ -200,7 +200,7 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 `suppressSignUp`
 | `true`,`false` +
 (`_false_`)
-|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_suppressing-sign-up[below].
+|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_suppressing-sign-up[below].
 
 |`isis.viewer.wicket.` +
 `timestampPattern`
@@ -212,13 +212,13 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 |`isis.viewer.wicket.` +
 `themes.enabled`
 | comma separated list ...
-| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below].
+| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below].
 
 |`isis.viewer.wicket.` +
 `themes.showChooser`
 | `true`,`false` +
 (`_false_`)
-| Whether to show chooser for Bootstrap themes.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
+| Whether to show chooser for Bootstrap themes.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
 
 |`isis.viewer.wicket.` +
 `useIndicatorForFormSubmit`

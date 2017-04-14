@@ -40,7 +40,7 @@ public class Customer {
 <3> give the action an abbreviated name, because the fact that the "status" property is to be updated is implied by its positioning
 
 
-The default is `BELOW`, which is rendered (by the xref:ugvw.adoc#[Wicket viewer]) as shown below:
+The default is `BELOW`, which is rendered (by the xref:../ugvw/ugvw.adoc#[Wicket viewer]) as shown below:
 
 image::{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png"]
 
@@ -67,7 +67,7 @@ image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.pn
 If there are multiple actions associated with a single property then the positioning can be mix'ed-and-match'ed as required.  If the `PANEL` or `PANEL_DROPDOWN` are used, then (as the screenshots above show) the actions from potentially multiple properties grouped by that panel will be shown together.
 
 
-As an alternative to using the annotation, the dynamic xref:ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

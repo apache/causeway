@@ -7,7 +7,7 @@
 
 
 The `xsd` goal of the `isis-maven-plugin` uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to
-generate XSD schemas from any JAXB-annotated xref:ugbtb.adoc#_ugbtb_view-models[view model/DTOs].
+generate XSD schemas from any JAXB-annotated xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[view model/DTOs].
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
 tool, because it uses the framework's support (via

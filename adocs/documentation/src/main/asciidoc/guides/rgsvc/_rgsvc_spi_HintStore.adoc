@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `HintStore` service defines an SPI for the xref:ugvw.adoc#[Wicket viewer] to store UI hints on a per-object basis.
+The `HintStore` service defines an SPI for the xref:../ugvw/ugvw.adoc#[Wicket viewer] to store UI hints on a per-object basis.
 For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden),
 which page of a table to render, or whether "show all" (rows) is toggled.
 
@@ -59,6 +59,6 @@ in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introducti
 
 == Related Services
 
-The xref:ugvw.adoc[Wicket viewer] exposes the xref:../rgcms/rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"]
+The xref:../ugvw/ugvw.adoc[Wicket viewer] exposes the xref:../rgcms/rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"]
 mixin action that is for use by end-users of the application to clear any UI hints that have accumulated for a
 domain object.

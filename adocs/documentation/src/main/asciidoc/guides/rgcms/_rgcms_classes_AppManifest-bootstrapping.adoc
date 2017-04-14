@@ -105,7 +105,7 @@ If this method returns a non-`null` value, then it overrides the value of `isis.
 
 If non-`null`, this method specifies the authentication mechanism to use.  The valid values are currently `"shiro"`  or `"bypass"`.  If null is returned then the value of the `isis.authentication` configuration property (in `isis.properties` file) is used instead.
 
-See the xref:ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
+See the xref:../ugsec/ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
 
 [NOTE]
 ====
@@ -118,7 +118,7 @@ This property is ignored for integration tests (which always uses the `"bypass"`
 
 If non-`null`, this method specifies the authorization mechanism to use.  The valid values are currently `"shiro"`  or `"bypass"`.  If null is returned then the value of the `isis.authorization` configuration property (in `isis.properties` file) is used instead.
 
-See the xref:ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
+See the xref:../ugsec/ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
 
 [NOTE]
 ====
@@ -244,7 +244,7 @@ configuration properties.  This class is still supported, but is deprecated.
 
 === Webapps
 
-To bootstrap an Apache Isis webapp (using the xref:ugvw.adoc#[Wicket viewer]), there are two choices:
+To bootstrap an Apache Isis webapp (using the xref:../ugvw/ugvw.adoc#[Wicket viewer]), there are two choices:
 
 * either specify the `AppManifest` by overriding the `IsisWicketApplication#newWicketModule()`, eg: +
 +
@@ -276,7 +276,7 @@ The first (programmatic) approach takes precedence over the second approach (con
 
 [TIP]
 ====
-If you use the `org.apache.isis.WebServer` class to launch your application from the xref:ugbtb.adoc#_ugbtb_deployment_cmd-line[command line], then note that you can specify the `AppManifest` using the `-m` (or `--manifest`) flag:
+If you use the `org.apache.isis.WebServer` class to launch your application from the xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_cmd-line[command line], then note that you can specify the `AppManifest` using the `-m` (or `--manifest`) flag:
 
 [source,ini]
 ----

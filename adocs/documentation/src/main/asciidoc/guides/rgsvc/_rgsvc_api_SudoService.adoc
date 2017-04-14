@@ -7,7 +7,7 @@
 
 
 The `SudoService` allows the current user reported by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_UserService[`UserService`]  to be temporarily changed to some other user.
-This is useful both for xref:ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
+This is useful both for xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 
 
 == API
@@ -36,7 +36,7 @@ The current user/role reported by the internal xref:../rgfis/rgfis.adoc#_rgfis_s
 
 [IMPORTANT]
 ====
-Note however that this the "effective user" does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
+Note however that this the "effective user" does not propagate through to the xref:../ugsec/ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
 See the xref:../rgsvc/rgsvc.adoc#__rgsvc_api_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
@@ -70,7 +70,7 @@ protected void execute(final ExecutionContext ec) {
 [[__rgsvc_api_SudoService_ACCESS-ALL-ROLE]]
 === ACCESS_ALL_ROLE
 
-When `sudo(...)` is called the "effective user" is reported by both xref:../rgsvc/rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and by xref:../rgfis/rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:ugsec.adoc#[Shiro security mechanism].
+When `sudo(...)` is called the "effective user" is reported by both xref:../rgsvc/rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and by xref:../rgfis/rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:../ugsec/ugsec.adoc#[Shiro security mechanism].
 These continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.

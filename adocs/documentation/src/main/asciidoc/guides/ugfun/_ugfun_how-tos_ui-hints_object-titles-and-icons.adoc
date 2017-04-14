@@ -9,7 +9,7 @@ In Apache Isis every object is identified to the user by a title (label) and an 
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-It is also possible for an object to provide a CSS class hint.  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to provide a CSS class hint.  In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 == Object Title
@@ -92,6 +92,6 @@ NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconNam
 == Object CSS Styling
 
 
-It is also possible for an object to return a xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to return a xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].  In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]

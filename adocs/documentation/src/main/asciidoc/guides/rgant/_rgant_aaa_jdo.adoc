@@ -36,7 +36,7 @@ The table below lists the JDO annotations currently recognized by Apache Isis.
 
 |xref:../rgant/rgant.adoc#_rgant-Discriminator[`@javax.jdo.annotations.` +
 `Discriminator`]
-|Override for the object type, as used in `Bookmark`s, URLs for xref:ugvro.adoc#[RestfulObjects viewer] and elsewhere. +
+|Override for the object type, as used in `Bookmark`s, URLs for xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] and elsewhere. +
 
 Note that the discriminator overrides the object type that may otherwise be inferred from the xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`] annotation.
 |Domain / persistence
@@ -45,7 +45,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 
 |xref:../rgant/rgant.adoc#_rgant-NotPersistent[`@javax.jdo.annotations.` +
 `NotPersistent`]
-|Used to determine whether to enforce or skip some xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
+|Used to determine whether to enforce or skip some xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
 
 |Domain / persistence
 |Property
@@ -56,7 +56,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 `PersistenceCapable`]
 |Used to build Apache Isis' own internal identifier for objects. +
 
-If the `schema()` attribute is specified (and if xref:../rgant/rgant.adoc#_rgant-Discriminator[`@Discriminator`] _hasn't_ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:ugvro.adoc#[RestfulObjects viewer] and elsewhere.
+If the `schema()` attribute is specified (and if xref:../rgant/rgant.adoc#_rgant-Discriminator[`@Discriminator`] _hasn't_ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] and elsewhere.
 
 |Domain / persistence
 |Class

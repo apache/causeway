@@ -6,7 +6,7 @@
 
 
 
-The `FixtureScriptsDefault` service provides the ability to execute xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts] .
+The `FixtureScriptsDefault` service provides the ability to execute xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts] .
 
 The service extends from the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], and is only instantiated by the framework if there no custom implementation of `FixtureScripts` has been otherwise provided; in other words it is a fallback.
 

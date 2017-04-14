@@ -6,7 +6,7 @@
 
 
 
-By and large the security mechanisms within Isis are transparent to the rest of the framework (the xref:ugvw.adoc#[Wicket Viewer] and xref:ugvro.adoc#[Restful Objects viewer], and the overall xref:../rgcfg/rgcfg.adoc#_rgcfg[runtime]).
+By and large the security mechanisms within Isis are transparent to the rest of the framework (the xref:../ugvw/ugvw.adoc#[Wicket Viewer] and xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and the overall xref:../rgcfg/rgcfg.adoc#_rgcfg[runtime]).
 
 That said, it is the responsibility of the viewers to ensure that there is a viewers to ensure that for each request there is a valid user session present.  The sections below explain how this works.
 
@@ -15,7 +15,7 @@ That said, it is the responsibility of the viewers to ensure that there is a vie
 
 == Wicket Viewer
 
-The xref:ugvw.adoc#[Wicket viewer] defines a relatively small number of pages (by which we mean subclasses of link:http://ci.apache.org/projects/wicket/apidocs/6.0.x/org/apache/wicket/markup/html/WebPage.html[`org.apache.wicket.markup.html.WebPage`]):
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] defines a relatively small number of pages (by which we mean subclasses of link:http://ci.apache.org/projects/wicket/apidocs/6.0.x/org/apache/wicket/markup/html/WebPage.html[`org.apache.wicket.markup.html.WebPage`]):
 
 * about page
 * action prompt page
@@ -37,7 +37,7 @@ which means that they can only be accessed by a user with an authenticated sessi
 
 [TIP]
 ====
-The sign-in page to render is pluggable; see xref:ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
+The sign-in page to render is pluggable; see xref:../ugvw/ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
 ====
 
 In the sign-in page the viewer calls to the Isis Authenticator API, and obtains back a user/role.  It also adds in its special reserved role (per the annotation above) and then continues on to whichever page the user was attempting to access (usually the home page).
@@ -49,11 +49,11 @@ Similarly, for those object members that _are_ visible, the viewer also checks i
 
 === User-registration
 
-As well as providing a sign-in screen, the Wicket viewer also provides the ability for xref:_user_registration[users to self-register].  By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.  These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:ugbtb.adoc#_ugbtb_headless-access[Headless access] in order to actually do their stuff.
+As well as providing a sign-in screen, the Wicket viewer also provides the ability for xref:_user_registration[users to self-register].  By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.  These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access[Headless access] in order to actually do their stuff.
 
 [TIP]
 ====
-The sign-in verification page to render is pluggable; see xref:ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
+The sign-in verification page to render is pluggable; see xref:../ugvw/ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
 ====
 
 User registration is only available if the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
@@ -66,7 +66,7 @@ If you are using an LDAP realm and want to enable user-self registration then yo
 
 == Restful Objects Viewer
 
-Unlike the Wicket viewer, the xref:ugvro.adoc#[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter defined in `web.xml`.  The authentication strategy is responsible for ensuring that a session is available for the REST resource.
+Unlike the Wicket viewer, the xref:../ugvro/ugvro.adoc#[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter defined in `web.xml`.  The authentication strategy is responsible for ensuring that a session is available for the REST resource.
 
 The API of `AuthenticationSessionStrategy` is simply:
 

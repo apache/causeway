@@ -13,7 +13,7 @@ different users of the system.
 
 [NOTE]
 ====
-This service is deprecated; use xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] and the
+This service is deprecated; use xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] and the
 xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SudoService[`SudoService`] instead.
 ====
 

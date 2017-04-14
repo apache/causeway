@@ -55,7 +55,7 @@ the service with the lowest xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_
 == Implementation
 
 The framework provides `GridSystemServiceBS3`, an implementation that encodes the bootstrap3 grid system.  (The framework
-also provides xref:ugvw.adoc[Wicket viewer] components that are capable of interpreting and rendering this metadata).
+also provides xref:../ugvw/ugvw.adoc[Wicket viewer] components that are capable of interpreting and rendering this metadata).
 
 
 == Registering the Services

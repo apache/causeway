@@ -9,7 +9,7 @@ Some pointers when deploying to Tomcat (or any other servlet container).
 
 == Externalized Configuration
 
-See the guidance xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[below].
+See the guidance xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[below].
 
 
 == JVM Args
@@ -25,4 +25,4 @@ The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] uses li
 
 == Using a JNDI Datasource
 
-See the guidance in the xref:ugodn.adoc#_ugodn_configuring_using-jndi-data-source[configuring datanucleus] section.
+See the guidance in the xref:../ugodn/ugodn.adoc#_ugodn_configuring_using-jndi-data-source[configuring datanucleus] section.

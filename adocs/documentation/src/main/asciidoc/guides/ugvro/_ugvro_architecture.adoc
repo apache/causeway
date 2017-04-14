@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The xref:ugvro.adoc#[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning
+The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning
 that it defines a well-defined set of endpoint URLs as resources, and generates a well-defined set of (JSON)
 representations when these resources are accessed.
 
@@ -33,7 +33,7 @@ xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiatio
 HTTP `Accept` header.  If the implementation does not recognize the value of the header, if can simply return `null`. +
 +
 The framework provides a number of implementations; an implementation that handles the
-xref:ugvro.adoc#_ugvro_simplified-representations[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a
+xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a
 default/fallback implementation that returns the representations defined by the RO spec.
 
 * `ContentMappingService` +

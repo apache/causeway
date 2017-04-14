@@ -6,7 +6,7 @@
 
 
 
-The `describedAs()` attribute is used to provide a short description of the property to the user.  In the xref:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
+The `describedAs()` attribute is used to provide a short description of the property to the user.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 
 For example:
 
@@ -20,7 +20,7 @@ public class Customer {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

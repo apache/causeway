@@ -28,7 +28,7 @@ image::{_imagesdir}blob-attachments/010-attachment-field-940.png[width="800px",l
 
 [NOTE]
 ====
-Note that these screenshots show an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 

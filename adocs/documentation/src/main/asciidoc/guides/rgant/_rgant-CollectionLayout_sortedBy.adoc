@@ -37,7 +37,7 @@ image::{_imagesdir}reference-annotations/CollectionLayout/sortedby-dependencies.
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 
@@ -46,7 +46,7 @@ Without this annotation, the order would have been inverted (because the natural
 
 
 
-As an alternative to using the annotation, the dynamic xref:ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

@@ -96,7 +96,7 @@ public class ToDoItem {
 
 [TIP]
 ====
-As an alternative to using the `@CollectionLayout` annotation, a xref:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+As an alternative to using the `@CollectionLayout` annotation, a xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
 ====
 
 

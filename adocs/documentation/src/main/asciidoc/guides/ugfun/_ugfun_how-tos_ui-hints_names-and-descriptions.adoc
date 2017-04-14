@@ -8,7 +8,7 @@ NOTE: FIXME
 
 
 
-NOTE: see also xref:ugbtb.adoc#_ugbtb_i18n[Internationalization]
+NOTE: see also xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[Internationalization]
 
 == Class (object)
 

@@ -12,7 +12,7 @@ The `org.apache.isis.applib.layout` package defines a number of classes that all
 
 * common component classes, that capture the layout metadata for an object's properties, collections and actions.  These are bound (or associated) to the regions of the grid
 
-The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:ugvw.adoc[Wicket viewer] components capable of rendering that grid system.  In principle it is
+The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:../ugvw/ugvw.adoc[Wicket viewer] components capable of rendering that grid system.  In principle it is
 also possible to extend the layout architecture for other grid systems.  The component classes, though, are intended to be reusable across all grid systems.
 
 The component classes, meanwhile, are broadly equivalent to the "layout" annotations (xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`]
@@ -89,6 +89,6 @@ responsive designs.
 
 As you can probably guess, the `BS3Grid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
 
-All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.  The xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[`application.css`] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
+All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.  The xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[`application.css`] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
 
 

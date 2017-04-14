@@ -48,7 +48,7 @@ Again, this is all transparent to the user.
 
 Apache Isis also has an internal event bus (you can switch between an underlying implementation of Gauva or Axon).
 A domain event is fired whenever an object is interacted with, and this allows any subscribers to influence the operation (or even veto it).
-This is a key mechanism in ensuring that Isis applications are maintainable, and we discuss it in depth in the section on  xref:ugbtb.adoc#_ugbtb_decoupling[Decoupling].
+This is a key mechanism in ensuring that Isis applications are maintainable, and we discuss it in depth in the section on  xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling[Decoupling].
 But fundamentally its relying on this AOP concept of interceptors.
 
 Finally, Isis also a feature that is akin to AOP mix-ins.
@@ -62,4 +62,4 @@ Apache Isis' support for contributions (not only contributed actions, but also c
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
 The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially at least - just focus on implementing your domain object.
-Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for (xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins]), (xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributions]) and interceptors (the xref:ugbtb.adoc#_ugbtb_decoupling_event-bus[event bus]) to ensure that your codebase remains maintainable.
+Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for (xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[mixins]), (xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_contributions[contributions]) and interceptors (the xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_event-bus[event bus]) to ensure that your codebase remains maintainable.

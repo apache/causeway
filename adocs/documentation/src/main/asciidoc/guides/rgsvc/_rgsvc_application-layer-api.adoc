@@ -27,7 +27,7 @@ The table below summarizes the application layer APIs defined by Apache Isis.  I
 |`AcceptHeaderServiceDefault` +
 ``o.a.i.core`` +
 ``isis-viewer-restfulobjects-rendering``
-|Populated only when the domain objects are accessed using the xref:ugvro.adoc#[Restful Objects viewer].
+|Populated only when the domain objects are accessed using the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
 
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`o.a.i.applib.` +

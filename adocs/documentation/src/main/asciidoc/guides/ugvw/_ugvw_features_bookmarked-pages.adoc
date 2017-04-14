@@ -23,7 +23,7 @@ image::{_imagesdir}bookmarked-pages/panel.png[width="800px",link="{_imagesdir}bo
 
 [NOTE]
 ====
-Note that these screenshots show an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note how the list contains both domain objects and an action ("not yet complete").
@@ -92,7 +92,7 @@ Alternatively, `alt+[` will toggle open/close the panel; it can also be closed u
 
 === Related functionality
 
-The xref:ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
+The xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
 
 
 

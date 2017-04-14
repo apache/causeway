@@ -8,7 +8,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ugodn.adoc#_ugodn_configuring[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:../ugodn/ugodn.adoc#_ugodn_configuring[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:../ugvro/ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
 ====
 
 
@@ -458,7 +458,7 @@ This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-comp
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
 
-See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
 
 
 |===
@@ -481,7 +481,7 @@ See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translatio
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
 
-See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `actionCollection` +
@@ -507,7 +507,7 @@ See also `isis.reflector.facets.ignoreDeprecated`.
 (`false`)
 | Whether to check that the class has an object type explicitly specified somehow.
 
-The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ugvw.adoc#[Wicket viewer] and xref:ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:../ugvw/ugvw.adoc#[Wicket viewer] and xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
 
 If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
@@ -547,7 +547,7 @@ This is by way of possibly deprecating and eventually moving contributed service
 | When searching for  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
-Note that this in effect means that xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
+Note that this in effect means that xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
 
 
 |`isis.reflector.validator.` +
@@ -620,7 +620,7 @@ See xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section b
 |This property is now ignored.  +
 +
 To customize the programming model, use `facets.exclude` and `facets.include`.
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 
 
@@ -629,7 +629,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programmi
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 
 |`isis.reflector.facets.` +
@@ -650,15 +650,15 @@ To be safe, we recommend that you first run your application using `isis.reflect
 `include`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
 
-See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 
 
@@ -717,7 +717,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the xref:ugvw.adoc#[Wicket viewer] and the xref:ugvro.adoc#[Restful Objects viewer], and also by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
+Filtering is supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and also by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
 
 [NOTE]
 ====

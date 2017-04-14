@@ -13,7 +13,7 @@ Use to verify at build time that the metamodel of an application is valid.  This
 
 * `swagger` +
 +
-Uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:ugvro.adoc#[RestfulObjects viewer].
+Uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 
 * `xsd` +
 +

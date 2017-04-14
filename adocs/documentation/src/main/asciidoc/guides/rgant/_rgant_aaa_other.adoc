@@ -13,7 +13,7 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Annotation
 |Purpose
 |Layer
-|xref:ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
 |xref:../rgant/rgant.adoc#_rgant-Facets[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.

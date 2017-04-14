@@ -22,7 +22,7 @@ Apache Isis recognizes some of the JDO and JAXB annotations and infers domain se
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
 These provide hints relating to the layout of the domain object in the user interface.
-(Alternatively, these UI hints can be defined in a supplementary xref:ugvw.adoc#_ugvw_layout[`.layout.xml`] file.
+(Alternatively, these UI hints can be defined in a supplementary xref:../ugvw/ugvw.adoc#_ugvw_layout[`.layout.xml`] file.
 
 We use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
 By convention there will be a single top-level package corresponding to the module.
@@ -167,7 +167,7 @@ There is further discussion of service injection xref:../ugfun/ugfun.adoc#_ugfun
 [[__ugfun_how-tos_class-structure_class-definition_view-models]]
 == View Models
 
-xref:ugbtb.adoc#_ugbtb_view-models[View model]s are similar to entities in that (unlike domain services) there can be many instances of any given type; but they differ from entities in that they are not persisted into a database.
+xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[View model]s are similar to entities in that (unlike domain services) there can be many instances of any given type; but they differ from entities in that they are not persisted into a database.
 Instead they are recreated dynamically by serializing their state, ultimately into the URL itself.
 
 A common use case for view models is to support a business process.
@@ -177,7 +177,7 @@ Another use case is for a view model to act as a proxy for an entity that is man
 For example, a `Content` view model could represent a PDF that has been scanned and is held within a separate Content Management system.
 
 A third use case is to define DTOs that act as a stable projection of one or more underlying entities.
-Apache Isis' xref:ugvro.adoc[Restful Objects] viewer provides a REST API that then allows REST clients to query the application using these DTOs; useful for integration scenarios.
+Apache Isis' xref:../ugvro/ugvro.adoc[Restful Objects] viewer provides a REST API that then allows REST clients to query the application using these DTOs; useful for integration scenarios.
 
 Apache Isis offers several ways to implement view models, but the most flexible/powerful is to annotate the class using JAXB annotations.
 For example:

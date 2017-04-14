@@ -6,11 +6,11 @@
 
 
 
-As noted in the xref:ugbtb.adoc#_ugbtb_view-models_use-cases[introduction], view models can also be defined using JAXB annotations.
+As noted in the xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models_use-cases[introduction], view models can also be defined using JAXB annotations.
 The serialized form of these view models is therefore XML, which also enables these view models
 to act as DTOs.
 
-In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc#[Wicket viewer] just like any other.
+In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:../ugvw/ugvw.adoc#[Wicket viewer] just like any other.
 In fact, these JAXB-annotated view models are in many regards the most powerful of all the various ways of writing view models:
 
 * their entire state (collections as well as properties) is automatically managed from interaction to interaction. +
@@ -59,16 +59,16 @@ public class ToDoItemV1_1 implements Dto {                          // <5>
     protected List<ToDoItem> similarItems = Lists.newArrayList();
 }
 ----
-<1> package name encodes major version; see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
+<1> package name encodes major version; see discussion on xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
 <2> identifies this class as a view model and defines the root element for JAXB serialization
 <3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
 <4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
-<5> class name encodes (major and) minor version; see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
-<6> again, see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
-<7> again, see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
+<5> class name encodes (major and) minor version; see discussion on xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
+<6> again, see discussion on xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
+<7> again, see discussion on xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
 <8> simple scalar properties
-<9> reference to a persistent entity; discussed xref:ugbtb.adoc#__ugbtb_view-models_jaxb_referencing-domain-entities[below]
-<10> reference to a collection of persistent entities; again discussed xref:ugbtb.adoc#__ugbtb_view-models_jaxb_referencing-domain-entities[below]
+<9> reference to a persistent entity; discussed xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_referencing-domain-entities[below]
+<10> reference to a collection of persistent entities; again discussed xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_referencing-domain-entities[below]
 
 
 
@@ -186,7 +186,7 @@ Although there is no requirement for the namespace URI to correspond to a physic
 This usually means including a company domain name within the string.
 
 As noted above, this package will contain multiple DTO classes all with the same namespace; these represent a set of minor versions of the DTO, each subsequent one intended to be backwardly compatible with the previous.
-Since these DTO classes will all be in the same package (as per the xref:ugbtb.adoc#__ugbtb_view-models_jaxb_using-packages-to-version[advice above]), the class should therefore include the minor version name:
+Since these DTO classes will all be in the same package (as per the xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_using-packages-to-version[advice above]), the class should therefore include the minor version name:
 
 [source,java]
 ----
@@ -246,7 +246,7 @@ We also _don't_ recommend using inheritance (ie `ToDoItemV1_2` should not inheri
 [[__ugbtb_view-models_jaxb_generating-xsds-and-dtos]]
 == Generating XSDs and DTOs
 
-In the section xref:ugbtb.adoc#__ugbtb_view-models_jaxb_referencing-domain-entities[above] it was explained how a view model DTO can transparent reference any "backing" entities; these references are converted to internal object identifiers.
+In the section xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_referencing-domain-entities[above] it was explained how a view model DTO can transparent reference any "backing" entities; these references are converted to internal object identifiers.
 
 However, if the consumer of the XML is another Java process (eg running within an Apache Camel route), then you might be tempted/expect to be able to use the same DTO within that Java process.
 After a little thought though you'll realize that (duh!) of course you cannot; the consumer runs in a different process space, and will not have references to those containing entities.

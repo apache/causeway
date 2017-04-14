@@ -6,7 +6,7 @@
 
 
 
-Apache Isis automatically injects domain services into other domain services and also into domain objects and view models.  In fact, it also injects domain services into xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] and xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts].
+Apache Isis automatically injects domain services into other domain services and also into domain objects and view models.  In fact, it also injects domain services into xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests] and xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts].
 
 [NOTE]
 ====

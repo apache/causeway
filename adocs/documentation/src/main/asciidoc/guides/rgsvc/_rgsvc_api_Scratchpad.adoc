@@ -59,7 +59,7 @@ public BigDecimal totalCost() {
 Scratchpad scratchpad;
 ----
 
-A more complex example could use a xref:ugbtb.adoc#_ugbtb_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
+A more complex example could use a xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
 
 [source,java]
 ----
@@ -100,7 +100,7 @@ Scratchpad scratchpad;
 <1> look for the `ToDoItemBulkUpdate` in the scratchpad...
 <2> ... and add one if there isn't one (ie for the first object returned).
 
-If using the xref:ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
+If using the xref:../ugvw/ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
 
 
 

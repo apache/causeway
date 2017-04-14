@@ -11,7 +11,7 @@ The `TranslationService` is the cornerstone of Apache Isis' i18n support.  Its r
 
 [NOTE]
 ====
-For the "big picture" and further details on Apache Isis' i18n support, see xref:ugbtb.adoc#_ugbtb_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[here].
 ====
 
 
@@ -53,7 +53,7 @@ The Apache Isis framework provides a default implementation (`TranslationService
 
 The framework also provides a supporting `TranslationServicePoMenu` provides menu items under the "Prototyping" secondary menu for controlling this service and downloading `.pot` files for translation.
 
-For more details on the implementation, see xref:ugbtb.adoc#_ugbtb_i18n[i18n support].
+For more details on the implementation, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support].
 
 
 
@@ -64,7 +64,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-If the menu items are not required then these can be suppressed either using security or by implementing a xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
 
 To use an alternative implementation, use
 xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained

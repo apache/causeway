@@ -9,7 +9,7 @@
 
 There are some key framework classes that make up the spec support; these are discussed below.
 
-NOTE: some of these are also used by Apache Isis' xref:ugtst.adoc#_ugtst_integ-test-support[Integration Test support].
+NOTE: some of these are also used by Apache Isis' xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[Integration Test support].
 
 
 

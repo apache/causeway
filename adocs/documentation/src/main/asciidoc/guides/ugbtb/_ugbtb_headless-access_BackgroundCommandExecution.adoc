@@ -6,7 +6,7 @@
 
 
 
-The `BackgroundCommandExecution` class (a subclass of xref:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] and the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`].
+The `BackgroundCommandExecution` class (a subclass of xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] and the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`].
 
 Its signature is:
 

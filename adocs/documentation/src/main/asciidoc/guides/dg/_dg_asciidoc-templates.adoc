@@ -309,7 +309,7 @@ for example:
 
 
 |`adugvw`
-|`\xref:ugvw.adoc#xxx[ttt]`
+|`\xref:../ugvw/ugvw.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Wicket viewer guide, where:
 
@@ -318,13 +318,13 @@ A hyperlink to a bookmark within the Wicket viewer guide, where:
 
 for example:
 
-`\xref:ugvw.adoc#_ugvw_customisation[Customisation]`
+`\xref:../ugvw/ugvw.adoc#_ugvw_customisation[Customisation]`
 
-|xref:ugvw.adoc#_ugvw_customisation[Customisation]
+|xref:../ugvw/ugvw.adoc#_ugvw_customisation[Customisation]
 
 
 |`adugvro`
-|`\xref:ugvro.adoc#xxx[ttt]`
+|`\xref:../ugvro/ugvro.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 
@@ -333,14 +333,14 @@ A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 
 for example:
 
-`\xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
+`\xref:../ugvro/ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
 
-|xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
+|xref:../ugvro/ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
 
 
 
 |`adugsec`
-|`\xref:ugsec.adoc#xxx[ttt]`
+|`\xref:../ugsec/ugsec.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Secrurity guide, where:
 
@@ -349,13 +349,13 @@ A hyperlink to a bookmark within the Secrurity guide, where:
 
 for example:
 
-`\xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]`
+`\xref:../ugsec/ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]`
 
-|xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]
+|xref:../ugsec/ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]
 
 
 |`adugtst`
-|`\xref:ugtst.adoc#xxx[ttt]`
+|`\xref:../ugtst/ugtst.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Testing guide, where:
 
@@ -364,13 +364,13 @@ A hyperlink to a bookmark within the Testing guide, where:
 
 for example:
 
-`\xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
+`\xref:../ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
 
-|xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
+|xref:../ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
 
 
 |`adugbtb`
-|`\xref:ugbtb.adoc#xxx[ttt]`
+|`\xref:../ugbtb/ugbtb.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 
@@ -379,9 +379,9 @@ A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 
 for example:
 
-`\xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
+`\xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
 
-|xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
+|xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
 
 
 

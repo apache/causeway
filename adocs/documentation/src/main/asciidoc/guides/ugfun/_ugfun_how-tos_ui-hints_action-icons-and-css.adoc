@@ -14,7 +14,7 @@ These UI hint can be applied either to individual actions, or can be applied en-
 NOTE: FIXME - xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
 
 
-Alternatively, you can specify these hints dynamically in the xref:ugvw.adoc#_ugvw_layout[`Xxx.layout.json`] for the entity.
+Alternatively, you can specify these hints dynamically in the xref:../ugvw/ugvw.adoc#_ugvw_layout[`Xxx.layout.json`] for the entity.
 
 
 == Per pattern matching

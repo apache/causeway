@@ -13,7 +13,7 @@ At its core, Apache Isis is a metamodel that is built at runtime from the domain
 
 The contents of this metamodel is inferred from the Java classes discovered on the classpath: the entities and supporting services, as well the members of those classes.
 The detail of the metamodel is generally explicit, usually represented by Java annotations such as `@Title` or `@Action`.
-Notably the metamodel is xref:ugbtb.adoc#_ugbtb_programming-model[extensible]; it is possible to teach Apache Isis new programming conventions/rules (and conversely to remove those that are built in).
+Notably the metamodel is xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model[extensible]; it is possible to teach Apache Isis new programming conventions/rules (and conversely to remove those that are built in).
 
 Most of the annotations recognized by the framework are defined by the Apache Isis framework itself.
 For example the `@Title` annotation -- which identifies how the framework should derive a human-readable label for each rendered domain object -- is part of the `org.apache.isis.applib.annotations` package.
@@ -24,7 +24,7 @@ This is an ORM that implements the JDO and JPA APIs, and which can map domain ob
 Apache Isis recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowsNull=...)`.
 
 In addition, the framework builds up the metamodel for each domain object using
-xref:ugvw.adoc#_ugvw_layout[layout hints], such as `Customer.layout.xml`.
+xref:../ugvw/ugvw.adoc#_ugvw_layout[layout hints], such as `Customer.layout.xml`.
 These provide metadata such as grouping elements of the UI together, using multi-column layouts, and so on.
 The layout file can be modified while the application is still running, and are picked up automatically; a useful way to speed up feedback.
 
@@ -44,7 +44,7 @@ From the end-user's perspective the UI displays a single domain object per page;
 
 The next type of domain object to discuss is *domain services*.
 These are (usually) singleton stateless services that provide additional functionality.
-The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:ugvw.adoc#[Wicket viewer]'s UI.
+The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:../ugvw/ugvw.adoc#[Wicket viewer]'s UI.
 
 Domain objects can also delegate to domain services; domain services are automatically injected into every other domain object; this includes domain entities as well as other services.
 This injection of domain services into entities is significant: it allows business logic to be implemented in the domain entities, rather than have it "leach away" into
@@ -54,7 +54,7 @@ Said another way: it is the means by which Apache Isis helps you avoid the anaem
 As well as domain entities -- mapped to a datastore -- Apache Isis also supports *view models*.
 End users interact with view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.
 However view models are _not_ mapped to the underlying database, rather they represent some aggregation of state from one or more underlying entities.
-Their state is serialized and recreated from their internal identifier; this identifier is visible as the object's URL in the xref:ugvw.adoc#[Wicket viewer] or xref:ugvro.adoc#[RestfulObjects viewer].
+Their state is serialized and recreated from their internal identifier; this identifier is visible as the object's URL in the xref:../ugvw/ugvw.adoc#[Wicket viewer] or xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 
 There's no need though for the view model to aggregate the state of regular domain entities.
 A view model could also be used as a proxy for some externally managed entity, accessed over a web service or REST API; it could even be a representation of state held in-memory (such as user preferences, for example).
@@ -97,7 +97,7 @@ functionality is simply for other domain objects to invoke programmatically).
 +
 It is also possible to specify a nature of simply `VIEW`, this combining `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`.
 This is in fact the default, useful for initial prototyping.
-A final nature is `VIEW_REST_ONLY` which is for domain services whose functionality is surfaced only by the xref:ugvro.adoc#[RestfulObjects viewer].
+A final nature is `VIEW_REST_ONLY` which is for domain services whose functionality is surfaced only by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 
 Worth emphasising is that domain entities and view models hold state, whereas domain services are generally stateless.
 If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be `@RequestScoped` so that this state is short-lived and usable only within a single request.
@@ -204,7 +204,7 @@ View models generally tend to be associated with supporting a particular use cas
 We introduce view models here because they do get mentioned quite often within the users and reference guide.
 However, we do consider them a more advanced topic; we generally recommend that you build your applications from the domain layer up, rather than from the view model down.
 
-For further discussion on view models, see xref:ugbtb.adoc#_ugbtb_view-models[this topic].
+For further discussion on view models, see xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[this topic].
 
 
 
@@ -244,7 +244,7 @@ Indeed, it is quite common to have a domain service that acts as both a factory 
 NOTE: FIXME
 
 
-For more information, see xref:ugbtb.adoc#_ugbtb_decoupling_contributions[this topic on contribution]s, and xref:ugbtb.adoc#_ugbtb_decoupling_mixins[this topic on mixin]s.
+For more information, see xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_contributions[this topic on contribution]s, and xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[this topic on mixin]s.
 
 
 
@@ -293,8 +293,8 @@ objects
 * similarly within implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]
 to persist published action invocations
 
-* and of course both the xref:ugvro.adoc#[RestfulObjects viewer] and
-xref:ugvw.adoc#[Wicket viewer]
+* and of course both the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] and
+xref:../ugvw/ugvw.adoc#[Wicket viewer]
 use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.

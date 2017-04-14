@@ -15,7 +15,7 @@ Can this be done?_
 
 The above FAQ was raised against `1.10.0`.  As of `1.11.0` (due to link:https://issues.apache.org/jira/browse/ISIS-1093[ISIS-1093]) it _is_ now possible to internationalize both the Wicket viewer's labels as well as the regular translations of the domain object metadata using the `.po` translation files as supported by the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`].
 
-Full details of the ``msgId``s that must be added to the `translations.po` file can be found in xref:guides/ugbtb.adoc#__ugbtb_i18n_wicket-viewer[i18n] section of the xref:ugbtb.adoc#[beyond the basics] guide.
+Full details of the ``msgId``s that must be added to the `translations.po` file can be found in xref:guides/ugbtb.adoc#__ugbtb_i18n_wicket-viewer[i18n] section of the xref:../ugbtb/ugbtb.adoc#[beyond the basics] guide.
 
 In prior releases (`1.10.0` and earlier) it was necessary to use link:https://ci.apache.org/projects/wicket/guide/6.x/guide/i18n.html#i18n_3[Wicket's internationalization support], namely resource bundles.  This is still supported (as a fallback):
 

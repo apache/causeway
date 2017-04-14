@@ -16,7 +16,7 @@ Most collections (those that are modifiable) will also have a setter and (if per
 And collections properties will also have a number of annotations:
 
 * Apache Isis defines its own set own `@Collection` annotation for capturing domain semantics.
-It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ugvw.adoc#_ugvw_layout[`.layout.xml`] file
+It also provides a `@CollectionLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:../ugvw/ugvw.adoc#_ugvw_layout[`.layout.xml`] file
 
 * the collections of domain entities are often annotated with various JDO/DataNucleus annotations, most notable `javax.jdo.annotations.Persistent`.
 This and other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
@@ -25,7 +25,7 @@ This and other annotations can be used to specify if the association is bidirect
 
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
-Unlike xref:../ugfun/ugfun.adoc#_ugfun_how-tos_class-structure_properties[properties], the framework (at least, the xref:ugvw.adoc[Wicket viewer]) does not allow collections to be "edited".
+Unlike xref:../ugfun/ugfun.adoc#_ugfun_how-tos_class-structure_properties[properties], the framework (at least, the xref:../ugvw/ugvw.adoc[Wicket viewer]) does not allow collections to be "edited".
 Instead, xref:../ugfun/ugfun.adoc#_ugfun_how-tos_class-structure_actions[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 

@@ -20,7 +20,7 @@ of the implementation to figure out what the "owning" object might be.
 +
 For example, return the home page (eg as defined by the xref:../rgant/rgant.adoc#_rgant-HomePage[`@HomePage`] annotation).
 
-Currently the routing service is used only by the xref:ugvw.adoc#[Wicket viewer]; it is ignored by the xref:ugvro.adoc#[Restful Objects] viewer.
+Currently the routing service is used only by the xref:../ugvw/ugvw.adoc#[Wicket viewer]; it is ignored by the xref:../ugvro/ugvro.adoc#[Restful Objects] viewer.
 
 
 [NOTE]

@@ -8,7 +8,7 @@
 
 The `ContentMappingService` supports the (default implementation of the)
 xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] allowing the
-xref:ugvro.adoc#[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified
+xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified
 by the HTTP `Accept` header.
 
 See xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
@@ -42,7 +42,7 @@ public interface ContentMappingService {
 
 
 In versions prior to `v1.12.0`, this interface resided in a different package, internal to the
-xref:ugvro.adoc[Restful Objects] viewer, and defined a slightly different signature that used an internal enum:
+xref:../ugvro/ugvro.adoc[Restful Objects] viewer, and defined a slightly different signature that used an internal enum:
 
 [source,java]
 ----

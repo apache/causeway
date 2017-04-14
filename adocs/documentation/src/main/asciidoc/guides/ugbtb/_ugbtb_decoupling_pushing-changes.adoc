@@ -7,7 +7,7 @@
 
 [NOTE]
 ====
-This technique is much less powerful than using xref:ugbtb.adoc#_ugbtb_decoupling_event-bus[the event bus] .  We present it mostly for completeness.
+This technique is much less powerful than using xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_event-bus[the event bus] .  We present it mostly for completeness.
 ====
 
 

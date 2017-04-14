@@ -28,7 +28,7 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 |`isis.persistor.datanucleus.` +
 `RegisterEntities.packagePrefix`
 |fully qualified package names (CSV)
-|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:ugodn.adoc#_ugodn_configuring_eagerly-registering-entities[discussion below].
+|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_eagerly-registering-entities[discussion below].
 
 This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
@@ -60,7 +60,7 @@ This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-comp
 `datanucleus.persistenceByReachabilityAtCommit`
 |`false`
 |We recommend this setting is disabled.  +
-Further xref:ugodn.adoc#_ugodn_configuring_disabling-persistence-by-reachability[discussion below].
+Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_disabling-persistence-by-reachability[discussion below].
 
 |===
 

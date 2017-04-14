@@ -229,7 +229,7 @@ method.  For example:
 DocumentHolder_documents mixin = container.mixin(DocumentHolder_documents.class, customer);
 ----
 
-The xref:ugtst.adoc#__ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
+The xref:../ugtst/ugtst.adoc#__ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
 xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience
 method.
 
@@ -257,7 +257,7 @@ fundamental structure is changing is likely to remain a no-no.
 However, chances are that the structure of your domain objects (the data) will change much less rapidly than
 the behaviour of those domain objects.  Thus, it's the behaviour that you're most likely wanting to change while the
 app is still running.  If you move that behaviour out into xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins[mixins] (or
-xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services]), then these can be reloaded happily.
+xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services]), then these can be reloaded happily.
 (When running in prototype mode), Apache Isis will automatically recreate the portion of the metamodel for any domain
 object as it is rendered.
 

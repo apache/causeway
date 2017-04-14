@@ -102,20 +102,20 @@ DTOs (data transfer objects) are simple classes that (according to link:https://
 
 If those two processes are parts of the same overall application (the same team builds and deploys both server and
 client) then there's generally no need to define a DTO; just access the entities using Apache Isis'
-xref:ugvro.adoc#[RestfulObjects viewer].
+xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 
 On the other hand, if the client consuming the DTO is a different application -- by which we mean developed/deployed by
 a different (possible third-party) team -- then the DTOs act as a formal contract between the provider and the consumer.
-In such cases, exposing domain entities over xref:ugvro.adoc#[RestfulObjects] would be
+In such cases, exposing domain entities over xref:../ugvro/ugvro.adoc#[RestfulObjects] would be
 "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be
 easily changed by the producer.
 
 To support this use case, a view model can be defined such that it can act as a DTO.  This is done by annotating the
 class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding
 XSD schema describing the structure of that XML.  A discussion of how that might be done using an ESB such as
-link:http://camel.apache.org[Apache Camel(TM)] follows xref:ugbtb.adoc#__ugbtb_view-models_use-cases_dtos_consumers[below].
+link:http://camel.apache.org[Apache Camel(TM)] follows xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_use-cases_dtos_consumers[below].
 
-In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc#[Wicket viewer] just like any other.  In fact (as the xref:ugbtb.adoc#_ugbtb_view-models_programming-model[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
+In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:../ugvw/ugvw.adoc#[Wicket viewer] just like any other.  In fact (as the xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models_programming-model[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
@@ -127,7 +127,7 @@ framework has xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that co
 === DTO Consumers
 
 The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly,
-eg using the xref:ugvro.adoc#[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB
+eg using the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB
 such as Apache Camel.
 
 In the former case, the consumer requests the DTO by calling the REST API with the appropriate HTTP `Accept` header.
@@ -153,7 +153,7 @@ The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' pu
 but which simply publishes instances of xref:../rgcms/rgcms.adoc#_rgcms_schema-aim[`ActionInvocationMemento`] to an ActiveMQ
 queue.  Camel (or similar) can then be hooked up to consume these events from this queue, and use a processor to
 parse the action memento to determine what has changed on the source system.  Thereafter, a subsequent Camel processor
-can then call back to the source - via the xref:ugvro.adoc[Restful Objects viewer] - to enrich the message with
+can then call back to the source - via the xref:../ugvro/ugvro.adoc[Restful Objects viewer] - to enrich the message with
 additional details using a DTO.
 
 

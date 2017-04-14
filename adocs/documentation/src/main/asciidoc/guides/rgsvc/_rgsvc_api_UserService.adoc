@@ -55,9 +55,9 @@ public final class RoleMemento {
 }
 ----
 
-The roles associated with the `UserMemento` will be based on the configured xref:ugsec.adoc#[security] (typically Shiro).
+The roles associated with the `UserMemento` will be based on the configured xref:../ugsec/ugsec.adoc#[security] (typically Shiro).
 
-In addition, when using the xref:ugvw.adoc#[Wicket viewer] there will be an additional "org.apache.isis.viewer.wicket.roles.USER" role; this is used internally to restrict access to web pages without authenticating.
+In addition, when using the xref:../ugvw/ugvw.adoc#[Wicket viewer] there will be an additional "org.apache.isis.viewer.wicket.roles.USER" role; this is used internally to restrict access to web pages without authenticating.
 
 
 

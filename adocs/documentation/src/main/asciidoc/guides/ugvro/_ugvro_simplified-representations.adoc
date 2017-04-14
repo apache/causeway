@@ -16,7 +16,7 @@ link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
 As of `1.11.0`, Apache Isis provides support for its own simplified representation for the most commonly-used
 representations.  This is implemented using the `ContentNegotiationService` described in the
-xref:ugvro.adoc#_ugvro_architecture[architecture] chapter.
+xref:../ugvro/ugvro.adoc#_ugvro_architecture[architecture] chapter.
 
 
 
@@ -222,7 +222,7 @@ When an action is invoked, it can return a domain object, a list, a scalar, or r
 === Returning an Object
 
 If the action returned an object, then the domain object representation described
-xref:ugvro.adoc#__ugvro_simplified-representations_domain-object[above] is returned.
+xref:../ugvro/ugvro.adoc#__ugvro_simplified-representations_domain-object[above] is returned.
 
 For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
 this resource:
@@ -273,7 +273,7 @@ Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="objec
 
 On the other hand if the action returned a list (a "standalone" collection, then an array representation is returned.
 This is very similar to that returned by a
-xref:ugvro.adoc#__ugvro_simplified-representations_object-collection[(parented) object collection], though with a
+xref:../ugvro/ugvro.adoc#__ugvro_simplified-representations_object-collection[(parented) object collection], though with a
 slightly different `Content-Type` to distinguish.
 
 For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing

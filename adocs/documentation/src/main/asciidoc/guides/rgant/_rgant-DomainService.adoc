@@ -24,7 +24,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`nature()`]
 |`VIEW`, `VIEW_MENU_ONLY`, `VIEW_CONTRIBUTIONS_ONLY`, `VIEW_REST_ONLY`, `DOMAIN` (`VIEW`)
-|the nature of this service: providing actions for menus, or as contributed actions, or for the xref:ugvro.adoc#[RestfulObjects REST API], or neither
+|the nature of this service: providing actions for menus, or as contributed actions, or for the xref:../ugvro/ugvro.adoc#[RestfulObjects REST API], or neither
 
 
 |xref:../rgant/rgant.adoc#_rgant-DomainService_objectType[`objectType()`]

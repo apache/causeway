@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Contributed services provide many of the same benefits as xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins];
+Contributed services provide many of the same benefits as xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[mixins];
 indeed mixins are an evolution and refinement of the contributions concept.
 
 [WARNING]

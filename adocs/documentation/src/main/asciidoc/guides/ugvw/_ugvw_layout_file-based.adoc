@@ -6,7 +6,7 @@
 
 
 
-Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_annotation-based[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
+Metadata providing UI hints can be specified either xref:../ugvw/ugvw.adoc#_ugvw_layout_annotation-based[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
 
 Using a file-based layout has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.
 Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
@@ -39,7 +39,7 @@ The layout file distinguishes between two types of element:
 
 * those that define a grid structure, of: rows, columns, tab groups and tabs. +
 +
-The rows and columns are closely modelled on link:getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:ugvw.adoc[Wicket viewer]).
+The rows and columns are closely modelled on link:getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:../ugvw/ugvw.adoc[Wicket viewer]).
 
 * those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 

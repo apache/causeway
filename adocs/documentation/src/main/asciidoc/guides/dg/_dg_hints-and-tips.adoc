@@ -10,7 +10,7 @@
 This chapter has FAQs (with solutions) for problems we've encountered ourselves or have been raised on the
 Apache Isis mailing lists.
 
-See also xref:ugvro.adoc#_ugvro_hints-and-tips[Restful Objects hints-n-tips].
+See also xref:../ugvro/ugvro.adoc#_ugvro_hints-and-tips[Restful Objects hints-n-tips].
 
 include::_dg_hints-and-tips_enabling-logging.adoc[leveloffset=+1]
 include::_dg_hints-and-tips_subtype-entity-not-fully-populated.adoc[leveloffset=+1]

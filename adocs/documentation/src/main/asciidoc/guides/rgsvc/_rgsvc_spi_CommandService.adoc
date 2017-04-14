@@ -40,7 +40,7 @@ The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] below provides 
 
 [NOTE]
 ====
-Note that this screencast shows an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screencast shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 
@@ -101,7 +101,7 @@ Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a
-xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
+xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
 
 
 

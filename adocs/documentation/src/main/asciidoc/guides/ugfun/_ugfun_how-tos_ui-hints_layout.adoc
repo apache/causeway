@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-See the xref:ugvw.adoc#_ugvw_layout[object layout] chapter.
+See the xref:../ugvw/ugvw.adoc#_ugvw_layout[object layout] chapter.
 

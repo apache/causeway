@@ -10,7 +10,7 @@ The `hidden()` attribute indicates where (in the UI) the property should be hidd
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[`@PropertyLayout#hidden()`] or a xref:ugvw.adoc#_ugvw_layout_file-based[file-based layout] such that the property can be hidden at the view layer.
+It is also possible to use xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[`@PropertyLayout#hidden()`] or a xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] such that the property can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -64,11 +64,11 @@ tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 [NOTE]
 ====
-The xref:ugvro.adoc#[RestfulObjects viewer] has only partial support for these `Where` enums.
+The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] has only partial support for these `Where` enums.
 ====
 
 
-As an alternative to using the annotation, the dynamic xref:ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

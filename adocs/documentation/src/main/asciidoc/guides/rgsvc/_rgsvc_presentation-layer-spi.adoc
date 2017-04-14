@@ -126,7 +126,7 @@ grids for any domain class.
 ``o.a.i.core`` +
 ``isis-core-applib``
 |The default implementation will return the home page (per xref:../rgsvc/rgsvc.adoc#_rgsvc_api_HomePageProviderService[`HomePageProviderService`]) if a void or null is returned. +
-Used by the xref:ugvw.adoc#[Wicket viewer] only.
+Used by the xref:../ugvw/ugvw.adoc#[Wicket viewer] only.
 
 
 
