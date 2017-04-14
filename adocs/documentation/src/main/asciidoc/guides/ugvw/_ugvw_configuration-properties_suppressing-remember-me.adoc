@@ -14,11 +14,11 @@ The 'remember me' checkbox on the login page can be suppressed, if required, by 
 
 With 'remember me' not suppressed (the default):
 
-image::{_imagesdir}wicket-viewer/suppress-remember-me/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-remember-me/login-page-default.png"]
+image::{_imagesdir}suppress-remember-me/login-page-default.png[width="300px",link="{_imagesdir}suppress-remember-me/login-page-default.png"]
 
 and with the checkbox suppressed:
 
-image::{_imagesdir}wicket-viewer/suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-remember-me/login-page-suppress-remember-me.png"]
+image::{_imagesdir}suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}suppress-remember-me/login-page-suppress-remember-me.png"]
 
 
 

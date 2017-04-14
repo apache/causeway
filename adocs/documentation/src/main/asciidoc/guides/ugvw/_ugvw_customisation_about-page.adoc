@@ -13,7 +13,7 @@ Isis' Wicket viewer has an About page that, by default, will provide a dump of t
 
 Here's what the About page looks like with this configuration added:
 
-image::{_imagesdir}wicket-viewer/about-page/about-page.png[width="800px",link="{_imagesdir}wicket-viewer/about-page/about-page.png"]
+image::{_imagesdir}about-page/about-page.png[width="800px",link="{_imagesdir}about-page/about-page.png"]
 
 [NOTE]
 ====

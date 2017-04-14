@@ -19,11 +19,11 @@ The 'sign up' link can be suppressed, if required, by setting a configuration fl
 
 With 'sign up' not suppressed (the default):
 
-image::{_imagesdir}wicket-viewer/suppress-sign-up/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-sign-up/login-page-default.png"]
+image::{_imagesdir}suppress-sign-up/login-page-default.png[width="300px",link="{_imagesdir}suppress-sign-up/login-page-default.png"]
 
 and with the link suppressed:
 
-image::{_imagesdir}wicket-viewer/suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-sign-up/login-page-suppress-sign-up.png"]
+image::{_imagesdir}suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}suppress-sign-up/login-page-suppress-sign-up.png"]
 
 
 

@@ -47,7 +47,7 @@ each rendered object, per user.
 [[__rgcms_classes_mixins_Object_downloadLayoutXml]]
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout XML] for the current domain object.  It has the following signature:
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:ugvw.adoc#_ugvw_layout_dynamic_xml[layout XML] for the current domain object.  It has the following signature:
 
 [source,java]
 ----
@@ -60,7 +60,7 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[layout XML] and also
+See the documentation on xref:ugvw.adoc#_ugvw_layout_dynamic_xml[layout XML] and also
 the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] for more information on these styles
 
 

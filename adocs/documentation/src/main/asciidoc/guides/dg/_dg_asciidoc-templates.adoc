@@ -590,9 +590,9 @@ embeds specified image, where:
 
 for example:
 
-`\image:{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]`
+`\image:{_imagesdir}layouts/estatio-Lease.png[width="300px",link="{_imagesdir}layouts/estatio-Lease.png"]`
 
-|image:{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]
+|image:{_imagesdir}layouts/estatio-Lease.png[width="300px",link="{_imagesdir}layouts/estatio-Lease.png"]
 
 
 

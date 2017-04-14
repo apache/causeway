@@ -96,7 +96,7 @@ public class ToDoItem {
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:ugvw.adoc#_ugvw_layout_dynamic[`.layout.json`] file (only for properties, collections and actions are supported).
 ====
 
 

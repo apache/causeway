@@ -19,11 +19,11 @@ isis.viewer.wicket.themes.showChooser=true
 ----
 
 .Example 1
-image::{_imagesdir}wicket-viewer/theme-chooser/example-1.png[width="720px",link="{_imagesdir}wicket-viewer/theme-chooser/example-1.png"]
+image::{_imagesdir}theme-chooser/example-1.png[width="720px",link="{_imagesdir}theme-chooser/example-1.png"]
 
 
 .Example 2:
-image::{_imagesdir}wicket-viewer/theme-chooser/example-2.png[width="720px",link="{_imagesdir}wicket-viewer/theme-chooser/example-2.png"]
+image::{_imagesdir}theme-chooser/example-2.png[width="720px",link="{_imagesdir}theme-chooser/example-2.png"]
 
 It is also possible to restrict the themes shown to some subset of those in bootswatch. This is done using a further
 property:

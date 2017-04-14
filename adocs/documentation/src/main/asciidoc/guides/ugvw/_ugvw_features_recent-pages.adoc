@@ -14,7 +14,7 @@ The Wicket viewer provides a recent pages drop-down that acts as a breadcrumb tr
 
 The following screenshot, taken from the https://github.com/estatio/estatio[Estatio] application, shows the recent pages drop-down after a number of pages have been accessed.
 
-image::{_imagesdir}wicket-viewer/recent-pages/recent-pages.png[width="800px",link="{_imagesdir}wicket-viewer/recent-pages/recent-pages.png"]
+image::{_imagesdir}recent-pages/recent-pages.png[width="800px",link="{_imagesdir}recent-pages/recent-pages.png"]
 
 
 [NOTE]

@@ -656,7 +656,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programmi
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ugvw.adoc#_ugvw_layout_dynamic[dynamic layout]s. +
 
 See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 

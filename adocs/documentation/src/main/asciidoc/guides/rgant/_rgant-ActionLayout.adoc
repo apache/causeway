@@ -100,7 +100,7 @@ public class ToDoItems {
 
 
 
-As an alternative to using the `@ActionLayout` annotation, a dynamic layout using  xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`] file can be specified; for example:
+As an alternative to using the `@ActionLayout` annotation, a dynamic layout using  xref:ugvw.adoc#_ugvw_layout_dynamic[`.layout.json`] file can be specified; for example:
 
 [source,javascript]
 ----

@@ -1,17 +1,17 @@
-[[_ugfun_object-layout_static]]
+[[_ugvw_layout_static]]
 = Static Object Layout
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
-Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using either a xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] file or a xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`] file.
+Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using either a xref:ugvw.adoc#_ugvw_layout_dynamic_xml[`layout.xml`] file or a xref:ugvw.adoc#_ugvw_layout_dynamic[`.layout.json`] file.
 
 This section describes the static approach, using annotations.
 
 [NOTE]
 ====
-Tabs and tabgroups are only supported using xref:ugfun.adoc#_ugfun_object-layout_dynamic_xml[`layout.xml`] files; they are not supported by annotations.
+Tabs and tabgroups are only supported using xref:ugvw.adoc#_ugvw_layout_dynamic_xml[`layout.xml`] files; they are not supported by annotations.
 ====
 
 
@@ -109,7 +109,7 @@ The property groups/fieldsets in this case are those that are inferred from the 
 
 [TIP]
 ====
-It is also possible to combine `@MemberOrder` with dynamic layouts, either using xref:ugfun.adoc#_ugfun_object-layout_xml[XML] or xref:ugfun.adoc#_ugfun_object-layout_dynamic[JSON].  The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.  The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
+It is also possible to combine `@MemberOrder` with dynamic layouts, either using xref:ugvw.adoc#_ugvw_layout_xml[XML] or xref:ugvw.adoc#_ugvw_layout_dynamic[JSON].  The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.  The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
 
 When dynamic layouts are used this way, the xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation (and the other layout annotations, xref:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) are all still honoured.
 ====

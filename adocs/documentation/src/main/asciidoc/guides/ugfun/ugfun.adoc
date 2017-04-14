@@ -13,7 +13,7 @@ This guide introduces the xref:ugfun.adoc#_ugfun_core-concepts[core concepts] an
 and tells you how to xref:ugfun.adoc#_ugfun_getting-started[get started] with a Maven archetype.
 
 It also describes a number of xref:ugfun.adoc#_ugfun_how-tos[how-to]s, describes how to influence the
-xref:ugfun.adoc#_ugfun_object-layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
+xref:ugvw.adoc#_ugvw_layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
  catalogues various xref:ugfun.adoc#_ugfun_faqs.adoc[FAQ]s.
 
 === Other Guides
@@ -50,7 +50,7 @@ include::_ugfun_core-concepts.adoc[leveloffset=+1]
 include::_ugfun_getting-started.adoc[leveloffset=+1]
 
 include::_ugfun_how-tos.adoc[leveloffset=+1]
-include::_ugfun_object-layout.adoc[leveloffset=+1]
+include::_ugvw_layout.adoc[leveloffset=+1]
 
 include::_ugfun_faqs.adoc[leveloffset=+1]
 

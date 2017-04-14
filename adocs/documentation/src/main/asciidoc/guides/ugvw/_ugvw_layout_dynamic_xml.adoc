@@ -1,4 +1,4 @@
-[[_ugfun_object-layout_dynamic_xml]]
+[[_ugvw_layout_dynamic_xml]]
 = Dynamic (XML) Layout
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
@@ -6,7 +6,7 @@
 
 
 
-Metadata providing UI hints can be specified either xref:ugfun.adoc#_ugfun_object-layout_static[statically], using annotations, or dynamically using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
+Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_static[statically], using annotations, or dynamically using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
 
 The `Xxx.layout.xml` file is just the serialized form of a xref:rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.  These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
@@ -15,7 +15,7 @@ It is also possible to download an initial `.layout.xml` - capturing any existin
 
 [NOTE]
 ====
-It is also possible to describe dynamic layouts using a `.layout.json` file, as discussed xref:ugfun.adoc#_ugfun_object-layout_dynamic[here].  The `.layout.json` file should be considered as deprecated: the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
+It is also possible to describe dynamic layouts using a `.layout.json` file, as discussed xref:ugvw.adoc#_ugvw_layout_dynamic[here].  The `.layout.json` file should be considered as deprecated: the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
 ====
 
 == Grids vs Components
@@ -43,7 +43,7 @@ This link:https://www.youtube.com/watch?v=MxewC5Pve5k[screencast] describes the 
 Probably the easiest way to understand dynamic XML layouts is by example.  For this we'll use the `ToDoItem` from the
 (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
-image::{_imagesdir}ugfun/_ugfun_object-layout_dynamic_xml/ToDoItem.png[width="940px",link="{_imagesdir}ugfun/_ugfun_object-layout_dynamic_xml/ToDoItem.png"]
+image::{_imagesdir}ugfun/_ugvw_layout_dynamic_xml/ToDoItem.png[width="940px",link="{_imagesdir}ugfun/_ugvw_layout_dynamic_xml/ToDoItem.png"]
 
 
 === Namespaces
@@ -102,7 +102,7 @@ This corresponds to the following XML:
 ----
 
 
-You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:ugfun.adoc#__ugfun_object-layout_dynamic_xml-unreferenced[below].
+You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_dynamic_xml-unreferenced[below].
 
 
 
@@ -145,7 +145,7 @@ In the first column there is a single fieldset.  Notice how actions - such as `d
 
 Thereafter the fieldset lists the properties in order.  Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
-Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ugfun.adoc#__ugfun_object-layout_dynamic_xml-unreferenced[below].
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_dynamic_xml-unreferenced[below].
 
 
 === Collections
@@ -177,7 +177,7 @@ As with properties, actions can be associated with collections; this indicates t
 
 
 
-[[__ugfun_object-layout_dynamic_xml-unreferenced]]
+[[__ugvw_layout_dynamic_xml-unreferenced]]
 == Unreferenced Members
 
 As noted in the preceding discussion, several of the grid's regions have either an ``unreferencedActions``, ``unreferencedCollections`` or ``unreferencedProperties`` attribute.
@@ -213,7 +213,7 @@ One feature worth being aware of is that it is possible to render a single featu
 For example, the dashboard home page for the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] shows
 the "not yet complete" collection of todo items twice, once as a table and also as a calendar:
 
-image::{_imagesdir}ugfun/_ugfun_object-layout_dynamic_xml/ToDoAppDashboard.png[width="940px",link="{_imagesdir}ugfun/_ugfun_object-layout_dynamic_xml/ToDoAppDashboard.png"]
+image::{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png"]
 
 
 This is accomplished using the following (slightly abbreviated) layout:
@@ -371,6 +371,8 @@ For more information about layouts, see:
 * xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] and its supporting services, xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`]
 
 * xref:rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
+
+
 
 
 == Required updates to the dom project's pom.xml

@@ -22,7 +22,7 @@ Apache Isis recognizes some of the JDO and JAXB annotations and infers domain se
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
 These provide hints relating to the layout of the domain object in the user interface.
-(Alternatively, these UI hints can be defined in a supplementary xref:ugfun.adoc#_ugfun_object-layout[`.layout.xml`] file.
+(Alternatively, these UI hints can be defined in a supplementary xref:ugvw.adoc#_ugvw_layout[`.layout.xml`] file.
 
 We use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
 By convention there will be a single top-level package corresponding to the module.

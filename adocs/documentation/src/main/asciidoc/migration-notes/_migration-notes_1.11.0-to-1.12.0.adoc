@@ -14,14 +14,14 @@ issues here.
 
 == Dynamic XML Layouts
 
-The major new feature in 1.12.0 is xref:guides/ugfun.adoc#_ugfun_object-layout_dynamic_xml[dynamic XML layouts], providing
+The major new feature in 1.12.0 is xref:guides/ugvw.adoc#_ugvw_layout_dynamic_xml[dynamic XML layouts], providing
 much enhanced support for custom layouts.
 
 The new `Xxx.layout.xml` file is optional; without it domain objects will
 continue to be rendered as before, using metadata from annotations (xref:guides/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`],
 xref:guides/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:guides/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`],
 xref:guides/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:guides/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] and
-xref:guides/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]), and also from any xref:guides/ugfun.adoc#_ugfun_object-layout_dynamic[`Xxx.layout.json`]
+xref:guides/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]), and also from any xref:guides/ugvw.adoc#_ugvw_layout_dynamic[`Xxx.layout.json`]
 file that might already exist.  There is therefore no requirement to move to the new more flexible XML-based layout.
 
 If you do want to start using the new format, then you will find that 1.12.0 provides a mixin action (available in

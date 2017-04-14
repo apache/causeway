@@ -13,7 +13,7 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Annotation
 |Purpose
 |Layer
-|xref:ugfun.adoc#_ugfun_object-layout_dynamic[Dynamic layout]?
+|xref:ugvw.adoc#_ugvw_layout_dynamic[Dynamic layout]?
 
 |xref:rgant.adoc#_rgant-Facets[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.

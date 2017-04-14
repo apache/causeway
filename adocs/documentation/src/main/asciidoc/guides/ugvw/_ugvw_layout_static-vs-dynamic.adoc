@@ -1,4 +1,4 @@
-[[_ugfun_object-layout_static-vs-dynamic]]
+[[_ugvw_layout_static-vs-dynamic]]
 = Static vs Dynamic Layouts
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
@@ -7,7 +7,7 @@
 
 
 
-Using xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic object layout]s using JSON has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.  Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+Using xref:ugvw.adoc#_ugvw_layout_dynamic[dynamic object layout]s using JSON has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.  Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
 Another benefit of dynamic layout is that UI hints can be provided for xref:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
 

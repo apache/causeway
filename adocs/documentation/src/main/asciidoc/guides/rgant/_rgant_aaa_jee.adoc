@@ -16,7 +16,7 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Annotation
 |Purpose
 |Layer
-|xref:ugfun.adoc#_ugfun_object-layout_dynamic[Dynamic layout]?
+|xref:ugvw.adoc#_ugvw_layout_dynamic[Dynamic layout]?
 
 |xref:rgant.adoc#_rgant-Digits[`@javax.validation.` +
 `constraints.` +
