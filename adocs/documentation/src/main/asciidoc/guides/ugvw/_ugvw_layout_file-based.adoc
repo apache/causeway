@@ -106,7 +106,7 @@ This corresponds to the following XML:
 ----
 
 
-You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_dynamic_xml-unreferenced[below].
+You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
 
 
 
@@ -149,7 +149,7 @@ In the first column there is a single fieldset.  Notice how actions - such as `d
 
 Thereafter the fieldset lists the properties in order.  Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
-Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_dynamic_xml-unreferenced[below].
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
 
 
 === Collections
@@ -181,7 +181,7 @@ As with properties, actions can be associated with collections; this indicates t
 
 
 
-[[__ugvw_layout_dynamic_xml-unreferenced]]
+[[__ugvw_layout_file-based_unreferenced]]
 == Unreferenced Members
 
 As noted in the preceding discussion, several of the grid's regions have either an ``unreferencedActions``, ``unreferencedCollections`` or ``unreferencedProperties`` attribute.
