@@ -8,7 +8,7 @@
 
 
 
-[[_ugvw]]
+[[__ugvw]]
 == Wicket Viewer
 
 The Wicket Viewer automatically exposes an Apache Isis domain object model for use by end-users.  The viewer is
@@ -51,7 +51,6 @@ The remaining guides are:
 
 include::_ugvw_features.adoc[leveloffset=+1]
 include::_ugvw_configuration-properties.adoc[leveloffset=+1]
-include::_ugvw_request-parameters.adoc[leveloffset=+1]
 include::_ugvw_layout.adoc[leveloffset=+1]
 include::_ugvw_customisation.adoc[leveloffset=+1]
 

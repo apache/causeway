@@ -20,6 +20,5 @@ The chapter wraps up with a technique for prototyping, allowing user/passwords t
 include::_ugvw_extending_custom-bootstrap-theme.adoc[leveloffset=+1]
 include::_ugvw_extending_replacing-page-elements.adoc[leveloffset=+1]
 include::_ugvw_extending_custom-pages.adoc[leveloffset=+1]
-include::_ugvw_extending_isis-addons-extensions.adoc[leveloffset=+1]
 include::_ugvw_extending_login-via-query-args-prototyping.adoc[leveloffset=+1]
 

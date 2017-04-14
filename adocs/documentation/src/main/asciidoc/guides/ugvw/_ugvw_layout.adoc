@@ -9,14 +9,13 @@
 
 In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], Apache Isis aims to infer as much information from the domain classes as possible.
 Nevertheless, some metadata relating solely to the UI is inevitably required.
+This chapter describes how this is done both for domain objects using either annotations or using an associated layout file.
 
-
-This chapter describes how this is done both for domain objects -- statically or dynamically -- and for the application menu bar (containing domain service' actions).
+It also describes how to layout the application menu items (containing domain service' actions), as more well as more advanced topics such as customising which columns appear in tables.
 
 include::_ugvw_layout_annotation-based.adoc[leveloffset=+1]
 include::_ugvw_layout_file-based.adoc[leveloffset=+1]
-include::_ugvw_layout_static-vs-dynamic.adoc[leveloffset=+1]
 include::_ugvw_layout_application-menu.adoc[leveloffset=+1]
-include::_ugvw_layout_customising-table-columns.adoc[leveloffset=+1]
+include::_ugvw_layout_table-columns.adoc[leveloffset=+1]
 
 
