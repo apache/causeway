@@ -6,7 +6,7 @@
 
 
 The `Dto` role interface is intended to be implemented by JAXB-annotated view models, that is, annotated using
-xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`].  It enables the ability to download the XML and
+xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`].  It enables the ability to download the XML and
 XSD schema of those objects using two xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins],
 `Dto_downloadXml` and `Dto_downloadXsd`.
 
@@ -32,7 +32,7 @@ public class Dto_downloadXml {
 <2> actually this method is called '$$' in the code, a "special case" that means to use the derive the action name
 from the class name.
 
-This will return the XML text wrapped up in a xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
+This will return the XML text wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 
 The `Dto_downloadXsd` mixin is similar:
 
@@ -48,10 +48,10 @@ public class Dto_downloadXsd {
 <2> actually this is '$$' in the code, a "special case" that means to use the derive the action name from the class name.
 
 If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as
-a xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.  If there are multiple XSD schemas referenced
+a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.  If there are multiple XSD schemas referenced
 then the action will return a zip of those schemas, wrapped up in a
-xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].  The `IsisSchemas` parameter to the action can be used to
-optionally ignore the common xref:rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema
+xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].  The `IsisSchemas` parameter to the action can be used to
+optionally ignore the common xref:../rgcms/rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema
 referenced by the DTO).
 
 
@@ -59,4 +59,4 @@ referenced by the DTO).
 == Related Services
 
 The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the
-xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to actually generate the XML/XSD.
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to actually generate the XML/XSD.

@@ -7,7 +7,7 @@
 
 The intent of this API is to provide a mechanism where an object can programmatically check the state any class
 invariants.  Specifically, this means the validating the current state of all properties, as well as any object-level
-validation defined by xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`].
+validation defined by xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`].
 
 [WARNING]
 ====

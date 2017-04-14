@@ -20,7 +20,7 @@ The table below summarizes the application layer SPIs defined by Apache Isis.  I
 |Notes
 
 
-|xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`o.a.i.applib.` +
 `services.background` +
 `BackgroundCommandService`]
 |Persisted a memento of an action invocation such that it can be executed asynchronously ("in the background") eg by a scheduler.
@@ -35,7 +35,7 @@ The table below summarizes the application layer SPIs defined by Apache Isis.  I
 
 
 
-|xref:rgsvc.adoc#_rgsvc_spi_CommandService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`o.a.i.applib.` +
 `services.command.spi` +
 `CommandService`]
 |Service to act as a factory and repository (create and save) of command instances, ie representations of an action invocation.  Used for command/auditing and background services.
@@ -49,7 +49,7 @@ The table below summarizes the application layer SPIs defined by Apache Isis.  I
 `JdoRepository`
 
 
-|xref:rgsvc.adoc#_rgsvc_api_HomePageProviderService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_HomePageProviderService[`o.a.i.applib.` +
 `services.homepage` +
 `HomePageProviderService`]
 |Returns the home page object, if any is defined.
@@ -57,7 +57,7 @@ The table below summarizes the application layer SPIs defined by Apache Isis.  I
 `ServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
-|Used by the default implementation of xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`].
+|Used by the default implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`].
 
 
 

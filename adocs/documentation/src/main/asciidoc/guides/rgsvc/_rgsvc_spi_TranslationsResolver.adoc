@@ -6,7 +6,7 @@
 
 
 
-The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`].
+The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`].
 
 The role of the service itself is locate and return translations.
 
@@ -47,12 +47,12 @@ Currently there is no equivalent implementation for the xref:ugvro.adoc#[Restful
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the xref:ugvw.adoc#[Wicket viewer] is being used, then an implementation of `TranslationsResolver` is
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the xref:ugvw.adoc#[Wicket viewer] is being used, then an implementation of `TranslationsResolver` is
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
@@ -62,6 +62,6 @@ in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to th
 == Related Services
 
 
-This service works in conjunction with xref:rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] and xref:rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`] in order to provide i18n support.
+This service works in conjunction with xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`] in order to provide i18n support.
 
 

@@ -6,9 +6,9 @@
 
 
 
-Subclass of xref:rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast
+Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast
 when an object is first instantiated using the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
 `#newTransientInstance(...)` method.
 
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.

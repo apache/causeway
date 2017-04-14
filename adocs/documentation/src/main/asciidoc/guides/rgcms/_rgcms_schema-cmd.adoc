@@ -51,12 +51,12 @@ The `commandDto` root element is defined as:
 ----
 <1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".  Although URIs are not the same as
 URLs, you will find that the schemas are also downloadable from this location.
-<2> uses complex types defined in the xref:rgcms.adoc#_rgcms_schema_common["common" schema].
+<2> uses complex types defined in the xref:../rgcms/rgcms.adoc#_rgcms_schema_common["common" schema].
 <3> definition of the `commandDto` root element.  The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this command is created.  The transaction Id is used to correlate
-to the xref:rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any
-xref:rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
+to the xref:../rgcms/rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any
+xref:../rgcms/rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
 <6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
 <7> the target object (or objects) to be invoked.  As of `1.13.0`, a bulk action will create multiple commands,
 each with only a single target, but a future version of the framework may also support a single bulk command against
@@ -110,11 +110,11 @@ property.  The `actionDto` and `propertyDto` are the concrete subtypes:
 property).
 <2> the `interactionType` attribute indicates whether the member is an action or a property.
 <3> the `actionDto` complex type captures the set of parameters (also including the argument values) with which to
-invoke the action.  The `paramsDto` type is defined xref:rgcms.adoc#__rgcms_schema-cmd_ancillary[below].
+invoke the action.  The `paramsDto` type is defined xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_ancillary[below].
 <4> the `propertyDto` complex type captures the new value (possibly `null`) to set the property to.
 
 
-Note also that there is a corresponding xref:rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]
+Note also that there is a corresponding xref:../rgcms/rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]
 complex type in the "ixn" schema that is for the actual execution (capturing metrics about its execution and also the
 return value if an action invocation).
 
@@ -147,4 +147,4 @@ The schema also defines a small number of supporting types:
 <1> the `paramsDto` is simply the list of parameter/arguments.
 <2> the `paramDto` complex type essentially combines a parameter with its corresponding argument: a named value that
 has a type.  It extends the `valueWithTypeDto` complex type taken from the
-xref:rgcms.adoc#_rgcms_schema-common["common"] schema.
+xref:../rgcms/rgcms.adoc#_rgcms_schema-common["common"] schema.

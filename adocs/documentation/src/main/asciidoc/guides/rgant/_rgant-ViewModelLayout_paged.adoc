@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.  This attribute can also be applied to xref:rgant.adoc#_rgant-CollectionLayout_paged[collections] and xref:rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects].
+The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[collections] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects].
 
 
 
@@ -29,6 +29,6 @@ public class OrderAnalysis {
 ----
 
 
-It is also possible to specify a global default for the page size of standalone collections, using the xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.standalone`.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.standalone`.
 
 

@@ -22,7 +22,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`o.a.i.applib.` +
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -31,7 +31,7 @@ Impl'n (g: a:)
 |Superclass of the other lifecycle events, listed below in this table.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedDomainEvent[`o.a.i.applib.` +
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -39,11 +39,11 @@ Impl'n (g: a:)
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is first instantiated
-using the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
+using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
 `#newTransientInstance(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedDomainEvent[`o.a.i.applib.` +
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -53,7 +53,7 @@ using the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`
 |Broadcast when an object is retrieved from the database.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistedDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistedDomainEvent[`o.a.i.applib.` +
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -61,11 +61,11 @@ using the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is first saved (inserted) into the database using the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingDomainEvent[`o.a.i.applib.` +
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -73,11 +73,11 @@ xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainO
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be saved (inserted) into the database using the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectRemovingDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectRemovingDomainEvent[`o.a.i.applib.` +
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -85,11 +85,11 @@ xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainO
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be deleted from the database using the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#remove(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatedDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatedDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -98,11 +98,11 @@ xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainO
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object has just been updated in the database.  This is done either explicitly when the current
 transaction is flushed using the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingDomainEvent[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -111,7 +111,7 @@ xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainO
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be updated in the database.  This is done either explicitly when the current
 transaction is flushed using the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 

@@ -56,7 +56,7 @@ protected Module newIsisWicketModule() {
 If the logo is hosted locally, add to the relevant directory (eg `src/main/webapp/images`). It is also valid for the
 URL to be absolute.
 
-You may also wish to tweak the xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. For example, a logo with height 40px works well with the following:
+You may also wish to tweak the xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. For example, a logo with height 40px works well with the following:
 
 [source,css]
 ----

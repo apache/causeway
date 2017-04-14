@@ -7,9 +7,9 @@
 
 
 
-The `labelPosition()` attribute determines the positioning of labels for properties.  This attribute can also be specified for xref:rgant.adoc#_rgant-ParameterLayout_labelPosition[parameters].
+The `labelPosition()` attribute determines the positioning of labels for properties.  This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[parameters].
 
-The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.  The one exception is xref:rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.  The one exception is xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean properties a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -77,7 +77,7 @@ can be used instead, eg:
 ====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using a xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] in `isis.properties`:
+Instead, a default can be specified using a xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] in `isis.properties`:
 
 [source,ini]
 ----

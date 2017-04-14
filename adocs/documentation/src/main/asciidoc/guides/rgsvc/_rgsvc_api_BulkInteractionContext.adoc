@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-This service is deprecated, replaced by xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`].
+This service is deprecated, replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`].
 

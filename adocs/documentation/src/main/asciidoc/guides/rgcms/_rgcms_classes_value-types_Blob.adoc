@@ -46,5 +46,5 @@ private Blob someImage;
 
 [TIP]
 ====
-For character large objects, use xref:rgcms.adoc#_rgcms_classes_value-types_Clob][`Clob`] value type.
+For character large objects, use xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob][`Clob`] value type.
 ====

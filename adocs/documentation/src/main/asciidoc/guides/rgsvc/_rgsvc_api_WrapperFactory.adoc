@@ -56,8 +56,8 @@ public interface WrapperFactory {
 <3> whether the supplied object has been wrapped.
 <4> enumerates how the wrapper interacts with the underlying domain object.
 <5> validate all business rules and then execute.
-<6> skip all business rules and then execute (including creating xref:rgant.adoc#_rgant-Action_command[command]s and firing pre- and post-execute xref:rgant.adoc#_rgant-Action_domainEvent[domain event]s).
-<7> validate all business rules (including those from xref:rgant.adoc#_rgant-Action_domainEvent[domain event]s) but do not execute.
+<6> skip all business rules and then execute (including creating xref:../rgant/rgant.adoc#_rgant-Action_command[command]s and firing pre- and post-execute xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[domain event]s).
+<7> validate all business rules (including those from xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[domain event]s) but do not execute.
 <8> convenience method to invoke `wrap(...)` with `ExecuteMode#NO_EXECUTE` (make this feature more discoverable)
 <9> convenience method to invoke `wrap(...)` with `ExecuteMode#SKIP_RULES` (make this feature more discoverable)
 
@@ -74,8 +74,8 @@ Calling any of the above methods may result in a (subclass of) `InteractionExcep
 
 In addition, the following methods may also be called:
 
-* the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and `toString()` methods
-* any xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] methods
+* the xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and `toString()` methods
+* any xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`], xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 
@@ -114,7 +114,7 @@ public class CustomerAgent {
 
 [NOTE]
 ====
-It ought to be possible to implement an xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.  This recognizer service would recognize the `InteractionException` and convert to a suitable message.
+It ought to be possible to implement an xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.  This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
 At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…
 ====
@@ -153,10 +153,10 @@ The original intent of this API was to enable test transcripts to be captured (i
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

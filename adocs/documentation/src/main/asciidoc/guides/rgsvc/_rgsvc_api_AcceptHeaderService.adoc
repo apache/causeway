@@ -5,13 +5,13 @@
 :_imagesdir: images/
 
 
-The `AcceptHeaderService` domain service is a xref:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] service that
+The `AcceptHeaderService` domain service is a xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] service that
 simply exposes the HTTP `Accept` header to the domain.  Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] and
-xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] and
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API & Implementation
@@ -27,7 +27,7 @@ public interface AcceptHeaderService {
     List<MediaType> getAcceptableMediaTypes();      // <2>
 }
 ----
-<1> is xref:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> returns the list of media types found in the HTTP Accept header.
 
 
@@ -49,7 +49,7 @@ The diagram below illustrated this:
 
 image::{_imagesdir}reference-services-api/acceptheaderservice.png[width="700px",link="{_imagesdir}reference-services-api/acceptheaderservice.png"]
 
-The REST request is submitted to a domain service with a xref:rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
+The REST request is submitted to a domain service with a xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
 HTTP `Accept` header.  Based on this it delegates to the appropriate underlying domain service (with a nature of
 `DOMAIN` so that they are not exposed in the REST API at all).
 
@@ -60,7 +60,7 @@ type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a
 `application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
 
 The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter;
-this is used by the xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] to determine how to
+this is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] to determine how to
 map domain objects to view models/DTOs.
 ====
 
@@ -70,10 +70,10 @@ map domain objects to view models/DTOs.
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
 implementation of `AcceptHeaderService` class is automatically registered (it is annotated with `@DomainService`)
 so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

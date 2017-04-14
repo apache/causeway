@@ -40,17 +40,17 @@ public String title() {
     return buf.toString();
 }
 ----
-<1> simple xref:rgcms.adoc#_rgcms_classes_utility_TitleBuffer[tility class] to help construct the title string
+<1> simple xref:../rgcms/rgcms.adoc#_rgcms_classes_utility_TitleBuffer[tility class] to help construct the title string
 <2> imperative conditional logic
-<3> using the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
+<3> using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
 <4> ... but ignore if not
 
 As the example above shows, the implementation can be as complex as you like.
 
-In many cases, though, you may be able to use the xref:rgant.adoc#_rgant-Title[`@Title`] annotation.
+In many cases, though, you may be able to use the xref:../rgant/rgant.adoc#_rgant-Title[`@Title`] annotation.
 
 
-See also xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
+See also xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
 
 
 

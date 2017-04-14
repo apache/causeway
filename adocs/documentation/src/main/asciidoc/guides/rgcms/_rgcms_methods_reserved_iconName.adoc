@@ -33,4 +33,4 @@ public class ToDoItem ... {
 }
 ----
 
-See also xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
+See also xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]

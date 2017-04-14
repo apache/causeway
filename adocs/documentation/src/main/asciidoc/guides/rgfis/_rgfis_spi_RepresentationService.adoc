@@ -9,11 +9,11 @@
 
 The `RepresentationService` is the main plug-in point for the xref:ugvro.adoc#[RestfulObjects viewer] to generate representations.
 
-The default implementation generates representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.  However, it also delegates to the xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
+The default implementation generates representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.  However, it also delegates to the xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
 
 The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
-In all there are three domain services that can influence the representations generated: this service, xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`]and the xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`].  The diagram below shows how these collaborate:
+In all there are three domain services that can influence the representations generated: this service, xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`]and the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`].  The diagram below shows how these collaborate:
 
 image::{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png[width="700px",link="{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png"]
 
@@ -75,21 +75,21 @@ ie `MemberReprMode`
 
 == Implementation
 
-As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.   This delegates to xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.   This delegates to xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default implementation of `RepresentationService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default implementation of `RepresentationService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 
 
 == Related Services
 
-The default implementation delegates to xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] (if present).
+The default implementation delegates to xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] (if present).

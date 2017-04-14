@@ -9,7 +9,7 @@ The `FactoryService` collects together methods for instantiating domain objects.
 
 [NOTE]
 ====
-The methods in this service replace similar methods (now deprecated) in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 ====
 
 
@@ -25,16 +25,16 @@ public interface FactoryService {
 }
 ----
 <1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
-<2> programmatically instantiate a mixin, as annotated with xref:rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
+<2> programmatically instantiate a mixin, as annotated with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
 
 
 The object is created in memory, but is not persisted.  The benefits of using this method (instead of simply using the Java `new` keyword) are:
 
-* any services will be injected into the object immediately (otherwise they will not be injected until the frameworkbecomes aware of the object, typically when it is persisted through the xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`]
+* any services will be injected into the object immediately (otherwise they will not be injected until the frameworkbecomes aware of the object, typically when it is persisted through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`]
 
 * the default value for any properties (usually as specified by `defaultXxx()` supporting methods) will not be set and the `created()` callback will be called.
 
-The corollary is: if your code never uses `defaultXxx()` or the `created()` callback, then you can just `new` up the object.  The xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] service can be used to inject services into the domain object.
+The corollary is: if your code never uses `defaultXxx()` or the `created()` callback, then you can just `new` up the object.  The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] service can be used to inject services into the domain object.
 
 
 
@@ -61,19 +61,19 @@ The core framework provides a default implementation of this service (`o.a.i.cor
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `FactoryService` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Related Services
 
-The xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
 
 An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the
-xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the
 instantiated object.

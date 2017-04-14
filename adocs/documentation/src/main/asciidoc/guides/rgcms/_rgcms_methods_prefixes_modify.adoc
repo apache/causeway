@@ -32,6 +32,6 @@ public class LibraryMember {
 <3> perform some additional business logic
 
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]`
+See also xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]`
 
 

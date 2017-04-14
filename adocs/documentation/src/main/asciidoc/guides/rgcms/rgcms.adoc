@@ -10,10 +10,10 @@
 == Classes, Methods and Schema
 
 This reference guide lists and describes various elements of the the Apache Isis Programming Model, specifically
-reserved and prefix xref:rgcms.adoc#_rgcms_methods[methods] (such as `title()` and `validate...()`) and various utility and
-supporting xref:rgcms.adoc#_rgcms_classes[classes].
+reserved and prefix xref:../rgcms/rgcms.adoc#_rgcms_methods[methods] (such as `title()` and `validate...()`) and various utility and
+supporting xref:../rgcms/rgcms.adoc#_rgcms_classes[classes].
 
-It also describes the xref:rgcms.adoc#_rgcms_schema[XSD schema] defined by Apache Isis.  One use case is for the
+It also describes the xref:../rgcms/rgcms.adoc#_rgcms_schema[XSD schema] defined by Apache Isis.  One use case is for the
 JAXB serialization of view models.
 
 === Other Guides

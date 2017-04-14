@@ -19,7 +19,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`o.a.i.applib.` +
 `AbstractContainedObject`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -27,7 +27,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_AbstractDomainObject[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractDomainObject[`o.a.i.applib.` +
 `AbstractDomainObject`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -35,7 +35,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_AbstractFactoryAndRepository[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractFactoryAndRepository[`o.a.i.applib.` +
 `AbstractFactoryAndRepository`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -43,7 +43,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractService[`o.a.i.applib.` +
 `AbstractService`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -51,7 +51,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`o.a.i.applib.` +
 `AbstractSubscriber`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -59,7 +59,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`o.a.i.applib.` +
 `AbstractViewModel`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -67,7 +67,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`o.a.i.applib.` +
 `fixturescript` +
 `FixtureScript`]
 |``o.a.i.core`` +
@@ -76,13 +76,13 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`o.a.i.applib.` +
+|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |``o.a.i.core`` +
 ``isis-core-applib``
 |(abstract class). +
-`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] is provided
+`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] is provided
   (and no other implementation of `FixtureScripts` was found).
 |depends on: +
 `ClassDiscoveryService`

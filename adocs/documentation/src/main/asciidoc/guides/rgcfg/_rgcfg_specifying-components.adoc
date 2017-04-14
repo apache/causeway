@@ -11,7 +11,7 @@ Bootstrapping an Apache Isis application involves identifying both:
 * the major components (authentication, persistence mechanisms, viewers) of Apache Isis, and also
 * specifying the domain services and persistent entities that make up the application itself.
 
-As of 1.9.0 there are two different ways to perform this bootstrapping.  The recommended (newer) approach is to use an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.  This allows the components, services and entities to be specified from a single class.  The alternative (and older, pre 1.9.0) approach is to specify this information individually, through configuration properties.
+As of 1.9.0 there are two different ways to perform this bootstrapping.  The recommended (newer) approach is to use an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.  This allows the components, services and entities to be specified from a single class.  The alternative (and older, pre 1.9.0) approach is to specify this information individually, through configuration properties.
 
 To specify the `AppManifest` as a configuration property, use:
 
@@ -27,7 +27,7 @@ To specify the `AppManifest` as a configuration property, use:
 |`FQCN`
 |`o.a.i.applib.AppManifest` +
 
-By convention this implementation resides in an `myapp-app` Maven module (as opposed to `myapp-dom` or `myapp-fixture`).  See the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] for details.
+By convention this implementation resides in an `myapp-app` Maven module (as opposed to `myapp-dom` or `myapp-fixture`).  See the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] for details.
 
 |===
 
@@ -49,7 +49,7 @@ If the `AppManifest` approach is _not_ being used, then the following configurat
 (`_shiro_`)
 |`o.a.i.core.runtime.authentication.` `AuthenticationManagerInstaller` +
 
-This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.authorization`
@@ -57,7 +57,7 @@ This property is IGNORED if the `isis.appManifest` configuration property is spe
 (`_shiro_`)
 |`o.a.i.core.runtime.authorization.` `AuthorizationManagerInstaller` +
 
-This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 |`isis.persistor`
 |`datanucleus`
@@ -80,7 +80,7 @@ The mechanism to discover and load domain services:
 
 * Otherwise an alternative implementation of the `o.a.i.core.runtime.services.ServicesInstaller` internal API can be provided. +
 
-This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 This property is also IGNORED completely in 1.13.0+; the `configuration-and-annotation` implementation is always used.
 

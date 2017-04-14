@@ -61,14 +61,14 @@ For more details on the implementation, see xref:ugbtb.adoc#_ugbtb_i18n[i18n sup
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 If the menu items are not required then these can be suppressed either using security or by implementing a xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
@@ -83,5 +83,5 @@ translations can be downloaded as a single file.
 
 == Related Services
 
-This service works in conjunction with xref:rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] and xref:rgsvc.adoc#_rgsvc_spi_TranslationsResolver[`TranslationsResolver`] in order to provide i18n support.
+This service works in conjunction with xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_TranslationsResolver[`TranslationsResolver`] in order to provide i18n support.
 

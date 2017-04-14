@@ -6,13 +6,13 @@
 :toc: right
 
 
-The `xsd` goal of the `isis-maven-plugin` uses the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to
+The `xsd` goal of the `isis-maven-plugin` uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to
 generate XSD schemas from any JAXB-annotated xref:ugbtb.adoc#_ugbtb_view-models[view model/DTOs].
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
 tool, because it uses the framework's support (via
-xref:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`]) to translate any references to domain
-objects into ``OidDto``s (as defined by the Apache Isis xref:rgcms.adoc#_rgcms_schema-common[common schema]).
+xref:../rgant/rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`]) to translate any references to domain
+objects into ``OidDto``s (as defined by the Apache Isis xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema]).
 
 The `xsd` goal defines the following properties:
 
@@ -26,11 +26,11 @@ Defaults to `generated-resources/isis-xsd`
 
 * `separate` - (optional) whether to create separate directories for each JAXB-class. +
 +
-Defaults to `false`.  Most DTO classes will reference one another or the xref:rgcms.adoc#_rgcms_schema-common[common schema].  Normally it's fine to merge all these XSDs together.  This property, if set, results in each a separate directory for each generation of its XSD or XSDs.
+Defaults to `false`.  Most DTO classes will reference one another or the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema].  Normally it's fine to merge all these XSDs together.  This property, if set, results in each a separate directory for each generation of its XSD or XSDs.
 
 * `commonSchemas` - (optional) whether to also generate the isis common schema(s). +
 +
-Defaults to `false`; if set then the call to xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
+Defaults to `false`; if set then the call to xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
 
 As a convenience to any (Java) consumers, the XSDs generated from the view models can then in turn be generated
 into DTOs.  The original view models and these DTOs are similar but not identical: while the view models can only be used

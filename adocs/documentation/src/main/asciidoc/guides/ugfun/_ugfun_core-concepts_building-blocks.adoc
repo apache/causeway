@@ -65,7 +65,7 @@ Another variation are *contributed services*: domain services that contribute be
 Finally domain services may also simply provide additional non-UI functionality; an example being to perform an address geocoding lookup against the google-maps API.
 
 Also worth mentioning: domain services can also be either singletons (discussed above) or request-scoped; the latter being annotated with `@javax.enterprise.context.RequestScoped`.
-An example of the request-scoped service is the xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service, for sharing arbitrary data between multiple objects.
+An example of the request-scoped service is the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service, for sharing arbitrary data between multiple objects.
 
 The final type of domain object is the *mixin*.
 These are similar to contributed services in that they also contribute (or rather, mixin) both behaviour or (derived) state to entities/view models.
@@ -251,13 +251,13 @@ For more information, see xref:ugbtb.adoc#_ugbtb_decoupling_contributions[this t
 [[__ugfun_core-concepts_building-blocks_domain-events]]
 == Domain Events
 
-NOTE: FIXME; see xref:rgcms.adoc#_rgcms_classes_domainevent[domain event] classes.
+NOTE: FIXME; see xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent[domain event] classes.
 
 
 
 === UI Events
 
-NOTE: FIXME; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
+NOTE: FIXME; see xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 
 
 
@@ -265,7 +265,7 @@ NOTE: FIXME; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 [[__ugfun_core-concepts_building-blocks_oid]]
 == OIDs
 
-As well as defining a xref:ugfun.adoc#__ugfun_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
+As well as defining a xref:../ugfun/ugfun.adoc#__ugfun_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
 
 When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an object identifier.
 Fundamentally this is a combination of its type (domain class), along with an identifier.
@@ -285,12 +285,12 @@ Some examples:
 * the information within an OID could be converted into a barcode, and stamped onto a PDF form.
 When the PDF is scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
 
-* as a handle to any object in an audit record, as used by xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] or xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (the latter deprecated);
+* as a handle to any object in an audit record, as used by xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (the latter deprecated);
 
-* similarly within implementations of xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] to persist `Command`
+* similarly within implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] to persist `Command`
 objects
 
-* similarly within implementations of xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]
+* similarly within implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`]
 to persist published action invocations
 
 * and of course both the xref:ugvro.adoc#[RestfulObjects viewer] and
@@ -298,11 +298,11 @@ xref:ugvw.adoc#[Wicket viewer]
 use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
-These are represented as `Bookmark`s, obtained from the xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
-Deep links meanwhile can be obtained from the xref:rgant.adoc#_rgant-DeepLinkService[`@DeepLinkService`].
+These are represented as `Bookmark`s, obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+Deep links meanwhile can be obtained from the xref:../rgant/rgant.adoc#_rgant-DeepLinkService[`@DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.
-The xref:rgcms.adoc#_rgcms_schema-common[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
+The xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
 
 
 

@@ -20,7 +20,7 @@ The table below summarizes the application layer APIs defined by Apache Isis.  I
 |Implementation
 |Notes
 
-|xref:rgsvc.adoc#_rgsvc_api_AcceptHeaderService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_AcceptHeaderService[`o.a.i.applib.` +
 `services.acceptheader` +
 `AcceptHeaderService`]
 |Request-scoped access to HTTP Accept headers.
@@ -30,7 +30,7 @@ The table below summarizes the application layer APIs defined by Apache Isis.  I
 |Populated only when the domain objects are accessed using the xref:ugvro.adoc#[Restful Objects viewer].
 
 
-|xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`o.a.i.applib.` +
 `services.actinv` +
 `ActionInvocation-` +
 `Context`]
@@ -42,7 +42,7 @@ The table below summarizes the application layer APIs defined by Apache Isis.  I
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_BackgroundService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BackgroundService[`o.a.i.applib.` +
 `services.background` +
 `BackgroundService`]
 |Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
@@ -50,10 +50,10 @@ The table below summarizes the application layer APIs defined by Apache Isis.  I
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |depends on: +
-xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommand-Service`]
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommand-Service`]
 
 
-|xref:rgsvc.adoc#_rgsvc_api_CommandContext[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[`o.a.i.applib.` +
 `services.command` +
 `CommandContext`]
 |Request-scoped access to capture the users's __intention__ to invoke an action or to edit a property.
@@ -62,12 +62,12 @@ xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommand-Service`]
 ``isis-core-applib``
 |API is also a concrete class. +
 depends on: +
-xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used.
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used.
 
-The xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
 
 
-|xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`o.a.i.applib.` +
 `services.iactn` +
 `InteractionContext`]
 |Request-scoped access to the current member execution (action invocation or property edit),
@@ -79,7 +79,7 @@ represented as the `Interaction` context.
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_MessageService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MessageService[`o.a.i.applib.` +
 `services.message` +
 `MessageService`]
 |Methods to inform or warn the user, or to raise errors.
@@ -87,10 +87,10 @@ represented as the `Interaction` context.
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
-|xref:rgsvc.adoc#_rgsvc_api_SessionManagementService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SessionManagementService[`o.a.i.applib.` +
 `services.sessmgmt` +
 `SessionManagementService`]
 |Methods for batching long-running work (eg data migration) into multiple sessions.
@@ -101,7 +101,7 @@ represented as the `Interaction` context.
 |
 
 
-|xref:rgsvc.adoc#_rgsvc_api_TitleService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_TitleService[`o.a.i.applib.` +
 `services.title` +
 `TitleService`]
 |Methods to programmatically obtain the title or icon of a domain object.
@@ -109,11 +109,11 @@ represented as the `Interaction` context.
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_TransactionService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_TransactionService[`o.a.i.applib.` +
 `services.xactn` +
 `TransactionService`]
 |Methods for managing transactions.
@@ -121,11 +121,11 @@ represented as the `Interaction` context.
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`o.a.i.applib.` +
 `services.wrapper` +
 `WrapperFactory`]
 |Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)

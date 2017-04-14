@@ -10,7 +10,7 @@ The `DomainObjectContainer` service provides a set of general purpose functional
 
 [NOTE]
 ====
-(Almost all of) the methods in this service have been moved out into a number of more fine-grained services: xref:rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`], xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`], xref:rgsvc.adoc#_rgsvc_api_TitleService[`TitleService`], xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`], xref:rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and xref:rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`].
+(Almost all of) the methods in this service have been moved out into a number of more fine-grained services: xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_api_TitleService[`TitleService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ConfigurationService[`ConfigurationService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_api_UserService[`UserService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`].
 ====
 
 
@@ -43,7 +43,7 @@ The core framework provides a default implementation of this service (`o.a.i.cor
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 

@@ -7,9 +7,9 @@
 
 The `updating()` lifecycle callback method is called when a (persistent) object is just about to be updated in the object store
 
-See also xref:rgcms.adoc#_rgcms_methods_lifecycle_updated[`updated()`].
+See also xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_updated[`updated()`].
 
 [TIP]
 ====
-Alternatively, consider using a xref:rgsvc.adoc#_rgsvc_api_EventBusService[event bus] xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingEvent[`ObjectUpdatingEvent`].
+Alternatively, consider using a xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[event bus] xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingEvent[`ObjectUpdatingEvent`].
 ====

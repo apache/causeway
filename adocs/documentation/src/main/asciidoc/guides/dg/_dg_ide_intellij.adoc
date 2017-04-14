@@ -148,7 +148,7 @@ The live templates have a prefix of prefixed either:
 * `is` : for Apache Isis domain objects
 * `ju` : for JUnit tests
 * `jm` : for JMock mocks or libraries
-* `ad` : for Asciidoc documentation; a full list can be found in the xref:dg.adoc#_dg_asciidoc-templates[appendix].
+* `ad` : for Asciidoc documentation; a full list can be found in the xref:../dg/dg.adoc#_dg_asciidoc-templates[appendix].
 
 The live templates are also provided as a settings JAR file, namely *link:resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
 Download and import (as for the previous settings JAR files).
@@ -499,7 +499,7 @@ In this section are several options that will reduce the time it takes between m
 [[__dg_ide_intellij_advanced_gradle-compile-enhance]]
 === Using Grade to compile/enhance
 
-Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:dg.adoc#__dg_ide_intellij_running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
+Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:../dg/dg.adoc#__dg_ide_intellij_running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
 
 Alternative, you can use the following `build.gradle` script in your `dom` module:
 
@@ -565,7 +565,7 @@ image::{_imagesdir}intellij-idea/070-advanced/004-gradle-output.png[width="600px
 === Using Gradle for liveReload
 
 Similarly, gradle can be run to reduce the turn-around time when tweaking the UI (defined by the
- xref:ugvw.adoc#_ugvw_layout_file-based[`*.layout.xml`] file for each domain class), when the app is running.
+ xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`*.layout.xml`] file for each domain class), when the app is running.
 
 The framework will automatically notice any changes to `.layout.xml` files, but these are read from the
 the classpath (the `target/classes` directory), not the source path.  With IntelliJ these can be copied over manually

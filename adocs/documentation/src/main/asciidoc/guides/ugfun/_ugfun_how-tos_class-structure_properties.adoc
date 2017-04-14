@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_entities[domain entity] or a xref:ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_view-models[view model].
+A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:../ugfun/ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_entities[domain entity] or a xref:../ugfun/ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_view-models[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
 All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
@@ -63,7 +63,7 @@ Or to map a reference type:
 private Customer customer;
 ----
 
-It's ok for a xref:ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_entities[domain entity] to reference another domain entity, and for a xref:ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_view-models[view model] to reference both view model and domain entities.
+It's ok for a xref:../ugfun/ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_entities[domain entity] to reference another domain entity, and for a xref:../ugfun/ugfun.adoc#__ugfun_how-tos_class-structure_class-definition_view-models[view model] to reference both view model and domain entities.
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 [NOTE]
@@ -72,7 +72,7 @@ For further details on mapping associations, see the JDO/DataNucleus documentati
 ====
 
 For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
-The table in the xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
+The table in the xref:../ugfun/ugfun.adoc#_ugfun_how-tos_class-structure_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
 
 
 [[__ugfun_how-tos_class-structure_properties_optional-properties]]
@@ -123,7 +123,7 @@ For example:
 private String notes;
 ----
 
-If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[reference configuration guide] for further details.
+If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[reference configuration guide] for further details.
 
 
 [[__ugfun_how-tos_class-structure_properties_ignoring-properties]]
@@ -254,7 +254,7 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
 
-As for xref:ugfun.adoc#__ugfun_how-tos_class-structure_properties_mapping-joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation.
+As for xref:../ugfun/ugfun.adoc#__ugfun_how-tos_class-structure_properties_mapping-joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation.
 However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
 
 [[__ugfun_how-tos_class-structure_properties_mapping-blobs-and-clobs_mapping-blobs]]

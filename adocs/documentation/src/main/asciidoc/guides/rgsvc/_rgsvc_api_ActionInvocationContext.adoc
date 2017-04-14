@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `ActionInvocationContext` domain service is a xref:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`].  This allows the user to select multiple objects in a table and then invoke the same action against all of them.
+The `ActionInvocationContext` domain service is a xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`].  This allows the user to select multiple objects in a table and then invoke the same action against all of them.
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.  In particular, an object can determine if it is the last object to be called, and so can perform special processing, eg to return a summary calculated result.
 
@@ -27,7 +27,7 @@ public static class ActionInvocationContext {
     public boolean isLast() { ... }
 }
 ----
-<1> is xref:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> an enum set to either `OBJECT` (if action has been invoked on a single object) or `COLLECTION` (if has been invoked on a collection).
 <3> returns the list of domain objects which are being acted upon
 <4> is the 0-based index to the object being acted upon.
@@ -38,7 +38,7 @@ public static class ActionInvocationContext {
 
 For actions that are void or that return null, Apache Isis will return to the list once executed. But for bulk actions that are non-void, Apache Isis will render the returned object/value from the last object invoked (and simply discards the object/value of all actions except the last).
 
-One idiom is for the domain objects to also use the xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service to share information, for example to aggregate values. The `ActionInvocationContext#isLast()` method can then be used to determine if all the information has been gathered, and then do something with it (eg derive variance across a range of values, render a graph etc).
+One idiom is for the domain objects to also use the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service to share information, for example to aggregate values. The `ActionInvocationContext#isLast()` method can then be used to determine if all the information has been gathered, and then do something with it (eg derive variance across a range of values, render a graph etc).
 
 More prosaically, the `ActionInvocationContext` can be used to ensure that the action behaves appropriately depending on how it has been invoked (on a single object and/or a collection) whether it is called in bulk mode or regular mode. Here's a snippet of code from the bulk action in the Isis addon example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
 
@@ -66,13 +66,13 @@ public class ToDoItem ... {
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
 implementation of `ActionInvocationContext` class is automatically registered (it is annotated with `@DomainService`)
 so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

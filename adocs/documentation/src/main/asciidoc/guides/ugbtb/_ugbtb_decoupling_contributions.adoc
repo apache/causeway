@@ -20,7 +20,7 @@ singletons, whereas mixins are instantiated as required (by the framework) and t
 
 [NOTE]
 ====
-There's further useful information on contributed services in the reference guide, discussing the xref:rgant.adoc#_rgant-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
+There's further useful information on contributed services in the reference guide, discussing the xref:../rgant/rgant.adoc#_rgant-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
 ====
 
 

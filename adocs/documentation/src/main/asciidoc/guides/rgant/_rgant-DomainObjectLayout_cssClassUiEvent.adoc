@@ -7,16 +7,16 @@
 
 Whenever a domain object is to be rendered, the framework fires off an CSS class UI event to obtain a CSS class to use
 in any wrapping ``<div>``s and ``<span>``s that render the domain object.  This is as an alternative to implementing
-xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] reserved method.  (If `cssClass()` is present, then
+xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] reserved method.  (If `cssClass()` is present, then
 it will take precedence).
 
-Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and can
+Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and can
 use obtain a reference to the domain object from the event.  From this they can, if they wish, specify a CSS class for
 the domain object using the event's API.
 
 [NOTE]
 ====
-The feature was originally introduced so that xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
+The feature was originally introduced so that xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
 xref:ugbtb.adoc#_ugbtb_view-models[view model]s could be kept as minimal as possible, just defining the data.
 UI events allow subscribers to provide UI hints, while xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixin]s can be used to provide the behaviour.
 ====
@@ -56,7 +56,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 == Subscribers
 
 Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] has been appropriately configured)
+or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] has been appropriately configured)
 using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -119,8 +119,8 @@ then no event will be posted.
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically either
-by calling the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] API directly, or as a result
-of calling the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s
+by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] API directly, or as a result
+of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]'s
 `cssClassOf(...)` method.
 
 

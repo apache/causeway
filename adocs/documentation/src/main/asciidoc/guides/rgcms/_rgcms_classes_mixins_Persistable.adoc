@@ -23,18 +23,18 @@ public Clob downloadJdoMetadata(                    // <1>
     ...
 }
 ----
-<1> returns the XML text wrapped up in a xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
+<1> returns the XML text wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 
 
 === Appearance in the UI
 
 This mixin action is associated with the "Metadata" fieldset, and will appear as a panel drop-down action.
 
-These mixin properties are all associated with the "Metadata" fieldset.  The xref:rgcms.adoc#_rgcms_classes_mixins_Object[Object mixin] also contribute an action to the "Metadata" fieldset.
+These mixin properties are all associated with the "Metadata" fieldset.  The xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[Object mixin] also contribute an action to the "Metadata" fieldset.
 
 === Related Services
 
-The mixin delegates to the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service to obtain
+The mixin delegates to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service to obtain
 a reference to the JDO `PersistenceManagerFactory`.
 
 
@@ -51,6 +51,6 @@ The framework provides a number of mixins that expose the datanucleus Id and ver
 
 === Appearance in the UI
 
-These mixin properties are all associated with the "Metadata" fieldset.  The xref:rgcms.adoc#_rgcms_classes_mixins_Object[Object mixin] also contribute an action to the "Metadata" fieldset.
+These mixin properties are all associated with the "Metadata" fieldset.  The xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[Object mixin] also contribute an action to the "Metadata" fieldset.
 
 

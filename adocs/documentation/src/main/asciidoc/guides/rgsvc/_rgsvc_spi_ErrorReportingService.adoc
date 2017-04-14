@@ -34,8 +34,8 @@ public class ErrorDetails {
     public List<String> getStackTraceDetailList() { // <4>
 }
 ----
-<1> the main message to be displayed to the end-user.  The service is responsible for translating this into the language of the end-user (it can use xref:rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] if required).
-<2> whether this message has already been recognized by an xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`] service.  Generally this converts potentially non-recoverable (fatal) exceptions into recoverable exceptions (warnings) as well providing an alternative mechanism for generating user-friendly error messages.
+<1> the main message to be displayed to the end-user.  The service is responsible for translating this into the language of the end-user (it can use xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] if required).
+<2> whether this message has already been recognized by an xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`] service.  Generally this converts potentially non-recoverable (fatal) exceptions into recoverable exceptions (warnings) as well providing an alternative mechanism for generating user-friendly error messages.
 <3> whether the cause of the exception was due to a lack of privileges.  In such cases the UI restricts the information shown to the end-user, to avoid leaking potentially sensitive information
 <4> the stack trace of the exception, including the trace of any exceptions in the causal chain.  These technical details are hidden from the user and only shown for non-recoverable exceptions.
 
@@ -100,7 +100,7 @@ image::{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-exam
 == Registering the Services
 
 There is no default implementation of this service.  To register your own implementation (and assuming that an
-`AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then just
+`AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then just
 ensure that the implementation is on the classpath and the module containing the implementation is returned in
 `AppManifest#getModules()`.
 

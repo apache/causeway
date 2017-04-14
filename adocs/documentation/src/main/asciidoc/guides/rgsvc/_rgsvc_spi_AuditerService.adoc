@@ -11,7 +11,7 @@ The `AuditerService` auditing service provides a simple mechanism to capture cha
 
 [NOTE]
 ====
-This service is intended to replace the now-deprecated xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService3`].
+This service is intended to replace the now-deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService3`].
 The difference between the two is that this service recognises that the `transactionId` is now (as of `1.13.0`)
 actually a request/interaction Id, and that an additional `sequence
 ====
@@ -85,7 +85,7 @@ the secondary menu bar.
 the user interface (they are all `@Programmatic`).
 
 * `AuditingServiceContributions` which contrbutes collections to the
-xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface. This will therefore display all
+xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface. This will therefore display all
 audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or
 another audit entry is displayed.
 
@@ -94,7 +94,7 @@ another audit entry is displayed.
 
 == Usage
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+The typical way to indicate that an object should be audited is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
 
 
 
@@ -105,7 +105,7 @@ The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit]
 this service (`AuditerService`), and also provides a number of related domain services (`AuditingServiceMenu`,
 `AuditingServiceRepository` and `AuditingServiceContributions`).
 
-Assuming that an `AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
+Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If menu items or contributions are not required in the UI, these can be suppressed either using security or by
@@ -116,19 +116,19 @@ implementing a xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subs
 == Related Services
 
 The auditing service works very well with implementations of
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] that persist the ``Interaction.Execution`` objects
-obtained from the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service.  The interaction
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] that persist the ``Interaction.Execution`` objects
+obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service.  The interaction
 execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the
 `AuditerService` audit entries capture the _effect_ of that interaction in terms of changed state.
 
 [NOTE]
 ====
-Prior to `1.13.0` the xref:rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] performed a similar role,
+Prior to `1.13.0` the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] performed a similar role,
 of capturing the cause.  As of `1.13.0`, ``Command``s are now primarily to capture the _intent_ of an action,
 not the actual action invocation itself.
 ====
 
 The `AuditerService` is intended to replace the (now-deprecated)
-xref:rgsvc.adoc#_rgsvc_spi_AuditingService3[`AuditingService3`], as the latter does not support the concept of multiple
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditingService3[`AuditingService3`], as the latter does not support the concept of multiple
 transactions within a single interaction.
 

@@ -11,7 +11,7 @@ The `AuditingService3` auditing service provides a simple mechanism to capture c
 
 [NOTE]
 ====
-This service is deprecated, replaced by xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
+This service is deprecated, replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
 ====
 
 
@@ -46,7 +46,7 @@ The module also provides:
 
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.  None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contrbutes collections to the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface. This will therefore display all audit entries that occurred in a given transaction, in other words whenever a command, a published event or another audit entry is displayed.
+* `AuditingServiceContributions` which contrbutes collections to the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface. This will therefore display all audit entries that occurred in a given transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 
 
@@ -56,7 +56,7 @@ If you just want to debug (writing to stderr), you can instead configure `o.a.i.
 
 == Usage
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+The typical way to indicate that an object should be audited is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
 
 
 
@@ -67,7 +67,7 @@ The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit]
 this service (`AuditingService`), and also provides a number of related domain services (`AuditingServiceMenu`,
 `AuditingServiceRepository` and `AuditingServiceContributions`).
 
-Assuming that an `AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
+Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If menu items or contributions are not required in the UI, these can be suppressed either using security or by
@@ -78,6 +78,6 @@ implementing a xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subs
 == Related Services
 
 This service has been deprecated and replaced by the equivalent
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
 
 

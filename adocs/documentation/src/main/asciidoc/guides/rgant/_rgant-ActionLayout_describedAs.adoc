@@ -8,7 +8,7 @@
 
 The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
 
-This attribute can also be specified for xref:rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:rgant.adoc#_rgant-ParameterLayout_describedAs[parameters], xref:rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
+This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 
 
 For example:

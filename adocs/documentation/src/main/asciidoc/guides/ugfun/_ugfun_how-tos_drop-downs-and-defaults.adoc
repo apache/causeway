@@ -13,15 +13,15 @@ NOTE: FIXME
 
 ### Choices for Property
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
 ### Auto-complete for property
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
 
 ### Default for property
 
-NOTE: FIXME -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
+NOTE: FIXME -  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
 
 
 
@@ -32,19 +32,19 @@ NOTE: FIXME
 
 ### Choices for action parameter
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
 ### Dependent choices for action params
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
 ### Auto-complete for action param
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
 
 ### Default for action param
 
-NOTE: FIXME -  xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
+NOTE: FIXME -  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
 
 
 
@@ -57,9 +57,9 @@ NOTE: FIXME
 
 ### Drop-down for limited number of instances
 
-NOTE: FIXME - xref:rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
+NOTE: FIXME - xref:../rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
 
 
 ### Auto-complete (repository-based)
 
-xref:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`]
+xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`]

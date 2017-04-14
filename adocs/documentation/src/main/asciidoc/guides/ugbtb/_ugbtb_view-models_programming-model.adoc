@@ -8,7 +8,7 @@
 
 So much for the theory; how should view models be implemented?  Fundamentally all view models' state is serialized into
 a string memento; this memento is then held by the client (browser) in the form of a URL.  As you might imagine, this
-URL can become quite long, but Apache Isis offers a mechanism (the xref:rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`]) if it exceeds the maximum length for a URL
+URL can become quite long, but Apache Isis offers a mechanism (the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`]) if it exceeds the maximum length for a URL
 (2083 characters).  Also, of course, this string memento must only contain characters that it is valid for use within
 a URL.
 
@@ -30,7 +30,7 @@ defining a view model so that the original intent is not lost.  They are:
 @DomainObject(nature=Nature.EXTERNAL_ENTITY)
 public class CustomerRecordOnSAP { ... }
 ----
-|Annotated with xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:rgant.adoc#_rgant-Property_notPersisted[not persisted].
+|Annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[not persisted].
 
 | In-memory entity
 |[source,java]
@@ -56,7 +56,7 @@ public class Dashboard { ... }
 public class Dashboard { ... }
 ----
 
-|Annotated with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
+|Annotated with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
 
 |Application view model
 |
@@ -66,7 +66,7 @@ public class ExcelUploadManager implements ViewModel {
   public String viewModelMemento() { ... }
   public void viewModelInit(String memento) { ... }
 }
-|Implement xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.  The memento is as defined by the
+|Implement xref:../rgcms/rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.  The memento is as defined by the
 interface's methods: the programmer has full control (but also full responsibility) for the string memento.
 
 |DTO
@@ -76,7 +76,7 @@ interface's methods: the programmer has full control (but also full responsibili
 @XmlRootElement("customer")
 public class CustomerDto { ... }
 ----
-|Annotate using JAXB xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`] annotation.  Memento
+|Annotate using JAXB xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`] annotation.  Memento
 derived automatically by serializing the XML graph as implied by the JAXB annotations.  Note that (unlike `@ViewModel`
 et al) this state _can_ include collections.
 |===

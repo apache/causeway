@@ -39,10 +39,10 @@ public class Customer {
 
 == Trigger on property change
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
 
 
 
 == Trigger on collection change
 
-NOTE: FIXME - xref:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]
+NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`], xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]

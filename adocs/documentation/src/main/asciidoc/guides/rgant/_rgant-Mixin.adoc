@@ -25,7 +25,7 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rgant.adoc#_rgant-Mixin_method[`method()`]
+|xref:../rgant/rgant.adoc#_rgant-Mixin_method[`method()`]
 |Method name within the mixin
 |How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
@@ -34,7 +34,7 @@ The default "reserved" method name is `$$`.
 |===
 
 An alternative and equivalent approach is to use the
-xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
+xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
 
 
 include::_rgant-Mixin_method.adoc[leveloffset=+1]

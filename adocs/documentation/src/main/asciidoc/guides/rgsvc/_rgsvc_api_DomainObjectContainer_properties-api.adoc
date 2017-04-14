@@ -8,7 +8,7 @@
 
 = Properties API
 
-The properties API allows domain objects to read the configuration properties aggregated from the various xref:rgcfg.adoc#_rgcfg_configuration-files[configuration files].
+The properties API allows domain objects to read the configuration properties aggregated from the various xref:../rgcfg/rgcfg.adoc#_rgcfg_configuration-files[configuration files].
 
 [source,java]
 ----
@@ -44,7 +44,7 @@ public class TweetService {
 
 [TIP]
 ====
-If you _do_ have a domain service that needs to access properties, then note that an alternative is to define a xref:rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] method and pass in a `Map<String,String>` of properties.  The two techniques are almost identical; it's mostly a matter of taste.
+If you _do_ have a domain service that needs to access properties, then note that an alternative is to define a xref:../rgant/rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] method and pass in a `Map<String,String>` of properties.  The two techniques are almost identical; it's mostly a matter of taste.
 ====
 
 

@@ -12,14 +12,14 @@ link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Cam
 
 An alternative use is for profiling: for each execution (action invocation/property edit) the framework captures
 metrics of the number of objects loaded or dirtied as the result of that execution.  If the
-xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] is used to call other objects then the metrics are captured
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] is used to call other objects then the metrics are captured
 for each sub-execution.  The framework provides a default implementation, `PublisherServiceLogging`, that will log
-these execution graphs (in XML form, per the xref:rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) to an SLF4J logger.
+these execution graphs (in XML form, per the xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) to an SLF4J logger.
 
 Only actions/properties/domain objects annotated for publishing (using
-xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`],
-xref:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] or
-xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) are published.
+xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`],
+xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] or
+xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) are published.
 
 
 == SPI
@@ -37,9 +37,9 @@ public interface PublisherService {
 <2> to publish a set of changed objects.
 
 Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from
-xref:rgsvc.adoc#_rgsvc_spi_InteractionContext[`InteractionContext`].  Implementations that publish member executions
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_InteractionContext[`InteractionContext`].  Implementations that publish member executions
 can use `Interaction.Execution#getDto()` method to return a DTO (as per the
-xref:rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) which can be converted into a serializable XML representation using
+xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn["ixn" schema]) which can be converted into a serializable XML representation using
 the `InteractionDtoUtils` utility class.  The XML can either serialize a single execution, or can be a "deep"
  serialization of an execution and all sub-executions.
 
@@ -64,7 +64,7 @@ public interface PublishedObjects extends HasTransactionId, HasUsername {
 objects were changed.
 <2> inherited from `HasUsername`, is the user that initiated the transaction causing these objects to change
 <3> the time that this set of objects was collated (just before the completion of the transaction completes)..
-<4> returns a DTO (as per the xref:rgcms.adoc#_rgcms_schema-chg["chg" schema]) which can be converted into a
+<4> returns a DTO (as per the xref:../rgcms/rgcms.adoc#_rgcms_schema-chg["chg" schema]) which can be converted into a
 serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.
 <5> metrics as to the number of objects loaded, created, updated or deleted and the number of object properties modified (in other words the "size" or "weight" of the transaction).
 
@@ -101,13 +101,13 @@ and monitoring the activity of subscribers of said message queues.
 == Usage
 
 To indicate that an action invocation should be published, annotate it with the
-xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] annotation.
+xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] annotation.
 
 To indicate that an property edit should be published, annotate it with the
-xref:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] annotation.
+xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] annotation.
 
 To indicate that a changed object should be published is to annotate it with the
-xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
+xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
 
 
 
@@ -115,7 +115,7 @@ xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] ann
 
 The (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishmq[publishmq] module provides an
 implementation of this service. Assuming that an `AppManifest` is being used to
-xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
+xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
 the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 The module also provide services that contribute to the UI.  If contributions are not required in the UI, these can be
@@ -133,7 +133,7 @@ This service supports two main use cases:
 +
 [NOTE]
 ====
-The xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] also supports this use case, but
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] also supports this use case, but
 is deprecated: the `PublisherService` is intended as a replacement for `PublishingService`.
 ====
 
@@ -142,24 +142,24 @@ is deprecated: the `PublisherService` is intended as a replacement for `Publishi
 
 To support these use cases several other services are involved:
 
-* the xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] is used to obtain the `Interaction` from which
+* the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] is used to obtain the `Interaction` from which
 the member executions are published.
 
-* the (internal) xref:rgfis.adoc#_rgfis_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain
+* the (internal) xref:../rgfis/rgfis.adoc#_rgfis_spi_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain
 service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters
+* the (internal) xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters
 these down to those changed objects that are also published (as per
-xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
-* the xref:rgsvc.adoc#_rgsvc_api_MetricsService[`MetricsService`] is used to obtain the objects that are loaded
+* the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MetricsService[`MetricsService`] is used to obtain the objects that are loaded
 throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to
 the `PublisherService`.
 
-The xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] differs from the `PublisherService` in that it is
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] differs from the `PublisherService` in that it is
 intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object
 model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event;
 it need not be serializable, for example.  That said, it is possible to obtain a serialization of the action
 invocation/property edit causing the current event to be raised using
-xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service.
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service.
 

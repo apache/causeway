@@ -48,9 +48,9 @@ XML, and how much (if any) will be obtained elsewhere, typically from annotation
 |===
 
 | Style
-|xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
-| xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
-| xref:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+|xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
+| xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+| xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
 
 
 |`COMPLETE`
@@ -88,7 +88,7 @@ As a developer, you therefore have a choice as to how you provide the metadata r
 
 The service's functionality is exposed in the UI through a mixin (per object) and a menu action (for all objects):
 
-* the xref:rgant.adoc#_rgcms_classes_mixins_Object[`Object` mixin] provides the ability to download the XML layout for
+* the xref:../rgant/rgant.adoc#_rgcms_classes_mixins_Object[`Object` mixin] provides the ability to download the XML layout for
 any domain object (entity or view model).
 
 * the `LayoutServiceMenu` provides the ability to download all XML layouts as a single ZIP file (in any of the
@@ -102,6 +102,6 @@ desired.
 [[__rgsvc_api_LayoutService_related-domain-services]]
 == Related Domain Services
 
-The xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] is responsible for loading and normalizing layout XML for
-a domain class.  It in turn uses the xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and  xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`]
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] is responsible for loading and normalizing layout XML for
+a domain class.  It in turn uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and  xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`]
 services.

@@ -22,7 +22,7 @@ The table below summarizes the core/domain APIs defined by Apache Isis.  It also
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_ClockService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ClockService[`o.a.i.applib.` +
 `services.clock` +
 `ClockService`]
 |Access the current time (and for testing, allow the time to be changed)
@@ -33,7 +33,7 @@ The table below summarizes the core/domain APIs defined by Apache Isis.  It also
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_ConfigurationService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ConfigurationService[`o.a.i.applib.` +
 `services.config` +
 `ConfigurationService`]
 |Access configuration properties (eg from `isis.properties` file)
@@ -43,10 +43,10 @@ The table below summarizes the core/domain APIs defined by Apache Isis.  It also
 ``isis-core-runtime``
 |The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface. +
 +
-Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
-|xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`o.a.i.applib` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`o.a.i.applib` +
 `DomainObjectContainer`]
 |Miscellaneous functions, eg obtain title of object.
 |`DomainObjectContainer-` +
@@ -56,20 +56,20 @@ Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainOb
 |
 
 
-|xref:rgsvc.adoc#_rgsvc_api_EventBusService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
 
-* xref:rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
-* xref:rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
-* xref:rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
+* xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
+* xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
+* xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
 |`EventBusServiceJdo` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
 
-|xref:rgsvc.adoc#_rgsvc_api_FactoryService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`o.a.i.applib.` +
 `services.factory` +
 `FactoryService`]
 |Methods to instantiate and initialize domain objects
@@ -77,12 +77,12 @@ Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainOb
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`o.a.i.applib.` +
 `services.scratchpad` +
 `Scratchpad`]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
@@ -94,7 +94,7 @@ Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainOb
 
 
 
-|xref:rgsvc.adoc#_rgsvc_api_UserService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_UserService[`o.a.i.applib.` +
 `services.xactn` +
 `UserService`]
 |Methods to access the currently-logged on user.
@@ -102,7 +102,7 @@ Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainOb
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 
@@ -135,7 +135,7 @@ There is also a number of deprecated domain services.
 |`Bulk.InteractionContext` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Replaced by xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`]
+|Replaced by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`]
 
 
 

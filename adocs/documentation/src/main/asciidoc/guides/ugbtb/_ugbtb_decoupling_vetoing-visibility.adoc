@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-NOTE: FIXME - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`]
+NOTE: FIXME - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`]
 
 
 eg if included an addon such as auditing or security.

@@ -194,25 +194,25 @@ public interface XmlSnapshotService {
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `XmlSnapshotService` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
 == Related Services
 
-The xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
 
-The xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] also provides a mechanism for generating string representations of domain objects.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] also provides a mechanism for generating string representations of domain objects.
 
-The xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] is a simple wrapper around
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] is a simple wrapper around
 standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that there is built-in support for JAXB classes (ie annotated with
-xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]) to be used as view models.
+xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]) to be used as view models.
 
 
 

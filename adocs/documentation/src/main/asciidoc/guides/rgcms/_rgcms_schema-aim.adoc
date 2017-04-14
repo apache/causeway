@@ -10,15 +10,15 @@ The "aim" schema defines the serialized form (or memento) of an action invocatio
 
 [WARNING]
 ====
-This schema has been removed in `1.13.0`, replaced with xref:rgcms.adoc#_rgcms_schema-ixn[ixn.xsd] (for action
-invocations/property edits) and with xref:rgcms.adoc#_rgcms_schema-cmd[cmd.xsd] (commands, ie the __intention__ to
+This schema has been removed in `1.13.0`, replaced with xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn[ixn.xsd] (for action
+invocations/property edits) and with xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[cmd.xsd] (commands, ie the __intention__ to
 invoke an action/edit a property).
 
 The remaining content on this page describes how `CommandContext` works up to v1.12.x.  However, as of `1.13.0` the `CommandContext` uses its own `cmd.xsd` schema).
 ====
 
 Action invocations are captured (in memory rather than in serialized form) when the end-user invokes the action
-"through" the UI, by way of the xref:rgsvc.adoc#_rgsvc_api_CommandContext[CommandContext] service. Using the
+"through" the UI, by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[CommandContext] service. Using the
 `ActionInvocationMementoDtoUtils` utility class, a service can instantiate `ActionInvocationMementoDto` which can then
 be serialized to/from using the same `ActionInvocationMementoDtoUtils` class.
 
@@ -83,12 +83,12 @@ be serialized to/from using the same `ActionInvocationMementoDtoUtils` class.
 </xs:schema>
 ----
 <1> the aim schema has a namespace URI of "http://isis.apache.org/schema/aim".  Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> reuses the xref:rgcms.adoc#_rgcms_schema-common[common] schema
+<2> reuses the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common] schema
 <3> definition of the `actionInvocationMementoDto` complex type. This consists of metadata (the transaction identifier, the target object, the initiating user) and the payload (the action parameter/arguments, the return value if known).
 <4> the unique transaction Id (a guid) allocated by the framework for each and every transaction
 <5> a sequence number within the transaction.  It is possible for there to be more than one action invocation to be
 <6> when the action was invoked
-<7> target object, as an OID (using `oidDto` from the xref:rgcms.adoc#_rgcms_schema-common[common] schema)
+<7> target object, as an OID (using `oidDto` from the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common] schema)
 <8> fully qualified class name of the target object, for information only
 <9> name of the action, for information only
 <10> Javadoc style unique identifier for the action.

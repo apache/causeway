@@ -9,12 +9,12 @@ The `RepositoryService` collects together methods for creating, persisting and s
 
 You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
 
-As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service.
+As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service.
 
 
 [NOTE]
 ====
-The methods in this service replace similar methods (now deprecated) in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 ====
 
 
@@ -47,7 +47,7 @@ public interface RepositoryService {
 }
 ----
 <1> create a new non-persisted domain entity.  This is identical to
-xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s `instantiate(...)` method, but is provided in the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`]'s `instantiate(...)` method, but is provided in the
 ``RepositoryService``'s API too because instantiating and persisting objects are often done together.
 <2> test whether a particular domain object is persistent or not
 <3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
@@ -83,7 +83,7 @@ repositoryService.persist(cust);
 
 You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
 
-By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`, as documented xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[above].  However, this behaviour can be disabled using the  xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
+By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`, as documented xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[above].  However, this behaviour can be disabled using the  xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
 
 
 
@@ -219,7 +219,7 @@ With respect to the other query APIs, the varargs parameters are optional, but a
 
 [TIP]
 ====
-It is also possible to query using DataNucleus' type-safe query API.  For more details, see xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`].
+It is also possible to query using DataNucleus' type-safe query API.  For more details, see xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`].
 ====
 
 
@@ -255,17 +255,17 @@ This key allows this behaviour to be disabled.
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `RepositoryService` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
 == Related Services
 
-the xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
+the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
 

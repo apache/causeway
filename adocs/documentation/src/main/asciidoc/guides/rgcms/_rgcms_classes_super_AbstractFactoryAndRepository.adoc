@@ -5,11 +5,11 @@
 :_imagesdir: images/
 
 
-This class extends xref:rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`AbstractContainedObject`].  Its
+This class extends xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`AbstractContainedObject`].  Its
 intent was to be a convenience subclass for services acting as either a repository or a factory, however note that
  all of the methods that it defines are now deprecated.
 
-Instead, indicate that a service is repository using the xref:rgant.adoc#_rgant-DomainService_repositoryFor[`@DomainService#repositoryFor()`] attribute.
+Instead, indicate that a service is repository using the xref:../rgant/rgant.adoc#_rgant-DomainService_repositoryFor[`@DomainService#repositoryFor()`] attribute.
 
 
 

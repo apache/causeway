@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.  In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]), but nevertheless deal with some of the most common use cases.  For service also provides access to the underlying JDO `PersistenceManager` for full control.
+The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.  In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]), but nevertheless deal with some of the most common use cases.  For service also provides access to the underlying JDO `PersistenceManager` for full control.
 
 The following sections discuss the functionality provided by the service, broken out into categories.
 
@@ -50,7 +50,7 @@ The returned value is the number of rows updated.
 
 [TIP]
 ====
-As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-query-api[below].
+As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:../rgsvc/rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-query-api[below].
 ====
 
 
@@ -61,7 +61,7 @@ As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/p
 
 DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO],  so that JDOQL queries can be built up and executed using a set of type-safe classes.
 
-The types in question for type safe queries are not the domain entities, but rather are companion "Q..." query classes.  These classes are generated dynamically by an link:https://www.jcp.org/en/jsr/detail?id=269[annotation processor] as a side-effect of compilation, one "Q..." class for each of the xref:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`] domain entity in your application.  For example, a `ToDoItem` domain entity will give rise to a `QToDoItem` query class.  These "Q..." classes mirror the structure of domain entity, but expose properties that allow predicates to be built up for querying instances, as well as other functions in support of order by. group by and other clauses.
+The types in question for type safe queries are not the domain entities, but rather are companion "Q..." query classes.  These classes are generated dynamically by an link:https://www.jcp.org/en/jsr/detail?id=269[annotation processor] as a side-effect of compilation, one "Q..." class for each of the xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`] domain entity in your application.  For example, a `ToDoItem` domain entity will give rise to a `QToDoItem` query class.  These "Q..." classes mirror the structure of domain entity, but expose properties that allow predicates to be built up for querying instances, as well as other functions in support of order by. group by and other clauses.
 
 [NOTE]
 ====
@@ -108,7 +108,7 @@ public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Categor
 
 [NOTE]
 ====
-You can find the full example of the JDOQL equivalent in the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
+You can find the full example of the JDOQL equivalent in the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
 ====
 
 
@@ -132,7 +132,7 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 [[__rgsvc_api_IsisJdoSupport_fixture-support]]
 == Fixture support
 
-When writing xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rgsvc.adoc#__rgsvc_api_IsisJdoSupport_executing-sql[above].
+When writing xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:../rgsvc/rgsvc.adoc#__rgsvc_api_IsisJdoSupport_executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 
@@ -267,10 +267,10 @@ public List<Order> findOrders(...) {
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `IsisJdoSupport` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).

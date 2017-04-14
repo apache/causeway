@@ -6,7 +6,7 @@
 
 
 
-By and large the security mechanisms within Isis are transparent to the rest of the framework (the xref:ugvw.adoc#[Wicket Viewer] and xref:ugvro.adoc#[Restful Objects viewer], and the overall xref:rgcfg.adoc#_rgcfg[runtime]).
+By and large the security mechanisms within Isis are transparent to the rest of the framework (the xref:ugvw.adoc#[Wicket Viewer] and xref:ugvro.adoc#[Restful Objects viewer], and the overall xref:../rgcfg/rgcfg.adoc#_rgcfg[runtime]).
 
 That said, it is the responsibility of the viewers to ensure that there is a viewers to ensure that for each request there is a valid user session present.  The sections below explain how this works.
 
@@ -56,7 +56,7 @@ As well as providing a sign-in screen, the Wicket viewer also provides the abili
 The sign-in verification page to render is pluggable; see xref:ugvw.adoc#_ugvw_extending_custom-pages[extensions chapter] for details.
 ====
 
-User registration is only available if the xref:rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
+User registration is only available if the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
 Because Shiro realms are pluggable, the Apache Isis framework does not provide default implementations of this service.  However, if you are using the http://github.com/isisaddons/isis-module-security[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
 

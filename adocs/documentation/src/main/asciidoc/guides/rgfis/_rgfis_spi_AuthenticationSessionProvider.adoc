@@ -31,4 +31,4 @@ isisSessionFactory.getCurrentSession().getAuthenticationSession();
 ----
 
 
-If xref:rgsvc.adoc#_rgsvc_api_SudoService[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values.
+If xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SudoService[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values.

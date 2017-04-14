@@ -17,9 +17,9 @@ public interface HoldsUpdatedAt {
 }
 ----
 
-The current time is obtained from the xref:rgsvc.adoc#_rgsvc_api_ClockService[`ClockService`].
+The current time is obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ClockService[`ClockService`].
 
-Entities that implement this interface often also implement xref:rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedBy[`HoldsUpdatedBy`] role interface; as a convenience the xref:rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] interface combines the two roles.
+Entities that implement this interface often also implement xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedBy[`HoldsUpdatedBy`] role interface; as a convenience the xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] interface combines the two roles.
 
 
 

@@ -9,7 +9,7 @@ The `ServiceRegistry2` service collects together methods for accessing other dom
 
 [NOTE]
 ====
-The methods in this service replace similar methods (now deprecated) in xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+The methods in this service replace similar methods (now deprecated) in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 ====
 
 
@@ -32,7 +32,7 @@ public interface ServiceRegistry2 {
 <4> returns the list of all domain services that constitute the running application (including internal domain services).
 
 Service injection is done automatically if objects are created using the
-xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
 
 
 
@@ -50,7 +50,7 @@ cust.setLastName("Mercury");
 repositoryService.persist(cust);
 ----
 
-The alternative is to use the xref:rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`] API which performs both steps in a single factory method.
+The alternative is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`] API which performs both steps in a single factory method.
 
 
 
@@ -64,12 +64,12 @@ The core framework provides a default implementation of this service (`o.a.i.cor
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `ServiceRegistry` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 

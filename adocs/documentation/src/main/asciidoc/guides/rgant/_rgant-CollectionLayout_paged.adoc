@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `paged()` attribute specifies the number of rows to display in a (parented) collection. This attribute can also be applied to xref:rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects] and xref:rgant.adoc#_rgant-ViewModelLayout_paged[view models].
+The `paged()` attribute specifies the number of rows to display in a (parented) collection. This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models].
 
 
 [WARNING]
@@ -27,7 +27,7 @@ public class Order {
 ----
 
 
-It is also possible to specify a global default for the page size of standalone collections, using the xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.parented`.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.parented`.
 
 
 

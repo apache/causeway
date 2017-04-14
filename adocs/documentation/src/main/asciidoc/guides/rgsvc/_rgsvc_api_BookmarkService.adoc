@@ -9,7 +9,7 @@ The `BookmarkService2` API provides the ability to obtain a serializable ``o.a.i
 
 For example, a `Customer` object with:
 
-* an object type of "custmgmt.Customer" (as per xref:rgant.adoc#_rgant-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
+* an object type of "custmgmt.Customer" (as per xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
 * an id=123
 
 could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
@@ -24,7 +24,7 @@ For example, a `Bookmark` could be converted into a barcode, and then this used 
 ``Bookmark``s are used by several other domain services as a means of storing areference to an arbitrary object
 (a polymorphic relationship).  For example, the (non-ASF)
 http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module's implementation of
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] uses bookmarks to capture the object
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`] uses bookmarks to capture the object
 that is being audited.
 
 [TIP]
@@ -100,13 +100,13 @@ A more sophisticated implementation could look inside the passed `ev` argument a
 == Usage by other services
 
 Bookmarks are used by the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's
-implementation of  xref:rgsvc.adoc#_rgsvc_api_BackgroundCommandService[`BackgroundCommandService`], which uses a
+implementation of  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BackgroundCommandService[`BackgroundCommandService`], which uses a
 bookmark to capture the target object on which an action will be invoked subsequently.
 
 Bookmarks are also used by the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing]
-module's implementation of xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], and by the
+module's implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], and by the
 (non-ASF) http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module's implementation of
-xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
 
 
 
@@ -114,12 +114,12 @@ xref:rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `BookmarkService` is automatically registered (it is annotated with `@DomainService`) so no further
 configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 

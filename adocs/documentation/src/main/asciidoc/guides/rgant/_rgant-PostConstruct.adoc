@@ -7,9 +7,9 @@
 
 The `@javax.annotation.PostConstruct` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250],  is recognized by Apache Isis as a callback method on domain services to be called just after they have been constructed, in order that they initialize themselves.
 
-It is also recognized for xref:ugbtb.adoc#_ugbtb_view-models[view models] (eg annotated with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`]).
+It is also recognized for xref:ugbtb.adoc#_ugbtb_view-models[view models] (eg annotated with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`]).
 
-For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] domain services, the method is called at the beginning of the request.
+For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] domain services, the method is called at the beginning of the request.
 
 The signature of the method is:
 
@@ -18,7 +18,7 @@ The signature of the method is:
 @PostConstruct                 <1>
 public void init() { ... }     <2>
 ----
-<1> It is not necessary to annotate the method with xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
+<1> It is not necessary to annotate the method with xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility.
 
 In the form shown above the method accepts no arguments.  Alternatively - for domain services only, not view models - the method can accept a parameter of type `Map<String,String>`:
@@ -29,14 +29,14 @@ In the form shown above the method accepts no arguments.  Alternatively - for do
 @Programmatic
 public void init(Map<String,String> properties) { ... }
 ----
-Isis uses argument to pass in the configuration properties read from all xref:rgcfg.adoc#_rgcfg_configuration-files[configuration files]:
+Isis uses argument to pass in the configuration properties read from all xref:../rgcfg/rgcfg.adoc#_rgcfg_configuration-files[configuration files]:
 
 [TIP]
 ====
-Alternatively, you could inject xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.  Note that when using this latter API only those configuration properties prefixes `application.` key are provided.
+Alternatively, you could inject xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.  Note that when using this latter API only those configuration properties prefixes `application.` key are provided.
 ====
 
-A common use case is for domain services that interact with the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`].  For example:
+A common use case is for domain services that interact with the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`].  For example:
 
 [source,java]
 ----
@@ -58,7 +58,7 @@ public class MySubscribingService {
 
 [TIP]
 ====
-In this particular use case, it is generally simpler to just subclass from xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`].
+In this particular use case, it is generally simpler to just subclass from xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`].
 ====
 
 
@@ -68,4 +68,4 @@ Other use cases include obtaining connections to external datasources, eg subscr
 
 
 
-See also xref:rgant.adoc#_rgant-PreDestroy[`@PreDestroy`]
+See also xref:../rgant/rgant.adoc#_rgant-PreDestroy[`@PreDestroy`]

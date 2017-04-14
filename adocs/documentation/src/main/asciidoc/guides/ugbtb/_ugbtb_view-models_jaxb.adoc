@@ -15,8 +15,8 @@ In fact, these JAXB-annotated view models are in many regards the most powerful 
 
 * their entire state (collections as well as properties) is automatically managed from interaction to interaction. +
 +
-In contrast, using xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] (or its xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] equivalent) will only manage the state of properties, but not collections.
-And if using the xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface, then the programmer must write all the state management (lots of boilerplate).
+In contrast, using xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] (or its xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] equivalent) will only manage the state of properties, but not collections.
+And if using the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface, then the programmer must write all the state management (lots of boilerplate).
 
 * JAXB-annotated view models are editable.
 
@@ -62,7 +62,7 @@ public class ToDoItemV1_1 implements Dto {                          // <5>
 <1> package name encodes major version; see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
 <2> identifies this class as a view model and defines the root element for JAXB serialization
 <3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
-<4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
+<4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
 <5> class name encodes (major and) minor version; see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
 <6> again, see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
 <7> again, see discussion on xref:ugbtb.adoc#__ugbtb_view-models_jaxb_versioning[versioning]
@@ -79,10 +79,10 @@ It's quite common for view models to be "backed by" (be projections of) some und
 The `ToDoItemDto` we've been using as the example in this section is an example: there is an underlying `ToDoItem` entity.
 
 It wouldn't make sense to serialize out the state of a persistent entity: the point of a DTO is to act as a facade on top of the entity so that the implementation details (of the entity's structure) don't leak out to the consumer.
-However, the identity of the underlying entity can be well defined; Apache Isis defines the xref:rgcms.adoc#_rgcms_schema-common[Common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
-This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+However, the identity of the underlying entity can be well defined; Apache Isis defines the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[Common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
+This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
 
-There is only one requirement to make this work: every referenced domain entity must be annotated with xref:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter.class`.
+There is only one requirement to make this work: every referenced domain entity must be annotated with xref:../rgant/rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter.class`.
 This class is similar to the `BookmarkService`: it knows how to create an `OidDto` from an object reference.
 
 Thus, in our view model we can legitimately write:
@@ -132,11 +132,11 @@ public class ToDoItemV1_1 implements Dto {
 
 
 There's nothing to prevent a JAXB DTO from containing rich graphs of data, parent containing children containing children.
-Be aware though that all of this state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`].
+Be aware though that all of this state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`].
 
 There are limits to the lengths of URLs, however.
 Therefore the DTO should not include state that can easily be derived from other information.
-If the URL does exceed limits, then provide a custom implementation of xref:rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
+If the URL does exceed limits, then provide a custom implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_UrlEncodingService[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
 
 
 
@@ -256,7 +256,7 @@ There are therefore two options:
 * either choose not to have the view model DTO reference any persistent entities, and simply limit the DTO to simple scalars. +
 +
 Such a DTO will then be usable in both the Apache Isis app (to generate the original XML) and in the consumer.
-The xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`] can be used to obtain the object identifiers
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`] can be used to obtain the object identifiers
 
 * alternatively, generate a different DTO for the consumer from the XSD of the view model DTO.
 
@@ -296,7 +296,7 @@ In the todoapp this can be found in the `todoapp-xsd` Maven module, whose `pom.x
 </project>
 ----
 
-The `isis-xsd` profile generates the XSD using the xref:rgmvn.adoc#_rgmvn_xsd[`xsd` goal] of Isis' maven plugin:
+The `isis-xsd` profile generates the XSD using the xref:../rgmvn/rgmvn.adoc#_rgmvn_xsd[`xsd` goal] of Isis' maven plugin:
 
 [source,xml]
 ----

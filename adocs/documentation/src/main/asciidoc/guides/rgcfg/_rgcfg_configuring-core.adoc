@@ -29,21 +29,21 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `collectionAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `propertyAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
 
 
 
@@ -70,7 +70,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -78,7 +78,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -86,7 +86,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -94,7 +94,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -102,7 +102,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -110,7 +110,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -118,7 +118,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
 
 
@@ -145,21 +145,21 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 
 
@@ -185,9 +185,9 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated as domain services.  +
 
-Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
 
-This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +
@@ -206,14 +206,14 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 `objects`
 | `all`, `none` +
 (`all`)
-|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
 `command.` +
 `actions`
 | `all`, `ignoreSafe`, `none` (`all`)
-|Whether action invocations should be automatically reified into commands (for actions annotated with xref:rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+|Whether action invocations should be automatically reified into commands (for actions annotated with xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
@@ -221,7 +221,7 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 `command.` +
 `properties`
 | `all`, `none` (`all`)
-|(Whether property edits should be automatically reified into commands (for properties annotated with xref:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
+|(Whether property edits should be automatically reified into commands (for properties annotated with xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
 |`isis.services.` +
@@ -241,7 +241,7 @@ Lazy initialization can speed up bootstrapping, useful while developing and runn
 (depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
 
-If no configuration property is available, then the defaults is determined by the xref:rgcfg.adoc#_rgcfg_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
+If no configuration property is available, then the defaults is determined by the xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
 
 
 
@@ -277,7 +277,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -286,7 +286,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
+|The email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -296,7 +296,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+|The hostname of the external SMTP provider (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -305,7 +305,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
+|The corresponding password for the email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -350,7 +350,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `tls.enabled`
 |`true`,`false` +
 (`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+|Whether to enable TLS for the email SMTP connection (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -360,7 +360,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `implementation` +
 | `guava`, `axon`, +
 FQCN (`_guava_`)
-|which implementation to use by the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] as the underlying event bus.
+|which implementation to use by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
 `eventbus.` +
@@ -368,7 +368,7 @@ FQCN (`_guava_`)
 `Registration` +
 |`true`,`false` +
 (`false`)
-|whether a domain service can register with the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
+|whether a domain service can register with the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
 
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
 
@@ -426,20 +426,20 @@ If the setting is changed to disabled then this may reduce application start-up 
 `objects`
 | `all`, `none` +
 (`all`)
-|Whether changed objects should be automatically published (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
+|Whether changed objects should be automatically published (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
 `publish.` +
 `actions`
 | `all`, `ignoreSafe`, `none` (`none`)
-|Whether actions should be automatically published (for actions annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether actions should be automatically published (for actions annotated with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
 
 |`isis.services.` +
 `publish.` +
 `properties`
 | `all`, `none` (`none`)
-|Whether properties should be automatically published (for properties annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether properties should be automatically published (for properties annotated with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
 
 
 |`isis.services.` +
@@ -449,7 +449,7 @@ If the setting is changed to disabled then this may reduce application start-up 
 |fully qualified package names (CSV)
 |to search for domain services (including all subpackages).
 
-This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +
@@ -507,7 +507,7 @@ See also `isis.reflector.facets.ignoreDeprecated`.
 (`false`)
 | Whether to check that the class has an object type explicitly specified somehow.
 
-The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ugvw.adoc#[Wicket viewer] and xref:ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ugvw.adoc#[Wicket viewer] and xref:ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
 
 If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
@@ -544,10 +544,10 @@ This is by way of possibly deprecating and eventually moving contributed service
 `noParamsOnly`
 |`true`,`false` +
 (`false`)
-| When searching for  xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
+| When searching for  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
-Note that this in effect means that xref:rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
+Note that this in effect means that xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
 
 
 |`isis.reflector.validator.` +
@@ -579,7 +579,7 @@ If enabled, this configuration property will ensure that domain services only de
 `editing`
 |`true`,`false` +
 (`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
 
 
 |`isis.persistor.` +
@@ -597,14 +597,14 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 |regex:css1, regex2:css2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
 
-See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:../ugfun/ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
 
-See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:../ugfun/ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 
 |`isis.reflector.facet.` +
@@ -613,7 +613,7 @@ See xref:ugfun.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for m
 (`true`)
 |Whether objects should be filtered for visibility. +
 
-See xref:rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section below] for further discussion.
+See xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section below] for further discussion.
 
 |`isis.reflector.facets`
 |`FQCN`
@@ -679,7 +679,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metad
 `propertyLayout.labelPosition`
 |`TOP`, `LEFT` +
 (`LEFT`)
-|Default for label position for all properties if not explicitly specified using xref:rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+|Default for label position for all properties if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
 
 |===
 
@@ -717,7 +717,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the xref:ugvw.adoc#[Wicket viewer] and the xref:ugvro.adoc#[Restful Objects viewer], and also by the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
+Filtering is supported by the xref:ugvw.adoc#[Wicket viewer] and the xref:ugvro.adoc#[Restful Objects viewer], and also by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
 
 [NOTE]
 ====

@@ -25,17 +25,17 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rgant.adoc#_rgant-DomainServiceLayout_menuBar[`menuBar()`]
+|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuBar[`menuBar()`]
 |`PRIMARY`, `SECONDARY`, `TERTIARY` (`PRIMARY`).
 |the menubar in which the menu that holds this service's actions should reside.
 
 
-|xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`menuOrder()`]
+|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`menuOrder()`]
 |
 |the order of the service's menu with respect to other service's.
 
 
-|xref:rgant.adoc#_rgant-DomainServiceLayout_named[`named()`]
+|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[`named()`]
 |string, eg "Customers"
 |name of this class (overriding the name derived from its name in code)
 

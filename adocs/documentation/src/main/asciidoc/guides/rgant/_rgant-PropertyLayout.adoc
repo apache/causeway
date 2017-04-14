@@ -19,40 +19,40 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_cssClass[`cssClass()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a property should have, to allow more targetted styling in xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
+|the css class that a property should have, to allow more targetted styling in xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_describedAs[`describedAs()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[`describedAs()`]
 |String
 |description of this property, eg to be rendered in a tooltip.
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_hidden[`hidden()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the property should be hidden from the user.
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition()`]
 |`LEFT`, `TOP`, `RIGHT`, `NONE` +
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Defaults is `LEFT`, unless xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
+Defaults is `LEFT`, unless xref:../rgant/rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
 
-It is also possible to change the default through a xref:rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
+It is also possible to change the default through a xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine()`]
 |Positive integer
 |for string properties, render as a text area over multiple lines.  +
 
-If set > 1, then xref:rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition`] defaults to TOP.
+If set > 1, then xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition`] defaults to TOP.
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_named[`named()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[`named()`]
 |String
 |to override the name inferred from the collection's name in code. +
 
@@ -65,13 +65,13 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this property.
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
 |`true`, `false` +
 (`false`)
 |for date properties only, render the date as one day prior to the actually stored date.
 
 
-|xref:rgant.adoc#_rgant-PropertyLayout_typicalLength[`typicalLength()`]
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_typicalLength[`typicalLength()`]
 |Positive integer.
 |the typical entry length of a field, use to determine the optimum width for display
 
@@ -113,7 +113,7 @@ As an alternative to using the `@PropertyLayout` annotation, a xref:ugvw.adoc#_u
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:rgant.adoc#_rgant-Collection[`@Collection`], xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:rgant.adoc#_rgant-Property[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:../rgant/rgant.adoc#_rgant-Property[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

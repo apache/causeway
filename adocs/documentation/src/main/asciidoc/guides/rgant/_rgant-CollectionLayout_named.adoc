@@ -6,7 +6,7 @@
 
 
 
-The `named()` attribute explicitly specifies the collection's name, overriding the name that would normally be inferred from the Java source code.  This attribute can also be specified for xref:rgant.adoc#_rgant-ActionLayout_named[actions], xref:rgant.adoc#_rgant-PropertyLayout_named[properties], xref:rgant.adoc#_rgant-ParameterLayout_named[parameters], xref:rgant.adoc#_rgant-DomainObjectLayout_named[domain objects], xref:rgant.adoc#_rgant-ViewModelLayout_named[view models] and xref:rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+The `named()` attribute explicitly specifies the collection's name, overriding the name that would normally be inferred from the Java source code.  This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models] and xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
 
 [TIP]
 ====

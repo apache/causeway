@@ -6,7 +6,7 @@
 
 
 
-The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:rgant.adoc#_rgant-Action_semantics[@Action(semantics=...)]) actions.
+The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:../rgant/rgant.adoc#_rgant-Action_semantics[@Action(semantics=...)]) actions.
 
 Domain objects, if bookmarkable, can be nested.
 
@@ -39,7 +39,7 @@ Some - like `Property`, `Lease` and `Party` - are root nodes. However, `LeaseIte
 
 == Domain Code
 
-To indicate a class is bookmarkable, use the xref:rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] annotation:
+To indicate a class is bookmarkable, use the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] annotation:
 
 [source,java]
 ----
@@ -59,7 +59,7 @@ To indicate a class is bookmarkable but only as a child of some parent bookmark,
 public class LeaseItem { ... }
 ----
 
-To indicate that a safe (query only) action is bookmarkable, use the xref:rgant.adoc#_rgant-ActionLayout[@ActionLayout] annotation:
+To indicate that a safe (query only) action is bookmarkable, use the xref:../rgant/rgant.adoc#_rgant-ActionLayout[@ActionLayout] annotation:
 
 [source,java]
 ----

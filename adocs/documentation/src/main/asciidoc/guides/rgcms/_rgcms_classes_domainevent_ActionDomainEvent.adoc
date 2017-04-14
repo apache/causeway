@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Subclass of xref:rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`AbstractDomainEvent`] for actions.
+Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`AbstractDomainEvent`] for actions.
 
 The class has a number of responsibilities (in addition to those it inherits):
 
@@ -15,7 +15,7 @@ The class has a number of responsibilities (in addition to those it inherits):
 
 * provide selected metadata about the action parameters from the metamodel (names, types)
 
-* link back to the xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service's `Command` object
+* link back to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service's `Command` object
 
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.
 
@@ -44,12 +44,12 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public Object getReturnValue();                                         // <7>
 }
 ----
-<1> The `Default` nested static class is the default for the xref:rgant.adoc#_rgant_Action_domainEvent[`@Action#domainEvent()`]
+<1> The `Default` nested static class is the default for the xref:../rgant/rgant.adoc#_rgant_Action_domainEvent[`@Action#domainEvent()`]
 annotation attribute.  Whether this raises an event or not depends upon the
 `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property.
 <2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
 <3> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
-<4> Deprecated, use xref:rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] or (better)  xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]instead.
+<4> Deprecated, use xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] or (better)  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`]instead.
 <5> Populated only for mixins; holds the underlying domain object that the mixin contributes to.
 <6> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
 <7> The value returned by the action; populated only in the executed phase.

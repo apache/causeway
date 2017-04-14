@@ -18,11 +18,11 @@ public interface DomainObjectContainer {
     ...
 }
 ----
-<1> injects services into domain object; used extensively internally by the framework (eg to inject to other services, or to entities, or integration test instances, or fixture scripts).  Service injection is done automatically if objects are created using `#newTransientInstance()`, described xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[above]
+<1> injects services into domain object; used extensively internally by the framework (eg to inject to other services, or to entities, or integration test instances, or fixture scripts).  Service injection is done automatically if objects are created using `#newTransientInstance()`, described xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[above]
 <2> returns the first registered service that implements the specified class
 <3> returns an `Iterable` in order to iterate over all registered services that implement the specified class
 
-The primary use case is to instantiate domain objects using a regular constructor ("new is the new new") rather than using the xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`#newTransientInstance()`] API, and then using the `#injectServicesInto(...)` API to set up any dependencies.
+The primary use case is to instantiate domain objects using a regular constructor ("new is the new new") rather than using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`#newTransientInstance()`] API, and then using the `#injectServicesInto(...)` API to set up any dependencies.
 
 For example:
 

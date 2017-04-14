@@ -13,14 +13,14 @@ Whenever a domain object (or list of domain objects) is to be rendered, the fram
 * pre-execute phase: before the modification of the collection
 * post-execute: after the modification of the collection
 
-Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
+Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
 
 
 [WARNING]
 ====
 The xref:ugvw.adoc#[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.  However, domain events are still relevant to determine if such collections should be hidden.
 
-The workaround is to create add/remove actions and use xref:rgant.adoc#_rgant-MemberOrder[UI hints] to render them close to the collection.
+The workaround is to create add/remove actions and use xref:../rgant/rgant.adoc#_rgant-MemberOrder[UI hints] to render them close to the collection.
 ====
 
 By default the event raised is `CollectionDomainEvent.Default`. For example:
@@ -36,8 +36,8 @@ public class ToDoItem {
 
 The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
 subclasses) to be defined instead.  This attribute is also supported for
-xref:rgant.adoc#_rgant-Action_domainEvent[actions] and
-xref:rgant.adoc#_rgant-Property_domainEvent[properties].
+xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[actions] and
+xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[properties].
 
 
 For example:
@@ -73,7 +73,7 @@ rather than through the constructor.  This substantially reduces the boilerplate
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -166,8 +166,8 @@ then no event will be posted.
 
 == Raising events programmatically
 
-Normally events are only raised for interactions through the UI. However, events can be raised programmatically either by calling the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] API directly, or by emulating the UI by
-wrapping the target object using the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service.
+Normally events are only raised for interactions through the UI. However, events can be raised programmatically either by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] API directly, or by emulating the UI by
+wrapping the target object using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service.
 
 
 

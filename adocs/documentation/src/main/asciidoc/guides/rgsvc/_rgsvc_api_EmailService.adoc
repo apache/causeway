@@ -47,7 +47,7 @@ To use this service the following properties must be configured:
 * `isis.service.email.sender.address`
 * `isis.service.email.sender.password`
 
-and these properties may optionally be configured (each has a default to use gmail, documented xref:rgcfg.adoc#_rgcfg_configuring-core[here]):
+and these properties may optionally be configured (each has a default to use gmail, documented xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[here]):
 
 * `isis.service.email.sender.hostname`
 * `isis.service.email.port`
@@ -112,11 +112,11 @@ To ensure that your alternative implementation takes the place of the default im
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `EmailService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core implementation of `EmailService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Related Services
 
-The email service is used by the xref:rgsvc.adoc#_rgsvc_spi_EmailNotificationService[`EmailNotificationService`] which is, in turn, used by xref:rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`].
+The email service is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_EmailNotificationService[`EmailNotificationService`] which is, in turn, used by xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_UserRegistrationService[`UserRegistrationService`].

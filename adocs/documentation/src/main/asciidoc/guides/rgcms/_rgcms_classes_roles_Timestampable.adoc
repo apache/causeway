@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `Timestampable` role interface is a convenience that combines the xref:rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedAt[`HoldsUpdatedAt`] and xref:rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedBy[`HoldsUpdatedBy`] interfaces.  It is defined as:
+The `Timestampable` role interface is a convenience that combines the xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedAt[`HoldsUpdatedAt`] and xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedBy[`HoldsUpdatedBy`] interfaces.  It is defined as:
 
 [source,java]
 ----
@@ -20,4 +20,4 @@ The interface no additional methods of its own.
 
 == Alternatives
 
-An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.  With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.  See xref:rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedBy[`HoldsUpdatedBy`] for further details.
+An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.  With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.  See xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_HoldsUpdatedBy[`HoldsUpdatedBy`] for further details.

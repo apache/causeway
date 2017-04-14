@@ -10,7 +10,7 @@ Apache Isis automatically injects domain services into other domain services and
 
 [NOTE]
 ====
-One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] and xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] annotations.
+One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] and xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] annotations.
 ====
 
 Isis supports several syntaxes for injecting domain services.  The simplest uses the `@javax.inject.Inject` annotation on the field, as defined in link:https://jcp.org/en/jsr/detail?id=330[JSR-330].
@@ -27,7 +27,7 @@ public class Customer {
     OrderRepository orders;                    // <2>
 }
 ----
-<1> an alternative implementation would be to implement `findRecentOrders()` as a xref:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed action].
+<1> an alternative implementation would be to implement `findRecentOrders()` as a xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed action].
 <2> we recommend default (rather than `private`) visibility so that unit tests can easily mock out the service
 
 
@@ -94,7 +94,7 @@ public class Customer {
 
 [NOTE]
 ====
-An alternative and almost equivalent design would be to publish an event using the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and implement the domain services as subscribers to
+An alternative and almost equivalent design would be to publish an event using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and implement the domain services as subscribers to
 the event.  This alternative design is used in the (non-ASF) http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module, for example.
 ====
 
@@ -114,7 +114,7 @@ Customer cust = container.newTransientInstance(Customer.class);  <1>
 // initialize state of "cust"
 container.persist(cust);
 ----
-<1> where `container` is an instance of xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+<1> where `container` is an instance of xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 View models are created similarly:
 

@@ -11,8 +11,8 @@ This value is used internally to generate a string representation of an service 
 This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
- (see xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`])
-* in the serialization of `OidDto` in the xref:rgcms.adoc#_rgcms_schema-cmd[command] and xref:rgcms.adoc#_rgcms_schema-ixn[interaction] schemas
+ (see xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`])
+* in the serialization of `OidDto` in the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[command] and xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn[interaction] schemas
 * in the URLs of the xref:ugvro.adoc#[RestfulObjects viewer]
 * in the URLs of the xref:ugvw.adoc#[Wicket viewer] (specifically, for bookmarked actions)
 
@@ -39,7 +39,7 @@ public class OrderMenu {
 The rules of precedence are:
 
 1. `@DomainService#objectType`
-2. xref:rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
+2. xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
 3. The fully qualified class name.
 
 

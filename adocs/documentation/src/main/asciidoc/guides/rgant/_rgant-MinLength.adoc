@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method.
+The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method.
 
 
 For example:

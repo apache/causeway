@@ -6,11 +6,11 @@
 
 
 
-Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.  This attribute can also be applied to xref:rgant.adoc#_rgant-ActionLayout_hidden[actions] and xref:rgant.adoc#_rgant-CollectionLayout_hidden[collections].
+Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions] and xref:../rgant/rgant.adoc#_rgant-CollectionLayout_hidden[collections].
 
 [TIP]
 ====
-It is also possible to use xref:rgant.adoc#_rgant-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.  Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
+It is also possible to use xref:../rgant/rgant.adoc#_rgant-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.  Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
 For example:
@@ -56,7 +56,7 @@ The property should be hidden when displayed as a column of a table, either an o
 +
 The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
 
-For example, if a property is annotated with xref:rgant.adoc#_rgant-Title[`@Title`], then normally this should be hidden from all
+For example, if a property is annotated with xref:../rgant/rgant.adoc#_rgant-Title[`@Title`], then normally this should be hidden from all
 tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 

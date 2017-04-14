@@ -120,7 +120,7 @@ Domain services are generally singletons that are automatically injected into ot
 A very common usage is as a repository (to find/locate existing entities) or as a factory (to create new instances of entities).
 But services can also be exposed in the UI as top-level menus; and services are also used as a bridge to access technical resources (eg rendering a document object as a PDF).
 
-The Apache Isis framework itself also provides a large number of number of domain services, catalogued in the xref:rgsvc.adoc#[Domain Services Reference Guide].
+The Apache Isis framework itself also provides a large number of number of domain services, catalogued in the xref:../rgsvc/rgsvc.adoc#[Domain Services Reference Guide].
 Some of these are APIs (intended to be called by your application's own domain objects) and some are SPIs (implemented by your application and called by the framework, customising the way it works).
 
 The following is a typical menu service:
@@ -161,7 +161,7 @@ In the example above the menu is named "Simple Objects" (otherwise it would have
 The implementation delegates to an `SimpleObjectRepository` service, which is injected.
 <4> The `javax.inject.Inject` annotation instructs Apache Isis framework to inject the `SimpleObjectRepository` service into this domain object.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
-There is further discussion of service injection xref:ugfun.adoc#_ugfun_how-tos_class-structure_inject-services[below].
+There is further discussion of service injection xref:../ugfun/ugfun.adoc#_ugfun_how-tos_class-structure_inject-services[below].
 
 
 [[__ugfun_how-tos_class-structure_class-definition_view-models]]

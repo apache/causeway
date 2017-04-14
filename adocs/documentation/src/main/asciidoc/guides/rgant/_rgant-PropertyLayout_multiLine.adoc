@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `multiLine()` attribute specifies that the text field for a string property should span multiple lines.  It is ignored for other property types.  The attribute is also supported for xref:rgant.adoc#_rgant-ParameterLayout_multiLine[parameters].
+The `multiLine()` attribute specifies that the text field for a string property should span multiple lines.  It is ignored for other property types.  The attribute is also supported for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[parameters].
 
 For example:
 
@@ -40,5 +40,5 @@ can be used instead, eg:
 
 [NOTE]
 ====
-If set > 1 (as would normally be the case), then the default xref:rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
+If set > 1 (as would normally be the case), then the default xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 ====

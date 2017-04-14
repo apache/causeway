@@ -8,7 +8,7 @@
 
 The repository API acts as an abstraction over the JDO/DataNucleus objectstore.  You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
 
-As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service.
+As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service.
 
 
 [source,java]
@@ -80,5 +80,5 @@ With respect to the other query APIs, the varargs parameters are optional, but a
 
 [TIP]
 ====
-It is also possible to query using DataNucleus' type-safe query API.  For more details, see xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`].
+It is also possible to query using DataNucleus' type-safe query API.  For more details, see xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`].
 ====

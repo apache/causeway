@@ -11,7 +11,7 @@ The `PublishingService` API is intended for coarse-grained publish/subscribe for
 
 [WARNING]
 ====
-As of `1.13.0` this service is deprecated, replaced with xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].
+As of `1.13.0` this service is deprecated, replaced with xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].
 ====
 
 
@@ -30,9 +30,9 @@ public interface PublishingService {
     void setEventSerializer(EventSerializer eventSerializer);   // <3>
 }
 ----
-<1> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`], date/time etc
+<1> standard metadata about the event, such as the user, the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`], date/time etc
 <2> for published actions, an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, an `EventPayloadForObjectChanged` (or subclass thereof)
-<3> injects in the xref:rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
+<3> injects in the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
 
 
 Typically implementations will use the injected `EventSerializer` to convert the metadata and payload into a form to be published:
@@ -68,16 +68,16 @@ The framework provides no default implementations of this service.
 
 == Usage
 
-To indicate that an action invocation should be published, annotate it with the xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] annotation.
+To indicate that an action invocation should be published, annotate it with the xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] annotation.
 
-To indicate that a changed object should be published is to annotate it with the xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
+To indicate that a changed object should be published is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
 
 
 It is also possible to "fine-tune" the `EventPayload` using the `#publishingFactory()` attribute (for both annotations).  By default the `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the action invocation provides details of the action arguments and result (if any) of that action.  However, the payload does not (by default) include any information about the new state of these objects. It is therefore the responsibility of the subscriber to call back to Apache Isis to determine any information that has not been published.
 
 [NOTE]
 ====
-The replacement xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] does __not__ support the concept of "payload factories" (but is otherwise more flexible).
+The replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] does __not__ support the concept of "payload factories" (but is otherwise more flexible).
 ====
 
 
@@ -155,7 +155,7 @@ There is no default implementation of this service provided by the core Apache I
 
 The (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishing[publishing] module provides an
 implementation of this service. Assuming that an `AppManifest` is being used to
-xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
+xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then this can be activated by updating
 the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 The module also provides services that contribute to the UI.  If contributions are not required in the UI, these can be
@@ -170,29 +170,29 @@ xref:ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
 
 The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from
 Apache Isis to some other system. Here the only events published are those that action invocations (for actions
-annotated with xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects
-annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`].
+annotated with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects
+annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`].
 
-The xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] is intended as a replacement for this service.  The
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] is intended as a replacement for this service.  The
 use case for `PublisherService` is the same: coarse-grained publishing of events for system-to-system interactions.  It
 is in most respects more flexible though: events are published both for action invocations (annotated with
-xref:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and also for property edits (annotated with
-xref:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`].  It also publishes changed objects (for objects
-annotated with xref:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]).  However, rather than
+xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]) and also for property edits (annotated with
+xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`].  It also publishes changed objects (for objects
+annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]).  However, rather than
 publishing one event for every changed objects, it publishes a single event that identifies all objects created,
 updated or deleted.
 
 Another significant difference between `PublishingService` and `PublisherService` is in the content of the events
-themselves.  While the former uses the xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] to create an
-ad-hoc serialization of the action being invoked, the latter uses the xref:rgcms.adoc#_rgcms_schema[DTOs/XML schemas]
+themselves.  While the former uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] to create an
+ad-hoc serialization of the action being invoked, the latter uses the xref:../rgcms/rgcms.adoc#_rgcms_schema[DTOs/XML schemas]
 as a formal specification of the nature of the interaction (action invocation, property edit or changed objects).
 
-The xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] meanwhile differs from both `PublishingService` and
-xref:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] in that it is intended for fine-grained
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] meanwhile differs from both `PublishingService` and
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] in that it is intended for fine-grained
 publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation
 is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable,
 for example.  (That said, it is possible to obtain a serialization of the action invocation/property edit causing the
-current event to be raised using xref:rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service).
+current event to be raised using xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service).
 
 
 == Design Notes

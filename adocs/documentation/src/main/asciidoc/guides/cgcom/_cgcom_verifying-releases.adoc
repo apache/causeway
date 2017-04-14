@@ -8,9 +8,9 @@
 
 The release process consists of:
 
-* the release manager xref:cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
+* the release manager xref:../cgcom/cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
 * members of the Apache Isis PMC verifying and voting on the release (documented below)
-* the release manager performing post-release tasks, for either a xref:cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
+* the release manager performing post-release tasks, for either a xref:../cgcom/cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
 
 This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
@@ -18,7 +18,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:cgcom.adoc#_cgcom_release-process[release process]) on the link:../support.html[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.  Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
+Whenever a release manager announces a vote on a release (as per the xref:../cgcom/cgcom.adoc#_cgcom_release-process[release process]) on the link:../support.html[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.  Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
 
@@ -53,7 +53,7 @@ rm -rf ~/.m2/repository/org/apache/isis
 
 == Verifying source artifacts
 
-You can either verify the source artifacts xref:cgcom.adoc#__cgcom_verifying-releases_manual-procedure[manuall], or use a script that xref:cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
+You can either verify the source artifacts xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_manual-procedure[manuall], or use a script that xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
 
 
 [[__cgcom_verifying-releases_manual-procedure]]
@@ -95,7 +95,7 @@ Confirm that the versions of the Isis artifacts now cached in your local reposit
 
 ==== Verifying binary artifacts
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype1] and running the resultant app.
+You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype1] and running the resultant app.
 
 Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
 
@@ -254,7 +254,7 @@ Execute...
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
 
-The main release auditing tool, http://creadur.apache.org/rat[Apache RAT] is used in the xref:cgcom.adoc#_cgcom_cutting-a-release[release process].
+The main release auditing tool, http://creadur.apache.org/rat[Apache RAT] is used in the xref:../cgcom/cgcom.adoc#_cgcom_cutting-a-release[release process].
 
 Creadur's remaining tools - link:http://creadur.apache.org/tentacles/[Tentacles] and link:http://creadur.apache.org/whisker/[Whisker] - are to support the verification process.
 
@@ -293,7 +293,7 @@ cd webapp
 mvn jetty:run
 ----
 
-Adjust the version as necessary.  If it runs up ok, then it's time to xref:cgcom.adoc#_cgcom_verifying-releases[vote]!
+Adjust the version as necessary.  If it runs up ok, then it's time to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[vote]!
 
 
 

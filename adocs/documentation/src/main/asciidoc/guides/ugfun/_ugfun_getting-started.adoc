@@ -7,17 +7,17 @@
 
 
 
-To get you up and running quickly, Apache Isis provides a xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] to setup a simple application as the basis of your own apps.
+To get you up and running quickly, Apache Isis provides a xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] to setup a simple application as the basis of your own apps.
 This is deliberately kept quite minimal so that you won't have to spend lots of time removing generated artifacts.
 On the other hand, it does set up a standard multi-module maven structure with unit- and integration tests pre-configured, as well as a webapp module so that you can easily run your app.
 We strongly recommend that you preserve this structure as you develop your own Isis application.
 
-In this chapter we also discuss the xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer].  link:http://www.datanucleus.org/[DataNucleus] is the reference implementation of the JDO (Java data objects) spec, and Apache Isis integrates with DataNucleus as its persistence layer.
+In this chapter we also discuss the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer].  link:http://www.datanucleus.org/[DataNucleus] is the reference implementation of the JDO (Java data objects) spec, and Apache Isis integrates with DataNucleus as its persistence layer.
 The enhancer performs post-processing on the bytecode of your persistent domain entities, such that they can be persisted by Apache Isis' JDO/DataNucleus objectstore.
 
 [NOTE]
 ====
-The xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] automatically configures the enhancer, so there's little you need to do at this stage.
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] automatically configures the enhancer, so there's little you need to do at this stage.
 Even so we feel it's a good idea to be aware of this critical part of Apache Isis runtime; if the enhancer does not run, then you'll find the app fails to start with (what will seem like) quite an obscure exception message.
 ====
 
@@ -31,7 +31,7 @@ Apache Isis is a Java based framework, so in terms of prerequisites, you'll need
 * Java 7 or 8 JDK
 * link:http://maven.apache.org[Apache Maven] 3.0.5 or later
 
-You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:dg.adoc#_dg_ide[Developers' Guide] we have detailed setup instructions for using these two IDEs.
+You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] we have detailed setup instructions for using these two IDEs.
 If you're a NetBeans user you should have no problems as it too has strong support for Maven.
 
 When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.

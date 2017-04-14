@@ -5,8 +5,8 @@
 :_imagesdir: images/
 
 
-This class extends xref:rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`AbstractContainedObject`], also
-implementing the xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.  In and of itself it provides no new behaviour.
+This class extends xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`AbstractContainedObject`], also
+implementing the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.  In and of itself it provides no new behaviour.
 
 [TIP]
 ====

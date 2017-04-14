@@ -29,4 +29,4 @@ public class LibraryMember {
 <2> perform some additional business logic
 
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]`
+See also xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]`

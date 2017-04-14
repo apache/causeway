@@ -39,7 +39,7 @@ public interface JaxbService {
 
 With respect to the `IsisSchemas` enum: a JAXB-annotated domain object will live in its own XSD namespace and may
 reference multiple other XSD schemas.  In particular, many JAXB domain objects will reference the
-xref:rgcms.adoc#_rgcms_schema[common Isis schemas] (for example the `OidDto` class that represents a reference to
+xref:../rgcms/rgcms.adoc#_rgcms_schema[common Isis schemas] (for example the `OidDto` class that represents a reference to
 a persistent entity).  The enum indicates whether these schemas should be included or excluded from the map.
 
 Isis provides a default implementation of the service, `o.a.i.schema.services.jaxb.JaxbServiceDefault`.
@@ -49,20 +49,20 @@ Isis provides a default implementation of the service, `o.a.i.schema.services.ja
 == Usage within the framework
 
 This service is provided as a convenience for applications, but is also used internally by the framework to
-xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
+xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
 xref:ugbtb.adoc#_ugbtb_view-models[view models].  The functionality to download XML and XSD schemas is also
-exposed in the UI through mixins to xref:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] interface.
+exposed in the UI through mixins to xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] interface.
 
 
 
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `JaxbService` service is automatically registered and injected (it is annotated with `@DomainService`)
 so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 

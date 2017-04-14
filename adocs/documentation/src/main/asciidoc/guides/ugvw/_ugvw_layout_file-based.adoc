@@ -11,15 +11,15 @@ Metadata providing UI hints can be specified either xref:ugvw.adoc#_ugvw_layout_
 Using a file-based layout has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.
 Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
-Another benefit of file-based layout is that UI hints can be provided for xref:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
+Another benefit of file-based layout is that UI hints can be provided for xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
 
 The main downsides of using file-based layouts are a lack of typesafety (a typo will result in the metadata not being picked up for the element) and syntactic fragility (an invalid XML document will result in no metadata for the entire class).
 
 Also, file-based layouts have no notion of inheritance, whereas the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
 
-The `Xxx.layout.xml` file is just the serialized form of a xref:rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.  These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
+The `Xxx.layout.xml` file is just the serialized form of a xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.  These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 
@@ -28,7 +28,7 @@ is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making ite
 It is also possible to describe layouts using a `.layout.json` file.
 However, `.layout.json` support is deprecated; the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
 
-If you have an application with older `.layout.json` files, then it is possible to download initial `.layout.xml` files using the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
+If you have an application with older `.layout.json` files, then it is possible to download initial `.layout.xml` files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
 The `.layout.json` file will be ignored once a `.layout.xml` file is present.
 ====
 
@@ -43,7 +43,7 @@ The rows and columns are closely modelled on link:getbootstrap.com[Bootstrap 3] 
 
 * those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 
-More information about these classes can be found in xref:rgcms.adoc#_rgcms_classes_layout[the reference guide].  More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
+More information about these classes can be found in xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[the reference guide].  More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
 
 
 == Screencast
@@ -117,7 +117,7 @@ This corresponds to the following XML:
 ----
 
 
-You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.  This topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
 
 
 
@@ -160,7 +160,7 @@ In the first column there is a single fieldset.  Notice how actions - such as `d
 
 Thereafter the fieldset lists the properties in order.  Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
-Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
 
 
 === Collections
@@ -321,7 +321,7 @@ from the top of the page slightly, using the following CSS:
 
 == Migrating from earlier versions
 
-As noted earlier on, it is possible to download layout XML files using the xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.  Alternatively the layout XML for a single domain object can be downloaded using the xref:rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
+As noted earlier on, it is possible to download layout XML files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.  Alternatively the layout XML for a single domain object can be downloaded using the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
 
 There are four "styles":
 
@@ -341,9 +341,9 @@ below summarises the choices:
 |===
 
 | Style
-|xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
-| xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
-| xref:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+|xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
+| xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+| xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
 
 
 |`COMPLETE`
@@ -381,11 +381,11 @@ Download either for a single domain object, or download all domain objects (enti
 
 For more information about layouts, see:
 
-* xref:rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms .adoc#_rgcms_classes_mixins_Object[mixin action]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms .adoc#_rgcms_classes_mixins_Object[mixin action]
 
-* xref:rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] and its supporting services, xref:rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and xref:rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] and its supporting services, xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`]
 
-* xref:rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
+* xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
 
 
 
@@ -414,4 +414,4 @@ Any `.layout.xml` files must be compiled and available in the classpath.  Ensure
 </resources>
 ----
 
-If using an Apache Isis xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
+If using an Apache Isis xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.

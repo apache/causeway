@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation.
+The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation.
 
 The annotation defines four attributes:
 
@@ -27,8 +27,8 @@ As this is an important topic, there is a xref:ugvw.adoc#_ugvw_layout[separate c
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:rgant.adoc#_rgant-Collection[`@Collection`], xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:rgant.adoc#_rgant-Property[`@Property`])
- and xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-Property[`@Property`])
+ and xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

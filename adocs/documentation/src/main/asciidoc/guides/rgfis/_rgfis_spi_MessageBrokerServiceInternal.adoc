@@ -6,7 +6,7 @@
 
 
 The (internal) `MessageBrokerServiceInternal` domain service is a wrapper around
-xref:rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`].
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`].
 
 
 [NOTE]
@@ -39,6 +39,6 @@ The framework provides two implementations:
 
 * `MessageBrokerServiceInternalDefault` is provided by `isis-core-runtime`, and is used during normal use and integration tests
 
-* `MessageBrokerServiceInternalNoop` is provided as a fallback by `isis-core-metamodel`, and is provided to allow the xref:rgmvn.adoc[maven plugin] to be bootstrapped without any "backend" database.
+* `MessageBrokerServiceInternalNoop` is provided as a fallback by `isis-core-metamodel`, and is provided to allow the xref:../rgmvn/rgmvn.adoc[maven plugin] to be bootstrapped without any "backend" database.
 
 The `...Default` implementation takes priority over the `...Noop` implementation.

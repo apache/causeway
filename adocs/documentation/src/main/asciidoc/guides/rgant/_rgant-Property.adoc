@@ -20,45 +20,45 @@ It is also possible to apply the annotation to actions of domain services that a
 | Description
 
 
-|xref:rgant.adoc#_rgant-Property_domainEvent[`domainEvent()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`domainEvent()`]
 |subtype of `PropertyDomainEvent` +
 (`PropertyDomainEvent.Default`)
-|the event type to be posted to the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref:rgant.adoc#_rgant-Property_editing[`editing()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_editing[`editing()`]
 |`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a property can be modified or cleared from within the UI
 
 
-|xref:rgant.adoc#_rgant-Property_fileAccept[`fileAccept()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_fileAccept[`fileAccept()`]
 |Media type or file extension
-|Hints the files to be uploaded to a xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
- or xref:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
+|Hints the files to be uploaded to a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
+ or xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
  +
 Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 
 
-|xref:rgant.adoc#_rgant-Property_hidden[`hidden()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the property should be hidden from the user.
 
 
-|xref:rgant.adoc#_rgant-Property_maxLength[`maxLength()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_maxLength[`maxLength()`]
 |
 |maximum number of characters for string parameters; ignored otherwise +
 
-In many/most cases you should however use xref:rgant.adoc#_rgant-Column[`@Column#length()`]
+In many/most cases you should however use xref:../rgant/rgant.adoc#_rgant-Column[`@Column#length()`]
 
 
-|xref:rgant.adoc#_rgant-Property_mustSatisfy[`mustSatisfy()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
 |allows arbitrary validation to be applied
 
 
-|xref:rgant.adoc#_rgant-Property_notPersisted[`notPersisted()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[`notPersisted()`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -69,15 +69,15 @@ Property must also be annotated with `@javax.jdo.annotations.NotPersistent` in o
 ====
 
 
-|xref:rgant.adoc#_rgant-Property_optionality[`optionality()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_optionality[`optionality()`]
 |
 |specifies a property is optional rather than mandatory +
 
-In many/most cases you should however use xref:rgant.adoc#_rgant-Column[`@Column#allowsNull()`]
+In many/most cases you should however use xref:../rgant/rgant.adoc#_rgant-Column[`@Column#allowsNull()`]
 
 
 
-|xref:rgant.adoc#_rgant-Property_regexPattern[`regexPattern()`]
+|xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`regexPattern()`]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 
@@ -124,7 +124,7 @@ public class Customer {
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:rgant.adoc#_rgant-Collection[`@Collection`], xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

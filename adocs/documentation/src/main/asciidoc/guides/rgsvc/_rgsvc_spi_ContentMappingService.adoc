@@ -7,11 +7,11 @@
 
 
 The `ContentMappingService` supports the (default implementation of the)
-xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] allowing the
+xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] allowing the
 xref:ugvro.adoc#[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified
 by the HTTP `Accept` header.
 
-See xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
+See xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
 
 
 [NOTE]
@@ -19,7 +19,7 @@ See xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationServ
 Unlike most other domain services, the framework (that is, `ContentNegotiationService`) will check _all_ available
 implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely
 the first implementation found; in other words it uses the chain-of-responsibility pattern.  Services are checked
-in the ordering defined by xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+in the ordering defined by xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
 The mapped object used will be the first non-`null` result returned by an implementation.
 ====
 
@@ -99,4 +99,4 @@ public class ContentMappingServiceForToDoItem implements ContentMappingService {
 
 == Related Services
 
-This service is a companion to the default implementation of the xref:rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`].
+This service is a companion to the default implementation of the xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`].

@@ -38,9 +38,9 @@ public interface SwaggerService {
 }
 ----
 <1> Generate a Swagger spec for use by third-party clients, ie public use.  This specification is restricted only to
-xref:ugbtb.adoc#_ugbtb_view-models[view model]s and to domain services with a xref:rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY`.
+xref:ugbtb.adoc#_ugbtb_view-models[view model]s and to domain services with a xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY`.
 <2> Generate a Swagger spec for use only by internally-managed clients, ie private internal use.  This specification includes domain entities and all menu domain services (as well as any view models).
-<3> Generate a Swagger spec that is the same as private case (above), but also including any xref:rgant.adoc#_rgant-Action_restrictTo[prototype] actions.
+<3> Generate a Swagger spec that is the same as private case (above), but also including any xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[prototype] actions.
 <4> Swagger specs can be written either in JSON or YAML format.
 
 Isis provides a default implementation of the service, `o.a.i.core.metamodel.services.swagger.SwaggerServiceDefault`.
@@ -56,7 +56,7 @@ This service is provided as a convenience for applications, it is not (currently
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `SwaggerService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
@@ -64,6 +64,6 @@ implementation of `SwaggerService` service is automatically registered and injec
 
 A `SwaggerServiceMenu` domain service provides a prototype action that enables the swagger spec to be downloaded from the Wicket viewer's UI.
 
-Apache Isis' xref:rgmvn.aod[Maven plugin] also provides a xref:rgmvn.adoc#_rgmvn_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
+Apache Isis' xref:rgmvn.aod[Maven plugin] also provides a xref:../rgmvn/rgmvn.adoc#_rgmvn_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
 
 

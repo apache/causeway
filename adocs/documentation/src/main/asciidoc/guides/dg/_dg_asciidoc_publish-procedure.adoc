@@ -9,5 +9,5 @@
 
 
 Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].
-See the xref:cgcom.adoc#_cgcom_publishing-the-docs[committers' guide] for further details.
+See the xref:../cgcom/cgcom.adoc#_cgcom_publishing-the-docs[committers' guide] for further details.
 

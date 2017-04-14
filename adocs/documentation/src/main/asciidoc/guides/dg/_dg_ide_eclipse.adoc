@@ -35,7 +35,7 @@ application into Eclipse and configure to use with the JDO Objectstore.
 [[__dg_ide_eclipse_editor-templates]]
 == Editor Templates
 
-We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
+We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
 
 * `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
 * `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
@@ -77,7 +77,7 @@ image::{_imagesdir}eclipse/eclipse-110-project-support.png[width="600px",link="{
 
 DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs. So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
-See the earlier section on xref:ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.  Chances are it is already set up from running the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+See the earlier section on xref:../ugfun/ugfun.adoc#_ugfun_getting-started_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.  Chances are it is already set up from running the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 
 
 Then, tell DataNucleus to use the project classpath:
@@ -171,5 +171,5 @@ Changing persisting domain entities is more problematic, for two reasons: the JD
 domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
 actions will work, but adding new properties or collections is much less likely to.
 
-For details of setting up DCEVM, see the xref:dg.adoc#__dg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
+For details of setting up DCEVM, see the xref:../dg/dg.adoc#__dg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
 

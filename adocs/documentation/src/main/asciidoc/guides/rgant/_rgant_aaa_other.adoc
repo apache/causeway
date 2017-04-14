@@ -15,34 +15,34 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Layer
 |xref:ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
 
-|xref:rgant.adoc#_rgant-Facets[`@Facets`]
+|xref:../rgant/rgant.adoc#_rgant-Facets[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.
 |(any)
 |
 
-|xref:rgant.adoc#_rgant-HomePage[`@HomePage`]
+|xref:../rgant/rgant.adoc#_rgant-HomePage[`@HomePage`]
 |Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
 |UI
 |
 
-|xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+|xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
 |Ordering of properties, collections and actions, and also associating actions with either a property or a collection.
 |UI
 |Yes
 
 
-|xref:rgant.adoc#_rgant-MinLength[`@MinLength`]
+|xref:../rgant/rgant.adoc#_rgant-MinLength[`@MinLength`]
 |Minimum number of characters required for an auto-complete search argument.
 |UI
 |
 
 
-|xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`]
+|xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]
 |Ignore a public method, excluded from the Apache Isis metamodel.
 |Domain
 |
 
-|xref:rgant.adoc#_rgant-Title[`@Title`]
+|xref:../rgant/rgant.adoc#_rgant-Title[`@Title`]
 |Indicates which of the object's properties should be used to build up a title for the object.
 |UI
 

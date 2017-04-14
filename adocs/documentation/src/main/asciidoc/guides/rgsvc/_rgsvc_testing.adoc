@@ -24,7 +24,7 @@ The table below summarizes the testing APIs defined by Apache Isis.  It also lis
 |Notes
 
 
-|xref:rgsvc.adoc#_rgsvc_api_ExecutionParametersService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ExecutionParametersService[`o.a.i.applib.` +
 `fixturescripts.` +
 `ExecutionParametersService`]
 |...
@@ -34,39 +34,39 @@ The table below summarizes the testing APIs defined by Apache Isis.  It also lis
 |API is also a concrete class
 
 
-|xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`o.a.i.applib.` +
 `services.` +
 `fixturespec` +
 `FixtureScriptsDefault`]
-|Fallback implementation of xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
+|Fallback implementation of xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Interacts with xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`FixtureScripts-
+|Interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`FixtureScripts-
 SpecificationProvider`].
 
 
 
-|xref:rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
 `services.fixturespec` +
 `FixtureScripts-` +
 `SpecificationProvider`]
-|Provides settings for xref:rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
+|Provides settings for xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
 |
 |
 
 
-|xref:rgsvc.adoc#_rgsvc_api_SudoService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SudoService[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
-|For use in testing while running xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
+|For use in testing while running xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
 |`SudoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |API is also a concrete class
 
 
-|xref:rgsvc.adoc#_rgsvc_api_SwitchUserService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SwitchUserService[`o.a.i.applib.` +
 `fixtures.switchuser` +
 `SwitchUserServiceService`]
 |(deprecated)

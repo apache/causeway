@@ -20,7 +20,7 @@ Mixins (and contributions) allow dependency to be inverted, so that the dependen
 
 Both use cases are discussed below.
 
-Syntactically, a mixin is defined using either the xref:rgant.adoc#_rgant_Mixin[`@Mixin`] annotation or using xref:rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
+Syntactically, a mixin is defined using either the xref:../rgant/rgant.adoc#_rgant_Mixin[`@Mixin`] annotation or using xref:../rgant/rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
 
 
 == Contributed Collection
@@ -205,7 +205,7 @@ In other words, all of the following are allowed:
 * `public static class _Documents { ... }`
 * `public static class _documents { ... }`
 
-The reserved method name "$$" can also be changed using xref:rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
+The reserved method name "$$" can also be changed using xref:../rgant/rgant.adoc#_rgant_Mixin_method[`@Mixin#method()`] or xref:../rgant/rgant.adoc#_rgant_DomainObject_mixinMethod[`@DomainObject#mixinMethod()`].
 
 
 
@@ -221,7 +221,7 @@ dynamically.  If writing integration tests or fixtures, or (sometimes) just regu
 instantiate mixins directly.
 
 For this you can use the
-xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)`
+xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)`
 method.  For example:
 
 [source,java]
@@ -230,7 +230,7 @@ DocumentHolder_documents mixin = container.mixin(DocumentHolder_documents.class,
 ----
 
 The xref:ugtst.adoc#__ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
-xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience
+xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience
 method.
 
 
@@ -256,7 +256,7 @@ fundamental structure is changing is likely to remain a no-no.
 
 However, chances are that the structure of your domain objects (the data) will change much less rapidly than
 the behaviour of those domain objects.  Thus, it's the behaviour that you're most likely wanting to change while the
-app is still running.  If you move that behaviour out into xref:rgcms.adoc#_rgcms_classes_mixins[mixins] (or
+app is still running.  If you move that behaviour out into xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins[mixins] (or
 xref:ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services]), then these can be reloaded happily.
 (When running in prototype mode), Apache Isis will automatically recreate the portion of the metamodel for any domain
 object as it is rendered.
