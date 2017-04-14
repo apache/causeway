@@ -49,8 +49,14 @@ The remaining guides are:
 include::_ugfun_core-concepts.adoc[leveloffset=+1]
 include::_ugfun_getting-started.adoc[leveloffset=+1]
 
-include::_ugfun_how-tos.adoc[leveloffset=+1]
-include::_ugvw_layout.adoc[leveloffset=+1]
+include::_ugfun_domain-class-ontology.adoc[leveloffset=+1]
 
-include::_ugfun_faqs.adoc[leveloffset=+1]
+include::_ugfun_class-structure.adoc[leveloffset=+1]
+include::_ugfun_ui-hints.adoc[leveloffset=+1]
+
+include::_ugfun_crud.adoc[leveloffset=+1]
+
+include::_ugfun_business-rules.adoc[leveloffset=+1]
+
+include::_ugfun_drop-downs-and-defaults.adoc[leveloffset=+1]
 

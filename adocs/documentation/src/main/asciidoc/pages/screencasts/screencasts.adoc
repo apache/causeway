@@ -87,7 +87,7 @@ Using xref:guides/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] to initiali
 
 
 |link:https://www.youtube.com/watch?v=dXtmxmYxa30[006^] +
-Implementing xref:guides/ugfun.adoc#_ugfun_how-tos_business-rules[business rules]for domain object members, using supporting methods ("see it, use it, do it")
+Implementing xref:guides/ugfun.adoc#_ugfun_business-rules[business rules]for domain object members, using supporting methods ("see it, use it, do it")
 |x||||||||||
 
 |link:https://www.youtube.com/watch?v=imHfxQGUgV8[007^] +

@@ -12,7 +12,6 @@ This opens up a number of more advanced use cases.
 In this topic we'll explore those use cases, and learn the programming model and conventions to use view models in your application.
 
 
-include::_ugbtb_view-models_use-cases.adoc[leveloffset=+1]
 include::_ugbtb_view-models_programming-model.adoc[leveloffset=+1]
 include::_ugbtb_view-models_jaxb.adoc[leveloffset=+1]
 

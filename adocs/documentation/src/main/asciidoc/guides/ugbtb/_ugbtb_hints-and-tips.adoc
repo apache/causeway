@@ -23,5 +23,8 @@ See also hints-n-tips chapters in the:
 * the xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide (this chapter).
 
 
+include::_ugbtb_hints-and-tips_are-you-sure.adoc[leveloffset=+1]
 include::_ugbtb_hints-and-tips_how-to-handle-void-and-null-results.adoc[leveloffset=+1]
+include::_ugbtb_hints-and-tips_subclass-properties-in-tables.adoc[leveloffset=+1]
+include::_ugbtb_hints-and-tips_simulating-collections-of-values.adoc[leveloffset=+1]
 include::_ugbtb_hints-and-tips_how-to-implement-a-spellchecker.adoc[leveloffset=+1]
