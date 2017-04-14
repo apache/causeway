@@ -37,9 +37,9 @@ application into Eclipse and configure to use with the JDO Objectstore.
 
 We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
 
-* `is` (Apache Isis domain objects).  link:./resources/appendices/dev-env/eclipse/isis-templates.xml[Download]
-* `ju` (for JUnit tests) link:./resources/appendices/dev-env/eclipse/junit4-templates.xml[Download]
-* `jm` (for JMock mocks or libraries) link:./resources/appendices/dev-env/eclipse/jmock2-templates.xml[Download]
+* `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
+* `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
+* `jm` (for JMock mocks or libraries) link:./resources/eclipse/jmock2-templates.xml[Download]
 
 
 To install, download each XML file, then go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
@@ -65,12 +65,12 @@ Make sure you are in the 'Java' Perspective, not the 'Java EE' Perspective.
 
 In Eclipse, for the _domain object model_ project, first add DataNucleus support:
 
-image::{_imagesdir}appendices/dev-env/eclipse/eclipse-100-project-support.png[width="600px",link="{_imagesdir}appendices/dev-env/eclipse/eclipse-100-project-support.png"]
+image::{_imagesdir}eclipse/eclipse-100-project-support.png[width="600px",link="{_imagesdir}eclipse/eclipse-100-project-support.png"]
 
 
 Then turn on Auto-Enhancement:
 
-image::{_imagesdir}appendices/dev-env/eclipse/eclipse-110-project-support.png[width="600px",link="{_imagesdir}appendices/dev-env/eclipse/eclipse-110-project-support.png"]
+image::{_imagesdir}eclipse/eclipse-110-project-support.png[width="600px",link="{_imagesdir}eclipse/eclipse-110-project-support.png"]
 
 
 === Update the classpath
@@ -83,11 +83,11 @@ See the earlier section on xref:ugfun.adoc#_ugfun_getting-started_datanucleus-en
 Then, tell DataNucleus to use the project classpath:
 
 
-image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-010-windows-preferences.png[width="750px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-010-windows-preferences.png"]
+image::{_imagesdir}eclipse/eclipse-010-windows-preferences.png[width="750px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-010-windows-preferences.png"]
 
 When the enhancer runs, it will print out to the console:
 
-image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-120-console.png[width="500px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-120-console.png"]
+image::{_imagesdir}eclipse/eclipse-120-console.png[width="500px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-120-console.png"]
 
 
 
@@ -99,7 +99,7 @@ To fix this, we configure the enhancer to read from the `persistence.xml` file.
 
 As a prerequisite, first make sure that your domain object model has a `persistence.xml` file.  Then specify the `persistence-unit` in the project properties:
 
-image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-025-project-properties.png"]
+image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-025-project-properties.png"]
 
 
 === Workaround: If the enhancer fails
@@ -107,20 +107,20 @@ image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-025-project-properties.pn
 On occasion it appears that Eclipse can attempt to run two instances of the DataNucleus enhancer. This is probably due to multiple Eclipse builders being defined; we've noticed multiple entries in the Eclipse's `Debug` view:
 
 
-image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-210-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-210-enhancer-fails-duplicates.png"]
+image::{_imagesdir}eclipse/eclipse-210-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-210-enhancer-fails-duplicates.png"]
 
 
 At any rate, you'll know you've encountered this error if you see the following in the console:
 
 
-image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-200-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-200-enhancer-fails-duplicates.png"]
+image::{_imagesdir}eclipse/eclipse-200-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-200-enhancer-fails-duplicates.png"]
 
 
 
 The best solution is to remove DataNucleus support and then to re-add it:
 
 
-image::{_imagesdir}/appendices/dev-env/eclipse/eclipse-220-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-220-enhancer-fails-duplicates.png"]
+image::{_imagesdir}eclipse/eclipse-220-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-220-enhancer-fails-duplicates.png"]
 
 
 If you consistently hit problems, then the final recourse is to disable the automatic enhancement and to remember to manually enhance your domain object model before each run.
