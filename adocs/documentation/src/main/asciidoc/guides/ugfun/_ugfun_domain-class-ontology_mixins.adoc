@@ -1,0 +1,54 @@
+[[_ugfun_domain-class-ontology_mixins]]
+= Mixins
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
+
+Some programming languages use the term "trait" instead of mixin, and some languages (such as AspectJ) define their own syntax for defining such constructs.
+In Apache Isis a mixin is very similar to a domain service, however it also defines a single 1-arg constructor that defines the type of the domain objects that it contributes to.
+
+Why do this?
+Two reasons:
+
+* The main reason is to allow the app to be decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
+Mixins (and contributions) allow dependency to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+
+* However, there is another reason: mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
+
+Both use cases are discussed below.
+
+Syntactically, a mixin is defined using either the xref:../rgant/rgant.adoc#_rgant_Mixin[`@Mixin`] annotation or using xref:../rgant/rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] attribute (specifying a nature of `Nature.MIXIN`).
+
+
+
+[source,java]
+----
+@Mixin(method="coll")                                       // <1>
+public class Customer_orders {                              // <2>
+
+    private final Customer customer;
+    public Customer_orders(final Customer customer) {       // <3>
+        this.customer = customer;
+    }
+
+    @Action(semantics=SemanticsOf.SAFE)                     // <4>
+    @ActionLayout(contributed=Contributed.AS_ASSOCIATION)   // <4>
+    @CollectionLayout(render=RenderType.EAGERLY)
+    public List<Order> coll() {                             // <1>
+        return repositoryService.findOrdersFor(customer);
+    }
+
+    @Inject
+    RepositoryService repositoryService;
+}
+----
+<1> indicates that this is a mixin, with "coll" as the name of the main method
+<2> The contributed member is inferred from the name, after the "_"; in other words "orders"
+<3> The mixee is `Customer`.
+This could also be an interface.
+<4> Indicates that the action should be interpreted as a collection.
+This requires that the action has safe semantics, ie does not alter state/no side-effects.
