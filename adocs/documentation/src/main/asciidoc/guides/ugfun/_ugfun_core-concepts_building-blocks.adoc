@@ -109,11 +109,11 @@ If a domain service does hold state (eg the `Scratchpad` service noted above) th
 
 Every domain object in Apache Isis consists of (at most) three types of members:
 
-* properties, such as a `Customer`'s `firstName
+* properties, such as a ``Customer``'s `firstName`
 
-* collections, such as a `Customer`'s `orders` collection of ``Order``s
+* collections, such as a ``Customer``'s `orders` collection of ``Order``s
 
-* actions, such as a `Customer'`s `placeOrder(...)` method.
+* actions, such as a ``Customer'``s `placeOrder(...)` method.
 
 Some domain objects -- specifically domain services and mixins -- only have actions.
 In the case of contributing services and mixins these actions can (depending upon their semantics and signatures) be represented as derived properties or collections on the entity/view model to which they contribute/mix-in.

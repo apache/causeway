@@ -5,8 +5,12 @@
 :_imagesdir: images/
 
 
-Apache Isis works by building a metamodel of the domain objects: entities, xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[view model]s and services.
-The class methods of both entities and view models represent both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.  The class members of domain services is simpler: just behaviour, ie actions.
+Apache Isis works by building a metamodel of the domain objects: entities, domain services, view models and mixins.
+Dependent on the sort of domain object, the class methods represent
+both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.
+
+More specifically, both entities and view models can have properties, collections and actions, while domain services have just actions.
+Mixins also define only actions, though depending on their semantics they may be rendered as derived properties or collections on the domain object to which they contribute.
 
 In the automatically generated UI a property is rendered as a field.
 This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.
