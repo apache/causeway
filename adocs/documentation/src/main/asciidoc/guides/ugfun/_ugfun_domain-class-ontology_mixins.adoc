@@ -52,3 +52,5 @@ public class Customer_orders {                              // <2>
 This could also be an interface.
 <4> Indicates that the action should be interpreted as a collection.
 This requires that the action has safe semantics, ie does not alter state/no side-effects.
+
+There is further discussion of mixins in the xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[beyond the basics] guide.

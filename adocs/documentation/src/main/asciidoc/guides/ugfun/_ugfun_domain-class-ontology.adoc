@@ -6,13 +6,16 @@
 
 
 
-Apache Isis supports recognises three main types of domain classes:
+Apache Isis supports recognises four main types of domain classes:
 
-* domain entities - domain objects persisted to the database using JDO/DataNucleus; for example `Customer`
+* xref:../ugfun/ugfun.adoc#_ugfun_domain-class-ontology_domain-entities[domain entities] - domain objects persisted to the database using JDO/DataNucleus; for example `Customer`
 
-* domain services - generally singletons, automatically injected, and providing various functionality; for example `CustomerRepository`
+* xref:../ugfun/ugfun.adoc#_ugfun_domain-class-ontology_domain-services[domain services] - generally singletons, automatically injected, and providing various functionality; for example `CustomerRepository`
 
-* view models - domain objects that are a projection of some state held by the database, in support a particular use case; for example `CustomerDashboard` (to pull together commonly accessed information about a customer).
+* xref:../ugfun/ugfun.adoc#_ugfun_domain-class-ontology_view-models[view models] - domain objects that are a projection of some state held by the database, in support a particular use case; for example `CustomerDashboard` (to pull together commonly accessed information about a customer).
+
+* xref:../ugfun/ugfun.adoc#_ugfun_domain-class-ontology_mixins[mixins] - allow functionality to be "contributed" in the UI by one module to another object, similar to traits or extension methods provided in some programming languages.
+This is an important capability to help keep large applications decoupled.
 
 Domain classes are generally recognized using annotations.
 Apache Isis defines its own set of annotations, while entities are annotated using JDO/DataNucleus (though XML can also be used if required).
@@ -37,7 +40,6 @@ In the same way that the Java module act as a namespace for domain objects, it's
 include::_ugfun_domain-class-ontology_domain-entities.adoc[leveloffset=+1]
 include::_ugfun_domain-class-ontology_domain-services.adoc[leveloffset=+1]
 include::_ugfun_domain-class-ontology_view-models.adoc[leveloffset=+1]
-
-
+include::_ugfun_domain-class-ontology_mixins.adoc[leveloffset=+1]
 
 

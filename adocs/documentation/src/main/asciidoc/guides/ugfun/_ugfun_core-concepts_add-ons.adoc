@@ -1,36 +1,54 @@
 [[_ugfun_core-concepts_add-ons]]
-= Isis Add-ons
+= Isis Add-ons & Incode Catalog
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
-The link:http://www.isisaddons.org[Isis Addons] website provides a number of reusable modules and other extensions for Apache Isis.
-This chapter focuses just on the modules, all of which have a name of the form `isis-module-xxx`.
+The link:http://www.isisaddons.org[Isis Addons] website provides a number of reusable modules for Apache Isis, focusing either on specific technologies or in technical cross-cutting concerns.
+Some of these modules implement SPIs defined by the framework.
+
+The link:http://catalog.incode.org[Incode Catalog] website also provides a number of reusable modules, focusing on business logic for generic subdomains.
+
+This section surveys the functionality available.
+
 
 [WARNING]
 ====
-Note that Isis Addons, although maintained by Apache Isis committers, are not part of the ASF.
+Note that Isis Addons and Incode Catalog, although maintained by Apache Isis committers, are not part of the ASF.
 ====
 
 
 
-The modules themselves fall into four broad groups:
+The modules themselves fall into a number of broader groups:
 
-* modules that provide an implementations of API defined by Apache Isis +
+* modules that provide an implementations of SPI defined by Apache Isis +
 +
-where Apache Isis has hooks to use the service if defined by provides no implementations of its own.  The http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[auditing], http://github.com/isisaddons/isis-module-publishing[publishing], http://github.com/isisaddons/isis-module-security[security]  and http://github.com/isisaddons/isis-module-sessionlogger[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
+where Apache Isis has hooks to use the service if defined by provides no implementations of its own. +
++
+From the link:http://www.isisaddons.org[Isis Addons] website, the http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[auditer], http://github.com/isisaddons/isis-module-publishmq[publisher], http://github.com/isisaddons/isis-module-security[security]  and http://github.com/isisaddons/isis-module-sessionlogger[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
 
 * modules that provide standalone domain services with their own API and implementation +
 +
-These are simply intended to be used by domain objects.  The http://github.com/isisaddons/isis-module-docx[docx], http://github.com/isisaddons/isis-module-excel[excel], http://github.com/isisaddons/isis-module-settings[settings] and http://github.com/isisaddons/isis-module-stringinterpolator[stringinterpolator] fall into this category.
+These are simply intended to be used by domain objects. +
++
+From the link:http://www.isisaddons.org[Isis Addons] website, the http://github.com/isisaddons/isis-module-docx[docx], http://github.com/isisaddons/isis-module-excel[excel], http://github.com/isisaddons/isis-module-freemarker[freemarker], http://github.com/isisaddons/isis-module-pdfbox[pdfbox], http://github.com/isisaddons/isis-module-settings[settings], http://github.com/isisaddons/isis-module-servletapi[servletapi], http://github.com/isisaddons/isis-module-stringinterpolator[stringinterpolator] and http://github.com/isisaddons/isis-module-xdocreport[xdocreport] fall into this category. +
++
+From the link:http://catalog.incode.org[Incode Catalog] website, the http://github.com/incodehq/incode-module-alias[alias], http://github.com/incodehq/incode-module-classification[classification], http://github.com/incodehq/incode-module-commchannel[commchannel], http://github.com/incodehq/incode-module-communications[communications], http://github.com/incodehq/incode-module-country[country], http://github.com/incodehq/incode-module-docfragment[docfragment],
+http://github.com/incodehq/incode-module-document[document] and http://github.com/incodehq/incode-module-document[note] modules fall into this category.
 
 * modules that provide standalone domain entities (and supporting services) for a particular subdomain +
 +
-The http://github.com/isisaddons/isis-module-tags[tags] module falls into this category
+From the link:http://www.isisaddons.org[Isis Addons] website, the http://github.com/isisaddons/isis-module-tags[tags] module falls into this category
 
-* modules that provide developer utilities +
+* modules that provide developer/testing utilities +
 +
-Not intended for use by either the framework or domain objects, but provide utilities that the developer themselves might use.  The http://github.com/isisaddons/isis-module-devutils[devutils] module (not suprisingly) falls into this category
+From the link:http://www.isisaddons.org[Isis Addons] website, the http://github.com/isisaddons/isis-module-fakedata[fakedata] module provides fakedata for unit- and integration testing +
++
+From the link:http://catalog.incode.org[Incode Catalog] website, the http://github.com/incodehq/incode-module-fixturesupport[fixturesupport], http://github.com/incodehq/incode-module-integtestsupport[integtestsupport] and http://github.com/incodehq/incode-module-unittestsupport[unittestsupport] modules fall into this category.
 
-Each of the modules has a full README and example application demonstrating their usage.  The sections below briefly outline the capabilities of these modules.
+* modules that support runtime/integration support +
++
+From the link:http://www.isisaddons.org[Isis Addons] website, link:http://github.com/isisaddons/isis-module-flywaydb[flywaydb] handle RDBMS schema migration, http://github.com/isisaddons/isis-module-quartz[quartz] provides scheduling of background jobs; and the http://github.com/isisaddons/isis-module-togglz[togglz] provides feature toggles.
+
+Each of the modules has a full README and demo application demonstrating their usage.  The sections below briefly outline the capabilities of these modules.
