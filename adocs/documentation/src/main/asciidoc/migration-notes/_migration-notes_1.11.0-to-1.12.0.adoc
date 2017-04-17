@@ -52,7 +52,7 @@ domain object is a view model rather than an entity (that is, has no id or versi
 as top-level actions.
 
 Most of these mixin object members are visible only in prototype mode, though some are visible in production mode and
-so potentially visible to end-users.  If you wish to suppress these members from the view, you can either use xref:guides/ugsec.adoc[security],
+so potentially visible to end-users.  If you wish to suppress these members from the view, you can either use xref:guides/ugsec.adoc#[security],
 or alternatively you can write xref:guides/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber]s to veto the visibility
 of these members by subscribing to their respective domain events.
 

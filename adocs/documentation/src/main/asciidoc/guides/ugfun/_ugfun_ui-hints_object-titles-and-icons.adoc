@@ -78,26 +78,264 @@ Titles can sometimes get be long and therefore rather cumbersome in "parented" t
 
 === Imperative style
 
-NOTE: FIXME - see xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+Alternatively, the title can be provided simply by implementing the xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method.
+
+For example:
+
+[source,java]
+----
+public class Author extends Customer {
+
+    public String title() {
+        StringBuilder buf = new StringBuilder();
+        buf.append(getFirstName());
+        if(getMiddleInitial() != null) {
+            buf.append(getMiddleInitial()).append(". ");
+        }
+        buf.append(getLastName();
+        return buf.toString();
+    }
+    ...
+}
+----
+
+A variation on this approach also supports localized names; see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[beyond-the-basics] guide for further details.
 
 
+=== Using a UI subscriber
 
-NOTE: FIXME -
-For more details on the actual UI event classes, see the xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent[UI event] section of the relevant reference guide.
+A third alternative is to move the responsibility for deriving the title into a separate subscriber object.
+
+In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
+
+[source,java]
+----
+@DomainObjectLayout(
+    titleUiEvent = Author.TitleUiEvent.class
+)
+public class Author extends Customer {
+    public static class TitleUiEvent
+            extends org.apache.isis.applib.services.eventbus.TitleUiEvent<Author> {}
+    ...
+}
+----
+
+The subscriber can then populate this event:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class AuthorSubscriptions extends AbstractSubscriber {
+
+    @org.axonframework.eventhandling.annotation.EventHandler
+    @com.google.common.eventbus.Subscribe
+    public void on(Author.TitleUiEvent ev) {
+        Author author = ev.getSource();
+        ev.setTitle(titleOf(author);
+    }
+
+    private String titleOf(Author author) {
+        StringBuilder buf = new StringBuilder();
+        buf.append(author.getFirstName());
+        if(author.getMiddleInitial() != null) {
+            buf.append(author.getMiddleInitial()).append(". ");
+        }
+        buf.append(author.getLastName();
+        return buf.toString();
+    }
+}
+----
 
 
 == Object Icon
 
-The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
+The icon is often the same for all instances of a particular class, and is picked up by convention.
 
-NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
+It's is also possible for an individual instance to return a custom icon, typically so that some significant state of that domain object is represented.
+For example, a custom icon could be used to represent a shipped order, say, or an overdue library loan.
 
+
+=== Declarative style
+
+If there is no requirement to customize the icon (the normal case), then the icon is usually picked up as the `.png` file in the same package as the class.
+For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
+
+Alternatively, font-awesome icon can be used.
+This is specified using the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute.
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    cssClassFa="play"               // <1>
+)
+public class InvoiceRun {
+    ...
+}
+----
+<1> will use the "fa-play" icon.
+
+
+
+=== Imperative style
+
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] method.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    public String iconName() {
+        return isShipped() ? "shipped": null;
+    }
+    ...
+}
+----
+
+In this case, if the `Order` has shipped then the framework will look for an icon image named "Order-shipped.png" (in the same package as the class).
+Otherwise it will just use "Order.png", as normal.
+
+
+
+=== Using a UI subscriber
+
+As for title, the determination of which image file to use for the icon can be externalized into a UI event subscriber.
+
+In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
+
+For example
+
+[source,java]
+----
+@DomainObjectLayout(
+    iconUiEvent = Author.IconUiEvent.class
+)
+public class Order {
+    public static class IconUiEvent
+            extends org.apache.isis.applib.services.eventbus.IconUiEvent<Order> {}
+    ...
+}
+----
+
+The subscriber can then populate this event:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class OrderSubscriptions extends AbstractSubscriber {
+
+    @org.axonframework.eventhandling.annotation.EventHandler
+    @com.google.common.eventbus.Subscribe
+    public void on(Order.IconUiEvent ev) {
+        Order order = ev.getSource();
+        ev.setIconName(iconNameOf(order);
+    }
+
+    private String iconNameOf(Order order) {
+        StringBuilder buf = new StringBuilder();
+        return order.isShipped() ? "shipped": null;
+    }
+}
+----
 
 
 
 == Object CSS Styling
 
+It is also possible for an object to return a xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].
+In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-It is also possible for an object to return a xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].  In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In fact, it is also possible to specify additional CSS for an object's members.
 
-NOTE: FIXME - xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]
+
+=== Declarative style
+
+To render an object with a particular CSS, use
+xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`].
+
+When the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
+Or, when the domain object is rendered as a row in a collection, then the CSS class will appear in a `<div>` wrapped by the `<tr>` of the row.
+
+One possible use case would be to render the most important object types with a subtle background colour: ``Customer``s shown in light green, or ``Order``s shown in a light pink, for example.
+
+
+Similarly, a CSS class can be specified for object members:
+
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] for actions
+
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`] for properties, and
+
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`] for collections.
+
+Again, this CSS class will be attached to an appropriate containing `<div>` or `<span>` on the rendered page.
+
+Possible use cases for this is to highlight the most important properties of a domain object.
+
+
+=== Imperative style
+
+
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] method.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    public String cssClass() {
+        return isShipped() ? "shipped": null;       <1>
+    }
+    ...
+}
+----
+<1> the implementation might well be the same as the `iconName()`.
+
+If non-null value is returned then the CSS class will be rendered _in addition_ to any declarative CSS class also specified.
+
+
+=== Using a UI subscriber
+
+
+As for title and icon, the determination of which CSS class to render can be externalized into a UI event subscriber.
+
+In the target object, we define an appropriate event type and use the xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
+
+For example
+
+[source,java]
+----
+@DomainObjectLayout(
+    cssClassUiEvent = Author.CssClassUiEvent.class
+)
+public class Order {
+    public static class CssClassUiEvent
+            extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<Order> {}
+    ...
+}
+----
+
+The subscriber can then populate this event:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class OrderSubscriptions extends AbstractSubscriber {
+
+    @org.axonframework.eventhandling.annotation.EventHandler
+    @com.google.common.eventbus.Subscribe
+    public void on(Order.CssClassUiEvent ev) {
+        Order order = ev.getSource();
+        ev.setIconName(iconNameOf(order);
+    }
+
+    private String cssClassOf(Order order) {
+        StringBuilder buf = new StringBuilder();
+        return order.isShipped() ? "shipped": null;
+    }
+}
+----
+
+
+

@@ -237,9 +237,9 @@ link:http://ciserver:8080[CI Server^]
 |Link to an external hyperlink, with `target=blank`
 
 |....
-xref:_markup-docs_background[background]
+xref:_markup-docs_background.adoc#[background]
 ....
-|xref:_markup-docs_background[background]
+|xref:_markup-docs_background.adoc#[background]
 |Cross-reference to section in same asciidoc document
 
 |....

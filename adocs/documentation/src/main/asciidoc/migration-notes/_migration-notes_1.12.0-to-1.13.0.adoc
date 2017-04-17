@@ -70,7 +70,7 @@ the attribute is not set explicitly.
 Conversely, neither the xref:guides/rgant.adoc#_rgant_Action_publishingPayloadFactory[`@Action#publishingPayloadFactory()`]
 nor the xref:guides/rgant.adoc#_rgant_DomainObject_publishingPayloadFactory[`@DomainObject#publishingPayloadFactory()`] are
 supported by `PublisherService`; instead the consumers of the events are expected to callback for any additional
-information, eg using xref:guides/ugvro.adoc[Resful Objects] viewer.
+information, eg using xref:guides/ugvro.adoc#[Resful Objects] viewer.
 
 
 == Auto-logout

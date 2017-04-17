@@ -132,31 +132,9 @@ In fact (as the xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models_programming-model[pr
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
 The view model simply needs to implement the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface; the framework has xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.
 
-
-[[__ugfun_building-blocks_view-models_dtos_consumers]]
-=== DTO Consumers
-
-The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly, eg using the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB such as Apache Camel.
-
-In the former case, the consumer requests the DTO by calling the REST API with the appropriate HTTP `Accept` header.
-An appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] can then be used to return the appropriate DTO (as XML).
-
-For the latter case, one design is simply for the application to instantiate the view model, then call the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to obtain its corresponding XML.  This can then be published onto the ESB, for example using an http://activemq.apache.org[Apache ActiveMQ (TM)] queue.
-
-However, rather than try to push all the data that might be needed by any of these external systems in a single XML event (which would require anticipating all the requirements, likely a hopeless task), a better design is to publish only the fact that something of note has changed - ie, that an action on a domain object has been invoked - and then let the consumers call back to obtain other information if required.
-This can once again be done by calling the REST API with an appropriate HTTP `Accept` header.
-
 [TIP]
 ====
-This is an example of the link:https://leanpub.com/camel-design-patterns[VETRO pattern] (validate, enrich, transform, route, operate).
-In our case we focus on the validation (to determine the nature of the inbound message, ie which action was invoked), and the enrich (callback to obtain a DTO with additional information required by the consumer).
+Details of how to consume such DTOs can be found xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb_dto-consumers[here].
 ====
-
-The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module provides an out-of-the-box solution of this design.
-It provides an implementation of the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], but which simply publishes instances of xref:../rgcms/rgcms.adoc#_rgcms_schema-aim[`ActionInvocationMemento`] to an ActiveMQ queue.
-Camel (or similar) can then be hooked up to consume these events from this queue, and use a processor to parse the action memento to determine what has changed on the source system.
-Thereafter, a subsequent Camel processor can then call back to the source - via the xref:../ugvro/ugvro.adoc[Restful Objects viewer] - to enrich the message with additional details using a DTO.
-
-
 
 

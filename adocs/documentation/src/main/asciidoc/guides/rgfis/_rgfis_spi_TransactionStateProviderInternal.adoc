@@ -33,6 +33,6 @@ The framework provides two implementations:
 
 * `TransactionStateProviderInternalDefault` is provided by `isis-core-runtime`, and is used during normal use and integration tests
 
-* `TransactionStateProviderInternalNoop` is provided as a fallback by `isis-core-metamodel`, and is provided to allow the xref:../rgmvn/rgmvn.adoc[maven plugin] to be bootstrapped without any "backend" database.
+* `TransactionStateProviderInternalNoop` is provided as a fallback by `isis-core-metamodel`, and is provided to allow the xref:../rgmvn/rgmvn.adoc#[maven plugin] to be bootstrapped without any "backend" database.
 
 The `...Default` implementation takes priority over the `...Noop` implementation.

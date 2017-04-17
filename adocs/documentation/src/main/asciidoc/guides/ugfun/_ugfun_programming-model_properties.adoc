@@ -129,7 +129,7 @@ If this is omitted then whether editing is enabled or disabled is defined global
 [[__ugfun_programming-model_properties_ignoring-properties]]
 == Ignoring Properties
 
-By default Apache Isis will automatically render all properties in the xref:../ugvw/ugvw.adoc[UI] or in the xref:../ugvro/ugvro.adoc[REST API].
+By default Apache Isis will automatically render all properties in the xref:../ugvw/ugvw.adoc#[Wicket UI] or in the xref:../ugvro/ugvro.adoc[REST API].
 To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using `@Programmatic`.
 
 Similarly, you can tell JDO/DataNucleus to ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.

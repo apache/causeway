@@ -7,7 +7,7 @@
 
 
 The `LayoutService` provides the ability to obtain the XML layout for a single domain object or for all domain
-objects.  This functionality is surfaced through the user interface through a related xref:__rgsvc_api_LayoutService_related-mixins-and-menus[mixin and menu action].
+objects.  This functionality is surfaced through the user interface through a related xref:../rgsvc/rgsvc.adoc#__rgsvc_api_LayoutService_related-mixins-and-menus[mixin and menu action].
 
 
 
