@@ -11,5 +11,14 @@ By convention there will be a single top-level package corresponding to the modu
 For example, the (non-ASF) link:https://github.com/incodehq/incode-module-document[Document module] (part of the link:http://catalog.incode.org[Incode Catalog]) has a top-level package of `org.incode.module.document`.
 Within the module there may be various subpackages, but its the module defines the namespace.
 
+The bootstrapping of Apache Isis also relies on module classes.
+(Currently) the only role of these classes is to identify a fully qualified package name, for example `org.incode.modules.document`.
+The framework then performs classpath scanning across all such packages to locate any domain entities provided by that module (though some modules have no entities), all domain services provided by the module (every module is likely to define at least one), and also any fixture scripts provided by the module.
+
+[TIP]
+====
 In the same way that the Java module act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
+====
+
+
 

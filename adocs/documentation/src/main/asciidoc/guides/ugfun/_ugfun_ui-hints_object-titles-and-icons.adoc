@@ -5,11 +5,14 @@
 :_imagesdir: images/
 
 
-In Apache Isis every object is identified to the user by a title (label) and an icon.  This is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
+In Apache Isis every object is identified to the user by a title (label) and an icon.
+This is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
 
-The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
+The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.
+This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-It is also possible for an object to provide a CSS class hint.  In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to provide a CSS class hint.
+In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 == Object Title
@@ -78,6 +81,9 @@ Titles can sometimes get be long and therefore rather cumbersome in "parented" t
 NOTE: FIXME - see xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
 
 
+
+NOTE: FIXME -
+For more details on the actual UI event classes, see the xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent[UI event] section of the relevant reference guide.
 
 
 == Object Icon
