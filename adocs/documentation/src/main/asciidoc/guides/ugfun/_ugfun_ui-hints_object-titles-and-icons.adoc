@@ -247,7 +247,6 @@ public class OrderSubscriptions extends AbstractSubscriber {
 It is also possible for an object to return a xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].
 In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-In fact, it is also possible to specify additional CSS for an object's members.
 
 
 === Declarative style
@@ -260,18 +259,6 @@ Or, when the domain object is rendered as a row in a collection, then the CSS cl
 
 One possible use case would be to render the most important object types with a subtle background colour: ``Customer``s shown in light green, or ``Order``s shown in a light pink, for example.
 
-
-Similarly, a CSS class can be specified for object members:
-
-* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] for actions
-
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`] for properties, and
-
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`] for collections.
-
-Again, this CSS class will be attached to an appropriate containing `<div>` or `<span>` on the rendered page.
-
-Possible use cases for this is to highlight the most important properties of a domain object.
 
 
 === Imperative style

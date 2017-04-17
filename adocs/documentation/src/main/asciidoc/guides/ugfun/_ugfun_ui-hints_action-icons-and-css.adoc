@@ -6,22 +6,39 @@
 
 
 Apache Isis allows link:http://fortawesome.github.io/Font-Awesome/icons/[font awesome] icons to be associated with each action, and for link:http://getbootstrap.com/css/#buttons[Bootstrap CSS] to be applied to action rendered as buttons.
+These UI hints can be applied either to individual actions, or can be applied en-masse using pattern matching.
 
-These UI hint can be applied either to individual actions, or can be applied en-masse using pattern matching.
-
-== Per action
-
-NOTE: FIXME - xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
+It is also possible to specify additional CSS for an object's members (not just actions).
 
 
-Alternatively, you can specify these hints dynamically in the xref:../ugvw/ugvw.adoc#_ugvw_layout[`Xxx.layout.json`] for the entity.
+== Icons
 
+Action icons can be specified in several ways.
 
-== Per pattern matching
+One option is to use the xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`].
+For example:
+
+[source,java]
+----
+@ActionLayout(cssClassFa="refresh")
+public void renew() {
+    ...
+}
+----
+
+Alternatively, you can specify these hints dynamically in the xref:../ugvw/ugvw.adoc#_ugvw_layout[`Xxx.layout.xml`] for the entity:
+
+[source,xml]
+----
+<cpt:action id="renew" cssClassFa="refresh"/>
+----
 
 Rather than annotating every action with xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] and xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
+Not only does this save a lot of boilerplate/editing, it helps ensure consistency across all actions.
 
-The xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClassFa.patterns` is a comma separated list of key:value pairs, eg:
+To declare fa classes globally, use the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClassFa.patterns` (a comma separated list of key:value pairs).
+
+For example:
 
 [source,ini]
 ----
@@ -29,6 +46,7 @@ isis.reflector.facet.cssClassFa.patterns=\
                         new.*:fa-plus,\
                         add.*:fa-plus-square,\
                         create.*:fa-plus,\
+                        renew.*:fa-refresh,\
                         list.*:fa-list, \
                         all.*:fa-list, \
                         download.*:fa-download, \
@@ -37,10 +55,33 @@ isis.reflector.facet.cssClassFa.patterns=\
                         run.*:fa-bolt
 ----
 
-where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex.
+Here:
+
+* the key is a regex matching action names (eg `create.*`), and
+* the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name
+
+For example, "fa-plus" is applied to all action members called "newXxx"
 
 
-Similarly, the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClass.patterns` is a comma separated list of key:value pairs, eg:
+
+== CSS
+
+Similarly, a CSS class can be specified for object members:
+
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] for actions
+
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`] for properties, and
+
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`] for collections.
+
+Again, this CSS class will be attached to an appropriate containing `<div>` or `<span>` on the rendered page.
+
+Possible use cases for this is to highlight the most important properties of a domain object.
+
+
+It is also possible to specify CSS classes globally, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClass.patterns` configuration property.
+
+For example:
 
 [source,ini]
 ----
@@ -48,11 +89,9 @@ isis.reflector.facet.cssClass.patterns=\
                         delete.*:btn-warning
 ----
 
-where (again)the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex.
+where (again):
 
-[TIP]
-====
-We strongly recommend that you use this technique rather than annotating each action with xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] or xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`].  Not only is the code more maintainable, you'll also find that it forces you to be consistent in your action names.
-====
+* the key is a regex matching action names (eg `delete.*`), and
+* the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied
 
 

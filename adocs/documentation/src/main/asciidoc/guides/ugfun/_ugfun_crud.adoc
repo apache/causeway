@@ -4,26 +4,24 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-NOTE: FIXME
+
+This chapter shows the idioms for creating, reading, updating and deleting xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_domain-entities[domain entities].
+
+It also shows how to instantiate xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] and how to programmatically instantiate xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (useful primarily for xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration testing]).
+
+[NOTE]
+====
+The main domain services used are xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
+These (and some other services) replace the now deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+====
 
 
-## Instantiating and Persisting
+include::_ugfun_crud_instantiating.adoc[leveloffset=+1]
 
-NOTE: FIXME - using ``DomainObjectContainer``'s support for  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[creation] and xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[persistence]
+include::_ugfun_crud_persisting.adoc[leveloffset=+1]
 
-## Finding Objects
+include::_ugfun_crud_finding.adoc[leveloffset=+1]
 
-NOTE: FIXME - using xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
-
-### Using DataNucleus type-safe queries
-
-NOTE: FIXME - as described xref:../rgsvc/rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries[here]
-
-
-
-## Deleting Objects
-
-NOTE: FIXME using ``DomainObjectContainer``'s support for  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[persistence]
-
+include::_ugfun_crud_deleting.adoc[leveloffset=+1]
 
 
