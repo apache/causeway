@@ -1,0 +1,79 @@
+[[_ugfun_building-blocks_events]]
+= Events
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[event bus].
+These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
+
+[TIP]
+====
+It is also possible to simulate the rendering of a domain object by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`].
+This
+====
+
+To receive the events, the domain service should subscribe to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`], and implement an appropriately annotated method to receive the events.
+
+The framework has several categories of events: domain events, UI events and lifecycle events.
+These are explored in the sections below.
+
+
+
+== Domain Events
+Domain events are fired for each object member (property, collection or action).
+
+By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:../rgant/rgant.adoc#_rgant_Property_domainEvent[`@Property#domainEvent()`] attribute allows a custom subclass to be specified if necessary.
+Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.
+
+In fact, each event can be fired up to five times, with the event's `getEventPhase()` method indicating to the subscriber the phase:
+
+* *hide* phase allows the subscriber to hide the member
+
+* *disable* phase allows the subscriber to disable the member. +
+
+For a property this makes it read-only; for an action this makes it "greyed out".
+(Collections are implicitly read-only).
+
+* *validate* phase allows the subscriber to validate the proposed change.
+
+For a property this means validating the proposed new value of the property; for an action this means validating the action parameter arguments.
+For example, a referential integrity restrict could be implemented here.
+
+* *executing* phase is prior to the actual property edit/action invocation, allowing the subscriber to perform side-effects. +
+
+For example, a cascade delete could be implemented here.
+
+* *executed* phase is after the actual property edit/action invocation. +
++
+For example, a business audit event could be implemented here.
+
+
+For more details on the actual domain event classes, see the xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent[domain event] section of the relevant reference guide.
+
+
+
+
+== UI Events
+
+To allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+The icon informally identifies the type of the domain object, while the title identifies the instance.
+The title is not formally required to be a unique identify the object within its type, but it needs to be "unique enough" that a human user is able to distinguish one instance from another.
+
+Sometimes it's helpful for the icon to represent more than just the object's type; it might also indicate the state of an object.
+For example, a shipped `Order` might have a slightly different icon to a yet-to-be-shipped `Order`; or an overdue `Loan` might be distinguished separately from a
+
+Customisable icons
+
+and optionally with custom CSS
+Each domain object is rendered with a
+NOTE: FIXME
+
+
+For more details on the actual domain event classes, see the xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent[UI event] section of the relevant reference guide.
+
+
+== Lifecycle Events
+
+

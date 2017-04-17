@@ -300,7 +300,7 @@ The semantics of an action (whether it is safe/query only, whether it is idempot
 
 Domain entities have state: either values (primitives, strings) or references to other entities. In this section we explore adding some value properties
 
-* add some xref:../../guides/ugfun/ugfun.adoc#_ugfun_class-structure_properties[value properties]; also:
+* add some xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_properties[value properties]; also:
 * for string properties
 ** use the xref:../../guides/rgant/rgant.adoc#_rgant-PropertyLayout_multiLine[`@PropertyLayout(multiLine=...)`] annotation to render a text area instead of a text box
 ** use the xref:../../guides/rgant/rgant.adoc#_rgant-Property_maxLength[`@Property(maxLength=...)`] annotation to specify the maximum number of characters allowable
@@ -324,7 +324,7 @@ Domain entities have state: either values (primitives, strings) or references to
 
 Domain entities can also reference other domain entities. These references may be either scalar (single-valued) or vector (multi-valued). In this section we focus on scalar reference properties.
 
-* add some xref:../../guides/ugfun/ugfun.adoc#_ugfun_class-structure_properties[reference properties]
+* add some xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_properties[reference properties]
 * update the corresponding domain service (for creation actoin)
 * use different techniques to obtain references (shown in drop-down list box)
 ** use the xref:../../guides/rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObjectLayout(bounded=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
@@ -354,7 +354,7 @@ Returning back to references, Isis also supports vector (multi-valued) reference
 * Ensure that all domain classes implement `java.lang.Comparable`
 ** use the xref:../../guides/rgcms/rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
 *** you can also implement `equals()`, `hashCode()`, `toString()`
-* Add a xref:../../guides/ugfun/ugfun.adoc#_ugfun_class-structure_collections[collection] to one of the entities
+* Add a xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_collections[collection] to one of the entities
 ** Use `SortedSet` as the class
 ** Use the xref:../../guides/rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
 * optional: use the xref:../../guides/rgant/rgant.adoc#_rgant-CollectionLayout_sortedBy[`@CollectionLayout(sortedBy=...)`] annotation to specify a different comparator than the natural ordering
@@ -368,7 +368,7 @@ Returning back to references, Isis also supports vector (multi-valued) reference
 The Wicket UI doesn't allow collections to be modified (added to/removed from). However, we can easily write actions to accomplish the same. Moreover, these actions can provide some additional business logic. For example: it probably shouldn't be possible to add an object twice into a collection, so it should not be presented in the list of choices/autoComplete; conversely, only those objects in the collection should be offered as choices to be removed.
 
 * Add domain actions to add/remove from the collection
-* to create objects, xref:../../guides/ugfun/ugfun.adoc#_ugfun_class-structure_inject-services[inject] associated domain service
+* to create objects, xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_inject-services[inject] associated domain service
 ** generally we recommend using the xref:../../guides/rgant/rgant.adoc#_rgant-Inject[`@Inject`] annotation with either private or default visibility
 * the service itself should use xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]
 * use the xref:../../guides/rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection

@@ -1,0 +1,27 @@
+[[_ugfun_building-blocks_identifiers_title-and-icon]]
+= Title and Icon
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+NOTE: FIXME
+
+
+
+To allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+The icon informally identifies the type of the domain object, while the title identifies the instance.
+The title is not formally required to be a unique identify the object within its type, but it needs to be "unique enough" that a human user is able to distinguish one instance from another.
+
+Sometimes it's helpful for the icon to represent more than just the object's type; it might also indicate the state of an object.
+For example, a shipped `Order` might have a slightly different icon to a yet-to-be-shipped `Order`; or an overdue `Loan` might be distinguished separately from a
+
+Customisable icons
+
+and optionally with custom CSS
+Each domain object is rendered with a
+NOTE: FIXME
+
+
+For more details on the actual domain event classes, see the xref:../rgcms/rgcms.adoc#_rgcms_classes_uievent[UI event] section of the relevant reference guide.
+

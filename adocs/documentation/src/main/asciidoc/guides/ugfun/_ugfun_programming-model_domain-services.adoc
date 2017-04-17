@@ -1,0 +1,383 @@
+[[_ugfun_programming-model_domain-services]]
+= Domain Services
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+This section looks at the programming conventions of writing your own domain services.
+
+''''
+''''
+
+[[__ugfun_building-blocks_domain-services_organizing-services]]
+== Organizing Services
+
+In larger applications we have found it worthwhile to ensure that our domain services only act aligned with these responsibilities, employing a naming convention so that it is clear what the responsibilities of each domain service is.
+
+The application provides the `@DomainService(nature=...)` annotation that helps distinguish some of these responsibilities:
+
+- `VIEW` indicates that the actions should appear both on the menu and also be used as contributions
+- `VIEW_MENU_ONLY` indicates that the actions should appear on the menu
+- `VIEW_CONTRIBUTIONS_ONLY` indicates that the actions should not appear on the menu
+- `DOMAIN` indicates that the actions are for other domain objects to invoke (either directly or indirectly through the event bus), but in any case should not be rendered at all in the UI
+
+NOTE: FIXME - deprecate any mention of VIEW_CONTRIBUTIONS_ONLY
+
+Pulling all the above together, here are our suggestions as to how you should organize your domain services.
+
+NOTE: FIXME - instead, xref to progamming model sections
+
+
+
+
+== Prototyping
+
+While for long-term maintainability we do recommend the naming conventions described xref:../ugfun/ugfun.adoc#__ugfun_building-blocks_domain-services_organizing-services[above], you can get away with far fewer services when just prototyping a domain.
+
+If the domain service nature is not specified (or is left to its default, `VIEW`), then the service's actions will
+appear in the UI both as menu items _and_ as contributions (and the service can of course be injected into other domain objects for programmatic invocation).
+
+Later on it is easy enough to refactor the code to tease apart the different responsibilities.
+
+
+
+
+
+''''
+''''
+
+
+== Typical Implementation
+
+Domain services are generally singletons that are automatically injected into other domain services.
+A very common usage is as a repository (to find/locate existing entities) or as a factory (to create new instances of entities).
+But services can also be exposed in the UI as top-level menus; and services are also used as a bridge to access technical resources (eg rendering a document object as a PDF).
+
+The Apache Isis framework itself also provides a large number of number of domain services, catalogued in the xref:../rgsvc/rgsvc.adoc#[Domain Services Reference Guide].
+Some of these are APIs (intended to be called by your application's own domain objects) and some are SPIs (implemented by your application and called by the framework, customising the way it works).
+
+The following is a typical menu service:
+
+[source,java]
+----
+@DomainService(                                                 // <1>
+        nature = NatureOfService.VIEW_MENU_ONLY
+)
+@DomainServiceLayout(                                           // <2>
+        named = "Simple Objects",
+        menuOrder = "10"
+)
+public class SimpleObjectMenu {
+
+    ...
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+    @MemberOrder(sequence = "2")
+    public List<SimpleObject> findByName(                       // <3>
+            @ParameterLayout(named="Name")
+            final String name
+    ) {
+        return simpleObjectRepository.findByName(name);
+    }
+
+    @javax.inject.Inject
+    SimpleObjectRepository simpleObjectRepository;              // <4>
+}
+----
+<1> The (Apache Isis) `@DomainService` annotation is used to identify the class as a domain service.
+Apache Isis scans the classpath looking for classes with this annotation, so there very little configuration other than to tell the framework which packages to scan underneath.
+The `VIEW_MENU_ONLY` nature indicates that this service's actions should be exposed as menu items.
+<2> The (Apache Isis) `@DomainServiceLayout` annotation provides UI hints.
+In the example above the menu is named "Simple Objects" (otherwise it would have defaulted to "Simple Object Menu", based on the class name, while the `menuOrder` attribute determines the order of the menu with respect to other menu services.
+<3> The `findByName` method is annotated with various Apache Isis annotations (`@Action`, `@ActionLayout` and `@MemberOrder`) and is itself rendered in the UI as a "Find By Name" menu item underneath the "Simple Objects" menu.
+The implementation delegates to an `SimpleObjectRepository` service, which is injected.
+<4> The `javax.inject.Inject` annotation instructs Apache Isis framework to inject the `SimpleObjectRepository` service into this domain object.
+The framework can inject into not just other domain services but will also automatically into domain entities and view models.
+There is further discussion of service injection xref:../ugfun/ugfun.adoc#_ugfun_programming-model_inject-services[below].
+
+
+
+''''
+''''
+
+
+
+[[__ugfun_building-blocks_domain-services_factory-and-repository]]
+== Factory and Repository
+
+The factory/repository uses an injected xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.  It is not visible in UI, rather other services delegate to it.
+
+We suggest naming such classes `XxxRepository`, eg:
+
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.DOMAIN                               // <1>
+)
+public CustomerRepository {
+    public List<Customer> findCustomerBy...(...) {
+        return repositoyService.allMatches(...);
+    }
+    public Customer newCustomer(...) {
+        Customer Customer = container.newTransientInstance(Customer.class);
+        ...
+        persistIfNotAlready(Customer);
+        return Customer;
+    }
+    public List<Customer> allCustomers() {
+        return repositoryService.allInstances(Customer.class);
+    }
+    @Inject
+    RepositoryService repositoryService;
+}
+----
+<1> interacted with only programmatically by other objects in the domain layer.
+
+There is no need to annotate the actions; they are implicitly hidden because of the domain service's nature.
+
+
+[[__ugfun_building-blocks_domain-services_menu]]
+== Menu
+
+Menu services provide actions to be rendered on the menu.
+
+For the Wicket viewer, each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.  It is possible for more than one menu service's actions to appear on the same menu; a separator is shown between each.
+
+For the Restful Objects viewer, all menu services are shown in the services representation.
+
+We suggest naming such classes `XxxMenu`, eg:
+
+
+[source,java]
+----
+@DomainService(
+    nature = NatureOfService.VIEW_MENU_ONLY                     // <1>
+)
+@DomainServiceLayout(
+        named = "Customers",                                    // <2>
+        menuBar = DomainServiceLayout.MenuBar.PRIMARY,
+        menuOrder = "10"
+)
+public class CustomerMenu {
+    @Action(
+            semantics = SemanticsOf.SAFE
+    )
+    @MemberOrder( sequence = "1" )
+    public List<Customer> findCustomerBy...(...) {
+        return customerRepository.findCustomerBy(...);          // <3>
+    }
+
+    @Action(
+            semantics = SemanticsOf.NON_IDEMPOTENT
+    )
+    @MemberOrder( sequence = "3" )
+    public Customer newCustomer(...) {
+        return customerRepository.newCustomer(...);
+    }
+
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @MemberOrder( sequence = "99" )
+    public List<Customer> allCustomers() {
+        return customerRepository.allBankMandates();
+    }
+
+    @Inject
+    protected CustomerRepository customerRepository;
+}
+----
+<1> the service's actions should be rendered as menu items
+<2> specifies the menu name.  All services with the same menu name will be displayed on the same menu, with separators between
+<3> delegates to an injected repository.
+
+Not every action on the repository need to be delegated to of course (the above example does but only because it is very simple).
+
+[TIP]
+====
+Note also that while there's nothing to stop `VIEW_MENU` domain services being injected into other domain objects and interacted with programmatically, we recommend against it.  Instead, inject the underlying repository.  If there is additional business logic, then consider introducing a further `DOMAIN`-scoped service and call that instead.
+====
+
+
+
+[[__ugfun_building-blocks_domain-services_contributions]]
+== Contributions (deprecated)
+
+
+Services can contribute either actions, properties or collections, based on the type of their parameters.
+
+[TIP]
+====
+Contributed services can instead be implemented as
+xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_mixins[mixins].
+As such, contributed services should be considered as deprecated.
+====
+
+We suggest naming such classes `XxxContributions`, eg:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY              // <1>
+)
+@DomainServiceLayout(
+    menuOrder="10",
+    name="...",
+}
+public class OrderContributions {
+    @Action(semantics=SemanticsOf.SAFE)
+    @ActionLayout(contributed=Contributed.AS_ASSOCIATION)       // <2>
+    @CollectionLayout(render=RenderType.EAGERLY)
+    public List<Order> orders(Customer customer) {              // <3>
+        return container.allMatches(...);
+    }
+
+    @Inject
+    CustomerRepository customerRepository;
+}
+----
+<1> the service's actions should be contributed to the entities of the parameters of those actions
+<2> contributed as an association, in particular as a collection because returns a `List<T>`.
+<3> Only actions with a single argument can be contributed as associations
+
+More information about contributions can be found xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[here].  More information
+about using contributions and mixins to keep your domain application decoupled can be found xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_contributions[here] and xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[here].
+
+
+
+
+[[__ugfun_building-blocks_domain-services_event-subscribers]]
+== Event Subscribers
+
+NOTE: FIXME - use AbstractSubscriber, need to show how to subscribe with event service bus...
+
+Event subscribers can both veto interactions (hiding members, disabling members or validating changes), or can react to interactions (eg action invocation or property edit).
+
+We suggest naming such classes `XxxSubscriptions`, eg:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.DOMAIN                       // <1>
+)
+@DomainServiceLayout(
+    menuOrder="10",
+    name="...",
+}
+public class CustomerOrderSubscriptions {
+    @com.google.common.eventbus.Subscribe
+    public void on(final Customer.DeletedEvent ev) {
+        Customer customer = ev.getSource();
+        orderRepository.delete(customer);
+    }
+    @Inject
+    OrderRepository orderRepository;
+}
+----
+<1> subscriptions do not appear in the UI at all, so should use the domain nature of service
+
+
+
+
+''''
+''''
+
+
+
+== Scoped services
+
+By default all domain services are considered to be singletons, and thread-safe.
+
+Sometimes though a service's lifetime is applicable only to a single request; in other words it is request-scoped.
+
+The CDI annotation xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@javax.enterprise.context.RequestScoped`] is used to indicate this fact:
+
+[source,java]
+----
+@javax.enterprise.context.RequestScoped
+public class MyService extends AbstractService {
+    ...
+}
+----
+
+The framework provides a number of request-scoped services, include a xref:../rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service query results caching through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_QueryResultsCache[`QueryResultsCache`], and support for co-ordinating bulk actions through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] service.  See the xref:../rgsvc/rgsvc.adoc[domain services] reference guide for further details.
+
+
+
+
+== Registering domain services
+
+The easiest way to register domain services is using xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to specify the modules
+which contain xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`]-annotated classes.
+
+For example:
+
+[source,ini]
+----
+public class MyAppManifest implements AppManifest {
+    public List<Class<?>> getModules() {
+        return Arrays.asList(
+                ToDoAppDomainModule.class,
+                ToDoAppFixtureModule.class,
+                ToDoAppAppModule.class,
+                org.isisaddons.module.audit.AuditModule.class);
+    }
+    ...
+}
+----
+
+will load all services in the packages underneath the four modules listed.
+
+An alternative (older) mechanism is to registered domain services in the `isis.properties` configuration file, under `isis.services` key (a comma-separated list); for example:
+
+[source,ini]
+----
+isis.services = com.mycompany.myapp.employee.Employees\,
+                com.mycompany.myapp.claim.Claims\,
+                ...
+----
+
+This will then result in the framework instantiating a single instance of each of the services listed.
+
+If all services reside under a common package, then the `isis.services.prefix` can specify this prefix:
+
+[source,ini]
+----
+isis.services.prefix = com.mycompany.myapp
+isis.services = employee.Employees,\
+                claim.Claims,\
+                ...
+----
+
+This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
+
+Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:../rgsvc/rgsvc.adoc[domain services] reference guide for further details.
+
+
+
+== Initialization
+
+Services can optionally declare lifecycle callbacks to initialize them (when the app is deployed) and to shut them down (when the app is undeployed).
+
+An Apache Isis session _is_ available when initialization occurs (so services can interact with the object store, for example).
+
+
+The framework will call any `public` method annotated with xref:../rgant/rgant.adoc#_rgant-PostConstruct[`@PostConstruct`] with either no arguments of an argument of type `Map<String,String>`
+
+or
+
+In the latter case, the framework passes in the configuration (`isis.properties` and any other component-specific configuration files).
+
+
+Shutdown is similar; the framework will call any method annotated with xref:../rgant/rgant.adoc#_rgant-PreDestroy[`@PreDestroy`].
+
+
+
+== The getId() method
+
+Optionally, a service may provide a xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`] method.  This method returns a logical identifier for a service, independent of its implementation.
+
