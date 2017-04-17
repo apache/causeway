@@ -50,3 +50,19 @@ serviceRegister.injectServicesInto(customer);
 ----
 
 Note that this does _not_ raise any lifecycle event.
+
+
+To instantiate a mixin, a different API of `FactoryService` is used:
+
+[source,java]
+----
+Customer_placeOrder placeOrderMixin = factoryService.mixin(Customer_placeOrder.class, customer);
+----
+
+Alternatively and equivalently, the mixin can be manually instantiated, and then the services injected directly:
+
+[source,java]
+----
+Customer_placeOrder placeOrderMixin = new Customer_placeOrder(customer);
+serviceRegistry.injectServicesInto(placeOrderMixin);
+----

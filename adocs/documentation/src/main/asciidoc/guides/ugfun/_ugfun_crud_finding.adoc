@@ -60,7 +60,7 @@ This ensures that the database query runs against an up-to-date table so that al
 When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle event].
 
 
-== Using DataNucleus type-safe queries
+== Type-safe queries
 
 DataNucleus also supports type-safe queries; see xref:../rgsvc/rgsvc.adoc#__rgsvc_api_IsisJdoSupport_type-safe-jdoql-queries[here] for further details.
 

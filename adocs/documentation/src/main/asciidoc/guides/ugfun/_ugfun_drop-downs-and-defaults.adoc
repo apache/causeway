@@ -7,6 +7,7 @@
 NOTE: FIXME
 
 
+
 == For Properties
 
 NOTE: FIXME
@@ -49,8 +50,7 @@ NOTE: FIXME -  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default
 
 
 
-
-== For both Properties and Action Parameters
+== For both Properties and Params
 
 NOTE: FIXME
 
