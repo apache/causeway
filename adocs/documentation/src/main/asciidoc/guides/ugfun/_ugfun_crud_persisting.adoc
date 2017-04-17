@@ -30,6 +30,20 @@ customer.setLastName(lastName);
 repositoryService.persist(customer);
 ----
 
+It's worth being aware that the framework does _not_ eagerly persist the object.
+Rather, it queues up an internal command structure representing the object persistence request.
+This is then executed either at the end of the transaction, or if a xref:../ugfun/ugfun.adoc#_ugfun_crud_finding[query is run], or if the internal queue is manually flushed using xref:../rgsvc/rgsvc.adoc#_rgsvc_api_TransactionService[`TransactionService`]'s `flush()` method.
+
+Alternatively, you can use:
+
+[source,java]
+----
+repositoryService.persistAndFlush(customer);
+----
+
+to eagerly perform the object insertion into the database.
+
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle events].
 
 
 
