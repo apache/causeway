@@ -5,15 +5,13 @@
 :_imagesdir: images/
 
 
-By default, collections all rendered lazily, in other words in a "collapsed" table view:
-
-NOTE: FIXME - screenshot here
+By default, parented collections all rendered lazily, in other words in a "collapsed" table view.
 
 For the more commonly used collections we want to show the table expanded:
 
-NOTE: FIXME - screenshot here
+image::{_imagesdir}programming-model/todoapp-Dashboard.png[width="px",link="{_imagesdir}programming-model/todoapp-Dashboard.png"]
 
-For this we annotate the collection using the `@CollectionLayout(render=RenderType.EAGERLY`; for example
+For this we annotate the collection using xref:../rgant/rgant.adoc#_rgant_CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]; for example
 
 [source,java]
 ----
@@ -21,26 +19,29 @@ For this we annotate the collection using the `@CollectionLayout(render=RenderTy
 private Set<ToDoItem> dependencies = new TreeSet<>();
 @Collection
 @CollectionLayout(
-    render = RenderType.EAGERLY
+    defaultView = "table"
 )
 public Set<ToDoItem> getDependencies() {
     return dependencies;
 }
 ----
 
-Alternatively, it can be specified the `Xxx.layout.json` file:
+[NOTE]
+====
+The `defaultView()` attribute replaces the deprecated approach of using xref:../rgant/rgant.adoc#_rgant_CollectionLayout_render[`@CollectionLayout#render()`] eagerly.
+====
+
+Alternatively, it can be specified the `Xxx.layout.xml` file:
 
 [source,javascript]
 ----
-"dependencies": {
-    "collectionLayout": {
-        "render": "EAGERLY"
-    },
-}
+<bs3:col span="5" cssClass="custom-padding-top-20">
+    <cpt:collection id="notYetComplete" defaultView="table" />
+    <cpt:collection id="complete" defaultView="table"/>
+</bs3col>
 ----
 
-[WARNING]
-====
+
 It might be thought that collections that are eagerly rendered should also be eagerly loaded from the database by enabling the `defaultFetchGroup` attribute:
 
 [source,java]
@@ -50,9 +51,8 @@ private Set<ToDoItem> dependencies = new TreeSet<>();
 ...
 ----
 
-While this can be done, it's likely to be a bad idea, because doing so will cause DataNucleus to query for more data than required even if the object is being rendered within some referencing object's table.
+While this can be done, it's likely to be a bad idea, because doing so will cause DataNucleus to query for more data irrespective of how the object is used/rendered.
 
-Of course, your mileage may vary, so don't think you can't experiment.
-====
+Of course, your mileage may vary, so do experiment.
 
 
