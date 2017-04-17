@@ -1,4 +1,4 @@
-[[_ugfun_programming-model_domain-services_menu]]
+    [[_ugfun_programming-model_domain-services_menu]]
 = Menu
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
@@ -62,7 +62,7 @@ public class CustomerMenu {
 <1> The (Apache Isis) xref:../rgant/rgant.adoc#_rgant_DomainService[`@DomainService`] annotation is used to identify the class as a domain service.
 Apache Isis scans the classpath looking for classes with this annotation, so there very little configuration other than to tell the framework which packages to scan underneath.
 The `VIEW_MENU_ONLY` nature indicates that this service's actions should be exposed as menu items.
-<3> The xref:../rgant/rgant.adoc#_rgant_DomainServiceLayout[`@DomainServiceLayout`] annotation provides UI hints.
+<2> The xref:../rgant/rgant.adoc#_rgant_DomainServiceLayout[`@DomainServiceLayout`] annotation provides UI hints.
 The menu is named "Customers" (otherwise it would have defaulted to "Customer Menu", based on the class name, while the xref:../rgant/rgant.adoc#_rgant_DomainServiceLayout_menuOrder[`menuOrder`] attribute determines the order of the menu with respect to other menu services.
 <3> The `findByName` method is annotated with various Apache Isis annotations (xref:../rgant/rgant.adoc#_rgant_Action[`@Action`], xref:../rgant/rgant.adoc#_rgant_ActionLayout[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant_MemberOrder[`@MemberOrder`] and is itself rendered in the UI as a "Find By Name" menu item underneath the "Simple Objects" menu.
 <4> The xref:../rgant/rgant.adoc#_rgant_ParameterLayout[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.

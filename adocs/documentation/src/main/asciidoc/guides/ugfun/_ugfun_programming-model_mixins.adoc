@@ -48,10 +48,10 @@ include::_ugfun_programming-model_mixins_contributed-action.adoc[leveloffset=+1]
 
 include::_ugfun_programming-model_mixins_inferred-name.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_mixins_nested-static-classes  .adoc[leveloffset=+1]
+include::_ugfun_programming-model_mixins_nested-static-classes.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_mixins_programmatic-usage  .adoc[leveloffset=+1]
+include::_ugfun_programming-model_mixins_programmatic-usage.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_mixins_contributed-services  .adoc[leveloffset=+1]
+include::_ugfun_programming-model_mixins_contributed-services.adoc[leveloffset=+1]
 
 
