@@ -64,7 +64,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 `AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_vetoing-visibility[vetoing subscriber].
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 To use an alternative implementation, use
 xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained

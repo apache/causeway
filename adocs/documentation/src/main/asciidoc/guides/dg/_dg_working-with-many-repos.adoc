@@ -8,7 +8,7 @@
 
 Applications built with Apache Isis often (should) consist of multiple modules, each in separate git repositories.  For example, there are the various (non-ASF) link:http://isisaddons.org[Isis Addons] that provide various cross-cutting concerns/technical services (security, mail-merge etc), as well the modules eg as provided by the (non-ASF) link:http://catalog.incode.org[Incode Catalog], which provides generic business subdomains (communication channels, documents etc).
 
-In addition, your own application may well be structured as a number of distinct modules (probably with the entities in each module being mapped to a different schema), and using such techniques as the xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_event-bus[event bus] and xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_mixins[mixins] so that these modules are decoupled from each other.
+In addition, your own application may well be structured as a number of distinct modules (probably with the entities in each module being mapped to a different schema), and using such techniques as the xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[event bus] and xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] so that these modules are decoupled from each other.
 
 All of which is a preamble to say that you will likely have multiple directories on your local development computer, for each such git repository that you contribute to.
 

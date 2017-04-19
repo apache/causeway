@@ -43,7 +43,6 @@ The remaining guides are:
 * xref:../cgcom/cgcom.adoc#[Committers' Guide] (release procedures and related practices)
 
 
-include::_ugbtb_decoupling.adoc[leveloffset=+1]
 include::_ugbtb_i18n.adoc[leveloffset=+1]
 include::_ugbtb_headless-access.adoc[leveloffset=+1]
 include::_ugbtb_hints-and-tips.adoc[leveloffset=+1]

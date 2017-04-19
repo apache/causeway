@@ -5,8 +5,12 @@
 :_imagesdir: images/
 
 
-The interfaces listed in this chapter are role interfaces; they define a contract for the framework
- to interact with those domain objects that implement these interfaces.
+This chapter defines a number of role interfaces that definea contract for some framework-defined mixins.
+
+[TIP]
+====
+See the xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[fundamentals user guide] for a discussion of mixins.
+====
 
 
 include::_rgcms_classes_mixins_Object.adoc[leveloffset=+1]

@@ -85,7 +85,7 @@ automatically generated from the underlying domain entities; the GRC viewer is a
 xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].  At the last count more than 400 domain entities, across 6 different
 Bounded Contexts, are surfaced in the UI in this this way.
 
-At the Domain level, we also extensively use the xref:../../guides/ugbtb/ugbtb.adoc#_ugbtb_decoupling_event-bus[domain events]
+At the Domain level, we also extensively use the xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events]
 functionality available in Apache Isis, along with many of the (non-ASF) link:http://isisaddons.org[Isis Addons] (such
 as http://github.com/isisaddons/isis-module-audit[audit], http://github.com/isisaddons/isis-module-security[security]
 and the http://github.com/isisaddons/isis-module-excel[excel] modules).

@@ -60,7 +60,7 @@ Importing the generated app into an xref:guides/dg.adoc#_dg_ide[IDE] +
 
 
 |link:https://www.youtube.com/watch?v=xVTjtiJM8XM[003^] +
-Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:guides/ugbtb.adoc#_ugbtb_view-models[view model] and `SimpleObjects` domain service (repository).
+Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:guides/ugfun/ugfun/_ugfun_building-blocks_types-of-domain-objects_view-models[view model] and `SimpleObjects` domain service (repository).
 ||||x|||||||
 
 
@@ -241,19 +241,19 @@ include::_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Wn5215K7_Jg[022^] +
-Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:guides/ugbtb.adoc#_ugbtb_decoupling_mixins[mixin] (useful for decoupling).
+Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:guides/ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixin] (useful for decoupling).
 |x|||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=m633OEBpWqQ[023^] +
-Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:guides/ugbtb.adoc#_ugbtb_decoupling_mixins[mixin].
+Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:guides/ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixin].
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:guides/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:guides/ugbtb.adoc#_ugbtb_decoupling_event-bus[decouple] and abstract business rules ( xref:guides/rgcms.adoc#_rgcms_methods_prefixes_validate[validation]).
+Using a domain event xref:guides/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] to xref:guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[decouple] and abstract business rules (xref:guides/rgcms.adoc#_rgcms_methods_prefixes_validate[validation]).
 ||||||x|||||
 
 
@@ -517,22 +517,22 @@ include::_screencasts-playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=puG-pzxRSd0[052^] +
-How to write a xref:guides/ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], holding references to two domain objects.
+How to write a xref:guides/ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[(JAXB) view model], holding references to two domain objects.
 |x||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=tdBkmA2CCZY[053^] +
-Updating the title, icon and layout of a xref:guides/ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model].
+Updating the title, icon and layout of a xref:guides/ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[(JAXB) view model].
 ||||x|||||||
 
 
 |link:https://www.youtube.com/watch?v=TKF0FB_od00[054^] +
-How to expose information from underlying domain entities referenced by a xref:guides/ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model] using derived properties
+How to expose information from underlying domain entities referenced by a xref:guides/ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[(JAXB) view model] using derived properties
 ||||||||||x|
 
 
 |link:https://www.youtube.com/watch?v=TMMeVhRNi8A[055^] +
-Adding an action to a xref:guides/ugbtb.adoc#_ugbtb_view-models_jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
+Adding an action to a xref:guides/ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
 ||||x|||||||
 
 

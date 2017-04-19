@@ -59,7 +59,7 @@ public BigDecimal totalCost() {
 Scratchpad scratchpad;
 ----
 
-A more complex example could use a xref:../ugbtb/ugbtb.adoc#_ugbtb_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
+A more complex example could use a xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
 
 [source,java]
 ----

@@ -547,7 +547,7 @@ This is by way of possibly deprecating and eventually moving contributed service
 | When searching for  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
-Note that this in effect means that xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins[mixins] must be used instead of xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling_contributions[contributed services].
+Note that this in effect means that xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services].
 
 
 |`isis.reflector.validator.` +

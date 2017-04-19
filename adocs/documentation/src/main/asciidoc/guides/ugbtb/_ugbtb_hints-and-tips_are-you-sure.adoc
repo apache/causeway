@@ -29,7 +29,7 @@ public SimpleObject updateName(
 
 This will render as:
 
-image::{_imagesdir}/how-tos/tips-n-tricks/action-semantics-are-you-sure.png[]
+image::{_imagesdir}/hints-and-tips/action-semantics-are-you-sure.png[]
 
 
 == Using a checkbox
@@ -38,7 +38,7 @@ An alternative approach (for all versions of the framework) is to require the en
 
 For example:
 
-image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure.png[]
+image::{_imagesdir}/hints-and-tips/are-you-sure.png[]
 
 [NOTE]
 ====
@@ -47,13 +47,13 @@ Note that these screenshots shows an earlier version of the xref:../ugvw/ugvw.ad
 
 If the user checks the box:
 
-image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure-happy-case.png[]
+image::{_imagesdir}/hints-and-tips/are-you-sure-happy-case.png[]
 
 then the action will complete.
 
 However, if the user fails to check the box, then a validation message is shown:
 
-image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure-sad-case.png[]
+image::{_imagesdir}/hints-and-tips/are-you-sure-sad-case.png[]
 
 
 

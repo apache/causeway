@@ -47,7 +47,7 @@ Although there is no requirement for the namespace URI to correspond to a physic
 This usually means including a company domain name within the string.
 
 As noted above, this package will contain multiple DTO classes all with the same namespace; these represent a set of minor versions of the DTO, each subsequent one intended to be backwardly compatible with the previous.
-Since these DTO classes will all be in the same package (as per the xref:../ugbtb/ugbtb.adoc#__ugbtb_view-models_jaxb_using-packages-to-version[advice above]), the class should therefore include the minor version name:
+Since these DTO classes will all be in the same package (as per the advice above), the class should therefore include the minor version name:
 
 [source,java]
 ----

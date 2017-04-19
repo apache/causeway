@@ -59,5 +59,6 @@ The remaining guides are:
 
 include::_ugodn_configuring.adoc[leveloffset=+1]
 include::_ugodn_jdo-mappings.adoc[leveloffset=+1]
+include::_ugodn_db-schemas.adoc[leveloffset=+1]
 include::_ugodn_hints-and-tips.adoc[leveloffset=+1]
 
