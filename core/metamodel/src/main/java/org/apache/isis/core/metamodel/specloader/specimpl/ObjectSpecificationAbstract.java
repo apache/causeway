@@ -1166,7 +1166,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
             final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
             final NotContributedFacet notContributedFacet = mixinAction.getFacet(NotContributedFacet.class);
-            if(notContributedFacet.toActions()) {
+            if(notContributedFacet != null && notContributedFacet.toActions()) {
                 continue;
             }
 
