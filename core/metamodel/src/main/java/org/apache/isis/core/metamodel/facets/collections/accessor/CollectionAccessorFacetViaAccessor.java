@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionAccessorFacetViaAccessor
@@ -78,14 +77,7 @@ public class CollectionAccessorFacetViaAccessor
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
 
-        // previously implementation adds the collection with a RootOid rather than a ParentedCollectionOid:
-        // final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
-
-        // instead, should use this API:
-        OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) owningAdapter.getSpecification()
-                .getAssociation(getIdentified().getIdentifier().getMemberName());
-        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray, owningAdapter, oneToManyAssociation);
-
+        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
         boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
