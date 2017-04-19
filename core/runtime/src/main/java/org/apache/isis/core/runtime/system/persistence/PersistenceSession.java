@@ -1714,6 +1714,12 @@ public class PersistenceSession implements
 
         // persistence of collection follows the parent
         final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) parentOid, otma);
+
+        ObjectAdapter existingAdapter = getAdapterFor(collectionOid);
+        if(existingAdapter != null) {
+            return existingAdapter;
+        }
+
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
 
         // we copy over the type onto the adapter itself
