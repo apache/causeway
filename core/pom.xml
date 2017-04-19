@@ -142,11 +142,11 @@
         <wicket.version>7.6.0</wicket.version>
 
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
-        <wicket-bootstrap.version>0.10.11</wicket-bootstrap.version>
+        <wicket-bootstrap.version>0.10.12</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
-        <wicketstuff.version>7.5.0</wicketstuff.version>
-        <select2.version>4.0.2</select2.version>
+        <wicketstuff.version>7.6.0</wicketstuff.version>
+        <select2.version>4.0.3</select2.version>
 
         <jquery-ui.version>1.11.4</jquery-ui.version>
 

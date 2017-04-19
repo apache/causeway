@@ -62,10 +62,16 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         buildGui();
     }
 
+//    @Override
+//    protected void onConfigure() {
+//        buildGui();
+//    }
+
     private void buildGui() {
         ActionModel model = getModel();
         model.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         add(new ActionParameterForm("inputForm", this, model));
+//        addOrReplace(new ActionParameterForm("inputForm", this, model));
     }
 
     class ActionParameterForm extends PropertyEditFormPanel.FormAbstract<ActionModel> implements ScalarModelSubscriber  {

@@ -35,6 +35,11 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
     
     public ActionPromptModalWindow(String id) {
         super(id);
+        // https://github.com/l0rdn1kk0n/wicket-bootstrap/issues/381
+        setDisableEnforceFocus(true);
+        // https://github.com/l0rdn1kk0n/wicket-bootstrap/issues/379
+        setCloseOnEscapeKey(true);
+        setBackdrop(Backdrop.STATIC);
     }
 
     @Override
