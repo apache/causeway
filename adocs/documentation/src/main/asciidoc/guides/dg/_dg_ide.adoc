@@ -7,7 +7,8 @@
 
 
 
-The vast majority of Java developers use an IDE to assist with developing their code, and we highly recommend that you do like wise as you develop your Apache Isis applications using an IDE.  Apache Isis is built with Maven, and all modern IDEs can import Maven projects.
+The vast majority of Java developers use an IDE to assist with developing their code, and we highly recommend that you do likewise as you develop your Apache Isis applications using an IDE.
+Apache Isis is built with Maven, and all modern IDEs can import Maven projects.
 
 This chapter shows how to setup and use two of the most popular IDEs, IntelliJ IDEA and Eclipse.
 

@@ -90,7 +90,7 @@ When the enhancer runs, it will print out to the console:
 image::{_imagesdir}eclipse/eclipse-120-console.png[width="500px",link="{_imagesdir}/appendices/dev-env/eclipse/eclipse-120-console.png"]
 
 
-
+[[__dg_ide_eclipse_workaround-for-path-limits]]
 === Workaround for path limits (the DN plugin to use the persistence.xml)
 
 If running on Windows then the DataNucleus plugin is very likely to hit the Windows path limit.
