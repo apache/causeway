@@ -18,7 +18,7 @@ Docker host can be assured.
 ====
 
 
-== Using an `overrides.properties` file
+== Using an `overrides.properties`
 
 In addition to loading the regular configuration properties from `WEB-INF` directory (described
 xref:../rgcfg/rgcfg.adoc#_rgcfg_configuration-files[here]), Apache Isis will also load the `overrides.properties` file.
@@ -63,7 +63,7 @@ The Docker's `ENTRYPOINT` therefore just needs to parse the Docker container's o
 create this file.
 
 
-== Using the `ISIS_OPTS` environment variable
+== Using `$ISIS_OPTS`
 
 The servlet context initializer will search for an environment variable called `$ISIS_OPTS`
  and if present will parse the content as a set of key/value pairs.  Each key/value pair is separated by "||".
