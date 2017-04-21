@@ -39,12 +39,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -93,7 +95,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     }
 
-    protected AbstractTextComponent<T> getTextField() {
+    AbstractTextComponent<T> getTextField() {
         return textField;
     }
 
@@ -101,12 +103,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return createTextField(id);
     }
 
-    protected TextField<T> createTextField(final String id) {
-        return new TextField<>(id, newTextFieldValueModel(), cls);
-    }
-
     protected TextFieldValueModel<T> newTextFieldValueModel() {
         return new TextFieldValueModel<>(this);
+    }
+
+    protected TextField<T> createTextField(final String id) {
+        return new TextField<>(id, newTextFieldValueModel(), cls);
     }
 
     @Override
@@ -115,7 +117,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setOutputMarkupId(true);
 
         addStandardSemantics();
-        addSemantics();
 
         final MarkupContainer labelIfRegular = createFormComponentLabel();
         scalarTypeContainer.add(labelIfRegular);
@@ -157,14 +158,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     protected abstract IModel<String> getScalarPanelType();
 
-    /**
-     * Optional hook method
-     */
-    protected void addSemantics() {
-        // we don't call textField.setType(), since we want more control 
-        // over the parsing (using custom subclasses of TextField etc)
-    }
-
     private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
         if(!getSettings().isReplaceDisabledTagWithReadonlyTag()) {
             return;
@@ -180,13 +173,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     private MarkupContainer createFormComponentLabel() {
         Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
-        final AbstractTextComponent<T> textField = getTextField();
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
         
-        final FormGroup scalarNameAndValue = new FormGroup(ID_SCALAR_IF_REGULAR, textField);
+        final FormGroup scalarNameAndValue = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);
 
-        textFieldFragment.add(textField);
+        textFieldFragment.add(this.textField);
         scalarNameAndValue.add(textFieldFragment);
 
         return scalarNameAndValue;
@@ -198,12 +190,13 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     protected void addStandardSemantics() {
         textField.setRequired(getModel().isRequired());
-        setTextFieldSizeAndMaxLengthIfSpecified(textField);
+        setTextFieldSizeAndMaxLengthIfSpecified();
 
-        addValidator();
+        addValidatorForIsisValidation();
     }
 
-    protected void addValidator() {
+
+    private void addValidatorForIsisValidation() {
         final ScalarModel scalarModel = getModel();
 
         textField.add(new IValidator<T>() {
@@ -223,24 +216,25 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         });
     }
 
-    protected void setTextFieldSizeAndMaxLengthIfSpecified(AbstractTextComponent<T> textField) {
+    private void setTextFieldSizeAndMaxLengthIfSpecified() {
 
         final Integer maxLength = getValueOf(getModel(), MaxLengthFacet.class);
         Integer typicalLength = getValueOf(getModel(), TypicalLengthFacet.class);
 
-        // doesn't make sense for typical length to be > maxLength 
+        // doesn't make sense for typical length to be > maxLength
         if(typicalLength != null && maxLength != null && typicalLength > maxLength) {
             typicalLength = maxLength;
         }
-        
+
         if (typicalLength != null) {
             textField.add(new AttributeModifier("size", Model.of("" + typicalLength)));
         }
-        
+
         if(maxLength != null) {
             textField.add(new AttributeModifier("maxlength", Model.of("" + maxLength)));
         }
     }
+
 
     private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
         final SingleIntValueFacet facet = model.getFacet(facetType);
@@ -263,9 +257,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return labelIfCompact;
     }
 
+
     @Override
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
+
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 

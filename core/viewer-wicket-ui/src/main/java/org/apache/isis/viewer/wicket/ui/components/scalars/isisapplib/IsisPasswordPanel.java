@@ -43,10 +43,6 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
         super(id, scalarModel);
     }
 
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
 
     @Override
     protected AbstractTextComponent<String> createTextFieldForRegular(String id) {
@@ -68,5 +64,4 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
     protected IModel<String> getScalarPanelType() {
         return Model.of("isisPasswordPanel");
     }
-
 }
