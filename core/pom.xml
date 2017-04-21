@@ -149,6 +149,7 @@
         <select2.version>4.0.3</select2.version>
 
         <jquery-ui.version>1.11.4</jquery-ui.version>
+        <x-editable.version>1.5.1</x-editable.version>
 
         <guice.version>4.1.0</guice.version>
         <picocontainer.version>2.15</picocontainer.version>
@@ -1620,6 +1621,18 @@ ${license.additional-notes}
                     <exclusion>
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>x-editable-bootstrap</artifactId>
+                <version>${x-editable.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>bootstrap</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

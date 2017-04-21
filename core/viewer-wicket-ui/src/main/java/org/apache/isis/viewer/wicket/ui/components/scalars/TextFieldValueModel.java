@@ -29,12 +29,12 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * For custom {@link ScalarPanelTextFieldAbstract}s to use as the {@link Model}
- * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextFieldForRegular()}).
+ * of their {@link TextField} (as constructed in {@link ScalarPanelTextFieldAbstract#createTextFieldForRegular(String)}).
  */
 public class TextFieldValueModel<T extends Serializable> extends Model<T> {
     
     private static final long serialVersionUID = 1L;
-    
+
     public interface ScalarModelProvider {
         ScalarModel getModel();
         AdapterManager getAdapterManager();
@@ -67,4 +67,12 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
             scalarModelProvider.getModel().setObject(objectAdapter);
         }
     }
+
+    // FIXME: a bit of a hack to just use toString(), probably want to format somehow.
+    public String getObjectAsString() {
+        T object = getObject();
+        return object != null ? object.toString() : null;
+    }
+
+
 }

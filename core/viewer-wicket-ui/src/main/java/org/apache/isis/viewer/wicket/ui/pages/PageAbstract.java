@@ -282,7 +282,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addBootLint(final IHeaderResponse response) {
-        response.render(BootlintHeaderItem.INSTANCE);
+        // rather than using the default BootlintHeaderItem.INSTANCE;
+        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
+        response.render(new BootlintHeaderItem("bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
     }
 
     private boolean isModernBrowser() {

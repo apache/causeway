@@ -37,6 +37,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PropertyEditStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -74,6 +75,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
+    protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
+    protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
 
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -164,7 +167,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     protected Rendering getRendering() {
-        return Rendering.renderingFor(getModel().getRenderingHint());
+        return Rendering.renderingFor(scalarModel.getRenderingHint());
     }
 
     protected Component getLabelForCompact() {
@@ -199,7 +202,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     /**
      * hook for highly dynamic components, eg conditional choices.
-     * 
+     *
      * <p>
      * Returning <tt>true</tt> means that the component is always rebuilt prior to
      * every {@link #onBeforeRender() render}ing.
@@ -292,8 +295,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     protected void addEditPropertyTo(final MarkupContainer markupContainer) {
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
-        if (disableReasonIfAny == null && scalarModel.isViewMode()) {
+
+        final PropertyEditStyle editStyle = this.scalarModel.getEditStyle();
+        if(editStyle == PropertyEditStyle.DIALOG) {
+
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
 
             editProperty.setOutputMarkupId(true);
@@ -305,11 +310,12 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                             .getFrom(ScalarPanelAbstract.this).getActionPrompt();
 
                     PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
-                            scalarModel);
+                            ScalarPanelAbstract.this.scalarModel);
 
                     final PropertyEditPanel propertyEditPanel =
                             (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
-                                    ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(), scalarModel);
+                                    ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
+                                    ScalarPanelAbstract.this.scalarModel);
 
                     propertyEditPanel.setShowHeader(false);
 
@@ -321,6 +327,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             });
 
             markupContainer.addOrReplace(editProperty);
+
         } else {
             Components.permanentlyHide(markupContainer, ID_EDIT_PROPERTY);
         }
