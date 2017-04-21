@@ -582,6 +582,14 @@ If enabled, this configuration property will ensure that domain services only de
 |Whether objects' properties and collections can be edited directly (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
 
 
+|`isis.properties.` +
+`editStyle`
+|`dialog`,`inline` +
+(`dialog`)
+|(`1.15.0-SNAPSHOT`) whether a domain object property is edited through a dialog box (similar to an action parameter form) or using an inline edit.
+Can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_editStyle[`@Property#editStyle()`]).
+
+
 |`isis.persistor.` +
 `disable` +
 `ConcurrencyChecking`

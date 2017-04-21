@@ -16,8 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.annotation;
 
-package org.apache.isis.core.metamodel.facets;
-
-public interface SingleStringValueFacet extends SingleValueFacet<String> {
+/**
+ * How editing of properties should be performed
+ */
+public enum PropertyEditStyle {
+    /**
+     * Edit the property according to the default edit style policy configured in <tt>isis.properties</tt>.
+     *
+     * <p>
+     *      If no editing style is configured, then {@link #DIALOG} is assumed.
+     * </p>
+     */
+    AS_CONFIGURED,
+    /**
+     * Edit the property using a dialog (similar to action parameter, but just a single property being changed)
+     */
+    DIALOG,
+    /**
+     * Edit the property inline.
+     *
+     * <p>
+     *     In the Wicket viewer this is implemented using the <code>x-editable</code> library
+     * </p>
+     */
+    INLINE
 }

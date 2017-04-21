@@ -69,7 +69,7 @@ public class BS3GridTest {
     }
 
     @Test
-    public void xxx() throws Exception {
+    public void happy_case() throws Exception {
 
         final BS3Grid bs3Grid = new BS3Grid();
 

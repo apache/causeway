@@ -29,6 +29,13 @@ The table below summarizes the annotation's attributes.
 |description of this property, eg to be rendered in a tooltip.
 
 
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_editStyle[`editStyle()`]
+|`DIALOG`, `INLINE`, `AS_CONFIGURED` +
+(`AS_CONFIGURED`)
+|(`1.15.0-SNAPSHOT`) how a property should be edited within the UI
+
+
+
 |xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
@@ -121,6 +128,7 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 include::_rgant-PropertyLayout_cssClass.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_describedAs.adoc[leveloffset=+1]
+include::_rgant-PropertyLayout_editStyle.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_labelPosition.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_multiLine.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_named.adoc[leveloffset=+1]

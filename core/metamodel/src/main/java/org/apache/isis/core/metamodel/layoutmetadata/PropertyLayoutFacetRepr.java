@@ -18,12 +18,14 @@ package org.apache.isis.core.metamodel.layoutmetadata;
 
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.PropertyEditStyle;
 import org.apache.isis.applib.annotation.Where;
 
 public class PropertyLayoutFacetRepr {
 
     public String cssClass;
     public String describedAs;
+    public PropertyEditStyle editStyle;
     public Where hidden;
     public LabelPosition labelPosition;
     public int multiLine;

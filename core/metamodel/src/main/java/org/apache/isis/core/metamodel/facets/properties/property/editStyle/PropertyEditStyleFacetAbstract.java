@@ -17,7 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.metamodel.facets.properties.property.editStyle;
 
-public interface SingleStringValueFacet extends SingleValueFacet<String> {
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+public abstract class PropertyEditStyleFacetAbstract extends FacetAbstract
+        implements PropertyEditStyleFacet {
+
+
+    public static Class<? extends Facet> type() {
+        return PropertyEditStyleFacet.class;
+    }
+
+    public PropertyEditStyleFacetAbstract(final FacetHolder holder) {
+        super( type(), holder, Derivation.NOT_DERIVED);
+    }
+
 }

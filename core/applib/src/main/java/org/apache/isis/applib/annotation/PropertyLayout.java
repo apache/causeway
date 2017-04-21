@@ -41,6 +41,12 @@ public @interface PropertyLayout {
      */
     String describedAs() default "";
 
+
+    /**
+     * How the properties of this domain object are be edited, either {@link PropertyEditStyle#DIALOG dialog} or {@link PropertyEditStyle#INLINE inline}.
+     */
+    PropertyEditStyle editStyle() default PropertyEditStyle.AS_CONFIGURED;
+
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.
      */

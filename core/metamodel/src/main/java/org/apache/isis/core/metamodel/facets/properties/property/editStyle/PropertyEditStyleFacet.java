@@ -17,7 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.metamodel.facets.properties.property.editStyle;
 
-public interface SingleStringValueFacet extends SingleValueFacet<String> {
+import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+
+/**
+ * Indicates that the editing of the property should be published.
+ */
+public interface PropertyEditStyleFacet extends SingleValueFacet<PropertyEditStyle> {
+
+    PropertyEditStyle value();
+
 }

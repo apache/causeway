@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.PropertyEditStyle;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -51,7 +52,7 @@ public class PropertyLayoutData
         implements ActionLayoutDataOwner,
                    Serializable,
                    Owned<FieldSet>,
-                   HasCssClass, HasDescribedAs, HasHidden, HasNamed {
+                   HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
 
     private static final long serialVersionUID = 1L;
 
@@ -103,6 +104,18 @@ public class PropertyLayoutData
     @Override
     public void setDescribedAs(String describedAs) {
         this.describedAs = describedAs;
+    }
+
+
+    private PropertyEditStyle editStyle;
+
+    @XmlAttribute(required = false)
+    public PropertyEditStyle getEditStyle() {
+        return editStyle;
+    }
+
+    public void setEditStyle(PropertyEditStyle editStyle) {
+        this.editStyle = editStyle;
     }
 
 
