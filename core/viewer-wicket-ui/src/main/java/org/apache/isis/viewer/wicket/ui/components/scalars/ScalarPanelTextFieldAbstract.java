@@ -27,6 +27,10 @@ import com.google.common.base.Strings;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -36,23 +40,30 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.StringValidator;
 
+import org.apache.isis.applib.annotation.PropertyEditStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.xeditable.XEditableBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.xeditable.XEditableOptions;
+import de.agilecoders.wicket.jquery.Key;
+import de.agilecoders.wicket.jquery.util.Json;
 
 /**
  * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
@@ -79,6 +90,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     protected WebMarkupContainer scalarTypeContainer;
     private AbstractTextComponent<T> textField;
+    private WebMarkupContainer editInlineLink;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
@@ -94,6 +106,13 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         addOrReplace(scalarTypeContainer);
 
     }
+
+    private Component getEditComponent() {
+        return textField.isVisibilityAllowed()
+                ? textField
+                : editInlineLink;
+    }
+
 
     AbstractTextComponent<T> getTextField() {
         return textField;
@@ -113,8 +132,132 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     @Override
     protected MarkupContainer addComponentForRegular() {
+
+        // even though only one of textField and editInlineLink will ever be visible,
+        // am instantiating both to avoid NPEs
+        // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check whichis visible.
+
         textField = createTextFieldForRegular(ID_SCALAR_VALUE);
         textField.setOutputMarkupId(true);
+        editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
+        editInlineLink.setOutputMarkupId(true);
+
+        final IModel<T> textFieldModel = textField.getModel();
+
+        final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
+        editInlineLink.add(editInlineLinkLabel);
+
+        if(scalarModel.getEditStyle() == PropertyEditStyle.INLINE) {
+            textField.setVisibilityAllowed(false);
+
+            final XEditableOptions options = new XEditableOptions() {
+                {
+                    put(new Key<String>("toggle"), "click");
+                    if(scalarModel.isRequired()) {
+                        put(new Key<Json.RawValue>("validate"), new Json.RawValue(
+                                "function (value) { if (value == '') { return 'Required field'; } }"));
+                    }
+//                    put(new Key<Json.RawValue>("error"), new Json.RawValue(
+//                            "function(response, newValue) {\n"
+//                                    + "    if(response.status === 500) {\n"
+//                                    + "        return 'Service unavailable. Please try later.';\n"
+//                                    + "    } else {\n"
+//                                    + "        return response.responseText;\n"
+//                                    + "    }\n"
+//                                    + "}"));
+
+                }
+            }.withMode("inline");
+
+            options.withDefaultValue(asString(textFieldModel));
+
+            XEditableBehavior xEditable = new XEditableBehavior(options) {
+                @Override
+                protected void onSave(final AjaxRequestTarget target, final String value) {
+
+                    scalarModel.setObjectAsString(value);
+
+                    ObjectAdapter adapter = scalarModel.getParentObjectAdapterMemento()
+                            .getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
+                                    getSpecificationLoader());
+
+                    scalarModel.applyValue(adapter);
+
+                    target.add(editInlineLink);
+
+                    options.withDefaultValue(asString(textFieldModel));
+                }
+
+                protected AjaxEventBehavior newSaveListener() {
+                    return new AjaxEventBehavior("save") {
+                        @Override
+                        protected void onEvent(AjaxRequestTarget target) {
+
+                            final ObjectAdapter currentValue = scalarModel.getObject();
+                            StringValue newValue = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("newValue");
+
+                            try {
+                                onSave(target, newValue.toString());
+                            } catch (Exception ex) {
+                                scalarModel.setObject(currentValue);
+
+                                final String value = asString(textFieldModel);
+                                options.withDefaultValue(value);
+
+                                //
+                                // hmmm... thought had this working, but turns out that can't rely on the .control-group to exist
+                                //
+                                // also: even if get going, still need to reset the value of the inline edit, and also
+                                // to handle updates to the title (eg Wicket event bus, I think)
+                                //
+                                final String message = ex.getMessage();
+                                target.appendJavaScript(
+                                        "( function() { "
+                                                + "var component = $(\"#" + editInlineLink.getMarkupId() + "\"); "
+                                                + "var parent = $(component).parent(); "
+
+                                                + "var controlGroup = $(parent).find(\".control-group\"); "
+                                                + "var errorBlock = $(parent).find(\".editable-error-block\"); "
+
+                                                + "$(component).editable(\"show\"); "
+                                                + "$(controlGroup).addClass(\"has-error\"); "
+                                                + "$(errorBlock).css(\"display\", \"block\"); "
+                                                + "$(errorBlock).text(\"" + message + "\"); "
+
+                                        + "} )();");
+                            }
+
+                        }
+
+                        @Override
+                        protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                            super.updateAjaxAttributes(attributes);
+                            attributes.getDynamicExtraParameters().add("return [{'name':'newValue', 'value': attrs.event.extraData.newValue}]");
+
+                            AjaxCallListener myAjaxCallListener = new AjaxCallListener() {
+
+                                @Override
+                                public CharSequence getBeforeHandler(Component component) {
+                                    return ""; // "var myEl = $(\"#" + component.getMarkupId() + "\"); console.log(myEl);";
+                                }
+
+                                @Override public CharSequence getFailureHandler(final Component component) {
+                                    return "alert(\"failure!!!\")";
+                                }
+                            };
+                            attributes.getAjaxCallListeners().add(myAjaxCallListener);
+
+                        }
+                    };
+                }
+
+            };
+
+
+            editInlineLink.add(xEditable);
+        } else {
+            editInlineLink.setVisibilityAllowed(false);
+        }
 
         addStandardSemantics();
 
@@ -147,13 +290,18 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        addFeedbackOnlyTo(labelIfRegular, textField);
+        addFeedbackOnlyTo(labelIfRegular, getEditComponent());
+
         addEditPropertyTo(labelIfRegular);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
 
         return labelIfRegular;
+    }
+
+    private String asString(final IModel<T> textFieldModel) {
+        return textFieldModel != null && textFieldModel.getObject() != null ? textFieldModel.getObject().toString() : null;
     }
 
     protected abstract IModel<String> getScalarPanelType();
@@ -180,6 +328,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         textFieldFragment.add(this.textField);
         scalarNameAndValue.add(textFieldFragment);
+
+        textFieldFragment.add(this.editInlineLink);
 
         return scalarNameAndValue;
     }
@@ -265,12 +415,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
-        if(disableReasonIfAny == null) {
-            CssClassAppender.appendCssClassTo(this, "editable");
-        }
-
-
         setTitleAttribute("");
     }
 
@@ -278,6 +422,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
         textField.setEnabled(false);
+        editInlineLink.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
         setTitleAttribute(disableReason);
     }
@@ -286,16 +431,22 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onBeforeRenderWhenEnabled() {
         super.onBeforeRenderWhenEnabled();
         textField.setEnabled(true);
+        editInlineLink.setEnabled(true);
         setTitleAttribute("");
     }
 
     private void setTitleAttribute(final String titleAttribute) {
-        textField.add(new AttributeModifier("title", Model.of(titleAttribute)));
+        AttributeModifier title = new AttributeModifier("title", Model.of(titleAttribute));
+        textField.add(title);
+        editInlineLink.add(title);
     }
 
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
-        textField.add(behavior);
+
+        // some behaviours can only be attached to one component
+        // so we check as to which will actually be visible.
+        getEditComponent().add(behavior);
     }
 
 
