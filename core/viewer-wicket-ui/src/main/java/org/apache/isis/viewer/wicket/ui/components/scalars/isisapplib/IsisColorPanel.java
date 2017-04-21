@@ -30,10 +30,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
 public class IsisColorPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public IsisColorPanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
+        super(id, scalarModel);
     }
 
     @Override
@@ -41,9 +40,5 @@ public class IsisColorPanel extends ScalarPanelTextFieldParseableAbstract {
         return Model.of("isisColorPanel");
     }
 
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
 
 }

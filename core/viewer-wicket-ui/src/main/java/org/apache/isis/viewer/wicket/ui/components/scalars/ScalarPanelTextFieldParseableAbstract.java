@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -36,33 +35,15 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
-    protected final String idTextField;
 
-    public ScalarPanelTextFieldParseableAbstract(final String id, final String idTextField, final ScalarModel scalarModel) {
+    public ScalarPanelTextFieldParseableAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, String.class);
-        this.idTextField = idTextField;
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular() {
-        final AbstractTextComponent<String> textField = new TextField<>(idTextField, new Model<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return getModel().getObjectAsString();
-            }
-
-            @Override
-            public void setObject(final String object) {
-                if (object == null) {
-                    getModel().setObject(null);
-                } else {
-                    getModel().setObjectAsString(object);
-                }
-            }
-        });
-        return textField;
+    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
+        final TextFieldStringModel model = new TextFieldStringModel(this);
+        return new TextField<>(id, model);
     }
 
     @Override

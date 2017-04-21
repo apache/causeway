@@ -18,17 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.lang.CloseableExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
+import javax.activation.MimeType;
+import javax.imageio.ImageIO;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -50,12 +47,18 @@ import org.apache.wicket.request.resource.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.activation.MimeType;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.lang.CloseableExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.util.Components;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract {
 

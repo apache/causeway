@@ -19,14 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
  * Panel for rendering scalars of type {@link DateTime Isis' applib.DateTime}.
@@ -40,9 +41,9 @@ public class IsisDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<or
         init(new DateConverterForApplibDateTime(getSettings(), getAdjustBy()));
     }
 
-    @Override
-    protected TextField<org.apache.isis.applib.value.DateTime> createTextField(final String id) {
-        return new TextFieldWithDateTimePicker<>(id, new TextFieldValueModel<org.apache.isis.applib.value.DateTime>(this), cls, converter);
+    protected AbstractTextComponent<DateTime> createTextFieldForRegular(final String id) {
+        final TextFieldValueModel<DateTime> textFieldValueModel = new TextFieldValueModel<>(this);
+        return new TextFieldWithDateTimePicker<>(id, textFieldValueModel, cls, converter);
     }
 
     @Override

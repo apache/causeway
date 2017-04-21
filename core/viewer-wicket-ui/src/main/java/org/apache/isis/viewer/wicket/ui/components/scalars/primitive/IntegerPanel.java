@@ -19,15 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.IntegerConverter;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 
 /**
  * Panel for rendering scalars of type {@link Integer} or <tt>int</tt>.
@@ -41,8 +42,9 @@ public class IntegerPanel extends ScalarPanelTextFieldNumeric<Integer> {
     }
 
     @Override
-    protected AbstractTextComponent<Integer> createTextFieldForRegular() {
-        return new TextField<Integer>(ID_SCALAR_VALUE, new TextFieldValueModel<Integer>(this), Integer.class) {
+    protected AbstractTextComponent<Integer> createTextFieldForRegular(final String id) {
+        final TextFieldValueModel<Integer> textFieldValueModel = new TextFieldValueModel<>(this);
+        return new TextField<Integer>(id, textFieldValueModel, Integer.class) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")

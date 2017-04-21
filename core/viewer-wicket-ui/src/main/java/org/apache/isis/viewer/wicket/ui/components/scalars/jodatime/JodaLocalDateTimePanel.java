@@ -19,14 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
-import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.joda.time.LocalDateTime;
+
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
 /**
  * Panel for rendering scalars of type {@link LocalDateTime}.
@@ -41,9 +42,9 @@ public class JodaLocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
     }
 
     // TODO mgrigorov: Check whether this is really needed after fixing ISIS-1015
-    @Override
-    protected TextField<LocalDateTime> createTextField(final String id) {
-        return new TextFieldWithDateTimePicker<>(id, new TextFieldValueModel<LocalDateTime>(this), cls, converter);
+    protected AbstractTextComponent<LocalDateTime> createTextFieldForRegular(final String id) {
+        final TextFieldValueModel<LocalDateTime> textFieldValueModel = new TextFieldValueModel<>(this);
+        return new TextFieldWithDateTimePicker<>(id, textFieldValueModel, cls, converter);
     }
 
     @Override
