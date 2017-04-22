@@ -24,18 +24,26 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div class="scalarNameAndValueComponentType" wicket:id="scalarTypeContainer">
-                <div class="form-group" wicket:id="scalarIfRegular">
-                    <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
+            <div wicket:id="scalarTypeContainer"
+                 class="scalarNameAndValueComponentType" >
+                <div wicket:id="scalarIfRegular"
+                     class="form-group" >
+                    <label wicket:id="scalarName"
+                           class="scalarName control-label"
+                    >[Label text]</label>
                     <span class="scalarValueWrapper">
                         <div class="scalarPlaceholder">
                             <span class="scalarValueInput">
                                 <span class="editing">
                                     <wicket:child/>
-                                    <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+                                    <a wicket:id="editProperty"
+                                       href="#"
+                                       class="edit fa fa-pencil-square-o"/>
                                 </span>
                             </span>
-                            <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight">[drop down]</span>
+                            <span wicket:id="associatedActionLinksRight"
+                                  class="associatedActionLinksRight"
+                            >[drop down]</span>
                         </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
@@ -46,7 +54,9 @@
             </div>
 
             <wicket:fragment wicket:id="compactAsInputCheckbox">
-                <input type="checkbox" class="form-control" wicket:id="scalarIfCompact"/>
+                <input wicket:id="scalarIfCompact"
+                       type="checkbox"
+                       class="form-control" />
             </wicket:fragment>
 
             <wicket:fragment wicket:id="compactAsSpan">

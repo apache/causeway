@@ -26,20 +26,22 @@
         <wicket:extend>
             <wicket:container wicket:id="scalarValueContainer"/>
 
+            <div wicket:id="scalarValueEditInlineContainer">
+                <a
+                        href="#"
+                        name="scalarValueEditInline"
+                        class="form-control input-sm scalarValueEditInline"
+                        wicket:id="scalarValueEditInline">
+                    <span wicket:id="scalarValueEditInlineLabel"></span>
+                </a>
+            </div>
+
             <wicket:fragment wicket:id="text">
                 <input
                         type="text"
                         name="scalarValue"
                         class="form-control input-sm scalarValue"
                         wicket:id="scalarValue" />
-                <a
-                        href="#"
-                        data-type="text"
-                        name="scalarValueEditInline"
-                        class="form-control input-sm scalarValueEditInline"
-                        wicket:id="scalarValueEditInline">
-                    <span wicket:id="scalarValueEditInlineLabel"></span>
-                </a>
             </wicket:fragment>
 
             <wicket:fragment wicket:id="textarea">
@@ -48,14 +50,6 @@
                         class="form-control scalarValue"
                         wicket:id="scalarValue">
                 </textarea>
-                <a
-                        href="#"
-                        data-type="textarea"
-                        name="scalarValueEditInline"
-                        class="form-control input-sm scalarValueEditInline"
-                        wicket:id="scalarValueEditInline"
-                        style="height: auto"
-                ><span wicket:id="scalarValueEditInlineLabel"></span></a>
             </wicket:fragment>
 
             <wicket:fragment wicket:id="date">
@@ -65,14 +59,6 @@
                             name="scalarValue"
                             class="form-control input-sm scalarValue"
                             wicket:id="scalarValue"/>
-                    <a
-                            data-type="combodate"
-                            href="#"
-                            name="scalarValueEditInline"
-                            class="form-control input-sm scalarValueEditInline"
-                            wicket:id="scalarValueEditInline">
-                        <span wicket:id="scalarValueEditInlineLabel"></span>
-                    </a>
                 </div>
             </wicket:fragment>
 

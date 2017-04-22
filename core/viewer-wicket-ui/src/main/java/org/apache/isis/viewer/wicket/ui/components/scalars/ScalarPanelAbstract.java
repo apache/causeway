@@ -72,6 +72,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     private static final long serialVersionUID = 1L;
 
+    protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
+
     protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";

@@ -73,8 +73,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
-
     protected final Class<T> cls;
 
     protected static class ReplaceDisabledTagWithReadonlyTagBehaviour extends Behavior {
@@ -90,6 +88,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     protected WebMarkupContainer scalarTypeContainer;
     private AbstractTextComponent<T> textField;
+
+    private WebMarkupContainer scalarValueEditInlineContainer;
     private WebMarkupContainer editInlineLink;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
@@ -108,9 +108,18 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     private Component getEditComponent() {
-        return textField.isVisibilityAllowed()
+        return scalarModel.getEditStyle() == PropertyEditStyle.INLINE
+                ? scalarValueEditInlineContainer
+                : textField;
+    }
+
+    /**
+     * Opposite of {@link #getEditComponent()}.
+     */
+    private Component getOtherComponent() {
+        return scalarModel.getEditStyle() == PropertyEditStyle.INLINE
                 ? textField
-                : editInlineLink;
+                : scalarValueEditInlineContainer;
     }
 
 
@@ -133,22 +142,27 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected MarkupContainer addComponentForRegular() {
 
-        // even though only one of textField and editInlineLink will ever be visible,
+        // even though only one of textField and scalarValueEditInlineContainer will ever be visible,
         // am instantiating both to avoid NPEs
         // elsewhere can use Component#isVisibilityAllowed or ScalarModel.getEditStyle() to check whichis visible.
 
         textField = createTextFieldForRegular(ID_SCALAR_VALUE);
         textField.setOutputMarkupId(true);
-        editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
-        editInlineLink.setOutputMarkupId(true);
+
+        addStandardSemantics();
 
         final IModel<T> textFieldModel = textField.getModel();
+
+
+        this.scalarValueEditInlineContainer = new WebMarkupContainer("scalarValueEditInlineContainer");
+        editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
+        editInlineLink.setOutputMarkupId(true);
+        scalarValueEditInlineContainer.add(editInlineLink);
 
         final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
         editInlineLink.add(editInlineLinkLabel);
 
         if(scalarModel.getEditStyle() == PropertyEditStyle.INLINE) {
-            textField.setVisibilityAllowed(false);
 
             final XEditableOptions options = new XEditableOptions() {
                 {
@@ -157,14 +171,14 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
                         put(new Key<Json.RawValue>("validate"), new Json.RawValue(
                                 "function (value) { if (value == '') { return 'Required field'; } }"));
                     }
-//                    put(new Key<Json.RawValue>("error"), new Json.RawValue(
-//                            "function(response, newValue) {\n"
-//                                    + "    if(response.status === 500) {\n"
-//                                    + "        return 'Service unavailable. Please try later.';\n"
-//                                    + "    } else {\n"
-//                                    + "        return response.responseText;\n"
-//                                    + "    }\n"
-//                                    + "}"));
+                    //                    put(new Key<Json.RawValue>("error"), new Json.RawValue(
+                    //                            "function(response, newValue) {\n"
+                    //                                    + "    if(response.status === 500) {\n"
+                    //                                    + "        return 'Service unavailable. Please try later.';\n"
+                    //                                    + "    } else {\n"
+                    //                                    + "        return response.responseText;\n"
+                    //                                    + "    }\n"
+                    //                                    + "}"));
 
                 }
             }.withMode("inline");
@@ -224,7 +238,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
                                                 + "$(errorBlock).css(\"display\", \"block\"); "
                                                 + "$(errorBlock).text(\"" + message + "\"); "
 
-                                        + "} )();");
+                                                + "} )();");
                             }
 
                         }
@@ -255,14 +269,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
 
             editInlineLink.add(xEditable);
-        } else {
-            editInlineLink.setVisibilityAllowed(false);
         }
 
-        addStandardSemantics();
 
-        final MarkupContainer labelIfRegular = createFormComponentLabel();
-        scalarTypeContainer.add(labelIfRegular);
+        final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
+
+        scalarTypeContainer.add(scalarIfRegularFormGroup);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
@@ -274,7 +286,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
-        addPositioningCssTo(labelIfRegular, entityActions);
+        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
         if(getModel().isRequired()) {
             final String label = scalarName.getDefaultModelObjectAsString();
@@ -283,21 +295,26 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             }
         }
 
-        labelIfRegular.add(scalarName);
+        scalarIfRegularFormGroup.add(scalarName);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
+            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        addFeedbackOnlyTo(labelIfRegular, getEditComponent());
-
-        addEditPropertyTo(labelIfRegular);
+        addFeedbackOnlyTo(scalarIfRegularFormGroup, getEditComponent());
+        addEditPropertyTo(scalarIfRegularFormGroup);
 
         // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
+        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
-        return labelIfRegular;
+
+
+
+        getOtherComponent().setVisibilityAllowed(false);
+
+
+        return scalarIfRegularFormGroup;
     }
 
     private String asString(final IModel<T> textFieldModel) {
@@ -319,19 +336,19 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         component.add(new ReplaceDisabledTagWithReadonlyTagBehaviour());
     }
 
-    private MarkupContainer createFormComponentLabel() {
+    private MarkupContainer createScalarIfRegularFormGroup() {
         Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
         
-        final FormGroup scalarNameAndValue = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);
 
         textFieldFragment.add(this.textField);
-        scalarNameAndValue.add(textFieldFragment);
+        formGroup.add(textFieldFragment);
 
-        textFieldFragment.add(this.editInlineLink);
+        formGroup.add(this.scalarValueEditInlineContainer);
 
-        return scalarNameAndValue;
+        return formGroup;
     }
 
     protected Fragment createTextFieldFragment(String id) {
@@ -421,9 +438,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
+
         textField.setEnabled(false);
-        editInlineLink.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
+
+        editInlineLink.setEnabled(false);
+
         setTitleAttribute(disableReason);
     }
 
@@ -450,7 +470,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
 
-    //region > dependencies
 
     @com.google.inject.Inject
     private WicketViewerSettings settings;
@@ -458,7 +477,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return settings;
     }
 
-    //endregion
 
 }
 
