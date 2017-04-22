@@ -26,7 +26,7 @@
         <wicket:extend>
             <wicket:container wicket:id="scalarValueContainer"/>
 
-            <div wicket:id="scalarValueEditInlineContainer">
+            <wicket:container wicket:id="scalarValueEditInlineContainer">
                 <a
                         href="#"
                         name="scalarValueEditInline"
@@ -34,7 +34,10 @@
                         wicket:id="scalarValueEditInline">
                     <span wicket:id="scalarValueEditInlineLabel"></span>
                 </a>
-            </div>
+
+                <wicket:container wicket:id="propertyEditForm"/>
+
+            </wicket:container>
 
             <wicket:fragment wicket:id="text">
                 <input

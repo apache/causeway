@@ -91,6 +91,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     private WebMarkupContainer scalarValueEditInlineContainer;
     private WebMarkupContainer editInlineLink;
+    private WebMarkupContainer propertyEditForm;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
@@ -158,6 +159,9 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
         editInlineLink.setOutputMarkupId(true);
         scalarValueEditInlineContainer.add(editInlineLink);
+
+        propertyEditForm = new WebMarkupContainer("propertyEditForm");
+        scalarValueEditInlineContainer.add(propertyEditForm);
 
         final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
         editInlineLink.add(editInlineLinkLabel);
