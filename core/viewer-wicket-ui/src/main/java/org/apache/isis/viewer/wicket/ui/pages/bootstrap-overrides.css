@@ -870,3 +870,10 @@ tr.headers th form input {
 .select2-container-multi.input-sm {
     height: inherit;
 }
+
+.scalarNameAndValueComponentType .inlineEditForm {
+    border: 2px solid;
+    padding: 10px;
+    margin-bottom: 20px
+}
+

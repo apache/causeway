@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
@@ -50,7 +51,7 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
     private void buildGui() {
         ScalarModel model = getModel();
-        add(new PropertyEditForm("inputForm", this, model));
+        add(new PropertyEditForm("inputForm", this, this.getSettings(), model));
     }
 
     class PropertyEditForm extends FormAbstract<ScalarModel> implements ScalarModelSubscriber  {
@@ -59,9 +60,10 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
         public PropertyEditForm(
                 final String id,
-                final PromptFormPanelAbstract<?> parentPanel,
+                final Component parentPanel,
+                final WicketViewerSettings settings,
                 final ScalarModel propertyModel) {
-            super(id, parentPanel, propertyModel);
+            super(id, parentPanel, settings, propertyModel);
         }
 
         private ScalarModel getScalarModel() {
@@ -75,7 +77,8 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
             final WebMarkupContainer container = new WebMarkupContainer(ID_PROPERTY);
             add(container);
 
-            final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+            final Component component =
+                    getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
             final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
             if(paramPanel != null) {
                 paramPanel.setOutputMarkupId(true);
@@ -94,7 +97,6 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
                 final AjaxRequestTarget target, final ScalarModelProvider provider) {
 
         }
-
     }
 
 }

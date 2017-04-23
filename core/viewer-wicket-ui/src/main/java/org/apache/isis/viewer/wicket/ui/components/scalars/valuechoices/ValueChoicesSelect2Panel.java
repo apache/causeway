@@ -106,7 +106,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
         addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component());
-        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
+        addEditPropertyTo(scalarIfRegularFormGroup);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);

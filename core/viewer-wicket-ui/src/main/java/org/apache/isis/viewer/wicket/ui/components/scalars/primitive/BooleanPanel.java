@@ -96,7 +96,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, checkBox);
-        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
+        addEditPropertyTo(scalarIfRegularFormGroup);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);

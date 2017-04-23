@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
@@ -65,19 +66,19 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
     private void buildGui() {
         ActionModel model = getModel();
         model.clearArguments();  // in case previously used, eg prompt displayed then cancelled
-        add(new ActionParameterForm("inputForm", this, model));
+        add(new ActionParameterForm("inputForm", this, this.getSettings(), model));
     }
 
     class ActionParameterForm extends PropertyEditFormPanel.FormAbstract<ActionModel> implements ScalarModelSubscriber  {
 
         private static final long serialVersionUID = 1L;
 
-
         public ActionParameterForm(
                 final String id,
-                final PromptFormPanelAbstract<?> parentPanel,
+                final Component parentPanel,
+                final WicketViewerSettings settings,
                 final ActionModel actionModel) {
-            super(id, parentPanel, actionModel);
+            super(id, parentPanel, settings, actionModel);
         }
 
         private ActionModel getActionModel() {

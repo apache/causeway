@@ -19,10 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.property;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -31,16 +29,13 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class PropertyEditPanel extends PanelAbstract<ScalarModel>
-        implements FormExecutor {
+public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,7 +50,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
 
     public PropertyEditPanel(final String id, final ScalarModel scalarModel) {
         super(id, new ScalarModel(scalarModel.getParentObjectAdapterMemento(), scalarModel.getPropertyMemento()));
-        getScalarModel().setFormExecutor(this);
+        getScalarModel().setFormExecutor(new PropertyEditFormExecutor(this, getModel()));
         buildGui(getScalarModel());
     }
 
@@ -63,7 +58,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
     protected void onConfigure() {
         super.onConfigure();
 
-        buildGui(getModel());
+        buildGui(getScalarModel());
     }
 
     private void buildGui(final ScalarModel scalarModel) {
@@ -136,32 +131,12 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
         return header;
     }
 
-    /**
-     * @param feedbackForm - for feedback messages.
-     * @return
-     */
-    @Override
-    public boolean executeAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
-
-        return new PropertyEditFormExecutor(this, getModel()).executeAndProcessResults(target, feedbackForm);
-
-
-    }
-
-
-
-
-
 
 
     ///////////////////////////////////////////////////////
     // Dependencies (from context)
     ///////////////////////////////////////////////////////
     
-    protected IsisTransactionManager getTransactionManager() {
-        return getPersistenceSession().getTransactionManager();
-    }
-
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }

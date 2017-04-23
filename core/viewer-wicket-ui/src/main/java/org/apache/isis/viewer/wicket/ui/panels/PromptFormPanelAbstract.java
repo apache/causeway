@@ -33,13 +33,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
-import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.HasExecutingPanel;
+import org.apache.isis.viewer.wicket.model.models.HasFormExecutor;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
@@ -47,39 +50,40 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFee
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  */
-public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecutingPanel> extends PanelAbstract<T> {
-
-    protected final FormExecutor formExecutor;
+public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecutor> extends PanelAbstract<T> {
 
     private static final String ID_OK_BUTTON = "okButton";
     private static final String ID_CANCEL_BUTTON = "cancelButton";
 
 
+
     public PromptFormPanelAbstract(final String id, final T model) {
         super(id, model);
-        Ensure.ensureThatArg(model.getFormExecutor(), is(not(nullValue())));
-        this.formExecutor = model.getFormExecutor();
     }
 
-    public static abstract class FormAbstract<T extends IModel<?>> extends Form<ObjectAdapter>
+    public static abstract class FormAbstract<T extends IModel<ObjectAdapter> & HasFormExecutor> extends Form<ObjectAdapter>
             implements ScalarModelSubscriber {
 
         protected static final String ID_FEEDBACK = "feedback";
 
         protected final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
-        protected final PromptFormPanelAbstract<?> parentPanel;
+        protected final Component parentPanel;
+        private final WicketViewerSettings settings;
+        private final FormExecutor formExecutor;
 
-        public FormAbstract(final String id, final PromptFormPanelAbstract<?> parentPanel, final IModel<ObjectAdapter> model) {
+        public FormAbstract(
+                final String id,
+                final Component parentPanel,
+                final WicketViewerSettings settings,
+                final T model) {
             super(id, model);
             this.parentPanel = parentPanel;
+            this.settings = settings;
+            this.formExecutor = model.getFormExecutor();
 
             setOutputMarkupId(true); // for ajax button
             addParameters();
@@ -95,19 +99,19 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
         protected abstract void addParameters();
 
         protected AjaxButton addOkButton() {
-            AjaxButton okButton = parentPanel.getSettings().isUseIndicatorForFormSubmit()
+            AjaxButton okButton = settings.isUseIndicatorForFormSubmit()
                     ? new IndicatingAjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
                         private static final long serialVersionUID = 1L;
 
                         @Override
                         public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                            onSubmitOf(target, form, this, FormAbstract.this.parentPanel);
+                            onSubmitOf(target, form, this);
                         }
 
                         @Override
                         protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                             super.updateAjaxAttributes(attributes);
-                            if(parentPanel.getSettings().isPreventDoubleClickForFormSubmit()) {
+                            if(settings.isPreventDoubleClickForFormSubmit()) {
                                 PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                             }
                         }
@@ -123,13 +127,13 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
 
                         @Override
                         public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                            onSubmitOf(target, form, this, FormAbstract.this.parentPanel);
+                            onSubmitOf(target, form, this);
                         }
 
                         @Override
                         protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                             super.updateAjaxAttributes(attributes);
-                            if(parentPanel.getSettings().isPreventDoubleClickForFormSubmit()) {
+                            if(settings.isPreventDoubleClickForFormSubmit()) {
                                 PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                             }
                         }
@@ -171,9 +175,8 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
         private void onSubmitOf(
                 final AjaxRequestTarget target,
                 final Form<?> form,
-                final AjaxButton ajaxButton,
-                final PromptFormPanelAbstract<?> parentPanel) {
-            boolean succeeded = parentPanel.formExecutor.executeAndProcessResults(target, form);
+                final AjaxButton ajaxButton) {
+            boolean succeeded = formExecutor.executeAndProcessResults(target, form);
             if(succeeded) {
                 // the Wicket ajax callbacks will have just started to hide the veil
                 // we now show it once more, so that a veil continues to be shown until the
@@ -189,7 +192,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
 
                 // ensure any jGrowl errors are shown
                 // (normally would be flushed when traverse to next page).
-                String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(parentPanel.getAuthenticationSession().getMessageBroker());
+                String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(getAuthenticationSession().getMessageBroker());
                 builder.append(errorMessagesIfAny);
 
                 // append the JS to the response.
@@ -197,6 +200,14 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
                 target.appendJavaScript(buf);
                 target.add(form);
             }
+        }
+
+        private AuthenticationSession getAuthenticationSession() {
+            return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+        }
+
+        protected IsisSessionFactory getIsisSessionFactory() {
+            return IsisContext.getSessionFactory();
         }
 
 
@@ -211,7 +222,6 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
                 target.add((Component)provider);
             }
         }
-
     }
 
     //region > dependencies

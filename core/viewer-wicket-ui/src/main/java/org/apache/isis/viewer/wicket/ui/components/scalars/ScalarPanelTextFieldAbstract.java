@@ -74,12 +74,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         }
     }
 
-    protected WebMarkupContainer scalarTypeContainer;
     private AbstractTextComponent<T> textField;
 
-    private WebMarkupContainer scalarValueEditInlineContainer;
-    private WebMarkupContainer editInlineLink;
-    private Component propertyEditForm;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
@@ -91,24 +87,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         super.onInitialize();
 
         scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
+        scalarTypeContainer.setOutputMarkupId(true);
         scalarTypeContainer.add(new CssClassAppender(getScalarPanelType()));
         addOrReplace(scalarTypeContainer);
 
-    }
-
-    private Component getEditComponent() {
-        return scalarModel.getEditStyle() == PropertyEditStyle.INLINE
-                ? scalarValueEditInlineContainer
-                : textField;
-    }
-
-    /**
-     * Opposite of {@link #getEditComponent()}.
-     */
-    private Component getOtherComponent() {
-        return scalarModel.getEditStyle() == PropertyEditStyle.INLINE
-                ? textField
-                : scalarValueEditInlineContainer;
     }
 
 
@@ -143,69 +125,80 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         final IModel<T> textFieldModel = textField.getModel();
 
 
-        this.scalarValueEditInlineContainer = new WebMarkupContainer("scalarValueEditInlineContainer");
-        scalarValueEditInlineContainer.setOutputMarkupId(true);
-        this.editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
-        editInlineLink.setOutputMarkupId(true);
-        scalarValueEditInlineContainer.add(editInlineLink);
 
-        propertyEditForm = new WebMarkupContainer("propertyEditForm");
-        //propertyEditForm = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
 
-        scalarValueEditInlineContainer.add(propertyEditForm);
-
-        final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
-        editInlineLink.add(editInlineLinkLabel);
-
-        propertyEditForm.setVisible(false);
+        //
+        // read-only/dialog edit
+        //
 
         final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
 
-        scalarTypeContainer.add(scalarIfRegularFormGroup);
-
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
 
         // find the links...
-
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
+        final List<LinkAndLabel> entityActions =
+                EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
         addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        if(getModel().isRequired()) {
-            final String label = scalarName.getDefaultModelObjectAsString();
-            if(!Strings.isNullOrEmpty(label)) {
-                scalarName.add(new CssClassAppender("mandatory"));
-            }
-        }
-
-        scalarIfRegularFormGroup.add(scalarName);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        addFeedbackOnlyTo(scalarIfRegularFormGroup, getEditComponent());
-        addEditPropertyTo(scalarIfRegularFormGroup, editInlineLink, scalarValueEditInlineContainer, propertyEditForm);
+        addFeedbackOnlyTo(scalarIfRegularFormGroup, textField);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
+        scalarTypeContainer.add(scalarIfRegularFormGroup);
 
 
 
-        getOtherComponent().setVisibilityAllowed(false);
 
+        //
+        // inline edit
+        //
+
+        this.editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
+        editInlineLink.setOutputMarkupId(true);
+
+        final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
+        editInlineLink.add(editInlineLinkLabel);
+
+
+        scalarIfRegularFormGroup.add(editInlineLink);
+
+
+
+        //
+        // inline edit form
+        // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
+        //
+
+        scalarIfRegularInlineEditForm = new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM);
+        scalarIfRegularInlineEditForm.setOutputMarkupId(true);
+        scalarTypeContainer.add(scalarIfRegularInlineEditForm);
+
+
+
+
+
+        //
+        // configure dialog edit vs inline edit
+        //
+
+        addEditPropertyTo(scalarIfRegularFormGroup);
+        configureInlineEditCallback();
+
+        if (scalarModel.isEditable() && scalarModel.getEditStyle() == PropertyEditStyle.INLINE) {
+            textField.setVisibilityAllowed(false);
+        } else {
+            editInlineLink.setVisibilityAllowed(false);
+        }
+        scalarIfRegularInlineEditForm.setVisible(false);
 
         return scalarIfRegularFormGroup;
-    }
-
-    private String asString(final IModel<T> textFieldModel) {
-        return textFieldModel != null && textFieldModel.getObject() != null ? textFieldModel.getObject().toString() : null;
     }
 
     protected abstract IModel<String> getScalarPanelType();
@@ -227,13 +220,25 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
-        
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);
 
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, this.textField);
         textFieldFragment.add(this.textField);
         formGroup.add(textFieldFragment);
 
-        formGroup.add(this.scalarValueEditInlineContainer);
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
+        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            scalarName.setEscapeModelStrings(namedFacet.escaped());
+        }
+
+        if(getModel().isRequired()) {
+            final String label = scalarName.getDefaultModelObjectAsString();
+            if(!Strings.isNullOrEmpty(label)) {
+                scalarName.add(new CssClassAppender("mandatory"));
+            }
+        }
+
+        formGroup.add(scalarName);
 
         return formGroup;
     }
@@ -351,9 +356,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
 
-        // some behaviours can only be attached to one component
-        // so we check as to which will actually be visible.
-        getEditComponent().add(behavior);
+        textField.add(behavior);
+
     }
 
 

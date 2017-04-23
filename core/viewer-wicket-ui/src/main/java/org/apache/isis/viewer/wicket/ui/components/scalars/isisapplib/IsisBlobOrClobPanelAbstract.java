@@ -116,7 +116,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         
         addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, fileUploadField);
-        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
+        addEditPropertyTo(scalarIfRegularFormGroup);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);

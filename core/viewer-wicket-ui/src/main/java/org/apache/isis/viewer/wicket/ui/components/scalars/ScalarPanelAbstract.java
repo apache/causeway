@@ -51,6 +51,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
@@ -77,8 +78,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
+
     protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
     protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
+
+    protected static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
 
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -144,9 +148,15 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
     }
 
-    protected Component componentIfCompact;
-    private Component componentIfRegular;
     protected final ScalarModel scalarModel;
+
+    protected WebMarkupContainer scalarTypeContainer;
+
+    protected Component scalarIfCompact;
+    protected Component scalarIfRegular;
+    protected WebMarkupContainer scalarIfRegularInlineEditForm;
+
+    protected WebMarkupContainer editInlineLink;
 
 
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
@@ -173,11 +183,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     protected Component getLabelForCompact() {
-        return componentIfCompact;
+        return scalarIfCompact;
     }
 
     public Component getComponentForRegular() {
-        return componentIfRegular;
+        return scalarIfRegular;
     }
 
     @Override
@@ -225,8 +235,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         
         // REVIEW: this is nasty, both write to the same entityLink field
         // even though only one is used
-        componentIfCompact = addComponentForCompact();
-        componentIfRegular = addComponentForRegular();
+        scalarIfCompact = addComponentForCompact();
+        scalarIfRegular = addComponentForRegular();
         
         getRendering().buildGui(this);
         addCssForMetaModel();
@@ -297,17 +307,13 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     protected void addEditPropertyTo(
-            final MarkupContainer markupContainer,
-            final WebMarkupContainer editInlineLink,
-            final Component scalarValueEditInlineContainer,
-            final Component propertyEditForm) {
+            final MarkupContainer scalarIfRegularFormGroup) {
 
-        final PropertyEditStyle editStyle = this.scalarModel.getEditStyle();
-        if(editStyle == PropertyEditStyle.DIALOG) {
+        if(scalarModel.isEditable() && scalarModel.getEditStyle() == PropertyEditStyle.DIALOG) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
-
             editProperty.setOutputMarkupId(true);
+            scalarIfRegularFormGroup.addOrReplace(editProperty);
 
             editProperty.add(new AjaxEventBehavior("click") {
                 protected void onEvent(AjaxRequestTarget target) {
@@ -331,18 +337,36 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
                 }
             });
-
-            markupContainer.addOrReplace(editProperty);
-
         } else {
+            Components.permanentlyHide(scalarIfRegularFormGroup, ID_EDIT_PROPERTY);
+        }
+
+    }
+
+    protected void configureInlineEditCallback() {
+
+        final PropertyEditStyle editStyle = this.scalarModel.getEditStyle();
+        if(editStyle == PropertyEditStyle.INLINE) {
 
             if(editInlineLink != null) {
                 editInlineLink.add(new AjaxEventBehavior("click") {
                     @Override
                     protected void onEvent(final AjaxRequestTarget target) {
+
+                        scalarModel.toEditMode();
                         editInlineLink.setVisible(false);
-                        propertyEditForm.setVisible(true);
-                        target.add(scalarValueEditInlineContainer);
+
+                        // dynamically update the edit form.
+                        final PropertyEditFormExecutor formExecutor =
+                                new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
+                        scalarModel.setFormExecutor(formExecutor);
+                        scalarIfRegularInlineEditForm = (WebMarkupContainer) getComponentFactoryRegistry().addOrReplaceComponent(
+                                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+
+                        scalarIfRegular.setVisible(false);
+                        scalarIfRegularInlineEditForm.setVisible(true);
+
+                        target.add(scalarTypeContainer);
                     }
 
                     @Override
@@ -351,9 +375,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                     }
                 });
             }
-
-
-            Components.permanentlyHide(markupContainer, ID_EDIT_PROPERTY);
         }
     }
 

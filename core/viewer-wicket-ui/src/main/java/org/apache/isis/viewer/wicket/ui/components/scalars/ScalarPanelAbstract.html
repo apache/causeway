@@ -26,11 +26,14 @@
         <wicket:panel>
             <div wicket:id="scalarTypeContainer"
                  class="scalarNameAndValueComponentType" >
+
                 <div wicket:id="scalarIfRegular"
                      class="form-group" >
+
                     <label wicket:id="scalarName"
                            class="scalarName control-label"
                     >[Label text]</label>
+
                     <span class="scalarValueWrapper">
                         <div class="scalarPlaceholder">
                             <span class="scalarValueInput">
@@ -38,22 +41,17 @@
                                     <wicket:child/>
                                     <a wicket:id="editProperty"
                                        href="#"
-                                       class="edit fa fa-pencil-square-o"/>
-                                    <div wicket:id="scalarValueEditInlineContainer">
-                                        <a
-                                                href="#"
-                                                name="scalarValueEditInline"
-                                                class="form-control input-sm scalarValueEditInline"
-                                                wicket:id="scalarValueEditInline">
-                                            <span wicket:id="scalarValueEditInlineLabel"></span>
-                                        </a>
-
-                                        <div wicket:id="propertyEditForm">
-                                            <div><span>property edit form</span></div>
-                                        </div>
-                                    </div>
+                                       class="edit fa fa-pencil-square-o"></a>
+                                    <a
+                                            href="#"
+                                            name="scalarValueEditInline"
+                                            class="form-control input-sm scalarValueEditInline"
+                                            wicket:id="scalarValueEditInline">
+                                        <span wicket:id="scalarValueEditInlineLabel"></span>
+                                    </a>
                                 </span>
                             </span>
+
                             <span wicket:id="associatedActionLinksRight"
                                   class="associatedActionLinksRight"
                             >[drop down]</span>
@@ -61,8 +59,14 @@
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
-                    <div class="clearfix"/>
+                    <div class="clearfix"></div>
+
                 </div>
+
+                <div wicket:id="scalarIfRegularInlineEditForm" class="inlineEditForm" >
+                    <div><span>property edit form</span></div>
+                </div>
+
                 <wicket:container wicket:id="scalarIfCompact"></wicket:container>
             </div>
 

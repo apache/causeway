@@ -79,7 +79,7 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
  * action's {@link Mode#PARAMETERS parameters}, or the handling of the
  * {@link Mode#RESULTS results} once invoked.
  */
-public class ActionModel extends BookmarkableModel<ObjectAdapter> implements HasExecutingPanel {
+public class ActionModel extends BookmarkableModel<ObjectAdapter> implements HasFormExecutor {
 
     private static final long serialVersionUID = 1L;
     

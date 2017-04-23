@@ -160,7 +160,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
         addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component()); // this is a placeholder; when select2.component() is available, we use that instead
-        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
+        addEditPropertyTo(scalarIfRegularFormGroup);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
