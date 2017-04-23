@@ -80,7 +80,7 @@ public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                oneOf(mockConfiguration).getString("isis.properties.editStyle");
+                oneOf(mockConfiguration).getString("isis.objects.promptStyle");
                 will(returnValue(PromptStyle.INLINE.name()));
 
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);

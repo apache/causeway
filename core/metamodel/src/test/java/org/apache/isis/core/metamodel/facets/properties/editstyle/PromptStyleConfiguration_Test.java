@@ -24,7 +24,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_none() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.properties.editStyle");
+            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
             will(returnValue(null));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -34,7 +34,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_inline() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.properties.editStyle");
+            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
             will(returnValue("inline"));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -44,7 +44,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_inline_mixed_case_and_superfluous_characters() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.properties.editStyle");
+            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
             will(returnValue(" inLIne "));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -54,7 +54,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_dialog() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.properties.editStyle");
+            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
             will(returnValue("dialog"));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -64,7 +64,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_invalid() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.properties.editStyle");
+            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
             will(returnValue("garbage"));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
