@@ -57,7 +57,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
 
         processDescribedAs(holder, properties, propertyLayout);
 
-        processEditStyle(holder, properties, propertyLayout);
+        processPromptStyle(holder, properties, propertyLayout);
 
         processHidden(holder, properties, propertyLayout);
 
@@ -91,7 +91,7 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
         FacetUtil.addFacet(describedAsFacet);
     }
 
-    void processEditStyle(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
+    void processPromptStyle(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
         PromptStyleFacet promptStyleFacet = PromptStyleFacetOnPropertyFromLayoutProperties
                 .create(properties, holder);
         if(promptStyleFacet == null) {
