@@ -47,6 +47,7 @@ import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
@@ -678,6 +679,17 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
     //////////////////////////////////////////////////
 
     private FormExecutor formExecutor;
+
+    @Override
+    public PromptStyle getPromptStyle() {
+        // for now, at least..
+        return PromptStyle.DIALOG;
+    }
+
+    @Override
+    public ScalarModel.InlinePromptContext getInlinePromptContext() {
+        throw new IllegalStateException("should not be called when getPromptStyle() returns DIALOG");
+    }
 
     /**
      * A hint passed from one Wicket UI component to another.

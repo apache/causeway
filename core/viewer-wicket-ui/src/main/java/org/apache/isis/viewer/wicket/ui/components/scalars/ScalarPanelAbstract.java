@@ -310,7 +310,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected void addEditPropertyTo(
             final MarkupContainer scalarIfRegularFormGroup) {
 
-        if(scalarModel.isEditable() && scalarModel.getEditStyle() == PromptStyle.DIALOG) {
+        if(scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.DIALOG) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
             editProperty.setOutputMarkupId(true);
@@ -346,7 +346,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected void configureInlineEditCallback() {
 
-        final PromptStyle editStyle = this.scalarModel.getEditStyle();
+        final PromptStyle editStyle = this.scalarModel.getPromptStyle();
         if(editStyle == PromptStyle.INLINE) {
 
             if(editInlineLink != null) {
@@ -355,14 +355,17 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                     protected void onEvent(final AjaxRequestTarget target) {
 
                         scalarModel.toEditMode();
-                        editInlineLink.setVisible(false);
 
                         // dynamically update the edit form.
                         final PropertyEditFormExecutor formExecutor =
                                 new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
                         scalarModel.setFormExecutor(formExecutor);
+                        scalarModel.setInlinePromptContext(
+                                new ScalarModel.InlinePromptContext(scalarIfRegular, scalarIfRegularInlineEditForm));
+
                         scalarIfRegularInlineEditForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
                                 scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+
 
                         scalarIfRegular.setVisible(false);
                         scalarIfRegularInlineEditForm.setVisible(true);

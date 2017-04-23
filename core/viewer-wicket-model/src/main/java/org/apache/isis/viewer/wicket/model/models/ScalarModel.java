@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,9 @@ import java.util.List;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -42,11 +46,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -919,24 +923,25 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
 
 
 
-    public PromptStyle getEditStyle() {
-        if (isEditable()) {
-            PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
-            return facet != null && facet.value() == PromptStyle.INLINE
-                    ? PromptStyle.INLINE
-                    : PromptStyle.DIALOG;
-        } else {
-            // not editable
+    public PromptStyle getPromptStyle() {
+        final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
+        if(facet == null) {
             return null;
         }
+        return facet.value() == PromptStyle.INLINE
+                ? PromptStyle.INLINE
+                : PromptStyle.DIALOG;
     }
 
-    public boolean isEditable() {
-        Where where = getRenderingHint().isInTable() ? Where.PARENTED_TABLES : Where.OBJECT_FORMS;
-        boolean editable = disable(where) == null;
+    public boolean canEnterEditMode() {
+        boolean editable = isEnabled();
         return editable && isViewMode();
     }
 
+    boolean isEnabled() {
+        Where where = getRenderingHint().isInTable() ? Where.PARENTED_TABLES : Where.OBJECT_FORMS;
+        return disable(where) == null;
+    }
 
     public String getReasonInvalidIfAny() {
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
@@ -1010,6 +1015,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
 
     private FormExecutor formExecutor;
 
+
     /**
      * A hint passed from one Wicket UI component to another.
      *
@@ -1022,6 +1028,44 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
         this.formExecutor = formExecutor;
     }
 
+
+
+    // //////////////////////////////////////
+
+
+    private InlinePromptContext inlinePromptContext;
+
+    /**
+     * Further hint, to support inline edits...
+     */
+    public InlinePromptContext getInlinePromptContext() {
+        return inlinePromptContext;
+    }
+
+    public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
+        this.inlinePromptContext = inlinePromptContext;
+    }
+
+    public static class InlinePromptContext implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private final Component scalarIfRegular;
+        private final WebMarkupContainer scalarIfRegularInlineEditForm;
+
+        public InlinePromptContext(
+                final Component scalarIfRegular,
+                final WebMarkupContainer scalarIfRegularInlineEditForm) {
+            this.scalarIfRegular = scalarIfRegular;
+            this.scalarIfRegularInlineEditForm = scalarIfRegularInlineEditForm;
+        }
+
+        public void onCancel() {
+
+            scalarIfRegular.setVisible(true);
+            scalarIfRegularInlineEditForm.setVisible(false);
+        }
+    }
 
     // //////////////////////////////////////
 
@@ -1041,6 +1085,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
     public ObjectAdapter[] getActionArgsHint() {
         return actionArgsHint;
     }
+
 
 
 }

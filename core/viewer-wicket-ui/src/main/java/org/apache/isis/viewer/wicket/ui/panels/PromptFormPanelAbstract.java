@@ -160,8 +160,9 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
                     if(actionPromptIfAny != null) {
                         actionPromptIfAny.closePrompt(target);
                     }
-                    // HACK: redraw the entire page...
-                    target.add(parentPanel.getPage());
+
+                    onCancel(target);
+
                 }
             };
             // so can submit with invalid content (eg mandatory params missing)
@@ -223,7 +224,14 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
                 target.add((Component)provider);
             }
         }
+
+        public void onCancel(
+                final AjaxRequestTarget target) {
+
+        }
+
     }
+
 
     //region > dependencies
     @com.google.inject.Inject

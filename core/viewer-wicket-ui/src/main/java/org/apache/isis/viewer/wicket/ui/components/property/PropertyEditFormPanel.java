@@ -20,10 +20,12 @@
 package org.apache.isis.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -31,8 +33,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
-import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
@@ -58,12 +60,15 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
         private static final long serialVersionUID = 1L;
 
+        private final PropertyEditFormPanel propertyEditFormPanel;
+
         public PropertyEditForm(
                 final String id,
-                final Component parentPanel,
+                final PropertyEditFormPanel propertyEditFormPanel,
                 final WicketViewerSettings settings,
                 final ScalarModel propertyModel) {
-            super(id, parentPanel, settings, propertyModel);
+            super(id, propertyEditFormPanel, settings, propertyModel);
+            this.propertyEditFormPanel = propertyEditFormPanel;
         }
 
         private ScalarModel getScalarModel() {
@@ -95,6 +100,34 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
         @Override
         public void onUpdate(
                 final AjaxRequestTarget target, final ScalarModelProvider provider) {
+
+        }
+
+        public void onCancel(
+                final AjaxRequestTarget target) {
+
+            final PromptStyle promptStyle = getScalarModel().getPromptStyle();
+
+            if(promptStyle == PromptStyle.INLINE) {
+
+                getScalarModel().toViewMode();
+
+                // replace
+                final String id = propertyEditFormPanel.getId();
+                final MarkupContainer parent = propertyEditFormPanel.getParent();
+
+                final WebMarkupContainer replacementPropertyEditFormPanel = new WebMarkupContainer(id);
+                replacementPropertyEditFormPanel.setVisible(false);
+
+                parent.addOrReplace(replacementPropertyEditFormPanel);
+
+
+                // change visibility of inline components
+                getScalarModel().getInlinePromptContext().onCancel();
+
+                // redraw
+                target.add(parent);
+            }
 
         }
     }

@@ -19,6 +19,15 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+
 public interface HasFormExecutor {
+    PromptStyle getPromptStyle();
+
+    /**
+     * Only applicable if {@link #getPromptStyle()} is {@link PromptStyle#INLINE}.
+     */
+    ScalarModel.InlinePromptContext getInlinePromptContext();
+
     FormExecutor getFormExecutor();
 }

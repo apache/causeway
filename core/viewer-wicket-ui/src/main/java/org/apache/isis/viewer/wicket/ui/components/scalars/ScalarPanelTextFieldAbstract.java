@@ -191,7 +191,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         addEditPropertyTo(scalarIfRegularFormGroup);
         configureInlineEditCallback();
 
-        if (scalarModel.isEditable() && scalarModel.getEditStyle() == PromptStyle.INLINE) {
+        if (scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.INLINE) {
             textField.setVisibilityAllowed(false);
         } else {
             editInlineLink.setVisibilityAllowed(false);
