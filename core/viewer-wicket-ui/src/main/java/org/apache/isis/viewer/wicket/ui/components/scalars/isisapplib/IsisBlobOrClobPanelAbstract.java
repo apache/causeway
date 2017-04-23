@@ -92,36 +92,36 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
         
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
-        labelIfRegular.add(fileUploadField);
+        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
+        scalarIfRegularFormGroup.add(fileUploadField);
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
-        labelIfRegular.add(scalarName);
+        scalarIfRegularFormGroup.add(scalarName);
 
         // find the links...
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
-        addPositioningCssTo(labelIfRegular, entityActions);
+        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
             wicketImage.setOutputMarkupId(true);
-            labelIfRegular.addOrReplace(wicketImage);
+            scalarIfRegularFormGroup.addOrReplace(wicketImage);
         } else {
-            Components.permanentlyHide(labelIfRegular, ID_IMAGE);
+            Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
         }
         
-        updateFileNameLabel(ID_FILE_NAME, labelIfRegular);
-        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, labelIfRegular);
+        updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
+        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
         
-        addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, fileUploadField);
-        addEditPropertyTo(labelIfRegular);
+        addOrReplace(scalarIfRegularFormGroup);
+        addFeedbackOnlyTo(scalarIfRegularFormGroup, fileUploadField);
+        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
 
         // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
+        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
-        return labelIfRegular;
+        return scalarIfRegularFormGroup;
     }
 
     private Image asWicketImage(String id) {

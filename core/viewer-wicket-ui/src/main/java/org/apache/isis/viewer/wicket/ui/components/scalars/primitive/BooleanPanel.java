@@ -72,19 +72,19 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         checkBox.setLabel(Model.of(name));
 
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
-        labelIfRegular.add(checkBox);
+        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
+        scalarIfRegularFormGroup.add(checkBox);
         if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
+            scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
+            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
-        labelIfRegular.add(scalarName);
+        scalarIfRegularFormGroup.add(scalarName);
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
         if (namedFacet != null) {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
@@ -92,16 +92,16 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
-        addPositioningCssTo(labelIfRegular, entityActions);
+        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, checkBox);
-        addEditPropertyTo(labelIfRegular);
+        addOrReplace(scalarIfRegularFormGroup);
+        addFeedbackOnlyTo(scalarIfRegularFormGroup, checkBox);
+        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
 
         // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
+        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
-        return labelIfRegular;
+        return scalarIfRegularFormGroup;
     }
 
 

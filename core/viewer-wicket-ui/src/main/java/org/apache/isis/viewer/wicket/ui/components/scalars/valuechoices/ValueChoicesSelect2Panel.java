@@ -80,12 +80,12 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         }
 
 
-        final MarkupContainer labelIfRegular = createFormComponentLabel();
+        final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
         if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
+            scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
         
-        addOrReplace(labelIfRegular);
+        addOrReplace(scalarIfRegularFormGroup);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
         if(getModel().isRequired()) {
@@ -94,7 +94,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
                 scalarName.add(new CssClassAppender("mandatory"));
             }
         }
-        labelIfRegular.addOrReplace(scalarName);
+        scalarIfRegularFormGroup.addOrReplace(scalarName);
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
         if (namedFacet != null) {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
@@ -103,15 +103,15 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         // find the links...
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
-        addPositioningCssTo(labelIfRegular, entityActions);
+        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        addFeedbackOnlyTo(labelIfRegular, select2.component());
-        addEditPropertyTo(labelIfRegular);
+        addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component());
+        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
 
         // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
+        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
-        return labelIfRegular;
+        return scalarIfRegularFormGroup;
     }
 
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
@@ -132,20 +132,20 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         select2.setRequired(required);
     }
 
-    protected MarkupContainer createFormComponentLabel() {
+    protected MarkupContainer createScalarIfRegularFormGroup() {
         final String name = getModel().getName();
         select2.setLabel(Model.of(name));
 
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, select2.component());
+        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, select2.component());
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
+            formGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        labelIfRegular.add(select2.component());
+        formGroup.add(select2.component());
 
-        return labelIfRegular;
+        return formGroup;
     }
 
     @Override

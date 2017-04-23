@@ -35,7 +35,7 @@ import org.apache.wicket.markup.html.form.Form;
  *     is it necessary to decouple them to this degree?
  * </p>
  */
-public interface ExecutingPanel extends Serializable {
+public interface FormExecutor extends Serializable {
 
     boolean executeAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
 

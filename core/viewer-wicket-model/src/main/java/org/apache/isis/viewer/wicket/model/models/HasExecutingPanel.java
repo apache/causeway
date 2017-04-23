@@ -20,5 +20,5 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 public interface HasExecutingPanel  {
-    ExecutingPanel getExecutingPanel();
+    FormExecutor getFormExecutor();
 }

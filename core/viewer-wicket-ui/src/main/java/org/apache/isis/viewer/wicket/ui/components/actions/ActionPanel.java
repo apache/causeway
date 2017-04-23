@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
@@ -62,7 +62,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * <p>
  * TODO: on results panel, have a button to resubmit?
  */
-public class ActionPanel extends PanelAbstract<ActionModel> implements ExecutingPanel {
+public class ActionPanel extends PanelAbstract<ActionModel> implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
 
@@ -79,7 +79,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements Executing
 
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
-        actionModel.setExecutingPanel(this);
+        actionModel.setFormExecutor(this);
         buildGui(getActionModel());
     }
 

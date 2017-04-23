@@ -27,8 +27,6 @@ import com.google.common.base.Strings;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -81,7 +79,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     private WebMarkupContainer scalarValueEditInlineContainer;
     private WebMarkupContainer editInlineLink;
-    private WebMarkupContainer propertyEditForm;
+    private Component propertyEditForm;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
@@ -152,23 +150,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         scalarValueEditInlineContainer.add(editInlineLink);
 
         propertyEditForm = new WebMarkupContainer("propertyEditForm");
+        //propertyEditForm = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+
         scalarValueEditInlineContainer.add(propertyEditForm);
 
         final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
         editInlineLink.add(editInlineLinkLabel);
-
-        editInlineLink.add(new AjaxEventBehavior("click") {
-            @Override
-            protected void onEvent(final AjaxRequestTarget target) {
-                editInlineLink.setVisible(false);
-                propertyEditForm.setVisible(true);
-                target.add(scalarValueEditInlineContainer);
-            }
-
-            @Override public boolean isEnabled(final Component component) {
-                return true;
-            }
-        });
 
         propertyEditForm.setVisible(false);
 
@@ -203,7 +190,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         }
 
         addFeedbackOnlyTo(scalarIfRegularFormGroup, getEditComponent());
-        addEditPropertyTo(scalarIfRegularFormGroup);
+        addEditPropertyTo(scalarIfRegularFormGroup, editInlineLink, scalarValueEditInlineContainer, propertyEditForm);
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);

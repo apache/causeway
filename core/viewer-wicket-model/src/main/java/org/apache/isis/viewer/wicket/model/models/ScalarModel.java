@@ -1008,18 +1008,18 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasExecuti
     // //////////////////////////////////////
 
 
-    private ExecutingPanel executingPanel;
+    private FormExecutor formExecutor;
 
     /**
      * A hint passed from one Wicket UI component to another.
      *
      * Mot actually used by the model itself.
      */
-    public ExecutingPanel getExecutingPanel() {
-        return executingPanel;
+    public FormExecutor getFormExecutor() {
+        return formExecutor;
     }
-    public void setExecutingPanel(final ExecutingPanel executingPanel) {
-        this.executingPanel = executingPanel;
+    public void setFormExecutor(final FormExecutor formExecutor) {
+        this.formExecutor = formExecutor;
     }
 
 

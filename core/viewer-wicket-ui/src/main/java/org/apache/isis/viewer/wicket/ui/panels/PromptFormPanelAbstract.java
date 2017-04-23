@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.HasExecutingPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -57,7 +57,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
  */
 public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecutingPanel> extends PanelAbstract<T> {
 
-    protected final ExecutingPanel executingPanel;
+    protected final FormExecutor formExecutor;
 
     private static final String ID_OK_BUTTON = "okButton";
     private static final String ID_CANCEL_BUTTON = "cancelButton";
@@ -65,8 +65,8 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
 
     public PromptFormPanelAbstract(final String id, final T model) {
         super(id, model);
-        Ensure.ensureThatArg(model.getExecutingPanel(), is(not(nullValue())));
-        this.executingPanel = model.getExecutingPanel();
+        Ensure.ensureThatArg(model.getFormExecutor(), is(not(nullValue())));
+        this.formExecutor = model.getFormExecutor();
     }
 
     public static abstract class FormAbstract<T extends IModel<?>> extends Form<ObjectAdapter>
@@ -173,7 +173,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasExecuting
                 final Form<?> form,
                 final AjaxButton ajaxButton,
                 final PromptFormPanelAbstract<?> parentPanel) {
-            boolean succeeded = parentPanel.executingPanel.executeAndProcessResults(target, form);
+            boolean succeeded = parentPanel.formExecutor.executeAndProcessResults(target, form);
             if(succeeded) {
                 // the Wicket ajax callbacks will have just started to hide the veil
                 // we now show it once more, so that a veil continues to be shown until the

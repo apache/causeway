@@ -296,7 +296,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
     }
 
-    protected void addEditPropertyTo(final MarkupContainer markupContainer) {
+    protected void addEditPropertyTo(
+            final MarkupContainer markupContainer,
+            final WebMarkupContainer editInlineLink,
+            final Component scalarValueEditInlineContainer,
+            final Component propertyEditForm) {
 
         final PropertyEditStyle editStyle = this.scalarModel.getEditStyle();
         if(editStyle == PropertyEditStyle.DIALOG) {
@@ -331,6 +335,24 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             markupContainer.addOrReplace(editProperty);
 
         } else {
+
+            if(editInlineLink != null) {
+                editInlineLink.add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(final AjaxRequestTarget target) {
+                        editInlineLink.setVisible(false);
+                        propertyEditForm.setVisible(true);
+                        target.add(scalarValueEditInlineContainer);
+                    }
+
+                    @Override
+                    public boolean isEnabled(final Component component) {
+                        return true;
+                    }
+                });
+            }
+
+
             Components.permanentlyHide(markupContainer, ID_EDIT_PROPERTY);
         }
     }

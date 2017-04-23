@@ -136,16 +136,16 @@ public class ReferencePanel extends ScalarPanelAbstract {
         select2.component().setOutputMarkupId(true);
         select2.component().setLabel(Model.of(name));
 
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, entityLink);
-        labelIfRegular.add(entityLink);
+        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, entityLink);
+        scalarIfRegularFormGroup.add(entityLink);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
+            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
-        labelIfRegular.add(scalarName);
+        scalarIfRegularFormGroup.add(scalarName);
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
         if (namedFacet != null) {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
@@ -156,14 +156,14 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final List<LinkAndLabel> entityActions =
                 EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
-        addPositioningCssTo(labelIfRegular, entityActions);
+        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, select2.component()); // this is a placeholder; when select2.component() is available, we use that instead
-        addEditPropertyTo(labelIfRegular);
+        addOrReplace(scalarIfRegularFormGroup);
+        addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component()); // this is a placeholder; when select2.component() is available, we use that instead
+        addEditPropertyTo(scalarIfRegularFormGroup, null, null, null);
 
         // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
+        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
         // add semantics
         entityLink.setRequired(getModel().isRequired());
@@ -186,7 +186,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(getModel().isRequired()) {
             scalarName.add(new CssClassAppender("mandatory"));
         }
-        return labelIfRegular;
+        return scalarIfRegularFormGroup;
     }
 
     private Select2 createSelect2() {
