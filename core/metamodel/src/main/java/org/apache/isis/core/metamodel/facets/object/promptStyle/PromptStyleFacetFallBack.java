@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.editStyle;
+package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class PropertyEditStyleFacetAsConfigured extends PropertyEditStyleFacetAbstract {
+public class PromptStyleFacetFallBack extends PromptStyleFacetAbstract {
 
-    private final PropertyEditStyle editStyle;
-
-    public PropertyEditStyleFacetAsConfigured(final PropertyEditStyle editStyle, final FacetHolder holder) {
+    public PromptStyleFacetFallBack(final FacetHolder holder) {
         super(holder);
-        this.editStyle = editStyle;
     }
 
-    @Override public PropertyEditStyle value() {
-        return editStyle;
+    @Override
+    public PromptStyle value() {
+        return PromptStyle.DIALOG;
     }
 }

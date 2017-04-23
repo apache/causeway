@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -107,15 +107,15 @@ public class PropertyLayoutData
     }
 
 
-    private PropertyEditStyle editStyle;
+    private PromptStyle promptStyle;
 
     @XmlAttribute(required = false)
-    public PropertyEditStyle getEditStyle() {
-        return editStyle;
+    public PromptStyle getPromptStyle() {
+        return promptStyle;
     }
 
-    public void setEditStyle(PropertyEditStyle editStyle) {
-        this.editStyle = editStyle;
+    public void setPromptStyle(PromptStyle promptStyle) {
+        this.promptStyle = promptStyle;
     }
 
 

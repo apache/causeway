@@ -43,9 +43,9 @@ public @interface PropertyLayout {
 
 
     /**
-     * How the properties of this domain object are be edited, either {@link PropertyEditStyle#DIALOG dialog} or {@link PropertyEditStyle#INLINE inline}.
+     * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
-    PropertyEditStyle editStyle() default PropertyEditStyle.AS_CONFIGURED;
+    PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;
 
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.

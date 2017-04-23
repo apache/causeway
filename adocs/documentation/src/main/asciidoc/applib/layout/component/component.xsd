@@ -60,7 +60,7 @@
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
-    <xs:attribute name="editStyle" type="tns:propertyEditStyle"/>
+    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
     <xs:attribute name="hidden" type="tns:where"/>
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="labelPosition" type="tns:labelPosition"/>
@@ -101,7 +101,7 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:simpleType name="propertyEditStyle">
+  <xs:simpleType name="promptStyle">
     <xs:restriction base="xs:string">
       <xs:enumeration value="DIALOG"/>
       <xs:enumeration value="INLINE"/>

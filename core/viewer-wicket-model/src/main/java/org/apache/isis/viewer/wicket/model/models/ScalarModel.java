@@ -28,7 +28,7 @@ import java.util.List;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -919,12 +919,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
 
 
 
-    public PropertyEditStyle getEditStyle() {
+    public PromptStyle getEditStyle() {
         if (isEditable()) {
-            PropertyEditStyleFacet facet = getFacet(PropertyEditStyleFacet.class);
-            return facet != null && facet.value() == PropertyEditStyle.INLINE
-                    ? PropertyEditStyle.INLINE
-                    : PropertyEditStyle.DIALOG;
+            PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
+            return facet != null && facet.value() == PromptStyle.INLINE
+                    ? PromptStyle.INLINE
+                    : PromptStyle.DIALOG;
         } else {
             // not editable
             return null;

@@ -16,27 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.property.editStyle;
+package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 
-public class PropertyEditStyleConfiguration {
+public class PromptStyleConfiguration {
 
-    private PropertyEditStyleConfiguration() {}
+    private PromptStyleConfiguration() {}
 
-    public static final String EDIT_STYLE_KEY = "isis.properties.editStyle";
+    public static final String PROMPT_STYLE_KEY = "isis.objects.promptStyle";
 
-    public static PropertyEditStyle parse(final IsisConfiguration configuration) {
-        final String configuredValue = configuration.getString(EDIT_STYLE_KEY);
-        return PropertyEditStyleConfiguration.parse(configuredValue);
+    public static PromptStyle parse(final IsisConfiguration configuration) {
+        final String configuredValue = configuration.getString(PROMPT_STYLE_KEY);
+        return PromptStyleConfiguration.parse(configuredValue);
     }
 
-    private static PropertyEditStyle parse(final String value) {
-        return value != null && value.trim().equalsIgnoreCase(PropertyEditStyle.INLINE.name())
-                ? PropertyEditStyle.INLINE
-                : PropertyEditStyle.DIALOG;
+    private static PromptStyle parse(final String value) {
+        return value != null && value.trim().equalsIgnoreCase(PromptStyle.INLINE.name())
+                ? PromptStyle.INLINE
+                : PromptStyle.DIALOG;
     }
 
 }

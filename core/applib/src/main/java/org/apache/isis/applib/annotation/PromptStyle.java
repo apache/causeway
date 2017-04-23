@@ -19,9 +19,9 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * How editing of properties should be performed
+ * How prompting for new values (property edit) should be performed
  */
-public enum PropertyEditStyle {
+public enum PromptStyle {
     /**
      * Edit the property according to the default edit style policy configured in <tt>isis.properties</tt>.
      *
@@ -31,15 +31,11 @@ public enum PropertyEditStyle {
      */
     AS_CONFIGURED,
     /**
-     * Edit the property using a dialog (similar to action parameter, but just a single property being changed)
+     * Use a dialog for the prompt
      */
     DIALOG,
     /**
-     * Edit the property inline.
-     *
-     * <p>
-     *     In the Wicket viewer this is implemented using the <code>x-editable</code> library
-     * </p>
+     * Show the form inline, replacing the rendering of the property.
      */
     INLINE
 }

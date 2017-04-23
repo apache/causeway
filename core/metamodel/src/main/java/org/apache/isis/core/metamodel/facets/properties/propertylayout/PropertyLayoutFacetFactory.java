@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 
 public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
@@ -92,14 +92,14 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     }
 
     void processEditStyle(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
-        PropertyEditStyleFacet propertyEditStyleFacet = PropertyEditStyleFacetOnPropertyFromLayoutProperties
+        PromptStyleFacet promptStyleFacet = PromptStyleFacetOnPropertyFromLayoutProperties
                 .create(properties, holder);
-        if(propertyEditStyleFacet == null) {
-            propertyEditStyleFacet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+        if(promptStyleFacet == null) {
+            promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(propertyLayout, getConfiguration(), holder);
         }
 
-        FacetUtil.addFacet(propertyEditStyleFacet);
+        FacetUtil.addFacet(promptStyleFacet);
     }
 
     void processHidden(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {

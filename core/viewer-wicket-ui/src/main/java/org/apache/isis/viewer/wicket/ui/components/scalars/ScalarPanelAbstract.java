@@ -37,7 +37,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -52,6 +52,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
@@ -309,7 +310,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected void addEditPropertyTo(
             final MarkupContainer scalarIfRegularFormGroup) {
 
-        if(scalarModel.isEditable() && scalarModel.getEditStyle() == PropertyEditStyle.DIALOG) {
+        if(scalarModel.isEditable() && scalarModel.getEditStyle() == PromptStyle.DIALOG) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
             editProperty.setOutputMarkupId(true);
@@ -345,8 +346,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected void configureInlineEditCallback() {
 
-        final PropertyEditStyle editStyle = this.scalarModel.getEditStyle();
-        if(editStyle == PropertyEditStyle.INLINE) {
+        final PromptStyle editStyle = this.scalarModel.getEditStyle();
+        if(editStyle == PromptStyle.INLINE) {
 
             if(editInlineLink != null) {
                 editInlineLink.add(new AjaxEventBehavior("click") {
@@ -360,7 +361,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                         final PropertyEditFormExecutor formExecutor =
                                 new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
                         scalarModel.setFormExecutor(formExecutor);
-                        scalarIfRegularInlineEditForm = (WebMarkupContainer) getComponentFactoryRegistry().addOrReplaceComponent(
+                        scalarIfRegularInlineEditForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
                                 scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
 
                         scalarIfRegular.setVisible(false);

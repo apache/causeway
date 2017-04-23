@@ -17,16 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.editStyle;
+package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-/**
- * Indicates that the editing of the property should be published.
- */
-public interface PropertyEditStyleFacet extends SingleValueFacet<PropertyEditStyle> {
+public abstract class PromptStyleFacetAbstract extends FacetAbstract
+        implements PromptStyleFacet {
 
-    PropertyEditStyle value();
+
+    public static Class<? extends Facet> type() {
+        return PromptStyleFacet.class;
+    }
+
+    public PromptStyleFacetAbstract(final FacetHolder holder) {
+        super( type(), holder, Derivation.NOT_DERIVED);
+    }
 
 }

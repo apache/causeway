@@ -99,7 +99,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFac
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyEditStyleFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -307,7 +307,7 @@ public abstract class GridSystemServiceAbstract<G extends Grid> implements GridS
                 FacetUtil.addOrReplaceFacet(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(
-                        PropertyEditStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                        PromptStyleFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));

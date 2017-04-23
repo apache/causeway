@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.editStyle;
+package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
-public class PropertyEditStyleFacetFallBack extends PropertyEditStyleFacetAbstract {
+/**
+ * Indicates that the editing of the property should be published.
+ */
+public interface PromptStyleFacet extends SingleValueFacet<PromptStyle> {
 
-    public PropertyEditStyleFacetFallBack(final FacetHolder holder) {
-        super(holder);
-    }
+    PromptStyle value();
 
-    @Override
-    public PropertyEditStyle value() {
-        return PropertyEditStyle.DIALOG;
-    }
 }

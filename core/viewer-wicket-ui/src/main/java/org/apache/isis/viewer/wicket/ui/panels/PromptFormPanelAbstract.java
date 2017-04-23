@@ -42,7 +42,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.HasFormExecutor;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
@@ -161,6 +160,8 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
                     if(actionPromptIfAny != null) {
                         actionPromptIfAny.closePrompt(target);
                     }
+                    // HACK: redraw the entire page...
+                    target.add(parentPanel.getPage());
                 }
             };
             // so can submit with invalid content (eg mandatory params missing)

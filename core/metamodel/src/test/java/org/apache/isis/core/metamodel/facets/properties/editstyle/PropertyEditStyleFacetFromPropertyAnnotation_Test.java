@@ -7,15 +7,15 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacetAsConfigured;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacetFallBack;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyEditStyleFacetForPropertyLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBack;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -42,72 +42,72 @@ public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
         public void when_annotated_with_dialog() throws Exception {
 
             context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).editStyle();
-                will(returnValue(PropertyEditStyle.DIALOG));
+                allowing(mockPropertyLayout).promptStyle();
+                will(returnValue(PromptStyle.DIALOG));
 
                 never(mockConfiguration);
             }});
 
-            PropertyEditStyleFacet facet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PropertyEditStyleFacetForPropertyLayoutAnnotation.class)));
-            Assert.assertThat(facet.value(), is(PropertyEditStyle.DIALOG));
+            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
         }
 
         @Test
         public void when_annotated_with_inline() throws Exception {
 
             context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).editStyle();
-                will(returnValue(PropertyEditStyle.INLINE));
+                allowing(mockPropertyLayout).promptStyle();
+                will(returnValue(PromptStyle.INLINE));
 
                 never(mockConfiguration);
             }});
 
 
-            PropertyEditStyleFacet facet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PropertyEditStyleFacetForPropertyLayoutAnnotation.class)));
-            Assert.assertThat(facet.value(), is(PropertyEditStyle.INLINE));
+            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+            Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
         @Test
         public void when_annotated_with_as_configured() throws Exception {
 
             context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).editStyle();
-                will(returnValue(PropertyEditStyle.AS_CONFIGURED));
+                allowing(mockPropertyLayout).promptStyle();
+                will(returnValue(PromptStyle.AS_CONFIGURED));
 
                 oneOf(mockConfiguration).getString("isis.properties.editStyle");
-                will(returnValue(PropertyEditStyle.INLINE.name()));
+                will(returnValue(PromptStyle.INLINE.name()));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PropertyEditStyleFacet.class);
+                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(false));
             }});
 
-            PropertyEditStyleFacet facet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PropertyEditStyleFacetAsConfigured.class)));
-            Assert.assertThat(facet.value(), is(PropertyEditStyle.INLINE));
+            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetAsConfigured.class)));
+            Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
         }
 
         @Test
         public void when_annotated_with_as_configured_but_already_has_doop_facet() throws Exception {
 
             context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).editStyle();
-                will(returnValue(PropertyEditStyle.AS_CONFIGURED));
+                allowing(mockPropertyLayout).promptStyle();
+                will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                oneOf(mockFacetHolder).containsDoOpFacet(PropertyEditStyleFacet.class);
+                oneOf(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
                 never(mockConfiguration);
             }});
 
-            PropertyEditStyleFacet facet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));
@@ -117,36 +117,36 @@ public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
         public void when_not_annotated() throws Exception {
 
             context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).editStyle();
+                allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(null));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PropertyEditStyleFacet.class);
+                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(false));
 
                 never(mockConfiguration);
             }});
 
-            PropertyEditStyleFacet facet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet.value(), is(PropertyEditStyle.DIALOG));
-            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PropertyEditStyleFacetFallBack.class)));
+            Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
+            Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetFallBack.class)));
         }
 
         @Test
         public void when_not_annotated_but_already_has_doop_facet() throws Exception {
 
             context.checking(new Expectations() {{
-                allowing(mockPropertyLayout).editStyle();
+                allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(null));
 
-                allowing(mockFacetHolder).containsDoOpFacet(PropertyEditStyleFacet.class);
+                allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
                 will(returnValue(true));
 
                 never(mockConfiguration);
             }});
 
-            PropertyEditStyleFacet facet = PropertyEditStyleFacetForPropertyLayoutAnnotation
+            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
             Assert.assertThat(facet, is(nullValue()));

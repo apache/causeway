@@ -19,31 +19,31 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.editStyle.PropertyEditStyleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 
-public class PropertyEditStyleFacetForPropertyXml extends PropertyEditStyleFacetAbstract {
+public class PromptStyleFacetForPropertyLayoutXml extends PromptStyleFacetAbstract {
 
-    public static PropertyEditStyleFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
+    public static PromptStyleFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
-        final PropertyEditStyle propertyEditStyle = propertyLayout.getEditStyle();
-        return propertyEditStyle != null ? new PropertyEditStyleFacetForPropertyXml(propertyEditStyle, holder) : null;
+        final PromptStyle promptStyle = propertyLayout.getPromptStyle();
+        return promptStyle != null ? new PromptStyleFacetForPropertyLayoutXml(promptStyle, holder) : null;
     }
 
-    private final PropertyEditStyle propertyEditStyle;
+    private final PromptStyle promptStyle;
 
-    private PropertyEditStyleFacetForPropertyXml(PropertyEditStyle propertyEditStyle, FacetHolder holder) {
+    private PromptStyleFacetForPropertyLayoutXml(PromptStyle promptStyle, FacetHolder holder) {
         super(holder);
-        this.propertyEditStyle = propertyEditStyle;
+        this.promptStyle = promptStyle;
     }
 
     @Override
-    public PropertyEditStyle value() {
-        return propertyEditStyle;
+    public PromptStyle value() {
+        return promptStyle;
     }
 }

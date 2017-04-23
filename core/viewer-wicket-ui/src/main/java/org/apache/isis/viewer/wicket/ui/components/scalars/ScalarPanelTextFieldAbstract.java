@@ -40,7 +40,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import org.apache.isis.applib.annotation.PropertyEditStyle;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -191,7 +191,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         addEditPropertyTo(scalarIfRegularFormGroup);
         configureInlineEditCallback();
 
-        if (scalarModel.isEditable() && scalarModel.getEditStyle() == PropertyEditStyle.INLINE) {
+        if (scalarModel.isEditable() && scalarModel.getEditStyle() == PromptStyle.INLINE) {
             textField.setVisibilityAllowed(false);
         } else {
             editInlineLink.setVisibilityAllowed(false);
