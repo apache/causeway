@@ -91,11 +91,12 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
             addOrReplace(formFeedback);
 
             AjaxButton okButton = addOkButton();
-            addCancelButton();
-            configureButtons(okButton);
+            final AjaxButton cancelButton = addCancelButton();
+            configureButtons(okButton, cancelButton);
         }
 
-        protected abstract void addParameters();
+
+    protected abstract void addParameters();
 
         protected AjaxButton addOkButton() {
             AjaxButton okButton = settings.isUseIndicatorForFormSubmit()
@@ -150,7 +151,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
         }
 
 
-        protected void addCancelButton() {
+        protected AjaxButton addCancelButton() {
             AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
                 private static final long serialVersionUID = 1L;
 
@@ -169,9 +170,11 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
             cancelButton.setDefaultFormProcessing(false);
 
             add(cancelButton);
+
+            return cancelButton;
         }
 
-        protected void configureButtons(final AjaxButton okButton) {
+        protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
         }
 
         private void onSubmitOf(

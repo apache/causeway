@@ -112,7 +112,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         }
 
         @Override
-        protected void configureButtons(final AjaxButton okButton) {
+        protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
             applyAreYouSure(okButton);
         }
 
