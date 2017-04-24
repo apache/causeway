@@ -115,6 +115,8 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
             if(promptStyle == PromptStyle.INLINE) {
 
                 getScalarModel().toViewMode();
+                getScalarModel().clearPending();
+                getScalarModel().reset();
 
                 // replace
                 final String id = propertyEditFormPanel.getId();
@@ -156,14 +158,13 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
                         final String javascript = PRE_JS + getCallbackScript() + POST_JS;
                         response.render(
-                                JavaScriptContentHeaderItem.forScript(javascript, component.getPath(), null));
+                                JavaScriptContentHeaderItem.forScript(javascript, null, null));
                     }
 
                     @Override
                     protected void respond(final AjaxRequestTarget target) {
                         onCancel(target);
                     }
-
 
                 });
             }

@@ -877,3 +877,7 @@ tr.headers th form input {
     margin-bottom: 20px
 }
 
+.scalarNameAndValueComponentType .inlineEditForm .form-group {
+    padding-left: 5px;
+    padding-right: 15px;
+}
