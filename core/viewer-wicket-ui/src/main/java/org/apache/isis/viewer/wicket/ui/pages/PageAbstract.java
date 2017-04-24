@@ -37,6 +37,7 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -279,6 +280,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         if(isModernBrowser()) {
             addBootLint(response);
         }
+
+        response.render(OnDomReadyHeaderItem.forScript(
+                "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)"));
+
     }
 
     private void addBootLint(final IHeaderResponse response) {

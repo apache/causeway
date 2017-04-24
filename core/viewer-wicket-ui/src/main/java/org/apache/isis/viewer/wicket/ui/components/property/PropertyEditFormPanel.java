@@ -26,6 +26,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 
@@ -78,6 +79,16 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
         private ScalarModel getScalarModel() {
             return (ScalarModel) super.getModel();
         }
+
+        @Override
+        public void renderHead(final IHeaderResponse response) {
+            super.renderHead(response);
+
+            response.render(OnDomReadyHeaderItem.forScript(
+                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId())));
+
+        }
+
 
         @Override
         protected void addParameters() {

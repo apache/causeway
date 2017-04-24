@@ -27,7 +27,8 @@ $(function() {
     window.Isis = {
         Topic: {
             OPEN_IN_NEW_TAB: 'openInNewTab',
-            FOCUS_FIRST_ACTION_PARAMETER: 'focusFirstActionParameter'
+            FOCUS_FIRST_PARAMETER: 'focusFirstParameter',
+            FOCUS_FIRST_PROPERTY: 'focusFirstProperty'
         },
         copyModalShown: false
     };
@@ -78,9 +79,15 @@ $(function() {
         if(win) { win.focus(); }
     });
 
-    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, function(jqEvent, modalWindowId) {
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, modalWindowId) {
         setTimeout(function() {
             $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select').filter(':visible:first').focus();
+        }, 0);
+    });
+
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent) {
+        setTimeout(function() {
+            $(document).find('a.scalarValueEditInline').filter(':visible:first').focus();
         }, 0);
     });
 

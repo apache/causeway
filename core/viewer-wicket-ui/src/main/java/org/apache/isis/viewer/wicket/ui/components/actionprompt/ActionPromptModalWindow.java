@@ -64,6 +64,6 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
         super.renderHead(response);
 
         response.render(OnDomReadyHeaderItem.forScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId())));
+                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId())));
     }
 }
