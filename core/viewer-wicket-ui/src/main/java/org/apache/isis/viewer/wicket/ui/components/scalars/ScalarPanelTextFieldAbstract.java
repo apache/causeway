@@ -51,11 +51,21 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
- * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
- * using a simple {@link TextField}.
+ * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
+ * their backing model.
+ *
+ * <p>
+ * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
+ * {@link Rendering#REGULAR regular} (eg within a form).
+ * </p>
+ *
+ * <p>
+ * This implementation is for panels that use a textfield/text area.
+ * </p>
  */
 public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelTextAbstract {
 

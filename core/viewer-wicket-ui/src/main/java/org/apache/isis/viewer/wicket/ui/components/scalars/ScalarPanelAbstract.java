@@ -300,7 +300,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                         getComponentForRegular().setVisible(false);
                         scalarIfRegularInlinePromptForm.setVisible(true);
 
-                        target.add(ScalarPanelAbstract.this);
+                        target.add(scalarTypeContainer);
                     }
 
                     @Override

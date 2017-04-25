@@ -20,16 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-/**
- * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
- * their backing model.
- * 
- * <p>
- * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
- * {@link Rendering#REGULAR regular} (eg within a form).
- */
 public abstract class ScalarPanelTextAbstract extends ScalarPanelAbstract  {
 
     private static final long serialVersionUID = 1L;

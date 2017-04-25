@@ -22,36 +22,96 @@
       xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"
       lang="en">
-    <body>
-        <wicket:extend>
-            <wicket:container wicket:id="scalarValueContainer"/>
+<body>
+<wicket:panel>
+    <div class="scalarNameAndValueComponentType"
+         wicket:id="scalarTypeContainer">
 
-            <wicket:fragment wicket:id="text">
-                <input
-                        type="text"
-                        name="scalarValue"
-                        class="form-control input-sm scalarValue"
-                        wicket:id="scalarValue" />
-            </wicket:fragment>
+        <div class="form-group"
+             wicket:id="scalarIfRegular">
 
-            <wicket:fragment wicket:id="textarea">
+            <label class="scalarName control-label"
+                   wicket:id="scalarName"
+            >[Label text]</label>
+
+            <span class="scalarValueWrapper">
+                    <div class="scalarPlaceholder">
+
+                        <span class="scalarValueInput">
+                            <span class="editing">
+
+                                <a href="#"
+                                   name="scalarValueEditInline"
+                                   class="form-control input-sm scalarValueEditInline"
+                                   wicket:id="scalarValueEditInline">
+                                    <span wicket:id="scalarValueEditInlineLabel"></span>
+                                </a>
+
+                                <wicket:container wicket:id="scalarValueContainer"/>
+
+
+
+                                <a href="#"
+                                   class="edit fa fa-pencil-square-o"
+                                   wicket:id="editProperty"></a>
+                            </span>
+                        </span>
+
+                        <span class="associatedActionLinksRight"
+                              wicket:id="associatedActionLinksRight"
+                        >[drop down]</span>
+                    </div>
+                    <span wicket:id="feedback" class="help-block"></span>
+                    <span wicket:id="associatedActionLinksBelow"></span>
+                </span>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="inlineEditForm"
+             wicket:id="scalarIfRegularInlineEditForm" >
+            <div><span>property edit form</span></div>
+        </div>
+
+        <wicket:container wicket:id="scalarIfCompact"></wicket:container>
+    </div>
+
+    <wicket:fragment wicket:id="text">
+        <input
+                type="text"
+                name="scalarValue"
+                class="form-control input-sm scalarValue"
+                wicket:id="scalarValue" />
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="textarea">
                 <textarea
                         name="scalarValue"
                         class="form-control scalarValue"
                         wicket:id="scalarValue">
                 </textarea>
-            </wicket:fragment>
+    </wicket:fragment>
 
-            <wicket:fragment wicket:id="date">
-                <div class="date">
-                    <input
-                            type="text"
-                            name="scalarValue"
-                            class="form-control input-sm scalarValue"
-                            wicket:id="scalarValue"/>
-                </div>
-            </wicket:fragment>
+    <wicket:fragment wicket:id="date">
+        <div class="date">
+            <input
+                    type="text"
+                    name="scalarValue"
+                    class="form-control input-sm scalarValue"
+                    wicket:id="scalarValue"/>
+        </div>
+    </wicket:fragment>
 
-        </wicket:extend>
-    </body>
+    <wicket:fragment wicket:id="compactAsInputCheckbox">
+        <input wicket:id="scalarIfCompact"
+               type="checkbox"
+               class="form-control" />
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="compactAsSpan">
+        <span wicket:id="scalarIfCompact"></span>
+    </wicket:fragment>
+
+</wicket:panel>
+</body>
 </html>
+
