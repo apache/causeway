@@ -104,7 +104,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     private WebMarkupContainer scalarTypeContainer;
 
     /**
-     * Used by most subclasses ({@link ScalarPanelTextAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
+     * Used by most subclasses ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
     protected WebMarkupContainer scalarIfRegularInlinePromptForm;
 
@@ -272,7 +272,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * For convenience of subclasses that support inline prompts ({@link ScalarPanelTextAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}).
+     * For convenience of subclasses that support inline prompts ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}).
      */
     protected void configureInlinePromptCallback() {
 
