@@ -24,46 +24,49 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div wicket:id="scalarTypeContainer"
-                 class="scalarNameAndValueComponentType" >
+            <div class="scalarNameAndValueComponentType"
+                 wicket:id="scalarTypeContainer">
 
-                <div wicket:id="scalarIfRegular"
-                     class="form-group" >
+                <div class="form-group"
+                     wicket:id="scalarIfRegular">
 
-                    <label wicket:id="scalarName"
-                           class="scalarName control-label"
+                    <label class="scalarName control-label"
+                           wicket:id="scalarName"
                     >[Label text]</label>
 
                     <span class="scalarValueWrapper">
                         <div class="scalarPlaceholder">
+
                             <span class="scalarValueInput">
                                 <span class="editing">
-                                    <wicket:child/>
-                                    <a wicket:id="editProperty"
-                                       href="#"
-                                       class="edit fa fa-pencil-square-o"></a>
-                                    <a
-                                            href="#"
-                                            name="scalarValueEditInline"
-                                            class="form-control input-sm scalarValueEditInline"
-                                            wicket:id="scalarValueEditInline">
+
+                                    <a href="#"
+                                       name="scalarValueEditInline"
+                                       class="form-control input-sm scalarValueEditInline"
+                                       wicket:id="scalarValueEditInline">
                                         <span wicket:id="scalarValueEditInlineLabel"></span>
                                     </a>
+
+                                    <wicket:child/>
+
+                                    <a href="#"
+                                       class="edit fa fa-pencil-square-o"
+                                       wicket:id="editProperty"></a>
                                 </span>
                             </span>
 
-                            <span wicket:id="associatedActionLinksRight"
-                                  class="associatedActionLinksRight"
+                            <span class="associatedActionLinksRight"
+                                  wicket:id="associatedActionLinksRight"
                             >[drop down]</span>
                         </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
                     <div class="clearfix"></div>
-
                 </div>
 
-                <div wicket:id="scalarIfRegularInlineEditForm" class="inlineEditForm" >
+                <div class="inlineEditForm"
+                     wicket:id="scalarIfRegularInlineEditForm" >
                     <div><span>property edit form</span></div>
                 </div>
 

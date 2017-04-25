@@ -24,25 +24,46 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div class="booleanPanel scalarNameAndValueComponentType">
-                <div class="form-group" wicket:id="scalarIfRegular">
-                    <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
+            <div class="scalarNameAndValueComponentType booleanPanel"
+                 wicket:id="scalarTypeContainer"
+            >
+                <div class="form-group"
+                     wicket:id="scalarIfRegular">
+
+                    <label class="scalarName control-label"
+                           wicket:id="scalarName"
+                    >[Label text]</label>
+
                     <span class="scalarValueWrapper">
+
                         <div class="scalarPlaceholder">
+
                             <span class="scalarValueInput">
                                 <span class="editing">
-                                    <input type="checkbox" name="scalarValue" class="scalarValue" wicket:id="scalarValue" />
-                                        <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+
+                                    <input type="checkbox"
+                                           name="scalarValue"
+                                           class="scalarValue"
+                                           wicket:id="scalarValue" />
+
+                                    <a href="#"
+                                       class="edit fa fa-pencil-square-o"
+                                       wicket:id="editProperty" ></a>
                                 </span>
                             </span>
-                            <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight"></span>
+                            <span class="associatedActionLinksRight"
+                                  wicket:id="associatedActionLinksRight"
+                            >[drop down]</span>
                         </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
                     <div class="clearfix"/>
                 </div>
-                <input type="checkbox" wicket:id="scalarIfCompact" />
+
+                <input type="checkbox"
+                       wicket:id="scalarIfCompact" />
+
             </div>
             <div class="clearfix"/>
         </wicket:panel>

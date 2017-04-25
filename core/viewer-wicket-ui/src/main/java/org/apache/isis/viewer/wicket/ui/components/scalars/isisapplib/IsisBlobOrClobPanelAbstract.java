@@ -114,7 +114,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
         
-        addOrReplace(scalarIfRegularFormGroup);
+        scalarTypeContainer.addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, fileUploadField);
         addEditPropertyTo(scalarIfRegularFormGroup);
 
@@ -178,7 +178,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         if(downloadLink != null) {
             updateFileNameLabel("fileNameIfCompact", downloadLink);
         }
-        addOrReplace(scalarIfCompact);
+
+        scalarTypeContainer.addOrReplace(scalarIfCompact);
         return scalarIfCompact;
     }
 

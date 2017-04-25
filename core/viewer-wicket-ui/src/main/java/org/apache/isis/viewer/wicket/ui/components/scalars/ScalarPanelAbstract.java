@@ -62,6 +62,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     private static final long serialVersionUID = 1L;
 
+    protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
+
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
     protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     protected static final String ID_SCALAR_NAME = "scalarName";
@@ -80,6 +82,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected Component scalarIfCompact;
     protected Component scalarIfRegular;
 
+    protected WebMarkupContainer scalarTypeContainer;
+
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
@@ -87,6 +91,17 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
 
     // ///////////////////////////////////////////////////////////////////
+
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
+        scalarTypeContainer.setOutputMarkupId(true);
+        addOrReplace(scalarTypeContainer);
+
+    }
 
     @Override
     protected void onBeforeRender() {

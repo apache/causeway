@@ -94,7 +94,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        addOrReplace(scalarIfRegularFormGroup);
+        scalarTypeContainer.addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, checkBox);
         addEditPropertyTo(scalarIfRegularFormGroup);
 
@@ -113,7 +113,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
     @Override
     protected Component addComponentForCompact() {
         final CheckBoxX component = createCheckBox(ID_SCALAR_IF_COMPACT);
-        addOrReplace(component);
+        scalarTypeContainer.addOrReplace(component);
         return component;
     }
 

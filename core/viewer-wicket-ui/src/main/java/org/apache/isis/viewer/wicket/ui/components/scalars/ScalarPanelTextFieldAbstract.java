@@ -57,7 +57,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
  * using a simple {@link TextField}.
  */
-public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract2 {
+public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelTextAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -82,16 +82,18 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         this.cls = cls;
     }
 
+    // ///////////////////////////////////////////////////////////////////
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
 
-        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
-        scalarTypeContainer.setOutputMarkupId(true);
         scalarTypeContainer.add(new CssClassAppender(getScalarPanelType()));
-        addOrReplace(scalarTypeContainer);
-
     }
+
+    protected abstract IModel<String> getScalarPanelType();
+
+    // ///////////////////////////////////////////////////////////////////
 
 
     AbstractTextComponent<T> getTextField() {
@@ -200,8 +202,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         return scalarIfRegularFormGroup;
     }
-
-    protected abstract IModel<String> getScalarPanelType();
 
     private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
         if(!getSettings().isReplaceDisabledTagWithReadonlyTag()) {

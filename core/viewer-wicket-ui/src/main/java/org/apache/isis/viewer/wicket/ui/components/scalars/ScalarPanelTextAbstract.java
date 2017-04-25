@@ -40,12 +40,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
  * {@link Rendering#REGULAR regular} (eg within a form).
  */
-public abstract class ScalarPanelAbstract2 extends ScalarPanelAbstract  {
+public abstract class ScalarPanelTextAbstract extends ScalarPanelAbstract  {
 
     private static final long serialVersionUID = 1L;
-
-    protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
-
 
     protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
     protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
@@ -59,12 +56,11 @@ public abstract class ScalarPanelAbstract2 extends ScalarPanelAbstract  {
     }
 
 
-    protected WebMarkupContainer scalarTypeContainer;
     protected WebMarkupContainer scalarIfRegularInlineEditForm;
     protected WebMarkupContainer editInlineLink;
 
 
-    public ScalarPanelAbstract2(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelTextAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 
@@ -72,11 +68,11 @@ public abstract class ScalarPanelAbstract2 extends ScalarPanelAbstract  {
         Fragment compactFragment;
         switch (type) {
             case INPUT_CHECKBOX:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract2.this);
+                compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelTextAbstract.this);
                 break;
             case SPAN:
             default:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstract2.this);
+                compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelTextAbstract.this);
                 break;
         }
         return compactFragment;
@@ -99,7 +95,7 @@ public abstract class ScalarPanelAbstract2 extends ScalarPanelAbstract  {
 
                         // dynamically update the edit form.
                         final PropertyEditFormExecutor formExecutor =
-                                new PropertyEditFormExecutor(ScalarPanelAbstract2.this, scalarModel);
+                                new PropertyEditFormExecutor(ScalarPanelTextAbstract.this, scalarModel);
                         scalarModel.setFormExecutor(formExecutor);
                         scalarModel.setInlinePromptContext(
                                 new ScalarModel.InlinePromptContext(scalarIfRegular, scalarIfRegularInlineEditForm));
