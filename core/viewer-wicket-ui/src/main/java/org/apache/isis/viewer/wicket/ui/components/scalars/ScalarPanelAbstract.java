@@ -52,6 +52,10 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -70,6 +74,19 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
 
+    /**
+     * as per {@link #editInlineLink}
+     */
+    protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
+    protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
+
+    /**
+     * as per {@link #scalarIfRegularInlineEditForm}.
+     */
+    protected static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
+
+
+
     private static final String ID_EDIT_PROPERTY = "editProperty";
     private static final String ID_FEEDBACK = "feedback";
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
@@ -83,6 +100,12 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected Component scalarIfRegular;
 
     protected WebMarkupContainer scalarTypeContainer;
+
+    /**
+     * Used by most subclasses ({@link ScalarPanelTextAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
+     */
+    protected WebMarkupContainer scalarIfRegularInlineEditForm;
+    protected WebMarkupContainer editInlineLink;
 
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -99,9 +122,13 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
         scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
         scalarTypeContainer.setOutputMarkupId(true);
+        scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
         addOrReplace(scalarTypeContainer);
 
     }
+
+    protected abstract String getScalarPanelType();
+
 
     @Override
     protected void onBeforeRender() {
@@ -149,8 +176,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
         // REVIEW: this is nasty, both write to the same entityLink field
         // even though only one is used
-        scalarIfCompact = addComponentForCompact();
-        scalarIfRegular = addComponentForRegular();
+        scalarIfCompact = createComponentForCompact();
+        scalarIfRegular = createComponentForRegular();
+
+        scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
         getRendering().buildGui(this);
         addCssForMetaModel();
@@ -306,9 +335,9 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#REGULAR regular} format.
      */
-    protected abstract MarkupContainer addComponentForRegular();
+    protected abstract MarkupContainer createComponentForRegular();
 
-    protected abstract Component addComponentForCompact();
+    protected abstract Component createComponentForCompact();
 
     protected Component getLabelForCompact() {
         return scalarIfCompact;

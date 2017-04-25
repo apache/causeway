@@ -84,17 +84,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     // ///////////////////////////////////////////////////////////////////
 
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-
-        scalarTypeContainer.add(new CssClassAppender(getScalarPanelType()));
-    }
-
-    protected abstract IModel<String> getScalarPanelType();
-
-    // ///////////////////////////////////////////////////////////////////
-
 
     AbstractTextComponent<T> getTextField() {
         return textField;
@@ -113,7 +102,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected MarkupContainer addComponentForRegular() {
+    protected MarkupContainer createComponentForRegular() {
 
         // even though only one of textField and scalarValueEditInlineContainer will ever be visible,
         // am instantiating both to avoid NPEs
@@ -152,9 +141,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         // ... add entity links to panel (below and to right)
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
-
-        scalarTypeContainer.add(scalarIfRegularFormGroup);
-
 
 
 
@@ -308,11 +294,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
      * This default implementation uses a {@link Label}, however it may be overridden if required.
      */
     @Override
-    protected Component addComponentForCompact() {
+    protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
         compactFragment.add(labelIfCompact);
-        scalarTypeContainer.addOrReplace(compactFragment);
         return labelIfCompact;
     }
 

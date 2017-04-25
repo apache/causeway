@@ -22,9 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.sql.Timestamp;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 
@@ -46,8 +43,8 @@ public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstrac
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("javaSqlTimestampPanel");
+    protected String getScalarPanelType() {
+        return "javaSqlTimestampPanel";
     }
 
 }

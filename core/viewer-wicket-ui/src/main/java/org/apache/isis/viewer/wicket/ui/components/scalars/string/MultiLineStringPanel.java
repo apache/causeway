@@ -24,8 +24,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -71,8 +69,8 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("multiLineStringPanel");
+    protected String getScalarPanelType() {
+        return "multiLineStringPanel";
     }
 
     private Component setAttribute(final TextArea<String> textField, final String attributeName, final int i) {

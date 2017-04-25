@@ -88,7 +88,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
 
     @Override
-    protected FormGroup addComponentForRegular() {
+    protected FormGroup createComponentForRegular() {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
         
@@ -114,7 +114,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
         
-        scalarTypeContainer.addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, fileUploadField);
         addEditPropertyTo(scalarIfRegularFormGroup);
 
@@ -150,9 +149,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final BufferedDynamicImageResource imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(image);
         final ThumbnailImageResource thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
-        
-        final NonCachingImage wicketImage = new NonCachingImage(id, thumbnailImageResource);
-        return wicketImage;
+
+        return new NonCachingImage(id, thumbnailImageResource);
     }
 
     private BufferedImage asBufferedImage(final Blob blob) {
@@ -172,14 +170,13 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     @Override
-    protected Component addComponentForCompact() {
+    protected Component createComponentForCompact() {
         final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
         if(downloadLink != null) {
             updateFileNameLabel("fileNameIfCompact", downloadLink);
         }
 
-        scalarTypeContainer.addOrReplace(scalarIfCompact);
         return scalarIfCompact;
     }
 
@@ -350,6 +347,12 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
      * Mandatory hook method.
      */
     protected abstract IResource newResource(final T namedWithMimeType);
+
+
+    @Override
+    protected String getScalarPanelType() {
+        return "isisBlobPanel";
+    }
 
 
 }

@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
@@ -37,8 +35,8 @@ public class IsisTimeStampPanel extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("isisTimeStampPanel");
+    protected String getScalarPanelType() {
+        return "isisTimeStampPanel";
     }
 
 

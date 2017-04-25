@@ -77,7 +77,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
 
-    protected Component addComponentForCompact() {
+    protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
             @Override

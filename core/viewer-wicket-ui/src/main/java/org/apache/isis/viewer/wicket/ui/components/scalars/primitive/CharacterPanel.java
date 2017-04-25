@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
@@ -36,7 +34,7 @@ public class CharacterPanel extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("characterPanel");
+    protected String getScalarPanelType() {
+        return "characterPanel";
     }
 }

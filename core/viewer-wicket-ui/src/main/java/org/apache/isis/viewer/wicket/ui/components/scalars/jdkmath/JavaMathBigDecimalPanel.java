@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 import java.math.BigDecimal;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
@@ -50,8 +48,8 @@ public class JavaMathBigDecimalPanel extends ScalarPanelTextFieldNumeric<BigDeci
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("javaMathBigDecimalPanel");
+    protected String getScalarPanelType() {
+        return "javaMathBigDecimalPanel";
     }
 }
 

@@ -65,7 +65,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
     @Override
-    protected MarkupContainer addComponentForRegular() {
+    protected MarkupContainer createComponentForRegular() {
         final String name = getModel().getName();
 
         checkBox = createCheckBox(ID_SCALAR_VALUE);
@@ -94,7 +94,6 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        scalarTypeContainer.addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, checkBox);
         addEditPropertyTo(scalarIfRegularFormGroup);
 
@@ -111,10 +110,8 @@ public class BooleanPanel extends ScalarPanelAbstract {
      * {@link Rendering#COMPACT compact} format.
      */
     @Override
-    protected Component addComponentForCompact() {
-        final CheckBoxX component = createCheckBox(ID_SCALAR_IF_COMPACT);
-        scalarTypeContainer.addOrReplace(component);
-        return component;
+    protected Component createComponentForCompact() {
+        return createCheckBox(ID_SCALAR_IF_COMPACT);
     }
 
     private CheckBoxX createCheckBox(final String id) {
@@ -190,4 +187,11 @@ public class BooleanPanel extends ScalarPanelAbstract {
         }
         return variation;
     }
+
+    @Override
+    protected String getScalarPanelType() {
+        return "booleanPanel";
+    }
+
+
 }

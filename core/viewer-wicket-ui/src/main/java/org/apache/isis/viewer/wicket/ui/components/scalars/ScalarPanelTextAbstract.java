@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -44,25 +43,17 @@ public abstract class ScalarPanelTextAbstract extends ScalarPanelAbstract  {
 
     private static final long serialVersionUID = 1L;
 
-    protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
-    protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
-
-    protected static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
-
-
     public enum CompactType {
         INPUT_CHECKBOX,
         SPAN
     }
 
 
-    protected WebMarkupContainer scalarIfRegularInlineEditForm;
-    protected WebMarkupContainer editInlineLink;
-
 
     public ScalarPanelTextAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
+
 
     protected Fragment getCompactFragment(CompactType type) {
         Fragment compactFragment;
@@ -118,9 +109,6 @@ public abstract class ScalarPanelTextAbstract extends ScalarPanelAbstract  {
             }
         }
     }
-
-
-
 
 
 }

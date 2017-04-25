@@ -66,7 +66,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     }
 
     @Override
-    protected MarkupContainer addComponentForRegular() {
+    protected MarkupContainer createComponentForRegular() {
 
         // same pattern as in ReferencePanel
         if(select2 == null) {
@@ -91,7 +91,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
         
-        scalarTypeContainer.addOrReplace(scalarIfRegularFormGroup);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
         if(getModel().isRequired()) {
@@ -155,10 +154,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     }
 
     @Override
-    protected Component addComponentForCompact() {
-        final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-        scalarTypeContainer.addOrReplace(labelIfCompact);
-        return labelIfCompact;
+    protected Component createComponentForCompact() {
+        return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
     }
 
     
@@ -306,4 +303,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     @com.google.inject.Inject
     private WicketViewerSettings wicketViewerSettings;
+
+    @Override
+    protected String getScalarPanelType() {
+        return "valueChoicesSelect2Panel";
+    }
+
+
 }

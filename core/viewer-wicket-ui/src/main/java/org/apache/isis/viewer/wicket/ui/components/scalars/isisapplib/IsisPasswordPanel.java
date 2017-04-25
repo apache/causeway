@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -61,7 +59,7 @@ public class IsisPasswordPanel extends ScalarPanelTextFieldParseableAbstract {
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("isisPasswordPanel");
+    protected String getScalarPanelType() {
+        return "isisPasswordPanel";
     }
 }

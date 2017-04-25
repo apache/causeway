@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 
@@ -39,7 +37,7 @@ public class JavaUtilDatePanel extends ScalarPanelTextFieldDatePickerAbstract<ja
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("javaUtilDatePanel");
+    protected String getScalarPanelType() {
+        return "javaUtilDatePanel";
     }
 }

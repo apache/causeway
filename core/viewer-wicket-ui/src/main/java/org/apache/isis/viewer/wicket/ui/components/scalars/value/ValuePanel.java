@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.value;
 
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -44,7 +43,7 @@ public class ValuePanel extends ScalarPanelTextFieldParseableAbstract {
 
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("valuePanel");
+    protected String getScalarPanelType() {
+        return "valuePanel";
     }
 }

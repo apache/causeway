@@ -77,10 +77,6 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
 
-    private static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
-    private static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
-
-    private static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
 
     /**
      * Determines the behaviour of dependent choices for the dependent; either to autoselect the first available choice, or to select none.
@@ -94,21 +90,18 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
 
     private EntityLinkSimplePanel entitySimpleLink;
 
-    protected WebMarkupContainer scalarIfRegularInlineEditForm;
-    protected WebMarkupContainer editInlineLink;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 
-    
     // //////////////////////////////////////
     // addComponentFor{Compact/Regular}
     // //////////////////////////////////////
 
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected Component addComponentForCompact() {
+    protected Component createComponentForCompact() {
 
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
@@ -121,14 +114,12 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         final WebMarkupContainer labelIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         labelIfCompact.add(entitySimpleLink);
 
-        scalarTypeContainer.addOrReplace(labelIfCompact);
-
         return labelIfCompact;
     }
 
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected FormGroup addComponentForRegular() {
+    protected FormGroup createComponentForRegular() {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
@@ -159,6 +150,9 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         if (namedFacet != null) {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
         }
+        if(getModel().isRequired()) {
+            scalarName.add(new CssClassAppender("mandatory"));
+        }
 
 
         // find the links...
@@ -167,7 +161,6 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
 
         addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
-        scalarTypeContainer.addOrReplace(scalarIfRegularFormGroup);
         addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component()); // this is a placeholder; when select2.component() is available, we use that instead
         addEditPropertyTo(scalarIfRegularFormGroup);
 
@@ -192,9 +185,7 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
             }
         });
 
-        if(getModel().isRequired()) {
-            scalarName.add(new CssClassAppender("mandatory"));
-        }
+
         return scalarIfRegularFormGroup;
     }
 
@@ -539,4 +530,11 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     public void repaint(AjaxRequestTarget target) {
         target.add(select2.component());
     }
+
+    @Override
+    protected String getScalarPanelType() {
+        return "referencePanel";
+    }
+
+
 }

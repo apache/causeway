@@ -23,8 +23,6 @@ import java.math.BigInteger;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 
@@ -59,8 +57,8 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInte
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("javaMathBigIntegerPanel");
+    protected String getScalarPanelType() {
+        return "javaMathBigIntegerPanel";
     }
 
 }
