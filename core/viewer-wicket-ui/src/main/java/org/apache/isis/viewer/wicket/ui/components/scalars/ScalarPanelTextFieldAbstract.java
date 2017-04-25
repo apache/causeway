@@ -57,7 +57,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
  * using a simple {@link TextField}.
  */
-public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract {
+public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 

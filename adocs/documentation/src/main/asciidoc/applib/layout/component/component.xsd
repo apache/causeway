@@ -60,12 +60,15 @@
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
-    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
     <xs:attribute name="hidden" type="tns:where"/>
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="labelPosition" type="tns:labelPosition"/>
     <xs:attribute name="multiLine" type="xs:int"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
+
+    <!-- 1.15.0-SNAPSHOT -->
+    <xs:attribute name="promptStyle" type="tns:promptStyle"/>
+
     <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
     <xs:attribute name="typicalLength" type="xs:int"/>
   </xs:complexType>
@@ -101,6 +104,7 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <!-- 1.15.0-SNAPSHOT -->
   <xs:simpleType name="promptStyle">
     <xs:restriction base="xs:string">
       <xs:enumeration value="DIALOG"/>

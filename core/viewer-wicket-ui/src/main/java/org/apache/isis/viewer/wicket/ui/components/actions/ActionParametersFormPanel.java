@@ -38,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
@@ -148,11 +149,13 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
                 final int numParams = action.getParameterCount();
                 for (int i = 0; i < numParams; i++) {
                     final ScalarPanelAbstract paramPanel = paramPanels.get(i);
-                    if(paramPanel != null) {
-                        // this could throw a ConcurrencyException as we may have to reload the 
+                    if(paramPanel != null && paramPanel instanceof PanelWithChoices) {
+                        final PanelWithChoices panelWithChoices = (PanelWithChoices) paramPanel;
+
+                        // this could throw a ConcurrencyException as we may have to reload the
                         // object adapter of the action in order to compute the choices
                         // (and that object adapter might have changed)
-                        if (paramPanel.updateChoices(pendingArguments)) {
+                        if (panelWithChoices.updateChoices(pendingArguments)) {
                             paramPanel.repaint(target);
                         }
                     }

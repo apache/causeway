@@ -31,11 +31,8 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -43,18 +40,15 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
@@ -64,41 +58,176 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-/**
- * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
- * their backing model.
- * 
- * <p>
- * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
- * {@link Rendering#REGULAR regular} (eg within a form).
- */
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 
-    protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
-
+    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
     protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
-    protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
-    protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
-
-    protected static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
-
-    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-
-    private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
-    private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
     private static final String ID_EDIT_PROPERTY = "editProperty";
     private static final String ID_FEEDBACK = "feedback";
+    private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
+    private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
-    public enum CompactType {
-        INPUT_CHECKBOX,
-        SPAN
+    // ///////////////////////////////////////////////////////////////////
+
+    protected final ScalarModel scalarModel;
+
+    protected Component scalarIfCompact;
+    protected Component scalarIfRegular;
+
+    public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
+        super(id, scalarModel);
+        this.scalarModel = scalarModel;
     }
+
+
+    // ///////////////////////////////////////////////////////////////////
+
+    @Override
+    protected void onBeforeRender() {
+
+        if ((!hasBeenRendered() || alwaysRebuildGui())) {
+            buildGui();
+        }
+
+        final ScalarModel scalarModel = getModel();
+        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+
+        if (scalarModel.isViewMode()) {
+            onBeforeRenderWhenViewMode();
+        } else {
+            if (disableReasonIfAny != null) {
+                onBeforeRenderWhenDisabled(disableReasonIfAny);
+            } else {
+                onBeforeRenderWhenEnabled();
+            }
+        }
+        super.onBeforeRender();
+    }
+
+
+    /**
+     * hook for highly dynamic components, eg conditional choices.
+     *
+     * <p>
+     * Returning <tt>true</tt> means that the component is always rebuilt prior to
+     * every {@link #onBeforeRender() render}ing.
+     */
+    protected boolean alwaysRebuildGui() {
+        return false;
+    }
+
+    /**
+     * Builds GUI lazily prior to first render.
+     *
+     * <p>
+     * This design allows the panel to be configured first.
+     *
+     * @see #onBeforeRender()
+     */
+    private void buildGui() {
+
+        // REVIEW: this is nasty, both write to the same entityLink field
+        // even though only one is used
+        scalarIfCompact = addComponentForCompact();
+        scalarIfRegular = addComponentForRegular();
+
+        getRendering().buildGui(this);
+        addCssForMetaModel();
+
+        if(!subscribers.isEmpty()) {
+            addFormComponentBehavior(new ScalarUpdatingBehavior());
+        }
+    }
+
+
+    /**
+     * Optional hook.
+     */
+    protected void onBeforeRenderWhenViewMode() {
+    }
+
+    /**
+     * Optional hook.
+     */
+    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+    }
+
+    /**
+     * Optional hook.
+     */
+    protected void onBeforeRenderWhenEnabled() {
+    }
+
+
+    private void addCssForMetaModel() {
+        final String cssForMetaModel = getModel().getLongName();
+        if (cssForMetaModel != null) {
+            add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
+        }
+
+        ScalarModel model = getModel();
+        final CssClassFacet facet = model.getFacet(CssClassFacet.class);
+        if(facet != null) {
+            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(
+                    AdapterManager.ConcurrencyChecking.NO_CHECK,
+                    getPersistenceSession(), getSpecificationLoader());
+            final String cssClass = facet.cssClass(parentAdapter);
+            CssClassAppender.appendCssClassTo(this, cssClass);
+        }
+    }
+
+
+    protected class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
+        private static final long serialVersionUID = 1L;
+
+        private ScalarUpdatingBehavior() {
+            super("change");
+        }
+
+        @Override
+        protected void onUpdate(AjaxRequestTarget target) {
+            for (ScalarModelSubscriber subscriber : subscribers) {
+                subscriber.onUpdate(target, ScalarPanelAbstract.this);
+            }
+
+            // hmmm... this doesn't seem to be picked up...
+            target.appendJavaScript(
+                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId()));
+        }
+
+        @Override
+        protected void onError(AjaxRequestTarget target, RuntimeException e) {
+            super.onError(target, e);
+            for (ScalarModelSubscriber subscriber : subscribers) {
+                subscriber.onError(target, ScalarPanelAbstract.this);
+            }
+        }
+    }
+
+
+    // //////////////////////////////////////
+
+    private final List<ScalarModelSubscriber> subscribers = Lists.newArrayList();
+
+    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
+        subscribers.add(subscriber);
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Mandatory hook.
+     */
+    protected abstract void addFormComponentBehavior(Behavior behavior);
+
+    // ///////////////////////////////////////////////////////////////////
 
     public enum Rendering {
         /**
@@ -146,156 +275,17 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
         public abstract Where getWhere();
 
-        private static Rendering renderingFor(RenderingHint renderingHint) {
+        private static Rendering renderingFor(EntityModel.RenderingHint renderingHint) {
             return renderingHint.isInTable()? Rendering.COMPACT: Rendering.REGULAR;
         }
-    }
-
-    protected final ScalarModel scalarModel;
-
-    protected WebMarkupContainer scalarTypeContainer;
-
-    protected Component scalarIfCompact;
-    protected Component scalarIfRegular;
-    protected WebMarkupContainer scalarIfRegularInlineEditForm;
-
-    protected WebMarkupContainer editInlineLink;
-
-
-    public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
-        this.scalarModel = scalarModel;
-    }
-
-    protected Fragment getCompactFragment(CompactType type) {
-        Fragment compactFragment;
-        switch (type) {
-            case INPUT_CHECKBOX:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract.this);
-                break;
-            case SPAN:
-            default:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstract.this);
-                break;
-        }
-        return compactFragment;
     }
 
     protected Rendering getRendering() {
         return Rendering.renderingFor(scalarModel.getRenderingHint());
     }
 
-    protected Component getLabelForCompact() {
-        return scalarIfCompact;
-    }
 
-    public Component getComponentForRegular() {
-        return scalarIfRegular;
-    }
-
-    @Override
-    protected void onBeforeRender() {
-
-        if ((!hasBeenRendered() || alwaysRebuildGui())) {
-            buildGui();
-        }
-
-        final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
-
-        if (scalarModel.isViewMode()) {
-            onBeforeRenderWhenViewMode();
-        } else {
-            if (disableReasonIfAny != null) {
-                onBeforeRenderWhenDisabled(disableReasonIfAny);
-            } else {
-                onBeforeRenderWhenEnabled();
-            }
-        }
-        super.onBeforeRender();
-    }
-
-    /**
-     * hook for highly dynamic components, eg conditional choices.
-     *
-     * <p>
-     * Returning <tt>true</tt> means that the component is always rebuilt prior to
-     * every {@link #onBeforeRender() render}ing.
-     */
-    protected boolean alwaysRebuildGui() {
-        return false;
-    }
-
-    /**
-     * Builds GUI lazily prior to first render.
-     * 
-     * <p>
-     * This design allows the panel to be configured first.
-     *
-     * @see #onBeforeRender()
-     */
-    private void buildGui() {
-        
-        // REVIEW: this is nasty, both write to the same entityLink field
-        // even though only one is used
-        scalarIfCompact = addComponentForCompact();
-        scalarIfRegular = addComponentForRegular();
-        
-        getRendering().buildGui(this);
-        addCssForMetaModel();
-        
-        if(!subscribers.isEmpty()) {
-            addFormComponentBehavior(new ScalarUpdatingBehavior());
-        }
-    }
-
-    protected class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
-        private static final long serialVersionUID = 1L;
-
-        private ScalarUpdatingBehavior() {
-            super("change");
-        }
-
-        @Override
-        protected void onUpdate(AjaxRequestTarget target) {
-            for (ScalarModelSubscriber subscriber : subscribers) {
-                subscriber.onUpdate(target, ScalarPanelAbstract.this);
-            }
-
-            // hmmm... this doesn't seem to be picked up...
-            target.appendJavaScript(
-                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId()));
-        }
-
-        @Override
-        protected void onError(AjaxRequestTarget target, RuntimeException e) {
-            super.onError(target, e);
-            for (ScalarModelSubscriber subscriber : subscribers) {
-                subscriber.onError(target, ScalarPanelAbstract.this);
-            }
-        }
-    }
-
-    /**
-     * Mandatory hook.
-     */
-    protected abstract void addFormComponentBehavior(Behavior behavior);
-
-    private void addCssForMetaModel() {
-        final String cssForMetaModel = getModel().getLongName();
-        if (cssForMetaModel != null) {
-            add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
-        }
-
-        ScalarModel model = getModel();
-        final CssClassFacet facet = model.getFacet(CssClassFacet.class);
-        if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                    getPersistenceSession(), getSpecificationLoader());
-            final String cssClass = facet.cssClass(parentAdapter);
-            CssClassAppender.appendCssClassTo(this, cssClass);
-        }
-    }
+    // ///////////////////////////////////////////////////////////////////
 
     /**
      * Mandatory hook method to build the component to render the model when in
@@ -305,9 +295,16 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected abstract Component addComponentForCompact();
 
-    protected void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
-        markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
+    protected Component getLabelForCompact() {
+        return scalarIfCompact;
     }
+
+    public Component getComponentForRegular() {
+        return scalarIfRegular;
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////
 
     protected void addEditPropertyTo(
             final MarkupContainer scalarIfRegularFormGroup) {
@@ -346,74 +343,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     }
 
-    protected void configureInlineEditCallback() {
 
-        final PromptStyle editStyle = this.scalarModel.getPromptStyle();
-        if(editStyle == PromptStyle.INLINE) {
-
-            if(editInlineLink != null) {
-                editInlineLink.add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(final AjaxRequestTarget target) {
-
-                        scalarModel.toEditMode();
-
-                        // dynamically update the edit form.
-                        final PropertyEditFormExecutor formExecutor =
-                                new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
-                        scalarModel.setFormExecutor(formExecutor);
-                        scalarModel.setInlinePromptContext(
-                                new ScalarModel.InlinePromptContext(scalarIfRegular, scalarIfRegularInlineEditForm));
-
-                        scalarIfRegularInlineEditForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
-                                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
-
-
-                        scalarIfRegular.setVisible(false);
-                        scalarIfRegularInlineEditForm.setVisible(true);
-
-                        target.add(scalarTypeContainer);
-                    }
-
-                    @Override
-                    public boolean isEnabled(final Component component) {
-                        return true;
-                    }
-                });
-            }
-        }
+    protected void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
+        markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
     }
 
-    /**
-     * Optional hook.
-     */
-    protected void onBeforeRenderWhenViewMode() {
-    }
-
-    /**
-     * Optional hook.
-     */
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
-    }
-
-    /**
-     * Optional hook.
-     */
-    protected void onBeforeRenderWhenEnabled() {
-    }
-
-    /**
-     * Applies the {@literal @}{@link org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet} and also CSS based on
-     * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotation.ActionLayout layout} positioned to
-     * the {@link org.apache.isis.applib.annotation.ActionLayout.Position#RIGHT right}.
-     *
-     * @param markupContainer The form group element
-     * @param entityActionLinks
-     */
-    protected void addPositioningCssTo(final MarkupContainer markupContainer, final List<LinkAndLabel> entityActionLinks) {
-        CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
-        CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
-    }
 
     protected void addEntityActionLinksBelowAndRight(final MarkupContainer labelIfRegular, final List<LinkAndLabel> entityActions) {
         final List<LinkAndLabel> entityActionsBelow = LinkAndLabel.positioned(entityActions, ActionLayout.Position.BELOW);
@@ -423,18 +357,31 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
+    /**
+     * Applies the {@literal @}{@link LabelAtFacet} and also CSS based on
+     * whether any of the associated actions have {@literal @}{@link ActionLayout layout} positioned to
+     * the {@link ActionLayout.Position#RIGHT right}.
+     *
+     * @param markupContainer The form group element
+     * @param entityActionLinks
+     */
+    protected void addPositioningCssTo(final MarkupContainer markupContainer, final List<LinkAndLabel> entityActionLinks) {
+        CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
+        CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
+    }
+
     private static String determinePropParamLayoutCss(ScalarModel model) {
         final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
         if (facet != null) {
             switch (facet.label()) {
-                case LEFT:
-                    return "label-left";
-                case RIGHT:
-                    return "label-right";
-                case NONE:
-                    return "label-none";
-                case TOP:
-                    return "label-top";
+            case LEFT:
+                return "label-left";
+            case RIGHT:
+                return "label-right";
+            case NONE:
+                return "label-none";
+            case TOP:
+                return "label-top";
             }
         }
         return "label-left";
@@ -454,24 +401,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return false;
     }
 
-    // //////////////////////////////////////
-
-    private final List<ScalarModelSubscriber> subscribers = Lists.newArrayList();
-
-    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
-        subscribers.add(subscriber);
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * Optional hook method
-     * 
-     * @return true - indicates has been updated, so update dynamically via ajax
-     */
-    public boolean updateChoices(ObjectAdapter[] pendingArguments) {
-        return false;
-    }
+    // ///////////////////////////////////////////////////////////////////
 
     /**
      * Repaints this panel of just some of its children
@@ -481,7 +411,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     public void repaint(AjaxRequestTarget target) {
         target.add(this);
     }
-
 
     // ///////////////////////////////////////////////////////////////////
 
