@@ -165,7 +165,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         //
 
         addEditPropertyTo(scalarIfRegularFormGroup);
-        configureInlineEditCallback();
+        configureInlinePromptCallback();
 
         if (scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.INLINE) {
             textField.setVisibilityAllowed(false);
@@ -299,6 +299,26 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
         compactFragment.add(labelIfCompact);
         return labelIfCompact;
+    }
+
+    public enum CompactType {
+        INPUT_CHECKBOX,
+        SPAN
+    }
+
+
+    protected Fragment getCompactFragment(CompactType type) {
+        Fragment compactFragment;
+        switch (type) {
+        case INPUT_CHECKBOX:
+            compactFragment = new Fragment(ID_SCALAR_IF_COMPACT, "compactAsInputCheckbox", ScalarPanelTextFieldAbstract.this);
+            break;
+        case SPAN:
+        default:
+            compactFragment = new Fragment(ID_SCALAR_IF_COMPACT, "compactAsSpan", ScalarPanelTextFieldAbstract.this);
+            break;
+        }
+        return compactFragment;
     }
 
 

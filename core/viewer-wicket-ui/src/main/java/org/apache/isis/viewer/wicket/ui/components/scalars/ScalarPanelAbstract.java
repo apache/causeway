@@ -49,6 +49,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
@@ -265,6 +266,50 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     public void notifyOnChange(final ScalarModelSubscriber subscriber) {
         subscribers.add(subscriber);
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////
+
+    /**
+     * For convenience of subclasses that support inline prompts ({@link ScalarPanelTextAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}).
+     */
+    protected void configureInlinePromptCallback() {
+
+        final PromptStyle promptStyle = this.scalarModel.getPromptStyle();
+        if(promptStyle == PromptStyle.INLINE) {
+
+            if(editInlineLink != null) {
+                editInlineLink.add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(final AjaxRequestTarget target) {
+
+                        scalarModel.toEditMode();
+
+                        // dynamically update the edit form.
+                        final PropertyEditFormExecutor formExecutor =
+                                new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
+                        scalarModel.setFormExecutor(formExecutor);
+                        scalarModel.setInlinePromptContext(
+                                new ScalarModel.InlinePromptContext(
+                                        getComponentForRegular(),
+                                        scalarIfRegularInlinePromptForm));
+
+                        switchFormForInlinePrompt();
+
+                        getComponentForRegular().setVisible(false);
+                        scalarIfRegularInlinePromptForm.setVisible(true);
+
+                        target.add(ScalarPanelAbstract.this);
+                    }
+
+                    @Override
+                    public boolean isEnabled(final Component component) {
+                        return true;
+                    }
+                });
+            }
+        }
     }
 
 
