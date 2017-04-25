@@ -16,10 +16,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 
 public class ActionPromptModalWindow extends ModalDialog<Void> {
 
@@ -41,6 +44,20 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
         setCloseOnEscapeKey(true);
         setBackdrop(Backdrop.STATIC);
     }
+
+    @Override
+    public Modal<Void> appendShowDialogJavaScript(final IPartialPageRequestHandler target) {
+
+        // the default implementation seems to make its two calls in the wrong order, in particular with
+        // appendDisableEnforceFocus called after the modal javascript object has already been created.
+        // so this patch makes sure it is called before hand.  This results in the Javascript fragment being
+        // invoked twice, but what the hey.
+        appendDisableEnforceFocus(target);
+
+        // we continue to call the original implementation, for maintainability
+        return super.appendShowDialogJavaScript(target);
+    }
+
 
     @Override
     public void renderHead(IHeaderResponse response) {

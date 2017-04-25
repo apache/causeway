@@ -243,6 +243,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             for (ScalarModelSubscriber subscriber : subscribers) {
                 subscriber.onUpdate(target, ScalarPanelAbstract.this);
             }
+
+            // hmmm... this doesn't seem to be picked up...
+            target.appendJavaScript(
+                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId()));
         }
 
         @Override
