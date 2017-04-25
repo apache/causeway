@@ -49,6 +49,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
@@ -81,7 +82,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
 
     /**
-     * as per {@link #scalarIfRegularInlineEditForm}.
+     * as per {@link #scalarIfRegularInlinePromptForm}.
      */
     protected static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
 
@@ -96,15 +97,16 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected final ScalarModel scalarModel;
 
-    protected Component scalarIfCompact;
-    protected Component scalarIfRegular;
+    private Component scalarIfCompact;
+    private Component scalarIfRegular;
 
-    protected WebMarkupContainer scalarTypeContainer;
+    private WebMarkupContainer scalarTypeContainer;
 
     /**
      * Used by most subclasses ({@link ScalarPanelTextAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
-    protected WebMarkupContainer scalarIfRegularInlineEditForm;
+    protected WebMarkupContainer scalarIfRegularInlinePromptForm;
+
     protected WebMarkupContainer editInlineLink;
 
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
@@ -174,12 +176,14 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      */
     private void buildGui() {
 
-        // REVIEW: this is nasty, both write to the same entityLink field
-        // even though only one is used
-        scalarIfCompact = createComponentForCompact();
-        scalarIfRegular = createComponentForRegular();
+        this.scalarIfCompact = createComponentForCompact();
+        this.scalarIfRegular = createComponentForRegular();
+        this.scalarIfRegularInlinePromptForm = createFormForInlinePromptIfRequired();
 
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
+        if(scalarIfRegularInlinePromptForm != null) {
+            scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
+        }
 
         getRendering().buildGui(this);
         addCssForMetaModel();
@@ -304,7 +308,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
             @Override
             public void buildGui(final ScalarPanelAbstract panel) {
-                panel.getLabelForCompact().setVisible(false);
+                panel.scalarIfCompact.setVisible(false);
             }
 
             @Override
@@ -334,19 +338,42 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#REGULAR regular} format.
+     *
+     * <p>
+     *     Is added to {@link #scalarTypeContainer}.
+     * </p>
      */
     protected abstract MarkupContainer createComponentForRegular();
 
+    /**
+     * Mandatory hook method to build the component to render the model when in
+     * {@link Rendering#COMPACT compact} format.
+     *
+     * <p>
+     *     Is added to {@link #scalarTypeContainer}.
+     * </p>
+     */
     protected abstract Component createComponentForCompact();
 
-    protected Component getLabelForCompact() {
-        return scalarIfCompact;
+    /**
+     * Optional hook method.
+     *
+     * <p>
+     *     If non-null, is added to {@link #scalarTypeContainer}.
+     * </p>
+     */
+    protected WebMarkupContainer createFormForInlinePromptIfRequired() {
+        return null;
     }
 
-    public Component getComponentForRegular() {
+    protected void switchFormForInlinePrompt() {
+        scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
+                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+    }
+
+    protected Component getComponentForRegular() {
         return scalarIfRegular;
     }
-
 
     // ///////////////////////////////////////////////////////////////////
 
@@ -444,6 +471,9 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
         return false;
     }
+
+    // ///////////////////////////////////////////////////////////////////
+
 
     // ///////////////////////////////////////////////////////////////////
 

@@ -24,9 +24,9 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Panel for rendering numeric scalars.
@@ -60,7 +60,6 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         label.setEnabled(false);
 
         compactFragment.add(label);
-        scalarTypeContainer.addOrReplace(compactFragment);
         return label;
     }
 

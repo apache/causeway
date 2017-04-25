@@ -96,7 +96,6 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
         compactFragment.add(label);
 
-        scalarTypeContainer.addOrReplace(compactFragment);
         return label;
     }
     

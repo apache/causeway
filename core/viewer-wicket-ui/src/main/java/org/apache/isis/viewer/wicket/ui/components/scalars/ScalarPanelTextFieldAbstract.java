@@ -159,18 +159,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
 
 
-        //
-        // inline edit form
-        // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
-        //
-
-        scalarIfRegularInlineEditForm = new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM);
-        scalarIfRegularInlineEditForm.setOutputMarkupId(true);
-        scalarTypeContainer.add(scalarIfRegularInlineEditForm);
-
-
-
-
 
         //
         // configure dialog edit vs inline edit
@@ -184,9 +172,21 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         } else {
             editInlineLink.setVisibilityAllowed(false);
         }
-        scalarIfRegularInlineEditForm.setVisible(false);
 
         return scalarIfRegularFormGroup;
+    }
+
+    @Override
+    protected WebMarkupContainer createFormForInlinePromptIfRequired() {
+
+        // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
+
+        WebMarkupContainer scalarIfRegularInlinePromptForm = new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM);
+        scalarIfRegularInlinePromptForm.setOutputMarkupId(true);
+
+        scalarIfRegularInlinePromptForm.setVisible(false);
+
+        return scalarIfRegularInlinePromptForm;
     }
 
     private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {

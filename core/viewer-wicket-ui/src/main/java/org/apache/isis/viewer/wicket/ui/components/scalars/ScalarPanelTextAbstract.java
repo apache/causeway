@@ -89,16 +89,16 @@ public abstract class ScalarPanelTextAbstract extends ScalarPanelAbstract  {
                                 new PropertyEditFormExecutor(ScalarPanelTextAbstract.this, scalarModel);
                         scalarModel.setFormExecutor(formExecutor);
                         scalarModel.setInlinePromptContext(
-                                new ScalarModel.InlinePromptContext(scalarIfRegular, scalarIfRegularInlineEditForm));
+                                new ScalarModel.InlinePromptContext(
+                                        getComponentForRegular(),
+                                        scalarIfRegularInlinePromptForm));
 
-                        scalarIfRegularInlineEditForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
-                                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+                        switchFormForInlinePrompt();
 
+                        getComponentForRegular().setVisible(false);
+                        scalarIfRegularInlinePromptForm.setVisible(true);
 
-                        scalarIfRegular.setVisible(false);
-                        scalarIfRegularInlineEditForm.setVisible(true);
-
-                        target.add(scalarTypeContainer);
+                        target.add(ScalarPanelTextAbstract.this);
                     }
 
                     @Override

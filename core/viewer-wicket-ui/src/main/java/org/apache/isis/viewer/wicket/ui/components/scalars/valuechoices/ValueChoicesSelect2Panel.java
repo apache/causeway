@@ -27,7 +27,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -56,9 +55,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     private Select2 select2;
     private ObjectAdapterMemento pending;
-
-    protected WebMarkupContainer scalarIfRegularInlineEditForm;
-    protected WebMarkupContainer editInlineLink;
 
     public ValueChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
