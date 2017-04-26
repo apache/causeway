@@ -27,7 +27,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -52,6 +51,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending, ScalarModelWithMultiPending,
         PanelWithChoices {
 
+
     private static final long serialVersionUID = 1L;
 
     private Select2 select2;
@@ -61,6 +61,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         super(id, scalarModel);
         pending = scalarModel.getObjectAdapterMemento();
     }
+
+
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     protected MarkupContainer createComponentForRegular() {
@@ -102,18 +105,12 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             scalarName.setEscapeModelStrings(namedFacet.escaped());
         }
 
-        // find the links...
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
-
-        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
-
-        addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component());
-        addEditPropertyTo(scalarIfRegularFormGroup);
-
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
         return scalarIfRegularFormGroup;
+    }
+
+    protected Component getScalarValueComponent() {
+        return select2.component();
     }
 
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
@@ -150,26 +147,28 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         return formGroup;
     }
 
+    // ///////////////////////////////////////////////////////////////////
+
     @Override
     protected Component createComponentForCompact() {
         return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
     }
 
+    // ///////////////////////////////////////////////////////////////////
+
     @Override
-    protected WebMarkupContainer createInlinePromptFormIfRequired() {
-        return super.createInlinePromptFormIfRequired();
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.supportedAndHide(select2.component());
     }
 
     @Override
-    protected IModel<?> obtainPromptInlineLinkModelIfAvailable() {
+    protected IModel<?> obtainPromptInlineLinkModel() {
         return select2.getModel();
-//        return new TextFieldValueModel<>(this);
     }
 
 
-    private ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
-        return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos, wicketViewerSettings);
-    }
+
+    // ///////////////////////////////////////////////////////////////////
 
     @Override
     protected boolean alwaysRebuildGui() {
@@ -252,6 +251,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             final List<ObjectAdapterMemento> choicesMementos1 = providerFixed.getChoicesMementos();
             resetIfCurrentNotInChoices(select2, choicesMementos1);
         }
+    }
+
+    private ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
+        return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos, wicketViewerSettings);
     }
 
     private void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {

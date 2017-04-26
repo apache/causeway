@@ -46,7 +46,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -54,7 +53,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -152,17 +150,7 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         }
 
 
-        // find the links...
-        final List<LinkAndLabel> entityActions =
-                EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
 
-        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
-
-        addFeedbackOnlyTo(scalarIfRegularFormGroup, select2.component()); // this is a placeholder; when select2.component() is available, we use that instead
-        addEditPropertyTo(scalarIfRegularFormGroup);
-
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
         // add semantics
         entityLink.setRequired(getModel().isRequired());
@@ -184,6 +172,11 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
 
 
         return scalarIfRegularFormGroup;
+    }
+
+    @Override
+    protected Component getScalarValueComponent() {
+        return select2.component();
     }
 
     private Select2 createSelect2() {
@@ -225,16 +218,42 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         return select2;
     }
 
+    // //////////////////////////////////////
+
     @Override
-    protected WebMarkupContainer createInlinePromptFormIfRequired() {
-        return super.createInlinePromptFormIfRequired();
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.supported();
     }
 
     @Override
-    protected IModel<?> obtainPromptInlineLinkModelIfAvailable() {
-        return select2.getModel();
-//        return new TextFieldValueModel<>(this);
+    protected IModel<?> obtainPromptInlineLinkModel() {
+        final IModel<ObjectAdapterMemento> model = select2.getModel();
+        return new IModel<String>() {
+            @Override
+            public String getObject() {
+                final ObjectAdapterMemento oam = model.getObject();
+                if(oam == null) {
+                    return null;
+                }
+                ObjectAdapter objectAdapter = oam
+                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
+                                getSpecificationLoader());
+                return objectAdapter != null ? objectAdapter.titleString(null) : null;
+            }
+
+            @Override
+            public void setObject(final String s) {
+                // gnore
+            }
+
+            @Override
+            public void detach() {
+                // ignore
+            }
+        };
     }
+
+
 
     // //////////////////////////////////////
 

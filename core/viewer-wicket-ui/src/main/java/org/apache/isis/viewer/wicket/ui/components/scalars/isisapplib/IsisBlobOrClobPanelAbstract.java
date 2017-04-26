@@ -98,10 +98,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         scalarIfRegularFormGroup.add(scalarName);
 
-        // find the links...
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
-
-        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
@@ -113,48 +109,65 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         
         updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
-        
-        addFeedbackOnlyTo(scalarIfRegularFormGroup, fileUploadField);
-        addEditPropertyTo(scalarIfRegularFormGroup);
 
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
         return scalarIfRegularFormGroup;
     }
+
+    protected Component getScalarValueComponent() {
+        return fileUploadField;
+    }
+
+    // //////////////////////////////////////
 
     /**
      * Inline prompts are <i>not</i> supported by this component.
      */
     @Override
-    protected WebMarkupContainer createInlinePromptFormIfRequired() {
-        return null;
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.notSupported();
     }
 
 
+    // //////////////////////////////////////
+
+    @Override
+    protected Component createComponentForCompact() {
+        final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+        MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
+        if(downloadLink != null) {
+            updateFileNameLabel("fileNameIfCompact", downloadLink);
+        }
+
+        return scalarIfCompact;
+    }
+
+
+    // //////////////////////////////////////
+
     private Image asWicketImage(String id) {
-        
+
         final ObjectAdapter adapter = getModel().getObject();
         if(adapter == null) {
             return null;
         }
-        
+
         final Object object = adapter.getObject();
         if(!(object instanceof Blob)) {
             return null;
-        } 
-        
+        }
+
         final Blob blob = (Blob)object;
         final MimeType mimeType = blob.getMimeType();
         if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
             return null;
-        } 
-        
+        }
+
         final BufferedImage image = asBufferedImage(blob);
         if(image == null) {
             return null;
         }
-        
+
         final BufferedDynamicImageResource imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(image);
         final ThumbnailImageResource thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
@@ -167,7 +180,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         if(bytes == null) {
             return null;
         }
-        
+
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         try {
             return ImageIO.read(bais);
@@ -178,16 +191,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
     }
 
-    @Override
-    protected Component createComponentForCompact() {
-        final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
-        if(downloadLink != null) {
-            updateFileNameLabel("fileNameIfCompact", downloadLink);
-        }
 
-        return scalarIfCompact;
-    }
+    // //////////////////////////////////////
 
     protected void onBeforeRenderWhenViewMode() {
         updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE);

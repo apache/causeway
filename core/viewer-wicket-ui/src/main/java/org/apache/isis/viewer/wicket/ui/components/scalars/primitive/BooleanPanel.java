@@ -25,7 +25,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -91,20 +90,12 @@ public class BooleanPanel extends ScalarPanelAbstract {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
         }
 
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
-
-        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
-
-        addFeedbackOnlyTo(scalarIfRegularFormGroup, checkBox);
-        addEditPropertyTo(scalarIfRegularFormGroup);
-
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
-
         return scalarIfRegularFormGroup;
     }
 
-
+    protected Component getScalarValueComponent() {
+        return checkBox;
+    }
 
     /**
      * Mandatory hook method to build the component to render the model when in
@@ -115,12 +106,13 @@ public class BooleanPanel extends ScalarPanelAbstract {
         return createCheckBox(ID_SCALAR_IF_COMPACT);
     }
 
+
     /**
      * Inline prompts are <i>not</i> supported by this component.
      */
     @Override
-    protected WebMarkupContainer createInlinePromptFormIfRequired() {
-        return null;
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.notSupported();
     }
 
     private CheckBoxX createCheckBox(final String id) {

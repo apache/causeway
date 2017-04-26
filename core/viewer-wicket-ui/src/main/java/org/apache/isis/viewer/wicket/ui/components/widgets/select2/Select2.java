@@ -92,7 +92,7 @@ public class Select2 implements Serializable {
     }
 
     public void setRequired(final boolean required) {
-        // causing a more severe orphaned drop-down when triggered...
+        // REVIEW: causing a more severe orphaned drop-down when triggered...
         // component().setRequired(required);
     }
     public boolean checkRequired() {

@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.google.common.base.Strings;
 
@@ -29,7 +28,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
@@ -40,16 +38,13 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -99,17 +94,23 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return textField;
     }
 
+    /**
+     * Optional hook for subclasses to override
+     */
     protected AbstractTextComponent<T> createTextFieldForRegular(final String id) {
         return createTextField(id);
+    }
+
+    protected TextField<T> createTextField(final String id) {
+        return new TextField<>(id, newTextFieldValueModel(), cls);
     }
 
     TextFieldValueModel<T> newTextFieldValueModel() {
         return new TextFieldValueModel<>(this);
     }
 
-    protected TextField<T> createTextField(final String id) {
-        return new TextField<>(id, newTextFieldValueModel(), cls);
-    }
+    // ///////////////////////////////////////////////////////////////////
+
 
     @Override
     protected MarkupContainer createComponentForRegular() {
@@ -131,50 +132,16 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
 
-
-        // find the links...
-        final List<LinkAndLabel> entityActions =
-                EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
-
-        addPositioningCssTo(scalarIfRegularFormGroup, entityActions);
-
-
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        addFeedbackOnlyTo(scalarIfRegularFormGroup, textField);
-
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
-
-
         return scalarIfRegularFormGroup;
     }
 
-    @Override
-    protected void configureEditVisibility(
-            final MarkupContainer scalarIfRegularFormGroup,
-            final WebMarkupContainer inlinePromptLink) {
-
-        addEditPropertyTo(scalarIfRegularFormGroup);
-
-        if (scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.INLINE) {
-            textField.setVisibilityAllowed(false);
-        } else {
-            inlinePromptLink.setVisibilityAllowed(false);
-        }
-    }
-
-    @Override
-    protected WebMarkupContainer createInlinePromptFormIfRequired() {
-        return super.createInlinePromptFormIfRequired();
-    }
-
-    @Override
-    protected IModel<T> obtainPromptInlineLinkModelIfAvailable() {
-        return textField.getModel();
+    protected Component getScalarValueComponent() {
+        return textField;
     }
 
     private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
@@ -269,11 +236,9 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
 
-    private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
-        final SingleIntValueFacet facet = model.getFacet(facetType);
-        return facet != null ? facet.value() : null;
-    }
-    
+    // //////////////////////////////////////
+
+
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#COMPACT compact} format.
@@ -308,6 +273,22 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         }
         return compactFragment;
     }
+
+
+    // //////////////////////////////////////
+
+    @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.supportedAndHide(textField);
+    }
+
+    @Override
+    protected IModel<T> obtainPromptInlineLinkModel() {
+        return textField.getModel();
+    }
+
+
+    // //////////////////////////////////////
 
 
     @Override
@@ -348,15 +329,19 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
-
         textField.add(behavior);
-
     }
 
 
+    // //////////////////////////////////////
+
+    private static Integer getValueOf(ScalarModel model, Class<? extends SingleIntValueFacet> facetType) {
+        final SingleIntValueFacet facet = model.getFacet(facetType);
+        return facet != null ? facet.value() : null;
+    }
 
     @com.google.inject.Inject
-    private WicketViewerSettings settings;
+    WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
     }
