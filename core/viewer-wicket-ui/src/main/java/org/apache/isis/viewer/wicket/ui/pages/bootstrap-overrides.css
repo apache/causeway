@@ -871,13 +871,13 @@ tr.headers th form input {
     height: inherit;
 }
 
-.scalarNameAndValueComponentType .inlineEditForm {
+.scalarNameAndValueComponentType .inlinePromptForm {
     border: 2px solid;
     padding: 10px;
     margin-bottom: 20px
 }
 
-.scalarNameAndValueComponentType .inlineEditForm .form-group {
+.scalarNameAndValueComponentType .inlinePromptForm .form-group {
     padding-left: 5px;
     padding-right: 15px;
 }

@@ -123,6 +123,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         return scalarIfRegularFormGroup;
     }
 
+    /**
+     * Inline prompts are <i>not</i> supported by this component.
+     */
+    @Override
+    protected WebMarkupContainer createInlinePromptFormIfRequired() {
+        return null;
+    }
+
+
     private Image asWicketImage(String id) {
         
         final ObjectAdapter adapter = getModel().getObject();

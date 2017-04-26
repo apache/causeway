@@ -27,6 +27,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -154,8 +155,19 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         return new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
     }
 
-    
-    protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
+    @Override
+    protected WebMarkupContainer createInlinePromptFormIfRequired() {
+        return super.createInlinePromptFormIfRequired();
+    }
+
+    @Override
+    protected IModel<?> obtainPromptInlineLinkModelIfAvailable() {
+        return select2.getModel();
+//        return new TextFieldValueModel<>(this);
+    }
+
+
+    private ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos, wicketViewerSettings);
     }
 

@@ -44,14 +44,12 @@
                                 <span class="scalarValueInput">
                                     <span class="editing">
 
-                                        <wicket:remove>
                                         <a href="#"
-                                           name="scalarValueEditInline"
-                                           class="form-control input-sm scalarValueEditInline"
-                                           xwicket:id="scalarValueEditInline">
-                                            <span xwicket:id="scalarValueEditInlineLabel"></span>
+                                           name="scalarValueInlinePromptLink"
+                                           class="form-control input-sm scalarValueInlinePromptLink"
+                                           wicket:id="scalarValueInlinePromptLink">
+                                            <span wicket:id="scalarValueInlinePromptLabel"></span>
                                         </a>
-                                        </wicket:remove>
 
                                         <span class="autoCompletePlaceholder">
                                             <span wicket:id="entityLink">link or drop down</span>
@@ -75,12 +73,10 @@
                     <div class="clearfix"></div>
                 </div>
 
-                <wicket:remove>
-                <div class="inlineEditForm"
-                     xwicket:id="scalarIfRegularInlineEditForm" >
-                    <div><span>property edit form</span></div>
+                <div class="inlinePromptForm"
+                     wicket:id="scalarIfRegularInlinePromptForm" >
+                    <div><span>[property edit form]</span></div>
                 </div>
-                </wicket:remove>
 
                 <div class="scalarIfCompact"
                      wicket:id="scalarIfCompact" >

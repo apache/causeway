@@ -25,6 +25,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -112,6 +113,14 @@ public class BooleanPanel extends ScalarPanelAbstract {
     @Override
     protected Component createComponentForCompact() {
         return createCheckBox(ID_SCALAR_IF_COMPACT);
+    }
+
+    /**
+     * Inline prompts are <i>not</i> supported by this component.
+     */
+    @Override
+    protected WebMarkupContainer createInlinePromptFormIfRequired() {
+        return null;
     }
 
     private CheckBoxX createCheckBox(final String id) {

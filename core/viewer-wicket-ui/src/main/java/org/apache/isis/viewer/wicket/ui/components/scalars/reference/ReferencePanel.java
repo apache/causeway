@@ -84,7 +84,6 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
 
     private EntityLinkSelect2Panel entityLink;
-
     Select2 select2;
 
 
@@ -95,8 +94,6 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         super(id, scalarModel);
     }
 
-    // //////////////////////////////////////
-    // addComponentFor{Compact/Regular}
     // //////////////////////////////////////
 
     // First called as a side-effect of {@link #beforeRender()}
@@ -226,6 +223,17 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         }
 
         return select2;
+    }
+
+    @Override
+    protected WebMarkupContainer createInlinePromptFormIfRequired() {
+        return super.createInlinePromptFormIfRequired();
+    }
+
+    @Override
+    protected IModel<?> obtainPromptInlineLinkModelIfAvailable() {
+        return select2.getModel();
+//        return new TextFieldValueModel<>(this);
     }
 
     // //////////////////////////////////////

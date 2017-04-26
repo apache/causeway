@@ -103,7 +103,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return createTextField(id);
     }
 
-    protected TextFieldValueModel<T> newTextFieldValueModel() {
+    TextFieldValueModel<T> newTextFieldValueModel() {
         return new TextFieldValueModel<>(this);
     }
 
@@ -122,9 +122,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setOutputMarkupId(true);
 
         addStandardSemantics();
-
-        final IModel<T> textFieldModel = textField.getModel();
-
 
 
 
@@ -153,50 +150,31 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         addEntityActionLinksBelowAndRight(scalarIfRegularFormGroup, entityActions);
 
 
-
-        //
-        // inline edit
-        //
-
-        this.editInlineLink = new WebMarkupContainer(ID_SCALAR_VALUE_EDIT_INLINE);
-        editInlineLink.setOutputMarkupId(true);
-
-        final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_EDIT_INLINE_LABEL, textFieldModel);
-        editInlineLink.add(editInlineLinkLabel);
-
-
-        scalarIfRegularFormGroup.add(editInlineLink);
-
-
-
-
-        //
-        // configure dialog edit vs inline edit
-        //
-
-        addEditPropertyTo(scalarIfRegularFormGroup);
-        configureInlinePromptCallback();
-
-        if (scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.INLINE) {
-            textField.setVisibilityAllowed(false);
-        } else {
-            editInlineLink.setVisibilityAllowed(false);
-        }
-
         return scalarIfRegularFormGroup;
     }
 
     @Override
-    protected WebMarkupContainer createFormForInlinePromptIfRequired() {
+    protected void configureEditVisibility(
+            final MarkupContainer scalarIfRegularFormGroup,
+            final WebMarkupContainer inlinePromptLink) {
 
-        // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
+        addEditPropertyTo(scalarIfRegularFormGroup);
 
-        WebMarkupContainer scalarIfRegularInlinePromptForm = new WebMarkupContainer(ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM);
-        scalarIfRegularInlinePromptForm.setOutputMarkupId(true);
+        if (scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.INLINE) {
+            textField.setVisibilityAllowed(false);
+        } else {
+            inlinePromptLink.setVisibilityAllowed(false);
+        }
+    }
 
-        scalarIfRegularInlinePromptForm.setVisible(false);
+    @Override
+    protected WebMarkupContainer createInlinePromptFormIfRequired() {
+        return super.createInlinePromptFormIfRequired();
+    }
 
-        return scalarIfRegularInlinePromptForm;
+    @Override
+    protected IModel<T> obtainPromptInlineLinkModelIfAvailable() {
+        return textField.getModel();
     }
 
     private void addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(final Component component) {
@@ -317,7 +295,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
 
-    protected Fragment getCompactFragment(CompactType type) {
+    Fragment getCompactFragment(CompactType type) {
         Fragment compactFragment;
         switch (type) {
         case INPUT_CHECKBOX:
@@ -349,7 +327,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 
-        editInlineLink.setEnabled(false);
+        inlinePromptLink.setEnabled(false);
 
         setTitleAttribute(disableReason);
     }
@@ -358,14 +336,14 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onBeforeRenderWhenEnabled() {
         super.onBeforeRenderWhenEnabled();
         textField.setEnabled(true);
-        editInlineLink.setEnabled(true);
+        inlinePromptLink.setEnabled(true);
         setTitleAttribute("");
     }
 
     private void setTitleAttribute(final String titleAttribute) {
         AttributeModifier title = new AttributeModifier("title", Model.of(titleAttribute));
         textField.add(title);
-        editInlineLink.add(title);
+        inlinePromptLink.add(title);
     }
 
     @Override

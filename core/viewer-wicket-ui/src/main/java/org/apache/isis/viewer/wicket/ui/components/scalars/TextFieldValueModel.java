@@ -68,11 +68,5 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
         }
     }
 
-    // FIXME: a bit of a hack to just use toString(), probably want to format somehow.
-    public String getObjectAsString() {
-        T object = getObject();
-        return object != null ? object.toString() : null;
-    }
-
 
 }

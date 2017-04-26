@@ -32,7 +32,9 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -77,16 +79,15 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
 
     /**
-     * as per {@link #editInlineLink}
+     * as per {@link #inlinePromptLink}
      */
-    protected static final String ID_SCALAR_VALUE_EDIT_INLINE = "scalarValueEditInline";
-    protected static final String ID_SCALAR_VALUE_EDIT_INLINE_LABEL = "scalarValueEditInlineLabel";
+    protected static final String ID_SCALAR_VALUE_INLINE_PROMPT_LINK = "scalarValueInlinePromptLink";
+    protected static final String ID_SCALAR_VALUE_INLINE_PROMPT_LABEL = "scalarValueInlinePromptLabel";
 
     /**
      * as per {@link #scalarIfRegularInlinePromptForm}.
      */
-    protected static final String ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM = "scalarIfRegularInlineEditForm";
-
+    protected static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
 
 
     private static final String ID_EDIT_PROPERTY = "editProperty";
@@ -99,16 +100,16 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected final ScalarModel scalarModel;
 
     private Component scalarIfCompact;
-    private Component scalarIfRegular;
+    private MarkupContainer scalarIfRegular;
 
     private WebMarkupContainer scalarTypeContainer;
 
     /**
      * Used by most subclasses ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
-    protected WebMarkupContainer scalarIfRegularInlinePromptForm;
+    private WebMarkupContainer scalarIfRegularInlinePromptForm;
 
-    protected WebMarkupContainer editInlineLink;
+    WebMarkupContainer inlinePromptLink;
 
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -179,12 +180,20 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();
-        this.scalarIfRegularInlinePromptForm = createFormForInlinePromptIfRequired();
+        this.scalarIfRegularInlinePromptForm = createInlinePromptFormIfRequired();
 
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
         if(scalarIfRegularInlinePromptForm != null) {
             scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
         }
+
+        inlinePromptLink = createInlinePromptLinkIfRequired();
+        if(this.inlinePromptLink != null) {
+            scalarIfRegular.add(inlinePromptLink);
+            configureInlinePromptLinkCallback();
+            configureEditVisibility(scalarIfRegular, inlinePromptLink);
+        }
+
 
         getRendering().buildGui(this);
         addCssForMetaModel();
@@ -271,49 +280,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     // ///////////////////////////////////////////////////////////////////
 
-    /**
-     * For convenience of subclasses that support inline prompts ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}).
-     */
-    protected void configureInlinePromptCallback() {
-
-        final PromptStyle promptStyle = this.scalarModel.getPromptStyle();
-        if(promptStyle == PromptStyle.INLINE) {
-
-            if(editInlineLink != null) {
-                editInlineLink.add(new AjaxEventBehavior("click") {
-                    @Override
-                    protected void onEvent(final AjaxRequestTarget target) {
-
-                        scalarModel.toEditMode();
-
-                        // dynamically update the edit form.
-                        final PropertyEditFormExecutor formExecutor =
-                                new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
-                        scalarModel.setFormExecutor(formExecutor);
-                        scalarModel.setInlinePromptContext(
-                                new ScalarModel.InlinePromptContext(
-                                        getComponentForRegular(),
-                                        scalarIfRegularInlinePromptForm));
-
-                        switchFormForInlinePrompt();
-
-                        getComponentForRegular().setVisible(false);
-                        scalarIfRegularInlinePromptForm.setVisible(true);
-
-                        target.add(scalarTypeContainer);
-                    }
-
-                    @Override
-                    public boolean isEnabled(final Component component) {
-                        return true;
-                    }
-                });
-            }
-        }
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////
 
     /**
      * Mandatory hook.
@@ -380,6 +346,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     // ///////////////////////////////////////////////////////////////////
 
+    protected Component getComponentForRegular() {
+        return scalarIfRegular;
+    }
+
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#REGULAR regular} format.
@@ -400,25 +370,108 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      */
     protected abstract Component createComponentForCompact();
 
+
     /**
-     * Optional hook method.
+     * Optional hook method to return a container holding an empty form.  This can be switched out using {@link #switchFormForInlinePrompt()}.
      *
+     * <p>
+     *     Implementations that don't support inline prompts can override and return <tt>null</tt>.
+     * </p>
      * <p>
      *     If non-null, is added to {@link #scalarTypeContainer}.
      * </p>
      */
-    protected WebMarkupContainer createFormForInlinePromptIfRequired() {
+    protected WebMarkupContainer createInlinePromptFormIfRequired() {
+
+        // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
+
+        WebMarkupContainer scalarIfRegularInlinePromptForm = new WebMarkupContainer(
+                ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
+        scalarIfRegularInlinePromptForm.setOutputMarkupId(true);
+        scalarIfRegularInlinePromptForm.setVisible(false);
+
+        return scalarIfRegularInlinePromptForm;
+    }
+
+    private WebMarkupContainer createInlinePromptLinkIfRequired() {
+        final IModel<?> textFieldModel = obtainPromptInlineLinkModelIfAvailable();
+        if(textFieldModel == null) {
+            return null;
+        }
+
+        final WebMarkupContainer inlinePromptLink = new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
+        inlinePromptLink.setOutputMarkupId(true);
+
+        final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, textFieldModel);
+        inlinePromptLink.add(editInlineLinkLabel);
+
+        return inlinePromptLink;
+    }
+
+    /**
+     * Optional hook; if returns non null then the model will be used to set up a link representing the
+     * component for inline prompt.
+     */
+    protected IModel<?> obtainPromptInlineLinkModelIfAvailable() {
         return null;
     }
 
-    protected void switchFormForInlinePrompt() {
-        scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
-                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_EDIT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+
+    /**
+     * Optional hook to set the visibility of subfields according to editability.
+     *
+     * <p>
+     * Only implementations that support inline prompts need override.
+     * </p>
+     */
+    protected void configureEditVisibility(
+            final MarkupContainer scalarIfRegularFormGroup,
+            final WebMarkupContainer inlinePromptLink) {
     }
 
-    protected Component getComponentForRegular() {
-        return scalarIfRegular;
+    private void configureInlinePromptLinkCallback() {
+
+        final PromptStyle promptStyle = this.scalarModel.getPromptStyle();
+        if(promptStyle == PromptStyle.INLINE) {
+
+            if(inlinePromptLink != null) {
+                inlinePromptLink.add(new AjaxEventBehavior("click") {
+                    @Override
+                    protected void onEvent(final AjaxRequestTarget target) {
+
+                        scalarModel.toEditMode();
+
+                        // dynamically update the edit form.
+                        final PropertyEditFormExecutor formExecutor =
+                                new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
+                        scalarModel.setFormExecutor(formExecutor);
+                        scalarModel.setInlinePromptContext(
+                                new ScalarModel.InlinePromptContext(
+                                        getComponentForRegular(),
+                                        scalarIfRegularInlinePromptForm));
+
+                        switchFormForInlinePrompt();
+
+                        getComponentForRegular().setVisible(false);
+                        scalarIfRegularInlinePromptForm.setVisible(true);
+
+                        target.add(scalarTypeContainer);
+                    }
+
+                    @Override
+                    public boolean isEnabled(final Component component) {
+                        return true;
+                    }
+                });
+            }
+        }
     }
+
+    private void switchFormForInlinePrompt() {
+        scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
+                scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+    }
+
 
     // ///////////////////////////////////////////////////////////////////
 
@@ -516,8 +569,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
         return false;
     }
-
-    // ///////////////////////////////////////////////////////////////////
 
 
     // ///////////////////////////////////////////////////////////////////

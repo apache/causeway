@@ -40,14 +40,12 @@
                             <span class="scalarValueInput">
                                 <span class="editing">
 
-                                    <wicket:remove>
                                     <a href="#"
-                                       name="scalarValueEditInline"
-                                       class="form-control input-sm scalarValueEditInline"
-                                       xwicket:id="scalarValueEditInline">
-                                        <span xwicket:id="scalarValueEditInlineLabel"></span>
+                                       name="scalarValueInlinePromptLink"
+                                       class="form-control input-sm scalarValueInlinePromptLink"
+                                       wicket:id="scalarValueInlinePromptLink">
+                                        <span wicket:id="scalarValueInlinePromptLabel"></span>
                                     </a>
-                                    </wicket:remove>
 
                                     <select class="choices input-sm select2-remote"
                                             style="width: 99.8%;"
@@ -69,13 +67,10 @@
                 </div>
 
 
-                <wicket:remove>
-                    <div class="inlineEditForm"
-                         xwicket:id="scalarIfRegularInlineEditForm" >
-                        <div><span>property edit form</span></div>
-                    </div>
-                </wicket:remove>
-
+                <div class="inlinePromptForm"
+                     wicket:id="scalarIfRegularInlinePromptForm" >
+                    <div><span>[property edit form]</span></div>
+                </div>
 
                 <span class="scalarIfCompact"
                       wicket:id="scalarIfCompact"></span>
