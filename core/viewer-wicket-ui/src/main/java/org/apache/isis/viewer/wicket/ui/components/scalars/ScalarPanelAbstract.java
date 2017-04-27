@@ -363,20 +363,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return select2;
     }
 
-    // the implementation pulled up from ValueChoicesSelect2Panel.
-    // however, uses an overloaded version that relies on VCSP implementing ScalarModlWith{Multi}Pending.  Experimenting as to whether that's actually required...
-//    protected Select2 createSelect2(final String id) {
-//        final Select2 select2;
-//        if(getModel().isCollection()) {
-//            final IModel<ArrayList<ObjectAdapterMemento>> model = ScalarModelWithMultiPending.Util.createModel(this);
-//            select2 = Select2.newSelect2MultiChoice(id, model, scalarModel);
-//        } else {
-//            final IModel<ObjectAdapterMemento> modelObject = ScalarModelWithPending.Util.createModel(this);
-//            select2 = Select2.newSelect2Choice(ID_SCALAR_VALUE, modelObject, scalarModel);
-//        }
-//        return select2;
-//    }
-
 
 
     // //////////////////////////////////////

@@ -532,12 +532,6 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         return autoCompleteFacet != null;
     }
 
-    @com.google.inject.Inject
-    private WicketViewerSettings wicketViewerSettings;
-
-    IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
-    }
 
     /**
      * Repaints just the Select2 component
@@ -554,5 +548,15 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         return "referencePanel";
     }
 
+
+
+    // //////////////////////////////////////
+
+    @com.google.inject.Inject
+    WicketViewerSettings wicketViewerSettings;
+
+    IsisConfiguration getConfiguration() {
+        return getIsisSessionFactory().getConfiguration();
+    }
 
 }

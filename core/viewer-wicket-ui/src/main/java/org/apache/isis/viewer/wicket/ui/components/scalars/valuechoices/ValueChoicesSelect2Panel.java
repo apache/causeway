@@ -16,7 +16,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -37,8 +36,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -46,18 +43,15 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending, ScalarModelWithMultiPending,
-        PanelWithChoices {
+public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements PanelWithChoices {
 
 
     private static final long serialVersionUID = 1L;
 
     private Select2 select2;
-    private ObjectAdapterMemento pending;
 
     public ValueChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-        pending = scalarModel.getObjectAdapterMemento();
     }
 
 
@@ -283,36 +277,14 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         }
     }
 
-    // //////////////////////////////////////
-
-    @Override
-    public ObjectAdapterMemento getPending() {
-        return pending;
-    }
-
-    public void setPending(ObjectAdapterMemento pending) {
-        this.pending = pending;
-    }
-
-    @Override
-    public ArrayList<ObjectAdapterMemento> getMultiPending() {
-        final ArrayList<ObjectAdapterMemento> mementos = pending != null ? pending.getList() : null;
-        return mementos == null || mementos.isEmpty() ? null : mementos;
-    }
-
-    @Override
-    public void setMultiPending(final ArrayList<ObjectAdapterMemento> pending) {
-        this.pending = ObjectAdapterMemento.createForList(pending, scalarModel.getTypeOfSpecification().getSpecId());
-    }
 
     public ScalarModel getScalarModel() {
         return scalarModel;
     }
 
-    // //////////////////////////////////////
 
     @com.google.inject.Inject
-    private WicketViewerSettings wicketViewerSettings;
+    WicketViewerSettings wicketViewerSettings;
 
     @Override
     protected String getScalarPanelType() {
