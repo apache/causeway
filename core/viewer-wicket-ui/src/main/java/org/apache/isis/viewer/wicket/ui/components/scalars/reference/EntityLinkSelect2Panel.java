@@ -46,7 +46,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
      */
     @Override
     public boolean checkRequired() {
-        return owningPanel.select2.checkRequired();
+        return owningPanel.getSelect2().checkRequired();
     }
 
     /**

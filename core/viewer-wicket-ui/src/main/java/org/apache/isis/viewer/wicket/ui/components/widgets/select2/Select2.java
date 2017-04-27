@@ -34,6 +34,8 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
@@ -45,23 +47,16 @@ public class Select2 implements Serializable {
     final Select2ChoiceExt select2Choice;
     final Select2MultiChoiceExt select2MultiChoice;
 
-    public static Select2 newSelect2Choice(
-            final String id,
-            final IModel<ObjectAdapterMemento> singleModel, final ScalarModel parentModel) {
-        return new Select2(
-                Select2ChoiceExt.create(id, singleModel, parentModel),
-                null
-        );
-    }
-
-    public static Select2 newSelect2MultiChoice(
-            final String id,
-            final IModel<ArrayList<ObjectAdapterMemento>> multiModel,
-            final ScalarModel parentModel) {
-        return new Select2(
-                null,
-                Select2MultiChoiceExt.create(id, multiModel, parentModel)
-        );
+    public static Select2 createSelect2(final String id, final ScalarModel scalarModel) {
+        return scalarModel.isCollection()
+                ? new Select2(
+                        null,
+                        Select2MultiChoiceExt.create(id,
+                                ScalarModelWithMultiPending.Util.createModel(scalarModel), scalarModel))
+                : new Select2(
+                        Select2ChoiceExt.create(id,
+                                ScalarModelWithPending.Util.createModel(scalarModel), scalarModel),
+                        null);
     }
 
     private Select2(

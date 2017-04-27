@@ -18,7 +18,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.AttributeModifier;
@@ -32,23 +31,21 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements PanelWithChoices {
+public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
 
 
     private static final long serialVersionUID = 1L;
 
-    private Select2 select2;
 
     public ValueChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -62,45 +59,24 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Pan
 
         // same pattern as in ReferencePanel
         if(select2 == null) {
-            this.select2 = createSelect2AndSemantics();
-
-            final ObjectAdapter[] actionArgsHint = scalarModel.getActionArgsHint();
-            setProviderAndCurrAndPending(select2, actionArgsHint);
-            addStandardSemantics(select2);
+            this.select2 = createSelect2(ID_SCALAR_VALUE);
         } else {
             select2.clearInput();
         }
 
-        final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
+        final String name = getModel().getName();
+        select2.setLabel(Model.of(name));
+
+        final FormGroup formGroup = createFormGroupAndName(select2.component(), ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
+
         if(getModel().isRequired()) {
-            scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
-        }
-
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
-        if(getModel().isRequired()) {
-            final String label = scalarName.getDefaultModelObjectAsString();
-            if(!Strings.isNullOrEmpty(label)) {
-                scalarName.add(new CssClassAppender("mandatory"));
-            }
-        }
-        scalarIfRegularFormGroup.addOrReplace(scalarName);
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
+            formGroup.add(new CssClassAppender("mandatory"));
         }
 
 
-        return scalarIfRegularFormGroup;
+        return formGroup;
     }
 
-    private Select2 createSelect2AndSemantics() {
-        final Select2 select2 = createSelect2(ID_SCALAR_VALUE);
-
-        final ObjectAdapter[] actionArgsHint = scalarModel.getActionArgsHint();
-        setProviderAndCurrAndPending(select2, actionArgsHint);
-        addStandardSemantics(select2);
-        return select2;
-    }
 
     protected Component getScalarValueComponent() {
         return select2.component();
@@ -112,32 +88,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Pan
         
         // take a copy otherwise is only lazily evaluated
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
-    }
-
-    protected void addStandardSemantics(final Select2 select2) {
-        setRequiredIfSpecified(select2);
-    }
-
-    private void setRequiredIfSpecified(final Select2 select2) {
-        final ScalarModel scalarModel = getModel();
-        final boolean required = scalarModel.isRequired();
-        select2.setRequired(required);
-    }
-
-    protected MarkupContainer createScalarIfRegularFormGroup() {
-        final String name = getModel().getName();
-        select2.setLabel(Model.of(name));
-
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, select2.component());
-
-        final String describedAs = getModel().getDescribedAs();
-        if(describedAs != null) {
-            formGroup.add(new AttributeModifier("title", Model.of(describedAs)));
-        }
-
-        formGroup.add(select2.component());
-
-        return formGroup;
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -158,7 +108,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Pan
     protected IModel<?> obtainPromptInlineLinkModel() {
         return select2.getModel();
     }
-
 
 
     // ///////////////////////////////////////////////////////////////////
@@ -206,12 +155,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Pan
 
     @Override
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if(select2 != null) {
-            setProviderAndCurrAndPending(select2, argsIfAvailable);
-            return true;
-        } else {
+        if (select2 == null) {
             return false;
         }
+        setProviderAndCurrAndPending(select2, argsIfAvailable);
+        return true;
     }
 
     /**
@@ -224,42 +172,29 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Pan
         target.add(select2.component());
     }
 
-    /**
-     * sets up the choices, also ensuring that any currently held value is compatible.
-     */
-    private void setProviderAndCurrAndPending(final Select2 select2, ObjectAdapter[] argsIfAvailable) {
 
-        final ChoiceProvider<ObjectAdapterMemento> provider;
-
-        // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
-        // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
+    // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
+    // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
+    @Override
+    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapterMemento> choicesMementos = getChoiceMementos(argsIfAvailable);
-        provider = newChoiceProvider(choicesMementos);
-
-        select2.setProvider(provider);
-        getModel().clearPending();
-
-        if(provider instanceof ObjectAdapterMementoProviderForValueChoices) {
-            final ObjectAdapterMementoProviderForValueChoices providerFixed = (ObjectAdapterMementoProviderForValueChoices) provider;
-            final List<ObjectAdapterMemento> choicesMementos1 = providerFixed.getChoicesMementos();
-            resetIfCurrentNotInChoices(select2, choicesMementos1);
-        }
-    }
-
-    private ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos, wicketViewerSettings);
     }
 
-    private void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {
-        final ObjectAdapterMemento objectAdapterMemento = getModel().getObjectAdapterMemento();
-        if(objectAdapterMemento == null) {
+    @Override
+    protected void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos) {
+        final ObjectAdapterMemento curr = getModel().getObjectAdapterMemento();
+
+        if(curr == null) {
+
             select2.getModel().setObject(null);
+
         } else {
 
             if(!getModel().isCollection()) {
 
                 // if currently held value is not compatible with choices, then replace with the first choice
-                if(!choicesMementos.contains(objectAdapterMemento)) {
+                if(!choicesMementos.contains(curr)) {
 
                     final ObjectAdapterMemento newAdapterMemento =
                             choicesMementos.isEmpty()

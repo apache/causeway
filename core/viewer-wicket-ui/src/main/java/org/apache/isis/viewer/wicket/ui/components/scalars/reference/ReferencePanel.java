@@ -41,7 +41,6 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -51,7 +50,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -59,13 +58,12 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoices {
+public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
 
     private static final long serialVersionUID = 1L;
 
@@ -79,14 +77,17 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
 
     private EntityLinkSelect2Panel entityLink;
-    Select2 select2;
-
 
     private EntityLinkSimplePanel entitySimpleLink;
 
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
+    }
+
+
+    Select2 getSelect2() {
+        return select2;
     }
 
     // //////////////////////////////////////
@@ -112,9 +113,7 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     // First called as a side-effect of {@link #beforeRender()}
     @Override
     protected FormGroup createComponentForRegular() {
-        final ScalarModel scalarModel = getModel();
-        final String name = scalarModel.getName();
-        
+
         entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), this);
 
         entityLink.setRequired(getModel().isRequired());
@@ -126,35 +125,19 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
         select2.component().setOutputMarkupId(true);
-        select2.component().setLabel(Model.of(name));
 
-        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, entityLink);
-        scalarIfRegularFormGroup.add(entityLink);
+        final String name = scalarModel.getName();
+        select2.setLabel(Model.of(name));
 
-        final String describedAs = getModel().getDescribedAs();
-        if(describedAs != null) {
-            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
-        }
-
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
-        scalarIfRegularFormGroup.add(scalarName);
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
-        if(getModel().isRequired()) {
-            scalarName.add(new CssClassAppender("mandatory"));
-        }
-
-
+        final FormGroup formGroup = createFormGroupAndName(this.entityLink, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
 
 
         // add semantics
-        entityLink.setRequired(getModel().isRequired());
-        entityLink.add(new IValidator<ObjectAdapter>() {
-        
+        this.entityLink.setRequired(getModel().isRequired());
+        this.entityLink.add(new IValidator<ObjectAdapter>() {
+
             private static final long serialVersionUID = 1L;
-        
+
             @Override
             public void validate(final IValidatable<ObjectAdapter> validatable) {
                 final ObjectAdapter proposedAdapter = validatable.getValue();
@@ -167,8 +150,7 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
             }
         });
 
-
-        return scalarIfRegularFormGroup;
+        return formGroup;
     }
 
     @Override
@@ -180,7 +162,6 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
 
         final Select2 select2 = createSelect2(ID_AUTO_COMPLETE);
 
-        setProviderAndCurrAndPending(select2, getModel().getActionArgsHint());
 
         final Settings settings = select2.getSettings();
 
@@ -205,6 +186,8 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
 
         return select2;
     }
+
+
 
     // //////////////////////////////////////
 
@@ -378,32 +361,19 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     // setProviderAndCurrAndPending
     // //////////////////////////////////////
     
-    // called by syncWithInput, updateChoices
-    private void setProviderAndCurrAndPending(
-            final Select2 select2,
-            final ObjectAdapter[] argsIfAvailable) {
+    @Override
+    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable) {
 
-        ChoiceProvider<ObjectAdapterMemento> providerForChoices;
         if (getModel().hasChoices()) {
             List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
-            providerForChoices =
-                    new ObjectAdapterMementoProviderForReferenceChoices(getModel(), wicketViewerSettings, choiceMementos);
-
-        } else if(getModel().hasAutoComplete()) {
-            providerForChoices =
-                    new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel(), wicketViewerSettings);
-        } else {
-            providerForChoices =
-                    new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel(), wicketViewerSettings);
+            return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), wicketViewerSettings, choiceMementos);
         }
 
-        select2.setProvider(providerForChoices);
-        getModel().clearPending();
-
-        if(providerForChoices instanceof ObjectAdapterMementoProviderForReferenceChoices) {
-            final ObjectAdapterMementoProviderForReferenceChoices provider = (ObjectAdapterMementoProviderForReferenceChoices) providerForChoices;
-            resetIfCurrentNotInChoices(select2, provider.getChoiceMementos());
+        if(getModel().hasAutoComplete()) {
+            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel(), wicketViewerSettings);
         }
+
+        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel(), wicketViewerSettings);
     }
 
     // called by setProviderAndCurrAndPending
@@ -417,7 +387,8 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
     }
 
     // called by setProviderAndCurrAndPending
-    private void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
+    @Override
+    protected void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
         final ObjectAdapterMemento curr = select2.getModelObject();
 
         if(!getModel().isCollection()) {
@@ -499,12 +470,11 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
      */
     @Override
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if(select2 != null) {
-            setProviderAndCurrAndPending(select2, argsIfAvailable);
-            return true;
-        } else {
+        if (select2 == null) {
             return false;
         }
+        setProviderAndCurrAndPending(select2, argsIfAvailable);
+        return true;
     }
 
     

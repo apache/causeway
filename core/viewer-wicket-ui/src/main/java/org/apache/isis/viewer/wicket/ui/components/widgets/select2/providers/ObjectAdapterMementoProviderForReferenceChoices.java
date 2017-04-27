@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 public class ObjectAdapterMementoProviderForReferenceChoices
-        extends ObjectAdapterMementoProviderAbstract {
+        extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProviderForChoices {
 
     private static final long serialVersionUID = 1L;
     private final List<ObjectAdapterMemento> choiceMementos;
