@@ -43,7 +43,6 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -138,7 +137,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         }
 
         @Override
-        public void onUpdate(AjaxRequestTarget target, ScalarModelProvider provider) {
+        public void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
 
             final ActionModel actionModel = getActionModel();
             

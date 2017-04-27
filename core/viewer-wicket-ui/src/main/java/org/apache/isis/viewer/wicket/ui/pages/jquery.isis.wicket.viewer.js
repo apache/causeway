@@ -27,6 +27,7 @@ $(function() {
     window.Isis = {
         Topic: {
             OPEN_IN_NEW_TAB: 'openInNewTab',
+            CLOSE_SELECT2: 'closeSelect2',
             FOCUS_FIRST_PARAMETER: 'focusFirstParameter',
             FOCUS_FIRST_PROPERTY: 'focusFirstProperty'
         },
@@ -79,6 +80,15 @@ $(function() {
         if(win) { win.focus(); }
     });
 
+    Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
+        setTimeout(function() {
+            var $panel = $('#'+panelId);
+             console.log($panel);
+            $($panel).find('select').select2('close');
+            $($panel).find('select').filter(':visible:first').focus();
+        }, 0);
+    });
+
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, modalWindowId) {
         setTimeout(function() {
             $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select').filter(':visible:first').focus();
@@ -87,7 +97,7 @@ $(function() {
 
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent) {
         setTimeout(function() {
-            $(document).find('a.scalarValueEditInline').filter(':visible:first').focus();
+            $(document).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
         }, 0);
     });
 

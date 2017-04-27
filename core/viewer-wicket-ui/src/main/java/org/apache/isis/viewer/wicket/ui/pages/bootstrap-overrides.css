@@ -896,3 +896,20 @@ tr.headers th form input {
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityTitle {
     display: none;
 }
+
+#container  a:focus,
+#container  .btn:focus,
+#container  input:focus,
+#container  :focus {
+//    outline-color: darkorange;
+//    outline-color: sienna;
+//    outline-color: darkred;
+    outline-color: maroon;
+    outline-style: solid;
+    outline-width: 2px;
+}
+
+#container  a.edit:focus {
+    padding: 3px;
+}
+

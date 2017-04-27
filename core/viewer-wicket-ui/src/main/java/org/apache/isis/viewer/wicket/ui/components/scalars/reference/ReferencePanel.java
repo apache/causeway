@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -49,6 +50,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
@@ -150,6 +152,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             }
         });
 
+
         return formGroup;
     }
 
@@ -226,6 +229,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             }
         };
     }
+
 
 
 
@@ -455,6 +459,30 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
     
     // //////////////////////////////////////
+
+    @Override
+    public void onUpdate(
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+
+        target.appendJavaScript(
+                String.format("Wicket.Event.publish(Isis.Topic.CLOSE_SELECT2, '%s')", getMarkupId()));
+
+
+        // super.onUpdate(target, scalarPanel);
+//        target.appendJavaScript("console.log(\"ReferencePanel : changed\")");
+//        target.appendJavaScript("console.log(" + jQuery(scalarPanel) + ".find(\"select\"));");
+//        target.appendJavaScript("" + jQuery(scalarPanel) + ".find(\"select\").focus();");
+    }
+
+    private static String jQuery(final ScalarPanelAbstract scalarPanel) {
+        return "$(" + markupId(scalarPanel) + ")";
+    }
+
+    private static String markupId(final ScalarPanelAbstract scalarPanel) {
+        return "\"#" + scalarPanel.getMarkupId() + "\"";
+    }
+
+    // //////////////////////////////////////
     // helpers querying model state
     // //////////////////////////////////////
 
@@ -496,3 +524,5 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     }
 
 }
+
+

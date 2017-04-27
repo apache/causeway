@@ -56,7 +56,6 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExec
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
@@ -67,7 +66,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
+public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelSubscriber {
 
     private static final long serialVersionUID = 1L;
 
@@ -263,11 +262,16 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 }
             }
         }
+        if(scalarModel.getPromptStyle() != PromptStyle.INLINE) {
+            getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
+        }
 
         getRendering().buildGui(this);
         addCssForMetaModel();
 
-        addFormComponentBehaviour();
+        notifyOnChange(this);
+        addFormComponentBehaviourToUpdateSubscribers();
+
     }
 
     /**
@@ -312,6 +316,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
         private static final long serialVersionUID = 1L;
+
         private final ScalarPanelAbstract scalarPanel;
 
         private ScalarUpdatingBehavior(final ScalarPanelAbstract scalarPanel) {
@@ -324,10 +329,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);
             }
-
-            // hmmm... this doesn't seem to be picked up...
-            target.appendJavaScript(
-                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", scalarPanel.getMarkupId()));
         }
 
         @Override
@@ -345,11 +346,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         subscribers.add(subscriber);
     }
 
-    private void addFormComponentBehaviour() {
-        if (subscribers.isEmpty()) {
-            return;
-        }
-
+    private void addFormComponentBehaviourToUpdateSubscribers() {
         Component scalarValueComponent = getScalarValueComponent();
         if(scalarValueComponent == null) {
             return;
@@ -360,7 +357,26 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         scalarValueComponent.add(new ScalarUpdatingBehavior(this));
     }
 
+    // //////////////////////////////////////
+
+    @Override
+    public void onUpdate(
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+
+        target.appendJavaScript(
+                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
+    }
+
+
+    @Override
+    public void onError(
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+
+    }
+
+
     // ///////////////////////////////////////////////////////////////////
+
 
     public enum Rendering {
         /**
@@ -639,11 +655,5 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         target.add(this);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-
-    @Override
-    public AdapterManager getAdapterManager() {
-        return getPersistenceSession();
-    }
 
 }

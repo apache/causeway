@@ -44,7 +44,6 @@ import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.HasFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
@@ -221,10 +220,10 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
                 final Form<?> form);
 
         @Override
-        public void onError(AjaxRequestTarget target, TextFieldValueModel.ScalarModelProvider provider) {
-            if(provider instanceof Component) {
+        public void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
+            if(scalarPanel instanceof Component) {
                 // ensure that any feedback error associated with the providing component is shown.
-                target.add((Component)provider);
+                target.add(scalarPanel);
             }
         }
 

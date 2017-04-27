@@ -37,7 +37,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
@@ -114,7 +113,7 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
         @Override
         public void onUpdate(
-                final AjaxRequestTarget target, final ScalarModelProvider provider) {
+                final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
         }
 

@@ -39,6 +39,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -62,7 +63,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * This implementation is for panels that use a textfield/text area.
  * </p>
  */
-public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract {
+public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -342,6 +343,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return settings;
     }
 
+    @Override
+    public AdapterManager getAdapterManager() {
+        return getPersistenceSession();
+    }
 
 }
 
