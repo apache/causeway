@@ -884,9 +884,15 @@ tr.headers th form input {
 
 .referencePanel .form-control.scalarValueInlinePromptLink {
     display: inline-block;
-    width: 50%;
+    width: 90%;
 }
 
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
-    width: 50%;
+    width: 90%;
+}
+.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
+    margin-right: 10px;
+}
+.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityTitle {
+    display: none;
 }

@@ -189,7 +189,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
         return scalarModel;
     }
 
-
     @com.google.inject.Inject
     WicketViewerSettings wicketViewerSettings;
 

@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -37,6 +36,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -57,6 +57,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
@@ -280,6 +281,10 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
                 final ComponentFactory componentFactory = 
                         getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
                 final Component component = componentFactory.createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), entityModelForLink);
+                if(scalarModel.getPromptStyle() == PromptStyle.INLINE) {
+                    // bit of a hack... allows us to suppress the title using CSS
+                    component.add(new CssClassAppender("inlinePrompt"));
+                }
                 
                 componentForRegular.addOrReplace(component);
 
