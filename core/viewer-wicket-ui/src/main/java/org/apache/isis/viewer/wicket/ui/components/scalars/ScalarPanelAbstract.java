@@ -327,7 +327,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
             // hmmm... this doesn't seem to be picked up...
             target.appendJavaScript(
-                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId()));
+                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", scalarPanel.getMarkupId()));
         }
 
         @Override
