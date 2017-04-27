@@ -35,12 +35,10 @@ import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -70,27 +68,19 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         // same pattern as in ReferencePanel
         if(select2 == null) {
-            if(getModel().isCollection()) {
-                final IModel<ArrayList<ObjectAdapterMemento>> modelObject = ScalarModelWithMultiPending.Util.createModel(this);
-                select2 = Select2.newSelect2MultiChoice(ID_SCALAR_VALUE, modelObject, scalarModel);
-            } else {
-                final IModel<ObjectAdapterMemento> modelObject = ScalarModelWithPending.Util.createModel(this);
-                select2 = Select2.newSelect2Choice(ID_SCALAR_VALUE, modelObject, scalarModel);
-            }
+            this.select2 = createSelect2AndSemantics();
 
             final ObjectAdapter[] actionArgsHint = scalarModel.getActionArgsHint();
             setProviderAndCurrAndPending(select2, actionArgsHint);
-            addStandardSemantics();
+            addStandardSemantics(select2);
         } else {
             select2.clearInput();
         }
-
 
         final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
         if(getModel().isRequired()) {
             scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
-        
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2.component()));
         if(getModel().isRequired()) {
@@ -109,6 +99,15 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         return scalarIfRegularFormGroup;
     }
 
+    private Select2 createSelect2AndSemantics() {
+        final Select2 select2 = createSelect2(ID_SCALAR_VALUE);
+
+        final ObjectAdapter[] actionArgsHint = scalarModel.getActionArgsHint();
+        setProviderAndCurrAndPending(select2, actionArgsHint);
+        addStandardSemantics(select2);
+        return select2;
+    }
+
     protected Component getScalarValueComponent() {
         return select2.component();
     }
@@ -121,11 +120,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
     }
 
-    protected void addStandardSemantics() {
-        setRequiredIfSpecified();
+    protected void addStandardSemantics(final Select2 select2) {
+        setRequiredIfSpecified(select2);
     }
 
-    private void setRequiredIfSpecified() {
+    private void setRequiredIfSpecified(final Select2 select2) {
         final ScalarModel scalarModel = getModel();
         final boolean required = scalarModel.isRequired();
         select2.setRequired(required);

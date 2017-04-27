@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -45,10 +46,13 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
+import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
@@ -61,6 +65,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOr
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -337,6 +342,41 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             }
         }
     }
+
+
+
+
+    // //////////////////////////////////////
+
+    /**
+     * For convenience of implementations that use a select2 dropdown ({@link ReferencePanel} and {@link ValueChoicesSelect2Panel}).
+     */
+    protected Select2 createSelect2(final String id) {
+        final Select2 select2;
+        if(getModel().isCollection()) {
+            final IModel<ArrayList<ObjectAdapterMemento>> model = ScalarModelWithMultiPending.Util.createModel(scalarModel);
+            select2 = Select2.newSelect2MultiChoice(id, model, scalarModel);
+        } else {
+            final IModel<ObjectAdapterMemento> model = ScalarModelWithPending.Util.createModel(scalarModel);
+            select2 = Select2.newSelect2Choice(id, model, scalarModel);
+        }
+        return select2;
+    }
+
+    // the implementation pulled up from ValueChoicesSelect2Panel.
+    // however, uses an overloaded version that relies on VCSP implementing ScalarModlWith{Multi}Pending.  Experimenting as to whether that's actually required...
+//    protected Select2 createSelect2(final String id) {
+//        final Select2 select2;
+//        if(getModel().isCollection()) {
+//            final IModel<ArrayList<ObjectAdapterMemento>> model = ScalarModelWithMultiPending.Util.createModel(this);
+//            select2 = Select2.newSelect2MultiChoice(id, model, scalarModel);
+//        } else {
+//            final IModel<ObjectAdapterMemento> modelObject = ScalarModelWithPending.Util.createModel(this);
+//            select2 = Select2.newSelect2Choice(ID_SCALAR_VALUE, modelObject, scalarModel);
+//        }
+//        return select2;
+//    }
+
 
 
     // //////////////////////////////////////

@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -49,8 +48,6 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiPending;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
@@ -121,7 +118,7 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), this);
 
         entityLink.setRequired(getModel().isRequired());
-        this.select2 = createSelect2();
+        this.select2 = createSelect2AndSemantics();
         entityLink.addOrReplace(select2.component());
 
         syncWithInput();
@@ -179,18 +176,9 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
         return select2.component();
     }
 
-    private Select2 createSelect2() {
+    private Select2 createSelect2AndSemantics() {
 
-        final Select2 select2;
-        if(getModel().isCollection()) {
-            final IModel<ArrayList<ObjectAdapterMemento>> model =
-                    ScalarModelWithMultiPending.Util.createModel(getModel());
-            select2 = Select2.newSelect2MultiChoice(ID_AUTO_COMPLETE, model, getModel());
-        } else {
-            final IModel<ObjectAdapterMemento> modelObject =
-                    ScalarModelWithPending.Util.createModel(getModel());
-            select2 = Select2.newSelect2Choice(ID_AUTO_COMPLETE, modelObject, getModel());
-        }
+        final Select2 select2 = createSelect2(ID_AUTO_COMPLETE);
 
         setProviderAndCurrAndPending(select2, getModel().getActionArgsHint());
 
