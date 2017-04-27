@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
@@ -56,7 +57,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract {
         return select2;
     }
 
-    protected Label createScalarName(final String id) {
+    private Label createScalarName(final String id) {
         final Label scalarName = new Label(id, getRendering().getLabelCaption(select2.component()));
         if(getModel().isRequired()) {
             final String label = scalarName.getDefaultModelObjectAsString();
@@ -86,14 +87,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract {
         return formGroup;
     }
 
+
+
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
-     *
-     * <p>
-     *     For convenience of subclasses using a select2.
-     * </p>
      */
-    protected void setProviderAndCurrAndPending(final Select2 select2, ObjectAdapter[] argsIfAvailable) {
+    private void setProviderAndCurrAndPending(final Select2 select2, ObjectAdapter[] argsIfAvailable) {
 
         final ChoiceProvider<ObjectAdapterMemento> choiceProvider;
         choiceProvider = buildChoiceProvider(argsIfAvailable);
@@ -116,6 +115,35 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract {
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, ObjectAdapter[])})
      */
     protected abstract void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos);
+
+
+    // //////////////////////////////////////
+
+    /**
+     * Hook method to refresh choices when changing.
+     *
+     * <p>
+     * called from onUpdate callback
+     */
+    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
+        if (select2 == null) {
+            return false;
+        }
+        setProviderAndCurrAndPending(select2, argsIfAvailable);
+        return true;
+    }
+
+
+
+    /**
+     * Repaints just the Select2 component
+     *
+     * @param target The Ajax request handler
+     */
+    @Override
+    public void repaint(AjaxRequestTarget target) {
+        target.add(select2.component());
+    }
 
 
 }

@@ -27,7 +27,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -229,17 +228,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
 
 
-    // //////////////////////////////////////
 
-    // called from buildGui
-    @Override
-    protected void addFormComponentBehavior(Behavior behavior) {
-        if(select2 != null) {
-            select2.add(behavior);
-        }
-    }
-
-    
     // //////////////////////////////////////
     // onBeforeRender*
     // //////////////////////////////////////
@@ -458,24 +447,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
         entityLink.setConvertedInput(pendingAdapter);
     }
 
-    // //////////////////////////////////////
-    // updateChoices
-    // //////////////////////////////////////
-
-    /**
-     * Hook method to refresh choices when changing.
-     * 
-     * <p>
-     * called from onUpdate callback
-     */
-    @Override
-    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if (select2 == null) {
-            return false;
-        }
-        setProviderAndCurrAndPending(select2, argsIfAvailable);
-        return true;
-    }
 
     
     // //////////////////////////////////////
@@ -502,16 +473,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
         return autoCompleteFacet != null;
     }
 
-
-    /**
-     * Repaints just the Select2 component
-     *
-     * @param target The Ajax request handler
-     */
-    @Override
-    public void repaint(AjaxRequestTarget target) {
-        target.add(select2.component());
-    }
 
     @Override
     protected String getScalarPanelType() {

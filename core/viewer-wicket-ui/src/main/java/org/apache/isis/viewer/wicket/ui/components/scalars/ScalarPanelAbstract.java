@@ -267,12 +267,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         getRendering().buildGui(this);
         addCssForMetaModel();
 
-        if(!subscribers.isEmpty()) {
-            addFormComponentBehavior(new ScalarUpdatingBehavior());
-        }
+        addFormComponentBehaviour();
     }
-
-
 
     /**
      * Optional hook.
@@ -311,17 +307,22 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
 
-    protected class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
-        private static final long serialVersionUID = 1L;
+    // //////////////////////////////////////
 
-        private ScalarUpdatingBehavior() {
+
+    static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
+        private static final long serialVersionUID = 1L;
+        private final ScalarPanelAbstract scalarPanel;
+
+        private ScalarUpdatingBehavior(final ScalarPanelAbstract scalarPanel) {
             super("change");
+            this.scalarPanel = scalarPanel;
         }
 
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
-            for (ScalarModelSubscriber subscriber : subscribers) {
-                subscriber.onUpdate(target, ScalarPanelAbstract.this);
+            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
+                subscriber.onUpdate(target, scalarPanel);
             }
 
             // hmmm... this doesn't seem to be picked up...
@@ -332,15 +333,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         @Override
         protected void onError(AjaxRequestTarget target, RuntimeException e) {
             super.onError(target, e);
-            for (ScalarModelSubscriber subscriber : subscribers) {
-                subscriber.onError(target, ScalarPanelAbstract.this);
+            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
+                subscriber.onError(target, scalarPanel);
             }
         }
     }
-
-
-    // //////////////////////////////////////
-
 
     private final List<ScalarModelSubscriber> subscribers = Lists.newArrayList();
 
@@ -348,14 +345,20 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         subscribers.add(subscriber);
     }
 
+    private void addFormComponentBehaviour() {
+        if (subscribers.isEmpty()) {
+            return;
+        }
 
-    // ///////////////////////////////////////////////////////////////////
-
-
-    /**
-     * Mandatory hook.
-     */
-    protected abstract void addFormComponentBehavior(Behavior behavior);
+        Component scalarValueComponent = getScalarValueComponent();
+        if(scalarValueComponent == null) {
+            return;
+        }
+        for (Behavior b : scalarValueComponent.getBehaviors(ScalarUpdatingBehavior.class)) {
+            scalarValueComponent.remove(b);
+        }
+        scalarValueComponent.add(new ScalarUpdatingBehavior(this));
+    }
 
     // ///////////////////////////////////////////////////////////////////
 
@@ -564,6 +567,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * @return
      */
     protected abstract Component getScalarValueComponent();
+
 
     private void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));

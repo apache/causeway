@@ -23,8 +23,6 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -143,34 +141,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     }
 
     
-    @Override
-    protected void addFormComponentBehavior(Behavior behavior) {
-        for (Behavior b : select2.getBehaviors(ScalarUpdatingBehavior.class)) {
-            select2.remove(b);
-        }
-        select2.add(behavior);
-    }
-
     // //////////////////////////////////////
 
-    @Override
-    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if (select2 == null) {
-            return false;
-        }
-        setProviderAndCurrAndPending(select2, argsIfAvailable);
-        return true;
-    }
-
-    /**
-     * Repaints just the Select2 component
-     *
-     * @param target The Ajax request handler
-     */
-    @Override
-    public void repaint(AjaxRequestTarget target) {
-        target.add(select2.component());
-    }
 
 
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers

@@ -327,10 +327,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         inlinePromptLink.add(title);
     }
 
-    @Override
-    protected void addFormComponentBehavior(Behavior behavior) {
-        textField.add(behavior);
-    }
 
 
     // //////////////////////////////////////
