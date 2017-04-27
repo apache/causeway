@@ -464,23 +464,13 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     public void onUpdate(
             final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
+        super.onUpdate(target, scalarPanel);
+
         target.appendJavaScript(
                 String.format("Wicket.Event.publish(Isis.Topic.CLOSE_SELECT2, '%s')", getMarkupId()));
 
-
-        // super.onUpdate(target, scalarPanel);
-//        target.appendJavaScript("console.log(\"ReferencePanel : changed\")");
-//        target.appendJavaScript("console.log(" + jQuery(scalarPanel) + ".find(\"select\"));");
-//        target.appendJavaScript("" + jQuery(scalarPanel) + ".find(\"select\").focus();");
     }
 
-    private static String jQuery(final ScalarPanelAbstract scalarPanel) {
-        return "$(" + markupId(scalarPanel) + ")";
-    }
-
-    private static String markupId(final ScalarPanelAbstract scalarPanel) {
-        return "\"#" + scalarPanel.getMarkupId() + "\"";
-    }
 
     // //////////////////////////////////////
     // helpers querying model state
