@@ -881,3 +881,12 @@ tr.headers th form input {
     padding-left: 5px;
     padding-right: 15px;
 }
+
+.referencePanel .form-control.scalarValueInlinePromptLink {
+    display: inline-block;
+    width: 50%;
+}
+
+.referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
+    width: 50%;
+}

@@ -222,7 +222,10 @@ public class ReferencePanel extends ScalarPanelAbstract implements PanelWithChoi
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supported();
+        return InlinePromptConfig.supportedAndHide(
+                scalarModel.getMode() == EntityModel.Mode.EDIT || scalarModel.getKind() == ScalarModel.Kind.PARAMETER
+                        ? select2.component()
+                        : null);
     }
 
     @Override
