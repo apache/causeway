@@ -503,7 +503,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     }
 
 
-
     // //////////////////////////////////////
 
     @com.google.inject.Inject

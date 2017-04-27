@@ -27,6 +27,7 @@ $(function() {
     window.Isis = {
         Topic: {
             OPEN_IN_NEW_TAB: 'openInNewTab',
+            OPEN_SELECT2: 'openSelect2',
             CLOSE_SELECT2: 'closeSelect2',
             FOCUS_FIRST_PARAMETER: 'focusFirstParameter',
             FOCUS_FIRST_PROPERTY: 'focusFirstProperty'
@@ -78,6 +79,15 @@ $(function() {
     Wicket.Event.subscribe(Isis.Topic.OPEN_IN_NEW_TAB, function(jqEvent, url) {
         var win=window.open(url, '_blank');
         if(win) { win.focus(); }
+    });
+
+    Wicket.Event.subscribe(Isis.Topic.OPEN_SELECT2, function(jqEvent, panelId) {
+        setTimeout(function() {
+            var $panel = $('#'+panelId);
+             console.log($panel);
+            $($panel).find('select').select2('open');
+//            $($panel).find('select').filter(':visible:first').focus();
+        }, 0);
     });
 
     Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {

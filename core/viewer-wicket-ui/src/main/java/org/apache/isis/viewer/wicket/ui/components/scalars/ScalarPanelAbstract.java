@@ -462,7 +462,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
 
     /**
-     * Returns a container holding an empty form.  This can be switched out using {@link #switchFormForInlinePrompt()}.
+     * Returns a container holding an empty form.  This can be switched out using {@link #switchFormForInlinePrompt(AjaxRequestTarget)}.
      */
     private WebMarkupContainer createInlinePromptForm() {
 
@@ -518,7 +518,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                                 getComponentForRegular(),
                                 scalarIfRegularInlinePromptForm));
 
-                switchFormForInlinePrompt();
+                switchFormForInlinePrompt(target);
 
                 getComponentForRegular().setVisible(false);
                 scalarIfRegularInlinePromptForm.setVisible(true);
@@ -533,9 +533,20 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         });
     }
 
-    private void switchFormForInlinePrompt() {
+    private void switchFormForInlinePrompt(final AjaxRequestTarget target) {
         scalarIfRegularInlinePromptForm = (PropertyEditFormPanel) getComponentFactoryRegistry().addOrReplaceComponent(
                 scalarTypeContainer, ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PROPERTY_EDIT_FORM, scalarModel);
+
+        onSwitchFormForInlinePrompt(scalarIfRegularInlinePromptForm, target);
+    }
+
+    /**
+     * Optional hook.
+     */
+    protected void onSwitchFormForInlinePrompt(
+            final WebMarkupContainer inlinePromptForm,
+            final AjaxRequestTarget target) {
+
     }
 
 

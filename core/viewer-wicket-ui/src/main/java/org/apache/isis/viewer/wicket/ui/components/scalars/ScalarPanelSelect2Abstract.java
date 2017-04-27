@@ -25,6 +25,7 @@ import com.google.common.base.Strings;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
@@ -116,6 +117,21 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract {
      */
     protected abstract void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choicesMementos);
 
+
+    // //////////////////////////////////////
+
+    /**
+     * Automatically "opens" the select2.
+     */
+    @Override
+    protected void onSwitchFormForInlinePrompt(
+            final WebMarkupContainer inlinePromptForm,
+            final AjaxRequestTarget target) {
+
+        target.appendJavaScript(
+                String.format("Wicket.Event.publish(Isis.Topic.OPEN_SELECT2, '%s')", inlinePromptForm.getMarkupId()));
+
+    }
 
     // //////////////////////////////////////
 
