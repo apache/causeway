@@ -27,13 +27,15 @@ import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -64,12 +66,13 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
         final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
         final EntityModel entityModel = collectionModel.getEntityModel();
-
+        final ObjectAdapter adapter = entityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+        
         final List<ObjectAction> associatedActions =
-                EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentCategory());
+                ObjectAction.Util.findForAssociation(adapter, otma, getDeploymentCategory());
 
         entityActionLinks.addAll(
-                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
+                LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null));
 
         collectionModel.addEntityActions(entityActionLinks);
     }

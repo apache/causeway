@@ -17,37 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
-
-import java.util.Properties;
-
-import com.google.common.base.Strings;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 
-public class PromptStyleFacetOnPropertyFromLayoutProperties extends PromptStyleFacetAbstract {
+public class PromptStyleFacetForActionXml extends PromptStyleFacetAbstract {
+
+    public static PromptStyleFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
+        if(actionLayout == null) {
+            return null;
+        }
+        final PromptStyle promptStyle = actionLayout.getPromptStyle();
+        return promptStyle != null ? new PromptStyleFacetForActionXml(promptStyle, holder) : null;
+    }
 
     private final PromptStyle promptStyle;
 
-    public static PromptStyleFacet create(Properties properties, FacetHolder holder) {
-        final PromptStyle promptStyle = promptStyle(properties);
-        return promptStyle != null? new PromptStyleFacetOnPropertyFromLayoutProperties(promptStyle, holder): null;
-    }
-
-    private PromptStyleFacetOnPropertyFromLayoutProperties(PromptStyle promptStyle, FacetHolder holder) {
+    private PromptStyleFacetForActionXml(PromptStyle promptStyle, FacetHolder holder) {
         super(holder);
         this.promptStyle = promptStyle;
-    }
-
-    private static PromptStyle promptStyle(Properties properties) {
-        if(properties == null) {
-            return null;
-        }
-        String propertyPromptStyle = Strings.emptyToNull(properties.getProperty("promptStyle"));
-        return PromptStyle.valueOf(propertyPromptStyle);
     }
 
     @Override

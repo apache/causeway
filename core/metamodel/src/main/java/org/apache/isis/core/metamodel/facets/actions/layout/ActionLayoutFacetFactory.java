@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
@@ -52,8 +53,8 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
     public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
-
         Properties properties = processMethodContext.metadataProperties("actionLayout");
+
         if(properties == null) {
             // alternate key
             properties = processMethodContext.metadataProperties("layout");
@@ -108,6 +109,16 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         }
         FacetUtil.addFacet(namedFacet);
 
+        // promptStyle
+        PromptStyleFacet promptStyleFacet = PromptStyleFacetOnActionFromLayoutProperties
+                .create(properties, holder);
+        if(promptStyleFacet == null) {
+            promptStyleFacet = PromptStyleFacetForActionLayoutAnnotation
+                    .create(actionLayout, getConfiguration(), holder);
+        }
+
+        FacetUtil.addFacet(promptStyleFacet);
+
 
         // position
         ActionPositionFacet actionPositionFacet = ActionPositionFacetOnActionFromLayoutProperties.create(properties, holder);
@@ -121,7 +132,6 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
 
         // contributing
-
         if (isContributingServiceOrMixinObject(processMethodContext)) {
             NotContributedFacet notContributedFacet = NotContributedFacetForLayoutProperties.create(properties, holder);
             if(notContributedFacet == null) {

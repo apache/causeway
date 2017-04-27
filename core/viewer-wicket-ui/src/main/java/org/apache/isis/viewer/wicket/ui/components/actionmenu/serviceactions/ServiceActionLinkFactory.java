@@ -36,9 +36,14 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    ServiceActionLinkFactory() {
+        super(null);
+    }
+
     @Override
     public LinkAndLabel newLink(
-            final String linkId, final ObjectAdapterMemento adapterMemento,
+            final String linkId,
+            final ObjectAdapterMemento adapterMemento,
             final ObjectAction action) {
         
         ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,

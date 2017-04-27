@@ -51,7 +51,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
@@ -87,7 +87,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     /**
      * as per {@link #scalarIfRegularInlinePromptForm}.
      */
-    protected static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
+    public static final String ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM = "scalarIfRegularInlinePromptForm";
 
 
     private static final String ID_EDIT_PROPERTY = "editProperty";
@@ -232,22 +232,21 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         this.scalarIfRegular = createComponentForRegular();
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
-        final List<LinkAndLabel> entityActions =
-                EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
-        addPositioningCssTo(scalarIfRegular, entityActions);
-        addEntityActionLinksBelowAndRight(scalarIfRegular, entityActions);
-
-        addEditPropertyTo(scalarIfRegular);
-        addFeedbackOnlyTo(scalarIfRegular, getScalarValueComponent());
-
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
-
         if(inlinePromptConfig.isSupported()) {
             this.scalarIfRegularInlinePromptForm = createInlinePromptForm();
             scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
             inlinePromptLink = createInlinePromptLink();
             scalarIfRegular.add(inlinePromptLink);
 
+            // even if this particular scalarModel (property) is not configured for inline edits, it's possible that
+            // one of the associated actions is.  Thus we set the prompt context
+            scalarModel.setInlinePromptContext(
+                    new ScalarModel.InlinePromptContext(
+                            getComponentForRegular(),
+                            scalarIfRegularInlinePromptForm, scalarTypeContainer));
+
+            // and we configure the prompt link if _this_ property is configured for inline edits...
             final PromptStyle promptStyle = this.scalarModel.getPromptStyle();
             if(promptStyle == PromptStyle.INLINE) {
                 configureInlinePromptLinkCallback(inlinePromptLink);
@@ -266,8 +265,17 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
 
+        final List<LinkAndLabel> actionLinks =
+                LinkAndLabelUtil.asActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
+        addPositioningCssTo(scalarIfRegular, actionLinks);
+        addActionLinksBelowAndRight(scalarIfRegular, actionLinks);
+
+        addEditPropertyTo(scalarIfRegular);
+        addFeedbackOnlyTo(scalarIfRegular, getScalarValueComponent());
+
+
         getRendering().buildGui(this);
-        addCssForMetaModel();
+        addCssFromMetaModel();
 
         notifyOnChange(this);
         addFormComponentBehaviourToUpdateSubscribers();
@@ -293,7 +301,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
 
-    private void addCssForMetaModel() {
+    private void addCssFromMetaModel() {
         final String cssForMetaModel = getModel().getLongName();
         if (cssForMetaModel != null) {
             add(new AttributeAppender("class", Model.of(cssForMetaModel), " "));
@@ -513,10 +521,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 final PropertyEditFormExecutor formExecutor =
                         new PropertyEditFormExecutor(ScalarPanelAbstract.this, scalarModel);
                 scalarModel.setFormExecutor(formExecutor);
-                scalarModel.setInlinePromptContext(
-                        new ScalarModel.InlinePromptContext(
-                                getComponentForRegular(),
-                                scalarIfRegularInlinePromptForm));
 
                 switchFormForInlinePrompt(target);
 
@@ -600,14 +604,14 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
     }
 
-    private void addEntityActionLinksBelowAndRight(
+    private void addActionLinksBelowAndRight(
             final MarkupContainer labelIfRegular,
-            final List<LinkAndLabel> entityActions) {
-        final List<LinkAndLabel> entityActionsBelow = LinkAndLabel.positioned(entityActions, ActionLayout.Position.BELOW);
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, entityActionsBelow, AdditionalLinksPanel.Style.INLINE_LIST);
+            final List<LinkAndLabel> linkAndLabels) {
+        final List<LinkAndLabel> linksBelow = LinkAndLabel.positioned(linkAndLabels, ActionLayout.Position.BELOW);
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        final List<LinkAndLabel> entityActionsRight = LinkAndLabel.positioned(entityActions, ActionLayout.Position.RIGHT);
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
+        final List<LinkAndLabel> linksRight = LinkAndLabel.positioned(linkAndLabels, ActionLayout.Position.RIGHT);
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, linksRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
     /**

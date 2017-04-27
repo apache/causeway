@@ -27,17 +27,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
-public class HiddenFacetForActionLayoutXml extends HiddenFacetAbstract {
+public class HiddenFacetForActionXml extends HiddenFacetAbstract {
 
     public static HiddenFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
         if (actionLayout == null) {
             return null;
         }
         final Where where = actionLayout.getHidden();
-        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForActionLayoutXml(where, holder) : null;
+        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForActionXml(where, holder) : null;
     }
 
-    private HiddenFacetForActionLayoutXml(final Where where, final FacetHolder holder) {
+    private HiddenFacetForActionXml(final Where where, final FacetHolder holder) {
         super(When.ALWAYS, where, holder);
     }
 

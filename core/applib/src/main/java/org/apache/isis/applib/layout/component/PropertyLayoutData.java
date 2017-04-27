@@ -107,18 +107,6 @@ public class PropertyLayoutData
     }
 
 
-    private PromptStyle promptStyle;
-
-    @XmlAttribute(required = false)
-    public PromptStyle getPromptStyle() {
-        return promptStyle;
-    }
-
-    public void setPromptStyle(PromptStyle promptStyle) {
-        this.promptStyle = promptStyle;
-    }
-
-
     private Where hidden;
 
     @Override
@@ -183,6 +171,19 @@ public class PropertyLayoutData
     public void setNamedEscaped(Boolean namedEscaped) {
         this.namedEscaped = namedEscaped;
     }
+
+
+    private PromptStyle promptStyle;
+
+    @XmlAttribute(required = false)
+    public PromptStyle getPromptStyle() {
+        return promptStyle;
+    }
+
+    public void setPromptStyle(PromptStyle promptStyle) {
+        this.promptStyle = promptStyle;
+    }
+
 
 
     private Boolean renderedAsDayBefore;

@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -44,12 +44,10 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
 
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
-    private final EntityActionLinkFactory linkFactory;
 
 
     public EntityHeaderPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
-        linkFactory = new EntityActionLinkFactory(getEntityModel());
     }
 
     /**
@@ -81,9 +79,11 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         final EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
         if (adapter != null) {
-            final List<ObjectAction> topLevelActions = EntityActionUtil.getTopLevelActions(adapter, getDeploymentCategory());
+            final List<ObjectAction> topLevelActions = ObjectAction.Util
+                    .findTopLevel(adapter, getDeploymentCategory());
 
-            final List<LinkAndLabel> entityActionLinks = EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(model, topLevelActions);
+            final List<LinkAndLabel> entityActionLinks = LinkAndLabelUtil
+                    .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null);
 
             AdditionalLinksPanel.addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
         } else {

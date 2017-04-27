@@ -18,9 +18,14 @@
  */
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * How prompting for new values (property edit) should be performed
  */
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+)
 public enum PromptStyle {
     /**
      * Edit the property according to the default edit style policy configured in <tt>isis.properties</tt>.

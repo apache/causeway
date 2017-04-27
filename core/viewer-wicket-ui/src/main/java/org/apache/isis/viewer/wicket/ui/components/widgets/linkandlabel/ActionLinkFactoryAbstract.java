@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 import java.util.concurrent.Callable;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -28,6 +29,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -37,11 +39,14 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -52,6 +57,12 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     private static final long serialVersionUID = 1L;
+
+    private final ScalarModel scalarModelForAssociationIfAny;
+
+    protected ActionLinkFactoryAbstract(final ScalarModel scalarModelForAssociationIfAny) {
+        this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
+    }
 
     protected AbstractLink newLink(
             final String linkId,
@@ -65,112 +76,47 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
         final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 
-        // TODO: could remove some of the copy-n-paste between IndicatingAjaxLink and AjaxLink
         final AbstractLink link = getSettings().isUseIndicatorForNoArgAction()
                 ? new IndicatingAjaxLink<Object>(linkId) {
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-
-                        if (ajaxDeferredBehaviour != null) {
-                            ajaxDeferredBehaviour.initiate(target);
-                        }
-                        else {
-                            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
-                            final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
-                            final ActionPromptHeaderPanel titlePanel =
-                                    PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                                    new Callable<ActionPromptHeaderPanel>() {
-                                        @Override
-                                        public ActionPromptHeaderPanel call() throws Exception {
-                                            final String titleId = actionPrompt.getTitleId();
-                                            return new ActionPromptHeaderPanel(titleId, actionModel);
-                                        }
-                                    });
-                            final ActionPanel actionPanel =
-                                    (ActionPanel) getComponentFactoryRegistry().createComponent(
-                                            ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
-
-                            actionPanel.setShowHeader(false);
-
-                            actionPrompt.setTitle(titlePanel, target);
-                            actionPrompt.setPanel(actionPanel, target);
-                            actionPanel.setActionPrompt(actionPrompt);
-                            actionPrompt.showPrompt(target);
-                        }
+                        ActionLinkFactoryAbstract.this.onClick(target, ajaxDeferredBehaviour, actionModel, this);
                     }
 
                     @Override
                     protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                         super.updateAjaxAttributes(attributes);
-                        if(getSettings().isPreventDoubleClickForNoArgAction()) {
-                            PanelUtil.disableBeforeReenableOnComplete(attributes, this);
-                        }
-
-                        // allow the event to bubble so the menu is hidden after click on an item
-                        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
+                        ActionLinkFactoryAbstract.this.updateAjaxAttributes(attributes, this);
                     }
 
                     @Override
                     protected void onComponentTag(ComponentTag tag) {
                         super.onComponentTag(tag);
-
                         Buttons.fixDisabledState(this, tag);
                     }
                 } :
                 new AjaxLink<Object>(linkId) {
-            private static final long serialVersionUID = 1L;
+                    private static final long serialVersionUID = 1L;
 
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        ActionLinkFactoryAbstract.this.onClick(target, ajaxDeferredBehaviour, actionModel, this);
+                    }
 
-                if (ajaxDeferredBehaviour != null) {
-                    ajaxDeferredBehaviour.initiate(target);
-                }
-                else {
-                    final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
-                    final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
-                    final ActionPromptHeaderPanel titlePanel =
-                            PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                            new Callable<ActionPromptHeaderPanel>() {
-                                @Override
-                                public ActionPromptHeaderPanel call() throws Exception {
-                                    final String titleId = actionPrompt.getTitleId();
-                                    return new ActionPromptHeaderPanel(titleId, actionModel);
-                                }
-                            });
-                    final ActionPanel actionPanel =
-                            (ActionPanel) getComponentFactoryRegistry().createComponent(
-                                    ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
+                    @Override
+                    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                        super.updateAjaxAttributes(attributes);
+                        ActionLinkFactoryAbstract.this.updateAjaxAttributes(attributes, this);
+                    }
 
-                    actionPanel.setShowHeader(false);
-
-                    actionPrompt.setTitle(titlePanel, target);
-                    actionPrompt.setPanel(actionPanel, target);
-                    actionPanel.setActionPrompt(actionPrompt);
-                    actionPrompt.showPrompt(target);
-                }
-            }
-
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
-                if(getSettings().isPreventDoubleClickForNoArgAction()) {
-                    PanelUtil.disableBeforeReenableOnComplete(attributes, this);
-                }
-
-                // allow the event to bubble so the menu is hidden after click on an item
-                attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
-            }
-
-            @Override
-            protected void onComponentTag(ComponentTag tag) {
-                super.onComponentTag(tag);
-
-                Buttons.fixDisabledState(this, tag);
-            }
-        };
+                    @Override
+                    protected void onComponentTag(ComponentTag tag) {
+                        super.onComponentTag(tag);
+                        Buttons.fixDisabledState(this, tag);
+                    }
+                };
 
         if (ajaxDeferredBehaviour != null) {
             link.add(ajaxDeferredBehaviour);
@@ -238,15 +184,89 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
 
+    private void onClick(
+            final AjaxRequestTarget target,
+            final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny,
+            final ActionModel actionModel,
+            final AjaxLink<Object> ajaxLink) {
+
+        if (ajaxDeferredBehaviourIfAny != null) {
+            ajaxDeferredBehaviourIfAny.initiate(target);
+            return;
+        }
+
+
+
+        ScalarModel.InlinePromptContext inlinePromptContext = determineInlinePromptContext();
+        PromptStyle promptStyle = actionModel.getPromptStyle();
+
+        if(inlinePromptContext == null || promptStyle != PromptStyle.INLINE) {
+            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(ajaxLink.getPage());
+            final ActionPrompt prompt = promptProvider.getActionPrompt();
+
+            final ActionPromptHeaderPanel titlePanel =
+                    PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                            new Callable<ActionPromptHeaderPanel>() {
+                                @Override
+                                public ActionPromptHeaderPanel call() throws Exception {
+                                    final String titleId = prompt.getTitleId();
+                                    return new ActionPromptHeaderPanel(titleId, actionModel);
+                                }
+                            });
+            final ActionPanel actionPanel =
+                    (ActionPanel) getComponentFactoryRegistry().createComponent(
+                            ComponentType.ACTION_PROMPT, prompt.getContentId(), actionModel);
+
+            actionPanel.setShowHeader(false);
+
+            prompt.setTitle(titlePanel, target);
+            prompt.setPanel(actionPanel, target);
+            actionPanel.setActionPrompt(prompt);
+            prompt.showPrompt(target);
+
+        } else {
+
+            MarkupContainer scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
+            actionModel.setFormExecutor(new ActionParametersFormExecutor(scalarTypeContainer, actionModel));
+            actionModel.setInlinePromptContext(inlinePromptContext);
+            getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
+                    ScalarPanelAbstract.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
+
+            // TODO: probably needs to be like the switchXxx, and update the parent of the placeholder editform
+            inlinePromptContext.getScalarIfRegular().setVisible(false);
+            inlinePromptContext.getScalarIfRegularInlinePromptForm().setVisible(true);
+
+            target.add(scalarTypeContainer);
+        }
+
+    }
+
+    private void updateAjaxAttributes(
+            final AjaxRequestAttributes attributes,
+            final AjaxLink<Object> ajaxLink) {
+        if(getSettings().isPreventDoubleClickForNoArgAction()) {
+            PanelUtil.disableBeforeReenableOnComplete(attributes, ajaxLink);
+        }
+
+        // allow the event to bubble so the menu is hidden after click on an item
+        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
+    }
+
     protected LinkAndLabel newLinkAndLabel(
             final ObjectAdapter objectAdapter,
             final ObjectAction objectAction,
             final AbstractLink link,
             final String disabledReasonIfAny) {
 
-        final boolean blobOrClob = ObjectAction.Utils.returnsBlobOrClob(objectAction);
+        final boolean whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
 
-        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, blobOrClob);
+        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, whetherReturnsBlobOrClob);
+    }
+
+    private ScalarModel.InlinePromptContext determineInlinePromptContext() {
+        return scalarModelForAssociationIfAny != null
+                ? scalarModelForAssociationIfAny.getInlinePromptContext()
+                : null;
     }
 
 

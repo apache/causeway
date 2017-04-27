@@ -17,29 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.actions.layout;
+
+import java.util.Properties;
+
+import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 
-public class PromptStyleFacetForPropertyLayoutXml extends PromptStyleFacetAbstract {
-
-    public static PromptStyleFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
-            return null;
-        }
-        final PromptStyle promptStyle = propertyLayout.getPromptStyle();
-        return promptStyle != null ? new PromptStyleFacetForPropertyLayoutXml(promptStyle, holder) : null;
-    }
+public class PromptStyleFacetOnActionFromLayoutProperties extends PromptStyleFacetAbstract {
 
     private final PromptStyle promptStyle;
 
-    private PromptStyleFacetForPropertyLayoutXml(PromptStyle promptStyle, FacetHolder holder) {
+    public static PromptStyleFacet create(Properties properties, FacetHolder holder) {
+        final PromptStyle promptStyle = promptStyle(properties);
+        return promptStyle != null? new PromptStyleFacetOnActionFromLayoutProperties(promptStyle, holder): null;
+    }
+
+    private PromptStyleFacetOnActionFromLayoutProperties(PromptStyle promptStyle, FacetHolder holder) {
         super(holder);
         this.promptStyle = promptStyle;
+    }
+
+    private static PromptStyle promptStyle(Properties properties) {
+        if(properties == null) {
+            return null;
+        }
+        String propertyPromptStyle = Strings.emptyToNull(properties.getProperty("promptStyle"));
+        return PromptStyle.valueOf(propertyPromptStyle);
     }
 
     @Override

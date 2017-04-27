@@ -16,10 +16,10 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 
 public class ActionLayoutFacetRepr {
@@ -31,6 +31,7 @@ public class ActionLayoutFacetRepr {
     public Where hidden;
     public String named;
     public boolean namedEscaped = true;
+    public PromptStyle promptStyle;
     public ActionLayout.Position position;
     public Contributed contributed;
 }

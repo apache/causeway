@@ -18,11 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3.col;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -40,7 +48,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
@@ -49,11 +57,6 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
@@ -145,9 +148,9 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                     })
                     .toList();
         final List<LinkAndLabel> entityActionLinks =
-                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(getModel(), visibleActions);
+                LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);
 
-        if(!entityActionLinks.isEmpty()) {
+        if (!entityActionLinks.isEmpty()) {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
             visible = true;
         } else {

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
 
 public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
@@ -39,7 +40,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
     @SuppressWarnings("unused")
     private final EntityModel entityModel;
 
-    public EntityActionLinkFactory(final EntityModel entityModel) {
+    public EntityActionLinkFactory(final EntityModel entityModel, final ScalarModel scalarModelForAssociationIfAny) {
+        super(scalarModelForAssociationIfAny);
         this.entityModel = entityModel;
     }
 

@@ -46,8 +46,7 @@ public class ActionPanelFactory extends ComponentFactoryAbstract {
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final ActionModel actionModel = (ActionModel) model;
-        final ActionPanel actionPanel = new ActionPanel(id, actionModel);
-        return actionPanel;
+        return new ActionPanel(id, actionModel);
     }
 
 }

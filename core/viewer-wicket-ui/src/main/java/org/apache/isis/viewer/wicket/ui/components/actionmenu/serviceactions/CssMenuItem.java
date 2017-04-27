@@ -345,13 +345,13 @@ class CssMenuItem implements Serializable {
                 .link(link)
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
-                .returnsBlobOrClob(ObjectAction.Utils.returnsBlobOrClob(objectAction))
+                .returnsBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
                 .prototyping(objectAction.isPrototype())
                 .requiresSeparator(separator)
-                .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
-                .withCssClass(ObjectAction.Utils.cssClassFor(objectAction, adapter))
-                .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction))
-                .withCssClassFaPosition(ObjectAction.Utils.cssClassFaPositionFor(objectAction));
+                .withActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
+                .withCssClass(ObjectAction.Util.cssClassFor(objectAction, adapter))
+                .withCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
+                .withCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
 
         return builder;
     }

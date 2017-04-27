@@ -30,6 +30,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -1036,7 +1037,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
     private InlinePromptContext inlinePromptContext;
 
     /**
-     * Further hint, to support inline edits...
+     * Further hint, to support inline prompts...
      */
     public InlinePromptContext getInlinePromptContext() {
         return inlinePromptContext;
@@ -1046,24 +1047,40 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
         this.inlinePromptContext = inlinePromptContext;
     }
 
+    // //////////////////////////////////////
+
     public static class InlinePromptContext implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
         private final Component scalarIfRegular;
-        private final WebMarkupContainer scalarIfRegularInlineEditForm;
+        private final WebMarkupContainer scalarIfRegularInlinePromptForm;
+        private final MarkupContainer scalarTypeContainer;
 
         public InlinePromptContext(
                 final Component scalarIfRegular,
-                final WebMarkupContainer scalarIfRegularInlineEditForm) {
+                final WebMarkupContainer scalarIfRegularInlinePromptForm,
+                final MarkupContainer scalarTypeContainer) {
             this.scalarIfRegular = scalarIfRegular;
-            this.scalarIfRegularInlineEditForm = scalarIfRegularInlineEditForm;
+            this.scalarIfRegularInlinePromptForm = scalarIfRegularInlinePromptForm;
+            this.scalarTypeContainer = scalarTypeContainer;
+        }
+
+        public Component getScalarIfRegular() {
+            return scalarIfRegular;
+        }
+
+        public WebMarkupContainer getScalarIfRegularInlinePromptForm() {
+            return scalarIfRegularInlinePromptForm;
         }
 
         public void onCancel() {
-
             scalarIfRegular.setVisible(true);
-            scalarIfRegularInlineEditForm.setVisible(false);
+            scalarIfRegularInlinePromptForm.setVisible(false);
+        }
+
+        public MarkupContainer getScalarTypeContainer() {
+            return scalarTypeContainer;
         }
     }
 

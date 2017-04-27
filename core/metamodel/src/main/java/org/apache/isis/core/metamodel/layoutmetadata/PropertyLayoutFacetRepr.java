@@ -25,12 +25,12 @@ public class PropertyLayoutFacetRepr {
 
     public String cssClass;
     public String describedAs;
-    public PromptStyle editStyle;
     public Where hidden;
     public LabelPosition labelPosition;
     public int multiLine;
     public String named;
     public boolean namedEscaped = true;
+    public PromptStyle promptStyle;
     public boolean renderedAsDayBefore;
     public int typicalLength;
 

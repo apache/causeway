@@ -124,7 +124,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
 
-
                 final String cssClass = linkAndLabel.getCssClass();
                 CssClassAppender.appendCssClassTo(link, cssClass);
 

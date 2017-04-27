@@ -60,8 +60,11 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -88,6 +91,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
 
     private static final String NULL_ARG = "$nullArg$";
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
+
 
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
@@ -680,17 +684,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
 
     private FormExecutor formExecutor;
 
-    @Override
-    public PromptStyle getPromptStyle() {
-        // for now, at least..
-        return PromptStyle.DIALOG;
-    }
-
-    @Override
-    public ScalarModel.InlinePromptContext getInlinePromptContext() {
-        throw new IllegalStateException("should not be called when getPromptStyle() returns DIALOG");
-    }
-
     /**
      * A hint passed from one Wicket UI component to another.
      *
@@ -704,6 +697,40 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
         this.formExecutor = formExecutor;
     }
 
+
+    //////////////////////////////////////////////////
+
+    @Override
+    public PromptStyle getPromptStyle() {
+        final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
+        if(facet == null) {
+            return null;
+        }
+        return facet.value() == PromptStyle.INLINE
+                ? PromptStyle.INLINE
+                : PromptStyle.DIALOG;
+    }
+
+    public <T extends Facet> T getFacet(final Class<T> facetType) {
+        final FacetHolder facetHolder = getActionMemento().getAction(getSpecificationLoader());
+        return facetHolder.getFacet(facetType);
+    }
+
+
+    //////////////////////////////////////////////////
+
+    private ScalarModel.InlinePromptContext inlinePromptContext;
+
+    /**
+     * Further hint, to support inline prompts...
+     */
+    public ScalarModel.InlinePromptContext getInlinePromptContext() {
+        return inlinePromptContext;
+    }
+
+    public void setInlinePromptContext(ScalarModel.InlinePromptContext inlinePromptContext) {
+        this.inlinePromptContext = inlinePromptContext;
+    }
 
     //////////////////////////////////////////////////
     // Dependencies (from context)
