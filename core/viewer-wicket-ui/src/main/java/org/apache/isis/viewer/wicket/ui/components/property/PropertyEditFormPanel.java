@@ -31,8 +31,8 @@ import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
@@ -56,7 +56,7 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
         add(new PropertyEditForm("inputForm", this, this.getSettings(), model));
     }
 
-    class PropertyEditForm extends FormAbstract<ScalarModel> implements ScalarModelSubscriber  {
+    class PropertyEditForm extends FormAbstract<ScalarModel> implements ScalarModelSubscriber2 {
 
         private static final long serialVersionUID = 1L;
 
@@ -94,7 +94,7 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
             final Component component =
                     getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-            final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
+            final ScalarPanelAbstract2 paramPanel = component instanceof ScalarPanelAbstract2 ? (ScalarPanelAbstract2) component : null;
             if(paramPanel != null) {
                 paramPanel.setOutputMarkupId(true);
                 paramPanel.notifyOnChange(this);
@@ -109,7 +109,7 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
         @Override
         public void onUpdate(
-                final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+                final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
 
         }
 

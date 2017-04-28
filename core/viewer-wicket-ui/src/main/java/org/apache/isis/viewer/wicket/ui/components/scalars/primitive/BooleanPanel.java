@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -41,7 +41,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
-public class BooleanPanel extends ScalarPanelAbstract {
+public class BooleanPanel extends ScalarPanelAbstract2 {
 
     private static final CheckBoxXConfig THREE_STATE_CONFIG = new CheckBoxXConfig()
         .withSize(CheckBoxXConfig.Sizes.xs)

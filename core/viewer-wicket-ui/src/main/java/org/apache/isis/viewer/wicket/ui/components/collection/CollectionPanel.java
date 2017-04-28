@@ -38,14 +38,14 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
- * of) {@link ScalarPanelAbstract}.
+ * of) {@link ScalarPanelAbstract2}.
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionSelectorProvider {
 

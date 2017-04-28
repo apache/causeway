@@ -50,7 +50,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
@@ -462,7 +462,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
     @Override
     public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+            final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
 
         super.onUpdate(target, scalarPanel);
 

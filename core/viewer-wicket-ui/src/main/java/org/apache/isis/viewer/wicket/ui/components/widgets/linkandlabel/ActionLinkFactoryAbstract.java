@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -231,7 +231,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             actionModel.setFormExecutor(new ActionParametersFormExecutor(scalarTypeContainer, actionModel));
             actionModel.setInlinePromptContext(inlinePromptContext);
             getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
-                    ScalarPanelAbstract.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
+                    ScalarPanelAbstract2.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
 
             // TODO: probably needs to be like the switchXxx, and update the parent of the placeholder editform
             inlinePromptContext.getScalarIfRegular().setVisible(false);

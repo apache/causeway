@@ -19,15 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.value;
 
-import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
  * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
+ * {@link ScalarPanelAbstract2 panel} to render them.
  * 
  * <p>
  * This is a fallback panel; values are expected to be {@link Parser parseable}

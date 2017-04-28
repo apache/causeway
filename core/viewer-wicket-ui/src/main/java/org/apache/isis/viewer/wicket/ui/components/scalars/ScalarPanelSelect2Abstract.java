@@ -40,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForChoices;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract {
+public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 

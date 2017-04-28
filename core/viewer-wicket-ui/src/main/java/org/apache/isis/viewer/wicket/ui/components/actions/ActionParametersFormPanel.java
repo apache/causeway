@@ -40,8 +40,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
@@ -69,7 +69,8 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         add(new ActionParameterForm("inputForm", this, this.getSettings(), model));
     }
 
-    class ActionParameterForm extends PropertyEditFormPanel.FormAbstract<ActionModel> implements ScalarModelSubscriber  {
+    class ActionParameterForm extends PropertyEditFormPanel.FormAbstract<ActionModel> implements
+            ScalarModelSubscriber2 {
 
         private static final long serialVersionUID = 1L;
 
@@ -102,7 +103,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
                 actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
                 final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE,
                         actionArgumentModel);
-                final ScalarPanelAbstract paramPanel = component instanceof ScalarPanelAbstract ? (ScalarPanelAbstract) component : null;
+                final ScalarPanelAbstract2 paramPanel = component instanceof ScalarPanelAbstract2 ? (ScalarPanelAbstract2) component : null;
                 paramPanels.add(paramPanel);
                 if(paramPanel != null) {
                     paramPanel.setOutputMarkupId(true);
@@ -138,7 +139,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         }
 
         @Override
-        public void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
+        public void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel) {
 
             final ActionModel actionModel = getActionModel();
             
@@ -148,7 +149,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
                 final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
                 final int numParams = action.getParameterCount();
                 for (int i = 0; i < numParams; i++) {
-                    final ScalarPanelAbstract paramPanel = paramPanels.get(i);
+                    final ScalarPanelAbstract2 paramPanel = paramPanels.get(i);
                     if(paramPanel != null && paramPanel instanceof PanelWithChoices) {
                         final PanelWithChoices panelWithChoices = (PanelWithChoices) paramPanel;
 

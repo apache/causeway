@@ -47,8 +47,8 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
@@ -69,11 +69,11 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
     }
 
     public static abstract class FormAbstract<T extends IModel<ObjectAdapter> & FormExecutorContext> extends Form<ObjectAdapter>
-            implements ScalarModelSubscriber {
+            implements ScalarModelSubscriber2 {
 
         protected static final String ID_FEEDBACK = "feedback";
 
-        protected final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
+        protected final List<ScalarPanelAbstract2> paramPanels = Lists.newArrayList();
         protected final Component parentPanel;
         private final WicketViewerSettings settings;
         private final T formExecutorContext;
@@ -256,7 +256,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
                 final Form<?> form);
 
         @Override
-        public void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
+        public void onError(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel) {
             if(scalarPanel != null) {
                 // ensure that any feedback error associated with the providing component is shown.
                 target.add(scalarPanel);
