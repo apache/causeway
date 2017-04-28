@@ -73,6 +73,10 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
                 will(returnValue(null));
+
+                allowing(mockConfiguration).getString("isis.objects.promptStyle");
+                will(returnValue(null));
+
             }
         });
 
