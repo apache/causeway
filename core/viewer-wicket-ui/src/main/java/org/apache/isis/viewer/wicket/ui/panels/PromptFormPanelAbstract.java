@@ -24,15 +24,21 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -40,8 +46,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.HasFormExecutor;
+import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
@@ -52,7 +57,7 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  */
-public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecutor> extends PanelAbstract<T> {
+public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutorContext> extends PanelAbstract<T> {
 
     private static final String ID_OK_BUTTON = "okButton";
     private static final String ID_CANCEL_BUTTON = "cancelButton";
@@ -63,7 +68,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
         super(id, model);
     }
 
-    public static abstract class FormAbstract<T extends IModel<ObjectAdapter> & HasFormExecutor> extends Form<ObjectAdapter>
+    public static abstract class FormAbstract<T extends IModel<ObjectAdapter> & FormExecutorContext> extends Form<ObjectAdapter>
             implements ScalarModelSubscriber {
 
         protected static final String ID_FEEDBACK = "feedback";
@@ -71,7 +76,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
         protected final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
         protected final Component parentPanel;
         private final WicketViewerSettings settings;
-        private final FormExecutor formExecutor;
+        private final T formExecutorContext;
 
         public FormAbstract(
                 final String id,
@@ -81,7 +86,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
             super(id, model);
             this.parentPanel = parentPanel;
             this.settings = settings;
-            this.formExecutor = model.getFormExecutor();
+            this.formExecutorContext = model;
 
             setOutputMarkupId(true); // for ajax button
             addParameters();
@@ -95,7 +100,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
         }
 
 
-    protected abstract void addParameters();
+        protected abstract void addParameters();
 
         protected AjaxButton addOkButton() {
             AjaxButton okButton = settings.isUseIndicatorForFormSubmit()
@@ -174,13 +179,44 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
         }
 
         protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
+
+            if(formExecutorContext.getPromptStyle() == PromptStyle.INLINE) {
+                cancelButton.add(new AbstractDefaultAjaxBehavior() {
+
+                    private static final String PRE_JS =
+                            ""+"$(document).ready( function() { \n"
+                                    +  "  $(document).bind('keyup', function(evt) { \n"
+                                    +  "    if (evt.keyCode == 27) { \n";
+                    private static final String POST_JS =
+                            ""+"      evt.preventDefault(); \n   "
+                                    +  "    } \n"
+                                    +  "  }); \n"
+                                    +  "});";
+
+                    @Override
+                    public void renderHead(final Component component, final IHeaderResponse response) {
+                        super.renderHead(component, response);
+
+                        final String javascript = PRE_JS + getCallbackScript() + POST_JS;
+                        response.render(
+                                JavaScriptContentHeaderItem.forScript(javascript, null, null));
+                    }
+
+                    @Override
+                    protected void respond(final AjaxRequestTarget target) {
+                        onCancel(target);
+                    }
+
+                });
+            }
         }
 
         private void onSubmitOf(
                 final AjaxRequestTarget target,
                 final Form<?> form,
                 final AjaxButton ajaxButton) {
-            boolean succeeded = formExecutor.executeAndProcessResults(target, form);
+
+            boolean succeeded = formExecutorContext.getFormExecutor().executeAndProcessResults(target, form);
             if(succeeded) {
                 // the Wicket ajax callbacks will have just started to hide the veil
                 // we now show it once more, so that a veil continues to be shown until the
@@ -221,7 +257,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
 
         @Override
         public void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
-            if(scalarPanel instanceof Component) {
+            if(scalarPanel != null) {
                 // ensure that any feedback error associated with the providing component is shown.
                 target.add(scalarPanel);
             }
@@ -230,6 +266,29 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
         public void onCancel(
                 final AjaxRequestTarget target) {
 
+            final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
+
+            if(promptStyle == PromptStyle.INLINE) {
+
+                formExecutorContext.reset();
+
+                // replace
+                final String id = parentPanel.getId();
+                final MarkupContainer parent = parentPanel.getParent();
+
+                final WebMarkupContainer replacementPropertyEditFormPanel = new WebMarkupContainer(id);
+                replacementPropertyEditFormPanel.setVisible(false);
+
+                parent.addOrReplace(replacementPropertyEditFormPanel);
+
+
+                // change visibility of inline components
+                formExecutorContext.getInlinePromptContext().onCancel();
+
+                // redraw
+                target.add(parent);
+            }
+
         }
 
     }
@@ -237,7 +296,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & HasFormExecu
 
     //region > dependencies
     @com.google.inject.Inject
-    private WicketViewerSettings settings;
+    WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
     }

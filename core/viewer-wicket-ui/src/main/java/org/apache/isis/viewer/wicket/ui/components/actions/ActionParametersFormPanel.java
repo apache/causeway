@@ -35,16 +35,16 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
-import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
@@ -113,6 +113,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
 
         @Override
         protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
+            super.configureButtons(okButton, cancelButton);
             applyAreYouSure(okButton);
         }
 
@@ -180,7 +181,6 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
             // done in the loop above).  However, that logic is wrong, because any values entered in the browser
             // get trampled over (ISIS-629).
         }
-        
 
     }
 

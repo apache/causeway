@@ -48,6 +48,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -230,6 +231,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();
+        scalarIfRegular.setOutputMarkupId(true);
+
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
@@ -242,7 +245,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             // even if this particular scalarModel (property) is not configured for inline edits, it's possible that
             // one of the associated actions is.  Thus we set the prompt context
             scalarModel.setInlinePromptContext(
-                    new ScalarModel.InlinePromptContext(
+                    new InlinePromptContext(
                             getComponentForRegular(),
                             scalarIfRegularInlinePromptForm, scalarTypeContainer));
 

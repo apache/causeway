@@ -83,7 +83,7 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
  * action's {@link Mode#PARAMETERS parameters}, or the handling of the
  * {@link Mode#RESULTS results} once invoked.
  */
-public class ActionModel extends BookmarkableModel<ObjectAdapter> implements HasFormExecutor {
+public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
     
@@ -719,16 +719,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements Has
 
     //////////////////////////////////////////////////
 
-    private ScalarModel.InlinePromptContext inlinePromptContext;
+    private InlinePromptContext inlinePromptContext;
 
     /**
      * Further hint, to support inline prompts...
      */
-    public ScalarModel.InlinePromptContext getInlinePromptContext() {
+    public InlinePromptContext getInlinePromptContext() {
         return inlinePromptContext;
     }
 
-    public void setInlinePromptContext(ScalarModel.InlinePromptContext inlinePromptContext) {
+    public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
         this.inlinePromptContext = inlinePromptContext;
     }
 

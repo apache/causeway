@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -197,7 +198,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
 
 
-        ScalarModel.InlinePromptContext inlinePromptContext = determineInlinePromptContext();
+        InlinePromptContext inlinePromptContext = determineInlinePromptContext();
         PromptStyle promptStyle = actionModel.getPromptStyle();
 
         if(inlinePromptContext == null || promptStyle != PromptStyle.INLINE) {
@@ -263,7 +264,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, whetherReturnsBlobOrClob);
     }
 
-    private ScalarModel.InlinePromptContext determineInlinePromptContext() {
+    private InlinePromptContext determineInlinePromptContext() {
         return scalarModelForAssociationIfAny != null
                 ? scalarModelForAssociationIfAny.getInlinePromptContext()
                 : null;

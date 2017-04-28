@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,10 +27,6 @@ import java.util.List;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -73,7 +68,7 @@ import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  */
-public class ScalarModel extends EntityModel implements LinksProvider,HasFormExecutor, ActionArgumentModel {
+public class ScalarModel extends EntityModel implements LinksProvider,FormExecutorContext, ActionArgumentModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -1044,45 +1039,15 @@ public class ScalarModel extends EntityModel implements LinksProvider,HasFormExe
     }
 
     public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
+        if (this.inlinePromptContext != null) {
+            // otherwise the components created for an property edit inline prompt will overwrite the original
+            // components on the underlying page (which we go back to if the prompt is cancelled).
+            return;
+        }
         this.inlinePromptContext = inlinePromptContext;
     }
 
     // //////////////////////////////////////
-
-    public static class InlinePromptContext implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        private final Component scalarIfRegular;
-        private final WebMarkupContainer scalarIfRegularInlinePromptForm;
-        private final MarkupContainer scalarTypeContainer;
-
-        public InlinePromptContext(
-                final Component scalarIfRegular,
-                final WebMarkupContainer scalarIfRegularInlinePromptForm,
-                final MarkupContainer scalarTypeContainer) {
-            this.scalarIfRegular = scalarIfRegular;
-            this.scalarIfRegularInlinePromptForm = scalarIfRegularInlinePromptForm;
-            this.scalarTypeContainer = scalarTypeContainer;
-        }
-
-        public Component getScalarIfRegular() {
-            return scalarIfRegular;
-        }
-
-        public WebMarkupContainer getScalarIfRegularInlinePromptForm() {
-            return scalarIfRegularInlinePromptForm;
-        }
-
-        public void onCancel() {
-            scalarIfRegular.setVisible(true);
-            scalarIfRegularInlinePromptForm.setVisible(false);
-        }
-
-        public MarkupContainer getScalarTypeContainer() {
-            return scalarTypeContainer;
-        }
-    }
 
     // //////////////////////////////////////
 

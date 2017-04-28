@@ -20,12 +20,8 @@
 package org.apache.isis.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -117,6 +113,9 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
         }
 
+        // REVIEW: this overload may not be necessary, recall that the important call needed is getScalarModel().reset(),
+        // which is called in the superclass.
+        @Override
         public void onCancel(
                 final AjaxRequestTarget target) {
 
@@ -126,59 +125,11 @@ public class PropertyEditFormPanel extends PromptFormPanelAbstract<ScalarModel> 
 
                 getScalarModel().toViewMode();
                 getScalarModel().clearPending();
-                getScalarModel().reset();
-
-                // replace
-                final String id = propertyEditFormPanel.getId();
-                final MarkupContainer parent = propertyEditFormPanel.getParent();
-
-                final WebMarkupContainer replacementPropertyEditFormPanel = new WebMarkupContainer(id);
-                replacementPropertyEditFormPanel.setVisible(false);
-
-                parent.addOrReplace(replacementPropertyEditFormPanel);
-
-
-                // change visibility of inline components
-                getScalarModel().getInlinePromptContext().onCancel();
-
-                // redraw
-                target.add(parent);
             }
 
+            super.onCancel(target);
         }
 
-        @Override
-        protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
-            if(getScalarModel().getPromptStyle() == PromptStyle.INLINE) {
-                cancelButton.add(new AbstractDefaultAjaxBehavior() {
-
-                    private static final String PRE_JS =
-                            ""+"$(document).ready( function() { \n"
-                            +  "  $(document).bind('keyup', function(evt) { \n"
-                            +  "    if (evt.keyCode == 27) { \n";
-                    private static final String POST_JS =
-                            ""+"      evt.preventDefault(); \n   "
-                            +  "    } \n"
-                            +  "  }); \n"
-                            +  "});";
-
-                    @Override
-                    public void renderHead(final Component component, final IHeaderResponse response) {
-                        super.renderHead(component, response);
-
-                        final String javascript = PRE_JS + getCallbackScript() + POST_JS;
-                        response.render(
-                                JavaScriptContentHeaderItem.forScript(javascript, null, null));
-                    }
-
-                    @Override
-                    protected void respond(final AjaxRequestTarget target) {
-                        onCancel(target);
-                    }
-
-                });
-            }
-        }
 
     }
 
