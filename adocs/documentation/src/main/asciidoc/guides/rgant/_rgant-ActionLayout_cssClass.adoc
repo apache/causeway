@@ -30,8 +30,9 @@ to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icon
 
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.json`]
-can be used instead, eg:
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+
+NOTE: FIXME - change to .layout.xml syntax instead.
 
 [source,javascript]
 ----
