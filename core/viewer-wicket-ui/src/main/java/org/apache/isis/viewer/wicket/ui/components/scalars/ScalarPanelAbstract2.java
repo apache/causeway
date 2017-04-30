@@ -264,7 +264,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 }
             }
         }
-        if(scalarModel.getPromptStyle() != PromptStyle.INLINE) {
+        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY && scalarModel.getPromptStyle() != PromptStyle.INLINE) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
 
