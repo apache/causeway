@@ -28,8 +28,10 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
 public class DisabledFacetOnCollectionDerivedFromRecreatableObject extends DisabledFacetAbstract {
 
-    public DisabledFacetOnCollectionDerivedFromRecreatableObject(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
+    public DisabledFacetOnCollectionDerivedFromRecreatableObject(
+            final FacetHolder holder,
+            final Semantics semantics) {
+        super(When.ALWAYS, Where.ANYWHERE, holder, semantics);
     }
 
     @Override

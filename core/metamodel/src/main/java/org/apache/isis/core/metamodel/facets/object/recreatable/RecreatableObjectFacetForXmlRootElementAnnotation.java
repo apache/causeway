@@ -60,6 +60,11 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
     }
 
     @Override
+    public boolean isImplicitlyImmutable() {
+        return false;
+    }
+
+    @Override
     public Object clone(Object pojo) {
         final String xml = getJaxbService().toXml(pojo);
         final Object cloned = getJaxbService().fromXml(pojo.getClass(), xml);
