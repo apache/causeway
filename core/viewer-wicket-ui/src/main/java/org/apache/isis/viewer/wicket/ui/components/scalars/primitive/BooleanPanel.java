@@ -37,19 +37,12 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
+import de.agilecoders.wicket.jquery.Key;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
 public class BooleanPanel extends ScalarPanelAbstract2 {
-
-    private static final CheckBoxXConfig THREE_STATE_CONFIG = new CheckBoxXConfig()
-        .withSize(CheckBoxXConfig.Sizes.xs)
-        .withEnclosedLabel(false)
-        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
-        .withIconNull("<i class='fa fa-fw fa-square'></i>");
-
-    private static final CheckBoxXConfig TWO_STATE_CONFIG = new CheckBoxXConfig(THREE_STATE_CONFIG).withThreeState(false);
 
     private static final long serialVersionUID = 1L;
 
@@ -111,6 +104,9 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     }
 
     private CheckBoxX createCheckBox(final String id) {
+
+        final CheckBoxXConfig config = configFor(getModel().isRequired());
+
         final CheckBoxX checkBox = new CheckBoxX(id, new Model<Boolean>() {
             private static final long serialVersionUID = 1L;
 
@@ -129,9 +125,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         }) {
             @Override
             public CheckBoxXConfig getConfig() {
-                return BooleanPanel.this.getModel().isRequired()
-                    ? TWO_STATE_CONFIG
-                    : THREE_STATE_CONFIG;
+                return config;
             }
         };
         checkBox.setOutputMarkupId(true);
@@ -147,6 +141,22 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         }
 
         return checkBox;
+    }
+
+    private static CheckBoxXConfig configFor(final boolean required) {
+        final CheckBoxXConfig config = new CheckBoxXConfig() {
+            {
+                // so can tab to the checkbox
+                // not part of the API, so have to use this object initializer
+                put(new Key<String>("tabindex"), "0");
+            }
+        };
+        return config
+                .withSize(CheckBoxXConfig.Sizes.xs)
+                .withEnclosedLabel(false)
+                .withIconChecked("<i class='fa fa-fw fa-check'></i>")
+                .withIconNull("<i class='fa fa-fw fa-square'></i>")
+                .withThreeState(!required);
     }
 
     @Override

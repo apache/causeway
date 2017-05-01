@@ -101,7 +101,7 @@ $(function() {
 
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, modalWindowId) {
         setTimeout(function() {
-            $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select').filter(':visible:first').focus();
+            $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select,div.cbx').filter(':visible:first').focus();
         }, 0);
     });
 
