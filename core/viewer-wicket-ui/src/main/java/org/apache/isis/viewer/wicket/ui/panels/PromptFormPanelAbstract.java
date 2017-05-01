@@ -37,6 +37,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -78,6 +79,9 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
         private final WicketViewerSettings settings;
         private final T formExecutorContext;
 
+        private final AjaxButton okButton;
+        private final AjaxButton cancelButton;
+
         public FormAbstract(
                 final String id,
                 final Component parentPanel,
@@ -94,8 +98,8 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
             FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
             addOrReplace(formFeedback);
 
-            AjaxButton okButton = addOkButton();
-            final AjaxButton cancelButton = addCancelButton();
+            okButton = addOkButton();
+            cancelButton = addCancelButton();
             configureButtons(okButton, cancelButton);
         }
 
@@ -290,6 +294,28 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
             }
 
         }
+
+        private AjaxButton defaultSubmittingComponent() {
+            return okButton;
+        }
+
+        // workaround for https://issues.apache.org/jira/browse/WICKET-6364
+        @Override
+        protected void appendDefaultButtonField() {
+            AppendingStringBuffer buffer = new AppendingStringBuffer();
+            buffer.append("<div style=\"width:0px;height:0px;position:absolute;left:-100px;top:-100px;overflow:hidden\">");
+            buffer.append("<input type=\"text\" tabindex=\"-1\" autocomplete=\"off\"/>");
+            Component submittingComponent = (Component)this.defaultSubmittingComponent();
+            buffer.append("<input type=\"submit\" tabindex=\"-1\" name=\"");
+            buffer.append(this.defaultSubmittingComponent().getInputName());
+            buffer.append("\" onclick=\" var b=document.getElementById(\'");
+            buffer.append(submittingComponent.getMarkupId());
+            buffer.append("\'); if (b!=null&amp;&amp;b.onclick!=null&amp;&amp;typeof(b.onclick) != \'undefined\') {  var r = Wicket.bind(b.onclick, b)(); if (r != false) b.click(); } else { b.click(); };  return false;\" ");
+            buffer.append(" />");
+            buffer.append("</div>");
+            this.getResponse().write(buffer);
+        }
+
 
     }
 
