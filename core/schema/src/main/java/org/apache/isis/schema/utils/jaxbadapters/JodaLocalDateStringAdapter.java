@@ -18,11 +18,11 @@
  */
 package org.apache.isis.schema.utils.jaxbadapters;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import com.google.common.base.Strings;
 
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 /**
  * Note: not actually registered as a JAXB adapter.
@@ -31,20 +31,33 @@ public final class JodaLocalDateStringAdapter {
     private JodaLocalDateStringAdapter() {
     }
 
-    private static DateTimeFormatter dateFormatter = ISODateTimeFormat.localDateParser();
-
     public static LocalDate parse(final String date) {
         if (Strings.isNullOrEmpty(date)) {
             return null;
         }
-        return dateFormatter.parseLocalDate(date);
+        return LocalDate.parse(date);
     }
 
     public static String print(LocalDate date) {
         if (date == null) {
             return null;
         }
-        return dateFormatter.print(date);
+        return date.toString();
     }
+
+
+    public static class ForJaxb extends XmlAdapter<String, LocalDate> {
+
+        @Override
+        public LocalDate unmarshal(final String localDateStr) throws Exception {
+            return JodaLocalDateStringAdapter.parse(localDateStr);
+        }
+
+        @Override
+        public String marshal(final LocalDate localDate) throws Exception {
+            return JodaLocalDateStringAdapter.print(localDate);
+        }
+    }
+
 
 }

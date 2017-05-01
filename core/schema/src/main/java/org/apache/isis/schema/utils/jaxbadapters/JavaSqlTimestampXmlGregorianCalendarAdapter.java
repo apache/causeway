@@ -21,6 +21,7 @@ package org.apache.isis.schema.utils.jaxbadapters;
 import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -60,6 +61,19 @@ public class JavaSqlTimestampXmlGregorianCalendarAdapter  {
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(timestamp);
         return getDatatypeFactory().newXMLGregorianCalendar(c);
+    }
+
+    public static class ForJaxb extends XmlAdapter<XMLGregorianCalendar, java.sql.Timestamp> {
+
+        @Override
+        public java.sql.Timestamp unmarshal(final XMLGregorianCalendar timestampStr) throws Exception {
+            return JavaSqlTimestampXmlGregorianCalendarAdapter.parse(timestampStr);
+        }
+
+        @Override
+        public XMLGregorianCalendar marshal(final java.sql.Timestamp timestamp) throws Exception {
+            return JavaSqlTimestampXmlGregorianCalendarAdapter.print(timestamp);
+        }
     }
 
 }

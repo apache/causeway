@@ -18,6 +18,8 @@
  */
 package org.apache.isis.schema.utils.jaxbadapters;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import com.google.common.base.Strings;
 
 import org.joda.time.DateTime;
@@ -33,8 +35,8 @@ public final class JodaDateTimeStringAdapter {
 
     private static DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
 
-    public static DateTime parse(final String date) {
-        return !Strings.isNullOrEmpty(date) ? formatter.parseDateTime(date) : null;
+    public static DateTime parse(final String dateTimeStr) {
+        return !Strings.isNullOrEmpty(dateTimeStr) ? formatter.parseDateTime(dateTimeStr) : null;
     }
 
     public static String print(final DateTime date) {
@@ -44,4 +46,16 @@ public final class JodaDateTimeStringAdapter {
         return formatter.print(date);
     }
 
+    public static class ForJaxb extends XmlAdapter<String, DateTime> {
+
+        @Override
+        public DateTime unmarshal(final String dateTimeStr) throws Exception {
+            return JodaDateTimeStringAdapter.parse(dateTimeStr);
+        }
+
+        @Override
+        public String marshal(final DateTime dateTime) throws Exception {
+            return JodaDateTimeStringAdapter.print(dateTime);
+        }
+    }
 }
