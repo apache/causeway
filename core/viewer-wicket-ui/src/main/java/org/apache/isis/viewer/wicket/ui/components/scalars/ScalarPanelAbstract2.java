@@ -562,7 +562,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void addEditPropertyTo(
             final MarkupContainer scalarIfRegularFormGroup) {
 
-        if(scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.DIALOG) {
+        if(scalarModel.canEnterEditMode() && (scalarModel.getPromptStyle() == PromptStyle.DIALOG || !getInlinePromptConfig().isSupported())) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
             editProperty.setOutputMarkupId(true);
