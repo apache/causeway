@@ -268,7 +268,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
 
             final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
 
-            if(promptStyle == PromptStyle.INLINE) {
+            if(promptStyle == PromptStyle.INLINE && formExecutorContext.getInlinePromptContext() != null) {
 
                 formExecutorContext.reset();
 
