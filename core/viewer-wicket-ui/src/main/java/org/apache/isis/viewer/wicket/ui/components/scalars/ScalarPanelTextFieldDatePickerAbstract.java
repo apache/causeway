@@ -24,17 +24,16 @@ import java.io.Serializable;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
@@ -98,7 +97,17 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
         return label;
     }
-    
+
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        ObjectAdapter object = scalarModel.getObject();
+        final T value = object != null ? (T) object.getObject() : null;
+        final String str =
+                value != null
+                        ? converter.convertToString(value, getLocaleProvider().getLocale())
+                        : null;
+        return Model.of(str);
+    }
+
     /**
      * Optional override for subclasses to explicitly indicate desired amount to adjust compact form of textField
      */
@@ -109,9 +118,13 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     
     @com.google.inject.Inject
-    private WicketViewerSettings settings;
+    WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
+    }
+
+    private LocaleProvider getLocaleProvider() {
+        return IsisContext.getSessionFactory().getServicesInjector().lookupService(LocaleProvider.class);
     }
 
 

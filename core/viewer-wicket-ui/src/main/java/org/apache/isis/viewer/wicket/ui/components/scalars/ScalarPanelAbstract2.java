@@ -79,6 +79,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
 
+
     /**
      * as per {@link #inlinePromptLink}
      */
@@ -237,6 +238,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
+
             this.scalarIfRegularInlinePromptForm = createInlinePromptForm();
             scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
             inlinePromptLink = createInlinePromptLink();
@@ -264,7 +266,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 }
             }
         }
-        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY && scalarModel.getPromptStyle() != PromptStyle.INLINE) {
+        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
+           scalarModel.getMode() == EntityModel.Mode.VIEW     &&
+           scalarModel.getPromptStyle() != PromptStyle.INLINE) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
 
@@ -275,7 +279,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         addEditPropertyTo(scalarIfRegular);
         addFeedbackOnlyTo(scalarIfRegular, getScalarValueComponent());
-
 
         getRendering().buildGui(this);
         addCssFromMetaModel();
@@ -374,8 +377,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     public void onUpdate(
             final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
 
-        target.appendJavaScript(
-                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
+        if(getModel().getKind() == ScalarModel.Kind.PARAMETER) {
+            target.appendJavaScript(
+                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
+        }
     }
 
 
@@ -479,8 +484,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         // (placeholder initially, create dynamically when needed - otherwise infinite loop because form references regular)
 
-        WebMarkupContainer scalarIfRegularInlinePromptForm = new WebMarkupContainer(
-                ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
+        WebMarkupContainer scalarIfRegularInlinePromptForm =
+                new WebMarkupContainer( ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM);
         scalarIfRegularInlinePromptForm.setOutputMarkupId(true);
         scalarIfRegularInlinePromptForm.setVisible(false);
 
@@ -507,7 +512,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     /**
      * Components returning true for {@link #getInlinePromptConfig()} are required to override and return a non-null value.
      */
-    protected IModel<?> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainPromptInlineLinkModel() {
         return null;
     }
 
@@ -660,7 +665,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
         return false;
     }
-
 
     // ///////////////////////////////////////////////////////////////////
 

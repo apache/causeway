@@ -19,9 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
+import java.io.Serializable;
+import java.util.List;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -38,11 +45,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-
-import java.io.Serializable;
-import java.util.List;
 
 public class CollectionSelectorHelper implements Serializable {
 
@@ -114,7 +116,7 @@ public class CollectionSelectorHelper implements Serializable {
     private String determineInitialFactory() {
 
         // try to load from session, if can
-        final Bookmark bookmark = domainObjectBookmarkIfAny();
+        final Bookmark bookmark = bookmarkHintIfAny();
         final String sessionAttribute = componentHintKey.get(bookmark);
         if(sessionAttribute != null) {
             return sessionAttribute;
@@ -148,10 +150,10 @@ public class CollectionSelectorHelper implements Serializable {
 
     }
 
-    private Bookmark domainObjectBookmarkIfAny() {
+    private Bookmark bookmarkHintIfAny() {
         final EntityModel entityModel = this.model.getEntityModel();
         return entityModel != null
-                ? entityModel.getObjectAdapterMemento().asBookmark()
+                ? entityModel.getObjectAdapterMemento().asHintingBookmark()
                 : null;
     }
 

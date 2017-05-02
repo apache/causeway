@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -45,14 +46,18 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
@@ -160,7 +165,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
 
 
         protected AjaxButton addCancelButton() {
-            AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
+            final AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -170,7 +175,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
                         actionPromptIfAny.closePrompt(target);
                     }
 
-                    onCancel(target);
+                    onCancel(target, this);
 
                 }
             };
@@ -208,17 +213,28 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
 
                     @Override
                     protected void respond(final AjaxRequestTarget target) {
-                        onCancel(target);
+                        onCancel(target, cancelButton);
                     }
 
                 });
             }
         }
 
+        private EntityModel getPageUiHintContainerIfAny() {
+            Page page = getPage();
+            if(page instanceof EntityPage) {
+                EntityPage entityPage = (EntityPage) page;
+                return entityPage.getUiHintContainerIfAny();
+            }
+            return null;
+        }
+
         private void onSubmitOf(
                 final AjaxRequestTarget target,
                 final Form<?> form,
-                final AjaxButton ajaxButton) {
+                final AjaxButton okButton) {
+
+            setLastFocusHint(target, okButton);
 
             boolean succeeded = formExecutorContext.getFormExecutor().executeAndProcessResults(target, form);
             if(succeeded) {
@@ -227,7 +243,7 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
                 // new page is rendered.
                 target.appendJavaScript("isisShowVeil();\n");
 
-                ajaxButton.send(getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
+                okButton.send(getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
 
                 target.add(form);
             } else {
@@ -243,6 +259,27 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
                 String buf = builder.toString();
                 target.appendJavaScript(buf);
                 target.add(form);
+            }
+        }
+
+        private void setLastFocusHint(final AjaxRequestTarget target, final AjaxButton ajaxButton) {
+
+            String lastFocusedElementId = target.getLastFocusedElementId();
+            System.out.println("onSubmitOf, lastFocusedElementId = " + lastFocusedElementId);
+            System.out.println("onSubmitOf, ajaxButton.getPath() = " + ajaxButton.getPath());
+
+            final EntityModel entityModel = getPageUiHintContainerIfAny();
+            if (entityModel == null) {
+                return;
+            }
+            ObjectAdapterMemento oam = entityModel.getObjectAdapterMemento();
+            if(oam == null) {
+                return;
+            }
+            Component parentPanel = this.parentPanel;
+            MarkupContainer parent = parentPanel.getParent();
+            if(parent != null) {
+                entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parent.getPageRelativePath());
             }
         }
 
@@ -268,7 +305,12 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
         }
 
         public void onCancel(
-                final AjaxRequestTarget target) {
+                final AjaxRequestTarget target, final AjaxButton cancelButton) {
+
+            String lastFocusedElementId = target.getLastFocusedElementId();
+            System.out.println("onCancel, lastFocusedElementId = " + lastFocusedElementId);
+
+            setLastFocusHint(target, cancelButton);
 
             final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
 
@@ -290,7 +332,21 @@ public abstract class PromptFormPanelAbstract<T extends IModel<?> & FormExecutor
                 formExecutorContext.getInlinePromptContext().onCancel();
 
                 // redraw
+                MarkupContainer scalarTypeContainer = formExecutorContext.getInlinePromptContext()
+                        .getScalarTypeContainer();
+
+                if(scalarTypeContainer != null) {
+                    String markupId = scalarTypeContainer.getMarkupId();
+                    target.appendJavaScript(
+                            String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')",
+                                    markupId));
+                }
+//                target.appendJavaScript(
+//                        String.format("var $parent = $('%s').parent().parent().parent().parent().parent().parent(); Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, $parent[0].id)",
+//                                parentPanel.getMarkupId()));
+
                 target.add(parent);
+
             }
 
         }

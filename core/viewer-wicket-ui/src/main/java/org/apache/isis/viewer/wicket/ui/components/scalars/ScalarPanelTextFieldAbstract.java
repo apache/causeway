@@ -91,7 +91,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     // ///////////////////////////////////////////////////////////////////
 
 
-    AbstractTextComponent<T> getTextField() {
+    protected AbstractTextComponent<T> getTextField() {
         return textField;
     }
 
@@ -284,8 +284,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected IModel<T> obtainPromptInlineLinkModel() {
-        return textField.getModel();
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        IModel<T> model = textField.getModel();
+        final T modelObject = model.getObject();
+        return Model.of(modelObject != null ? modelObject.toString() : null);
     }
 
 

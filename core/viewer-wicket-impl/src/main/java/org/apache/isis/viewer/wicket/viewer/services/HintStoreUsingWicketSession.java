@@ -99,7 +99,11 @@ public class HintStoreUsingWicketSession implements HintStore {
     }
 
     protected String sessionAttributeFor(final Bookmark bookmark) {
-        return "hint-" + bookmark.toString();
+        return "hint-" + (
+                bookmark instanceof BookmarkWithHintId
+                        ? ((BookmarkWithHintId) bookmark).toStringUsingHintId()
+                        : bookmark.toString()
+        );
     }
 
 }

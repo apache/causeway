@@ -89,6 +89,9 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         config.calendarWeeks(true);
         config.useCurrent(false);
 
+        // seems not to do anything...
+        //config.allowKeyboardNavigation(true);
+
         final String datePickerMinDate = getConfiguration().getString(KEY_DATE_PICKER_MIN_DATE, KEY_DATE_PICKER_MIN_DATE_DEFAULT);
         final String datePickerMaxDate = getConfiguration().getString(KEY_DATE_PICKER_MAX_DATE, KEY_DATE_PICKER_MAX_DATE_DEFAULT);
 

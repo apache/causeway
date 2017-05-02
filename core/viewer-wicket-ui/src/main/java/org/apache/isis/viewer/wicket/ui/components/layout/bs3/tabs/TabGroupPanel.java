@@ -24,9 +24,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -35,6 +32,8 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
@@ -100,13 +99,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     @Override
     public TabbedPanel setSelectedTab(final int index) {
-        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asBookmark(), ""+index);
+        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asHintingBookmark(), ""+index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel) {
-        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asBookmark());
+        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asHintingBookmark());
         final Integer tabIndex = parse(selectedTabStr);
         if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();

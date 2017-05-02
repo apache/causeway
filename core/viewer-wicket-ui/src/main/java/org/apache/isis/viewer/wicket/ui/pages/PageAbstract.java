@@ -120,6 +120,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     public static final String ID_MENU_LINK = "menuLink";
 
+    public static final String UIHINT_FOCUS = "focus";
+
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
      * if there is a problem rendering this page.
@@ -281,9 +283,28 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addBootLint(response);
         }
 
-        response.render(OnDomReadyHeaderItem.forScript(
-                "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)"));
+        String markupId = null;
+        EntityModel entityModel = getUiHintContainerIfAny();
+        if(entityModel != null) {
+            String path = entityModel.getHint(getPage(), PageAbstract.UIHINT_FOCUS);
+            if(path != null) {
+                Component childComponent = get(path);
+                if(childComponent != null) {
+                    markupId = childComponent.getMarkupId();
+                }
 
+            }
+        }
+        String javaScript = markupId != null
+            ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
+            : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
+
+        response.render(OnDomReadyHeaderItem.forScript(javaScript));
+
+    }
+
+    protected EntityModel getUiHintContainerIfAny() {
+        return null;
     }
 
     private void addBootLint(final IHeaderResponse response) {

@@ -99,15 +99,19 @@ $(function() {
         }, 0);
     });
 
-    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, modalWindowId) {
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
         setTimeout(function() {
-            $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select,div.cbx').filter(':visible:first').focus();
+            $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,select,div.cbx').filter(':visible:first').focus();
         }, 0);
     });
 
-    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent) {
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent, elementId) {
         setTimeout(function() {
-            $(document).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
+            if(elementId) {
+                $("#" + elementId).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
+            } else {
+                $(document).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
+            }
         }, 0);
     });
 

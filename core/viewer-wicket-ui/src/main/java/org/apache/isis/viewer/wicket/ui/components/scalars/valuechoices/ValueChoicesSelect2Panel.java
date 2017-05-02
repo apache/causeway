@@ -103,8 +103,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     }
 
     @Override
-    protected IModel<?> obtainPromptInlineLinkModel() {
-        return select2.getModel();
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        ObjectAdapterMemento modelObject = select2.getModelObject();
+        String str = modelObject != null ? modelObject.asString(): null;
+        return Model.of(str);
     }
 
 

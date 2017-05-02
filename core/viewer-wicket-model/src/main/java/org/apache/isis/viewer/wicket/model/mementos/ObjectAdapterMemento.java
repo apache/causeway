@@ -31,6 +31,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -380,6 +381,11 @@ public class ObjectAdapterMemento implements Serializable {
     private Bookmark bookmark;
 
     /**
+     * Only populated for {@link ObjectAdapter#getObject() domain object}s that implement {@link HintStore.HintIdProvider}.
+     */
+    private String hintId;
+
+    /**
      * The current value, if {@link Type#TRANSIENT}, will be <tt>null</tt> otherwise.
      *
      * <p>
@@ -441,6 +447,10 @@ public class ObjectAdapterMemento implements Serializable {
 
         persistentOidStr = oid.enString();
         bookmark = oid.asBookmark();
+        if(adapter.getObject() instanceof HintStore.HintIdProvider) {
+            HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getObject();
+            this.hintId = provider.hintId();
+        }
         type = Type.PERSISTENT;
     }
 
@@ -465,6 +475,13 @@ public class ObjectAdapterMemento implements Serializable {
     public Bookmark asBookmark() {
         ensureScalar();
         return bookmark;
+    }
+
+    public Bookmark asHintingBookmark() {
+        Bookmark bookmark = asBookmark();
+        return hintId != null && bookmark != null
+                ? new HintStore.BookmarkWithHintId(bookmark, hintId)
+                : bookmark;
     }
 
     /**

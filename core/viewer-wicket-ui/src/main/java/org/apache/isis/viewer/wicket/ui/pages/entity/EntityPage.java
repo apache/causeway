@@ -19,6 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
+
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -36,13 +44,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.Application;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.Strings;
 
 /**
  * Web page representing an entity.
@@ -124,6 +125,11 @@ public class EntityPage extends PageAbstract {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.remove(entityModel);
+    }
+
+    @Override
+    public EntityModel getUiHintContainerIfAny() {
+        return model;
     }
 
     /**

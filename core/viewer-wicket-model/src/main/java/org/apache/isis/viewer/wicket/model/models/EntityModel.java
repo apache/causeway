@@ -211,7 +211,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         public void hintStoreToPageParameters(
                 final PageParameters pageParameters) {
             final HintStore hintStore = getHintStore();
-            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asBookmark();
+            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asHintingBookmark();
             Set<String> hintKeys = hintStore.findHintKeys(bookmark);
             for (String hintKey : hintKeys) {
                 ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
@@ -222,7 +222,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
                 final PageParameters pageParameters) {
             Set<String> namedKeys = pageParameters.getNamedKeys();
             if(namedKeys.contains("no-hints")) {
-                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asBookmark());
+                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asHintingBookmark());
                 return;
             }
             List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
@@ -232,7 +232,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
                     String key = namedKey.substring(5);
                     final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
                     newComponentHintKeys.add(componentHintKey);
-                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asBookmark();
+                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asHintingBookmark();
                     componentHintKey.set(bookmark, value);
                 }
             }
@@ -251,7 +251,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
         if(componentHintKey != null) {
-            return componentHintKey.get(getObjectAdapterMemento().asBookmark());
+            return componentHintKey.get(getObjectAdapterMemento().asHintingBookmark());
         }
         return null;
     }
@@ -259,7 +259,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
-        componentHintKey.set(this.getObjectAdapterMemento().asBookmark(), hintValue);
+        componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmark(), hintValue);
     }
 
     @Override
