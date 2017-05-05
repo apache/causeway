@@ -64,7 +64,7 @@ or
 [source,bash]
 ----
 gpg –import KEYS
-gpg –verify isis-1.14.0-source-release.zip.asc isis-1.14.0-source-release.zip
+gpg -verify isis-1.14.0-source-release.zip.asc isis-1.14.0-source-release.zip
 ----
 
 
