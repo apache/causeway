@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -127,6 +128,25 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             public CheckBoxXConfig getConfig() {
                 return config;
             }
+
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                //
+                // this is a horrid hack to allow the space bar to work as a way of toggling the checkbox.
+                // this hack works for 1.5.4 of the JS plugin (https://github.com/kartik-v/bootstrap-checkbox-x)
+                //
+                // the problem is that the "change" event is not fired for a keystroke; instead the callback in the
+                // JS code (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L70)
+                // calls self.change().  This in turn calls validateCheckbox().  In that method it is possible to
+                // cause the "change" event to fire, but only if the input element is NOT type="checkbox".
+                // (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L132)
+                //
+                // It's not possible to simply change the associated markup to input type='xx' because it falls foul
+                // of a check in super.onComponentTag(tag).  So instead we let that through then hack the tag
+                // afterwards:
+                //
+                tag.put("type", "xx");
+            }
         };
         checkBox.setOutputMarkupId(true);
         checkBox.setEnabled(false); // will be enabled before rendering if
@@ -152,7 +172,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             }
         };
         return config
-                .withSize(CheckBoxXConfig.Sizes.xs)
+                .withSize(CheckBoxXConfig.Sizes.sm)
                 .withEnclosedLabel(false)
                 .withIconChecked("<i class='fa fa-fw fa-check'></i>")
                 .withIconNull("<i class='fa fa-fw fa-square'></i>")
