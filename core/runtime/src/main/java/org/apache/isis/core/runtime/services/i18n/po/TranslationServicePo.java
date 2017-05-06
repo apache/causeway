@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,8 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class TranslationServicePo implements TranslationService {
 

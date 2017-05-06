@@ -37,7 +37,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
  * that it is automatically registered and available for use; no further configuration is required.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 

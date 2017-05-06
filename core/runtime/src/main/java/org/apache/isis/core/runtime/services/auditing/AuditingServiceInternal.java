@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -46,7 +44,10 @@ import org.apache.isis.core.runtime.services.changes.PreAndPostValues;
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditingService3}.  Is a no-op if there is no injected service.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class AuditingServiceInternal {
 
     Boolean whetherCanAudit;

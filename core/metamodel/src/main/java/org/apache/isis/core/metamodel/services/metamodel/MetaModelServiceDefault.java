@@ -46,7 +46,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class MetaModelServiceDefault implements MetaModelService3 {
 

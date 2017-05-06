@@ -69,7 +69,10 @@ public @interface Bulk {
      * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext}.
      */
     @Deprecated
-    @DomainService(nature = NatureOfService.DOMAIN)
+    @DomainService(
+            nature = NatureOfService.DOMAIN,
+            menuOrder = "" + Integer.MAX_VALUE
+    )
     @RequestScoped
     public static class InteractionContext {
 

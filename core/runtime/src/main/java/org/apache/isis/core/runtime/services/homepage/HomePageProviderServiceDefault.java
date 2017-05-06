@@ -20,8 +20,6 @@ package org.apache.isis.core.runtime.services.homepage;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +39,8 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class HomePageProviderServiceDefault implements HomePageProviderService {
 

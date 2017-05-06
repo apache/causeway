@@ -37,7 +37,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 @RequestScoped
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {

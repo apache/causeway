@@ -25,7 +25,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -64,7 +63,8 @@ import javassist.util.proxy.ProxyObject;
  * be configured.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class BackgroundServiceDefault implements BackgroundService2 {
 

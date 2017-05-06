@@ -47,7 +47,10 @@ import org.apache.isis.applib.services.WithTransactionScope;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
 public class QueryResultsCache implements WithTransactionScope {
 
@@ -235,7 +238,10 @@ public class QueryResultsCache implements WithTransactionScope {
     /**
      * In separate class because {@link QueryResultsCache} itself is request-scoped
      */
-    @DomainService(nature = NatureOfService.DOMAIN)
+    @DomainService(
+            nature = NatureOfService.DOMAIN,
+            menuOrder = "" + Integer.MAX_VALUE
+    )
     public static class Control extends AbstractSubscriber {
 
         @Programmatic

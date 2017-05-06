@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.services.title;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -30,7 +28,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class TitleServiceDefault implements TitleService {
 

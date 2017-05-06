@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ServiceRegistryDefault implements ServiceRegistry2, ServicesInjectorAware {
 

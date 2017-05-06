@@ -28,7 +28,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class MessageServiceInternalDefault implements MessageService {
 

@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class SessionManagementServiceDefault implements SessionManagementService {
 

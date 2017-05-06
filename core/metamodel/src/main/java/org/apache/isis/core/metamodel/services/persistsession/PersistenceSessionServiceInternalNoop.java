@@ -32,7 +32,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class PersistenceSessionServiceInternalNoop implements PersistenceSessionServiceInternal {
 
 

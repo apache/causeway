@@ -39,7 +39,10 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
 public class ChangedObjectsServiceInternal implements WithTransactionScope {
 

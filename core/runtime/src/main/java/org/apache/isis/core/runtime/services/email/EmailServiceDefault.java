@@ -45,7 +45,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
  */
 @com.google.inject.Singleton // necessary because is registered in and injected by google guice
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class EmailServiceDefault implements EmailService {
 

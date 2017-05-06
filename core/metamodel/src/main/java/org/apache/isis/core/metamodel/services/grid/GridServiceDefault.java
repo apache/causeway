@@ -19,7 +19,6 @@ package org.apache.isis.core.metamodel.services.grid;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -38,7 +37,8 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.grid.GridSystemService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class GridServiceDefault implements GridService {
 

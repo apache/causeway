@@ -35,7 +35,8 @@ import org.apache.isis.applib.clock.Clock;
  * configuration is required.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ClockService {
     

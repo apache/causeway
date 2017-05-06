@@ -36,7 +36,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class UserServiceDefault implements UserService {
 
@@ -146,7 +147,10 @@ public class UserServiceDefault implements UserService {
     }
 
 
-    @DomainService(nature = NatureOfService.DOMAIN)
+    @DomainService(
+            nature = NatureOfService.DOMAIN,
+            menuOrder = "" + Integer.MAX_VALUE
+    )
     public static class SudoServiceSpi implements SudoService.Spi {
 
         @Override

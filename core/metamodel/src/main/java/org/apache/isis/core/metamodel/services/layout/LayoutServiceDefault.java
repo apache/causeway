@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.inject.Inject;
 import javax.xml.bind.Marshaller;
 
 import com.google.common.base.Predicate;
@@ -49,7 +48,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class LayoutServiceDefault implements LayoutService {
 

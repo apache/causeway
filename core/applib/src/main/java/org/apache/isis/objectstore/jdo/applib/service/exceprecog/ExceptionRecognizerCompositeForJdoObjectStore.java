@@ -42,7 +42,8 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
  * </p>
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 

@@ -33,7 +33,8 @@ import org.apache.isis.applib.annotation.Programmatic;
  * available for use; no further configuration is required.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 @RequestScoped
 public class InteractionContext {

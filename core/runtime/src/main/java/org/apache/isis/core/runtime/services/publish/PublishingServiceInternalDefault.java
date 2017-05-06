@@ -75,7 +75,10 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 

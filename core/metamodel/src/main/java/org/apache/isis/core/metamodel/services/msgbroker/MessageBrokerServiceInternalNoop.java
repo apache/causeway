@@ -21,7 +21,10 @@ package org.apache.isis.core.metamodel.services.msgbroker;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class MessageBrokerServiceInternalNoop implements MessageBrokerServiceInternal {
 
     @Override

@@ -22,7 +22,10 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class TransactionStateProviderInternalNoop implements TransactionStateProviderInternal {
 
     @Override

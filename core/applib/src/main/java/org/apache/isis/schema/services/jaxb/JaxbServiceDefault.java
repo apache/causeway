@@ -16,7 +16,6 @@
  */
 package org.apache.isis.schema.services.jaxb;
 
-import javax.inject.Inject;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -27,7 +26,8 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class JaxbServiceDefault extends JaxbService.Simple {
 

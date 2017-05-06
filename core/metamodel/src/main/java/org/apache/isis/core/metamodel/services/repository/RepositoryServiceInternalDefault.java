@@ -42,7 +42,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class RepositoryServiceInternalDefault implements RepositoryService {
 

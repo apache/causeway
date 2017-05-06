@@ -49,7 +49,8 @@ import static java.util.regex.Pattern.quote;
  */
 @com.google.inject.Singleton // necessary because is registered in and injected by google guice
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 

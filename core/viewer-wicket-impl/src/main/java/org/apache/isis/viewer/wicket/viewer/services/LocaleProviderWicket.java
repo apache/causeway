@@ -34,7 +34,8 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
  * An implementation that provides the locale of the current session.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class LocaleProviderWicket implements LocaleProvider {
 

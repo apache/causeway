@@ -49,11 +49,11 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
         }
 
         final String domainServiceMenuOrder =
-                domainService != null && !domainService.menuOrder().equals("" + Integer.MAX_VALUE)
+                domainService != null && !domainService.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
                         ? domainService.menuOrder()
                         : null;
         final String domainServiceLayoutMenuOrder =
-                domainServiceLayout != null && !domainServiceLayout.menuOrder().equals("" + Integer.MAX_VALUE)
+                domainServiceLayout != null && !domainServiceLayout.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
                         ? domainServiceLayout.menuOrder()
                         : null;
         final String menuOrder = coalesce(domainServiceLayoutMenuOrder, domainServiceMenuOrder);

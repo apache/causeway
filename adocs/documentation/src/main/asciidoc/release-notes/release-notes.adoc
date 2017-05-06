@@ -21,6 +21,14 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 | JIRA relnotes
 
+| xref:r1.15.0[1.15.0]
+| (currently in development)
+| Inline prompts, Wicket 7.x
+|
+|
+|
+|
+
 | xref:r1.14.0[1.14.0]
 | 19-02-2017
 | Actions with collection parameters, metamodel validations.
@@ -281,7 +289,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
-
+include::_release-notes_1.15.0.adoc[leveloffset=+1]
 include::_release-notes_1.14.0.adoc[leveloffset=+1]
 include::_release-notes_1.13.2.1.adoc[leveloffset=+1]
 include::_release-notes_1.13.2.adoc[leveloffset=+1]

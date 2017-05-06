@@ -8,16 +8,15 @@
 
 The framework provides default implementations for many of the xref:../rgsvc/rgsvc.adoc#[domain services].  This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
-The trick is to use the xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, specifying a low number (typically `"1"`).
+For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LocaleProvider[`LocaleProvider`].
+The trick is to use the xref:../rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] attribute, specifying a low number (typically `"1"`).
 
-For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LocaleProvider[`LocaleProvider`].  Here's how:
+Here's how:
 
 [source,java]
 ----
 @DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@DomainServiceLayout(
+        nature = NatureOfService.DOMAIN,
         menuOrder = "1"                             // <1>
 )
 public class MyLocaleProvider implements LocaleProvider {
@@ -29,8 +28,58 @@ public class MyLocaleProvider implements LocaleProvider {
 ----
 <1> takes precedence over the default implementation.
 
+The framework uses the value of the `menuOrder` attribute to determine priority; lowest number wins.
 
-It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy if using `1.10.0` or later:
+Thus, if a single instance is to be injected, eg:
+
+[source,java]
+----
+@javax.inject.Inject
+LocalProvider localeProvider;
+----
+
+then the custom implementation will be used in preference to the framework's default implementation.
+
+If multiple instances are injected, eg:
+
+[source,java]
+----
+@javax.inject.Inject
+List<LocalProvider> localeProviders;
+----
+
+then all implementations will be present in the list, ordered by priority; your custom implementation will be first in the list.
+
+As of `1.15.0-SNAPSHOT`, there is no need to specify the `menuOrder` attribute: its default value is now set to a lower value (specifically: `Integer.MAX_VALUE - 100`).
+Thus, the code simplifies to:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class MyLocaleProvider implements LocaleProvider {
+    @Override
+    public Locale getLocale() {
+        return ...
+    }
+}
+----
+
+
+
+
+[NOTE]
+====
+It is also possible to use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, rather than xref:../rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`].
+The general convention is to use the former only for services that are rendered in the UI, the latter for programmatic services.
+
+If both attributes are present, then the value of xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] is used.
+====
+
+
+
+== Decorating existing implementations
+
+It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy:
 
 [source,java]
 ----

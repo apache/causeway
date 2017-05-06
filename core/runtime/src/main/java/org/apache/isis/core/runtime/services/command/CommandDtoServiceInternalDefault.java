@@ -59,7 +59,8 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 

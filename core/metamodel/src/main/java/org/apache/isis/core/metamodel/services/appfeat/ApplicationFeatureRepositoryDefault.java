@@ -26,7 +26,6 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -62,7 +61,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
-        repositoryFor = ApplicationFeature.class
+        repositoryFor = ApplicationFeature.class,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 

@@ -31,7 +31,10 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class AuditerServiceLogging implements AuditerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditerServiceLogging.class);

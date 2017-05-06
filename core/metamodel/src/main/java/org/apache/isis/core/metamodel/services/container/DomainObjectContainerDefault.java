@@ -24,7 +24,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
 
@@ -64,7 +63,10 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class DomainObjectContainerDefault
         implements DomainObjectContainer, ExceptionRecognizer {
 

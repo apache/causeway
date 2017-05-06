@@ -26,7 +26,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class TransactionServiceInternalDefault implements TransactionService {
 

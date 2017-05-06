@@ -19,7 +19,6 @@ package org.apache.isis.objectstore.jdo.datanucleus.service.support;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -33,7 +32,8 @@ import org.apache.isis.applib.services.user.UserService;
 
 @RequestScoped
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class TimestampService implements
         javax.jdo.listener.StoreLifecycleListener {

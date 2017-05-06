@@ -48,7 +48,8 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
  * An implementation that reads from /WEB-INF/...
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class TranslationsResolverWicket implements TranslationsResolver {
 

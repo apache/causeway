@@ -22,8 +22,6 @@ package org.apache.isis.core.runtime.services.ixn;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -47,7 +45,10 @@ import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
 

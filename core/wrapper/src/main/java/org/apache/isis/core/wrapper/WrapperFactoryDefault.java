@@ -67,7 +67,10 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  * <tt>o.a.i.core:isis-core-wrapper</tt> on the classpath, the service is automatically registered; no further
  * configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();

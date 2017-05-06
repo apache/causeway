@@ -27,7 +27,10 @@ import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
      /**

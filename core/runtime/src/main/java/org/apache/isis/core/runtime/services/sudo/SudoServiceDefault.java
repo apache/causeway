@@ -29,7 +29,8 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class SudoServiceDefault implements SudoService {
 

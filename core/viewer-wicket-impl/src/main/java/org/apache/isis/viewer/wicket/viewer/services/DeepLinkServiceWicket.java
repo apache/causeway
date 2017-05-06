@@ -43,7 +43,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  * for Wicket Viewer
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class DeepLinkServiceWicket implements DeepLinkService {
 

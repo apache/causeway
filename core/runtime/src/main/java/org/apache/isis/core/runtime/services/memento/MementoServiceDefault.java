@@ -19,8 +19,6 @@ package org.apache.isis.core.runtime.services.memento;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -45,7 +43,8 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
  * that it is automatically registered and available for use; no further configuration is required.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class MementoServiceDefault implements MementoService {
 
