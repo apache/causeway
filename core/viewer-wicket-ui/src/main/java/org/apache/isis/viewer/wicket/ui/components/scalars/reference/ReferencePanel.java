@@ -197,7 +197,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
         return InlinePromptConfig.supportedAndHide(
-                scalarModel.getMode() == EntityModel.Mode.EDIT || scalarModel.getKind() == ScalarModel.Kind.PARAMETER
+                scalarModel.getMode() == EntityModel.Mode.EDIT ||
+                scalarModel.getKind() == ScalarModel.Kind.PARAMETER
                         ? select2.component()
                         : null);
     }

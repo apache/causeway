@@ -49,16 +49,30 @@
                                     <a href="#"
                                        class="edit fa fa-pencil-square-o"
                                        wicket:id="editProperty" ></a>
+
+                                    <a href="#"
+                                       name="scalarValueInlinePromptLink"
+                                       class="form-control input-sm scalarValueInlinePromptLink"
+                                       wicket:id="scalarValueInlinePromptLink">
+                                        <span wicket:id="scalarValueInlinePromptLabel"></span>
+                                    </a>
+
                                 </span>
                             </span>
                             <span class="associatedActionLinksRight"
                                   wicket:id="associatedActionLinksRight"
                             >[drop down]</span>
+                            <div class="clearfix"/>
                         </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
                     <div class="clearfix"/>
+                </div>
+
+                <div class="inlinePromptForm"
+                     wicket:id="scalarIfRegularInlinePromptForm" >
+                    <div><span>[property edit form]</span></div>
                 </div>
 
                 <input type="checkbox"

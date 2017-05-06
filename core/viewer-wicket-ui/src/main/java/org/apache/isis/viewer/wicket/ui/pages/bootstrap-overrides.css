@@ -605,12 +605,19 @@ div.label-left .choicesPlaceholder {
 }
 
 div.label-right .scalarValueWrapper {
-    padding-left: 28.5%;
+    padding-left: 30%;
 }
 
 div.label-right .scalarValueWrapper .control-label{
     vertical-align: sub;
 }
+
+div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
+    padding-left: 30%;
+    width: 70%;
+    float: left;
+}
+
 /* Labels on the left/top/none END */
 
 
@@ -882,13 +889,15 @@ tr.headers th form input {
     padding-right: 15px;
 }
 
+.booleanPanel .form-control.scalarValueInlinePromptLink,
 .referencePanel .form-control.scalarValueInlinePromptLink {
     display: inline-block;
-    width: 90%;
+    width: 85%;
 }
 
+.booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
-    width: 90%;
+    width: 85%;
 }
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
     margin-right: 10px;

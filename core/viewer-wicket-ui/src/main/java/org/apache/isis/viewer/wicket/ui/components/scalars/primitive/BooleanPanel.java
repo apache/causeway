@@ -24,6 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -31,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -96,12 +98,21 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     }
 
 
-    /**
-     * Inline prompts are <i>not</i> supported by this component.
-     */
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.notSupported();
+        return InlinePromptConfig.supportedAndHide(
+                scalarModel.getMode() == EntityModel.Mode.EDIT ||
+                scalarModel.getKind() == ScalarModel.Kind.PARAMETER
+                        ? this.checkBox
+                        : null
+        );
+    }
+
+    @Override
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        final IModel<Boolean> model = checkBox.getModel();
+        final Boolean bool = model.getObject();
+        return Model.of(bool == null? "(not set)" : bool ? "Yes" : "No");
     }
 
     private CheckBoxX createCheckBox(final String id) {
@@ -172,7 +183,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             }
         };
         return config
-                .withSize(CheckBoxXConfig.Sizes.sm)
+                .withSize(CheckBoxXConfig.Sizes.lg)
                 .withEnclosedLabel(false)
                 .withIconChecked("<i class='fa fa-fw fa-check'></i>")
                 .withIconNull("<i class='fa fa-fw fa-square'></i>")
