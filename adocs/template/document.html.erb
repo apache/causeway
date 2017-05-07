@@ -1,11 +1,5 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<%#encoding:UTF-8%><!DOCTYPE html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <title><%= document.name %></title>
-
     <!--
         Licensed to the Apache Software Foundation (ASF) under one
         or more contributor license agreements.  See the NOTICE file
@@ -25,451 +19,189 @@
         under the License.
     -->
 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- No caching headers -->
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="expires" content="-1" />
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="expires" content="-1"/>
+
+    <title><%= document.name %></title>
+
+    <link rel="icon" type="image/png" href="<%= (attr :_basedir) %>images/isis-favicon.png"/>
+
+    <!--
+        Based on DataNucleus' template,
+        that was in turn based on an earlier version of Apache Isis' template,
+        that was in turn based on Apache Deltaspike's template.
+
+        This template uses
+        * Bootstrap v3.3.7 (https://getbootstrap.com/) for navbar.
+        * Bootswatch "cosmo" theme for Bootstrap (https://bootswatch.com/cosmo).
+        * Bootstrap TOC plugin v0.4.1 (https://afeld.github.io/bootstrap-toc/)
+          for the table of contents.
+        * jQuery (necessary for Bootstrap's JavaScript plugins)
+        * Font-Awesome for some icons used by Asciidoctor
+        NOTE: tried using Font-Awesome CSS locally but then fails to work!
+
+        Also:
+        * slick.js (carousel)
+        * add a link to all headers (home-grown, adapted from blog posts)
+        * to hide the header (home-grown, adapted from blog posts)
+        * integration of elasticlunr.js (home-grown, adapted from blog posts)
+    -->
+    <link href="<%= (attr :_basedir) %>css/bootswatch/3.3.7/bootstrap-cosmo.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/bootstrap-toc/0.4.1/bootstrap-toc.min.css" rel="stylesheet"/>
+
+    <link href="<%= (attr :_basedir) %>css/asciidoctor/foundation.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/datanucleus_theme.css" rel="stylesheet"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <%
+       def is_toc?
+         not (attributes.has_key?('notoc'))
+       end
+    %>
 
 
-    <!-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
-    <link href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css" rel="stylesheet" />
-    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
-    <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="<%= (attr :_basedir) %>css/asciidoctor/colony.css" rel="stylesheet">
-    <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="<%= (attr :_basedir) %>js/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <script src="<%= (attr :_basedir) %>js/bootstrap-toc/0.4.1/bootstrap-toc.min.js"></script>
 
-
-
-
-
-
-
+    <!-- Coderay syntax formatter -->
     <style type="text/css">
-        pre code {
-            background-color: inherit;
-            border-style: none;
-        }
-
-        pre code > span:first-child {
-            margin-left: -5px;
-        }
-
-    <style>
-
-
-
-    <style>
-        @media only screen and (min-width: 40.063em) {
-          .top-bar {
-            .contain-to-grid .top-bar {
-                max-width: 80rem;
-            }
-          }
-        }
-        .row {
-            max-width: 80rem;
-        }
+        <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
     </style>
-
-    <style>
-        .extended-quote,
-        .extended-quote-first {
-            margin-left: 40px;
-            margin-right: 40px;
-            font-style: italic;
-        }
-        .extended-quote-attribution {
-            text-align: right;
-            margin-right: 100px;
-            color: #10B061;
-        }
-
-        .extended-quote-first:before {
-            content: "\201c";
-            float: left;
-            font-size: 2.75em;
-            font-weight: bold;
-            line-height: 0.6em;
-            margin-left: -0.6em;
-            color: #003b6b;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-
-    <style>
-        body {
-          position: relative;
-        }
-
-        *:not(pre) a > code {
-            color: #210DDC;
-        }
-
-        *:not(pre) > code {
-            background-color: inherit;
-            border: none;
-            font-weight: normal;
-        }
-
-        body div#toc li,
-        body div#toc2 li {
-            list-style-type: none;
-        }
-
-        div#doc-content {
-            margin-top: 30px;
-            padding-top: 30px;
-        }
-
-        div.documentation-page table.frame-all {
-            border-left: none;
-            border-right: none;
-        }
-
-        body div#toc li.active-region:before,
-        body div#toc2 li.active-region:before {
-            content: "\00BB \0020";
-            margin-left: -12px;
-        }
-
-        body div#toc li a.active,
-        body div#toc2 li a.active {
-            color: red;
-        }
-
-        body div#toc.toc,
-        body div#toc.toc2 {
-            position: fixed;
-            left: auto;
-            padding-top: 60px;
-            z-index: auto;
-            background-color: white;
-            border-left-color: #eee;
-            border-left-style: solid;
-            border-right: none;
-            min-height: 2000px;
-        }
-
-    </style>
-
-    <style>
-
-        @media only screen and (min-width: 768px) {
-          #toc.toc2 ul ul { margin-left: -10px; }
-        }
-
-
-        body div#toc .tocify-subheader ul {
-            margin-bottom: 0px;
-        }
-
-        body div#toc .tocify-subheader li {
-            font-size: 14px;
-        }
-        .tocify li.tocify-item, .tocify ul.tocify-item {
-            line-height: 24px;
-        }
-
-        body div#toc li.tocify-item.active:before,
-        body div#toc2 li.tocify-item.active:before {
-            content: "\00BB \0020";
-            margin-left: -12px;
-        }
-
-        body div#toc li.tocify-item.active a,
-        body div#toc2 li.tocify-item.active a {
-            color: red;
-        }
-    </style>
-
-    <style>
-        footer {
-            margin-top: 1000px;
-        }
-
-        .searchLink {
-            font-size: larger;
-            color:#10B061;
-        }
-
-        .searchScore {
-            font-size: 12px;
-            color: #D5810A;
-         }
-
-        .searchDescription {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
-            #search-panel {
-                display: none;
-                border: lightgray solid 1px;
-                padding: 10px;
-                margin-top: 10px;                
-                margin-bottom: 10px;
-            }
-
-            #search-panel.active {
-                display: inherit;
-            }
-    </style>
-
-    <style>
-        /* overriding colony.css stylesheet */
-        .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] {
-           /*padding: 1.25em 1.5625em 1.125em 1.5625em;*/
-           padding: 0.3em 0.6em 0.25em 0.6em;
-        }
-        @media only screen and (min-width: 1280px)
-        #toc.toc2 {
-          /*width: 20em;*/
-          width: 25em;
-        }
-
-        #doc-content a {
-          color: #210DDC;
-        }
-
-        .top-bar h1 {
-            border-bottom: inherit;
-        }
-
-        h2 {
-          margin-top: 80px;
-        }
-        h3 {
-          margin-top: 40px;
-        }
-        h4,h5 {
-          margin-top: 30px;
-        }
-
-        .admonitionblock.tip > table td.content {
-            color: #10B061;
-        }
-        .admonitionblock.note > table td.content {
-            color: #B509AB;
-        }
-        .admonitionblock.important > table td.content {
-            color: #D5810A;
-        }
-
-        .admonitionblock .title {
-            font-size: larger;
-            font-style: italic;
-        }
-
-        .imageblock img {
-            margin-bottom: 10px;
-        }
-    </style>
-
-    <style>
-        /* from http://ben.balter.com/2014/03/13/pages-anchor-links/ */
-        .header-link {
-          position: absolute;
-          left: -0.5em;
-          opacity: 0;
-
-          /*
-          -webkit-transition: opacity 0.2s ease-in-out 0.1s;
-          -moz-transition: opacity 0.2s ease-in-out 0.1s;
-          -ms-transition: opacity 0.2s ease-in-out 0.1s;
-          */
-        }
-
-        h2:hover .header-link,
-        h3:hover .header-link,
-        h4:hover .header-link,
-        h5:hover .header-link,
-        h6:hover .header-link {
-          opacity: 1;
-        }
-    </style>
-
-    <style>
-        .top-bar
-        {
-            -webkit-transition-duration: .5s;
-            transition-duration: .5s;
-
-            -webkit-transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
-            transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
-
-            -webkit-transition-property: -webkit-transform;
-            transition-property: transform;
-        }
-
-        /*
-        http://osvaldas.info/auto-hide-sticky-header
-        MIT license
-        */
-        .header--hidden
-        {
-            -webkit-transform: translateY( -100% );
-            -ms-transform: translateY( -100% );
-            transform: translateY( -100% );
-
-            transition-duration: .5s;
-            transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
-            -webkit-transition-property: -webkit-transform;
-            transition-property: transform;
-        }
-    </style>
-
-    <style>
-        #doc-content a.guide {
-            color: white;
-        }
-    </style>
-
-    <style>
-        .tocify {
-            margin-top: 80px;
-        }
-    </style>
-
-    <style>
-        .tocify {
-            margin-top: 80px;
-        }
-    </style>
-
-
-</script>
-
 </head>
-<body>
 
+<body data-spy="scroll" data-target="#toc">
 
-<div class="row">
+<!-- Navbar -->
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <!-- Three line menu button for use on mobile screens -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-    <!-- pass through to app.js -->
-    <div id="basedir" style="display:none;"><%= (attr :_basedir) %></div>
-    <div id="docname" style="display:none;"><%= (attr :docname) %></div>
-    <div id="filetype" style="display:none;"><%= (attr :filetype) %></div>
-    
+            <!-- 'style' added to align image with navbar. FIX THIS -->
+            <a class="navbar-brand" href="http://isis.apache.org">
+                <img style="margin-top: -12px;" alt="Brand" src="<%= (attr :_basedir) %>images/isis-logo-48x48.png"/>
+            </a>
 
-    <div class="fixed contain-to-grid header">
-        <nav class="top-bar" data-topbar role="navigation" style="max-width: 80rem">
-            <ul class="title-area">
-                <li class="name">
-                    <h1>
-                        <a href="<%= (attr :_basedir) %>index.html">Apache Isis&trade;</a>
-                    </h1>
+            <!-- TODO Any way to abstract the version from Maven? -->
+            <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">Apache Isis</a>
+
+            <!-- 'style' added to fix height of input box. FIX THIS -->
+            <form class="navbar-form navbar-left" role="search" id="search-form" style="padding: 1px 15px;">
+                <div class="form-group">
+                    <input class="form-control" id="search-field" type="text" length="30" placeholder="Search"/>
+                </div>
+            </form>
+        </div>
+
+        <!-- Navbar that will collapse on mobile screens -->
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">JPA API <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<%= (attr :_basedir) %>jpa/getting_started.html">Getting Started</a></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/mapping.html">Mapping</a></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/enhancer.html">Enhancer</a></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/persistence.html">Persistence</a></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/query.html">Queries</a></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/tools.html">Tools</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Reference Documents</li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/annotations.html">Annotations Reference</a></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/metadata_xml.html">ORM.XML Reference</a></li>
+                        <li><a href="http://www.datanucleus.org/javadocs/javax.persistence/2.1/">JPA Javadocs</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="<%= (attr :_basedir) %>jpa/tutorial.html">JPA Tutorial</a></li>
+                        <li><a href="https://github.com/datanucleus/samples-jpa">JPA Samples</a></li>
+                        <li><a href="http://jcp.org/aboutJava/communityprocess/final/jsr338/index.html"><i>JPA 2.1 spec</i></a></li>
+                    </ul>
                 </li>
-                <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+
+
+                <li><a href="<%= (attr :_basedir) %>documentation.html">Documentation</a></li>
+                <li><a href="<%= (attr :_basedir) %>downloads.html">Downloads</a></li>
+                <li><a href="<%= (attr :_basedir) %>help.html">Help</a></li>
+                <li><a href="<%= (attr :_basedir) %>asf.html">@ASF</a></li>
+
             </ul>
-
-            <section class="top-bar-section">
-                <ul class="right">
-
-                    <li class="has-form">
-                            <form id="search-form">
-                                <input class="form-control" id="search-field" type="text" length="30" placeholder="Search"/>
-                            </form>
-
-                     </li>
-
-                </ul>
-
-                <!-- Left Nav Section -->
-                <ul class="left">
-
-                        <li><a href="<%= (attr :_basedir) %>documentation.html">Documentation</a></li>
-                        <li><a href="<%= (attr :_basedir) %>downloads.html">Downloads</a></li>
-                        <li><a href="<%= (attr :_basedir) %>help.html">Help</a></li>
-                        <li><a href="<%= (attr :_basedir) %>asf.html">@ASF</a></li>
-
-                </ul>
-
-            </section>
-        </nav>
-    </div>
-</div>
-    <div class="row">
-        <div class="large-12 medium-12 columns">
-
-            <br/>
-            <br/>
-            <br/>
         </div>
     </div>
+</nav>
 
-    <div class="row">
-        <div class="large-12 medium-12 columns">
-            <div id="search-panel">
-                <div id="search-results"></div>
-                <div>
-                    <br/>
-                    <a href=".">clear</a>
+
+<div class="container">
+
+
+    <% if is_toc? then %>
+        <div class="row-fluid">
+            <div class="col-sm-9">
+                <div class="page-title">
+                    <h1><%= document.name %></h1>
+                </div>
+                <div id="doc-content">
+                    <%= document.content %>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
+            </div>
+        </div>
+    <% else %>
+        <!-- Front Page, no TOC and no heading -->
+        <div class="row-fluid">
+            <div class="col-sm-12">
+                <div id="doc-content">
+                    <%= document.content %>
                 </div>
             </div>
         </div>
-    </div>
+    <% end %>
+</div>
 
-<div class="row">
-
-    <div id="doc-content-left" class="large-9 medium-9 columns">
-
-
-        <div id="doc-content">
-          <%= document.content %>
+<footer style="padding: 5px;">
+<div class="container">
+    <hr/>
+    <div class="row">
+        <div class="col-sm-2">
+            Support :
         </div>
-
-        <footer>
-          <hr>
-          <p class="small">
+        <div class="col-sm-5">
+            <a href="<%= (attr :_basedir) %>support.html">Mailing lists</a>
+        </div>
+        <div class="col-sm-5">
+            <a href="https://lists.apache.org/list.html?users@isis.apache.org">Archives</a>
+        </div>
+    </div>
+    <hr/>
+    <p class="text-center small">
           Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
           <br/>
           Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
-          </p>
-        </footer>
-
-    </div>
-
-    <div id="doc-content-right" class="large-3 medium-3 xcolumns">
-        <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
-            <div class="fallback-toc">
-                <%= converter.convert_with_options @document, 'outline', :toclevels => 4 %>
-            </div>
-        </div>
-    </div>
-
+    </p>
 </div>
+</footer>
 
-
-<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/jquery.js"></script>
-<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
-
-
-<link href="<%= (attr :_basedir) %>css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
 <script src="<%= (attr :_basedir) %>js/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script src="<%= (attr :_basedir) %>js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
-
 <script src="<%= (attr :_basedir) %>js/slick/1.5.0/slick.min.js"></script>
 
 <script src="<%= (attr :_basedir) %>js/elasticlunr/elasticlunr.min.js"></script>
 
 <script src="<%= (attr :_basedir) %>js/app.js"></script>
 
-
-<script type="text/javascript">
-    $(function () {
-        $("#toc").tocify({
-            scrollTo: 50,
-            extendPage: true,
-            context: "#doc-content",
-            highlightOnScroll: true,
-            hashGenerator: "pretty",
-            hideEffect: "slideUp",
-            selectors: "h2,h3,h4,h5"
-        });
-        $(".fallback-toc").hide();
-    });
-</script>
 
 <script type="text/javascript">
 
@@ -583,19 +315,6 @@
 
 </script>
 
-<script type="text/javascript">
-
-$(document).ready(function(){
-    if("Documentation" === "<%= document.name %>") {
-        console.log( "processing 'Documentation'" );
-
-        $("#doc-content-left").removeClass("large-9").removeClass("medium-9").addClass("large-12").addClass("medium-12");
-        $("#doc-content-right").removeClass("large-3").removeClass("medium-3").hide();
-    }
-
-});
-
-</script>
 
 
 <script>
