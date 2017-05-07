@@ -46,9 +46,11 @@ $('#search-form').submit(function(ev) {
                 }
             };
         }
+        $('#search-results-clear').attr("href", location.pathname.split('/').slice(-1))
         $('#search-results').focus();
+
         $('html,body').animate({
-            scrollTop: $("#search-results").offset().top - 80
+            scrollTop: $("#search-results").offset().top - 100
         });
 
     });

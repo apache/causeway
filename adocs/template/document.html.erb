@@ -71,6 +71,35 @@
     <script src="<%= (attr :_basedir) %>js/bootstrap/3.3.7/bootstrap.min.js"></script>
     <script src="<%= (attr :_basedir) %>js/bootstrap-toc/0.4.1/bootstrap-toc.min.js"></script>
 
+    <style>
+        .searchLink {
+            font-size: larger;
+            color:#10B061;
+        }
+
+        .searchScore {
+            font-size: 12px;
+            color: #D5810A;
+         }
+
+        .searchDescription {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        #search-panel {
+            display: none;
+            border: lightgray solid 1px;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #search-panel.active {
+            display: inherit;
+        }
+    </style>
+
     <!-- Coderay syntax formatter -->
     <style type="text/css">
         <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
@@ -96,15 +125,8 @@
                 <img style="margin-top: -12px;" alt="Brand" src="<%= (attr :_basedir) %>images/isis-logo-48x48.png"/>
             </a>
 
-            <!-- TODO Any way to abstract the version from Maven? -->
             <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">Apache Isis</a>
 
-            <!-- 'style' added to fix height of input box. FIX THIS -->
-            <form class="navbar-form navbar-left" role="search" id="search-form" style="padding: 1px 15px;">
-                <div class="form-group">
-                    <input class="form-control" id="search-field" type="text" length="30" placeholder="Search"/>
-                </div>
-            </form>
         </div>
 
         <!-- Navbar that will collapse on mobile screens -->
@@ -138,13 +160,38 @@
                 <li><a href="<%= (attr :_basedir) %>asf.html">@ASF</a></li>
 
             </ul>
+
+            <div class="nav navbar-nav navbar-right">
+
+                <!-- 'style' added to fix height of input box. FIX THIS -->
+                <form class="navbar-form" role="search" id="search-form" style="padding: 1px 15px;">
+                    <div class="form-group">
+                        <input class="form-control" id="search-field" type="text" length="30" placeholder="Search"/>
+                    </div>
+                </form>
+
+            </div>
+
         </div>
+
+
     </div>
 </nav>
 
 
 <div class="container">
 
+    <div class="row-fluid">
+        <div class="col-sm-12">
+            <div id="search-panel">
+                <div id="search-results"></div>
+                <div>
+                    <br/>
+                    <a href="#" id="search-results-clear">clear</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <% if is_toc? then %>
         <div class="row-fluid">
