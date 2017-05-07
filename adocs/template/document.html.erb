@@ -66,69 +66,12 @@
        end
     %>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="<%= (attr :_basedir) %>js/bootstrap/3.3.7/bootstrap.min.js"></script>
-    <script src="<%= (attr :_basedir) %>js/bootstrap-toc/0.4.1/bootstrap-toc.min.js"></script>
+    <link href="css/slick/1.5.0/slick.css" rel="stylesheet">
+    <link href="css/slick/1.5.0/slick-theme.css" rel="stylesheet">
 
-    <style>
-        .searchLink {
-            font-size: larger;
-            color:#10B061;
-        }
-
-        .searchScore {
-            font-size: 12px;
-            color: #D5810A;
-         }
-
-        .searchDescription {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
-        #search-panel {
-            display: none;
-            border: lightgray solid 1px;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        #search-panel.active {
-            display: inherit;
-        }
-    </style>
-
-    <style>
-
-        /* from http://ben.balter.com/2014/03/13/pages-anchor-links/ */
-        .header-link {
-          position: absolute;
-          left: -0.5em;
-          opacity: 0;
-
-          /*
-          -webkit-transition: opacity 0.2s ease-in-out 0.1s;
-          -moz-transition: opacity 0.2s ease-in-out 0.1s;
-          -ms-transition: opacity 0.2s ease-in-out 0.1s;
-          */
-        }
-
-        h2:hover .header-link,
-        h3:hover .header-link,
-        h4:hover .header-link,
-        h5:hover .header-link,
-        h6:hover .header-link {
-          opacity: 1;
-        }
-
-    </style>
-
-    <style>
-        body > div.container {
-            margin-top: 80px;
-        }
-    </style>
+    <link href="<%= (attr :_basedir) %>css/search-panel/search-panel.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/header-links/header-links.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/customisations.css" rel="stylesheet"/>
 
     <!-- Coderay syntax formatter -->
     <style type="text/css">
@@ -137,6 +80,10 @@
 </head>
 
 <body data-spy="scroll" data-target="#toc">
+
+<div id="basedir" style="display:none;"><%= (attr :_basedir) %></div>
+<div id="docname" style="display:none;"><%= (attr :docname) %></div>
+<div id="filetype" style="display:none;"><%= (attr :filetype) %></div>
 
 <!-- Navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -150,12 +97,9 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <!-- 'style' added to align image with navbar. FIX THIS -->
-            <!--
-            <a class="navbar-brand" href="http://isis.apache.org">
-                <img style="margin-top: -12px;" alt="Brand" src="<%= (attr :_basedir) %>images/isis-logo-48x48.png"/>
+            <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">
+                <img alt="Brand" src="<%= (attr :_basedir) %>images/isis-logo-48x48.png"/>
             </a>
-            -->
 
             <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">Apache Isis</a>
 
@@ -287,8 +231,7 @@
     <% end %>
 </div>
 
-
-<footer id="footer">
+<footer class="footer">
     <div class="container">
         <p class="text-center small text-muted">
               Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
@@ -298,149 +241,17 @@
     </div>
 </footer>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/bootstrap-toc/0.4.1/bootstrap-toc.min.js"></script>
+
 <script src="<%= (attr :_basedir) %>js/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script src="<%= (attr :_basedir) %>js/slick/1.5.0/slick.min.js"></script>
 <script src="<%= (attr :_basedir) %>js/elasticlunr/elasticlunr.min.js"></script>
-<script src="<%= (attr :_basedir) %>js/app.js"></script>
 
-<script type="text/javascript">
+<script src="<%= (attr :_basedir) %>js/search-panel/search-panel.js"></script>
+<script src="<%= (attr :_basedir) %>js/header-link/header-link.js"></script>
 
-  /****
-
-      $(document).foundation();
-
-      $(document).ready(function(){
-        // Cache selectors
-        var lastId,
-            topMenu = $("div#toc ul"),
-            topMenuHeight = 100,
-
-            menuItems = topMenu.find("a"),
-            menuItemsHrefs = menuItems.map(function(){
-              var item = $($(this).attr("href"));
-              if (item.length) { return item; }
-            });
-
-        // Bind click handler to menu items to scroll animation
-        menuItems.click(function(e){
-          var href = $(this).attr("href"),
-              offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
-          $('html, body').stop().animate({
-              scrollTop: offsetTop
-          }, 300);
-
-          e.preventDefault();
-        });
-
-        // Bind to scroll of window
-        $(  window ).scroll(function(){
-
-           // Get container scroll position
-           var fromTop = $(this).scrollTop()+topMenuHeight;
-
-           var cur = menuItemsHrefs.map(function(){
-             if ($(this).offset().top < fromTop)
-               return this;
-           });
-
-           // Get the id of the current element
-           cur = cur[cur.length-1];
-
-           var id = cur && cur.length ? cur[0].id : "";
-
-           if (lastId !== id && id) {
-               scrollTo(id);
-           }
-
-           window.history.pushState({}, "", window.location.origin + window.location.pathname + "#" + id);
-        });
-
-        scrollTo = function(id) {
-              lastId = id;
-
-              menuItems
-                .removeClass("active");
-
-              menuItems
-                .parents()
-                .removeClass("active-region");
-
-              menuItems
-                .parents("ul").hide();
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .addClass("active");
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .parents("ul").show();
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .parent().children("ul").show();
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .parents("li").addClass("active-region");
-
-        }
-      menuItems
-        .removeClass("active");
-
-      menuItems
-        .parents()
-        .removeClass("active-region");
-
-        var syncMenuItem;
-        if(window.location.hash!=="") {
-            var menuItemFor = $.grep(menuItems, function(e) {
-                return e.hash === window.location.hash;
-            });
-            console.log(menuItemFor);
-            if(menuItemFor.length === 1) {
-                syncMenuItem = menuItemFor[0];
-            }
-        }
-
-        if(!syncMenuItem){
-            syncMenuItem = menuItems[0];
-        }
-
-        $(syncMenuItem).click();
-
-      });
-
-    ***/
-
-</script>
-
-
-
-<script>
-
-$( document ).ready(function() {
-
-    (function() {
-      $(function() {
-        return $("#doc-content h2, #doc-content h3, #doc-content h4, #doc-content h5, #doc-content h6").each(function(i, el) {
-          var $el, icon, id;
-          $el = $(el);
-          id = $el.attr('id');
-          icon = '<i class="fa fa-link"></i>';
-          if (id) {
-            return $el.prepend($("<a />").addClass("header-link").attr("href", "#" + id).html(icon));
-          }
-        });
-      });
-    }).call(this);
-
-
-
-
-
-});
-</script>
 
 </body>
 </html>

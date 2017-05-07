@@ -89,28 +89,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!--
-                align JRuby version with AsciidoctorJ to avoid redundant downloading
-
-                <plugin>
-                <groupId>de.saumya.mojo</groupId>
-                <artifactId>gem-maven-plugin</artifactId>
-                <version>1.0.5</version>
-                <configuration>
-
-                        <jrubyVersion>${jruby.version}</jrubyVersion>
-                        <gemHome>${project.build.directory}/gems</gemHome>
-                        <gemPath>${project.build.directory}/gems</gemPath>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>initialize</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                -->
                 <plugin>
                     <groupId>org.asciidoctor</groupId>
                     <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -173,24 +151,6 @@
         </pluginManagement>
     </build>
 
-    <!--
-    <dependencies>
-        <dependency>
-            <groupId>rubygems</groupId>
-            <artifactId>asciidoctor-diagram</artifactId>
-            <version>1.2.1</version>
-            <type>gem</type>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>rubygems</groupId>
-                    <artifactId>asciidoctor</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
-    -->
-
     <profiles>
         <profile>
             <id>html</id>
@@ -216,14 +176,9 @@
 
                                     <sourceDirectory>src/main/asciidoc/</sourceDirectory>
                                     <outputDirectory>${project.reporting.outputDirectory}/</outputDirectory>
-                                    <!--
-                                    <sourceDocumentName>downloads.adoc</sourceDocumentName>
-                                    -->
-
-                                    <!--
-                                    The gem-maven-plugin appends the scope (e.g., provided) to the gemPath defined in the plugin configuration
-                                    <gemPath>${project.build.directory}/gems-provided</gemPath>
-                                    -->
+<!--
+                                    <sourceDocumentName>index.adoc</sourceDocumentName>
+-->
 
                                     <sourceHighlighter>coderay</sourceHighlighter>
                                     <templateDir>../template</templateDir>

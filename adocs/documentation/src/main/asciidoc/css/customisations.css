@@ -1,0 +1,29 @@
+body > div.container {
+    margin-top: 80px;
+}
+#doc-content {
+    min-height: 600px;
+}
+
+.navbar-brand > img {
+    margin-top: -12px;
+    margin-left: 12px;
+}
+
+
+
+
+
+
+.slick-slide img {
+    padding:30px;
+}
+.slick-slide.slick-active img {
+    padding: 10px;
+}
+
+.slick-prev:before, .slick-next:before {
+    color: #AA3633;
+}
+
+
