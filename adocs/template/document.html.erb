@@ -39,7 +39,6 @@
 
         This template uses
         * Bootstrap v3.3.7 (https://getbootstrap.com/) for navbar.
-        * Bootswatch "cosmo" theme for Bootstrap (https://bootswatch.com/cosmo).
         * Bootstrap TOC plugin v0.4.1 (https://afeld.github.io/bootstrap-toc/)
           for the table of contents.
         * jQuery (necessary for Bootstrap's JavaScript plugins)
@@ -47,12 +46,15 @@
         NOTE: tried using Font-Awesome CSS locally but then fails to work!
 
         Also:
+        * Bootswatch "flatly" theme for Bootstrap (https://bootswatch.com/flatly).
         * slick.js (carousel)
         * add a link to all headers (home-grown, adapted from blog posts)
-        * to hide the header (home-grown, adapted from blog posts)
         * integration of elasticlunr.js (home-grown, adapted from blog posts)
     -->
+    <!--
     <link href="<%= (attr :_basedir) %>css/bootswatch/3.3.7/bootstrap-cosmo.css" rel="stylesheet"/>
+    -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
     <link href="<%= (attr :_basedir) %>css/bootstrap-toc/0.4.1/bootstrap-toc.min.css" rel="stylesheet"/>
 
     <link href="<%= (attr :_basedir) %>css/asciidoctor/foundation.css" rel="stylesheet"/>
@@ -100,6 +102,12 @@
         }
     </style>
 
+    <style>
+        body > div.container {
+            margin-top: 80px;
+        }
+    </style>
+
     <!-- Coderay syntax formatter -->
     <style type="text/css">
         <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
@@ -109,7 +117,7 @@
 <body data-spy="scroll" data-target="#toc">
 
 <!-- Navbar -->
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <!-- Three line menu button for use on mobile screens -->
@@ -121,9 +129,11 @@
             </button>
 
             <!-- 'style' added to align image with navbar. FIX THIS -->
+            <!--
             <a class="navbar-brand" href="http://isis.apache.org">
                 <img style="margin-top: -12px;" alt="Brand" src="<%= (attr :_basedir) %>images/isis-logo-48x48.png"/>
             </a>
+            -->
 
             <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">Apache Isis</a>
 
@@ -133,31 +143,72 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">JPA API <span class="caret"></span></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Documentation<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="<%= (attr :_basedir) %>jpa/getting_started.html">Getting Started</a></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/mapping.html">Mapping</a></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/enhancer.html">Enhancer</a></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/persistence.html">Persistence</a></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/query.html">Queries</a></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/tools.html">Tools</a></li>
+                        <li><a href="<%= (attr :_basedir) %>documentation.html">Table of Contents</a></li>
+
                         <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Reference Documents</li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/annotations.html">Annotations Reference</a></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/metadata_xml.html">ORM.XML Reference</a></li>
-                        <li><a href="http://www.datanucleus.org/javadocs/javax.persistence/2.1/">JPA Javadocs</a></li>
+                        <li class="dropdown-header">User Guides</li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugfun/ugfun.html">Fundamentals</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugvw/ugvw.html">Wicket Viewer</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugvro/ugvro.html">Restful Objects Viewer</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugsec/ugsec.html">Security</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugtst/ugtst.html">Testing</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugbtb/ugbtb.html">Beyond the Basics</a></li>
+
                         <li role="separator" class="divider"></li>
-                        <li><a href="<%= (attr :_basedir) %>jpa/tutorial.html">JPA Tutorial</a></li>
-                        <li><a href="https://github.com/datanucleus/samples-jpa">JPA Samples</a></li>
-                        <li><a href="http://jcp.org/aboutJava/communityprocess/final/jsr338/index.html"><i>JPA 2.1 spec</i></a></li>
+                        <li class="dropdown-header">Reference Guides</li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgant/rgant.html">Annotations</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgsvc/rgsvc.html">Domain Services</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgcfg/rgcfg.html">Core Config' Properties</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgcms/rgcms.html">Classes, Methods and Schema</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgmvn/rgmvn.html">Maven plugin</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgfis/rgfis.html">Framework Internal Services</a></li>
+
                     </ul>
                 </li>
 
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Downloads<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<%= (attr :_basedir) %>downloads.html">Downloads</a></li>
+                        <li><a href="<%= (attr :_basedir) %>release-notes/release-notes.html">Release Notes</a></li>
+                        <li><a href="<%= (attr :_basedir) %>migration-notes/migration-notes.html">Migration Notes</a></li>
 
-                <li><a href="<%= (attr :_basedir) %>documentation.html">Documentation</a></li>
-                <li><a href="<%= (attr :_basedir) %>downloads.html">Downloads</a></li>
-                <li><a href="<%= (attr :_basedir) %>help.html">Help</a></li>
-                <li><a href="<%= (attr :_basedir) %>asf.html">@ASF</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="<%= (attr :_basedir) %>guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype.html">Maven archetype</a></li>
+
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://issues.apache.org/jira/browse/ISIS">ASF JIRA</a></li>
+                        <li><a href="http://github.com/apache/isis">Github mirror</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Support<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<%= (attr :_basedir) %>support.html">Mailing lists</a></li>
+                        <li><a href="https://lists.apache.org/list.html?users&#0064;isis.apache.org">Archives (ASF Pony mail)</a></li>
+                        <li><a href="http://isis.markmail.org/search/?q=">Archives (Markmail)</a></li>
+                        <li><a href="http://stackoverflow.com/questions/tagged/isis">Stack Overflow</a></li>
+                        <li><a href="guides/dg.html/dg.html">How to contribute</a></li>
+                        <li><a href="<%= (attr :_basedir) %>help.html">Other resources</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@ASF<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="http://www.apache.org/">Apache Homepage</a></li>
+                        <li><a href="http://www.apache.org/licenses/">Licenses</a></li>
+                        <li><a href="http://www.apache.org/security/">Security</a></li>
+                        <li><a href="http://www.apache.org/foundation/sponsorship.html/">Sponsorship</a></li>
+                        <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://whimsy.apache.org/board/minutes/Isis.html">PMC board minutes</a></li>
+                    </ul>
+                </li>
 
             </ul>
 
@@ -169,18 +220,13 @@
                         <input class="form-control" id="search-field" type="text" length="30" placeholder="Search"/>
                     </div>
                 </form>
-
             </div>
-
         </div>
-
-
     </div>
 </nav>
 
 
 <div class="container">
-
     <div class="row-fluid">
         <div class="col-sm-12">
             <div id="search-panel">
@@ -219,36 +265,21 @@
     <% end %>
 </div>
 
-<footer style="padding: 5px;">
-<div class="container">
-    <hr/>
-    <div class="row">
-        <div class="col-sm-2">
-            Support :
-        </div>
-        <div class="col-sm-5">
-            <a href="<%= (attr :_basedir) %>support.html">Mailing lists</a>
-        </div>
-        <div class="col-sm-5">
-            <a href="https://lists.apache.org/list.html?users@isis.apache.org">Archives</a>
-        </div>
+
+<footer id="footer">
+    <div class="container">
+        <p class="text-center small text-muted">
+              Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
+              <br/>
+              Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
+        </p>
     </div>
-    <hr/>
-    <p class="text-center small">
-          Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
-          <br/>
-          Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
-    </p>
-</div>
 </footer>
 
 <script src="<%= (attr :_basedir) %>js/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script src="<%= (attr :_basedir) %>js/slick/1.5.0/slick.min.js"></script>
-
 <script src="<%= (attr :_basedir) %>js/elasticlunr/elasticlunr.min.js"></script>
-
 <script src="<%= (attr :_basedir) %>js/app.js"></script>
-
 
 <script type="text/javascript">
 
@@ -384,74 +415,6 @@ $( document ).ready(function() {
 
 
 
-	/*
-        http://osvaldas.info/auto-hide-sticky-header
-        MIT license
-	*/
-	;( function( $, window, document, undefined )
-	{
-		'use strict';
-
-		var elSelector		= '.header',
-			elClassHidden	= 'header--hidden',
-			throttleTimeout	= 500,
-			$element		= $( elSelector );
-
-		if( !$element.length ) return true;
-
-		var $window			= $( window ),
-			wHeight			= 0,
-			wScrollCurrent	= 0,
-			wScrollBefore	= 0,
-			wScrollDiff		= 0,
-			$document		= $( document ),
-			dHeight			= 0,
-
-			throttle = function( delay, fn )
-			{
-				var last, deferTimer;
-				return function()
-				{
-					var context = this, args = arguments, now = +new Date;
-					if( last && now < last + delay )
-					{
-						clearTimeout( deferTimer );
-						deferTimer = setTimeout( function(){ last = now; fn.apply( context, args ); }, delay );
-					}
-					else
-					{
-						last = now;
-						fn.apply( context, args );
-					}
-				};
-			};
-
-		$window.on( 'scroll', throttle( throttleTimeout, function()
-		{
-			dHeight			= $document.height();
-			wHeight			= $window.height();
-			wScrollCurrent	= $window.scrollTop();
-			wScrollDiff		= wScrollBefore - wScrollCurrent;
-
-			if( wScrollCurrent <= 0 ) // scrolled to the very top; element sticks to the top
-				$element.removeClass( elClassHidden );
-
-			else if( wScrollDiff > 0 && $element.hasClass( elClassHidden ) ) // scrolled up; element slides in
-				$element.removeClass( elClassHidden );
-
-			else if( wScrollDiff < 0 ) // scrolled down
-			{
-				if( wScrollCurrent + wHeight >= dHeight && $element.hasClass( elClassHidden ) ) // scrolled to the very bottom; element slides in
-					$element.removeClass( elClassHidden );
-
-				else // scrolled down; element slides out
-					$element.addClass( elClassHidden );
-			}
-
-			wScrollBefore = wScrollCurrent;
-		}));
-
-	})( jQuery, window, document );
 
 
 });

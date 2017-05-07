@@ -90,7 +90,6 @@ pass:[<br/>]
 ** link:./guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying a release^]
 
 
-
 |===
 
 

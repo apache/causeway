@@ -20,7 +20,6 @@
 * link:guides/dg.html#_dg_contributing[How to contribute]
 
 
-
 [[__help_commonly-used-resources]]
 == Commonly-used Resources
 
