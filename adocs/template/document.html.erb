@@ -43,7 +43,6 @@
           for the table of contents.
         * jQuery (necessary for Bootstrap's JavaScript plugins)
         * Font-Awesome for some icons used by Asciidoctor
-        NOTE: tried using Font-Awesome CSS locally but then fails to work!
 
         Also:
         * Bootswatch "flatly" theme for Bootstrap (https://bootswatch.com/flatly).
@@ -51,14 +50,13 @@
         * add a link to all headers (home-grown, adapted from blog posts)
         * integration of elasticlunr.js (home-grown, adapted from blog posts)
     -->
-    <!--
-    <link href="<%= (attr :_basedir) %>css/bootswatch/3.3.7/bootstrap-cosmo.css" rel="stylesheet"/>
-    -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
     <link href="<%= (attr :_basedir) %>css/bootstrap-toc/0.4.1/bootstrap-toc.min.css" rel="stylesheet"/>
 
     <link href="<%= (attr :_basedir) %>css/asciidoctor/foundation.css" rel="stylesheet"/>
+    <!--
     <link href="<%= (attr :_basedir) %>css/datanucleus_theme.css" rel="stylesheet"/>
+    -->
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -67,7 +65,6 @@
          not (attributes.has_key?('notoc'))
        end
     %>
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="<%= (attr :_basedir) %>js/bootstrap/3.3.7/bootstrap.min.js"></script>
@@ -100,6 +97,31 @@
         #search-panel.active {
             display: inherit;
         }
+    </style>
+
+    <style>
+
+        /* from http://ben.balter.com/2014/03/13/pages-anchor-links/ */
+        .header-link {
+          position: absolute;
+          left: -0.5em;
+          opacity: 0;
+
+          /*
+          -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+          -moz-transition: opacity 0.2s ease-in-out 0.1s;
+          -ms-transition: opacity 0.2s ease-in-out 0.1s;
+          */
+        }
+
+        h2:hover .header-link,
+        h3:hover .header-link,
+        h4:hover .header-link,
+        h5:hover .header-link,
+        h6:hover .header-link {
+          opacity: 1;
+        }
+
     </style>
 
     <style>

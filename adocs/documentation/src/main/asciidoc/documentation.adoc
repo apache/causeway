@@ -20,7 +20,7 @@ pass:[<br/>]
 [.documentation-page]
 --
 
-[cols="1a,1a,1a",frame="none"]
+[cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
 | *What is Apache Isis?*
@@ -53,7 +53,7 @@ pass:[<br/>]
 |===
 
 
-[cols="1a,1a,1a"]
+[cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
 |*User Guides:*
@@ -95,7 +95,7 @@ pass:[<br/>]
 
 
 
-[cols="1a,1a,1a",frame="none"]
+[cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
 |*Releases:*
