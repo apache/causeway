@@ -48,17 +48,9 @@
         <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
         <incode-asciidoctor-extension-improvethisdoc.version>0.0.2</incode-asciidoctor-extension-improvethisdoc.version>
 
-        <!--
         <jruby.version>9.1.8.0</jruby.version>
-        -->
-        <jruby.version>1.7.26</jruby.version>
 
-        <!--
-        <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
-        -->
-
-        <build.relative.dir>target/site</build.relative.dir>
-        <build.dir>${project.basedir}/${build.relative.dir}</build.dir>
+        <build.dir>${project.basedir}/target/site</build.dir>
 
         <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
         <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
@@ -94,15 +86,6 @@
                     <artifactId>asciidoctor-maven-plugin</artifactId>
                     <version>${asciidoctor.maven.plugin.version}</version>
                     <dependencies>
-                        <!--
-
-                        <dependency>
-                            <groupId>org.asciidoctor</groupId>
-                            <artifactId>asciidoctorj-pdf</artifactId>
-                            <version>${asciidoctorj.pdf.version}</version>
-                        </dependency>
-                        -->
-
                         <!-- Comment this section to use the default jruby artifact provided by the plugin -->
                         <dependency>
                             <groupId>org.jruby</groupId>
@@ -176,9 +159,9 @@
 
                                     <sourceDirectory>src/main/asciidoc/</sourceDirectory>
                                     <outputDirectory>${project.reporting.outputDirectory}/</outputDirectory>
-<!--
+                                    <!--
                                     <sourceDocumentName>index.adoc</sourceDocumentName>
--->
+                                    -->
 
                                     <sourceHighlighter>coderay</sourceHighlighter>
                                     <templateDir>../template</templateDir>
@@ -209,57 +192,6 @@
             </build>
         </profile>
 
-<!--
-        <profile>
-            <id>pdf</id>
-            <activation>
-                <property>
-                    <name>!skip.pdf</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctor-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-pdf-doc</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>pdf</backend>
-
-                                    <sourceDirectory>src/main/asciidoc/</sourceDirectory>
-                                    <outputDirectory>${project.reporting.outputDirectory}/</outputDirectory>
-
-                                    <sourceHighlighter>rouge</sourceHighlighter>
-                                    <preserveDirectories>true</preserveDirectories>
-                                    <relativeBaseDir>true</relativeBaseDir>
-                                    <doctype>book</doctype>
-
-                                    <attributes>
-                                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
-                                        <imagesdir/>
-
-                                        <icons>font</icons>
-                                        <pagenums/>
-                                        <toc/>
-                                        <idprefix/>
-                                        <idseparator>-</idseparator>
-                                        <version>${project.version}</version>
-                                        <title-logo-image>${project.reporting.outputDirectory}/images/DataNucleus16-300.jpg</title-logo-image>
-                                    </attributes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
--->
 
         <profile>
             <id>delete</id>

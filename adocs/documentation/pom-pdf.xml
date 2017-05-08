@@ -20,10 +20,6 @@
 -->
     <modelVersion>4.0.0</modelVersion>
 
-    <!--
-    Heavily adapted from deltaspike's Asciidoctor website; many thanks!
-    -->
-
     <parent>
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
@@ -33,7 +29,7 @@
 
     <groupId>org.apache.isis.docs</groupId>
     <artifactId>isis-documentation-pdf</artifactId>
-    <version>1.14.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache Isis Docs</name>
@@ -47,17 +43,16 @@
 
         <asciidoctor.maven.plugin.version>1.5.3</asciidoctor.maven.plugin.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.11</asciidoctorj.pdf.version>
-        <asciidoctorj.version>1.5.4</asciidoctorj.version>
+        <asciidoctorj.version>1.5.4.1</asciidoctorj.version>
         <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
         <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
+        <jruby.version>9.1.8.0</jruby.version>
+        <!--
         <jruby.version>1.7.21</jruby.version>
-
-        <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
+        -->
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-        <isis-site.dir>../../../isis-site/content</isis-site.dir>
-        <redirects.dir>../redirects/content</redirects.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
@@ -85,12 +80,12 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!--
                 <plugin>
                     <groupId>de.saumya.mojo</groupId>
                     <artifactId>gem-maven-plugin</artifactId>
                     <version>1.0.5</version>
                     <configuration>
-                        <!-- align JRuby version with AsciidoctorJ to avoid redundant downloading -->
                         <jrubyVersion>${jruby.version}</jrubyVersion>
                         <gemHome>${project.build.directory}/gems</gemHome>
                         <gemPath>${project.build.directory}/gems</gemPath>
@@ -103,6 +98,7 @@
                         </execution>
                     </executions>
                 </plugin>
+                -->
                 <plugin>
                     <groupId>org.asciidoctor</groupId>
                     <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -156,6 +152,7 @@
         </pluginManagement>
     </build>
 
+<!--
     <dependencies>
         <dependency>
             <groupId>rubygems</groupId>
@@ -171,6 +168,7 @@
             </exclusions>
         </dependency>
     </dependencies>
+-->
 
     <profiles>
 
