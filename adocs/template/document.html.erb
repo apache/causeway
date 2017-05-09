@@ -87,7 +87,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+    <div class="container-fluid">
         <div class="navbar-header">
             <!-- Three line menu button for use on mobile screens -->
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -192,7 +192,7 @@
 </nav>
 
 
-<div class="container">
+<div class="container-fluid">
     <div class="row-fluid">
         <div class="col-sm-12">
             <div id="search-panel">
@@ -207,7 +207,7 @@
 
     <% if is_toc? then %>
         <div class="row-fluid">
-            <div class="col-sm-9">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
                 <div class="page-title">
                     <h1><%= document.name %></h1>
                 </div>
@@ -215,7 +215,7 @@
                     <%= document.content %>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="hidden-xs hidden-sm hidden-md col-lg-3">
                 <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
             </div>
         </div>
@@ -232,7 +232,7 @@
 </div>
 
 <footer class="footer">
-    <div class="container">
+    <div class="container-fluid">
         <p class="text-center small text-muted">
               Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
               <br/>
