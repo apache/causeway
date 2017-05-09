@@ -163,6 +163,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-security</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.danhaywood.mavendeps</groupId>
             <artifactId>isisintellij</artifactId>
             <version>${mavendeps-isisintellij.version}</version>
