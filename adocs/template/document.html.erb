@@ -87,7 +87,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
+    <div class="container">
         <div class="navbar-header">
             <!-- Three line menu button for use on mobile screens -->
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -192,8 +192,8 @@
 </nav>
 
 
-<div class="container-fluid">
-    <div class="row-fluid">
+<div class="container">
+    <div class="row">
         <div class="col-sm-12">
             <div id="search-panel">
                 <div id="search-results"></div>
@@ -221,7 +221,7 @@
         </div>
     <% else %>
         <!-- Front Page, no TOC and no heading -->
-        <div class="row-fluid">
+        <div class="row">
             <div class="col-sm-12">
                 <div id="doc-content">
                     <%= document.content %>
@@ -229,15 +229,19 @@
             </div>
         </div>
     <% end %>
+
+
 </div>
 
 <footer class="footer">
-    <div class="container-fluid">
+    <div class="container">
+        <div class="row">
         <p class="text-center small text-muted">
               Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
               <br/>
               Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
         </p>
+        </div>
     </div>
 </footer>
 
