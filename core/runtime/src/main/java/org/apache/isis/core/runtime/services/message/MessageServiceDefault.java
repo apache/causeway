@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services.msgbroker;
+package org.apache.isis.core.runtime.services.message;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.DomainService;

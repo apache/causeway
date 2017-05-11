@@ -55,7 +55,7 @@ xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property#commandExecuteIn()`]
 |MessageBrokerService-` +
 `InternalDefault` +
 ``isis-core-runtime``
-|This service does not provide any additional capabilities over `MessageService`, and will (most likely) be conflated with that service in the future.
+|Removed in `1.15.0-SNAPSHOT; this service does not provide any additional capabilities over `MessageService`.
 
 
 |xref:../rgfis/rgfis.adoc#_rgfis_spi_InteractionDtoServiceInternal[`o.a.i.c.m.s.ixn` +
