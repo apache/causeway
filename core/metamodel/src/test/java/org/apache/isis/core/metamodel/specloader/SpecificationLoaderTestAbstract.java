@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -44,7 +45,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -71,7 +71,7 @@ public abstract class SpecificationLoaderTestAbstract {
     @Mock
     private TransactionStateProviderInternal mockTransactionStateProviderInternal;
     @Mock
-    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
+    private MessageService mockMessageService;
 
     ServicesInjector stubServicesInjector;
     IsisConfigurationDefault stubConfiguration;
@@ -92,7 +92,7 @@ public abstract class SpecificationLoaderTestAbstract {
 
             ignoring(mockPersistenceSessionServiceInternal);
             ignoring(mockTransactionStateProviderInternal);
-            ignoring(mockMessageBrokerServiceInternal);
+            ignoring(mockMessageService);
 
         }});
 
@@ -105,7 +105,7 @@ public abstract class SpecificationLoaderTestAbstract {
                         stubConfiguration,
                         mockDeploymentCategoryProvider,
                         mockPersistenceSessionServiceInternal,
-                        mockMessageBrokerServiceInternal,
+                            mockMessageService,
                         mockTransactionStateProviderInternal,
                         mockGridService,
                         mockDeploymentCategoryProvider),

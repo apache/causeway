@@ -31,6 +31,7 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
@@ -53,7 +54,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -88,7 +88,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
-    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
+    private MessageService mockMessageService;
     @Mock
     private ServicesInjector mockServicesInjector;
     @Mock

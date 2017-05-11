@@ -16,19 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.msgbroker;
+package org.apache.isis.core.metamodel.services.message;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.message.MessageService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class MessageBrokerServiceInternalNoop implements MessageBrokerServiceInternal {
+public class MessageServiceNoop implements MessageService {
 
     @Override
     public void informUser(final String message) {
+        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
+
+    @Override
+    public String informUser(
+            final TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod) {
         throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
     }
 
@@ -37,8 +47,22 @@ public class MessageBrokerServiceInternalNoop implements MessageBrokerServiceInt
         throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
     }
 
+    @Override public String warnUser(
+            final TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod) {
+        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
+
     @Override
     public void raiseError(final String message) {
+        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
+
+    @Override public String raiseError(
+            final TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod) {
         throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
     }
 

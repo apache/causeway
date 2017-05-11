@@ -16,55 +16,64 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.runtime.services.msgbroker;
 
-package org.apache.isis.core.metamodel.services.message;
-
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
+import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
+        menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
 )
-public class MessageServiceInternalDefault implements MessageService {
+public class MessageServiceDefault implements MessageService {
 
-    @Programmatic
     @Override
     public void informUser(final String message) {
-        messageBrokerServiceInternal.informUser(message);
+        getMessageBroker().addMessage(message);
     }
 
     @Override
-    public String informUser(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
-        return message.translate(translationService, context(contextClass, contextMethod));
+    public String informUser(
+            final TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod) {
+        String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
+        informUser(translatedMessage);
+        return translatedMessage;
     }
 
-    @Programmatic
     @Override
     public void warnUser(final String message) {
-        messageBrokerServiceInternal.warnUser(message);
+        getMessageBroker().addWarning(message);
     }
 
     @Override
-    public String warnUser(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
-        return message.translate(translationService, context(contextClass, contextMethod));
+    public String warnUser(
+            final TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod) {
+        String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
+        warnUser(translatedMessage);
+        return translatedMessage;
     }
 
-    @Programmatic
     @Override
     public void raiseError(final String message) {
-        messageBrokerServiceInternal.raiseError(message);
+        throw new RecoverableException(message);
     }
 
-    @Override
-    public String raiseError(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+    @Override public String raiseError(
+            final TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod) {
         final String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
-        messageBrokerServiceInternal.raiseError(translatedMessage);
+        raiseError(translatedMessage);
         return translatedMessage;
     }
 
@@ -72,10 +81,12 @@ public class MessageServiceInternalDefault implements MessageService {
         return contextClass.getName()+"#"+contextMethod;
     }
 
-
+    private MessageBroker getMessageBroker() {
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession().getMessageBroker();
+    }
 
     @javax.inject.Inject
-    MessageBrokerServiceInternal messageBrokerServiceInternal;
+    IsisSessionFactory isisSessionFactory;
 
     @javax.inject.Inject
     TranslationService translationService;

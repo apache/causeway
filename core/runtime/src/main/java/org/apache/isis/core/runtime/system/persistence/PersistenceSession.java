@@ -39,7 +39,6 @@ import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -70,7 +69,6 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -100,7 +98,6 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -151,13 +148,10 @@ public class PersistenceSession implements
         TransactionalResource,
         SessionScopedComponent,
         AdapterManager,
-        MessageBrokerServiceInternal,
         IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     //region > constants
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
-
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     /**
      * @see #isFixturesInstalled()
@@ -2332,21 +2326,6 @@ public class PersistenceSession implements
 
     public boolean flush() {
         return getTransactionManager().flushTransaction();
-    }
-
-    @Override
-    public void informUser(final String message) {
-        getCurrentTransaction().getMessageBroker().addMessage(message);
-    }
-
-    @Override
-    public void warnUser(final String message) {
-        getCurrentTransaction().getMessageBroker().addWarning(message);
-    }
-
-    @Override
-    public void raiseError(final String message) {
-        throw new RecoverableException(message);
     }
 
 
