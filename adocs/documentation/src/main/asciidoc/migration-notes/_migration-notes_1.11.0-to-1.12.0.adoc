@@ -67,15 +67,15 @@ view models that should be read-only should have editing attribute disabled usin
 
 == `DomainObjectContainer` domain service
 
-The xref:guides/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]domain service has been deprecated, with
+The xref:guides/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]domain service has been deprecated, with
 its methods moved to a new set of more fine-grained domain services, such as
-xref:guides/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] and
-xref:guides/rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`].
+xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and
+xref:guides/rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`MessageService`].
 
 The `DomainObjectContainer` service will continue to be supported until Apache Isis v2.0.0, but in the meantime, consider
 changing existing application code to use these new domain services.
 
-Please note that when migrating from _rgsvc_api_DomainObjectContainer_object-persistence-api.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persist()`] to xref:guides/_rgsvc_api_RepositoryService.adoc.adoc#_rgsvc_api_RepositoryService[`RepositoryService#persist()`], no exception will be thrown if the Domain Object is already persisted, so the behavior of xref:guides/_rgsvc_api_RepositoryService.adoc#_rgsvc_api_RepositoryService[`RepositoryService#persist()`] will be the same as that of _rgsvc_api_DomainObjectContainer_object-persistence-api.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persistIfNotAlready()`].
+Please note that when migrating from _rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persist()`] to xref:guides/_rgsvc_persistence-layer-api_RepositoryService.adoc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`], no exception will be thrown if the Domain Object is already persisted, so the behavior of xref:guides/_rgsvc_persistence-layer-api_RepositoryService.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`] will be the same as that of _rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer#persistIfNotAlready()`].
 
 
 

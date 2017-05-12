@@ -27,7 +27,7 @@ Impl'n (g: a:)
 
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_spi_AuthenticationSessionProvider[`o.a.i.core.commons.` +
+|xref:../rgfis/rgfis.adoc#_rgfis_application-layer_AuthenticationSessionProvider[`o.a.i.core.commons.` +
 `authentication.` +
 `AuthenticationSessionProvider`]
 |Simply responsible for obtaining the current `AuthenticationSession` (the framework's internal representation of the currently logged-in user).
@@ -37,7 +37,7 @@ Impl'n (g: a:)
 |Default implementation looks up from `IsisSessionFactory` singleton's thread-local
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_spi_CommandDtoServiceInternal[`o.a.i.c.m.s.command` +
+|xref:../rgfis/rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`o.a.i.c.m.s.command` +
 `CommandDtoServiceInternal`]
 |Creates memento of current action invocation, for use as a serializable XML reified command.  The
 most notable usage of this is to allow the execution of the `Command` to be deferred to run in the background (via
@@ -49,18 +49,18 @@ xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property#commandExecuteIn()`]
 |
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_spi_MessageBrokerServiceInternal[`o.a.i.c.m.s.msgbroker` +
+|xref:../rgfis/rgfis.adoc#_rgfis_application-layer_MessageBrokerServiceInternal[`o.a.i.c.m.s.msgbroker` +
 `MessageBrokerServiceInternal`]
-|A wrapper around xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MessageService[`MessageService`].
+|A wrapper around xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`MessageService`].
 |MessageBrokerService-` +
 `InternalDefault` +
 ``isis-core-runtime``
 |Removed in `1.15.0-SNAPSHOT; this service does not provide any additional capabilities over `MessageService`.
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_spi_InteractionDtoServiceInternal[`o.a.i.c.m.s.ixn` +
+|xref:../rgfis/rgfis.adoc#_rgfis_application-layer_InteractionDtoServiceInternal[`o.a.i.c.m.s.ixn` +
 `InteractionDtoServiceInternal`]
-|Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
 |`CommandDtoService-` +
 `InternalServiceDefault` +
 ``isis-core-metamodel``
@@ -81,7 +81,7 @@ Key:
 
 
 
-include::_rgfis_spi_AuthenticationSessionProvider.adoc[leveloffset=+1]
-include::_rgfis_spi_CommandDtoServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_spi_MessageBrokerServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_spi_InteractionDtoServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_application-layer_AuthenticationSessionProvider.adoc[leveloffset=+1]
+include::_rgfis_application-layer_CommandDtoServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_application-layer_MessageBrokerServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_application-layer_InteractionDtoServiceInternal.adoc[leveloffset=+1]

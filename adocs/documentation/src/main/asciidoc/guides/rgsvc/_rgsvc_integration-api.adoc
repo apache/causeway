@@ -22,7 +22,7 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`o.a.i.applib.` +
 `services.bookmark` +
 `BookmarkService2`]
 |Convert object reference to a serializable "bookmark", and vice versa.
@@ -37,7 +37,7 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 `Contributions`
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DeepLinkService[`o.a.i.applib` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_DeepLinkService[`o.a.i.applib` +
 `services.deeplink` +
 `DeepLinkService`]
 |Obtain a URL to a domain object (eg for use within an email or report)
@@ -47,7 +47,7 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 |Implementation only usable within Wicket viewer
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`o.a.i.applib.` +
 `services.email` +
 `EmailService`]
 |Send a HTML email, optionally with attachments.
@@ -57,7 +57,7 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_GuiceBeanProvider[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_GuiceBeanProvider[`o.a.i.applib.` +
 `services.guice` +
 `GuiceBeanProvider`]
 |Access to internal framework services initialized using Guice DI.
@@ -68,7 +68,7 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`o.a.i.applib.` +
 `services.jaxb` +
 `JaxbService`]
 |Marshal and unmarshal JAXB-annotated view models to/from XML.
@@ -78,17 +78,17 @@ The table below summarizes the integration APIs defined by Apache Isis.  It also
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MementoService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`o.a.i.applib.` +
 `services.memento` +
 `MementoService`]
-|Capture a serializable memento of a set of primitives or xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[bookmarks].  Primarily used internally, eg in support of commands/auditing.
+|Capture a serializable memento of a set of primitives or xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[bookmarks].  Primarily used internally, eg in support of commands/auditing.
 |`MementoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_XmlSnapshotService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_XmlSnapshotService[`o.a.i.applib.` +
 `services.xmlsnapshot` +
 `XmlSnapshotService`]
 |Generate an XML representation of an object and optionally a graph of related objects.
@@ -112,10 +112,10 @@ Key:
 
 
 
-include::_rgsvc_api_BookmarkService.adoc[leveloffset=+1]
-include::_rgsvc_api_DeepLinkService.adoc[leveloffset=+1]
-include::_rgsvc_api_EmailService.adoc[leveloffset=+1]
-include::_rgsvc_api_GuiceBeanProvider.adoc[leveloffset=+1]
-include::_rgsvc_api_JaxbService.adoc[leveloffset=+1]
-include::_rgsvc_api_MementoService.adoc[leveloffset=+1]
-include::_rgsvc_api_XmlSnapshotService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_BookmarkService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_DeepLinkService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_EmailService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_GuiceBeanProvider.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_JaxbService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_MementoService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_XmlSnapshotService.adoc[leveloffset=+1]

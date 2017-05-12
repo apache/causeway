@@ -6,7 +6,7 @@
 :toc: right
 
 
-The `xsd` goal of the `isis-maven-plugin` uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to
+The `xsd` goal of the `isis-maven-plugin` uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to
 generate XSD schemas from any JAXB-annotated xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model/DTOs].
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
@@ -30,7 +30,7 @@ Defaults to `false`.  Most DTO classes will reference one another or the xref:..
 
 * `commonSchemas` - (optional) whether to also generate the isis common schema(s). +
 +
-Defaults to `false`; if set then the call to xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
+Defaults to `false`; if set then the call to xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
 
 As a convenience to any (Java) consumers, the XSDs generated from the view models can then in turn be generated
 into DTOs.  The original view models and these DTOs are similar but not identical: while the view models can only be used

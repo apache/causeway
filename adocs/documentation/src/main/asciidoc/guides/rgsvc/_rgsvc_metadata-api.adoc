@@ -20,7 +20,7 @@ The table below summarizes the metadata APIs defined by Apache Isis.  It also li
 |Notes
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ApplicationFeatureRepository[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`o.a.i.applib.` +
 `services.appfeat` +
 `ApplicationFeatureRepository`]
 |Provides access to string representations of the features (package, class, class members) of the domain classes
@@ -32,7 +32,7 @@ within the metamodel.
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`o.a.i.applib.` +
 `services.layout` +
 `LayoutService`]
 |Provides the ability to download `Xxx.layout.xml` files, in various styles.
@@ -44,7 +44,7 @@ within the metamodel.
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MetaModelService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`o.a.i.applib.` +
 `services.metamodel` +
 `MetaModelService`]
 |Access to certain information from the Apache Isis metamodel.
@@ -54,7 +54,7 @@ within the metamodel.
 |Functionality surfaced in the UI through related menu.
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ServiceRegistry[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`o.a.i.applib.` +
 `services.registry` +
 `ServiceRegistry`]
 |Methods to access and use other domain services.
@@ -62,12 +62,12 @@ within the metamodel.
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SwaggerService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`o.a.i.applib.` +
 `services.swagger` +
 `SwaggerService`]
 |Generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].  These can then be used with the link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the REST API, or used to generate client-side stubs using the link:http://swagger.io/swagger-codegen/[Swagger codegen] tool, eg for use in a custom REST client app.
@@ -90,8 +90,8 @@ Key:
 * `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 
 
-include::_rgsvc_api_ApplicationFeatureRepository.adoc[leveloffset=+1]
-include::_rgsvc_api_LayoutService.adoc[leveloffset=+1]
-include::_rgsvc_api_MetamodelService.adoc[leveloffset=+1]
-include::_rgsvc_api_ServiceRegistry.adoc[leveloffset=+1]
-include::_rgsvc_api_SwaggerService.adoc[leveloffset=+1]
+include::_rgsvc_metadata-api_ApplicationFeatureRepository.adoc[leveloffset=+1]
+include::_rgsvc_metadata-api_LayoutService.adoc[leveloffset=+1]
+include::_rgsvc_metadata-api_MetamodelService.adoc[leveloffset=+1]
+include::_rgsvc_metadata-api_ServiceRegistry.adoc[leveloffset=+1]
+include::_rgsvc_metadata-api_SwaggerService.adoc[leveloffset=+1]

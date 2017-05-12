@@ -1,0 +1,47 @@
+[[_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api]]
+= Object Creation API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+The object creation APIs are used to instantiate new domain objects or view models.
+
+[source,java]
+----
+public interface DomainObjectContainer {
+
+    <T> T newTransientInstance(final Class<T> ofType);                              // <1>
+    <T> T newViewModelInstance(final Class<T> ofType, final String memento);        // <2>
+    <T> T mixin();                                                                  // <3>
+    ...
+}
+----
+<1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
+<2> create a new view model, with the specified memento (as per xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
+<3> programmatically instantiate a mixin, as annotated with
+xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
+
+For example:
+
+[source,java]
+----
+Customer cust = container.newTransientInstance(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+container.persist(cust);
+----
+
+As an alternative to using `newTransientInstance(...)` or `mixin(...)`, you could also simply `new()` up the object.
+Doing this will not inject any domain services, but they can be injected manually using xref:rg .adoc#_rgsvc_core-domain-api_DomainObjectContainer_services-api[#injectServicesInto(...)`].
+
+[NOTE]
+====
+Calling `new(...)` also this circumvents Apache Isis' xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_created[`created()`]
+callback, and in addition any default values for properties (either explicitly set by
+xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`] or defaulted implicitly according to Apache Isis'
+own conventions) will not be called either.  If you don't intend to use these features, though, the net effect is code
+that has less coupling to Isis and is arguably easier to understand (has "less magic" happening).
+====
+

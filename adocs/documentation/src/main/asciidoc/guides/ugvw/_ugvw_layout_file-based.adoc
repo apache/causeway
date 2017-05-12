@@ -13,7 +13,7 @@ Many developers also find it easier to rationalize about layout when all the hin
 
 Another benefit of file-based layout is that UI hints can be provided for xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
 
 The main downsides of using file-based layouts are a lack of typesafety (a typo will result in the metadata not being picked up for the element) and syntactic fragility (an invalid XML document will result in no metadata for the entire class).
 
@@ -28,7 +28,7 @@ is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making ite
 It is also possible to describe layouts using a `.layout.json` file.
 However, `.layout.json` support is deprecated; the ``.layout.xml`` file also enables much more sophisticated layouts than those afforded by ``.layout.json``.
 
-If you have an application with older `.layout.json` files, then it is possible to download initial `.layout.xml` files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
+If you have an application with older `.layout.json` files, then it is possible to download initial `.layout.xml` files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed as an action on the prototyping menu).
 The `.layout.json` file will be ignored once a `.layout.xml` file is present.
 ====
 
@@ -321,7 +321,7 @@ from the top of the page slightly, using the following CSS:
 
 == Migrating from earlier versions
 
-As noted earlier on, it is possible to download layout XML files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.  Alternatively the layout XML for a single domain object can be downloaded using the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
+As noted earlier on, it is possible to download layout XML files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.  Alternatively the layout XML for a single domain object can be downloaded using the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
 
 There are four "styles":
 
@@ -381,9 +381,9 @@ Download either for a single domain object, or download all domain objects (enti
 
 For more information about layouts, see:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms .adoc#_rgcms_classes_mixins_Object[mixin action]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:rgcms .adoc#_rgcms_classes_mixins_Object[mixin action]
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridService[`GridService`] and its supporting services, xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridSystemService[`GridSystemService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] and its supporting services, xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
 
 * xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
 

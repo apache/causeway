@@ -146,7 +146,7 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 
 
 |link:https://www.youtube.com/watch?v=0naoVsWppuQ[013^] +
-Invoking (no-arg) action on multiple objects at once (using xref:guides/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`], and using the xref:guides/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience.
+Invoking (no-arg) action on multiple objects at once (using xref:guides/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`], and using the xref:guides/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`] domain service for a smoother end-user experience.
 |||x||||||x||
 
 
@@ -342,7 +342,7 @@ How to validate action parameters using the xref:guides/rgant.adoc#_rgant-Parame
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:guides/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`], xref:guides/rgsvc.adoc#_rgsvc_api_ServiceRegistry[`ServiceRegistry`] and/or xref:guides/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
+How to instantiate/initialize objects using xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`], xref:guides/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] and/or xref:guides/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
 |x||||||||x||
 
 

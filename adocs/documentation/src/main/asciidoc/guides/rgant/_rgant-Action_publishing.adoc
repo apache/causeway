@@ -8,8 +8,8 @@
 
 
 The `publishing()` attribute determines whether and how an action invocation is published via the registered
-implementation of a xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`]) or
-xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].  This attribute is also
+implementation of a xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`]) or
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].  This attribute is also
 supported for xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects
 are published as events, and for xref:../rgant/rgant.adoc#_rgant_Property_publishing[`@Property#publishing()`], where it controls
 whether property edits are published as events.
@@ -62,8 +62,8 @@ this should avoid the necessity to query back for additional information.
 
 [WARNING]
 ====
-Be aware that this attribute is only honoured by the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
-is ignored by the replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`],
+Be aware that this attribute is only honoured by the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
+is ignored by the replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`],
 ====
 
 

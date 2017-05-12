@@ -9,13 +9,13 @@ The `@Action(command=...)` attribute (and the related `@Action(commandPersistenc
 
 The annotation works with (and is influenced by the behaviour of) a number of domain services:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]
 * xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundService[`BackgroundService`] and
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]
 
 
-Each action invocation is reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
+Each action invocation is reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
 
 If an appropriate `CommandService` is configured (for example using (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module), then the `Command` itself is persisted.
 
@@ -28,7 +28,7 @@ If background ``Command``s are used, then an external scheduler, using xref:../u
 
 
 
-The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] service).
+The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).
 
 The default is `AS_CONFIGURED`, meaning that the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.command.actions` is used to determine the whether the action is reified:
 
@@ -48,7 +48,7 @@ If there is no configuration property in `isis.properties` then all actions are 
 
 [NOTE]
 ====
-Note: `Command` reification does not necessarily imply that `Command` objects will be persisted; that depends on whether there is a xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] configured that will persist said ``Command``s.
+Note: `Command` reification does not necessarily imply that `Command` objects will be persisted; that depends on whether there is a xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] configured that will persist said ``Command``s.
 ====
 
 This default can be overridden on an action-by-action basis; if `command()` is set to `ENABLED` then the action is reified irrespective of the configured value; if set to `DISABLED` then the action is NOT reified irrespective of the configured value.
@@ -86,7 +86,7 @@ public class Order {
 }
 ----
 
-will suppress the persistence of the `Command` object _unless_ a child background `Command` has been created in the body of the action by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BackgroundService[`BackgroundService`].
+will suppress the persistence of the `Command` object _unless_ a child background `Command` has been created in the body of the action by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`].
 
 On the other hand:
 
@@ -112,7 +112,7 @@ will prevent the parent `Command` object from being persisted, _even if_ a child
 
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
-Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
 
 For example:
 

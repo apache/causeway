@@ -277,7 +277,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -286,7 +286,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
+|The email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -296,7 +296,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+|The hostname of the external SMTP provider (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -305,7 +305,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).
+|The corresponding password for the email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -350,7 +350,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `tls.enabled`
 |`true`,`false` +
 (`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
+|Whether to enable TLS for the email SMTP connection (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -360,7 +360,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `implementation` +
 | `guava`, `axon`, +
 FQCN (`_guava_`)
-|which implementation to use by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] as the underlying event bus.
+|which implementation to use by the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
 `eventbus.` +
@@ -368,7 +368,7 @@ FQCN (`_guava_`)
 `Registration` +
 |`true`,`false` +
 (`false`)
-|whether a domain service can register with the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
+|whether a domain service can register with the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] after any events have posted. +
 
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
 
@@ -507,7 +507,7 @@ See also `isis.reflector.facets.ignoreDeprecated`.
 (`false`)
 | Whether to check that the class has an object type explicitly specified somehow.
 
-The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:../ugvw/ugvw.adoc#[Wicket viewer] and xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:../ugvw/ugvw.adoc#[Wicket viewer] and xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
 
 If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
@@ -725,7 +725,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and also by the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
+Filtering is supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and also by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
 
 [NOTE]
 ====

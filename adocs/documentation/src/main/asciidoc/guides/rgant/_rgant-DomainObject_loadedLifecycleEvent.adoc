@@ -7,7 +7,7 @@
 
 Whenever a persistent domain object is loaded from the database, a "loaded" lifecycle event is fired.
 
-Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and can
+Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
 use the event to obtain a reference to the domain object just loaded.  The subscriber could then, for example, update
 or default values on the object (eg to support on-the-fly migration scenarios).
 
@@ -46,7 +46,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 == Subscribers
 
 Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] has been appropriately configured)
+or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured)
 using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):

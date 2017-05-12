@@ -17,7 +17,7 @@ the `Content-Type` header which the client can use to know how to process the re
 
 * `RepresentationService` +
 +
-The xref:../rgfis/rgfis.adoc#_rgfis_spi_RepresentationService[`RepresentationService`] is an SPI domain service (plugin-point)
+The xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`RepresentationService`] is an SPI domain service (plugin-point)
 that allows an arbitrary representation to be generated for any of the resources defined in the RO spec. +
 +
 Normally this SPI service need not be replaced, because the default implementation
@@ -29,7 +29,7 @@ is able to handle the request (per the chain of responsibliity pattern).
 * `ContentNegotiationService` +
 +
 As noted above, there can be multiple implementations of the
-xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`], each one handling a particular
+xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`], each one handling a particular
 HTTP `Accept` header.  If the implementation does not recognize the value of the header, if can simply return `null`. +
 +
 The framework provides a number of implementations; an implementation that handles the
@@ -38,7 +38,7 @@ default/fallback implementation that returns the representations defined by the 
 
 * `ContentMappingService` +
 +
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`] is used by the implementation of
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] is used by the implementation of
 `ContentNegotationService` that recognizes the `x-ro-domain-type`, its role being to transform a domain object
 (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.  There
 can be many such implementations, each handling a different target domain type.

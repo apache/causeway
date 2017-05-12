@@ -11,7 +11,7 @@ updated or deleted as the result of invoking an action or editing a property.  I
 metrics counts (number of objects loaded, number of object properties modified), useful for profiling.
 
 An instance of the DTO (corresponding to this schema) is used within the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`] SPI, identifying changed objects that are to be
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] SPI, identifying changed objects that are to be
 published (as per xref:../rgant/rgant.adoc#_rgant_DomainObject_publishing[`@DomainObject#publishing()`] or equivalent).
 
 

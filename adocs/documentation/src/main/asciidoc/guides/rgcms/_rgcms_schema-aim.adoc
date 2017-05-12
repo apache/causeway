@@ -18,7 +18,7 @@ The remaining content on this page describes how `CommandContext` works up to v1
 ====
 
 Action invocations are captured (in memory rather than in serialized form) when the end-user invokes the action
-"through" the UI, by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_CommandContext[CommandContext] service. Using the
+"through" the UI, by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[CommandContext] service. Using the
 `ActionInvocationMementoDtoUtils` utility class, a service can instantiate `ActionInvocationMementoDto` which can then
 be serialized to/from using the same `ActionInvocationMementoDtoUtils` class.
 

@@ -34,7 +34,7 @@ These mixin properties are all associated with the "Metadata" fieldset.  The xre
 
 === Related Services
 
-The mixin delegates to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service to obtain
+The mixin delegates to the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] service to obtain
 a reference to the JDO `PersistenceManagerFactory`.
 
 

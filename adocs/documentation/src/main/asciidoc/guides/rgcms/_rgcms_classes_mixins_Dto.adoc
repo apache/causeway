@@ -58,4 +58,4 @@ referenced by the DTO).
 == Related Services
 
 The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to actually generate the XML/XSD.
+xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to actually generate the XML/XSD.

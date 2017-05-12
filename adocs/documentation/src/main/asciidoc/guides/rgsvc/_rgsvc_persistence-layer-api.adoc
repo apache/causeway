@@ -22,7 +22,7 @@ The table below summarizes the persistence layer APIs defined by Apache Isis.  I
 |Notes
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`o.a.i.applib.` +
 `services.jdosupport` +
 `IsisJdoSupport`]
 |Lower level access to the JDO Persistence API.
@@ -32,7 +32,7 @@ The table below summarizes the persistence layer APIs defined by Apache Isis.  I
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_MetricsService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`o.a.i.applib.` +
 `services.metrics` +
 `MetricsService`]
 |Gathers and provides metrics on the numbers of objects used within a transaction.
@@ -42,7 +42,7 @@ The table below summarizes the persistence layer APIs defined by Apache Isis.  I
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_QueryResultsCache[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`o.a.i.applib.` +
 `services.` +
 `queryresultscache` +
 `QueryResultsCache`]
@@ -54,7 +54,7 @@ The table below summarizes the persistence layer APIs defined by Apache Isis.  I
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`o.a.i.applib.` +
 `services.repository` +
 `RepositoryService`]
 |Methods to help implement repositories: query for existing objects, persist new or delete existing objects
@@ -62,7 +62,7 @@ The table below summarizes the persistence layer APIs defined by Apache Isis.  I
 ``Default`` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``
-|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+|Supercedes methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
 
 
 
@@ -84,7 +84,7 @@ Key:
 
 
 
-include::_rgsvc_api_IsisJdoSupport.adoc[leveloffset=+1]
-include::_rgsvc_api_MetricsService.adoc[leveloffset=+1]
-include::_rgsvc_api_QueryResultsCache.adoc[leveloffset=+1]
-include::_rgsvc_api_RepositoryService.adoc[leveloffset=+1]
+include::_rgsvc_persistence-layer-api_IsisJdoSupport.adoc[leveloffset=+1]
+include::_rgsvc_persistence-layer-api_MetricsService.adoc[leveloffset=+1]
+include::_rgsvc_persistence-layer-api_QueryResultsCache.adoc[leveloffset=+1]
+include::_rgsvc_persistence-layer-api_RepositoryService.adoc[leveloffset=+1]

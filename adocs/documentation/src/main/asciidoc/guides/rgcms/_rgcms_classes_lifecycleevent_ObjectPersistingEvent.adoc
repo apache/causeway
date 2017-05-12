@@ -7,7 +7,7 @@
 
 Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast
 when an object is about to be saved (inserted) into the database using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 

@@ -302,15 +302,15 @@ The `IntegrationTestAbstract` also provides a number of helper/convenience metho
 deprecated because the functionality they expose is now readily accessible through various domain services; most
 notably these are:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] +
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] +
 +
 to wrap objects simulating interaction through the user interface)
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_api_TransactionService[`TransactionService`] +
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] +
 +
 most commonly used to commit changes after the fixture setup) and,
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SessionManagementService[`SessionManagementService`] +
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`] +
 +
 for tests that check interactions over multiple separate sessions.
 

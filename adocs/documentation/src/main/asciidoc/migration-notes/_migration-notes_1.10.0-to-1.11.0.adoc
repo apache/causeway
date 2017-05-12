@@ -13,7 +13,7 @@ issues here.
 
 == Swagger UI
 
-The new xref:guides/rgsvc.adoc#_rgsvc_api_SwaggerService[`SwaggerService`] allows link:http://swagger.io[Swagger] spec files
+The new xref:guides/rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`] allows link:http://swagger.io[Swagger] spec files
 to be generated from the Apache Isis metamodel.  These can be downloaded directly through the `SwaggerResource`
 (mapped to `/restful/swagger/public` and `/restful/swagger/private`) as well as from the Wicket UI through the
 `SwaggerServiceMenu`.
@@ -70,7 +70,7 @@ xref:guides/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[here]) then the 
 
 == `RoutingService`
 
-The new xref:guides/rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`] SPI service provides a plugin point to the
+The new xref:guides/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`] SPI service provides a plugin point to the
 xref:guides/ugvw.adoc#[Wicket viewer] so that a different object than that returned from an action invocation can be
 rendered.
 
@@ -93,7 +93,7 @@ public class IdentityRoutingService implements RoutingService {
 == Wicket Viewer i18n
 
 The xref:guides/ugvw.adoc#[Wicket viewer] (its labels, buttons, messages etc) can now be internationalized using the
-xref:guides/rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`].
+xref:guides/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
 
 To enable this, new ``msgId``s and corresponding translations must be added to the `translations.po` file.  Full
 details of these ``msgId``s can be found in xref:guides/ugbtb.adoc#__ugbtb_i18n_wicket-viewer[i18n] section of the "beyond the basics" guide.

@@ -1,0 +1,54 @@
+[[_rgfis_persistence-layer_AuditingServiceInternal]]
+= `AuditingServiceInternal`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+The (internal) `AuditingServiceInternal` domain service acts as an internal facade to any
+configured xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] and
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] services.  It is responsible for obtaining the details
+of all changes to domain objects within an interaction, and then to call the configured `AuditingService` to actually
+create audit entries of those changes.
+
+[NOTE]
+====
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] is now deprecated, replaced by
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
+====
+
+
+
+== SPI and Implementation
+
+The SPI of the service is:
+
+[source,java]
+----
+public class AuditingServiceInternal {
+    public boolean canAudit();              // <1>
+    public void audit();                    // <2>
+}
+----
+<1> minor performance optimization as to whether any auditing services are actually enabled; checks to see if
+any xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] has been configured, also if any
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditService`] are enabled.
+<2> uses the xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`].
+
+The service implementation is `o.a.i.c.r.s.auditing.AuditingServiceInternal`.
+
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
+implementation of `AuditingServiceInternal` class is automatically registered (it is annotated with `@DomainService`)
+so no further configuration is required.
+
+
+== Related Classes
+
+The service delegates between the (internal) xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service  to the configured xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`].  If no such `AuditingService` is configured, this service is in effect a no-op.
+
+The (internal) xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] performs a similar function for the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.

@@ -33,10 +33,10 @@ Isis uses argument to pass in the configuration properties read from all xref:..
 
 [TIP]
 ====
-Alternatively, you could inject xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.  Note that when using this latter API only those configuration properties prefixes `application.` key are provided.
+Alternatively, you could inject xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.  Note that when using this latter API only those configuration properties prefixes `application.` key are provided.
 ====
 
-A common use case is for domain services that interact with the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`].  For example:
+A common use case is for domain services that interact with the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  For example:
 
 [source,java]
 ----

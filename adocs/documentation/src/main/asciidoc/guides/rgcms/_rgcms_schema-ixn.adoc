@@ -8,7 +8,7 @@
 
 The interaction ("ixn") schema defines the serialized form of an action invocation or a property
 edit.  In fact, it actually defines a call-graph of such executions for those cases where the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] is used to execute sub-actions/property edits.
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to execute sub-actions/property edits.
 
 Each execution identifies the target object, the member to invoke, and the arguments.  It also captures metrics about
 the execution, and the result of the execution (eg return value of an action invocation).
@@ -117,7 +117,7 @@ execution.
 <6> the current "human-friendly" title of the target object
 <7> the set of metrics captured for this execution, of type `metricsDto` defined xref:../rgcms/rgcms.adoc#__rgcms_schema-ixn_ancillary[below].
 <8> if the action invocation/property edit threw an exception, then this is captured here.
-<9> if any sub-actions or sub-edits were performed via the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`], then these are captured in the `childExecutions` element.
+<9> if any sub-actions or sub-edits were performed via the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`], then these are captured in the `childExecutions` element.
 <10> the `interactionType` attribute indicates whether the member is an action or a property (similar attribute exists for the "cmd" schema).
 
 

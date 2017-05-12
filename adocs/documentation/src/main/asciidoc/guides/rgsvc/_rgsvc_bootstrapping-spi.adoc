@@ -20,7 +20,7 @@ The table below summarizes the bootstrapping SPI defined by Apache Isis.  It als
 |Notes
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ClassDiscoveryService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_bootstrapping-spi_ClassDiscoveryService[`o.a.i.applib.` +
 `services.classdiscovery` +
 `ClassDiscoveryService`]
 |Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`])
@@ -44,4 +44,4 @@ Key:
 
 
 
-include::_rgsvc_spi_ClassDiscoveryService.adoc[leveloffset=+1]
+include::_rgsvc_bootstrapping-spi_ClassDiscoveryService.adoc[leveloffset=+1]

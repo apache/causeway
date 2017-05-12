@@ -16,15 +16,15 @@ support you and document issues here.
 
 == Command changes
 
-The main feature in `1.13.0` is the xref:guides/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] domain service
+The main feature in `1.13.0` is the xref:guides/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] domain service
 to represent an action invocation/property edit, with the re-positioning of
-xref:guides/rgsvc.adoc#_rgsvc_api_CommandContext[`CommandContext`] to represent the _intention_ to invoke an action/edit a
+xref:guides/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] to represent the _intention_ to invoke an action/edit a
 property.  You can read more about this design in the reference guide on domain services, in the
 xref:guides/rgsvc.adoc#__rgsvc_intro_commands-and-events[commands and events] section.
 
 This refactoring completely overhauls the structure of the XML mementos passed to
-xref:guides/rgsvc.adoc#_rgsvc_spi_CommandService[`CommandService`] (to persist) and to
-xref:guides/rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] (to invoke persisted commands in the
+xref:guides/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] (to persist) and to
+xref:guides/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] (to invoke persisted commands in the
 background).  If you are using these services then ensure that there are no pending commands at the point at which you
 cut-over.  If you have any code that makes assumptions on the format of the XML, it will also need to be rewritten.
 Note that the XML which is persisted henceforth is well-defined and any future changes to it will be backward
@@ -44,8 +44,8 @@ framework; moreover the default implementation now throws an exception to this e
 
 == Auditing
 
-The xref:guides/rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] SPI service has been deprecated, instead replaced
-by the xref:guides/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`].
+The xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] SPI service has been deprecated, instead replaced
+by the xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
 
 There can be more than one implementation of this new SPI, and a framework-provided implementation
 (`AuditerServiceLogging`) will log to a file.  The (non-ASF)
@@ -54,9 +54,9 @@ http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module also i
 
 == Publishing
 
-The xref:guides/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`] SPI service and its supporting
-xref:guides/rgsvc.adoc#_rgsvc_spi_EventSerializer[`EventSerializer`] domain service, have both deprecated, instead
-replaced by the xref:guides/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`].
+The xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] SPI service and its supporting
+xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_EventSerializer[`EventSerializer`] domain service, have both deprecated, instead
+replaced by the xref:guides/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 There can be more than one implementation of this new SPI, and a framework-provided implementation
 (`PublisherServiceLogging`) will log to a file.  The (non-ASF)
@@ -137,7 +137,7 @@ in use, then the app will fail-fast and refuse to start.
 == ApplicationFeatureRepository
 
 The `isis.services.applicationFeatures.init` configuration property is used to control whether the
-xref:guides/rgsvc.adoc#_rgsvc_api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service lazily or
+xref:guides/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service lazily or
 eagerly initializes itself based on the framework's internal metamodel.
 
 Previously this service eagerly initialized itself, causing the framework to have to traverse the domain object
@@ -227,7 +227,7 @@ In the xref:guides/ugbtb.adoc#_ugbtb_web-xml[`web.xml`], the "isis.viewers" cont
 The xref:guides/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] mixin interface has subtly changed its
 meaning (and is now somewhat mis-named).  Prior to `1.13.0`, this identifier was the GUID of the Isis transaction in
 which the object was created.  As of `1.13.0`, this identifier actually is for the request/interaction (as per the new
-xref:guides/rgsvc.adoc#_rgsvc_api_InteractionContext[`InteractionContext`] service) in which the object was created.
+xref:guides/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service) in which the object was created.
 
 
 

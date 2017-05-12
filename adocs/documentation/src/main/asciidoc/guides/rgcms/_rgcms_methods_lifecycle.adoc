@@ -29,7 +29,7 @@ The lifecycle callback methods supported by Isis are:
 |Description
 
 |xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_created[`created()`]
-|called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`newTransientInstance()`]
+|called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`newTransientInstance()`]
 
 |xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_loaded[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.

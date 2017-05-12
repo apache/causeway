@@ -23,8 +23,8 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (deprecated) or (its replacement)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (deprecated) or (its replacement)
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
 
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]
@@ -47,7 +47,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditerService[`AuditerService`]
 `LifecycleEvent()`]
 |subtype of `ObjectCreatedEvent` +
 (`ObjectCreatedEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] whenever an instance is created
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is created
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`editing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
@@ -76,18 +76,18 @@ The default "reserved" method name is `$$`.
 `LifecycleEvent()`]
 |subtype of `ObjectPersistedEvent` +
 (`ObjectPersistedEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] whenever an instance has just been persisted
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance has just been persisted
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`persisting-` +
 `LifecycleEvent()`]
 |subtype of `ObjectPersistingEvent` +
 (`ObjectPersistingEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] whenever an instance is about to be persisted
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be persisted
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether changes to the object should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`].
+|whether changes to the object should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
 
 
 |`publishing-` +
@@ -99,19 +99,19 @@ The default "reserved" method name is `$$`.
 `LifecycleEvent()`]
 |subtype of `ObjectRemovingEvent` +
 (`ObjectRemovingEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] whenever an instance is about to be deleted
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be deleted
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`updated-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatedEvent` +
 (`ObjectUpdatedEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] whenever an instance has just been updated
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance has just been updated
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`updating-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatingEvent` +
 (`ObjectUpdatingEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] whenever an instance is about to be updated
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be updated
 
 |===
 

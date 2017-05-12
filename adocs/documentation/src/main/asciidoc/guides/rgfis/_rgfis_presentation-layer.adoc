@@ -27,10 +27,10 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`o.a.i.v.ro.` +
+|xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`o.a.i.v.ro.` +
 `rendering.service.conneg.` +
 `ContentNegotiationService`]
-|Encodes the algorithm that delegates to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]s.
+|Encodes the algorithm that delegates to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]s.
 |`ContentNegotiationService-` +
 `XRoDomainType` +
 ``o.a.i.core`` +
@@ -38,10 +38,10 @@ Impl'n (g: a:)
 |
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_spi_RepresentationService[`o.a.i.v.ro.` +
+|xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`o.a.i.v.ro.` +
 `rendering.service.` +
 `RepresentationService`]
-|Generates the representations, delegating to any registered xref:../rgfis/rgfis.adoc#_rgfis_spi_ContentNegotiationService[`ContentNegotiationService`]s.
+|Generates the representations, delegating to any registered xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`]s.
 |`RepresentationService-` +
 `ForRestfulObjects` +
 ``o.a.i.core`` +
@@ -62,5 +62,5 @@ Key:
 
 
 
-include::_rgfis_spi_ContentNegotiationService.adoc[leveloffset=+1]
-include::_rgfis_spi_RepresentationService.adoc[leveloffset=+1]
+include::_rgfis_presentation-layer_ContentNegotiationService.adoc[leveloffset=+1]
+include::_rgfis_presentation-layer_RepresentationService.adoc[leveloffset=+1]

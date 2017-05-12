@@ -17,7 +17,7 @@ also possible to extend the layout architecture for other grid systems.  The com
 
 The component classes, meanwhile, are broadly equivalent to the "layout" annotations (xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`]
 
-All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).  This ability to serialize to/from XML is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_GridLoaderService[`GridLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
+All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).  This ability to serialize to/from XML is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 
 
 

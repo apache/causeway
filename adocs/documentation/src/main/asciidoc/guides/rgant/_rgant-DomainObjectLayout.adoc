@@ -51,7 +51,7 @@ The table below summarizes the annotation's attributes.
 |xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] to obtain a CSS class for the domain object.
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain a CSS class for the domain object.
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[`describedAs()`]
 |String.
@@ -60,7 +60,7 @@ The table below summarizes the annotation's attributes.
 |xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`iconUiEvent()`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[`named()`]
 |String.
@@ -82,7 +82,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`titleUiEvent()`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] to obtain the title for the domain object.
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the title for the domain object.
 
 |===
 

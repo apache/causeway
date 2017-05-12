@@ -5,7 +5,9 @@ $( document ).ready(function() {
             $scrollToTarget = $($target.attr("href")),
             $header = $("nav.navbar-static-top"),
             prop = {
-                scrollTop:   $scrollToTarget.offset().top - $header.outerHeight(true)
+                // subtracting the offset results in the incorrect entry in the TOC from being highlighted.
+                // since the sticky-header keeps the header out of the way, this isn't a problem for us.
+                scrollTop:   $scrollToTarget.offset().top /*- $header.outerHeight(true)*/
             },
             speed = 500;
 

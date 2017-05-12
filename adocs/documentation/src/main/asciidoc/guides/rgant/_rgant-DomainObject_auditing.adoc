@@ -6,7 +6,7 @@
 
 
 The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be
-submitted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`] (if one has been configured), or to
+submitted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (if one has been configured), or to
 any
 
 The default value for the attribute is `AS_CONFIGURED`, meaning that the

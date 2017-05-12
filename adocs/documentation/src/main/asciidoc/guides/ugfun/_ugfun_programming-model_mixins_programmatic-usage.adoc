@@ -10,7 +10,7 @@
 When a domain object is rendered, the framework will automatically instantiate all required mixins and delegate to them dynamically.
 If writing integration tests or fixtures, or (sometimes) just regular domain logic, then you may need to instantiate mixins directly.
 
-For this you can use the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)` method.
+For this you can use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)` method.
 
 For example:
 

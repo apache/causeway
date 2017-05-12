@@ -11,8 +11,8 @@ It also shows how to instantiate xref:../ugfun/ugfun.adoc#_ugfun_building-blocks
 
 [NOTE]
 ====
-The main domain services used are xref:../rgsvc/rgsvc.adoc#_rgsvc_api_RepositoryService[`RepositoryService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FactoryService[`FactoryService`].
-These (and some other services) replace the now deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
+The main domain services used are xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+These (and some other services) replace the now deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`].
 ====
 
 

@@ -24,7 +24,7 @@ The table below summarizes the testing APIs defined by Apache Isis.  It also lis
 |Notes
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_ExecutionParametersService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_ExecutionParametersService[`o.a.i.applib.` +
 `fixturescripts.` +
 `ExecutionParametersService`]
 |...
@@ -34,7 +34,7 @@ The table below summarizes the testing APIs defined by Apache Isis.  It also lis
 |API is also a concrete class
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`o.a.i.applib.` +
 `services.` +
 `fixturespec` +
 `FixtureScriptsDefault`]
@@ -42,21 +42,21 @@ The table below summarizes the testing APIs defined by Apache Isis.  It also lis
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`FixtureScripts-
+|Interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScripts-
 SpecificationProvider`].
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
 `services.fixturespec` +
 `FixtureScripts-` +
 `SpecificationProvider`]
-|Provides settings for xref:../rgsvc/rgsvc.adoc#_rgsvc_api_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
+|Provides settings for xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
 |
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SudoService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_SudoService[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
 |For use in testing while running xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
@@ -66,7 +66,7 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_api_SwitchUserService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_SwitchUserService[`o.a.i.applib.` +
 `fixtures.switchuser` +
 `SwitchUserServiceService`]
 |(deprecated)
@@ -104,8 +104,8 @@ The table below summarizes the testing SPIs defined by Apache Isis.  It also lis
 
 
 
-include::_rgsvc_api_ExecutionParametersService.adoc[leveloffset=+1]
-include::_rgsvc_api_FixtureScriptsDefault.adoc[leveloffset=+1]
-include::_rgsvc_spi_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
-include::_rgsvc_api_SudoService.adoc[leveloffset=+1]
-include::_rgsvc_api_SwitchUserService.adoc[leveloffset=+1]
+include::_rgsvc_testing_ExecutionParametersService.adoc[leveloffset=+1]
+include::_rgsvc_testing_FixtureScriptsDefault.adoc[leveloffset=+1]
+include::_rgsvc_testing_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
+include::_rgsvc_testing_SudoService.adoc[leveloffset=+1]
+include::_rgsvc_testing_SwitchUserService.adoc[leveloffset=+1]

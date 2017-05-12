@@ -11,7 +11,7 @@ From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the A
 * _What is the easiest way to add a spell checker to the text written in a field in
    a domain object, for instance to check English syntax?_
 
-One way to implement is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[event bus]:
+One way to implement is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus]:
 
 * Set up a xref:rgcsm.adoc#_rgcsm_classes_domainevent[domain event] xref:rgcsm.adoc#_rgcsm_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
 

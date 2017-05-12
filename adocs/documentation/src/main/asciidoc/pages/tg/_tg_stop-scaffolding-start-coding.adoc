@@ -245,7 +245,7 @@ Fixture scripts are used to setup the app into a known state. They are great for
 
 * rename the `SimpleObjectsTearDownFixture` class
 * and update to delete from the appropriate underlying database table(s)
-* use the injected xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] domain service.
+* use the injected xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] domain service.
 * refactor/rename the fixture script classes that create instances your entity:
 * `RecreateSimpleObjects`, which sets up a set of objects for a given scenario
 * `SimpleObjectCreate` which creates a single object
@@ -370,7 +370,7 @@ The Wicket UI doesn't allow collections to be modified (added to/removed from). 
 * Add domain actions to add/remove from the collection
 * to create objects, xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_inject-services[inject] associated domain service
 ** generally we recommend using the xref:../../guides/rgant/rgant.adoc#_rgant-Inject[`@Inject`] annotation with either private or default visibility
-* the service itself should use xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`]
+* the service itself should use xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]
 * use the xref:../../guides/rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection
 
 
@@ -454,7 +454,7 @@ The Wicket UI will automatically invoke the "home page" action, if available. Th
 To ensure testability, there should be no dependencies on system time, for example usage of `LocalDate.now()`. Instead the domain objects should delegate to the provided `ClockService`.
 
 * remove any dependencies on system time (eg defaults for date/time action parameters)
-* inject xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_ClockService[`ClockService`]
+* inject xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`ClockService`]
 * call `ClockService.now()` etc where required.
 
 
@@ -512,7 +512,7 @@ Under the covers Apache Isis uses the https://code.google.com/p/guava-libraries/
 By default the events generated are `ActionDomainEvent.Default` (for actions) and `PropertyDomainEvent.Default` (for properties). Subclasses of these can be specified using the xref:../../guides/rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action(domainEvent=...)`] or xref:../../guides/rgant/rgant.adoc#_rgant-Property_domainEvent[`Property(domainEvent=...)`] for properties.
 
 
-Using the guidance in the docs for the xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`]:
+Using the guidance in the docs for the xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]:
 
 * write a domain service subscriber to subscribe to events
 * use the domain service to perform log events
@@ -531,12 +531,12 @@ Note that currently (1.8.0) only no-arg actions can be specified as bulk actions
 
 Thus:
 * Write a no-arg action for your domain entity, annotate with `@Action(invokeOn=...)`
-* Inject the xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`ActionInteractionContext`] (request-scoped) service
+* Inject the xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInteractionContext`] (request-scoped) service
 * Use the `ActionInteractionContext` service to determine whether the action was invoked in bulk or as a regular action.
 * return null if invoked on a collection; the Wicket viewer will go back to the original collection
 ** (if return non-null, then Wicket viewer will navigate to the object of the last invocation generally not what is required)
 
-The similar xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
+The similar xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
 
 * Inject the `Scratchpad` domain service
 * for each action, store state (eg a running total)
@@ -547,7 +547,7 @@ The similar xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad
 
 == Performance tuning
 
-The xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_QueryResultsCache[`QueryResultsCache`] (request-scoped) domain service allows arbitrary objects to be cached for the duration of a request.
+The xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] (request-scoped) domain service allows arbitrary objects to be cached for the duration of a request.
 
 This can be helpful for "naive" code which would normally make the same query within a loop.
 
@@ -662,7 +662,7 @@ change back to:
 
 There will probably be some compile issues to fix up once you've done this; comment out all code that doesn't compile.
 
-Isis has great support for writing xref:../../guides/ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests]; well-written integration tests should leverage fixture scripts and use the xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_api_WrapperFactory[`@WrapperFactory`] domain service.
+Isis has great support for writing xref:../../guides/ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests]; well-written integration tests should leverage fixture scripts and use the xref:../../guides/rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`@WrapperFactory`] domain service.
 
 * use the tests from the original archetype and the documentation on the website to develop integration tests for your app's functionality.
 

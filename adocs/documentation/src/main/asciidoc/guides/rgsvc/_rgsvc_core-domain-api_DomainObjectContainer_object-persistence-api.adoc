@@ -1,0 +1,56 @@
+[[_rgsvc_core-domain-api_DomainObjectContainer_object-persistence-api]]
+= Object Persistence API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+
+The persistence API is used to persist newly created objects (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`#newTransientInstance(...)`], above and to delete (remove) objects that are persistent.
+
+Note that there is no API for updating existing objects; the framework (or rather, JDO/DataNucleus) performs object dirty tracking and so any objects that are modified in the course of a request will be automatically updated).
+
+
+
+[source,java]
+----
+public interface DomainObjectContainer {
+
+    boolean isPersistent(Object domainObject);          // <1>
+    boolean isViewModel(Object domainObject);           // <2>
+
+    void persist(Object domainObject);                  // <3>
+    void persistIfNotAlready(Object domainObject);      // <4>
+
+    void remove(Object persistentDomainObject);         // <5>
+    void removeIfNotAlready(Object domainObject);       // <6>
+
+    boolean flush();                                    // <7>
+    ...
+}
+----
+<1> test whether a particular domain object is persistent or not.
+<2> test whether a particular domain object is a view model or not.  Note that this includes any domain objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature=Nature.EXTERNAL_ENTITY)`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature=Nature.INMEMORY_ENTITY`]
+<3> persist a transient object.  Note though that this will throw an exception if the object is already persistent; this can happen if JDO/DataNucleus's link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/cascading.html[persistence-by-reachability] is in effect.  For this reason it is generally better to use `persistIfNotAlready(...)`. Also note that `persist(...)` has been deprecate.  When moving to xref:rgsvc_api_RepositoryService.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService#persist()`] take into account that its behavior is identical to <4>, being a no-op if the object is persistent, instead of throwing an exception.
+<4> persist an object but only if know to not have been persistent.  But if the object is persistent, is a no-op
+<5> remove (ie DELETE) a persistent object.  For similar reasons to the persistence, it is generally better to use:
+<6> remove (ie DELETE) an object only if known to be persistent.  But if the object has already been deleted, then is a no-op.
+<7> flushes all pending changes to the objectstore.  Explained further below.
+
+For example:
+
+[source,java]
+----
+Customer cust = container.newTransientInstance(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+container.persistIfNotAlready(cust);
+----
+
+You should be aware that by default Apache Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
+
+By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`, as documented xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_generic-repository-api[above].  However, this behaviour can be disabled using the  xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
+
+
+
