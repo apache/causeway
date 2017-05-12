@@ -46,7 +46,7 @@
         <asciidoctorj.version>1.5.4.1</asciidoctorj.version>
         <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
         <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
-        <incode-asciidoctor-extension-improvethisdoc.version>0.0.2</incode-asciidoctor-extension-improvethisdoc.version>
+        <incode-asciidoctor-extension-improvethisdoc.version>0.0.4-SNAPSHOT</incode-asciidoctor-extension-improvethisdoc.version>
 
         <jruby.version>9.1.8.0</jruby.version>
 
@@ -161,6 +161,7 @@
                                     <outputDirectory>${project.reporting.outputDirectory}/</outputDirectory>
                                     <!--
                                     <sourceDocumentName>guides/ugvw/ugvw.adoc</sourceDocumentName>
+                                    <sourceDocumentName>guides/rgsvc/rgsvc.adoc</sourceDocumentName>
                                     -->
 
                                     <sourceHighlighter>coderay</sourceHighlighter>

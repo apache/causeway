@@ -1,0 +1,19 @@
+/*
+    By Osvaldas Valutis, www.osvaldas.info
+    Available for use under the MIT License
+
+    https://osvaldas.info/examples/auto-hide-sticky-header/
+*/
+
+.header
+{
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+
+    -webkit-box-shadow: 0 0.063em 0.25em rgba( 37, 50, 55, .25 ); /* 1 4 */
+    box-shadow: 0 0.063em 0.25em rgba( 37, 50, 55, .25 ); /* 1 4 */
+}

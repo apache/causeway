@@ -54,9 +54,9 @@
     <link href="<%= (attr :_basedir) %>css/bootstrap-toc/0.4.1/bootstrap-toc.min.css" rel="stylesheet"/>
 
     <link href="<%= (attr :_basedir) %>css/asciidoctor/foundation.css" rel="stylesheet"/>
-    <!--
-    <link href="<%= (attr :_basedir) %>css/datanucleus_theme.css" rel="stylesheet"/>
-    -->
+
+    <link href="<%= (attr :_basedir) %>css/slick/1.5.0/slick.css" rel="stylesheet">
+    <link href="<%= (attr :_basedir) %>css/slick/1.5.0/slick-theme.css" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -71,6 +71,7 @@
 
     <link href="<%= (attr :_basedir) %>css/search-panel/search-panel.css" rel="stylesheet"/>
     <link href="<%= (attr :_basedir) %>css/header-links/header-links.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/sticky-header/sticky-header.css" rel="stylesheet"/>
     <link href="<%= (attr :_basedir) %>css/customisations.css" rel="stylesheet"/>
 
     <!-- Coderay syntax formatter -->
@@ -86,7 +87,7 @@
 <div id="filetype" style="display:none;"><%= (attr :filetype) %></div>
 
 <!-- Navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-static-top header">
     <div class="container">
         <div class="navbar-header">
             <!-- Three line menu button for use on mobile screens -->
@@ -253,10 +254,10 @@
 <script src="<%= (attr :_basedir) %>js/slick/1.5.0/slick.min.js"></script>
 <script src="<%= (attr :_basedir) %>js/elasticlunr/elasticlunr.min.js"></script>
 
+<script src="<%= (attr :_basedir) %>js/sticky-header/sticky-header.js"></script>
 <script src="<%= (attr :_basedir) %>js/search-panel/search-panel.js"></script>
 <script src="<%= (attr :_basedir) %>js/header-link/header-link.js"></script>
 <script src="<%= (attr :_basedir) %>js/toc-scroll/toc-scroll.js"></script>
-
 
 </body>
 </html>
