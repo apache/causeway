@@ -36,7 +36,11 @@
                         <img alt="Brand" wicket:id="brandLogo"/>
                     </a>
                 </div>
-                <div class="navbar-header navbar-right">
+                <div class="navbar-collapse app-actions collapse navbar-left">
+                    <ul class="nav navbar-nav" wicket:id="primaryMenuBar"></ul>
+                </div>
+                <div class="navbar-collapse app-actions collapse navbar-right">
+                    <ul class="nav navbar-nav" wicket:id="secondaryMenuBar"></ul>
                     <ul class="nav navbar-nav tertiary">
                         <li class="dropdown">
                             <a tabindex="-1" href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -46,12 +50,6 @@
                             </ul>
                         </li>
                     </ul>
-                </div>
-                <div class="navbar-collapse app-actions collapse navbar-right">
-                    <ul class="nav navbar-nav" wicket:id="secondaryMenuBar"></ul>
-                </div>
-                <div class="navbar-collapse app-actions collapse">
-                    <ul class="nav navbar-nav" wicket:id="primaryMenuBar"></ul>
                 </div>
             </div>
 
