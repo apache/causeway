@@ -13,6 +13,16 @@ body > div.container {
 
 
 
+a code, a:visited code, a:active code {
+  text-decoration: none;
+  border-bottom: 1px dashed;
+}
+
+a:hover code {
+  text-decoration: none;
+  border-bottom: 1px solid;
+}
+
 
 
 
