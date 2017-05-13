@@ -191,21 +191,17 @@
 
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <div id="search-panel">
-                <div id="search-results"></div>
-                <div>
-                    <br/>
-                    <a href="#" id="search-results-clear">clear</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <% if is_toc? then %>
         <div class="row-fluid">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                <div id="search-panel">
+                    <div id="search-results"></div>
+                    <div>
+                        <br/>
+                        <a href="#" id="search-results-clear">clear</a>
+                    </div>
+                </div>
                 <div class="page-title">
                     <h1><%= document.name %></h1>
                 </div>
@@ -221,6 +217,13 @@
         <!-- Front Page, no TOC and no heading -->
         <div class="row">
             <div class="col-sm-12">
+                <div id="search-panel">
+                    <div id="search-results"></div>
+                    <div>
+                        <br/>
+                        <a href="#" id="search-results-clear">clear</a>
+                    </div>
+                </div>
                 <div id="doc-content">
                     <%= document.content %>
                 </div>
