@@ -23,6 +23,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -112,6 +113,10 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     @Programmatic
     Transaction currentTransaction();
+
+
+    @Programmatic
+    TransactionState getTransactionState();
 
     //endregion
 

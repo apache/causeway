@@ -46,7 +46,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFr
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -69,8 +68,6 @@ public abstract class SpecificationLoaderTestAbstract {
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
-    private TransactionStateProviderInternal mockTransactionStateProviderInternal;
-    @Mock
     private MessageService mockMessageService;
 
     ServicesInjector stubServicesInjector;
@@ -91,7 +88,6 @@ public abstract class SpecificationLoaderTestAbstract {
             ignoring(mockGridService).existsFor(with(any(Class.class)));
 
             ignoring(mockPersistenceSessionServiceInternal);
-            ignoring(mockTransactionStateProviderInternal);
             ignoring(mockMessageService);
 
         }});
@@ -106,7 +102,6 @@ public abstract class SpecificationLoaderTestAbstract {
                         mockDeploymentCategoryProvider,
                         mockPersistenceSessionServiceInternal,
                             mockMessageService,
-                        mockTransactionStateProviderInternal,
                         mockGridService,
                         mockDeploymentCategoryProvider),
                     stubConfiguration);

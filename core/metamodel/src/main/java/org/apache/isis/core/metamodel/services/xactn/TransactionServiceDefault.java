@@ -16,20 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.transtate;
+
+package org.apache.isis.core.metamodel.services.xactn;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.core.metamodel.transactions.TransactionState;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionService2;
+import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class TransactionStateProviderInternalNoop implements TransactionStateProviderInternal {
+public class TransactionServiceDefault implements TransactionService2 {
+
+
+    @Override
+    public void flushTransaction() {
+        persistenceSessionServiceInternal.flush();
+    }
+
+    @Override
+    public void nextTransaction() {
+        persistenceSessionServiceInternal.commit();
+        persistenceSessionServiceInternal.beginTran();
+    }
+
+    @Override
+    public Transaction currentTransaction() {
+        return persistenceSessionServiceInternal.currentTransaction();
+    }
 
     @Override
     public TransactionState getTransactionState() {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        return persistenceSessionServiceInternal.getTransactionState();
     }
+
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
 }

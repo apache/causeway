@@ -19,8 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Callable;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -37,6 +50,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -61,26 +75,13 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
-import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
@@ -98,7 +99,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private final ServicesInjector servicesInjector;
     private final IsisConfiguration configuration;
-    private final TransactionStateProviderInternal transactionStateProviderInternal;
     private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
@@ -119,7 +119,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
         this.configuration = servicesInjector.getConfigurationServiceInternal();
-        this.transactionStateProviderInternal = servicesInjector.lookupService(TransactionStateProviderInternal.class);
         this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
     }
 
@@ -612,6 +611,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     public TransactionState getTransactionState() {
-        return transactionStateProviderInternal.getTransactionState();
+        return persistenceSessionServiceInternal.getTransactionState();
     }
 }

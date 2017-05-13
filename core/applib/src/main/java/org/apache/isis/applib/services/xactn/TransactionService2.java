@@ -17,16 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services.transtate;
+package org.apache.isis.applib.services.xactn;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.metamodel.transactions.TransactionState;
 
-/**
- * TODO: would make sense to combine with {@link TransactionService}.
- */
-public interface TransactionStateProviderInternal {
+public interface TransactionService2 extends TransactionService {
 
     @Programmatic
     TransactionState getTransactionState();

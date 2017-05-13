@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
@@ -67,8 +66,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected ServicesInjector mockServicesInjector;
     @Mock
     protected TranslationService mockTranslationService;
-    @Mock
-    protected TransactionStateProviderInternal mockTransactionStateProviderInternal;
 
     @Mock
     protected IsisConfigurationDefault mockConfiguration;
@@ -116,9 +113,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
             allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
             will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockServicesInjector).lookupService(TransactionStateProviderInternal.class);
-            will(returnValue(mockTransactionStateProviderInternal));
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));

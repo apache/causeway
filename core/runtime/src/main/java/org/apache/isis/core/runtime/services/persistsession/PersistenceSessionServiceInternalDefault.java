@@ -27,6 +27,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
@@ -179,6 +181,16 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         getTransactionManager().executeWithinTransaction(transactionalClosure);
     }
 
+    @Override
+    public TransactionState getTransactionState() {
+        final IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
+        if (transaction == null) {
+            return TransactionState.NONE;
+        }
+        IsisTransaction.State state = transaction.getState();
+        return state.getRuntimeContextState();
+    }
+
     protected PersistenceSession getPersistenceSession() {
         return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
@@ -199,6 +211,5 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
-
 
 }
