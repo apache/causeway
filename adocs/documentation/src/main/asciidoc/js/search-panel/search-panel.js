@@ -42,7 +42,19 @@ $('#search-form').submit(function(ev) {
                 var percentScore = score.toFixed(2);
 
                 if(description) {
-                    $('#search-results').append("<br/><span class='searchLink'><a href='" + url + "'>" + title + " <span class='searchScore'>" + percentScore + "</span>" + "</a></span><p class='searchDescription'>" + description + "</p>");
+                    var urlAfterSlash = /[^/]*$/.exec(url)[0];
+                    var urlNoAnchor = urlAfterSlash.split("#")[0];
+                    $('#search-results').append(
+                        "<br/>" +
+                        "<span class='searchLink'>" +
+                            "<a href='" + url + "'>" +
+                                title +
+                                "&nbsp;<span class='searchUrl'>" + urlNoAnchor + "</span>" +
+                                "&nbsp;<span class='searchScore'>(" + percentScore + ")</span>" +
+                            "</a>" +
+                        "</span>" +
+                        "<p class='searchDescription'>" + description + "</p>"
+                    );
                 }
             };
         }
