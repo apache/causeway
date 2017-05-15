@@ -156,6 +156,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                     final ActionModel actionModel = model.getActionModelHint();
                     if(actionModel != null && actionModel.getActionMemento().getAction(getSpecificationLoader()).getSemantics().isIdempotentInNature()) {
+                        actionModel.detach(); // force reload
                         ObjectAdapter resultAdapter = actionModel.getObject();
                         model.setObjectList(resultAdapter);
                     } else {
