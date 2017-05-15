@@ -35,6 +35,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 
 /**
  * A {@link ColumnAbstract column} within a
@@ -87,7 +88,9 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         final EntityModel entityModel = new EntityModel(adapter);
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociation(propertyExpression);
         final PropertyMemento pm = new PropertyMemento(property, entityModel.getIsisSessionFactory());
+
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+        scalarModel.setFormExecutor(new PropertyEditFormExecutor(scalarModel));
 
         scalarModel.setRenderingHint(RenderingHint.PROPERTY_COLUMN);
         scalarModel.toViewMode();

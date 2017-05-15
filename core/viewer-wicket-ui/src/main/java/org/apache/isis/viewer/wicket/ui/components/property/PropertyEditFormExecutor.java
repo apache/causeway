@@ -14,8 +14,8 @@ import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 
 public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> {
 
-    public PropertyEditFormExecutor(/*final MarkupContainer panel, */final ScalarModel scalarModel) {
-        super(/*panel, */scalarModel);
+    public PropertyEditFormExecutor(final ScalarModel scalarModel) {
+        super(scalarModel);
     }
 
     protected ObjectAdapter obtainTargetAdapter() {

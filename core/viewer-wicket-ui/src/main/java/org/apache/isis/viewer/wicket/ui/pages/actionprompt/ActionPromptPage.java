@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -72,6 +73,8 @@ public class ActionPromptPage extends PageAbstract {
     private static ActionModel buildModel(
             final PageParameters pageParameters,
             final SpecificationLoader specificationLoader) {
-        return ActionModel.createForPersistent(pageParameters, specificationLoader);
+        final ActionModel actionModel = ActionModel.createForPersistent(pageParameters, specificationLoader);
+        actionModel.setFormExecutor(new ActionParametersFormExecutor(actionModel));
+        return actionModel;
     }
 }

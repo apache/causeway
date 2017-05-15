@@ -37,11 +37,9 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandl
 
 public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter>> implements FormExecutor {
 
-    // protected final MarkupContainer panel;
     protected final M model;
 
-    public FormExecutorAbstract(/*final MarkupContainer panel, */final M model) {
-        // this.panel = panel;
+    public FormExecutorAbstract(final M model) {
         this.model = model;
     }
 
@@ -50,8 +48,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             final AjaxRequestTarget target,
             final Form<?> feedbackForm,
             final PromptStyle promptStyle) {
-
-        // Components.permanentlyHide(panel, ComponentType.ENTITY_ICON_AND_TITLE);
 
         ObjectAdapter targetAdapter = null;
         try {
@@ -324,7 +320,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
     protected abstract void forwardOntoResult(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target);
-
 
 
 }

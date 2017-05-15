@@ -16,8 +16,8 @@ import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 
 public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionModel> {
 
-    public ActionParametersFormExecutor(/*final MarkupContainer panel, */final ActionModel actionModel) {
-        super(/*panel, */actionModel);
+    public ActionParametersFormExecutor(final ActionModel actionModel) {
+        super(actionModel);
     }
 
 

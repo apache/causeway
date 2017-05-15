@@ -53,7 +53,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
@@ -525,11 +524,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             protected void onEvent(final AjaxRequestTarget target) {
 
                 scalarModel.toEditMode();
-
-                // dynamically update the edit form.
-                final PropertyEditFormExecutor formExecutor =
-                        new PropertyEditFormExecutor(/*ScalarPanelAbstract2.this, */scalarModel);
-                scalarModel.setFormExecutor(formExecutor);
 
                 switchFormForInlinePrompt(target);
 
