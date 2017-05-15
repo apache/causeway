@@ -2,7 +2,6 @@ package org.apache.isis.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -75,7 +74,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
     // which is called in the superclass.
     @Override
     public void onCancel(
-            final AjaxRequestTarget target, final AjaxButton cancelButton) {
+            final AjaxRequestTarget target) {
 
         final PromptStyle promptStyle = getScalarModel().getPromptStyle();
 
@@ -85,7 +84,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
             getScalarModel().clearPending();
         }
 
-        super.onCancel(target, cancelButton);
+        super.onCancel(target);
     }
 
 }

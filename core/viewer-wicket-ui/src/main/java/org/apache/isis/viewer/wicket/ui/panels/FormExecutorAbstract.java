@@ -116,25 +116,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             parentEntityModel.resetVersion();
             parentEntityModel.resetPropertyModels();
 
-            //                // don't need to do this, can instead use resetPropertyModels() on EntityModel, see above...
-            //                final Page page = target.getPage();
-            //                if (page instanceof EntityPage) {
-            //
-            //                    page.visitChildren(new IVisitor<Component, Object>() {
-            //                        @Override
-            //                        public void component(
-            //                                final Component component,
-            //                                final IVisit<Object> visit) {
-            //
-            //                            final IModel<?> componentModel = component.getDefaultModel();
-            //                            if (componentModel instanceof ScalarModel) {
-            //                                final ScalarModel scalarModel = (ScalarModel) componentModel;
-            //                                scalarModel.reset();
-            //                            }
-            //                        }
-            //                    });
-            //                }
-
             onExecuteAndProcessResults(target);
 
             if(promptStyle == PromptStyle.INLINE) {
@@ -144,7 +125,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
             } else {
                 forwardOntoResult(resultAdapter, target);
-
             }
 
             return true;

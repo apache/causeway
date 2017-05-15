@@ -313,12 +313,6 @@ public class IsisWicketApplication
             @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
 
-            // hmm, this design doesn't work as expected, called before every component is rendered
-            // instead just override onBeforeRender/onAfterRender in EntityPage
-//            final DisableConcurrencyCheckingOnRenderListener listenr = new DisableConcurrencyCheckingOnRenderListener();
-//            getComponentPreOnBeforeRenderListeners().add(listenr);
-//            getComponentOnAfterRenderListeners().add(listenr);
-            
             final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
             if(mmie != null) {
                 log(mmie.getValidationErrors());
@@ -876,33 +870,4 @@ public class IsisWicketApplication
         return settings;
     }
 
-//    private static class DisableConcurrencyCheckingOnRenderListener
-//            implements IComponentOnBeforeRenderListener, IComponentOnAfterRenderListener {
-//
-//        private static ThreadLocal<AdapterManager.ConcurrencyChecking> concurrencyChecking =
-//                new ThreadLocal<AdapterManager.ConcurrencyChecking>() {
-//                    protected AdapterManager.ConcurrencyChecking initialValue() {
-//                        return null;
-//                    }
-//                };
-//
-//        @Override
-//        public void onBeforeRender(final Component component) {
-//            if(component instanceof Page) {
-//                final AdapterManager.ConcurrencyChecking prior = AdapterManager.ConcurrencyChecking.disable();
-//                concurrencyChecking.set(prior);
-//            }
-//        }
-//
-//        @Override
-//        public void onAfterRender(final Component component) {
-//            if(component instanceof Page) {
-//                final AdapterManager.ConcurrencyChecking prior = DisableConcurrencyCheckingOnRenderListener.concurrencyChecking.get();
-//                if(prior != null) {
-//                    AdapterManager.ConcurrencyChecking.reset(prior);
-//                }
-//                DisableConcurrencyCheckingOnRenderListener.concurrencyChecking.remove();
-//            }
-//        }
-//    }
 }

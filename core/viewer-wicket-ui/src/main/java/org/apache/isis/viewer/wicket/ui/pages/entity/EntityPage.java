@@ -133,30 +133,16 @@ public class EntityPage extends PageAbstract {
         return model;
     }
 
-//    private static ThreadLocal<AdapterManager.ConcurrencyChecking> concurrencyChecking =
-//            new ThreadLocal<AdapterManager.ConcurrencyChecking>() {
-//                protected AdapterManager.ConcurrencyChecking initialValue() {
-//                    return null;
-//                }
-//            };
-
     @Override
     public void onBeforeRender() {
-        final AdapterManager.ConcurrencyChecking prior = AdapterManager.ConcurrencyChecking.disable();
-        //concurrencyChecking.set(prior);
+        AdapterManager.ConcurrencyChecking.disable();
         super.onBeforeRender();
     }
 
     @Override
     public void onAfterRender() {
         super.onAfterRender();
-
-//        final AdapterManager.ConcurrencyChecking prior = concurrencyChecking.get();
-//        if(prior != null) {
-//            AdapterManager.ConcurrencyChecking.reset(prior);
         AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
-//        }
-//        concurrencyChecking.remove();
     }
 
     private void buildPage() {

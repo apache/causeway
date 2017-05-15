@@ -28,7 +28,6 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -163,7 +162,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
                     actionPromptIfAny.closePrompt(target);
                 }
 
-                onCancel(target, this);
+                onCancel(target);
 
             }
         };
@@ -201,7 +200,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
                 @Override
                 protected void respond(final AjaxRequestTarget target) {
-                    onCancel(target, cancelButton);
+                    onCancel(target);
                 }
 
             });
@@ -222,7 +221,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
             final Form<?> form,
             final AjaxButton okButton) {
 
-        setLastFocusHint(target, okButton);
+        setLastFocusHint();
 
         final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
         boolean succeeded = formExecutorContext.getFormExecutor()
@@ -257,20 +256,12 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
     }
 
-    private void setLastFocusHint(final AjaxRequestTarget target, final AjaxButton ajaxButton) {
-
-        //            String lastFocusedElementId = target.getLastFocusedElementId();
-        //            System.out.println("onSubmitOf, lastFocusedElementId = " + lastFocusedElementId);
-        //            System.out.println("onSubmitOf, ajaxButton.getPath() = " + ajaxButton.getPath());
+    private void setLastFocusHint() {
 
         final UiHintContainer entityModel = getPageUiHintContainerIfAny();
         if (entityModel == null) {
             return;
         }
-//        ObjectAdapterMemento oam = entityModel.getObjectAdapterMemento();
-//        if (oam == null) {
-//            return;
-//        }
         MarkupContainer parent = this.parentPanel.getParent();
         if (parent != null) {
             entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parent.getPageRelativePath());
@@ -290,10 +281,9 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
     }
 
     public void onCancel(
-            final AjaxRequestTarget target,
-            final AjaxButton cancelButton) {
+            final AjaxRequestTarget target) {
 
-        setLastFocusHint(target, cancelButton);
+        setLastFocusHint();
 
         rebuildGuiAfterInlinePromptDoneIfNec(target);
 
