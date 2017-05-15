@@ -24,6 +24,8 @@ import java.io.Serializable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+
 /**
  * Passed through the {@link ActionModel} or {@link ScalarModel}, allowing
  * two different Wicket UI components (eg owning <code>ActionPanel</code> and
@@ -37,5 +39,8 @@ import org.apache.wicket.markup.html.form.Form;
  */
 public interface FormExecutor extends Serializable {
 
-    boolean executeAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
+    boolean executeAndProcessResults(
+            AjaxRequestTarget target,
+            Form<?> feedbackForm,
+            PromptStyle promptStyle);
 }
