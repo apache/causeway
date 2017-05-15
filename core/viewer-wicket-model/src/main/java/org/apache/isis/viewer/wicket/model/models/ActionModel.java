@@ -329,6 +329,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         this.actionMode = actionMode;
     }
 
+    @Override
+    public EntityModel getParentEntityModel() {
+        return entityModel;
+    }
+
     /**
      * Copy constructor, as called by {@link #copy()}.
      */

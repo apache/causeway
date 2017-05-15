@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
@@ -108,7 +107,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             targetAdapter = actionModel.getTargetAdapter();
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
+            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel.getParentEntityModel());
 
             final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
             header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));

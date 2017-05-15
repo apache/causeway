@@ -66,6 +66,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
@@ -284,9 +285,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
 
         String markupId = null;
-        EntityModel entityModel = getUiHintContainerIfAny();
-        if(entityModel != null) {
-            String path = entityModel.getHint(getPage(), PageAbstract.UIHINT_FOCUS);
+        UiHintContainer hintContainer = getUiHintContainerIfAny();
+        if(hintContainer != null) {
+            String path = hintContainer.getHint(getPage(), PageAbstract.UIHINT_FOCUS);
             if(path != null) {
                 Component childComponent = get(path);
                 if(childComponent != null) {
@@ -303,7 +304,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     }
 
-    protected EntityModel getUiHintContainerIfAny() {
+    protected UiHintContainer getUiHintContainerIfAny() {
         return null;
     }
 

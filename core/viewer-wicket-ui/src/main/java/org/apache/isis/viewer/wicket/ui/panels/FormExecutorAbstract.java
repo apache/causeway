@@ -31,11 +31,13 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
+import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
 
-public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter>> implements FormExecutor {
+public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider> implements FormExecutor {
 
     protected final M model;
 
@@ -107,7 +109,33 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             // flush any queued changes, so concurrency or violation exceptions (if any)
             // will be thrown here
             getTransactionManager().flushTransaction();
+            getPersistenceSession().getPersistenceManager().flush();
 
+            // update target, since version updated (concurrency checks)
+            final EntityModel parentEntityModel = model.getParentEntityModel();
+            parentEntityModel.resetVersion();
+            parentEntityModel.resetPropertyModels();
+
+            //                // don't need to do this, can instead use resetPropertyModels() on EntityModel, see above...
+            //                final Page page = target.getPage();
+            //                if (page instanceof EntityPage) {
+            //
+            //                    page.visitChildren(new IVisitor<Component, Object>() {
+            //                        @Override
+            //                        public void component(
+            //                                final Component component,
+            //                                final IVisit<Object> visit) {
+            //
+            //                            final IModel<?> componentModel = component.getDefaultModel();
+            //                            if (componentModel instanceof ScalarModel) {
+            //                                final ScalarModel scalarModel = (ScalarModel) componentModel;
+            //                                scalarModel.reset();
+            //                            }
+            //                        }
+            //                    });
+            //                }
+
+            onExecuteAndProcessResults(target);
 
             if(promptStyle == PromptStyle.INLINE) {
 
@@ -118,8 +146,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
                 forwardOntoResult(resultAdapter, target);
 
             }
-
-            onExecuteAndProcessResults(target);
 
             return true;
 

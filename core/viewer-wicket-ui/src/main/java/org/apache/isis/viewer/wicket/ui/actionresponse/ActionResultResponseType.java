@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -50,8 +51,9 @@ public enum ActionResultResponseType {
         }
 
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-            return toEntityPage(model, targetAdapter, ex);
+        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter targetAdapter, final ConcurrencyException ex) {
+            final ActionResultResponse actionResultResponse = toEntityPage(model, targetAdapter, ex);
+            return actionResultResponse;
         }
     },
     COLLECTION {

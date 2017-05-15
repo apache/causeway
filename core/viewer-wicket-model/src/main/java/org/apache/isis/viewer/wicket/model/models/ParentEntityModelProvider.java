@@ -19,28 +19,8 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+public interface ParentEntityModelProvider {
 
-public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
-
-    private static final long serialVersionUID = 1L;
-
-    public BookmarkableModel() {
-        super();
-    }
-
-    public BookmarkableModel(T t) {
-        super(t);
-    }
-
-    
-    /**
-     * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.
-     */
-    public abstract PageParameters getPageParameters();
-
-    public abstract boolean hasAsRootPolicy();
-    
-    public abstract String getTitle();
+    EntityModel getParentEntityModel();
 
 }

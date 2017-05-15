@@ -29,7 +29,7 @@ import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -128,30 +129,34 @@ public class EntityPage extends PageAbstract {
     }
 
     @Override
-    public EntityModel getUiHintContainerIfAny() {
+    public UiHintContainer getUiHintContainerIfAny() {
         return model;
     }
 
-    /**
-     * A rather crude way of intercepting the redirect-and-post strategy.
-     * 
-     * <p>
-     * Performs eager loading of corresponding {@link EntityModel}, with
-     * {@link ConcurrencyChecking#NO_CHECK no} concurrency checking.
-     */
+//    private static ThreadLocal<AdapterManager.ConcurrencyChecking> concurrencyChecking =
+//            new ThreadLocal<AdapterManager.ConcurrencyChecking>() {
+//                protected AdapterManager.ConcurrencyChecking initialValue() {
+//                    return null;
+//                }
+//            };
+
     @Override
-    protected void onBeforeRender() {
+    public void onBeforeRender() {
+        final AdapterManager.ConcurrencyChecking prior = AdapterManager.ConcurrencyChecking.disable();
+        //concurrencyChecking.set(prior);
+        super.onBeforeRender();
+    }
 
+    @Override
+    public void onAfterRender() {
+        super.onAfterRender();
 
-        ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        EntityPage.this.model.load(ConcurrencyChecking.NO_CHECK);
-                        EntityPage.super.onBeforeRender();
-                    }
-                }
-        );
+//        final AdapterManager.ConcurrencyChecking prior = concurrencyChecking.get();
+//        if(prior != null) {
+//            AdapterManager.ConcurrencyChecking.reset(prior);
+        AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
+//        }
+//        concurrencyChecking.remove();
     }
 
     private void buildPage() {

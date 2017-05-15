@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -38,9 +37,6 @@ public class ActionPromptPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
-     */
     public ActionPromptPage(final ActionModel model) {
         super(new PageParameters(), model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);

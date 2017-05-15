@@ -154,7 +154,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     // //////////////////////////////////////////////////////////
 
     public EntityModel() {
-        this((ObjectAdapterMemento)null);
+        this.adapterMemento = null;
+        this.pendingModel = new PendingModel(this);
+        this.propertyScalarModels = Maps.newHashMap();
+        this.hintPageParameterSerializer = new HintPageParameterSerializer(this);
     }
 
     public EntityModel(final PageParameters pageParameters) {
@@ -493,7 +496,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             final ScalarModel scalarModel = propertyScalarModels.get(propertyMemento);
             scalarModel.detach();
         }
-        propertyScalarModels.clear();
+        // we no longer clear these, because we want to call resetPropertyModels(...) after an object has been updated.
+        //propertyScalarModels.clear();
     }
 
     // //////////////////////////////////////////////////////////
@@ -605,18 +609,15 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    private Object layoutMetadata;
-
     public Object getLayoutMetadata() {
-        return layoutMetadata;
+        return null;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
     public EntityModel cloneWithLayoutMetadata(final Object layoutMetadata) {
-        final EntityModel entityModel = new EntityModel(this.propertyScalarModels, this.adapterMemento);
-        entityModel.layoutMetadata = layoutMetadata;
+        final EntityModel entityModel = new EntityModelWithLayoutHints(this, layoutMetadata);
         return entityModel;
     }
 

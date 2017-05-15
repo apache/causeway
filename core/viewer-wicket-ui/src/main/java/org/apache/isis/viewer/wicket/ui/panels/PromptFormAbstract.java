@@ -21,19 +21,15 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
@@ -94,7 +90,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
     protected AjaxButton addOkButton() {
 
-        final IModel<ObjectAdapter> model = getModel();
+//        final IModel<ObjectAdapter> model = getModel();
 
         AjaxButton okButton = settings.isUseIndicatorForFormSubmit()
                 ? new IndicatingAjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
@@ -108,34 +104,9 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
                     actionPromptIfAny.closePrompt(target);
                 }
 
-                final ObjectAdapter targetAdapter = model.getObject();
-
                 onSubmitOf(target, form, this);
 
-                IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().flush();
-                IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getPersistenceManager()
-                        .flush();
-                // update target, since version updated (concurrency checks)
-                final Page page = target.getPage();
-                if (page instanceof EntityPage) {
-                    final EntityPage entityPage = (EntityPage) page;
-                    final EntityModel pageModel = entityPage.getUiHintContainerIfAny();
-                    pageModel.setObject(targetAdapter);
 
-                    page.visitChildren(new IVisitor<Component, Object>() {
-                        @Override
-                        public void component(
-                                final Component component,
-                                final IVisit<Object> visit) {
-
-                            final IModel<?> componentModel = component.getDefaultModel();
-                            if (componentModel instanceof ScalarModel) {
-                                final ScalarModel scalarModel = (ScalarModel) componentModel;
-                                scalarModel.reset();
-                            }
-                        }
-                    });
-                }
             }
 
             @Override
@@ -237,7 +208,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         }
     }
 
-    private EntityModel getPageUiHintContainerIfAny() {
+    private UiHintContainer getPageUiHintContainerIfAny() {
         Page page = getPage();
         if (page instanceof EntityPage) {
             EntityPage entityPage = (EntityPage) page;
@@ -292,16 +263,15 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         //            System.out.println("onSubmitOf, lastFocusedElementId = " + lastFocusedElementId);
         //            System.out.println("onSubmitOf, ajaxButton.getPath() = " + ajaxButton.getPath());
 
-        final EntityModel entityModel = getPageUiHintContainerIfAny();
+        final UiHintContainer entityModel = getPageUiHintContainerIfAny();
         if (entityModel == null) {
             return;
         }
-        ObjectAdapterMemento oam = entityModel.getObjectAdapterMemento();
-        if (oam == null) {
-            return;
-        }
-        Component parentPanel = this.parentPanel;
-        MarkupContainer parent = parentPanel.getParent();
+//        ObjectAdapterMemento oam = entityModel.getObjectAdapterMemento();
+//        if (oam == null) {
+//            return;
+//        }
+        MarkupContainer parent = this.parentPanel.getParent();
         if (parent != null) {
             entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parent.getPageRelativePath());
         }
