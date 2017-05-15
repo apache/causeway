@@ -72,7 +72,7 @@ public interface AdapterManager extends AdapterManagerBase {
         };
 
         /**
-         * Whether concurrency checking is currently disabled.
+         * Whether concurrency checking is currently enabled or disabled.
          */
         public static boolean isCurrentlyEnabled() {
             return concurrencyChecking.get().isChecking();
@@ -82,15 +82,37 @@ public interface AdapterManager extends AdapterManagerBase {
          * Allows a caller to temporarily disable concurrency checking for the current thread.
          */
         public static <T> T executeWithConcurrencyCheckingDisabled(final Callable<T> callable) {
-            final ConcurrencyChecking prior = ConcurrencyChecking.concurrencyChecking.get();
+            ConcurrencyChecking prior = null;
             try {
-                ConcurrencyChecking.concurrencyChecking.set(ConcurrencyChecking.NO_CHECK);
+                prior = disable();
                 return callable.call();
             } catch(Exception ex) {
                 throw new RuntimeException(ex);
             } finally {
-                ConcurrencyChecking.concurrencyChecking.set(prior);
+                reset(prior);
             }
+        }
+
+        /**
+         * Recommended instead to call {@link #executeWithConcurrencyCheckingDisabled(Runnable)} or {@link #executeWithConcurrencyCheckingDisabled(Callable)}.
+         *
+         * <p>
+         *     If this method is used, then make sure to call {@link #reset(ConcurrencyChecking)} afterwards, using the value returned by this method.
+         * </p>
+         *
+         * @return the value of the {@link ConcurrencyChecking} thread-local prior to disabling it (to allow for nested calls).
+         */
+        public static ConcurrencyChecking disable() {
+            final ConcurrencyChecking prior = ConcurrencyChecking.concurrencyChecking.get();
+            ConcurrencyChecking.concurrencyChecking.set(ConcurrencyChecking.NO_CHECK);
+            return prior;
+        }
+
+        public static void reset(ConcurrencyChecking prior) {
+            if(prior == null) {
+                return;
+            }
+            ConcurrencyChecking.concurrencyChecking.set(prior);
         }
 
         /**
@@ -99,7 +121,7 @@ public interface AdapterManager extends AdapterManagerBase {
         public static void executeWithConcurrencyCheckingDisabled(final Runnable runnable) {
             final ConcurrencyChecking prior = ConcurrencyChecking.concurrencyChecking.get();
             try {
-                ConcurrencyChecking.concurrencyChecking.set(ConcurrencyChecking.NO_CHECK);
+                disable();
                 runnable.run();
             } finally {
                 ConcurrencyChecking.concurrencyChecking.set(prior);
