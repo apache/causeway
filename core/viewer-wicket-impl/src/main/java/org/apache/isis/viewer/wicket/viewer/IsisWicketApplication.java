@@ -35,11 +35,14 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.SharedResources;
+import org.apache.wicket.application.IComponentOnAfterRenderListener;
+import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -66,6 +69,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
@@ -313,6 +317,10 @@ public class IsisWicketApplication
             @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
 
+            final DisableConcurrencyCheckingOnRenderListener listenr = new DisableConcurrencyCheckingOnRenderListener();
+            getComponentPreOnBeforeRenderListeners().add(listenr);
+            getComponentOnAfterRenderListeners().add(listenr);
+            
             final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
             if(mmie != null) {
                 log(mmie.getValidationErrors());
@@ -870,4 +878,29 @@ public class IsisWicketApplication
         return settings;
     }
 
+    private static class DisableConcurrencyCheckingOnRenderListener
+            implements IComponentOnBeforeRenderListener, IComponentOnAfterRenderListener {
+
+        private static ThreadLocal<AdapterManager.ConcurrencyChecking> concurrencyChecking =
+                new ThreadLocal<AdapterManager.ConcurrencyChecking>() {
+                    protected AdapterManager.ConcurrencyChecking initialValue() {
+                        return null;
+                    }
+                };
+
+        @Override
+        public void onBeforeRender(final Component component) {
+            final AdapterManager.ConcurrencyChecking prior = AdapterManager.ConcurrencyChecking.disable();
+            concurrencyChecking.set(prior);
+        }
+
+        @Override
+        public void onAfterRender(final Component component) {
+            final AdapterManager.ConcurrencyChecking prior = DisableConcurrencyCheckingOnRenderListener.concurrencyChecking.get();
+            if(prior != null) {
+                AdapterManager.ConcurrencyChecking.reset(prior);
+            }
+            DisableConcurrencyCheckingOnRenderListener.concurrencyChecking.remove();
+        }
+    }
 }
