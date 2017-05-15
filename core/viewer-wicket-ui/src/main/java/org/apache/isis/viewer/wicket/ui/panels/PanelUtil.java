@@ -28,6 +28,16 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+
 public final class PanelUtil {
 
     private PanelUtil(){}
@@ -78,5 +88,33 @@ public final class PanelUtil {
         attributes.getAjaxCallListeners().add(new AjaxCallListener()
                 .onBefore("$('#" + ajaxButtonOrLink.getMarkupId() + "').prop('disabled',true);")
                 .onComplete("$('#" + ajaxButtonOrLink.getMarkupId() + "').prop('disabled',false);"));
+    }
+
+    public static void addConfirmationDialogIfAreYouSureSemantics(
+            final Component component,
+            final SemanticsOf semanticsOf,
+            final ServicesInjector servicesInjector) {
+        final TranslationService translationService =
+                servicesInjector.lookupService(TranslationService.class);
+
+        if (!semanticsOf.isAreYouSure()) {
+            return;
+        }
+        ConfirmationConfig confirmationConfig = new ConfirmationConfig();
+
+        final String context = IsisSessionFactoryBuilder.class.getName();
+        final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
+        final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
+        final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
+
+        confirmationConfig
+                .withTitle(areYouSure)
+                .withBtnOkLabel(confirm)
+                .withBtnCancelLabel(cancel)
+                .withPlacement(TooltipConfig.Placement.right)
+                .withBtnOkClass("btn btn-danger")
+                .withBtnCancelClass("btn btn-default");
+
+        component.add(new ConfirmationBehavior(confirmationConfig));
     }
 }

@@ -32,6 +32,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -41,11 +42,11 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * <p>
  * Based on the {@link ActionModel.Mode mode}, will render either parameter
  * dialog or the results.
- * 
+ *
  * <p>
- * TODO: on results panel, have a button to resubmit?
+ * Corresponding component to edit properties is {@link PropertyEditPanel}.
  */
-public class ActionPanel extends PanelAbstract<ActionModel> {
+public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +60,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
      */
     private boolean showHeader = true;
 
-    public ActionPanel(final String id, final ActionModel actionModel) {
+    public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
         actionModel.setFormExecutor(new ActionParametersFormExecutor(this, actionModel));
         buildGui(getActionModel());
@@ -93,7 +94,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
         return super.getModel();
     }
 
-    public ActionPanel setShowHeader(boolean showHeader) {
+    public ActionParametersPanel setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
         return this;
     }

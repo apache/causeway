@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.property;
+package org.apache.isis.viewer.wicket.ui.components.propertyheader;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -30,9 +30,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-/**
- * A panel used as a title for the action prompts
- */
 public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
 
     private static final String ID_PROPERTY_NAME = "propertyName";

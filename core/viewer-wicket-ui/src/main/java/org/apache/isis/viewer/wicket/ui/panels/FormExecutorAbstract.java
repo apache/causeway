@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.wicket.ui.components.property;
+package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 

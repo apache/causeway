@@ -12,7 +12,7 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.components.property.FormExecutorAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionModel> {

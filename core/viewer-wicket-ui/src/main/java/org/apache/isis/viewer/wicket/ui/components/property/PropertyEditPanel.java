@@ -30,9 +30,13 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+/**
+ * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
+ */
 public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
     private static final long serialVersionUID = 1L;
@@ -42,14 +46,17 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
     private static final String ID_PROPERTY_NAME = "propertyName";
 
     /**
-     * Gives a chance to hide the header part of this action panel, e.g. when shown in an action prompt
+     * Gives a chance to hide the header part of this panel.
      */
     private boolean showHeader = true;
 
-    public PropertyEditPanel(final String id, final ScalarModel scalarModel) {
+    public PropertyEditPanel(
+            final String id,
+            final ScalarModel scalarModel) {
         super(id, new ScalarModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento()));
-        getScalarModel().setFormExecutor(new PropertyEditFormExecutor(this, getModel()));
-        buildGui(getScalarModel());
+        final PropertyEditFormExecutor formExecutor = new PropertyEditFormExecutor(this, scalarModel);
+        scalarModel.setFormExecutor(formExecutor);
+        buildGui(scalarModel);
     }
 
     @Override

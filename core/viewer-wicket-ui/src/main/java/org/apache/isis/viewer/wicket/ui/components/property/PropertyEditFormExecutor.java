@@ -9,6 +9,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> {

@@ -65,7 +65,7 @@ public class ActionPromptPage extends PageAbstract {
         super(pageParameters, model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
         
-        // no need to bookmark because the ActionPanel will have done so for us
+        // no need to bookmark because the ActionParametersPanel will have done so for us
         addBookmarkedPages(themeDiv);
     }
     

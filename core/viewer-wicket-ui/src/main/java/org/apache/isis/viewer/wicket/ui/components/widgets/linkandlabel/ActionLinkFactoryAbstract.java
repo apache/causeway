@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -136,7 +136,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     private static AjaxDeferredBehaviour determineDeferredBehaviour(final ObjectAction action,
             final ActionModel actionModel) {
-        // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
+        // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
         if (isNoArgReturnTypeRedirect(action)) {
             /**
              * adapted from:
@@ -177,14 +177,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return null;
     }
 
-    // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
+    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
     private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
         return action.getParameterCount() == 0 &&
                 action.getReturnType() != null &&
                 action.getReturnType().getCorrespondingClass() == java.net.URL.class;
     }
 
-    // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
+    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
     private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
         return action.getParameterCount() == 0 && action.getReturnType() != null &&
                 (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
@@ -220,15 +220,15 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     return new ActionPromptHeaderPanel(titleId, actionModel);
                                 }
                             });
-            final ActionPanel actionPanel =
-                    (ActionPanel) getComponentFactoryRegistry().createComponent(
+            final ActionParametersPanel actionParametersPanel =
+                    (ActionParametersPanel) getComponentFactoryRegistry().createComponent(
                             ComponentType.ACTION_PROMPT, prompt.getContentId(), actionModel);
 
-            actionPanel.setShowHeader(false);
+            actionParametersPanel.setShowHeader(false);
 
             prompt.setTitle(titlePanel, target);
-            prompt.setPanel(actionPanel, target);
-            actionPanel.setActionPrompt(prompt);
+            prompt.setPanel(actionParametersPanel, target);
+            actionParametersPanel.setActionPrompt(prompt);
             prompt.showPrompt(target);
 
         } else {

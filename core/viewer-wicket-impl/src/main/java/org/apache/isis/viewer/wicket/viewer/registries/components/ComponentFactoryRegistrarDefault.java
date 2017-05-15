@@ -26,8 +26,8 @@ import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.TertiaryMenuPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionInfoPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
@@ -236,7 +236,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForAction(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new ActionPanelFactory());
+        componentFactories.add(new ActionParametersPanelFactory());
         componentFactories.add(new StandaloneCollectionPanelFactory());
     }
 
