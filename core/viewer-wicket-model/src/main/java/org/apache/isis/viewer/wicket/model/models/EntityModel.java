@@ -90,6 +90,15 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return pageParameters;
     }
 
+    public void resetVersion() {
+        if(getObjectAdapterMemento() == null) {
+            return;
+        }
+        final PersistenceSession persistenceSession = getPersistenceSession();
+        final SpecificationLoader specificationLoader = getSpecificationLoader();
+        getObjectAdapterMemento().resetVersion(persistenceSession, specificationLoader);
+    }
+
     public enum RenderingHint {
         REGULAR,
         PROPERTY_COLUMN,
@@ -166,11 +175,20 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     public EntityModel(
             final ObjectAdapterMemento adapterMemento,
             final Map<PropertyMemento, ScalarModel> propertyScalarModels) {
+        this(propertyScalarModels, adapterMemento);
+    }
+
+    // this constructor was introduced just so that, when debugging, could distinguish between EntityModel instantiated
+    // in its own right, vs instantiated via the cloneWithLayoutMetadata.
+    private EntityModel(
+            final Map<PropertyMemento, ScalarModel> propertyScalarModels,
+            final ObjectAdapterMemento adapterMemento) {
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels;
         this.hintPageParameterSerializer = new HintPageParameterSerializer(this);
     }
+
 
     public static String oidStr(final PageParameters pageParameters) {
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
@@ -347,7 +365,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
      */
     @Override
     public ObjectAdapter load() {
-        return load(ConcurrencyChecking.CHECK);
+        final ObjectAdapter objectAdapter = load(ConcurrencyChecking.CHECK);
+        return objectAdapter;
     }
 
 
@@ -379,7 +398,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     public ScalarModel getPropertyModel(final PropertyMemento pm) {
         ScalarModel scalarModel = propertyScalarModels.get(pm);
         if (scalarModel == null) {
-            scalarModel = new ScalarModel(getObjectAdapterMemento(), pm);
+            scalarModel = new ScalarModel(this, pm);
             if (isViewMode()) {
                 scalarModel.toViewMode();
             } else {
@@ -596,7 +615,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
     public EntityModel cloneWithLayoutMetadata(final Object layoutMetadata) {
-        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        final EntityModel entityModel = new EntityModel(this.propertyScalarModels, this.adapterMemento);
         entityModel.layoutMetadata = layoutMetadata;
         return entityModel;
     }
