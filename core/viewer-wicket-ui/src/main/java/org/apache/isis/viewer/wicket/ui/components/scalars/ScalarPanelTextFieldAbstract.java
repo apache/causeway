@@ -286,8 +286,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected IModel<String> obtainPromptInlineLinkModel() {
         IModel<T> model = textField.getModel();
-        final T modelObject = model.getObject();
-        return Model.of(modelObject != null ? modelObject.toString() : null);
+        // must be "live", for ajax updates.
+        return (IModel<String>) model;
     }
 
 
