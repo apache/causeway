@@ -233,7 +233,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             }
         }
 
-        debug(componentsToRedraw, componentsNotToRedraw);
+        //debug(componentsToRedraw, componentsNotToRedraw);
 
         for (Component component : componentsToRedraw) {
             target.add(component);

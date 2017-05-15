@@ -110,9 +110,17 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
     @Override
     protected IModel<String> obtainPromptInlineLinkModel() {
-        final IModel<Boolean> model = checkBox.getModel();
-        final Boolean bool = model.getObject();
-        return Model.of(bool == null? "(not set)" : bool ? "Yes" : "No");
+        return new Model<String>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override public String getObject() {
+                final ScalarModel model = getModel();
+                final ObjectAdapter adapter = model.getObject();
+                final Boolean bool = adapter != null ? (Boolean) adapter.getObject() : null;
+                return bool == null? "(not set)" : bool ? "Yes" : "No";
+            }
+        };
     }
 
     private CheckBoxX createCheckBox(final String id) {
