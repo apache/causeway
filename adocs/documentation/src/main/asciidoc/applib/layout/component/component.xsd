@@ -75,6 +75,7 @@
 
     <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
     <xs:attribute name="typicalLength" type="xs:int"/>
+    <xs:attribute name="unchanging" type="xs:boolean"/>
   </xs:complexType>
 
   <xs:complexType name="collection">

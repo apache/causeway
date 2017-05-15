@@ -103,6 +103,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFace
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -316,6 +317,8 @@ public abstract class GridSystemServiceAbstract<G extends Grid> implements GridS
                         PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(
                         RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addOrReplaceFacet(
+                        UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
 
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing

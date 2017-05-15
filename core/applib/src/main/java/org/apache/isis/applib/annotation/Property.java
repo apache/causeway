@@ -19,13 +19,18 @@
 
 package org.apache.isis.applib.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import javax.jdo.annotations.NotPersistent;
+
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-
-import javax.jdo.annotations.NotPersistent;
-import java.lang.annotation.*;
 
 /**
  * Domain semantics for domain object property.
@@ -115,8 +120,6 @@ public @interface Property {
      * </p>
      */
     CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
-
-
 
 
 

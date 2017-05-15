@@ -34,11 +34,12 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 
 public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
@@ -70,6 +71,8 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
         processRenderedAdjusted(holder, properties, propertyLayout);
 
         processTypicalLength(holder, properties, propertyLayout);
+
+        processUnchanging(holder, properties, propertyLayout);
     }
 
     void processCssClass(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
@@ -159,6 +162,18 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
             typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
         }
         FacetUtil.addFacet(typicalLengthFacet);
+    }
+
+    void processUnchanging(
+            final FacetHolder holder,
+            final Properties properties,
+            final PropertyLayout propertyLayout) {
+        UnchangingFacet unchangingFacet = UnchangingFacetOnPropertyFromLayoutProperties
+                .create(properties, holder);
+        if(unchangingFacet == null) {
+            unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        }
+        FacetUtil.addFacet(unchangingFacet);
     }
 
     @Override
