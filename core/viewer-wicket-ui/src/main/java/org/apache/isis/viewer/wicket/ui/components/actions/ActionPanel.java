@@ -140,9 +140,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
         return header;
     }
 
-    private void buildGuiForNoParameters(final ActionModel actionModel) {
+    private void buildGuiForNoParameters(final ActionModel formExecutor) {
 
-        boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(null, null);
+        boolean succeeded = formExecutor.getFormExecutor().executeAndProcessResults(null, null,
+                formExecutor.getPromptStyle());
         if(succeeded) {
             // nothing to do
         } else {
@@ -152,7 +153,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
             // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
             // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
             // an error page, but is probably 'good enough').
-            final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+            final ObjectAdapter targetAdapter = formExecutor.getTargetAdapter();
 
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
             resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
