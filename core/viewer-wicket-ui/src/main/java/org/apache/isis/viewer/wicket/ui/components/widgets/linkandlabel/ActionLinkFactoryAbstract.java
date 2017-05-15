@@ -234,7 +234,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         } else {
 
             MarkupContainer scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
-            actionModel.setFormExecutor(new ActionParametersFormExecutor(scalarTypeContainer, actionModel));
+            actionModel.setFormExecutor(new ActionParametersFormExecutor(/*scalarTypeContainer, */actionModel));
             actionModel.setInlinePromptContext(inlinePromptContext);
             getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                     ScalarPanelAbstract2.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);

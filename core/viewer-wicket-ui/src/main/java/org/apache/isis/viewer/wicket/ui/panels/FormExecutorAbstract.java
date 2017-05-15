@@ -18,6 +18,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,17 +33,15 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter>> implements FormExecutor {
 
-    protected final MarkupContainer panel;
+    // protected final MarkupContainer panel;
     protected final M model;
 
-    public FormExecutorAbstract(final MarkupContainer panel, final M model) {
-        this.panel = panel;
+    public FormExecutorAbstract(/*final MarkupContainer panel, */final M model) {
+        // this.panel = panel;
         this.model = model;
     }
 
@@ -52,7 +51,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             final Form<?> feedbackForm,
             final PromptStyle promptStyle) {
 
-        Components.permanentlyHide(panel, ComponentType.ENTITY_ICON_AND_TITLE);
+        // Components.permanentlyHide(panel, ComponentType.ENTITY_ICON_AND_TITLE);
 
         ObjectAdapter targetAdapter = null;
         try {
@@ -71,7 +70,8 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
             forwardOnConcurrencyException(targetAdapter, ex);
 
-            getMessageBroker().addWarning(ex.getMessage());
+            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            messageService.warnUser(ex.getMessage());
             return false;
         }
     }
@@ -139,7 +139,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
                     // (otherwise, we'll have rendered an action parameters page
                     // and so we'll be staying on that page)
                     ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID
-                            .handleResults(panel, null, getIsisSessionFactory());
+                            .handleResults(null, getIsisSessionFactory());
                 }
 
                 return false;

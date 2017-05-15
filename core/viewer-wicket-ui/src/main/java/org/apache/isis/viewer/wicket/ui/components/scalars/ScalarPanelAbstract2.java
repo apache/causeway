@@ -528,7 +528,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
                 // dynamically update the edit form.
                 final PropertyEditFormExecutor formExecutor =
-                        new PropertyEditFormExecutor(ScalarPanelAbstract2.this, scalarModel);
+                        new PropertyEditFormExecutor(/*ScalarPanelAbstract2.this, */scalarModel);
                 scalarModel.setFormExecutor(formExecutor);
 
                 switchFormForInlinePrompt(target);

@@ -1,6 +1,5 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
@@ -12,13 +11,13 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 
 public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionModel> {
 
-    public ActionParametersFormExecutor(final MarkupContainer panel, final ActionModel actionModel) {
-        super(panel, actionModel);
+    public ActionParametersFormExecutor(/*final MarkupContainer panel, */final ActionModel actionModel) {
+        super(/*panel, */actionModel);
     }
 
 
@@ -51,7 +50,7 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
             final ConcurrencyException ex) {
         ActionResultResponse resultResponse = ActionResultResponseType.OBJECT
                 .interpretResult(model, targetAdapter, ex);
-        resultResponse.getHandlingStrategy().handleResults(panel, resultResponse, getIsisSessionFactory());
+        resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
     }
 
     protected void forwardOntoResult(
@@ -59,7 +58,7 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
             final AjaxRequestTarget target) {
         ActionResultResponse resultResponse = ActionResultResponseType
                 .determineAndInterpretResult(model, target, resultAdapter);
-        resultResponse.getHandlingStrategy().handleResults(panel, resultResponse, getIsisSessionFactory());
+        resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
     }
 
     ///////////////////////////////////////////////////////

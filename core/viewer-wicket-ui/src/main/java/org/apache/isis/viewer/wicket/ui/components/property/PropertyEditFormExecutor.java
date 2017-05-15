@@ -2,20 +2,20 @@ package org.apache.isis.viewer.wicket.ui.components.property;
 
 import java.util.concurrent.Callable;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
 
 public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> {
 
-    public PropertyEditFormExecutor(final MarkupContainer panel, final ScalarModel scalarModel) {
-        super(panel, scalarModel);
+    public PropertyEditFormExecutor(/*final MarkupContainer panel, */final ScalarModel scalarModel) {
+        super(/*panel, */scalarModel);
     }
 
     protected ObjectAdapter obtainTargetAdapter() {
@@ -47,7 +47,8 @@ public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> 
             final ObjectAdapter targetAdapter,
             final ConcurrencyException ex) {
         final EntityPage entityPage = new EntityPage(targetAdapter, null);
-        panel.setResponsePage(entityPage);
+        final RequestCycle requestCycle = RequestCycle.get();
+        requestCycle.setResponsePage(entityPage);
     }
 
     protected void forwardOntoResult(
@@ -66,7 +67,8 @@ public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> 
                         }
                 );
 
-        panel.setResponsePage(entityPage);
+        final RequestCycle requestCycle = RequestCycle.get();
+        requestCycle.setResponsePage(entityPage);
     }
 
 

@@ -62,7 +62,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
     public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
-        actionModel.setFormExecutor(new ActionParametersFormExecutor(this, actionModel));
+        actionModel.setFormExecutor(new ActionParametersFormExecutor(/*this, */actionModel));
         buildGui(getActionModel());
     }
 
@@ -123,7 +123,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
+            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
 
             final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
             messageService.warnUser(ex.getMessage());
@@ -158,7 +158,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             final ObjectAdapter targetAdapter = formExecutor.getTargetAdapter();
 
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
+            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
         }
     }
 

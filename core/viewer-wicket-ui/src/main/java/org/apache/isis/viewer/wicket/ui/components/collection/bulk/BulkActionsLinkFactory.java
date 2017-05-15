@@ -165,7 +165,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     if(lastReturnedAdapter != null) {
                         final ActionResultResponse resultResponse =
                                 ActionResultResponseType.determineAndInterpretResult(actionModel, null, lastReturnedAdapter);
-                        resultResponse.getHandlingStrategy().handleResults(this, resultResponse, model.getIsisSessionFactory());
+                        resultResponse.getHandlingStrategy().handleResults(resultResponse, model.getIsisSessionFactory());
                     }
 
                 } catch(final ConcurrencyException ex) {
