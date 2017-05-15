@@ -254,7 +254,7 @@ public class ObjectAdapterMemento implements Serializable {
 
             @Override
             public void resetVersion(
-                    ObjectAdapterMemento oam,
+                    final ObjectAdapterMemento oam,
                     final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 // REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
