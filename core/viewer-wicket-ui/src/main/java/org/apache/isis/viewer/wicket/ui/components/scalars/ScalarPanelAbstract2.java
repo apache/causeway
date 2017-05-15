@@ -159,13 +159,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         buildGuiAndCallHooks();
 
-        // REVIEW: think that this concurrency checking disabled is not needed given we disable in IsisWicketApplication anyway
-//        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable() {
-//            @Override public void run() {
-//                buildGuiAndCallHooks();
-//            }
-//        });
-
         setOutputMarkupId(true);
 
     }
