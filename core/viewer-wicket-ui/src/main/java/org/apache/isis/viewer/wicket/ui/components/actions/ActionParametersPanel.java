@@ -125,7 +125,8 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
             resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
 
-            getMessageBroker().addWarning(ex.getMessage());
+            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            messageService.warnUser(ex.getMessage());
         }
     }
 
@@ -159,12 +160,6 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
             resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
         }
-    }
-
-
-
-    private MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
     }
 
 
