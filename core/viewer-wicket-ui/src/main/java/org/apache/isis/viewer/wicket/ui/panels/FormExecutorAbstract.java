@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -21,7 +20,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
@@ -57,16 +55,16 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
     @Override
     public boolean executeAndProcessResults(
-            final AjaxRequestTarget target,
-            final Form<?> feedbackForm,
-            final PromptStyle promptStyle) {
+            final Page page,
+            final AjaxRequestTarget targetIfAny,
+            final Form<?> feedbackFormIfAny) {
 
         ObjectAdapter targetAdapter = null;
         try {
             targetAdapter = obtainTargetAdapter();
 
             // no concurrency exception, so continue...
-            return doExecuteAndProcessResults(target, feedbackForm, promptStyle);
+            return doExecuteAndProcessResults(page, targetIfAny, feedbackFormIfAny);
 
         } catch (ConcurrencyException ex) {
 
@@ -85,19 +83,21 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
     }
 
     /**
-     * @param target
+     *
+     * @param page
+     * @param targetIfAny
      * @return whether to clear args or not (they aren't if there was a validation exception)
      */
     private boolean doExecuteAndProcessResults(
-            final AjaxRequestTarget target,
-            final Form<?> feedbackForm,
-            final PromptStyle promptStyle) {
+            final Page page,
+            final AjaxRequestTarget targetIfAny,
+            final Form<?> feedbackFormIfAny) {
 
         // validate the action parameters (if any)
         final String invalidReasonIfAny = getReasonInvalidIfAny();
 
         if (invalidReasonIfAny != null) {
-            raiseWarning(target, feedbackForm, invalidReasonIfAny);
+            raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny);
             return false;
         }
 
@@ -127,18 +127,17 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             targetEntityModel.resetVersion();
             targetEntityModel.resetPropertyModels();
 
-            onExecuteAndProcessResults(target);
+            onExecuteAndProcessResults(targetIfAny);
 
             final ObjectAdapter targetAdapter = targetEntityModel.load();
             final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
 
-            if (targetAdapter != resultAdapter || redirectEvenIfSameObject) {
+            if (targetAdapter != resultAdapter || redirectEvenIfSameObject || targetIfAny == null) {
 
-                forwardOntoResult(resultAdapter, target);
+                forwardOntoResult(resultAdapter, targetIfAny);
 
             } else {
-
-                final Page page = feedbackForm.getPage();
+                final AjaxRequestTarget target = targetIfAny; // only in this branch if there *is* a target to use
                 addComponentsToRedraw(target, page);
             }
 
@@ -146,12 +145,12 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
         } catch (RuntimeException ex) {
 
-            String message = recognizeException(ex, target, feedbackForm);
+            String message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
 
             if (message != null) {
                 // no need to add to message broker, should already have been added...
 
-                if (feedbackForm == null) {
+                if (feedbackFormIfAny == null) {
                     // forward on instead to void page
                     // (otherwise, we'll have rendered an action parameters page
                     // and so we'll be staying on that page)
@@ -171,10 +170,11 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         }
     }
 
-    private void addComponentsToRedraw(final AjaxRequestTarget target, final Page page) {
+    private void addComponentsToRedraw(final AjaxRequestTarget target, final Page pageUNUSED) {
         final List<Component> componentsToRedraw = Lists.newArrayList();
         final List<Component> componentsNotToRedraw = Lists.newArrayList();
 
+        final Page page = target.getPage();
         page.visitChildren(new IVisitor<Component, Object>() {
             @Override
             public void component(final Component component, final IVisit<Object> visit) {
@@ -281,12 +281,17 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         return recognizedErrorIfAny;
     }
 
-    private void raiseWarning(AjaxRequestTarget target, Form<?> feedbackForm, String error) {
-        if(target != null && feedbackForm != null) {
-            target.add(feedbackForm);
-            feedbackForm.error(error);
+    private void raiseWarning(
+            final AjaxRequestTarget targetIfAny,
+            final Form<?> feedbackFormIfAny,
+            final String error) {
+
+        if(targetIfAny != null && feedbackFormIfAny != null) {
+            targetIfAny.add(feedbackFormIfAny);
+            feedbackFormIfAny.error(error);
         } else {
-            getMessageBroker().addWarning(error);
+            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            messageService.warnUser(error);
         }
     }
 
@@ -309,10 +314,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
-    }
-
-    private MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
     }
 
     protected IsisSessionFactory getIsisSessionFactory() {

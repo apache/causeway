@@ -56,9 +56,9 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
 
     protected void forwardOntoResult(
             final ObjectAdapter resultAdapter,
-            final AjaxRequestTarget target) {
+            final AjaxRequestTarget targetIfany) {
         ActionResultResponse resultResponse = ActionResultResponseType
-                .determineAndInterpretResult(model, target, resultAdapter);
+                .determineAndInterpretResult(model, targetIfany, resultAdapter);
         resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
     }
 

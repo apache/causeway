@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
@@ -62,7 +63,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
     public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
         actionModel.setFormExecutor(new ActionParametersFormExecutor(actionModel));
-        buildGui(getActionModel());
+        //buildGui(getActionModel());
     }
 
     /**
@@ -76,11 +77,16 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
         formExecutor.setActionPrompt(actionPrompt);
     }
 
+    @Override protected void onInitialize() {
+        super.onInitialize();
+
+        buildGui(getModel());
+    }
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
 
-        buildGui(getModel());
     }
 
     private void buildGui(final ActionModel actionModel) {
@@ -145,8 +151,9 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
     private void buildGuiForNoParameters(final ActionModel formExecutor) {
 
-        boolean succeeded = formExecutor.getFormExecutor().executeAndProcessResults(null, null,
-                formExecutor.getPromptStyle());
+        final Page page = this.getPage();
+        boolean succeeded = formExecutor.getFormExecutor().executeAndProcessResults(page, null, null);
+
         if(succeeded) {
             // nothing to do
         } else {

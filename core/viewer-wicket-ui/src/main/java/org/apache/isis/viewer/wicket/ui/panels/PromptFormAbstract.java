@@ -89,10 +89,8 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
     protected AjaxButton addOkButton() {
 
-//        final IModel<ObjectAdapter> model = getModel();
-
         AjaxButton okButton = settings.isUseIndicatorForFormSubmit()
-                ? new IndicatingAjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
+        ? new IndicatingAjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -104,8 +102,6 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
                 }
 
                 onSubmitOf(target, form, this);
-
-
             }
 
             @Override
@@ -122,7 +118,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
                 target.add(form);
             }
         }
-                : new AjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
+        : new AjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -225,7 +221,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
         final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
         boolean succeeded = formExecutorContext.getFormExecutor()
-                .executeAndProcessResults(target, form, promptStyle);
+                .executeAndProcessResults(target.getPage(), target, form);
         if (succeeded) {
             if (promptStyle == PromptStyle.DIALOG) {
                 // the Wicket ajax callbacks will have just started to hide the veil
