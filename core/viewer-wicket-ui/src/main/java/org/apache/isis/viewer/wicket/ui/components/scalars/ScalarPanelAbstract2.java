@@ -157,11 +157,34 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void onInitialize() {
         super.onInitialize();
 
-        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
-        scalarTypeContainer.setOutputMarkupId(true);
-        scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
-        addOrReplace(scalarTypeContainer);
+        buildGuiAndCallHooks();
 
+        // REVIEW: think that this concurrency checking disabled is not needed given we disable in IsisWicketApplication anyway
+//        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable() {
+//            @Override public void run() {
+//                buildGuiAndCallHooks();
+//            }
+//        });
+
+        setOutputMarkupId(true);
+
+    }
+
+    private void buildGuiAndCallHooks() {
+        buildGui();
+
+        final ScalarModel scalarModel = getModel();
+        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+
+        if (scalarModel.isViewMode()) {
+            onInitializeWhenViewMode();
+        } else {
+            if (disableReasonIfAny != null) {
+                onInitializeWhenDisabled(disableReasonIfAny);
+            } else {
+                onInitializeWhenEnabled();
+            }
+        }
     }
 
     /**
@@ -186,27 +209,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      */
     protected abstract InlinePromptConfig getInlinePromptConfig();
 
-    @Override
-    protected void onBeforeRender() {
-
-        if ((!hasBeenRendered() || alwaysRebuildGui())) {
-            buildGui();
-        }
-
-        final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
-
-        if (scalarModel.isViewMode()) {
-            onBeforeRenderWhenViewMode();
-        } else {
-            if (disableReasonIfAny != null) {
-                onBeforeRenderWhenDisabled(disableReasonIfAny);
-            } else {
-                onBeforeRenderWhenEnabled();
-            }
-        }
-        super.onBeforeRender();
-    }
 
 
     /**
@@ -229,6 +231,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      * @see #onBeforeRender()
      */
     private void buildGui() {
+
+        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
+        scalarTypeContainer.setOutputMarkupId(true);
+        scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
+        addOrReplace(scalarTypeContainer);
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();
@@ -291,19 +298,19 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     /**
      * Optional hook.
      */
-    protected void onBeforeRenderWhenViewMode() {
+    protected void onInitializeWhenViewMode() {
     }
 
     /**
      * Optional hook.
      */
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+    protected void onInitializeWhenDisabled(final String disableReason) {
     }
 
     /**
      * Optional hook.
      */
-    protected void onBeforeRenderWhenEnabled() {
+    protected void onInitializeWhenEnabled() {
     }
 
 

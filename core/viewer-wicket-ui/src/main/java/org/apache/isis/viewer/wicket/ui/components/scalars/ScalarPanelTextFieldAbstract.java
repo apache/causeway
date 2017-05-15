@@ -295,8 +295,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
 
     @Override
-    protected void onBeforeRenderWhenViewMode() {
-        super.onBeforeRenderWhenViewMode();
+    protected void onInitializeWhenViewMode() {
+        super.onInitializeWhenViewMode();
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -305,8 +305,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
-        super.onBeforeRenderWhenDisabled(disableReason);
+    protected void onInitializeWhenDisabled(final String disableReason) {
+        super.onInitializeWhenDisabled(disableReason);
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -317,8 +317,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected void onBeforeRenderWhenEnabled() {
-        super.onBeforeRenderWhenEnabled();
+    protected void onInitializeWhenEnabled() {
+        super.onInitializeWhenEnabled();
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         setTitleAttribute("");
