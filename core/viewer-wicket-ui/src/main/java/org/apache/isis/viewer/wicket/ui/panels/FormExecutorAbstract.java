@@ -18,6 +18,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -30,6 +31,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
@@ -37,12 +39,20 @@ import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
 
-public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider> implements FormExecutor {
+public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
+        implements FormExecutor {
 
     protected final M model;
+    protected final WicketViewerSettings settings;
 
     public FormExecutorAbstract(final M model) {
         this.model = model;
+        this.settings = getSettings();
+    }
+
+    protected WicketViewerSettings getSettings() {
+        final GuiceBeanProvider guiceBeanProvider = getServicesInjector().lookupService(GuiceBeanProvider.class);
+        return guiceBeanProvider.lookup(WicketViewerSettings.class);
     }
 
     @Override
@@ -112,19 +122,24 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             getPersistenceSession().getPersistenceManager().flush();
 
             // update target, since version updated (concurrency checks)
-            final EntityModel parentEntityModel = model.getParentEntityModel();
-            parentEntityModel.resetVersion();
-            parentEntityModel.resetPropertyModels();
+            final EntityModel targetEntityModel = model.getParentEntityModel();
+
+            targetEntityModel.resetVersion();
+            targetEntityModel.resetPropertyModels();
 
             onExecuteAndProcessResults(target);
 
-            if(promptStyle == PromptStyle.INLINE) {
+            final ObjectAdapter targetAdapter = targetEntityModel.load();
+            final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
+
+            if (targetAdapter != resultAdapter || redirectEvenIfSameObject) {
+
+                forwardOntoResult(resultAdapter, target);
+
+            } else {
 
                 final Page page = feedbackForm.getPage();
                 addComponentsToRedraw(target, page);
-
-            } else {
-                forwardOntoResult(resultAdapter, target);
             }
 
             return true;
@@ -218,7 +233,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             }
         }
 
-        // debug(componentsToRedraw, componentsNotToRedraw);
+        debug(componentsToRedraw, componentsNotToRedraw);
 
         for (Component component : componentsToRedraw) {
             target.add(component);
@@ -326,6 +341,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
     protected abstract void forwardOntoResult(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target);
+
 
 
 }

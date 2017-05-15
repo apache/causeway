@@ -32,6 +32,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -182,6 +183,12 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
         return IsisContext.getSessionFactory();
     }
 
+
+    @com.google.inject.Inject
+    WicketViewerSettings settings;
+    protected WicketViewerSettings getSettings() {
+        return settings;
+    }
 
 
 }

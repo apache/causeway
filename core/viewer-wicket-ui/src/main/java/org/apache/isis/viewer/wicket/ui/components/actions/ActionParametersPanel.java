@@ -61,12 +61,14 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
     public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
-        actionModel.setFormExecutor(new ActionParametersFormExecutor(/*this, */actionModel));
+        actionModel.setFormExecutor(new ActionParametersFormExecutor(actionModel));
         buildGui(getActionModel());
     }
 
     /**
      * Sets the owning action prompt (modal window), if any.
+     *
+     * REVIEW: I wonder if this is necessary... there isn't anything exactly the same for property edits...
      */
     public void setActionPrompt(ActionPrompt actionPrompt) {
         ActionParametersFormExecutor formExecutor =

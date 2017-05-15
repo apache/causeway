@@ -30,6 +30,7 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
     }
 
     protected void onExecuteAndProcessResults(final AjaxRequestTarget target) {
+
         if (model.isBookmarkable()) {
             bookmarkPage(model);
         }
@@ -63,6 +64,10 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
 
     ///////////////////////////////////////////////////////
 
+    protected void bookmarkPage(BookmarkableModel<?> model) {
+        getBookmarkedPagesModel().bookmarkPage(model);
+    }
+
     private BookmarkedPagesModel getBookmarkedPagesModel() {
         BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getSession();
         return application.getBookmarkedPagesModel();
@@ -73,6 +78,9 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
     }
 
 
+    ///////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////
 
     private ActionPrompt actionPrompt;
 
@@ -80,12 +88,5 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
         this.actionPrompt = actionPrompt;
     }
 
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-    protected void bookmarkPage(BookmarkableModel<?> model) {
-        getBookmarkedPagesModel().bookmarkPage(model);
-    }
 
 }
