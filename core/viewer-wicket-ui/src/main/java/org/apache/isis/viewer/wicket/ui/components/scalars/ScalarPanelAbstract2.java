@@ -316,9 +316,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(
-                    AdapterManager.ConcurrencyChecking.NO_CHECK,
-                    getPersistenceSession(), getSpecificationLoader());
+
+            final ObjectAdapter parentAdapter =
+                    model.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }

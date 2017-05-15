@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
@@ -37,22 +36,17 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    @SuppressWarnings("unused")
-    private final EntityModel entityModel;
-
-    public EntityActionLinkFactory(final EntityModel entityModel, final ScalarModel scalarModelForAssociationIfAny) {
-        super(scalarModelForAssociationIfAny);
-        this.entityModel = entityModel;
+    public EntityActionLinkFactory(
+            final EntityModel entityModel,
+            final ScalarModel scalarModelForAssociationIfAny) {
+        super(entityModel, scalarModelForAssociationIfAny);
     }
 
     @Override
     public LinkAndLabel newLink(
-            final String linkId,
-            final ObjectAdapterMemento adapterMemento,
-            final ObjectAction action) {
+            final ObjectAction objectAction, final String linkId) {
 
-        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                entityModel.getPersistenceSession(), entityModel.getSpecificationLoader());
+        final ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
         
         final Boolean persistent = objectAdapter.representsPersistent();
         if (!persistent) {
@@ -62,7 +56,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
         // check visibility and whether enabled
         final Consent visibility =
-                action.isVisible(
+                objectAction.isVisible(
                         objectAdapter,
                         InteractionInitiatedBy.USER,
                         Where.OBJECT_FORMS);
@@ -71,10 +65,10 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         }
 
         
-        final AbstractLink link = newLink(linkId, objectAdapter, action);
+        final AbstractLink link = newLink(linkId, objectAction);
         
         final Consent usability =
-                action.isUsable(
+                objectAction.isUsable(
                         objectAdapter,
                         InteractionInitiatedBy.USER,
                         Where.OBJECT_FORMS);
@@ -83,7 +77,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
             link.setEnabled(false);
         }
 
-        return newLinkAndLabel(objectAdapter, action, link, disabledReasonIfAny);
+        return newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny);
     }
 
 

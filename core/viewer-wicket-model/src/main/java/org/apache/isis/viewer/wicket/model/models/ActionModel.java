@@ -114,15 +114,14 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
 
     /**
-     * @param objectAdapter
+     * @param entityModel
      * @param action
      * @return
      */
-    public static ActionModel create(final ObjectAdapter objectAdapter, final ObjectAction action) {
-        final ObjectAdapterMemento serviceMemento = ObjectAdapterMemento.Functions.fromAdapter().apply(objectAdapter);
+    public static ActionModel create(final EntityModel entityModel, final ObjectAction action) {
         final ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(action);
         final Mode mode = action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
-        return new ActionModel(serviceMemento, homePageActionMemento, mode);
+        return new ActionModel(entityModel, homePageActionMemento, mode);
     }
 
     public static ActionModel createForPersistent(
@@ -270,7 +269,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         return action.getParameterCount() > 0 ? Mode.PARAMETERS : Mode.RESULTS;
     }
 
-    private final ObjectAdapterMemento targetAdapterMemento;
+    private final EntityModel entityModel;
     private final ActionMemento actionMemento;
     private Mode actionMode;
 
@@ -281,7 +280,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
 
     private ActionModel(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
-        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters, specificationLoader), actionModeFrom(pageParameters,
+        this(newEntityModelFrom(pageParameters), newActionMementoFrom(pageParameters, specificationLoader), actionModeFrom(pageParameters,
                 specificationLoader));
 
         setArgumentsIfPossible(pageParameters);
@@ -309,12 +308,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
 
-    private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters) {
+    private static EntityModel newEntityModelFrom(final PageParameters pageParameters) {
         final RootOid oid = oidFor(pageParameters);
         if(oid.isTransient()) {
             return null;
         } else {
-            return ObjectAdapterMemento.createPersistent(oid);
+            return new EntityModel(ObjectAdapterMemento.createPersistent(oid));
         }
     }
 
@@ -324,8 +323,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
 
-    private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode) {
-        this.targetAdapterMemento = adapterMemento;
+    private ActionModel(final EntityModel entityModel, final ActionMemento actionMemento, final Mode actionMode) {
+        this.entityModel = entityModel;
         this.actionMemento = actionMemento;
         this.actionMode = actionMode;
     }
@@ -334,7 +333,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      * Copy constructor, as called by {@link #copy()}.
      */
     private ActionModel(final ActionModel actionModel) {
-        this.targetAdapterMemento = actionModel.targetAdapterMemento;
+        this.entityModel = actionModel.entityModel;
         this.actionMemento = actionModel.actionMemento;
         this.actionMode = actionModel.actionMode;
         //this.actionPrompt = actionModel.actionPrompt;
@@ -438,7 +437,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final int i = apm.getNumber();
 		ActionArgumentModel actionArgumentModel = arguments.get(i);
         if (actionArgumentModel == null) {
-            actionArgumentModel = new ScalarModel(targetAdapterMemento, apm);
+            actionArgumentModel = new ScalarModel(entityModel, apm);
             final int number = actionArgumentModel.getParameterMemento().getNumber();
             arguments.put(number, actionArgumentModel);
         }
@@ -446,8 +445,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
     public ObjectAdapter getTargetAdapter() {
-        return targetAdapterMemento.getObjectAdapter(getConcurrencyChecking(), getPersistenceSession(),
-                getSpecificationLoader());
+        return entityModel.load(getConcurrencyChecking());
     }
 
     protected ConcurrencyChecking getConcurrencyChecking() {

@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -59,21 +60,26 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     private static final long serialVersionUID = 1L;
 
+    protected final EntityModel targetEntityModel;
     private final ScalarModel scalarModelForAssociationIfAny;
 
-    protected ActionLinkFactoryAbstract(final ScalarModel scalarModelForAssociationIfAny) {
+    protected ActionLinkFactoryAbstract(
+            final EntityModel targetEntityModel,
+            final ScalarModel scalarModelForAssociationIfAny) {
+        this.targetEntityModel = targetEntityModel;
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
     }
 
     protected AbstractLink newLink(
             final String linkId,
-            final ObjectAdapter objectAdapter,
             final ObjectAction action) {
 
-        final ActionModel actionModel = ActionModel.create(objectAdapter, action);
+        final ActionModel actionModel = ActionModel.create(this.targetEntityModel, action);
 
-        // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.  Otherwise can use default handling
-        // TODO: the method looks at the actual compile-time return type; cannot see a way to check at runtime what is returned.
+        // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
+        // Otherwise can use default handling
+        // TODO: the method looks at the actual compile-time return type;
+        // TODO: cannot see a way to check at runtime what is returned.
         // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
         final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 

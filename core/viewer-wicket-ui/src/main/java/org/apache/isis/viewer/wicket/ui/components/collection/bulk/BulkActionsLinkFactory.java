@@ -72,11 +72,14 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         this.toggleboxColumn = toggleboxColumn;
     }
 
-
+    /**
+     * @param objectAction
+     * @param linkId
+     */
     @Override
     public LinkAndLabel newLink(
-            final String linkId, final ObjectAdapterMemento objectAdapterMemento,
-            final ObjectAction objectAction) {
+            final ObjectAction objectAction,
+            final String linkId) {
 
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {

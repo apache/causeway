@@ -40,9 +40,7 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
     public PropertyEditPromptHeaderPanel(String id, final ScalarModel model) {
         super(id, model);
 
-        ObjectAdapter targetAdapter =
-                model.getParentObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK,
-                        getPersistenceSession(), getSpecificationLoader());
+        ObjectAdapter targetAdapter = model.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 

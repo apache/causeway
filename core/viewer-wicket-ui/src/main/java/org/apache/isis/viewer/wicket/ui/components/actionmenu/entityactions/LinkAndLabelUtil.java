@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
@@ -48,8 +47,7 @@ public final class LinkAndLabelUtil {
             return Collections.emptyList();
         }
 
-        final ObjectAdapterMemento parentMemento = scalarModelForAssociation.getParentObjectAdapterMemento();
-        final EntityModel parentEntityModel = new EntityModel(parentMemento);
+        final EntityModel parentEntityModel = scalarModelForAssociation.getParentEntityModel();
 
         final ObjectAdapter parentAdapter = parentEntityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
 
@@ -75,19 +73,17 @@ public final class LinkAndLabelUtil {
      */
     public static List<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
             final EntityModel parentEntityModel,
-            final List<ObjectAction> actions,
+            final List<ObjectAction> objectActions,
             final ScalarModel scalarModelForAssociationIfAny) {
 
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelForAssociationIfAny);
-        final String linkId = AdditionalLinksPanel.ID_ADDITIONAL_LINK;
 
-        final ObjectAdapterMemento adapterMemento = parentEntityModel.getObjectAdapterMemento();
-        return FluentIterable.from(actions)
+        return FluentIterable.from(objectActions)
                 .transform(new Function<ObjectAction, LinkAndLabel>() {
 
                     @Override
                     public LinkAndLabel apply(ObjectAction objectAction) {
-                        return linkFactory.newLink(linkId, adapterMemento, objectAction);
+                        return linkFactory.newLink(objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK);
                     }
                 })
                 .filter(Predicates.<LinkAndLabel>notNull())
