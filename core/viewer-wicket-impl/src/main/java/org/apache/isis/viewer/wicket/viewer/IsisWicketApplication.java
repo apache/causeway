@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
@@ -35,11 +36,13 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.SharedResources;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -236,7 +239,46 @@ public class IsisWicketApplication
         // settings before any other.
         setResourceSettings(new IsisResourceSettings(this));
 
+        // this doesn't seem to accomplish anything
+        // addListenerToStripRemovedComponentsFromAjaxTargetResponse();
+
         super.internalInit();
+    }
+
+    // idea here is to avoid XmlPartialPageUpdate spitting out warnings, eg:
+    //
+    // 13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxLink [Component id = copyLink]]' with markupid: 'copyLink94c' not rendered because it was already removed from page
+    //  13:08:36,642  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[SimpleClipboardModalWindow [Component id = simpleClipboardModalWindow]]' with markupid: 'simpleClipboardModalWindow94e' not rendered because it was already removed from page
+    // 13:08:36,643  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxFallbackLink [Component id = link]]' with markupid: 'link951' not rendered because it was already removed from page
+    // 13:08:36,643  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxFallbackLink [Component id = link]]' with markupid: 'link952' not rendered because it was already removed from page
+    // 13:08:36,655  [XmlPartialPageUpdate qtp1988859660-18 WARN ]  Component '[AjaxLink [Component id = clearBookmarkLink]]' with markupid: 'clearBookmarkLink953' not rendered because it was already removed from page
+    //
+    // however, doesn't seem to work (even though the provided map is mutable).
+    // must be some other sort of side-effect which causes the enqueued component(s) to be removed from page between
+    // this listener firing and XmlPartialPageUpdate actually attempting to render the change components
+    //
+    private boolean addListenerToStripRemovedComponentsFromAjaxTargetResponse() {
+        return getAjaxRequestTargetListeners().add(new AjaxRequestTarget.AbstractListener(){
+
+            @Override
+            public void onBeforeRespond(Map<String, Component> map, AjaxRequestTarget target)
+            {
+
+                List<String> idsToRemove = Lists.newArrayList();
+                final Set<Map.Entry<String, Component>> entries = map.entrySet();
+                for (Map.Entry<String, Component> entry : entries) {
+                    final Component component = entry.getValue();
+                    final Page page = component.findParent(Page.class);
+                    if(page == null) {
+                        idsToRemove.add(entry.getKey());
+                    }
+                }
+                for (String id : idsToRemove) {
+                    map.remove(id);
+                }
+
+            }
+        });
     }
 
     /**
