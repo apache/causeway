@@ -23,13 +23,14 @@ import java.util.List;
 
 import com.google.common.base.Strings;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -105,14 +106,18 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 final AbstractLink link = linkAndLabel.getLink();
 
-                final String itemTitle = first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
-                if(itemTitle != null) {
-                    item.add(new AttributeAppender("title", itemTitle));
+                item.add(new AttributeModifier("title",  new Model<String>() {
+                    @Override
+                    public String getObject() {
+                        // TODO: for this to update immediately, need to pass through the ActionMemento etc
+                        // (rather than reifying into LinkAndLabel)
+                        return first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
+                    }
+                }));
 
-                    // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
-                    // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
-                    link.add(new AttributeAppender("data-original-title", ""));
-                }
+                // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
+                // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
+                link.add(new AttributeModifier("data-original-title", ""));
 
                 final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
                 if(linkAndLabel.isBlobOrClob()) {

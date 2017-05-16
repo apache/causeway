@@ -99,13 +99,17 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     protected IModel<String> obtainPromptInlineLinkModel() {
-        ObjectAdapter object = scalarModel.getObject();
-        final T value = object != null ? (T) object.getObject() : null;
-        final String str =
-                value != null
-                        ? converter.convertToString(value, getLocaleProvider().getLocale())
-                        : null;
-        return Model.of(str);
+        return new Model<String>() {
+            @Override public String getObject() {
+                ObjectAdapter object = scalarModel.getObject();
+                final T value = object != null ? (T) object.getObject() : null;
+                final String str =
+                        value != null
+                                ? converter.convertToString(value, getLocaleProvider().getLocale())
+                                : null;
+                return str;
+            }
+        };
     }
 
     /**

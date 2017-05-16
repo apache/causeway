@@ -141,6 +141,15 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
                 forwardOntoResult(resultAdapter, targetIfAny);
 
             } else {
+
+                // in this branch the result must be same "logical" object as target, but
+                // the OID might have changed if a view model.
+                final ObjectAdapter targetAdapter = targetEntityModel.getObject();
+                if(targetAdapter != resultAdapter) {
+                    targetEntityModel.setObject(resultAdapter);
+                    targetEntityModel.resetPropertyModels();
+                }
+
                 final AjaxRequestTarget target = targetIfAny; // only in this branch if there *is* a target to use
                 addComponentsToRedraw(target);
             }
