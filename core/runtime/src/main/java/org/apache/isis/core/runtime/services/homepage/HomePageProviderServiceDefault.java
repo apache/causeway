@@ -35,11 +35,12 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class HomePageProviderServiceDefault implements HomePageProviderService {
 
@@ -105,8 +106,13 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
     // for any other value for Where
     protected static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
 
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
+
 
 }

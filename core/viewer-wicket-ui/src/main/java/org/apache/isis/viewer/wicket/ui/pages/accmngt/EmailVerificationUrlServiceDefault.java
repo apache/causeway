@@ -19,13 +19,14 @@
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import java.util.UUID;
-import javax.inject.Inject;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -41,7 +42,7 @@ public class EmailVerificationUrlServiceDefault implements EmailVerificationUrlS
 
     private final PageClassRegistry pageClassRegistry;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     public EmailVerificationUrlServiceDefault(PageClassRegistry pageClassRegistry) {
         this.pageClassRegistry = pageClassRegistry;
     }

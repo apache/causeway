@@ -16,6 +16,8 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
+import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -34,7 +36,6 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -51,6 +52,7 @@ import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.MemberDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
@@ -106,13 +108,6 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
     private void execute(
             final IsisTransactionManager transactionManager,
             final Command backgroundCommand) {
-
-
-        //
-        // TODO: need to generalize so that can invoke property modifications also.
-        //
-
-
 
         transactionManager.executeWithinTransaction(
                 backgroundCommand,
@@ -180,11 +175,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
                             for (OidDto targetOidDto : targetOidDtos) {
 
-                                final Bookmark bookmark = Bookmark.from(targetOidDto);
-                                final Object targetObject = bookmarkService.lookup(bookmark);
-
-                                final ObjectAdapter targetAdapter = adapterFor(targetObject);
-
+                                final ObjectAdapter targetAdapter = targetAdapterFor(targetOidDto);
                                 final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
                                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
@@ -193,10 +184,15 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                                 final ObjectAdapter resultAdapter = objectAction.execute(
                                         targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
+                                //
                                 // for the result adapter, we could alternatively have used...
-                                Object unused = backgroundInteraction.getPriorExecution().getReturned();
+                                // (priorExecution populated by the push/pop within the interaction object)
+                                //
+                                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                                // Object unused = priorExecution.getReturned();
+                                //
 
-                                // this doesn't really make sense if >1 action
+                                // REVIEW: this doesn't really make sense if >1 action
                                 // in any case, the capturing of the action interaction should be the
                                 // responsibility of auditing/profiling
                                 if(resultAdapter != null) {
@@ -227,18 +223,27 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     }
 
                 } catch (RuntimeException e) {
-                    // this doesn't really make sense if >1 action
-                    // in any case, the capturing of the action interaction should be the
-                    // responsibility of auditing/profiling
+                    // hmmm, this doesn't really make sense if >1 action
+                    //
+                    // in any case, the capturing of the result of the action invocation should be the
+                    // responsibility of the interaction...
                     backgroundCommand.setException(Throwables.getStackTraceAsString(e));
 
-                    // alternatively, could have used ...
-                    Exception unused = backgroundInteraction.getPriorExecution().getThrew();
-
-                    backgroundInteraction.getCurrentExecution().setThrew(e);
+                    // lower down the stack the IsisTransactionManager will have set the transaction to abort
+                    // however, we don't want that to occur (because any changes made to the backgroundCommand itself
+                    // would also be rolled back, and it would keep getting picked up again by a scheduler for
+                    // processing); instead we clear the abort cause and ensure we can continue.
+                    transactionManager.getCurrentTransaction().clearAbortCauseAndContinue();
                 }
 
-                backgroundCommand.setCompletedAt(backgroundInteraction.getPriorExecution().getCompletedAt());
+                // it's possible that there is no priorExecution, specifically if there was an exception
+                // invoking the action.  We therefore need to guard that case.
+                final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                final Timestamp completedAt =
+                        priorExecution != null
+                                ? priorExecution.getCompletedAt()
+                                : clockService.nowAsJavaSqlTimestamp();  // close enough...
+                backgroundCommand.setCompletedAt(completedAt);
             }
 
             private ObjectAction findObjectAction(
@@ -319,20 +324,43 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             if(arg == null) {
                 return null;
             }
-            if(Bookmark.class != argType) {
-                return adapterFor(arg);
-            } else {
-                final Bookmark argBookmark = (Bookmark)arg;
-                final RootOid rootOid = RootOid.create(argBookmark);
-                return adapterFor(rootOid);
-            }
+            return argAdapterFor(argType, arg);
+
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
+    protected ObjectAdapter targetAdapterFor(final OidDto targetOidDto) {
+
+//        // this is the original code, but it can be simplified ...
+//        // (moved out to separate method so that, if proven wrong, can override as a patch)
+
+//      final Bookmark bookmark = Bookmark.from(targetOidDto);
+//      final Object targetObject = bookmarkService.lookup(bookmark);
+//      final ObjectAdapter targetAdapter = adapterFor(targetObject);
+
+        return adapterFor(targetOidDto);
+    }
+
+    protected ObjectAdapter argAdapterFor(final Class<?> argType, final Object arg) {
+
+//        // this is the original code, but it can be simplified ...
+//        // (moved out to separate method so that, if proven wrong, can override as a patch)
+
+//        if(Bookmark.class != argType) {
+//            return adapterFor(arg);
+//        } else {
+//            final Bookmark argBookmark = (Bookmark)arg;
+//            final RootOid rootOid = RootOid.create(argBookmark);
+//            return adapterFor(rootOid);
+//        }
+
+        return adapterFor(arg);
+    }
+
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
-        final List<ParamDto> params = actionDto.getParameters().getParameter();
+        final List<ParamDto> params = paramDtosFrom(actionDto);
         final List<ObjectAdapter> args = Lists.newArrayList(
                 Iterables.transform(params, new Function<ParamDto, ObjectAdapter>() {
                     @Override
@@ -343,6 +371,17 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                 })
         );
         return args.toArray(new ObjectAdapter[]{});
+    }
+
+    private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {
+        final ParamsDto parameters = actionDto.getParameters();
+        if (parameters != null) {
+            final List<ParamDto> parameterList = parameters.getParameter();
+            if (parameterList != null) {
+                return parameterList;
+            }
+        }
+        return Collections.emptyList();
     }
 
     // //////////////////////////////////////

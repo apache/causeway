@@ -28,13 +28,14 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
@@ -64,21 +65,24 @@ public class ObjectActionLayoutXmlDefaultTest {
     @Mock
     private AdapterManager mockAdapterManager;
     @Mock
-    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
+    private MessageService mockMessageService;
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
     private ServicesInjector stubServicesInjector;
+    private IsisConfigurationDefault stubConfiguration;
 
     @Before
     public void setUp() throws Exception {
+
+        stubConfiguration = new IsisConfigurationDefault();
 
         stubServicesInjector =
                 new ServicesInjector(Lists.newArrayList(
                         mockAuthenticationSessionProvider,
                         mockSpecificationLoader,
                         mockPersistenceSessionServiceInternal,
-                        mockMessageBrokerServiceInternal));
+                        mockMessageService), stubConfiguration);
 
         context.checking(new Expectations() {
             {

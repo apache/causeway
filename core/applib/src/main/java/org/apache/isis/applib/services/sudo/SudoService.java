@@ -32,6 +32,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface SudoService {
 
     /**
+     * If included in the list of roles, then will disable security checks (can view and use all object members).
+     */
+    String ACCESS_ALL_ROLE = SudoService.class.getName() + "#accessAll";
+
+    /**
      * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user.
      *
      * <p>
@@ -63,4 +68,26 @@ public interface SudoService {
     @Programmatic
     <T> T sudo(String username, List<String> roles, final Callable<T> callable);
 
+    /**
+     * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
+     */
+    interface Spi {
+        /**
+         * Any implementation of the {@link SudoService} should call this method on all implementations of the
+         * {@link Spi} service whenever {@link SudoService#sudo(String, List, Callable)} (or its overloads)
+         * is called.
+         *
+         * <p>
+         *     Modelled after Shiro security's <a href="https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-">runAs</a> support.
+         * </p>
+         */
+        @Programmatic
+        void runAs(String username, List<String> roles);
+
+        /**
+         *
+         */
+        @Programmatic
+        void releaseRunAs();
+    }
 }

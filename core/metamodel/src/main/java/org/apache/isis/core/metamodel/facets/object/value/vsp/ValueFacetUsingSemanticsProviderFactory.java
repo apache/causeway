@@ -28,11 +28,6 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract  {
 
 
-    /**
-     * Lazily created.
-     */
-    private ValueSemanticsProviderContext context;
-
     protected ValueFacetUsingSemanticsProviderFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
@@ -42,25 +37,11 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
         FacetUtil.addFacet(facet);
     }
 
-    // ////////////////////////////////////////////////////
-    // Dependencies (injected via setter)
-    // ////////////////////////////////////////////////////
 
 
-    public ValueSemanticsProviderContext getContext() {
-        if (context == null) {
-            context = new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), adapterManager, servicesInjector);
-        }
-        return context;
+    public ServicesInjector getContext() {
+        return servicesInjector;
     }
 
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    PersistenceSessionServiceInternal adapterManager;
 
 }

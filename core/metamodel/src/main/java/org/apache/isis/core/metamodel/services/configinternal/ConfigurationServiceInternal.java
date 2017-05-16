@@ -18,12 +18,15 @@ package org.apache.isis.core.metamodel.services.configinternal;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-public interface ConfigurationServiceInternal {
+public interface ConfigurationServiceInternal extends IsisConfiguration {
 
+    @Programmatic
     String getProperty(String name);
 
+    @Programmatic
     List<String> getPropertyNames();
 
 }

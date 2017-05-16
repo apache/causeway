@@ -35,7 +35,7 @@ public class DateConverterForApplibDate extends DateConverterAbstract<org.apache
     }
 
     private DateConverterForApplibDate(String datePattern, String datePickerPattern, int adjustBy) {
-        super(org.apache.isis.applib.value.Date.class, datePattern, datePattern, datePickerPattern, adjustBy);
+        super(org.apache.isis.applib.value.Date.class, datePattern, datePattern, adjustBy);
         converter = new DateConverterForJavaUtilDate(datePattern, datePattern, datePickerPattern, adjustBy);
     }
     

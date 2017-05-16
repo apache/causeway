@@ -26,7 +26,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -53,19 +52,19 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
             }
         });
 
-        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "21", null);
+        final Object parsed = value.parseTextEntry(null, "21");
         assertEquals(Byte.valueOf((byte) 21), parsed);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "xs21z4xxx23", null);
+            value.parseTextEntry(null, "xs21z4xxx23");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -73,7 +72,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testTitleOf() throws Exception {
-        assertEquals("102", value.displayTitleOf(byteObj, (Localization) null));
+        assertEquals("102", value.displayTitleOf(byteObj));
     }
 
     @Test

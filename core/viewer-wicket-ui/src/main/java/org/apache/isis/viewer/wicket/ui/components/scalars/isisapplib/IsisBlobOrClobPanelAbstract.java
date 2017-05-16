@@ -31,7 +31,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -51,16 +50,14 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
-public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract {
+public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract2 {
 
 
     private static final long serialVersionUID = 1L;
@@ -88,71 +85,91 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
 
     @Override
-    protected FormGroup addComponentForRegular() {
+    protected FormGroup createComponentForRegular() {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
         
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
-        labelIfRegular.add(fileUploadField);
+        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
+        scalarIfRegularFormGroup.add(fileUploadField);
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
-        labelIfRegular.add(scalarName);
+        scalarIfRegularFormGroup.add(scalarName);
 
-        // find the links...
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
-
-        addPositioningCssTo(labelIfRegular, entityActions);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
             wicketImage.setOutputMarkupId(true);
-            labelIfRegular.addOrReplace(wicketImage);
+            scalarIfRegularFormGroup.addOrReplace(wicketImage);
         } else {
-            Components.permanentlyHide(labelIfRegular, ID_IMAGE);
+            Components.permanentlyHide(scalarIfRegularFormGroup, ID_IMAGE);
         }
         
-        updateFileNameLabel(ID_FILE_NAME, labelIfRegular);
-        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, labelIfRegular);
-        
-        addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, fileUploadField);
-        addEditPropertyTo(labelIfRegular);
+        updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
+        updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
 
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
 
-        return labelIfRegular;
+        return scalarIfRegularFormGroup;
     }
 
+    protected Component getScalarValueComponent() {
+        return fileUploadField;
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Inline prompts are <i>not</i> supported by this component.
+     */
+    @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.notSupported();
+    }
+
+
+    // //////////////////////////////////////
+
+    @Override
+    protected Component createComponentForCompact() {
+        final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+        MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
+        if(downloadLink != null) {
+            updateFileNameLabel("fileNameIfCompact", downloadLink);
+        }
+
+        return scalarIfCompact;
+    }
+
+
+    // //////////////////////////////////////
+
     private Image asWicketImage(String id) {
-        
+
         final ObjectAdapter adapter = getModel().getObject();
         if(adapter == null) {
             return null;
         }
-        
+
         final Object object = adapter.getObject();
         if(!(object instanceof Blob)) {
             return null;
-        } 
-        
+        }
+
         final Blob blob = (Blob)object;
         final MimeType mimeType = blob.getMimeType();
         if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
             return null;
-        } 
-        
+        }
+
         final BufferedImage image = asBufferedImage(blob);
         if(image == null) {
             return null;
         }
-        
+
         final BufferedDynamicImageResource imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(image);
         final ThumbnailImageResource thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
-        
-        final NonCachingImage wicketImage = new NonCachingImage(id, thumbnailImageResource);
-        return wicketImage;
+
+        return new NonCachingImage(id, thumbnailImageResource);
     }
 
     private BufferedImage asBufferedImage(final Blob blob) {
@@ -160,7 +177,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         if(bytes == null) {
             return null;
         }
-        
+
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         try {
             return ImageIO.read(bais);
@@ -171,16 +188,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
     }
 
-    @Override
-    protected Component addComponentForCompact() {
-        final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
-        if(downloadLink != null) {
-            updateFileNameLabel("fileNameIfCompact", downloadLink);
-        }
-        addOrReplace(scalarIfCompact);
-        return scalarIfCompact;
-    }
+
+    // //////////////////////////////////////
 
     protected void onBeforeRenderWhenViewMode() {
         updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE);
@@ -258,24 +267,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         }
     }
 
-	/**
-	 * Just a demo! <br/>
-	 * Fetches the desired filter from e.g. <br/><br/> 
-	 * {@code @ParameterLayout(named="File", describedAs=".xlsx")} 
-	 * @return the desired accept filter 
-	 */
 	private String getAcceptFilter(){
-		return scalarModel.getDescribedAs();
+		return scalarModel.getFileAccept();
 	}
 	
-	/**
-	 * HTML file input tags allow for the client-side file-open-dialog 
-	 * to filter for specific file types *.xyz via the {@code<input ... accept=".xyz"/>}
-	 * attribute.  
-	 * @param component 
-	 * @param filter should be of the form "file_extension|audio/*|video/*|image/*|media_type"
-	 * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-	 */
 	private void addAcceptFilterTo(Component component){
 		final String filter = getAcceptFilter();
 		if(filter==null || filter.isEmpty())
@@ -353,16 +348,17 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         return getBlobOrClob(getModel());
     }
 
-    @Override
-    protected void addFormComponentBehavior(Behavior behavior) {
-        fileUploadField.add(behavior);
-    }
 
-    
     /**
      * Mandatory hook method.
      */
     protected abstract IResource newResource(final T namedWithMimeType);
+
+
+    @Override
+    protected String getScalarPanelType() {
+        return "isisBlobPanel";
+    }
 
 
 }

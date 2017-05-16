@@ -26,7 +26,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -53,13 +52,13 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
         holder = new FacetHolderImpl();
 
-        setValue(value = new ShortWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new ShortWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one", null);
+            value.parseTextEntry(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -67,23 +66,23 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testTitleOfForPositiveValue() {
-        assertEquals("32", value.displayTitleOf(short1, (Localization) null));
+        assertEquals("32", value.displayTitleOf(short1));
     }
 
     @Test
     public void testTitleOfForLargestNegativeValue() {
-        assertEquals("-128", value.displayTitleOf(Short.valueOf((short) -128), (Localization) null));
+        assertEquals("-128", value.displayTitleOf(Short.valueOf((short) -128)));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "120", null);
+        final Object newValue = value.parseTextEntry(null, "120");
         assertEquals(Short.valueOf((short) 120), newValue);
     }
 
     @Test
     public void testParseOfOddEntry() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "1,20.0", null);
+        final Object newValue = value.parseTextEntry(null, "1,20.0");
         assertEquals(Short.valueOf((short) 120), newValue);
     }
 

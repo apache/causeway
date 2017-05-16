@@ -28,12 +28,12 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
@@ -52,11 +52,11 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
      * {@link EncoderDecoder}.
      */
     public JavaSqlTimeStampValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, java.sql.Timestamp.class, configuration, context);
+    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, java.sql.Timestamp.class, context);
     }
 
     // //////////////////////////////////////////////////////////////////

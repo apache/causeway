@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
@@ -39,6 +38,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
@@ -72,21 +72,21 @@ public class AccountManagementPageAbstract extends WebPage {
     /**
      * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
     /**
      * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationCss")
     private String applicationCss;
 
     /**
      * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationJs")
     private String applicationJs;
 
@@ -154,7 +154,11 @@ public class AccountManagementPageAbstract extends WebPage {
     // ///////////////////////////////////////////////////
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
+    }
+
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
     @javax.inject.Inject

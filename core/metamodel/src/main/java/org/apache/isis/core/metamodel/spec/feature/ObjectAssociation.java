@@ -67,11 +67,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
-     * Get the name for the business key, if one has been specified.
-     */
-    String getBusinessKeyName();
-
-    /**
      * Return the default for this property.
      */
     ObjectAdapter getDefault(ObjectAdapter adapter);

@@ -33,6 +33,17 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainService {
 
+
+
+    /**
+     * Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always &quot;1&quot;).
+     *
+     * <p>
+     * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
+     */
+    String objectType() default "";
+
+
     /**
      * If this domain service acts as a repository for an entity type, specify that entity type.
      */
@@ -50,10 +61,22 @@ public @interface DomainService {
      * Same convention as {@link MemberOrder#sequence()}.  If not specified, placed after any named.
      * </p>
      *
-     * @deprecated - use {@link DomainServiceLayout#menuOrder()} instead.
+     * <p>
+     *     Either this attribute or {@link DomainServiceLayout#menuOrder()} can be used; they are equivalent.
+     *     Typically this attribute is used for services with a {@link #nature() nature} of
+     *     {@link NatureOfService#DOMAIN domain} (these are not visible in the UI) whereas
+     *     {@link DomainServiceLayout#menuOrder()} is used for services with a nature of
+     *     {@link NatureOfService#VIEW_MENU_ONLY} (which do appear in the UI)
+     * </p>
+     *
+     * <p>
+     *     The default value is set to "Integer.MAX_VALUE - 100" so that any domain services intended to override the
+     *     default implementations provided by the framework itself will do so without having to specify the
+     *     menuOrder (with the exception of <tt>EventBusServiceJdo</tt>, all framework implementations have a
+     *     default order greater than Integer.MAX_VALUE - 50).
+     * </p>
      */
-    @Deprecated
-    String menuOrder() default "" + Integer.MAX_VALUE;
+    String menuOrder() default "" + (Integer.MAX_VALUE - 100)  ;
 
 
 }

@@ -23,6 +23,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -39,7 +41,7 @@ public class ActionPromptPage extends PageAbstract {
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
     public ActionPromptPage(final ActionModel model) {
-        super(new PageParameters(), model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
+        super(new PageParameters(), model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
 
         if(model.isBookmarkable()) {
@@ -48,19 +50,28 @@ public class ActionPromptPage extends PageAbstract {
         addBookmarkedPages(themeDiv);
     }
 
+    /**
+     * Required for bookmarking of actions.
+     */
     public ActionPromptPage(final PageParameters pageParameters) {
-        this(pageParameters, buildModel(pageParameters));
+        this(pageParameters, IsisContext.getSessionFactory().getSpecificationLoader());
     }
-    
+
+    public ActionPromptPage(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
+        this(pageParameters, buildModel(pageParameters, specificationLoader));
+    }
+
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
-        super(pageParameters, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
+        super(pageParameters, model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
         
         // no need to bookmark because the ActionPanel will have done so for us
         addBookmarkedPages(themeDiv);
     }
     
-    private static ActionModel buildModel(final PageParameters pageParameters) {
-        return ActionModel.createForPersistent(pageParameters);
+    private static ActionModel buildModel(
+            final PageParameters pageParameters,
+            final SpecificationLoader specificationLoader) {
+        return ActionModel.createForPersistent(pageParameters, specificationLoader);
     }
 }

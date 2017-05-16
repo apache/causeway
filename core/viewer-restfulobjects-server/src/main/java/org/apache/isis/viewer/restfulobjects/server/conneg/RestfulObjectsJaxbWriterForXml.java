@@ -31,7 +31,7 @@ import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @Provider
@@ -51,17 +51,24 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
         return Util.hasXRoDomainTypeParameter(mediaType);
     }
 
-    @Override protected Marshaller getMarshaller(
+    @Override
+    protected Marshaller getMarshaller(
             final Class<?> type, final Annotation[] annotations, final MediaType mediaType) {
         final Marshaller marshaller = super.getMarshaller(type, annotations, mediaType);
         marshaller.setAdapter(PersistentEntityAdapter.class, new PersistentEntityAdapter() {
             @Override
             protected BookmarkService getBookmarkService() {
-                final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
-                final ServicesInjector servicesInjector = persistenceSession.getServicesInjector();
-                return servicesInjector.lookupService(BookmarkService.class);
+                return getServicesInjector().lookupServiceElseFail(BookmarkService.class);
             }
         });
         return marshaller;
+    }
+
+    ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

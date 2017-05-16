@@ -17,6 +17,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -35,6 +37,7 @@ import org.apache.isis.core.commons.lang.StringFunctions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
@@ -47,16 +50,13 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPositi
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectAction extends ObjectMember {
 
-
-        // //////////////////////////////////////////////////////
-    // semantics, realTarget, getOnType
-    // //////////////////////////////////////////////////////
-
+    //region > getSemantics, getOnType
     /**
      * The semantics of this action.
      */
@@ -67,19 +67,17 @@ public interface ObjectAction extends ObjectMember {
      * invoked upon.
      */
     ObjectSpecification getOnType();
+    //endregion
 
-    boolean promptForParameters(ObjectAdapter target);
-
-    // //////////////////////////////////////////////////////////////////
-    // Type
-    // //////////////////////////////////////////////////////////////////
+    //region > getType, isPrototype
 
     ActionType getType();
 
-    // //////////////////////////////////////////////////////////////////
-    // ReturnType
-    // //////////////////////////////////////////////////////////////////
+    boolean isPrototype();
 
+    //endregion
+
+    //region > ReturnType
     /**
      * Returns the specifications for the return type.
      */
@@ -91,9 +89,9 @@ public interface ObjectAction extends ObjectMember {
      */
     boolean hasReturn();
 
-    // //////////////////////////////////////////////////////////////////
-    // execute, executeWithRuleChecking
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > execute, executeWithRuleChecking
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -120,10 +118,9 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] parameters,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    // //////////////////////////////////////////////////////////////////
-    // valid
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > isProposedArgumentSetValid
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
@@ -133,9 +130,9 @@ public interface ObjectAction extends ObjectMember {
             ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    // //////////////////////////////////////////////////////
-    // Parameters (declarative)
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Parameters (declarative)
 
     /**
      * Returns the number of parameters used by this method.
@@ -175,9 +172,9 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectActionParameter getParameterByName(String paramName);
 
-    // //////////////////////////////////////////////////////
-    // Parameters (per instance)
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Parameters (per instance)
 
     /**
      * Returns the defaults references/values to be used for the action.
@@ -192,22 +189,24 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
+    //endregion
 
-
+    //region > setupBulkActionInvocationContext
     /**
      * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
      */
-    void setupActionInvocationContext(
+    void setupBulkActionInvocationContext(
             final ObjectAdapter targetAdapter);
 
 
-    // //////////////////////////////////////////////////////
-    // Utils
-    // //////////////////////////////////////////////////////
+    //endregion
 
-    public static final class Utils {
+    //region > Util
+    public static final class Util {
 
-        private Utils() {
+        final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
+
+        private Util() {
         }
 
         public static String nameFor(final ObjectAction objAction) {
@@ -223,19 +222,14 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
-            boolean blobOrClob = false;
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
                 Class<?> cls = returnType.getCorrespondingClass();
                 if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
-                    blobOrClob = true;
+                    return true;
                 }
             }
-            return blobOrClob;
-        }
-
-        public static boolean isExplorationOrPrototype(final ObjectAction action) {
-            return action.getType().isExploration() || action.getType().isPrototype();
+            return false;
         }
 
         public static String actionIdentifierFor(final ObjectAction action) {
@@ -271,11 +265,84 @@ public interface ObjectAction extends ObjectMember {
             return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
+
+        public static List<ObjectAction> findTopLevel(
+                final ObjectAdapter adapter,
+                final DeploymentCategory deploymentCategory) {
+            final List<ObjectAction> topLevelActions = Lists.newArrayList();
+
+            addTopLevelActions(adapter, ActionType.USER, topLevelActions);
+            if(deploymentCategory.isPrototyping()) {
+                addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
+            }
+            return topLevelActions;
+        }
+
+        static void addTopLevelActions(
+                final ObjectAdapter adapter,
+                final ActionType actionType,
+                final List<ObjectAction> topLevelActions) {
+
+            final ObjectSpecification adapterSpec = adapter.getSpecification();
+
+            @SuppressWarnings({ "unchecked", "deprecation" })
+            Filter<ObjectAction> filter = org.apache.isis.applib.filter.Filters.and(
+                    Filters.memberOrderNotAssociationOf(adapterSpec),
+                    Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                    Filters.notBulkOnly(),
+                    Filters.excludeWizardActions(adapterSpec));
+
+            final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, filter);
+            topLevelActions.addAll(userActions);
+        }
+
+
+        public static List<ObjectAction> findForAssociation(
+                final ObjectAdapter adapter,
+                final ObjectAssociation association, final DeploymentCategory deploymentCategory) {
+            final List<ObjectAction> associatedActions = Lists.newArrayList();
+
+            addActions(adapter, ActionType.USER, association, associatedActions);
+            if(deploymentCategory.isPrototyping()) {
+                addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
+            }
+
+            Collections.sort(associatedActions, new Comparator<ObjectAction>() {
+
+                @Override
+                public int compare(ObjectAction o1, ObjectAction o2) {
+                    final MemberOrderFacet m1 = o1.getFacet(MemberOrderFacet.class);
+                    final MemberOrderFacet m2 = o2.getFacet(MemberOrderFacet.class);
+                    return memberOrderFacetComparator.compare(m1, m2);
+                }
+            });
+            return associatedActions;
+        }
+
+        static List<ObjectAction> addActions(
+                final ObjectAdapter adapter,
+                final ActionType type,
+                final ObjectAssociation association, final List<ObjectAction> associatedActions) {
+            final ObjectSpecification objectSpecification = adapter.getSpecification();
+
+            @SuppressWarnings({ "unchecked", "deprecation" })
+            Filter<ObjectAction> filter = org.apache.isis.applib.filter.Filters.and(
+                    Filters.memberOrderOf(association),
+                    Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                    Filters.notBulkOnly(),
+                    Filters.excludeWizardActions(objectSpecification));
+
+            final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED, filter);
+            associatedActions.addAll(userActions);
+            return userActions;
+        }
+
+
     }
 
-    // //////////////////////////////////////////////////////
-    // Predicates
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Predicates
 
     public static final class Predicates {
 
@@ -316,9 +383,9 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-    // //////////////////////////////////////////////////////
-    // Filters
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > Filters
 
     public static final class Filters {
 
@@ -392,7 +459,9 @@ public interface ObjectAction extends ObjectMember {
 
                 @Override
                 public boolean accept(ObjectAction oa) {
-                    if (!oa.containsDoOpFacet(BulkFacet.class)) {
+
+                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
+                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == Bulk.AppliesTo.REGULAR_ONLY) {
                         return false;
                     }
                     if (oa.getParameterCount() != 0) {
@@ -489,4 +558,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
     }
+
+    //endregion
+
 }

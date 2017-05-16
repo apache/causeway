@@ -1,0 +1,50 @@
+[[_rgant-ViewModel]]
+= `@ViewModel`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+The `@ViewModel` annotation, applied to a class, is the simplest way to indicate that the class is a view model.
+
+View models are not persisted to the database, instead their state is encoded within their identity (ultimately
+represented in the URL). As such, view models are immutable.
+
+For example:
+
+[source,java]
+----
+@ViewModel
+public class MyViewModel {
+    public MyViewModel() {}   // <1>
+    ...
+}
+----
+<1> must have a no-arg constructor for subsequent "recreation" by the framework.
+
+
+To instantiate a view model, you can either instantiate directly using its constructor, or indirectly using `DomainObjectContainer#newTransientInstance()`.  If you use the former, also programmatically call `DomainObjectContainer#injectServicesInto(...)` to ensure that any dependencies are injected into the service.
+
+
+[TIP]
+====
+Note that there is a `DomainObjectContainer#newViewModelInstance(.)`; this is for view models that implement `ViewModel` interface and can be safely ignored.
+====
+
+
+The view model's memento will be derived from the value of the view model object's properties. Any xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`] properties. Properties that are merely xref:../rgant/rgant.adoc#_rgant-Property_hidden[hidden] _are_ included in the memento.
+
+Only properties supported by the configured xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
+
+(As of 1.8.0) there are some limitations:
+* view models cannot hold collections other view models (simple properties _are_ supported, though)
+* collections (of either view models or entities) are ignored.
+
+
+[WARNING]
+====
+The `@ViewModel` does not allow the objectType to be specified, meaning that it is incompatible with the metamodel validation check ennabled by the xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_metamodel-validation[`explicitObjectType`] configuration property.
+
+Instead, use xref:../rgant/rgant.adoc#_rgant_DomainObject_nature[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:../rgant/rgant.adoc#_rgant_DomainObject_objectType[`@DomainObject#objectType()`].
+====

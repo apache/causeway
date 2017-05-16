@@ -24,7 +24,6 @@ import java.util.IllegalFormatException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -52,13 +51,12 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     public ParseableFacetUsingParser(
             final Parser<?> parser,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
+            final ServicesInjector servicesInjector) {
         super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
-        this.authenticationSessionProvider = servicesInjector.lookupService(AuthenticationSessionProvider.class);
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
         this.dependencyInjector = servicesInjector;
-        this.adapterManager = adapterManager;
+        this.adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
     @Override
@@ -71,7 +69,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     public ObjectAdapter parseTextEntry(
             final ObjectAdapter contextAdapter,
             final String entry,
-            final InteractionInitiatedBy interactionInitiatedBy, Localization localization) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
         }
@@ -93,7 +91,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         getDependencyInjector().injectServicesInto(parser);
 
         try {
-            final Object parsed = parser.parseTextEntry(context, entry, localization);
+            final Object parsed = parser.parseTextEntry(context, entry);
             if (parsed == null) {
                 return null;
             }

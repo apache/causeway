@@ -28,17 +28,17 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotation;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
 
 public class BookmarkableAnnotationFacetFactoryTest_class extends AbstractFacetFactoryTest {
 
-    private BookmarkPolicyFacetViaBookmarkableAnnotationFactory facetFactory;
+    private BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new BookmarkPolicyFacetViaBookmarkableAnnotationFactory();
+        facetFactory = new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory();
     }
 
     @Override

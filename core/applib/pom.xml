@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-applib</artifactId>
 
-    <name>Isis AppLib</name>
+    <name>Apache Isis AppLib</name>
     <description>
         Isis application library, defining annotations and utilities for the
         default (Java) programming model.
@@ -103,11 +103,21 @@
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jta_1.1_spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jcdi_1.0_spec</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-core</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- DataNucleus' standard JDO support -->

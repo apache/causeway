@@ -20,8 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
-
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
@@ -54,13 +53,13 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 
@@ -71,8 +70,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     //region > fields
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
-
     private final String id;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
@@ -332,12 +329,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return getPersistenceSessionService().adapterFor(mixinPojo);
     }
 
-    static String determineNameFrom(final ObjectActionDefault mixinAction) {
+    public static String determineNameFrom(final ObjectAction mixinAction) {
         return StringExtensions.asCapitalizedName(suffix(mixinAction));
     }
 
     static String determineIdFrom(final ObjectActionDefault mixinAction) {
-        final String id = compress(suffix(mixinAction));
+        final String id = StringExtensions.asCamelLowerFirst(compress(suffix(mixinAction)));
         return id;
     }
 
@@ -345,22 +342,31 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return suffix.replaceAll(" ","");
     }
 
-    static String suffix(final ObjectActionDefault mixinAction) {
+    static String suffix(final ObjectAction mixinAction) {
         return suffix(mixinAction.getOnType().getSingularName());
     }
 
     static String suffix(final String singularName) {
-        if (singularName.endsWith("_")) {
-            if (Objects.equal(singularName, "_")) {
-                return singularName;
-            }
-            return singularName;
+        final String deriveFromUnderscore = derive(singularName, "_");
+        if(!Objects.equals(singularName, deriveFromUnderscore)) {
+            return deriveFromUnderscore;
         }
-        final int indexOfUnderscore = singularName.lastIndexOf('_');
-        if (indexOfUnderscore == -1) {
-            return singularName;
+        final String deriveFromDollar = derive(singularName, "$");
+        if(!Objects.equals(singularName, deriveFromDollar)) {
+            return deriveFromDollar;
         }
-        return singularName.substring(indexOfUnderscore + 1);
+        return singularName;
+    }
+
+    private static String derive(final String singularName, final String separator) {
+        final int indexOfSeparator = singularName.lastIndexOf(separator);
+        return occursNotAtEnd(singularName, indexOfSeparator)
+                ? singularName.substring(indexOfSeparator + 1)
+                : singularName;
+    }
+
+    private static boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
+        return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
     }
 
     //endregion
@@ -386,10 +392,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     public PersistenceSessionServiceInternal getPersistenceSessionService() {
         return persistenceSessionServiceInternal;
-    }
-
-    public CollectionTypeRegistry getCollectionTypeRegistry() {
-        return collectionTypeRegistry;
     }
 
     protected <T> T lookupService(final Class<T> serviceClass) {

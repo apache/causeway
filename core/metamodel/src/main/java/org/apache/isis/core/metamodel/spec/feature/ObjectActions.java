@@ -31,11 +31,11 @@ public final class ObjectActions {
     }
 
     /**
-     * @deprecated - use {@link ObjectAction.Utils#nameFor(ObjectAction)}
+     * @deprecated - use {@link ObjectAction.Util#nameFor(ObjectAction)}
      */
     @Deprecated
     public static String nameFor(final ObjectAction action) {
-        return ObjectAction.Utils.nameFor(action);
+        return ObjectAction.Util.nameFor(action);
     }
 
     /**

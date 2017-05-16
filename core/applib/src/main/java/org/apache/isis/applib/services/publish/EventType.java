@@ -23,5 +23,19 @@ public enum EventType {
     ACTION_INVOCATION,
     OBJECT_CREATED,
     OBJECT_UPDATED,
-    OBJECT_DELETED,
+    OBJECT_DELETED;
+
+    public static class Type {
+
+        private Type() {}
+
+        public static class Meta {
+
+            public static final int MAX_LEN = 20;
+
+            private Meta() {}
+
+        }
+    }
+
 }

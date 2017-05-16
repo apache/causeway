@@ -113,7 +113,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             // per JDO spec
             return returnType != null && returnType.isPrimitive();
         } else {
-            return "false".equalsIgnoreCase(allowsNull.trim());
+            return !"true".equalsIgnoreCase(allowsNull.trim()); // if mis-spelt, then DN assumes is not-nullable
         }
     }
 

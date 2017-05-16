@@ -46,7 +46,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
@@ -58,19 +57,23 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -80,6 +83,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private final ProxyContextHandler proxy;
     private final ExecutionMode executionMode;
+    private final IsisSessionFactory isisSessionFactory;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -117,19 +121,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     public DomainObjectInvocationHandler(
             final T delegate,
-            final WrapperFactory wrapperFactory,
             final ExecutionMode mode,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final SpecificationLoader specificationLoader,
-            final PersistenceSessionServiceInternal persistenceSessionServiceInternal,
-            final ProxyContextHandler proxy) {
-        super(delegate, wrapperFactory, mode);
+            final ProxyContextHandler proxy,
+            final IsisSessionFactory isisSessionFactory) {
+        super(delegate, mode, isisSessionFactory);
 
         this.proxy = proxy;
-        this.authenticationSessionProvider = authenticationSessionProvider;
-        this.specificationLoader = specificationLoader;
-        this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
         this.executionMode = mode;
+        this.isisSessionFactory = isisSessionFactory;
+
+        final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
+
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
 
 
         try {
@@ -253,11 +258,53 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
             }
 
-            final ObjectAction noa = (ObjectAction) objectMember;
-            return handleActionMethod(targetAdapter, args, noa, contributeeMember);
+            final ObjectAction objectAction = (ObjectAction) objectMember;
+
+            ObjectAction actualObjectAction;
+            ObjectAdapter actualTargetAdapter;
+
+            final MixinFacet mixinFacet = targetAdapter.getSpecification().getFacet(MixinFacet.class);
+            if(mixinFacet != null) {
+
+                // rather than invoke on a (transient) mixin, instead try to
+                // figure out the corresponding ObjectActionMixedIn
+                actualTargetAdapter = mixinFacet.mixedIn(targetAdapter, MixinFacet.Policy.IGNORE_FAILURES);
+                actualObjectAction = determineMixinAction(actualTargetAdapter, objectAction);
+
+                if(actualTargetAdapter == null || actualObjectAction == null) {
+                    // revert to original behaviour
+                    actualTargetAdapter = targetAdapter;
+                    actualObjectAction = objectAction;
+                }
+            } else {
+                actualTargetAdapter = targetAdapter;
+                actualObjectAction = objectAction;
+            }
+
+            return handleActionMethod(actualTargetAdapter, args, actualObjectAction, contributeeMember);
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
+    }
+
+    private static ObjectAction determineMixinAction(
+            final ObjectAdapter domainObjectAdapter,
+            final ObjectAction objectAction) {
+        if(domainObjectAdapter == null) {
+            return null;
+        }
+        final ObjectSpecification specification = domainObjectAdapter.getSpecification();
+        final List<ObjectAction> objectActions = specification.getObjectActions(Contributed.INCLUDED);
+        for (final ObjectAction action : objectActions) {
+            if(action instanceof ObjectActionMixedIn) {
+                ObjectActionMixedIn mixedInAction = (ObjectActionMixedIn) action;
+                if(mixedInAction.hasMixinAction(objectAction)) {
+                    return mixedInAction;
+                }
+            }
+        }
+        // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
+        return null;
     }
 
     public InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -618,11 +665,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode().shouldExecute()) {
             final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-            final ObjectAdapter mixedInAdapter = null; // mixin action will automatically fill in.
-            final ObjectAdapter returnedAdapter =
-                    objectAction.execute(
-                            targetAdapter, mixedInAdapter, argAdapters,
-                            interactionInitiatedBy);
+
+            final ObjectAdapter mixedInAdapter = null; // if a mixin action, then it will automatically fill in.
+
+            final ObjectAdapter returnedAdapter = objectAction.execute(
+                    targetAdapter, mixedInAdapter, argAdapters,
+                    interactionInitiatedBy);
 
             return ObjectAdapter.Util.unwrap(returnedAdapter);
         }
@@ -779,7 +827,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+        return isisSessionFactory.getSpecificationLoader();
     }
 
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
@@ -794,5 +842,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return persistenceSessionServiceInternal;
     }
 
-
+    public IsisSessionFactory getIsisSessionFactory() {
+        return isisSessionFactory;
+    }
 }

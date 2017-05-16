@@ -32,10 +32,10 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
@@ -58,25 +58,32 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
         final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
-        final IsisComponentProviderDefault2 componentProvider = new IsisComponentProviderDefault2(
-                DeploymentType.UNIT_TESTING, manifest, null, null, null, null, null);
 
-        final IsisSystem isisSystem = new IsisSystem(componentProvider);
+        final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(manifest);
+        IsisSessionFactory isisSessionFactory = null;
         try {
-            isisSystem.init();
-            IsisContext.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        doExecute(context, isisSystem);
-                    } catch (IOException e) {
-                        ;
-                        // ignore
-                    } catch (MojoFailureException e) {
-                        throw new RuntimeException(e);
+            isisSessionFactory = isisSessionFactoryBuilder.buildSessionFactory();
+            if(!isisSessionFactoryBuilder.isMetaModelValid()) {
+                MetaModelInvalidException metaModelInvalidException = IsisContext
+                        .getMetaModelInvalidExceptionIfAny();
+                Set<String> validationErrors = metaModelInvalidException.getValidationErrors();
+                    context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
+                return;
+            }
+            final IsisSessionFactory isisSessionFactoryFinal = isisSessionFactory;
+            isisSessionFactory.doInSession(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            doExecute(context, isisSessionFactoryFinal);
+                        } catch (IOException e) {
+                            ;
+                            // ignore
+                        } catch (MojoFailureException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                }
-            });
+                });
 
         } catch(RuntimeException e) {
             if(e.getCause() instanceof MojoFailureException) {
@@ -84,12 +91,16 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
             }
             throw e;
         } finally {
-            isisSystem.shutdown();
+            if(isisSessionFactory != null) {
+                isisSessionFactory.destroyServicesAndShutdown();
+            }
         }
 
     }
 
-    protected abstract void doExecute(final ContextForMojo context, final IsisSystem system)
+    protected abstract void doExecute(
+            final ContextForMojo context,
+            final IsisSessionFactory isisSessionFactory)
             throws MojoFailureException, IOException;
 
     //region > Context

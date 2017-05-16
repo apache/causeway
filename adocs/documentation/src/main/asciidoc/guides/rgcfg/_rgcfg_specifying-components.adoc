@@ -1,0 +1,104 @@
+[[_rgcfg_configuring-components]]
+= Specifying components
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+Bootstrapping an Apache Isis application involves identifying both:
+
+* the major components (authentication, persistence mechanisms, viewers) of Apache Isis, and also
+* specifying the domain services and persistent entities that make up the application itself.
+
+As of 1.9.0 there are two different ways to perform this bootstrapping.  The recommended (newer) approach is to use an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.  This allows the components, services and entities to be specified from a single class.  The alternative (and older, pre 1.9.0) approach is to specify this information individually, through configuration properties.
+
+To specify the `AppManifest` as a configuration property, use:
+
+.Core Configuration Properties (ignored if `isis.appManifest` is present)
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Implements
+
+|`isis.appManifest`
+|`FQCN`
+|`o.a.i.applib.AppManifest` +
+
+By convention this implementation resides in an `myapp-app` Maven module (as opposed to `myapp-dom` or `myapp-fixture`).  See the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] for details.
+
+|===
+
+From this the framework can determine the domain services, persistent entities and security (authentication and authorization) mechanisms to use.  Other configuration (including fixtures) can also be specified this way.
+
+
+If the `AppManifest` approach is _not_ being used, then the following configuration properties are used to specify the major components of Apache Isis to use:
+
+.Core Configuration Properties (ignored if `isis.appManifest` is present)
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Implements
+
+|`isis.authentication`
+|`shiro`, `bypass`, `FQCN` +
+(`_shiro_`)
+|`o.a.i.core.runtime.authentication.` `AuthenticationManagerInstaller` +
+
+This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+
+
+|`isis.authorization`
+|`shiro`, `bypass`, `FQCN` +
+(`_shiro_`)
+|`o.a.i.core.runtime.authorization.` `AuthorizationManagerInstaller` +
+
+This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+
+|`isis.persistor`
+|`datanucleus`
+(`_datanucleus_`)
+|`o.a.i.core.runtime.installerregistry.installerapi.` `PersistenceMechanismInstaller`
+
+This property is IGNORED completely in 1.9.0+; the `datanucleus` implementation is always used.
+
+
+|`isis.services-installer`
+|`configuration`, `configuration-and-annotation`, `FQCN` +
+(`_configuration_`)
+|`org.apache.isis.core.runtime.services.` `ServicesInstaller` +
+
+The mechanism to discover and load domain services:
+
+* `configuration-and-annotation` will search for `@DomainService`-annotated classes and also read from `isis.services` configuration property
+
+* `configuration` will only read from the `isis.services` configuration property. +
+
+* Otherwise an alternative implementation of the `o.a.i.core.runtime.services.ServicesInstaller` internal API can be provided. +
+
+This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+
+This property is also IGNORED completely in 1.13.0+; the `configuration-and-annotation` implementation is always used.
+
+
+|===
+
+[TIP]
+====
+The values `"shiro"`, `"bypass"` etc are actually aliases for concrete implementations.  It is also possible to specify a fully qualified class name to replace either of the two security components, implementing the appropriate interface.
+====
+
+If the `AppManifest` is _not_ being used then there are number of other configuration properties that also must be specified: `isis.services`, `isis.services.ServicesInstallerFromAnnotation.packagePrefix` and `isis.persistor.datanucleus.RegisterEntities.packagePrefix` and `isis.fixtures`; these are listed in the sections below.
+
+
+
+== Viewer Configuration
+
+Viewers are specified by way of the filters and servlets in the xref:../ugbtb/ugbtb.adoc#_ugbtb_web-xml[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.
+
+In versions prior to `1.13.0`, the "isis.viewers" context parameter was used to hint which configuration files should be read (corresponding to the viewers in use).  As of `1.13.0`, however, the configuration property has no effect: the `viewer_wicket.properties` and `viewer_restulobjects.properties` are always loaded if available.
+

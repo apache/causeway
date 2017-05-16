@@ -16,8 +16,6 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -43,15 +41,15 @@ public class Object_rebuildMetamodel {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-trash-o",
+            cssClassFa = "fa-refresh",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "800.1")
+    @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
     public void $$() {
         metaModelService.rebuild(object.getClass());
     }
 
-    @Inject
+    @javax.inject.Inject
     MetaModelService metaModelService;
 
 

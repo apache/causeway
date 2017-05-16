@@ -34,10 +34,10 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
 
     private MixinFacetForMixinAnnotation(
             final Class<?> mixinType,
-            final Class<?> constructorType,
+            final String value, final Class<?> constructorType,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
-        super(mixinType, constructorType, holder, servicesInjector);
+        super(mixinType, value, constructorType, holder, servicesInjector);
     }
 
     public static MixinFacet create(
@@ -54,7 +54,7 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
                 continue;
             }
             final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForMixinAnnotation(candidateMixinType, constructorType, facetHolder, servicesInjector);
+            return new MixinFacetForMixinAnnotation(candidateMixinType, mixin.method(), constructorType, facetHolder, servicesInjector);
         }
         return null;
     }

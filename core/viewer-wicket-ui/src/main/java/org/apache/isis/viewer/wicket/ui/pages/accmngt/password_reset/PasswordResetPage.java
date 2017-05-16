@@ -19,19 +19,20 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import java.util.concurrent.Callable;
+
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
+
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * A page used for resetting the password of an user.
@@ -73,10 +74,12 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                 error(getString("passwordResetExpiredOrInvalidToken"));
                 addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
             } else {
-                Boolean emailExists = IsisContext.doInSession(new Callable<Boolean>() {
+                Boolean emailExists = getIsisSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
-                        UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        UserRegistrationService userRegistrationService = getIsisSessionFactory()
+                                .getCurrentSession().getPersistenceSession().getServicesInjector()
+                                .lookupService(UserRegistrationService.class);
                         return userRegistrationService.emailExists(email);
                     }
                 });

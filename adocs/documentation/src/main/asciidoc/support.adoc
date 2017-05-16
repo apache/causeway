@@ -13,27 +13,28 @@ pass:[<br/><br/><br/>]
 Apache Isis has two public mailing lists.
 
 .Table caption
-[cols="1,1,1,1,1", options="header"]
+[cols="2,3,2,3", options="header"]
 |===
 
 |Mailing list
 |Email
-|ASF Archives
-|Markmail Archives
+|Mail archives
 |Subscribe
 
 
 |Users
-|link:mailto:users@isis.apache.org[users@isis.apache.org]
-|link:http://mail-archives.apache.org/mod_mbox/isis-users/[TLP only]
-|link:http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[TLP + incubating]
-|link:mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
+|mailto:users@isis.apache.org[users@isis.apache.org]
+|https://lists.apache.org/list.html?users&#0064;isis.apache.org[Pony mail] +
+http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[Markmail] +
+http://mail-archives.apache.org/mod_mbox/isis-users/[mbox]
+|mailto:users-subscribe@isis.apache.org[users-subscribe@isis.apache.org]
 
 
 |Contributors
 |mailto:dev@isis.apache.org[dev@isis.apache.org]
-|http://mail-archives.apache.org/mod_mbox/isis-dev/[TLP only]
-|http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[TLP + incubating]
+|https://lists.apache.org/list.html?dev&#0064;isis.apache.org[Pony mail] +
+http://markmail.org/search/isis-dev+list:org.apache.incubator.isis-dev[Markmail] +
+http://mail-archives.apache.org/mod_mbox/isis-dev/[mbox]
 |mailto:dev-subscribe@isis.apache.org[dev-subscribe@isis.apache.org]
 
 
@@ -63,7 +64,7 @@ If you ever want to unsubscribe, then you can send a mail to the `users-unsubscr
 
 Just a couple of rules/suggestions:
 
-* if you are referencing links, then in the body of the mail, number then [1], [2], [3] etc and then list them at the end.  Here's a [good example]() from the archives.
+* if you are referencing links, then in the body of the mail, number then [1], [2], [3] etc and then list them at the end.
 * reply to a previous post in the link:http://en.wikipedia.org/wiki/Posting_style#Interleaved_style[interleaved style] (adding your replies in-line).  Try not to link:http://en.wikipedia.org/wiki/Posting_style#Top-posting)[top-post].
 
 

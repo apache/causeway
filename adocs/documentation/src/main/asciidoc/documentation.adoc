@@ -3,9 +3,8 @@
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ./
 :_imagesdir: images/
-:toc: right
+:notoc:
 
-pass:[<br/><br/><br/>]
 
 pass:[<div class="extended-quote-first"><p>]Perfection is finally attained not when there is no longer anything to add but when there is no longer anything to take away.
 pass:[</p></div>]
@@ -21,73 +20,74 @@ pass:[<br/>]
 [.documentation-page]
 --
 
-[cols="1a,1a,1a",frame="none"]
+[cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
 | *What is Apache Isis?*
 
-* *link:./isis-in-pictures.html[What is Apache Isis?^] ... in pictures*
-* link:./powered-by.html[Powered by Apache Isis^]
-* link:./how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
-* link:./common-use-cases.html[Common Use Cases^]
+* *link:./pages/isis-in-pictures/isis-in-pictures.html[What is Apache Isis?^] ... in pictures*
+* link:./pages/powered-by/powered-by.html[Powered by Apache Isis^]
+* link:./pages/how-isis-works/how-isis-works.html[How Apache Isis Works^] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works./how-isis-works.html"]
+* link:./pages/common-use-cases/common-use-cases.html[Common Use Cases^]
 
 
 |*Learning More*
 
-* link:./screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="screencasts.html"]
-* link:./guides/tg.html[Tutorials^]
-* link:http://www.javadoc.io/doc/org.apache.isis.core/isis-core-applib/1.11.0[Javadoc (for Applib)^] (not ASF)
+* link:./pages/screencasts/screencasts.html[Screencasts^] image:{_imagesdir}tv_show-25.png[width="25px" link="./pages/screencasts/screencasts.html"]
+* link:./pages/tg/tg.html[Tutorials^]
+//* link:http://www.javadoc.io/doc/org.apache.isis.core/isis-core-applib/1.14.0[Javadoc (for Applib)^] (not ASF)
 
 
 
 |*Resources:*
 
-* *link:./cheat-sheet.html[Cheat Sheet^]*
-* link:./icons.html[Icons^]
+* *link:./pages/cheat-sheet/cheat-sheet.html[Cheat Sheet^]*
+* link:./pages/icons/icons.html[Icons^]
 
 *3rd-party add-ons (not ASF)*
 
-* http://isisaddons.org[Isis addons^]
+* http://www.isisaddons.org[Isis addons^]
 * http://catalog.incode.org[Incode Catalog^]
 
 
 |===
 
 
-[cols="1a,1a,1a"]
+[cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
 |*User Guides:*
 
-* *link:./guides/ugfun.html[Fundamentals^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugfun.pdf"]
-* link:./guides/ugvw.html[Wicket Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvw.pdf"]
-* link:./guides/ugvro.html[Restful Objects Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvro.pdf"]
-* link:./guides/ugsec.html[Security^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugsec.pdf"]
-* *link:./guides/ugtst.html[Testing^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugtst.pdf"]
-* link:./guides/ugbtb.html[Beyond the Basics^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugbtb.pdf"]
+* *link:./guides/ugfun/ugfun.html[Fundamentals^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugfun/ugfun.pdf"]
+* link:./guides/ugvw/ugvw.html[Wicket Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvw/ugvw.pdf"]
+* link:./guides/ugvro/ugvro.html[Restful Objects Viewer^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvro/ugvro.pdf"]
+* link:./guides/ugodn/ugodn.html[DataNucleus Object Store^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugvro/ugvro.pdf"]
+* link:./guides/ugsec/ugsec.html[Security^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugsec/ugsec.pdf"]
+* *link:./guides/ugtst/ugtst.html[Testing^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugtst/ugtst.pdf"]
+* link:./guides/ugbtb/ugbtb.html[Beyond the Basics^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/ugbtb/ugbtb.pdf"]
 
 
 |*Reference Guides:*
 
-* *link:./guides/rgant.html[Annotations^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgant.pdf"]
-* *link:./guides/rgsvc.html[Domain Services^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgsvc.pdf"]
-* link:./guides/rgcfg.html[Configuration Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg.pdf"]
-* link:./guides/rgcms.html[Classes, Methods and Schema^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcms.pdf"]
-* link:./guides/rgmvn.html[Apache Isis Maven plugin^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgmvn.pdf"]
-* link:./guides/rgfis.html[Framework Internal Services^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/fwsvc.pdf"]
+* *link:./guides/rgant/rgant.html[Annotations^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgant/rgant.pdf"]
+* *link:./guides/rgsvc/rgsvc.html[Domain Services^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgsvc/rgsvc.pdf"]
+* link:./guides/rgcfg/rgcfg.html[Core Config'n Properties^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcfg/rgcfg.pdf"]
+* link:./guides/rgcms/rgcms.html[Classes, Methods and Schema^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgcms/rgcms.pdf"]
+* link:./guides/rgmvn/rgmvn.html[Apache Isis Maven plugin^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/rgmvn/rgmvn.pdf"]
+* link:./guides/rgfis/rgfis.html[Framework Internal Services^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/fwsvc/rgfis.pdf"]
 
 
 
 |*"Supporting" Guides:*
 
-* *link:./guides/dg.html[Developers' Guide^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/dg.pdf"]
-** Setting up link:./guides/dg.html#_dg_ide_intellij[IntelliJ^] or link:./guides/dg.html#_dg_ide_eclipse[Eclipse^]
-** link:./guides/dg.html#_dg_contributing[Contributing patches^] (pull requests)
+* *link:./guides/dg/dg.html[Developers' Guide^]*  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/dg/dg.pdf"]
+** Setting up link:./guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] or link:./guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
+** link:./guides/dg/dg.html#_dg_contributing[Contributing patches^] (pull requests)
+** link:./guides/dg/dg.html#_dg_asciidoc-syntax[Asciidoc syntax^]
 
-* link:./guides/cgcom.html[Committers' Guide^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/cgcom.pdf"]
-** link:./guides/cgcom.html#_cgcom_cutting-a-release[Cutting a release^]
-** link:./guides/cgcom.html#_cgcom_verifying-releases[Verifying a release^]
-
+* link:./guides/cgcom/cgcom.html[Committers' Guide^]  image:{_imagesdir}PDF-50.png[width="20px" link="./guides/cgcom/cgcom.pdf"]
+** link:./guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting a release^]
+** link:./guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying a release^]
 
 
 |===
@@ -95,13 +95,13 @@ pass:[<br/>]
 
 
 
-[cols="1a,1a,1a",frame="none"]
+[cols="1a,1a,1a",frame="none", grid="none"]
 |===
 
 |*Releases:*
 
-* link:release-notes.html[Release Notes^]
-* link:migration-notes.html[Migration Notes^]
+* link:./release-notes/release-notes.html[Release Notes^]
+* link:./migration-notes/migration-notes.html[Migration Notes^]
 
 *Get involved!*
 
@@ -111,10 +111,10 @@ pass:[<br/>]
 
 |*Going Deeper:*
 
-* link:./articles-and-presentations.html[Articles, Conferences, Podcasts^]
-* link:./books.html[Books^]
-* link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis^] (Pawson)
-//* link:./downloadable-presentations.html[Downloadable Presentations]
+* link:./pages/articles-and-presentations/articles-and-presentations.html[Articles, Conferences, Podcasts^]
+* link:./pages/books/books.html[Books^]
+* link:./guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis^] (Pawson)
+//* link:./downloadable-presentations/downloadable-presentations.html[Downloadable Presentations]
 
 
 

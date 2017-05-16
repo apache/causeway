@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.markup.html.IHeaderContributor;
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IFormSubmitter;
 import org.apache.wicket.model.IModel;
@@ -29,15 +31,14 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 
 public abstract class FormAbstract<T> extends Form<T>
-        implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor,
-        PersistenceSessionProvider {
+        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     private static final long serialVersionUID = 1L;
 
@@ -101,18 +102,20 @@ public abstract class FormAbstract<T> extends Form<T>
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    @Override
-    public PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    protected  PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+    protected  AuthenticationSession getAuthenticationSession() {
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
-    public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+    protected DeploymentCategory getDeploymentCategory() {
+        return getIsisSessionFactory().getDeploymentCategory();
     }
 
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
 
 }

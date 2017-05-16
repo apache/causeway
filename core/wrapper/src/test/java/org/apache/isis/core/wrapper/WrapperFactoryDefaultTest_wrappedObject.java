@@ -31,6 +31,7 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
@@ -53,7 +54,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDef
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.services.command.CommandDtoServiceInternalDefault;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
@@ -87,7 +88,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
-    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
+    private MessageService mockMessageService;
     @Mock
     private ServicesInjector mockServicesInjector;
     @Mock
@@ -102,6 +103,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     @Mock
     private IsisConfiguration mockConfiguration;
+
+    @Mock
+    private IsisSessionFactory mockIsisSessionFactory;
 
     @Mock
     private ObjectSpecificationDefault mockEmployeeSpec;
@@ -198,7 +202,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         wrapperFactory = createWrapperFactory();
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
-        wrapperFactory.specificationLoader = mockSpecificationLoader;
+        wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
 
         final Method employeeGetNameMethod = methodOf(Employee.class, "getName");

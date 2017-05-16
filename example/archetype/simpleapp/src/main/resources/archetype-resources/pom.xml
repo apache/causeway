@@ -23,7 +23,7 @@
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
 
-    <name>Simple App</name>
+    <name>SimpleApp Parent</name>
 
     <packaging>pom</packaging>
 
@@ -32,12 +32,247 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.13.0-SNAPSHOT</isis.version>
+        <isis.version>1.14.0</isis.version>
+
+        <lombok.version>1.16.10</lombok.version>
+        <assertj-core.version>3.6.1</assertj-core.version>
+
+        <mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
+        <maven-cucumber-reporting.version>3.2.0</maven-cucumber-reporting.version>
+        <maven-cucumber-reporting.dependency.log4j.version>2.7</maven-cucumber-reporting.dependency.log4j.version>
+
+        <mavenmixin-datanucleusenhance.version>0.0.4</mavenmixin-datanucleusenhance.version>
+        <datanucleus-maven-plugin.version>4.0.5</datanucleus-maven-plugin.version>
+        <datanucleus-core.version>4.1.7</datanucleus-core.version>
+        <datanucleus-api-jdo.version>4.1.1</datanucleus-api-jdo.version>
+        <datanucleus-jodatime.version>4.1.0-release</datanucleus-jodatime.version>
+
+        <mavenmixin-enforcerrelaxed.version>0.0.2</mavenmixin-enforcerrelaxed.version>
+        <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+
+        <mavenmixin-isisswagger.version>0.0.3</mavenmixin-isisswagger.version>
+        <mavenmixin-isisvalidate.version>0.0.2</mavenmixin-isisvalidate.version>
+        <isis-maven-plugin.version>${isis.version}</isis-maven-plugin.version>
+
+        <mavenmixin-jettyconsole.version>0.0.2</mavenmixin-jettyconsole.version>
+        <jetty-console-maven-plugin.version>1.59</jetty-console-maven-plugin.version>
+        <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+
+        <mavenmixin-jettywar.version>0.0.2</mavenmixin-jettywar.version>
+        <maven-war-plugin.version>2.4</maven-war-plugin.version>
+        <jetty-maven-plugin.version>9.3.5.v20151012</jetty-maven-plugin.version>
+
+        <mavenmixin-sourceandjavadoc.version>0.0.2</mavenmixin-sourceandjavadoc.version>
+        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+        <maven-jxr-plugin.version>2.4</maven-jxr-plugin.version>
+        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+
+        <mavenmixin-standard.version>0.0.3</mavenmixin-standard.version>
+        <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
+        <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+        <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+        <maven-install-plugin.version>2.5.1</maven-install-plugin.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <maven-site-plugin.version>3.3</maven-site-plugin.version>
+
+        <mavenmixin-surefire.version>0.0.4</mavenmixin-surefire.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>2.19.1</maven-surefire-report-plugin.version>
+
+        <mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version>
+        <maven-checkstyle-plugin.version>2.11</maven-checkstyle-plugin.version>
+        <maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
+        <javancss-maven-plugin.version>2.1</javancss-maven-plugin.version>
+        <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
+        <findbugs-maven-plugin.version>2.5</findbugs-maven-plugin.version>
+
+        <mavenmixin-docker.version>0.0.3</mavenmixin-docker.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <gmavenplus-plugin.version>1.5</gmavenplus-plugin.version>
+
+        <mavendeps-isistesting.version>0.0.2</mavendeps-isistesting.version>
+        <mavendeps-isisintellij.version>0.0.1</mavendeps-isisintellij.version>
+        <mavendeps-isiswebapp.version>0.0.2</mavendeps-isiswebapp.version>
+
+        <compiler-plugin.source>1.7</compiler-plugin.source>
+        <compiler-plugin.target>1.7</compiler-plugin.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <assertj-core.version>2.4.0</assertj-core.version>
     </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- mavenmixin-cucumberreporting -->
+                <plugin>
+                    <groupId>net.masterthought</groupId>
+                    <artifactId>maven-cucumber-reporting</artifactId>
+                    <version>${maven-cucumber-reporting.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-datanucleusenhancer -->
+                <plugin>
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-maven-plugin</artifactId>
+                    <version>${datanucleus-maven-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-enforcerrelaxed -->
+                <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven-enforcer-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-isisvalidate & mavenmixin-isisswagger -->
+                <plugin>
+                    <groupId>org.apache.isis.tool</groupId>
+                    <artifactId>isis-maven-plugin</artifactId>
+                    <version>${isis-maven-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-jettyconsole -->
+                <plugin>
+                    <groupId>org.simplericity.jettyconsole</groupId>
+                    <artifactId>jetty-console-maven-plugin</artifactId>
+                    <version>${jetty-console-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-jettywar -->
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven-war-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>${jetty-maven-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-sourceandjavadoc -->
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>${maven-jxr-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-standard -->
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${maven-project-info-reports-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven-site-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-surefire -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${maven-surefire-report-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-staticanalysis -->
+                <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${maven-pmd-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javancss-maven-plugin</artifactId>
+                    <version>${javancss-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jdepend-maven-plugin</artifactId>
+                    <version>${jdepend-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findbugs-maven-plugin.version}</version>
+                </plugin>
+
+                <!-- mavenmixin-docker -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.gmavenplus</groupId>
+                    <artifactId>gmavenplus-plugin</artifactId>
+                    <version>${gmavenplus-plugin.version}</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.github.odavid.maven.plugins</groupId>
+                <artifactId>mixin-maven-plugin</artifactId>
+                <version>0.1-alpha-39</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <mixins>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>standard</artifactId>
+                            <version>${mavenmixin-standard.version}</version>
+                        </mixin>
+                    </mixins>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
         <repository>
@@ -53,258 +288,37 @@
         <repository>
             <id>Cloudbees snapshots</id>
             <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+            <name>CloudBees Snapshots (and Interim Releases)</name>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <snapshots>
             </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
         </repository>
     </repositories>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.3.1</version>
-                    <configuration>
-                        <rules>
-                            <requireMavenVersion>
-                                <version>[3.2.1,)</version>
-                            </requireMavenVersion>
-                            <requireJavaVersion>
-                                <version>[1.8.0,)</version>
-                            </requireJavaVersion>
-                            <requirePluginVersions>
-                                <message>All plugin versions must be
-                                    defined!</message>
-                                <banLatest>true</banLatest>
-                                <banRelease>true</banRelease>
-                            </requirePluginVersions>
-                            <DependencyConvergence />
-                        </rules>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>validate-enforce</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <compilerArgument>-parameters</compilerArgument>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>source</id>
-                            <phase>compile</phase>
-                        </execution>
-                        <execution>
-                            <id>test</id>
-                            <phase>test-compile</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
-                    <configuration>
-                        <includes>
-                            <include>**/*Test.java</include>
-                            <include>**/*Test$*.java</include>
-                            <include>**/*Test_*.java</include>
-                            <include>**/*Spec*.java</include>
-                        </includes>
-                        <excludes>
-                            <exclude>**/Test*.java</exclude>
-                            <exclude>**/*ForTesting.java</exclude>
-                            <exclude>**/*Abstract*.java</exclude>
-                        </excludes>
-                        <useFile>true</useFile>
-                        <printSummary>true</printSummary>
-                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>2.16</version>
-                    <configuration>
-                        <showSuccess>false</showSuccess>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>test</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.5</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.6</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.3</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.3.5.v20151012</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>2.2</version>
-                </plugin>
-
-                <!-- Apache Release Audit Tool -->
-                <plugin>
-                    <groupId>org.apache.rat</groupId>
-                    <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.10</version>
-                    <configuration>
-                        <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-                        <excludeSubProjects>true</excludeSubProjects>
-                        <excludes>
-                            <exclude>**/target/**</exclude>
-                            <exclude>**/target-ide/**</exclude>
-
-                            <exclude>**/*.project</exclude>
-                            <exclude>**/.classpath</exclude>
-                            <exclude>**/.settings/**</exclude>
-                            <exclude>**/*.launch</exclude>
-                            <exclude>**/ide/eclipse/launch/**</exclude>
-                            <exclude>**/ide/intellij/launch/**</exclude>
-                            <exclude>src/site/resources/ide/eclipse/**</exclude>
-
-                            <exclude>**/rebel.xml</exclude>
-                            <exclude>**/*.gitignore</exclude>
-                            <exclude>**/*.log</exclude>
-                            <exclude>**/*.pdn</exclude>
-                            <exclude>**/*.svg</exclude>
-                            <exclude>**/*.json</exclude>
-                            <exclude>**/*.min.js</exclude>
-                            <exclude>**/*.js</exclude>
-
-                            <exclude>**/translations.pot</exclude>
-                            <exclude>**/translations*.po</exclude>
-                        </excludes>
-                        <licenses>
-                            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                                <licenseFamilyCategory>AL2</licenseFamilyCategory>
-                                <licenseFamilyName>Apache License 2.0</licenseFamilyName>
-                                <notes />
-                                <patterns>
-                                    <pattern>Licensed to the Apache Software Foundation (ASF) under one</pattern>
-                                </patterns>
-                            </license>
-                            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                                <licenseFamilyCategory>JQRY</licenseFamilyCategory>
-                                <licenseFamilyName>MIT</licenseFamilyName>
-                                <notes />
-                                <patterns>
-                                    <pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
-                                </patterns>
-                            </license>
-                            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                                <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
-                                <licenseFamilyName>JMock</licenseFamilyName>
-                                <notes />
-                                <patterns>
-                                    <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
-                                </patterns>
-                            </license>
-                            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                                <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
-                                <licenseFamilyName>DocBook 4.5</licenseFamilyName>
-                                <notes />
-                                <patterns>
-                                    <pattern>Permission to copy in any form is granted for use</pattern>
-                                    <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
-                                    <pattern>is hereby granted in perpetuity, provided that the above copyright</pattern>
-                                    <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as</pattern>
-                                    <pattern>XML Catalog data for DocBook XML V4.5</pattern>
-                                    <pattern>DocBook additional general entities V4.5</pattern>
-                                    <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
-                                </patterns>
-                            </license>
-                            <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                                <licenseFamilyCategory>W3C</licenseFamilyCategory>
-                                <licenseFamilyName>XHTML</licenseFamilyName>
-                                <notes />
-                                <patterns>
-                                    <pattern>Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),</pattern>
-                                </patterns>
-                            </license>
-                        </licenses>
-                        <licenseFamilies>
-                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>Apache License 2.0</familyName>
-                            </licenseFamily>
-                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>MIT</familyName>
-                            </licenseFamily>
-                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>JMock</familyName>
-                            </licenseFamily>
-                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>DocBook 4.5</familyName>
-                            </licenseFamily>
-                            <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                                <familyName>XHTML</familyName>
-                            </licenseFamily>
-                        </licenseFamilies>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>estatio.snapshots</id>
+            <name>CloudBees Snapshots (and Interim Releases)</name>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+            <layout>default</layout>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
@@ -317,27 +331,21 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj-core.version}</version>
-            </dependency>
-
-
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>${rootArtifactId}-app</artifactId>
+                <artifactId>${rootArtifactId}-module-simple</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>${rootArtifactId}-dom</artifactId>
+                <artifactId>${rootArtifactId}-module-simple</artifactId>
                 <version>${version}</version>
+                <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>${rootArtifactId}-fixture</artifactId>
+                <artifactId>${rootArtifactId}-application</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>
@@ -346,9 +354,24 @@
                 <version>${version}</version>
             </dependency>
 
+            <!-- lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <profiles>
         <profile>

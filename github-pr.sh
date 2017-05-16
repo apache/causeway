@@ -36,24 +36,51 @@ function die {
 	exit 10
 }
 
+project="ISIS"
+jira_suffix=""
+pr_number=""
+skip_build="false"
 
 #
 # validate script args
 #
-if [ $# -ne 3 ]; then
-    die "usage: github-pr.sh proj nnn pp"
+
+while getopts ":p:j:g:s" opt; do
+  case $opt in
+    p)
+      project=$OPTARG
+      ;;
+    j)
+      jira_suffix=$OPTARG
+      ;;
+    g)
+      pr_number=$OPTARG
+      ;;
+    s)
+      skip_build="true"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+
+echo ""
+echo "project   : $project"
+echo "ASF jira  : $jira_suffix"
+echo "github PR : $pr_number"
+echo "skip_build: $skip_build"
+echo ""
+
+if [ "$jira_suffix" == "" -o "$pr_number" == "" ]; then
+    die "usage: github-pr.sh -j nnn -g pp [-s] [-p pppp]"
 fi
 
-project=$1
-jira_suffix=$2
-pr_number=$3
+
 project_lower=$(echo $project | tr '[:upper:]' '[:lower:]')
 project_upper=$(echo $project | tr '[:lower:]' '[:upper:]')
 
 jira_number="$project_upper-$jira_suffix"
-
-echo ""
-
 
 #
 # validate JIRA ticket
@@ -127,18 +154,27 @@ echo "Pulling the changes from $repo_clone_url $branch_name_fork"
 git pull $repo_clone_url $branch_name_fork
 
 echo ""
-echo "Merged the PR; hit enter to build"
 
-read 
-echo "Building..."
-echo
 
-mvn clean install -o
+if [ "$skip_build" == "false" ]
+then
+    echo "Merged the PR; hit enter to build"
+    read 
+    echo "Building..."
+    echo
 
-echo
-echo
-echo
-echo "If build successful and happy to merge, execute:"
-echo
-echo "git checkout $branch_name_local && git merge --no-ff $branch_name_temp && git branch -d $branch_name_temp"
-echo
+    mvn clean install -o
+
+    echo
+    echo
+    echo
+    echo "If build successful and happy to merge, execute:"
+    echo
+    echo "git checkout $branch_name_local && git merge --no-ff $branch_name_temp && git branch -d $branch_name_temp"
+    echo
+else
+    echo 
+    echo "Merging..."
+    echo 
+    git checkout $branch_name_local && git merge --no-ff $branch_name_temp && git branch -d $branch_name_temp
+fi

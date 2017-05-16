@@ -22,18 +22,24 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -98,27 +104,46 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService2.FieldResetPolicy fieldResetPolicy) {
-        return new DomainObjectContainerResolve().lookup(bookmark, fieldResetPolicy);
+        return getPersistenceSession().lookup(bookmark, fieldResetPolicy);
     }
 
     @Override
     public Bookmark bookmarkFor(Object domainObject) {
-        return new DomainObjectContainerResolve().bookmarkFor(domainObject);
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
+        final Oid oid = adapter.getOid();
+        if(oid == null) {
+            // values cannot be bookmarked
+            return null;
+        }
+        if(!(oid instanceof RootOid)) {
+            // must be root
+            return null;
+        }
+        final RootOid rootOid = (RootOid) oid;
+        return rootOid.asBookmark();
     }
 
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(cls);
+        String objectType = objectSpec.getSpecId().asString();
+        return new Bookmark(objectType, identifier);
     }
 
     @Override
     public void resolve(final Object parent) {
-        new DomainObjectContainerResolve().resolve(parent);
+        getPersistenceSession().resolve(parent);
     }
 
+    /**
+     * @deprecated - left over from manual object resolving.
+     */
+    @Deprecated
     @Override
     public void resolve(final Object parent, final Object field) {
-        new DomainObjectContainerResolve().resolve(parent, field);
+        if (field == null) {
+            resolve(parent);
+        }
     }
 
     @Override
@@ -137,6 +162,11 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     @Override
+    public Transaction currentTransaction() {
+        return getTransactionManager().getCurrentTransaction();
+    }
+
+    @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
         return getPersistenceSession().allMatchingQuery(query);
     }
@@ -146,12 +176,40 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         return getPersistenceSession().firstMatchingQuery(query);
     }
 
-    public static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    @Override
+    public void executeWithinTransaction(TransactionalClosure transactionalClosure) {
+        getTransactionManager().executeWithinTransaction(transactionalClosure);
     }
 
-    static IsisTransactionManager getTransactionManager() {
+    @Override
+    public TransactionState getTransactionState() {
+        final IsisTransaction transaction = getTransactionManager().getCurrentTransaction();
+        if (transaction == null) {
+            return TransactionState.NONE;
+        }
+        IsisTransaction.State state = transaction.getState();
+        return state.getRuntimeContextState();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    private IsisSessionFactory getIsisSessionFactory() {
+        return isisSessionFactory;
+    }
+
+    @Programmatic
+    public IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
 }

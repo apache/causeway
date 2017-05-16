@@ -27,6 +27,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -80,7 +81,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <p>
  * Note that # and ; were not chosen as separators to minimize noise when URL encoding OIDs.
  */
-public class OidMarshaller {
+public final class OidMarshaller {
+
+    public final static OidMarshaller INSTANCE = new OidMarshaller();
+
+    private OidMarshaller(){}
 
     //region > public constants
     public static final String VIEWMODEL_INDICATOR =
@@ -124,10 +129,12 @@ public class OidMarshaller {
     //endregion
 
     //region > join, split
+    @Programmatic
     public String joinAsOid(String domainType, String instanceId) {
 	    return domainType + SEPARATOR + instanceId;
 	}
-	
+
+    @Programmatic
     public String splitInstanceId(String oidStr) {
         final int indexOfSeperator = oidStr.indexOf(SEPARATOR);
         return indexOfSeperator > 0? oidStr.substring(indexOfSeperator+1): null;
@@ -137,6 +144,7 @@ public class OidMarshaller {
 
     //region > unmarshal
 
+    @Programmatic
     @SuppressWarnings("unchecked")
 	public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
         
@@ -235,24 +243,29 @@ public class OidMarshaller {
     //endregion
 
     //region > marshal
+    @Programmatic
     public final String marshal(RootOid rootOid) {
         return marshalNoVersion(rootOid) + marshal(rootOid.getVersion());
     }
 
+    @Programmatic
     public final String marshalNoVersion(RootOid rootOid) {
         final String transientIndicator = rootOid.isTransient()? TRANSIENT_INDICATOR : "";
         final String viewModelIndicator = rootOid.isViewModel()? VIEWMODEL_INDICATOR : "";
         return transientIndicator + viewModelIndicator + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
 
+    @Programmatic
     public final String marshal(ParentedCollectionOid collectionOid) {
         return marshalNoVersion(collectionOid) + marshal(collectionOid.getVersion());
     }
 
+    @Programmatic
     public String marshalNoVersion(ParentedCollectionOid collectionOid) {
-        return collectionOid.getRootOid().enStringNoVersion(this) + SEPARATOR_COLLECTION + collectionOid.getName();
+        return collectionOid.getRootOid().enStringNoVersion() + SEPARATOR_COLLECTION + collectionOid.getName();
     }
 
+    @Programmatic
     public final String marshal(Version version) {
         if(version == null) {
             return "";
@@ -260,7 +273,6 @@ public class OidMarshaller {
         final String versionUser = version.getUser();
         return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + Strings.nullToEmpty(versionUser) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
     }
-
 
     private static String nullToEmpty(Object obj) {
         return obj == null? "": "" + obj;

@@ -18,14 +18,14 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import javax.jdo.annotations.Query;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Value object that represents the information of a
@@ -41,9 +41,10 @@ public final class JdoNamedQuery {
 
     public JdoNamedQuery(final String name, final String query,
             final ObjectSpecification noSpec) {
-        Ensure.ensureThatArg(name, is(not(nullValue())));
-        Ensure.ensureThatArg(query, is(not(nullValue())));
-        Ensure.ensureThatArg(noSpec, is(not(nullValue())));
+
+        assert name != null;
+        assert query != null;
+        assert noSpec != null;
 
         this.name = name;
         this.query = query;

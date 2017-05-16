@@ -108,6 +108,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final String itemTitle = first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
                 if(itemTitle != null) {
                     item.add(new AttributeAppender("title", itemTitle));
+
                     // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
                     // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
                     link.add(new AttributeAppender("data-original-title", ""));
@@ -126,7 +127,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getDisabledReasonIfAny() == null) {
                     addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
-
 
                 final String cssClass = linkAndLabel.getCssClass();
                 CssClassAppender.appendCssClassTo(link, cssClass);

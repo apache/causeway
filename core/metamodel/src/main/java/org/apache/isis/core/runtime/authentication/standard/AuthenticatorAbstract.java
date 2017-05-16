@@ -21,27 +21,27 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
+    //region > constructor, fields
     private final IsisConfiguration configuration;
-
-    // //////////////////////////////////////////////////////
-    // constructor
-    // //////////////////////////////////////////////////////
+    private DeploymentCategory deploymentCategory;
 
     public AuthenticatorAbstract(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    // //////////////////////////////////////////////////////
-    // init, shutdown
-    // //////////////////////////////////////////////////////
+    //endregion
+
+    //region > init, shutdown
 
     @Override
-    public void init() {
+    public void init(final DeploymentCategory deploymentCategory) {
         // does nothing.
+        this.deploymentCategory = deploymentCategory;
     }
 
     @Override
@@ -49,9 +49,14 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         // does nothing.
     }
 
-    // //////////////////////////////////////////////////////
-    // API
-    // //////////////////////////////////////////////////////
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    //endregion
+
+    //region > API
 
     /**
      * Default implementation returns a {@link SimpleSession}; can be overridden
@@ -65,26 +70,35 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         return new SimpleSession(request.getName(), request.getRoles(), code);
     }
 
+
     /**
      * Whether this {@link Authenticator} is valid in the running context (and
      * optionally with respect to the provided {@link AuthenticationRequest}).
-     * 
+     *
      * <p>
      * For example, the <tt>ExplorationAuthenticator</tt> (in the default
      * runtime) is only available for authentication if running in
      * <i>exploration mode</i>.
-     * 
+     *
      * <p>
      * TODO: [ISIS-292] should change visibility to <tt>protected</tt> when remove from the API.
      */
-    public abstract boolean isValid(AuthenticationRequest request);
+    protected abstract boolean isValid(AuthenticationRequest request);
 
-    // //////////////////////////////////////////////////////
-    // Injected (via constructor)
-    // //////////////////////////////////////////////////////
+    @Override
+    public void logout(final AuthenticationSession session) {
+        // no-op
+    }
+
+
+    //endregion
+
+    //region > Injected (via constructor)
 
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
+
+    //endregion
 
 }

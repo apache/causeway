@@ -21,14 +21,13 @@ package org.apache.isis.core.metamodel.facets.value.password;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
     PasswordValueFacet {
@@ -44,13 +43,12 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public PasswordValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public PasswordValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public PasswordValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
         super(type(), holder, Password.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
-            configuration, context);
+                context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -63,13 +61,13 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return object == null ? "" : password(object).toString();
     }
 
     @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object, null);
+        return titleString(object);
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -35,7 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 /**
@@ -44,6 +44,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
  */
 public class LocalizerForIsis extends Localizer {
 
+    public LocalizerForIsis(){}
     /**
      * Uses Isis' {@link TranslationService} to translate the key, but falls back to Wicket's own implementation
      * if no translation is available.
@@ -68,15 +69,15 @@ public class LocalizerForIsis extends Localizer {
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
         final String context = contextClass.getName();
-        if(IsisContext.inSession()) {
+        if(getIsisSessionFactory().inSession()) {
             return translate(key, context);
         } else {
-            return IsisContext.doInSession(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    return translate(key, context);
-                }
-            });
+            return getIsisSessionFactory().doInSession(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        return translate(key, context);
+                    }
+                });
         }
     }
 
@@ -143,17 +144,18 @@ public class LocalizerForIsis extends Localizer {
         return translationService.translate(context, key);
     }
 
+
+
     protected TranslationService getTranslationService() {
-        return getServicesInjector()
-                .lookupService(TranslationService.class);
+        return getServicesInjector().lookupServiceElseFail(TranslationService.class);
     }
 
     protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

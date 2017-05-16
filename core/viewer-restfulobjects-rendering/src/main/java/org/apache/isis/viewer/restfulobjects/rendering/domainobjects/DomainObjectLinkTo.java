@@ -17,9 +17,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
@@ -60,7 +58,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      */
     protected StringBuilder linkRef(StringBuilder buf) {
         String domainType = OidUtils.getDomainType(objectAdapter);
-        String instanceId = OidUtils.getInstanceId(rendererContext, objectAdapter);
+        String instanceId = OidUtils.getInstanceId(objectAdapter);
         return buf.append("objects/").append(domainType).append("/").append(instanceId);
     }
 
@@ -96,13 +94,5 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
 
     
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-    
-    protected static OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-
 
 }

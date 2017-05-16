@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import com.google.inject.Inject;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -28,6 +27,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -175,7 +175,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     public ObjectAdapter getContextAdapterIfAny() {
         EntityModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK): null;
+        return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                model.getPersistenceSession(), model.getSpecificationLoader()): null;
     }
     
     static String abbreviated(final String str, final int maxLength) {
@@ -202,13 +203,13 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     // Dependency Injection
     // ///////////////////////////////////////////////
 
-    @Inject
+    @com.google.inject.Inject
     private ImageResourceCache imageCache;
     protected ImageResourceCache getImageCache() {
         return imageCache;
     }
-    
-    @Inject
+
+    @com.google.inject.Inject
     private WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;

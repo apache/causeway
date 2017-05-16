@@ -20,21 +20,26 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-
 import com.google.common.base.Throwables;
+
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.scratchpad.Scratchpad;
+import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -57,6 +62,10 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
  */
 public abstract class IntegrationTestAbstract {
 
+    /**
+     * @deprecated - just inject domain services into test instead.
+     */
+    @Deprecated
     protected static ScenarioExecution scenarioExecution() {
         return ScenarioExecution.current();
     }
@@ -65,32 +74,16 @@ public abstract class IntegrationTestAbstract {
 
   
     /**
-     * Intended to be called whenever there is a logically distinct interaction with the system.
-     *
-     * <p>
-     *     Each transaction has its own instances of request-scoped services, most notably
-     *     the {@link org.apache.isis.applib.services.command.Command}.
-     * </p>
-     * 
-     * <p>
-     *     (Unlike {@link #nextSession()}), it <i>is</i> valid to hold references to objects across transactions.
-     *     Also, note that {@link RequestScoped} services (such as {@link QueryResultsCache} will <i>not</i> be reset.
-     * </p>
-     *
-     * @see #nextSession()
+     * @deprecated - instead just inject {@link TransactionService} into test and use {@link TransactionService#nextTransaction()} instead.
      */
+    @Deprecated
     protected void nextTransaction() {
         scenarioExecution().endTran(true);
         scenarioExecution().beginTran();
     }
 
     /**
-     * Synonym for {@link #nextTransaction()}.
-     *
-     * @see #nextTransaction()
-     * @see #nextSession()
-     *
-     * @deprecated - confusing because does NOT clear out and reset any {@link javax.enterprise.context.RequestScoped} services.  For this, use {@link #nextSession()}.
+     * @deprecated - instead just inject {@link SessionManagementService} or {@link TransactionService} into test and use either {@link SessionManagementService#nextSession()} or {@link TransactionService#nextTransaction()} instead.
      */
     @Deprecated
     protected void nextRequest() {
@@ -98,15 +91,9 @@ public abstract class IntegrationTestAbstract {
     }
 
     /**
-     * Completes the transaction and session, then opens another session and transaction.  Any
-     * {@link RequestScoped} services (eg {@link QueryResultsCache} will be reset.
-     *
-     * <p>
-     *     Note that any references to objects must be discarded and reacquired.
-     * </p>
-     *
-     * @see #nextTransaction()
+     * @deprecated - instead just inject {@link SessionManagementService} into test and use {@link SessionManagementService#nextSession()} instead.
      */
+    @Deprecated
     protected void nextSession() {
         scenarioExecution().endTran(true);
         scenarioExecution().closeSession();
@@ -114,6 +101,9 @@ public abstract class IntegrationTestAbstract {
         scenarioExecution().beginTran();
     }
 
+    /**
+     * If just require the current time, use {@link ClockService}.
+     */
     protected FixtureClock getFixtureClock() {
         return ((FixtureClock)FixtureClock.getInstance());
     }
@@ -123,37 +113,39 @@ public abstract class IntegrationTestAbstract {
 
     
     /**
-     * Convenience method
+     * @deprecated - just inject {@link Scratchpad} service into test and use {@link Scratchpad#get(Object)} instead.
      */
+    @Deprecated
     public Object getVar(final String type, final String id) {
         return scenarioExecution().getVar(type, id);
     }
 
     /**
-     * Convenience method
+     * @deprecated - just inject {@link Scratchpad} service into test and use {@link Scratchpad#get(Object)} instead.
      */
+    @Deprecated
     public <X> X getVar(final String type, final String id, final Class<X> cls) {
         return scenarioExecution().getVar(type, id ,cls);
     }
 
     /**
-     * Convenience method
+     * @deprecated - just inject {@link Scratchpad} service into test and use {@link Scratchpad#put(Object, Object)} instead.
      */
+    @Deprecated
     public void putVar(final String type, final String id, final Object value) {
         scenarioExecution().putVar(type, id, value);
     }
-    
+
     /**
-     * Convenience method
+     * @deprecated - just inject {@link Scratchpad} service into test and use {@link Scratchpad#put(Object, Object)} (setting to <tt>null</tt>) instead.
      */
+    @Deprecated
     public void removeVar(final String type, final String id) {
         scenarioExecution().removeVar(type, id);
     }
 
     /**
-     * Convenience method
-     *
-     * @deprecated - instead just inject service into test.
+     * @deprecated - instead just inject service into test; optionally use {@link ServiceRegistry} service to lookup other services.
      */
     @Deprecated
     protected <T> T service(final Class<T> cls) {
@@ -161,8 +153,6 @@ public abstract class IntegrationTestAbstract {
     }
     
     /**
-     * Convenience method
-     *
      * @deprecated - instead just inject {@link org.apache.isis.applib.DomainObjectContainer} into test.
      */
     @Deprecated
@@ -171,8 +161,6 @@ public abstract class IntegrationTestAbstract {
     }
     
     /**
-     * Convenience method
-     *
      * @deprecated - instead just inject {@link org.apache.isis.applib.services.wrapper.WrapperFactory} into test.
      */
     @Deprecated
@@ -225,8 +213,13 @@ public abstract class IntegrationTestAbstract {
                     try {
                         base.evaluate();
                         isft.endTran();
+                        isft.nextSession();
                     } catch(final Throwable e) {
-                        isft.bounceSystem();
+
+                        // if test failed to clean up after itself, then take care of it here.
+                        endTransactionTilDone();
+
+                        isft.nextSession();
                         final List<Throwable> causalChain = Throwables.getCausalChain(e);
                         // if underlying cause is an applib-defined exception, throw that rather than Isis' wrapper exception
                         for (final Throwable cause : causalChain) {
@@ -236,6 +229,21 @@ public abstract class IntegrationTestAbstract {
                             }
                         }
                         throw e;
+                    }
+                }
+
+                protected void endTransactionTilDone() {
+                    IsisTransactionManager tranMgr = isft.getIsisSessionFactory().getCurrentSession()
+                                                         .getPersistenceSession().getTransactionManager();
+                    int count = 0;
+                    while(tranMgr.getTransactionLevel() > 0 &&
+                          count++ < 10              // just in case, to prevent an infinite loop...
+                            ) {
+                        try {
+                            tranMgr.endTransaction();
+                        } catch(Exception ignore) {
+                            // ignore
+                        }
                     }
                 }
             };

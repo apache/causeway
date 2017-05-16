@@ -24,23 +24,11 @@ import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 
-import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.lang.ListExtensions;
 
 public abstract class OptionHandlerAbstract implements OptionHandler {
 
     public OptionHandlerAbstract() {
-    }
-
-    protected StringBuffer availableInstallers(final Object[] factories) {
-        final StringBuffer types = new StringBuffer();
-        for (int i = 0; i < factories.length; i++) {
-            if (i > 0) {
-                types.append("; ");
-            }
-            types.append(((Installer) factories[i]).getName());
-        }
-        return types;
     }
 
     protected List<String> getOptionValues(final CommandLine commandLine, final String opt) {

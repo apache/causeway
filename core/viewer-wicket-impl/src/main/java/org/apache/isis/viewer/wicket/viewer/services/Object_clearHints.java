@@ -52,7 +52,7 @@ public class Object_clearHints {
             cssClassFa = "fa-trash",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "400.1")
+    @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object $$() {
         if (getHintStoreUsingWicketSession() != null) {
             final Bookmark bookmark = bookmarkService.bookmarkFor(object);
@@ -71,10 +71,10 @@ public class Object_clearHints {
                 : null;
     }
 
-    @Inject
+    @javax.inject.Inject
     HintStore hintStore;
 
-    @Inject
+    @javax.inject.Inject
     BookmarkService bookmarkService;
 
 }

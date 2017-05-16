@@ -35,16 +35,17 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
 
     private MixinFacetForDomainObjectAnnotation(
             final Class<?> mixinType,
-            final Class<?> constructorType,
+            final String value, final Class<?> constructorType,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
-        super(mixinType, constructorType, holder, servicesInjector);
+        super(mixinType, value, constructorType, holder, servicesInjector);
     }
 
     public static MixinFacet create(
-            final Class<?> candidateMixinType, final FacetHolder facetHolder,
+            final DomainObject domainObject,
+            final Class<?> candidateMixinType,
+            final FacetHolder facetHolder,
             final ServicesInjector servicesInjector) {
-        final DomainObject domainObject = candidateMixinType.getAnnotation(DomainObject.class);
         if(domainObject == null) {
             return null;
         }
@@ -58,7 +59,7 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
                 continue;
             }
             final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForDomainObjectAnnotation(candidateMixinType, constructorType, facetHolder,
+            return new MixinFacetForDomainObjectAnnotation(candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder,
                     servicesInjector);
         }
         return null;

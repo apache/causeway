@@ -34,7 +34,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -42,7 +41,10 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -51,8 +53,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
-import static org.hamcrest.CoreMatchers.is;
 
 class CssMenuItem implements Serializable {
 
@@ -78,7 +78,8 @@ class CssMenuItem implements Serializable {
         }
 
         public <T extends Page> Builder link(final AbstractLink link) {
-            Ensure.ensureThatArg(link.getId(), is(ID_MENU_LINK));
+            assert link.getId().equals(ID_MENU_LINK);
+
             cssMenuItem.setLink(link);
             return this;
         }
@@ -313,8 +314,8 @@ class CssMenuItem implements Serializable {
             final ActionLinkFactory actionLinkFactory) {
 
         // check visibility
-        final AuthenticationSession session = getAuthenticationSession();
-        final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+        final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
+                getPersistenceSession(), getSpecificationLoader());
         final Consent visibility = objectAction.isVisible(adapter, InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
             return null;
@@ -344,13 +345,13 @@ class CssMenuItem implements Serializable {
                 .link(link)
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
-                .returnsBlobOrClob(ObjectAction.Utils.returnsBlobOrClob(objectAction))
-                .prototyping(ObjectAction.Utils.isExplorationOrPrototype(objectAction))
+                .returnsBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
+                .prototyping(objectAction.isPrototype())
                 .requiresSeparator(separator)
-                .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
-                .withCssClass(ObjectAction.Utils.cssClassFor(objectAction, adapter))
-                .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction))
-                .withCssClassFaPosition(ObjectAction.Utils.cssClassFaPositionFor(objectAction));
+                .withActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
+                .withCssClass(ObjectAction.Util.cssClassFor(objectAction, adapter))
+                .withCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
+                .withCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
 
         return builder;
     }
@@ -447,8 +448,21 @@ class CssMenuItem implements Serializable {
     // dependencies
     // //////////////////////////////////////////////////////////////
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+    AuthenticationSession getAuthenticationSession() {
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+    }
+
+    SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

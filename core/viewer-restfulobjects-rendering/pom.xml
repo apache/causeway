@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
 
-	<name>Isis RestfulObjects Viewer Rendering</name>
+	<name>Apache Isis RestfulObjects Viewer Rendering</name>
 
 	<dependencies>
 

@@ -26,7 +26,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -52,13 +51,13 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         });
 
         holder = new FacetHolderImpl();
-        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one", null);
+            value.parseTextEntry(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -66,18 +65,18 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
 
     @Test
     public void testTitleString() {
-        assertEquals("32", value.displayTitleOf(integer, (Localization) null));
+        assertEquals("32", value.displayTitleOf(integer));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "120", null);
+        final Object newValue = value.parseTextEntry(null, "120");
         assertEquals(Integer.valueOf(120), newValue);
     }
 
     @Test
     public void testParseOddlyFormedEntry() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "1,20.0", null);
+        final Object newValue = value.parseTextEntry(null, "1,20.0");
         assertEquals(Integer.valueOf(120), newValue);
     }
 }

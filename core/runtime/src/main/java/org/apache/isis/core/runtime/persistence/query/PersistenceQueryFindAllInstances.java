@@ -23,13 +23,18 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to {@link QueryFindAllInstances}
  */
 public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbstract {
-    public PersistenceQueryFindAllInstances(final ObjectSpecification specification, final long ... range) {
-        super(specification, range);
+
+    public PersistenceQueryFindAllInstances(
+            final ObjectSpecification specification,
+            final SpecificationLoader specificationLoader,
+            final long... range) {
+        super(specification, specificationLoader, range);
         index=0;
         countedSoFar=0;
     }

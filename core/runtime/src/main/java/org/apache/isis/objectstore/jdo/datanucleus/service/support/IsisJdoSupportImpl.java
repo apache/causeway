@@ -47,8 +47,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
 
@@ -60,7 +60,10 @@ import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class IsisJdoSupportImpl implements IsisJdoSupport {
     
     @Programmatic
@@ -192,12 +195,15 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     // //////////////////////////////////////
 
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
     protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return isisSessionFactory.getServicesInjector();
     }
 
     @Programmatic

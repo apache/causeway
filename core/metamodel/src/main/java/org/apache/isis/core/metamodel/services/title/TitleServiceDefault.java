@@ -19,19 +19,17 @@
 
 package org.apache.isis.core.metamodel.services.title;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class TitleServiceDefault implements TitleService {
 
@@ -41,7 +39,7 @@ public class TitleServiceDefault implements TitleService {
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
         final boolean destroyed = objectAdapter.isDestroyed();
         if(!destroyed) {
-            return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProviderInternal.getLocalization());
+            return objectAdapter.getSpecification().getTitle(objectAdapter);
         } else {
             return "[DELETED]";
         }
@@ -65,11 +63,8 @@ public class TitleServiceDefault implements TitleService {
 
     // //////////////////////////////////////
 
-    @Inject
-    PersistenceSessionServiceInternal adapterManager;
-
     @javax.inject.Inject
-    LocalizationProviderInternal localizationProviderInternal;
+    PersistenceSessionServiceInternal adapterManager;
 
     @javax.inject.Inject
     WrapperFactory wrapperFactory;

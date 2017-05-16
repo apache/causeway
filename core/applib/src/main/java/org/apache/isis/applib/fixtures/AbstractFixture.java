@@ -19,7 +19,6 @@
 
 package org.apache.isis.applib.fixtures;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
  * Convenience class for creating fixtures.
@@ -51,14 +51,14 @@ import org.apache.isis.applib.annotation.Programmatic;
  *  
  * <p>
  * To automatically logon for the demo/test, use {@link LogonFixture}.
+ *
+ * @deprecated - use {@link FixtureScript} instead.
  */
+@Deprecated
 public abstract class AbstractFixture extends BaseFixture implements CompositeFixture {
 
     private final List<Object> fixtures = Lists.newArrayList();
 
-    // ///////////////////////////////////////////////////////////////
-    // Constructor
-    // ///////////////////////////////////////////////////////////////
 
     /**
      * Assumed to be {@link FixtureType#DOMAIN_OBJECTS data} fixture.
@@ -90,13 +90,16 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     public void install() {
     }
 
-    // ///////////////////////////////////////////////////////////////
+
+
     // CompositeFixture impl
-    // ///////////////////////////////////////////////////////////////
 
     /**
      * Allows the fixture to act as a composite (call within constructor).
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     protected void addFixture(final Object fixture) {
         fixtures.add(fixture);
     }
@@ -104,21 +107,27 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     /**
      * Returns an array of any fixtures that have been
      * {@link #addFixture(Object) added}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     @Programmatic // to allow this class to be used as a domain object
     @Override
     public List<Object> getFixtures() {
         return Collections.unmodifiableList(fixtures);
     }
 
-    // ///////////////////////////////////////////////////////////////
+
+
     // Date and time
-    // ///////////////////////////////////////////////////////////////
 
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     @Programmatic // to allow this class to be used as a domain object
     public void earlierDate(final int years, final int months, final int days) {
         if (shouldIgnoreCallBecauseNoClockSetup("earlierDate()")) {
@@ -130,7 +139,10 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     @Programmatic // to allow this class to be used as a domain object
     public void earlierTime(final int hours, final int minutes) {
         if (shouldIgnoreCallBecauseNoClockSetup("earlierTime()")) {
@@ -142,7 +154,10 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     @Programmatic // to allow this class to be used as a domain object
     public void laterDate(final int years, final int months, final int days) {
         if (shouldIgnoreCallBecauseNoClockSetup("laterDate()")) {
@@ -154,7 +169,10 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     @Programmatic // to allow this class to be used as a domain object
     public void laterTime(final int hours, final int minutes) {
         if (shouldIgnoreCallBecauseNoClockSetup("laterTime()")) {

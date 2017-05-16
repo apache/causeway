@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -35,7 +36,6 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
@@ -50,8 +50,10 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -59,7 +61,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
@@ -78,17 +79,39 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         if (!Session.exists()) {
             return;
         }
+
         final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
         final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
         if (authenticationSession == null) {
             return;
         }
 
-        getIsisContext().openSessionInstance(authenticationSession);
+        getIsisSessionFactory().openSession(authenticationSession);
         getTransactionManager().startTransaction();
     }
 
-    
+    @Override
+    public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler)
+    {
+
+        final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+
+        if(mmie != null) {
+            if(handler instanceof RenderPageRequestHandler) {
+                RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
+                final IRequestablePage nextPage = requestHandler.getPage();
+                if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
+                    // do nothing
+                    return;
+                }
+                throw mmie;
+            }
+            // can't figure out where we're heading, so continue anyway and let things turn out as they will.
+        }
+
+    }
+
+
     /**
      * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
      * throw an exception.
@@ -99,8 +122,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             LOG.debug("onRequestHandlerExecuted: handler: " + handler);
         }
 
-        final IsisSession session = getIsisContext().getSessionInstance();
-        if (session != null) {
+        if (getIsisSessionFactory().inSession()) {
             try {
                 // will commit (or abort) the transaction;
                 // an abort will cause the exception to be thrown.
@@ -108,7 +130,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             } catch(Exception ex) {
                 // will redirect to error page after this, 
                 // so make sure there is a new transaction ready to go.
-                if(getTransactionManager().getTransaction().getState().isComplete()) {
+                if(getTransactionManager().getCurrentTransaction().getState().isComplete()) {
                     getTransactionManager().startTransaction();
                 }
                 if(handler instanceof RenderPageRequestHandler) {
@@ -131,13 +153,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      */
     @Override
     public synchronized void onEndRequest(RequestCycle cycle) {
-        final IsisSession session = getIsisContext().getSessionInstance();
-        if (session != null) {
+        if (getIsisSessionFactory().inSession()) {
             try {
                 // belt and braces
                 getTransactionManager().endTransaction();
             } finally {
-                getIsisContext().closeSessionInstance();
+                getIsisSessionFactory().closeSession();
             }
         }
     }
@@ -146,9 +167,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
-        List<String> validationErrors = IsisWicketApplication.get().getValidationErrors();
-        if(!validationErrors.isEmpty()) {
-            final MmvErrorPage mmvErrorPage = new MmvErrorPage(Model.ofList(validationErrors));
+        final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+        if(mmie != null) {
+            final Set<String> validationErrors = mmie.getValidationErrors();
+            final MmvErrorPage mmvErrorPage = new MmvErrorPage(validationErrors);
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
@@ -172,7 +194,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
                 @Override
                 public String apply(String input) {
-                    return "Requested page is no longer available. Please navigate back to the home page or select an object from the bookmark bar.";
+                    return "Requested page is no longer available.";
                 }
             });
 
@@ -183,9 +205,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         if(inIsisSession()) {
             exceptionRecognizers.addAll(getServicesInjector().lookupServices(ExceptionRecognizer.class));
         } else {
-            List<String> validationErrors = IsisWicketApplication.get().getValidationErrors();
-            if(!validationErrors.isEmpty()) {
-                return new MmvErrorPage(Model.ofList(validationErrors));
+            final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+            if(mmie != null) {
+                Set<String> validationErrors = mmie.getValidationErrors();
+                return new MmvErrorPage(validationErrors);
             }
             // not sure whether this can ever happen now...
             LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception", ex);
@@ -247,37 +270,35 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         this.pageClassRegistry = pageClassRegistry;
     }
     
-    ///////////////////////////////////////////////////////////////
-    // Dependencies (from isis' context)
-    ///////////////////////////////////////////////////////////////
-    
+    //region > Dependencies (from isis' context)
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getPersistenceSession().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
     
-    protected IsisContext getIsisContext() {
-        return IsisContext.getInstance();
-    }
-
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
     protected boolean inIsisSession() {
-        return IsisContext.inSession();
+        return getIsisSessionFactory().inSession();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
-    ///////////////////////////////////////////////////////////////
-    // Dependencies (from wicket)
-    ///////////////////////////////////////////////////////////////
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
 
-    
+    //endregion
+
+    //region > Dependencies (from wicket)
+
     protected AuthenticatedWebSession getWicketAuthenticationSession() {
         return AuthenticatedWebSession.get();
     }
+
+    //endregion
 
 }

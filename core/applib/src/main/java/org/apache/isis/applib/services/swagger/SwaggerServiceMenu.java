@@ -16,8 +16,6 @@
  */
 package org.apache.isis.applib.services.swagger;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -32,7 +30,8 @@ import org.apache.isis.applib.value.Clob;
 
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY
+        nature = NatureOfService.VIEW_MENU_ONLY,
+        objectType = "isisApplib.SwaggerServiceMenu"
 )
 @DomainServiceLayout(
         named = "Prototyping",
@@ -75,6 +74,6 @@ public class SwaggerServiceMenu {
         return SwaggerService.Format.YAML;
     }
 
-    @Inject
+    @javax.inject.Inject
     SwaggerService swaggerService;
 }    

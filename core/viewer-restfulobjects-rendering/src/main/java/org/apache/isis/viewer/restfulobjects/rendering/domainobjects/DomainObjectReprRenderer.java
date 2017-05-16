@@ -19,7 +19,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -48,7 +46,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
     public static LinkBuilder newLinkToBuilder(final RendererContext rendererContext, final Rel rel, final ObjectAdapter objectAdapter) {
         String domainType = OidUtils.getDomainType(objectAdapter);
-        String instanceId = OidUtils.getInstanceId(rendererContext, objectAdapter);
+        String instanceId = OidUtils.getInstanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId;
         return LinkBuilder.newBuilder(rendererContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
     }
@@ -220,11 +218,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getInstanceId() {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(rendererContext, objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(objectAdapter);
     }
 
     private String getOidStr() {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(rendererContext, objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(objectAdapter);
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
@@ -397,18 +395,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return JsonValueEncoder.asObject(objectAdapter, format);
         }
         final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
-        final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
+        final String title = titleFacet.title(objectAdapter);
         return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.VALUE, objectAdapter).withTitle(title).build();
     }
 
- 
-    
-    // ///////////////////////////////////////////////////////////////////
-    // dependencies (from context)
-    // ///////////////////////////////////////////////////////////////////
 
-    protected static OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
 
 }

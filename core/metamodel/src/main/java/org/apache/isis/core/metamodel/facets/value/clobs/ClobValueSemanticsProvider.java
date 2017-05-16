@@ -25,13 +25,12 @@ import javax.activation.MimeTypeParseException;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class ClobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Clob> implements ClobValueFacet {
 
@@ -48,21 +47,21 @@ public class ClobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
      * {@link EncoderDecoder}.
      */
     public ClobValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public ClobValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Clob.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
+    public ClobValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, Clob.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return object != null? ((Clob)object).getName(): "[null]";
     }
 
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
-        return titleString(value, null);
+        return titleString(value);
     }
 
 

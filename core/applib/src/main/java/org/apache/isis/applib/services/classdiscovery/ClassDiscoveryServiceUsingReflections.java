@@ -44,7 +44,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  * </p>
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 

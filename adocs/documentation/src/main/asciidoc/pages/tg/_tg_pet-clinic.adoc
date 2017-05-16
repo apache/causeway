@@ -1,0 +1,565 @@
+[[_tg_pet-clinic]]
+= Pet Clinic
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+It was originally written by Jeroen van der Wal.
+
+It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
+
+image::{_imagesdir}tutorials/pet-clinic/domain-model.png[link="{_imagesdir}tutorials/pet-clinic/domain-model.png"]
+
+
+This supports the following use cases:
+
+* register a `Pet`
+* register an `Owner`
+* maintain a ``Pet``'s details
+* check in a `Pet` to visit the clinic
+* enter a `Diagnosis`
+* check out a `Pet` after visiting the clinic
+
+Either follow along or check out the tags from the corresponding https://github.com/danhaywood/isis-app-petclinic[github repo].
+
+
+== Prerequisites
+
+You'll need:
+
+* Java 7 JDK
+* http://maven.apache.org/[Maven] 3.2.x
+* an IDE, such as http://www.eclipse.org/[Eclipse] or https://www.jetbrains.com/idea/[IntelliJ IDEA].
+
+
+
+
+== Run the archetype
+
+Throughout this tutorial you can, if you wish, just checkout from the github repo wherever you see a "git checkout" note:
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/249abe476797438d83faa12ff88365da2c362451
+----
+
+Do note that the tutorial was originally developed against Apache Isis 1.8.0-SNAPSHOT; replace "1.8.0-SNAPSHOT" for the any version from 1.8.0 up to 1.13.1.
+(The structure of Apache Isis archetype changed in 1.13.2).
+====
+
+
+Run the simpleapp archetype to build an empty Isis application.
+With the *nix bash shell, use:
+
+[source,bash]
+----
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=simpleapp-archetype \
+    -D archetypeVersion=1.13.1 \
+    -D groupId=com.mycompany \
+    -D artifactId=petclinic \
+    -D version=1.0-SNAPSHOT \
+    -D archetypeRepository=http://repository-estatio.forge.cloudbees.com/snapshot/ \
+    -B
+----
+
+Adjust as necessary if using Windows `cmd.exe` or Powershell.
+
+[NOTE]
+====
+You can use 1.13.2 (or later) version of the archetype if you wish, however be aware that the structure of the solution repo (mentioned above) will be different from the structure for applications generated from 1.13.2.
+====
+
+
+
+This will generate the app in a `petclinic` directory. Move the contents back:
+
+[source,bash]
+----
+mv petclinic/* .
+rmdir petclinic
+----
+
+
+
+
+== Build and run
+
+Start off by building the app from the command line:
+
+[source,bash]
+----
+mvn clean install
+----
+
+
+You can run using the mvn-jetty-plugin:
+
+[source,bash]
+----
+mvn -pl webapp jetty:run
+----
+
+You can then browser to http://localhost:8080[http://localhost:8080]
+
+
+If using 1.13.2 or later, then you can also use the link:https://github.com/danhaywood/java-mavenmixin-jettyconsole/blob/master/README.adoc[jetty-console] plugin:
+
+[source,bash]
+----
+mvn clean install -Dmavenmixin-jettyconsole
+mvn -pl webapp antrun:run -Dmavenmixin-jettyconsole
+----
+
+This packages the app as a standalone JAR, and then runs using the AntRun plugin.
+
+
+== Using the app
+
+Navigate to the Wicket UI (eg http://localhost:8080/wicket[http://localhost:8080/wicket]), and login (sven/pass).
+
+image::{_imagesdir}tutorials/pet-clinic/010-01-login-page.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/010-01-login-page.png"]
+
+
+
+The home page should be shown:
+
+image::{_imagesdir}tutorials/pet-clinic/010-02-home-page.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/010-02-home-page.png"]
+
+
+
+Install the fixtures (example test data) using the `Prototyping` menu:
+
+image::{_imagesdir}tutorials/pet-clinic/010-03-prototyping-menu.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/010-03-prototyping-menu.png"]
+
+
+
+List all objects using the `Simple Objects` menu:
+
+image::{_imagesdir}tutorials/pet-clinic/010-04-simpleobjects.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/010-04-simpleobjects.png"]
+
+
+To return the objects created:
+
+image::{_imagesdir}tutorials/pet-clinic/010-05-simpleobject-list.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/010-05-simpleobject-list.png"]
+
+
+
+Experiment some more, to:
+
+* create a new object
+* list all objects
+
+Go back to the splash screen, and quit the app. Note that the database runs in-memory (using HSQLDB) so any data created will be lost between runs.
+
+
+
+
+== Dev environment
+
+Set up xref:../../guides/dg/dg.adoc#_dg_ide[an IDE] and import the project to be able to run and debug the app.
+
+Then set up a launch configuration so that you can run the app from within the IDE. To save having to run the fixtures
+every time, specify the following system properties:
+
+[source,bash]
+----
+-Disis.persistor.datanucleus.install-fixtures=true -Disis.fixtures=fixture.simple.scenario.SimpleObjectsFixture
+----
+
+For example, here's what a launch configuration in IntelliJ idea looks like:
+
+image::{_imagesdir}tutorials/pet-clinic/020-01-idea-configuration.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/020-01-idea-configuration.png"]
+
+
+
+where the "before launch" maven goal (to run the DataNucleus enhancer) is defined as:
+
+
+image::{_imagesdir}tutorials/pet-clinic/020-02-idea-configuration.png[width="400px",link="{_imagesdir}tutorials/pet-clinic/020-02-idea-configuration.png"]
+
+
+
+
+== Explore codebase
+
+Apache Isis applications are organized into several Maven modules. Within your IDE navigate to the various classes and correlate back to the generated UI:
+
+* `petclinic` : parent module
+* `petclinic-dom`: domain objects module
+** entity: `dom.simple.SimpleObject`
+** repository: `dom.simple.SimpleObjects`
+* `petclinic-fixture`: fixtures module
+** fixture script:`fixture.simple.SimpleObjectsFixture`
+* `petclinic-integtests`: integration tests module
+* `petclinic-webapp`: webapp module
+** (builds the WAR file)
+
+
+
+
+== Testing
+
+Testing is of course massively important, and Apache Isis makes both unit testing and (end-to-end) integration testing easy. Building the app from the Maven command line ("mvn clean install") will run all tests, but you should also run the tests from within the IDE.
+
+* `myapp-dom` unit tests
+* run
+* inspect, eg
+ - `SimpleObjectTest`
+* `myapp-integtests` integration tests
+* run
+* inspect, eg:
+** `integration.tests.smoke.SimpleObjectsTest`
+** `integration.specs.simple.SimpleObjectSpec_listAllAndCreate.feature`
+* generated report, eg
+ - `myapp/integtests/target/cucumber-html-report/index.html`
+** change test in IDE, re-run (in Maven)
+
+If you have issues with the integration tests, make sure that the domain classes have been enhanced by the DataNucleus enhancer. (The exact mechanics depends on the IDE being used).
+
+
+
+
+== Update POM files
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/68904752bc2de9ebb3c853b79236df2b3ad2c944
+----
+
+====
+
+The POM files generated by the simpleapp archetype describe the app as "SimpleApp". Update them to say "PetClinic" instead.
+
+
+
+
+== Delete the BDD specs
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/9046226249429b269325dfa2baccf03635841c20
+----
+
+====
+
+
+During this tutorial we're going to keep the integration tests in-sync with the code, but we're going to stop short of writing BDD/Cucumber specs.
+
+Therefore delete the BDD feature spec and glue in the `integtest` module:
+
+* `integration/specs/*`
+* `integration/glue/*`
+
+
+
+
+== Rename artifacts
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/bee3629c0b64058f939b6dd20f226be31810fc66
+----
+
+====
+
+
+Time to start refactoring the app. The heart of the PetClinic app is the `Pet` concept, so go through the code and refactor. While we're at it, refactor the app itself from "SimpleApp" to "PetClinicApp".
+
+See the git commit for more detail, but in outline, the renames required are:
+
+* in the `dom` module's production code
+** `SimpleObject` -&gt; `Pet` (entity)
+** `SimpleObjects` -&gt; `Pets` (repository domain service)
+** `SimpleObject.layout.json` -&gt; `Pet.layout.json` (layout hints for the `Pet` entity)
+** delete the `SimpleObject.png`, and add a new `Pet.png` (icon shown against all `Pet` instances).
+* in the `dom` module's unit test code
+** `SimpleObjectTest` -&gt; `PetTest` (unit tests for `Pet` entity)
+** `SimpleObjectsTest` -&gt; `PetsTest` (unit tests for `Pets` domain service)
+* in the `fixture` module:
+** `SimpleObjectsFixturesService` -&gt; `PetClinicAppFixturesService` (rendered as the prototyping menu in the UI)
+** `SimpleObjectsTearDownService` -&gt; `PetClinicAppTearDownService` (tear down all objects between integration tests)
+** `SimpleObjectAbstract` -&gt; `PetAbstract` (abstract class for setting up a single pet object
+*** and corresponding subclasses to set up sample data (eg `PetForFido`)
+** `SimpleObjectsFixture` -&gt; `PetsFixture` (tear downs system and then sets up all pets)
+* in the `integtest` module:
+** `SimpleAppSystemInitializer` -&gt; `PetClinicAppSystemInitializer` (bootstraps integration tests with domain service/repositories)
+** `SimpleAppIntegTest` -&gt; `PetClinicAppIntegTest` (base class for integration tests)
+** `SimpleObjectTest` -&gt; `PetTest` (integration test for `Pet` entity)
+** `SimpleObjectsTest` -&gt; `PetsTest` (integration test for `Pets` domain service)
+* in the `webapp` module:
+** `SimpleApplication` -&gt; `PetClinicApplication`
+** update `isis.properties`
+** update `web.xml`
+
+
+Note that `Pet` has both both Isis and JDO annotations:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE) // <1>
+@javax.jdo.annotations.DatastoreIdentity(                                      // <2>
+        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
+         column="id")
+@javax.jdo.annotations.Version(                                                // <3>
+        strategy=VersionStrategy.VERSION_NUMBER,
+        column="version")
+@javax.jdo.annotations.Unique(name="Pet_name_UNQ", members = {"name"})         // <4>
+@ObjectType("PET")                                                             // <5>
+@Bookmarkable                                                                  // <6>
+public class Pet implements Comparable<Pet> {
+    ...
+}
+----
+
+where:
+
+<1> `@PersistenceCapable` and
+<2> `@DatastoreIdentity` specify a surrogate `Id` column to be used as the primary key
+<3> `@Version` provides support for optimistic locking
+<4> `@Unique` enforces a uniqueness constraint so that no two `Pet`s can have the same name (unrealistic, but can refactor later)
+<5> `@ObjectType` is used by Apache Isis for its own internal "OID" identifier; this also appears in the URL in Apache Isis' Wicket viewer and REST API
+<6> `@Bookmarkable` indicates that the object can be automatically bookmarked in Apache Isis' Wicket viewer
+
+[NOTE]
+====
+The `@ObjectType` and `@Bookmarkable` annotations have since been deprecated, replaced with `@DomainObject(objectType=...)` and `@DomainObjectLayout(bookmarking=...)`
+====
+
+
+The `Pets` domain service also has Isis annotations:
+
+[source,java]
+----
+@DomainService(repositoryFor = Pet.class)
+@DomainServiceLayout(menuOrder = "10")
+public class Pets {
+    ...
+}
+----
+
+where:
+
+* `DomainService` indicates that the service should be instantiated automatically (as a singleton)
+* `DomainServiceLayout` provides UI hints, in this case the positioning of the menu for the actions provided by the service
+
+To run the application will require an update to the IDE configuration, for the changed name of the fixture class:
+
+
+image::{_imagesdir}tutorials/pet-clinic/030-01-idea-configuration-updated.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/030-01-idea-configuration-updated.png"]
+
+
+Running the app should now show `Pet`s:
+
+image::{_imagesdir}tutorials/pet-clinic/030-02-updated-app.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/030-02-updated-app.png"]
+
+
+
+
+
+== Update package names
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/55ec36e520191f5fc8fe7f5b89956814eaf13317
+----
+
+====
+
+
+
+The classes created by the simpleapp archetype are by default in the `simple` package. Move these classes to `pets` package instead. Also adjust package names where they appear as strings:
+
+* in `PetClinicAppFixturesService`, change the package name from "fixture.simple" to "fixture.pets".
+* in `PetClinicAppSystemInitializer`, change the package name "dom.simple" to "dom.pets", and similarly "fixture.simple" to "fixture.pets"
+* in `WEB-INF/isis.properties`, similarly change the package name "dom.simple" to "dom.pets", and similarly "fixture.simple" to "fixture.pets"
+
+To run the application will require a further update to the IDE configuration, for the changed package of the fixture class:
+
+
+image::{_imagesdir}tutorials/pet-clinic/040-01-idea-configuration-updated.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/040-01-idea-configuration-updated.png"]
+
+
+
+== Add `PetSpecies` enum
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/55c9cd28ff960220719b3dc7cb8abadace8d0829
+----
+
+====
+
+
+Each `Pet` is of a particular species. Model these as an enum called `PetSpecies`:
+
+[source,java]
+----
+public enum PetSpecies {
+    Cat,
+    Dog,
+    Budgie,
+    Hamster,
+    Tortoise
+}
+----
+
+Introduce a new property on `Pet` of this type:
+
+[source,java]
+----
+public class Pet {
+    ...
+    private PetSpecies species;
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    public PetSpecies getSpecies() { return species; }
+    public void setSpecies(final PetSpecies species) { this.species = species; }
+    ...
+}
+----
+
+Update fixtures, unit tests and integration tests.
+
+
+
+
+== Icon to reflect pet species
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/2212765694693eb463f8fa88bab1bad154add0cb
+----
+
+====
+
+
+Rather than using a single icon for a domain class, instead a different icon can be supplied for each instance. We can therefore have different icon files for each pet, reflecting that pet's species.
+
+[source,java]
+----
+public class Pet {
+    ...
+    public String iconName() {
+        return getSpecies().name();
+    }
+    ...
+}
+----
+
+Download corresponding icon files (`Dog.png`, `Cat.png` etc)
+
+Running the app shows the `Pet` and its associated icon:
+
+image::{_imagesdir}tutorials/pet-clinic/050-01-list-all.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/050-01-list-all.png"]
+
+
+
+with the corresponding view of the `Pet`:
+
+image::{_imagesdir}tutorials/pet-clinic/050-02-view-pet.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/050-02-view-pet.png"]
+
+
+== Add pet's `Owner`
+
+[TIP]
+====
+[source,bash]
+----
+git checkout https://github.com/danhaywood/isis-app-petclinic/commit/6f92a8ee8e76696d005da2a8b7a746444d017546
+----
+
+====
+
+
+Add the `Owner` entity and corresponding `Owners` domain service (repository). Add a query to find `Order`s by name:
+
+[source,java]
+----
+...
+@javax.jdo.annotations.Queries( {
+        @javax.jdo.annotations.Query(
+                name = "findByName", language = "JDOQL",
+                value = "SELECT "
+                        + "FROM dom.owners.Owner "
+                        + "WHERE name.matches(:name)")
+})
+public class Owner ... {
+    ...
+}
+----
+
+and `findByName(...)` in `Owners`:
+
+[source,java]
+----
+public class Owners {
+    ...
+    public List<Owner> findByName(
+            @ParameterLayout(named = "Name")
+            final String name) {
+        final String nameArg = String.format(".*%s.*", name);
+        final List<Owner> owners = container.allMatches(
+                new QueryDefault<>(
+                        Owner.class,
+                        "findByName",
+                        "name", nameArg));
+        return owners;
+    }
+    ...
+}
+----
+
+Add an `owner` property to `Pet`, with supporting `autoCompleteXxx()` method (so that available owners are shown in a drop-down list box):
+
+[source,java]
+----
+public class Pet ... {
+    ...
+    private Owner owner;
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    public Owner getOwner() { return owner; }
+    public void setOwner(final Owner owner) { this.owner = owner; }
+    public Collection<Owner> autoCompleteOwner(final @MinLength(1) String name) {
+        return owners.findByName(name);
+    }
+    ...
+}
+----
+
+Also updated fixture data to set up a number of `Owner`s, and associate each `Pet` with an `Owner`. Also add unit tests and integration tests for `Owner`/`Owners` and updated for `Pet`/`Pets`.
+
+When running the app, notice the new `Owners` menu:
+
+image::{_imagesdir}tutorials/pet-clinic/060-01-owners-menu.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/060-01-owners-menu.png"]
+
+which when invoked returns all `Owner` objects:
+
+image::{_imagesdir}tutorials/pet-clinic/060-02-owners-list.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/060-02-owners-list.png"]
+
+
+Each `Pet` also indicates its corresponding `Owner`:
+
+image::{_imagesdir}tutorials/pet-clinic/060-03-pets-list.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/060-03-pets-list.png"]
+
+
+And, on editing a `Pet`, a new `Owner` can be specified using the autoComplete:
+
+image::{_imagesdir}tutorials/pet-clinic/060-04-pet-owner-autoComplete.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/060-04-pet-owner-autoComplete.png"]
+

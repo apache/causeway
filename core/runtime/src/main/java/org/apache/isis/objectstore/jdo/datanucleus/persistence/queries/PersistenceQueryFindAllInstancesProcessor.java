@@ -28,12 +28,13 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
-    public PersistenceQueryFindAllInstancesProcessor(final PersistenceSessionQueryProcessorManagement persistenceSession) {
+    public PersistenceQueryFindAllInstancesProcessor(final PersistenceSession persistenceSession) {
         super(persistenceSession);
     }
 

@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.services.factory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -37,7 +35,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class FactoryServiceInternalDefault implements FactoryService {
 
@@ -89,10 +88,10 @@ public class FactoryServiceInternalDefault implements FactoryService {
                 "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject

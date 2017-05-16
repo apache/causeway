@@ -34,10 +34,13 @@ import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
 public class ApplicationFeatureIdTest {
@@ -452,6 +455,89 @@ public class ApplicationFeatureIdTest {
             }
         }
 
+    }
+
+    public static class CompareToTest extends ApplicationFeatureIdTest {
+
+        ApplicationFeatureId feature1;
+
+        @Test
+        public void members() throws Exception {
+            feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
+
+            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=MEMBER, packageName=com.mycompany, memberName=b}")));
+        }
+
+        @Test
+        public void classes() throws Exception {
+            feature1 = ApplicationFeatureId.newClass("com.mycompany.B");
+
+            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=CLASS, packageName=com.mycompany, className=B}")));
+        }
+
+        @Test
+        public void packages() throws Exception {
+            feature1 = ApplicationFeatureId.newPackage("com.b");
+
+            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=PACKAGE, packageName=com.b}")));
+        }
+    }
+
+    public static class ToStringTest extends ApplicationFeatureIdTest {
+
+        ApplicationFeatureId feature1;
+        ApplicationFeatureId feature2;
+
+        @Test
+        public void members() throws Exception {
+            feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
+
+            feature2 = ApplicationFeatureId.newMember("com.mycompany.Bar#c");
+            assertThat(feature1.compareTo(feature2), is(lessThan(0)));
+
+            feature2 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
+            assertThat(feature1.compareTo(feature2), is(equalTo(0)));
+
+            feature2 = ApplicationFeatureId.newMember("com.mycompany.Bar#a");
+            assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
+
+            feature2 = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
+
+            feature2 = ApplicationFeatureId.newPackage("com.mycompany");
+            assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
+        }
+
+        @Test
+        public void classes() throws Exception {
+            feature1 = ApplicationFeatureId.newClass("com.mycompany.B");
+
+            feature2 = ApplicationFeatureId.newClass("com.mycompany.C");
+            assertThat(feature1.compareTo(feature2), is(lessThan(0)));
+
+            feature2 = ApplicationFeatureId.newClass("com.mycompany.B");
+            assertThat(feature1.compareTo(feature2), is(equalTo(0)));
+
+            feature2 = ApplicationFeatureId.newClass("com.mycompany.A");
+            assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
+
+            feature2 = ApplicationFeatureId.newPackage("com.mycompany");
+            assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
+        }
+
+        @Test
+        public void packages() throws Exception {
+            feature1 = ApplicationFeatureId.newPackage("com.b");
+
+            feature2 = ApplicationFeatureId.newPackage("com.c");
+            assertThat(feature1.compareTo(feature2), is(lessThan(0)));
+
+            feature2 = ApplicationFeatureId.newPackage("com.b");
+            assertThat(feature1.compareTo(feature2), is(equalTo(0)));
+
+            feature2 = ApplicationFeatureId.newPackage("com.a");
+            assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
+        }
     }
 
 

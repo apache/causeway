@@ -33,7 +33,10 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class HintStoreUsingWicketSession implements HintStore {
 
     private static final long serialVersionUID = 1L;
@@ -99,7 +102,11 @@ public class HintStoreUsingWicketSession implements HintStore {
     }
 
     protected String sessionAttributeFor(final Bookmark bookmark) {
-        return "hint-" + bookmark.toString();
+        return "hint-" + (
+                bookmark instanceof BookmarkWithHintId
+                        ? ((BookmarkWithHintId) bookmark).toStringUsingHintId()
+                        : bookmark.toString()
+        );
     }
 
 }

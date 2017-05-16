@@ -18,9 +18,9 @@
  */
 package org.apache.isis.applib.services.session;
 
-import java.util.Date;
-
 import org.apache.isis.applib.annotation.Programmatic;
+
+import java.util.Date;
 
 /**
  * Similar to the {@link org.apache.isis.applib.services.audit.AuditingService3}, this defines an API to track
@@ -35,7 +35,8 @@ public interface SessionLoggingService {
 
     public enum CausedBy {
         USER,
-        SESSION_EXPIRATION
+        SESSION_EXPIRATION,
+        RESTART
     }
 
     @Programmatic

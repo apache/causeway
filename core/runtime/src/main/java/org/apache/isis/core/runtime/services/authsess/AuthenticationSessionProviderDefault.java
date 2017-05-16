@@ -16,19 +16,52 @@
  */
 package org.apache.isis.core.runtime.services.authsess;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
+import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
+     /**
+      * This class and {@link UserServiceDefault} both call each other, so the code below is carefully
+      * ordered to ensure no infinite loop.
+      *
+      * In particular, we check if there are overrides, and if so return a {@link SimpleSession} to represent those
+      * overrides.
+      */
     @Programmatic
     @Override
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+
+        // if user/role has been overridden by SudoService, then honour that value.
+        final UserServiceDefault.UserAndRoleOverrides userAndRoleOverrides =
+                userServiceDefault.currentOverridesIfAny();
+
+        if(userAndRoleOverrides != null) {
+            final String user = userAndRoleOverrides.getUser();
+            final List<String> roles = userAndRoleOverrides.getRoles();
+            return new SimpleSession(user, roles);
+        }
+
+        // otherwise...
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession();
     }
+
+    @javax.inject.Inject
+    UserServiceDefault  userServiceDefault;
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
 }

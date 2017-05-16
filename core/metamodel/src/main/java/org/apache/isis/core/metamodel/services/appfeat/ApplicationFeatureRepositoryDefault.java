@@ -26,7 +26,6 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
@@ -61,7 +61,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
-        repositoryFor = ApplicationFeature.class
+        repositoryFor = ApplicationFeature.class,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
@@ -74,10 +75,41 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = Maps.newTreeMap();
     //endregion
 
+
     //region > init
+
+    private static final String KEY = "isis.services.applicationFeatures.init";
+
     @Programmatic
     @PostConstruct
     public void init() {
+        if(isEagerInitialize()) {
+            initializeIfRequired();
+        }
+    }
+
+    private boolean isEagerInitialize() {
+        final String configuredValue = configurationService.getProperty(KEY);
+        return "eager".equalsIgnoreCase(configuredValue) ||
+                "eagerly".equalsIgnoreCase(configuredValue);
+    }
+
+    //endregion
+
+
+    //region > initializeIfRequired
+
+    enum InitializationState {
+        NOT_INITIALIZED,
+        INITIALIZED
+    }
+    private InitializationState initializationState = InitializationState.NOT_INITIALIZED;
+
+    private synchronized void initializeIfRequired() {
+        if(initializationState == InitializationState.INITIALIZED) {
+            return;
+        }
+        initializationState = InitializationState.INITIALIZED;
         final Collection<ObjectSpecification> specifications = primeMetaModel();
         createApplicationFeaturesFor(specifications);
     }
@@ -362,6 +394,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     //region > packageFeatures, classFeatures, memberFeatures
     @Programmatic
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
+        initializeIfRequired();
         switch (featureId.getType()) {
         case PACKAGE:
             return findPackage(featureId);
@@ -375,16 +408,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     @Programmatic
     public ApplicationFeature findPackage(final ApplicationFeatureId featureId) {
+        initializeIfRequired();
         return packageFeatures.get(featureId);
     }
 
     @Programmatic
     public ApplicationFeature findClass(final ApplicationFeatureId featureId) {
+        initializeIfRequired();
         return classFeatures.get(featureId);
     }
 
     @Programmatic
     public ApplicationFeature findMember(final ApplicationFeatureId featureId) {
+        initializeIfRequired();
         return memberFeatures.get(featureId);
     }
 
@@ -393,6 +429,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     //region > allFeatures, allPackages, allClasses, allMembers
     @Programmatic
     public Collection<ApplicationFeature> allFeatures(final ApplicationFeatureType featureType) {
+        initializeIfRequired();
         if (featureType == null) {
             return Collections.emptyList();
         }
@@ -409,31 +446,37 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     @Programmatic
     public Collection<ApplicationFeature> allPackages() {
+        initializeIfRequired();
         return packageFeatures.values();
     }
 
     @Programmatic
     public Collection<ApplicationFeature> allClasses() {
+        initializeIfRequired();
         return classFeatures.values();
     }
 
     @Programmatic
     public Collection<ApplicationFeature> allMembers() {
+        initializeIfRequired();
         return memberFeatures.values();
     }
 
     @Programmatic
     public Collection<ApplicationFeature> allProperties() {
+        initializeIfRequired();
         return propertyFeatures.values();
     }
 
     @Programmatic
     public Collection<ApplicationFeature> allCollections() {
+        initializeIfRequired();
         return collectionFeatures.values();
     }
 
     @Programmatic
     public Collection<ApplicationFeature> allActions() {
+        initializeIfRequired();
         return actionFeatures.values();
     }
     //endregion
@@ -441,6 +484,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     //region > packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     @Override @Programmatic
     public List<String> packageNames() {
+        initializeIfRequired();
         return Lists.newArrayList(
                 Iterables.transform(
                         allFeatures(ApplicationFeatureType.PACKAGE), ApplicationFeature.Functions.GET_FQN));
@@ -448,6 +492,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     @Override @Programmatic
     public List<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
+        initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
         return Lists.newArrayList(
                 Iterables.transform(
@@ -460,6 +505,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     @Override @Programmatic
     public List<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
+        initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
@@ -476,6 +522,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     @Override @Programmatic
     public List<String> classNamesRecursivelyContainedIn(final String packageFqn) {
+        initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
@@ -495,6 +542,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final String packageFqn,
             final String className,
             final ApplicationMemberType memberType) {
+        initializeIfRequired();
         final ApplicationFeatureId classId = ApplicationFeatureId.newClass(packageFqn + "." + className);
         final ApplicationFeature cls = findClass(classId);
         if (cls == null) {
@@ -510,16 +558,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     //region  > services (injected)
 
-    @Inject
+    @javax.inject.Inject
     ServiceRegistry2 serviceRegistry;
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
+    ConfigurationService configurationService;
+
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     ApplicationFeatureFactory applicationFeatureFactory;
 
     //endregion

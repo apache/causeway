@@ -69,6 +69,18 @@ public enum ComponentType {
      */
     ENTITY_SUMMARY,
     /**
+     * A single &quot;parented&quot; collection of an entity.
+     *
+     * <p>
+     *     Note that the default implementation is actually a wrapper that provides a selector over all available
+     *     individual representations of the entity by way of {@link #COLLECTION_CONTENTS} component type.  The
+     *     framework provides a number of implementations of this lower-level component: as a table, as
+     *     collapsed/hidden, as a summary.  Any additional representations that are found that can render the
+     *     collection (eg map, calendar) are added to the selector.
+     * </p>
+     */
+    ENTITY_COLLECTION,
+    /**
      * A single standalone value, as might be returned from an action.
      */
     VALUE,
@@ -76,12 +88,6 @@ public enum ComponentType {
      * The name and value of a single property or parameter, ie a scalar.
      */
     SCALAR_NAME_AND_VALUE,
-    /**
-     * The name and contents of a single collection of an entity;
-     * {@link Component}s are expected to use {@link #COLLECTION_CONTENTS} to
-     * actually render the contents.
-     */
-    COLLECTION_NAME_AND_CONTENTS,
     /**
      * The parameter form (dialog box) of an action.
      */
@@ -129,7 +135,7 @@ public enum ComponentType {
      */
     VOID_RETURN,
     /**
-     * A list of {@link IsisModel}s, rendered as a list of links.
+     * A list of models, rendered as a list of links.
      */
     BOOKMARKED_PAGES, 
     /**

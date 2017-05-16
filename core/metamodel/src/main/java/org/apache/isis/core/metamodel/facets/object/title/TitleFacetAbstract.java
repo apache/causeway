@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.title;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -36,11 +35,11 @@ public abstract class TitleFacetAbstract extends FacetAbstract implements TitleF
     }
 
     /**
-     * Default implementation that simply delegates to {@link #title(ObjectAdapter, Localization)}.
+     * Default implementation that simply delegates to {@link TitleFacet#title(ObjectAdapter)}.
      */
     @Override
-    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter, Localization localization) {
-        return title(targetAdapter, localization);
+    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter) {
+        return title(targetAdapter);
     }
 
 }

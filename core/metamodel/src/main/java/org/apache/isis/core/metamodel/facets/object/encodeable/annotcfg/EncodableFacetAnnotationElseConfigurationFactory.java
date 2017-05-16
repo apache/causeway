@@ -29,10 +29,15 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncoderDecoderUtil;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements DeprecatedMarker {
 
     public EncodableFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -51,7 +56,7 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
         // create from annotation, if present
         final Encodable annotation = Annotations.getAnnotation(cls, Encodable.class);
         if (annotation != null) {
-            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, getConfiguration(), holder, adapterManager, servicesInjector);
+            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -60,7 +65,7 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
         // otherwise, try to create from configuration, if present
         final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls, getConfiguration());
         if (!Strings.isNullOrEmpty(encoderDecoderName)) {
-            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, servicesInjector);
+            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -70,18 +75,7 @@ public class EncodableFacetAnnotationElseConfigurationFactory extends FacetFacto
         return null;
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // Injected
-    // ////////////////////////////////////////////////////////////////////
 
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    PersistenceSessionServiceInternal adapterManager;
 
 
 }

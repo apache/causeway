@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
+
     private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
 
     /**
@@ -61,12 +62,21 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        // search for exact match
-        Method disableMethod = MethodFinderUtils.findMethod(
-                cls, MethodScope.OBJECT,
-                MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
-                new Class<?>[]{String.class, TranslatableString.class},
-                method.getParameterTypes());
+
+        Method disableMethod = null;
+
+        boolean noParamsOnly = getConfiguration().getBoolean(
+                                    ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
+                                    ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
+        boolean searchExactMatch = !noParamsOnly;
+        if(searchExactMatch) {
+            // search for exact match
+            disableMethod = MethodFinderUtils.findMethod(
+                    cls, MethodScope.OBJECT,
+                    MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
+                    new Class<?>[]{String.class, TranslatableString.class},
+                    method.getParameterTypes());
+        }
         if (disableMethod == null) {
             // search for no-arg version
             disableMethod = MethodFinderUtils.findMethod(

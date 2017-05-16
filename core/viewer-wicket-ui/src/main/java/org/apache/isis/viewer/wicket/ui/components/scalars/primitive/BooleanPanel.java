@@ -19,13 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -33,28 +32,20 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
+import de.agilecoders.wicket.jquery.Key;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
-public class BooleanPanel extends ScalarPanelAbstract {
-
-    private static final CheckBoxXConfig THREE_STATE_CONFIG = new CheckBoxXConfig()
-        .withSize(CheckBoxXConfig.Sizes.xs)
-        .withEnclosedLabel(false)
-        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
-        .withIconNull("<i class='fa fa-fw fa-square'></i>");
-
-    private static final CheckBoxXConfig TWO_STATE_CONFIG = new CheckBoxXConfig(THREE_STATE_CONFIG).withThreeState(false);
+public class BooleanPanel extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,59 +56,69 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
     @Override
-    protected MarkupContainer addComponentForRegular() {
+    protected MarkupContainer createComponentForRegular() {
         final String name = getModel().getName();
 
         checkBox = createCheckBox(ID_SCALAR_VALUE);
 
         checkBox.setLabel(Model.of(name));
 
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
-        labelIfRegular.add(checkBox);
+        final FormGroup scalarIfRegularFormGroup = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
+        scalarIfRegularFormGroup.add(checkBox);
         if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
+            scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
+            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
-        labelIfRegular.add(scalarName);
+        scalarIfRegularFormGroup.add(scalarName);
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
         if (namedFacet != null) {
             scalarName.setEscapeModelStrings(namedFacet.escaped());
         }
 
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
-
-        addPositioningCssTo(labelIfRegular, entityActions);
-
-        addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, checkBox);
-        addEditPropertyTo(labelIfRegular);
-
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
-
-        return labelIfRegular;
+        return scalarIfRegularFormGroup;
     }
 
-
+    protected Component getScalarValueComponent() {
+        return checkBox;
+    }
 
     /**
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#COMPACT compact} format.
      */
     @Override
-    protected Component addComponentForCompact() {
-        final CheckBoxX component = createCheckBox(ID_SCALAR_IF_COMPACT);
-        addOrReplace(component);
-        return component;
+    protected Component createComponentForCompact() {
+        return createCheckBox(ID_SCALAR_IF_COMPACT);
+    }
+
+
+    @Override
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.supportedAndHide(
+                scalarModel.getMode() == EntityModel.Mode.EDIT ||
+                scalarModel.getKind() == ScalarModel.Kind.PARAMETER
+                        ? this.checkBox
+                        : null
+        );
+    }
+
+    @Override
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        final IModel<Boolean> model = checkBox.getModel();
+        final Boolean bool = model.getObject();
+        return Model.of(bool == null? "(not set)" : bool ? "Yes" : "No");
     }
 
     private CheckBoxX createCheckBox(final String id) {
+
+        final CheckBoxXConfig config = configFor(getModel().isRequired());
+
         final CheckBoxX checkBox = new CheckBoxX(id, new Model<Boolean>() {
             private static final long serialVersionUID = 1L;
 
@@ -136,9 +137,26 @@ public class BooleanPanel extends ScalarPanelAbstract {
         }) {
             @Override
             public CheckBoxXConfig getConfig() {
-                return BooleanPanel.this.getModel().isRequired()
-                    ? TWO_STATE_CONFIG
-                    : THREE_STATE_CONFIG;
+                return config;
+            }
+
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                //
+                // this is a horrid hack to allow the space bar to work as a way of toggling the checkbox.
+                // this hack works for 1.5.4 of the JS plugin (https://github.com/kartik-v/bootstrap-checkbox-x)
+                //
+                // the problem is that the "change" event is not fired for a keystroke; instead the callback in the
+                // JS code (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L70)
+                // calls self.change().  This in turn calls validateCheckbox().  In that method it is possible to
+                // cause the "change" event to fire, but only if the input element is NOT type="checkbox".
+                // (https://github.com/kartik-v/bootstrap-checkbox-x/blob/v1.5.4/js/checkbox-x.js#L132)
+                //
+                // It's not possible to simply change the associated markup to input type='xx' because it falls foul
+                // of a check in super.onComponentTag(tag).  So instead we let that through then hack the tag
+                // afterwards:
+                //
+                tag.put("type", "xx");
             }
         };
         checkBox.setOutputMarkupId(true);
@@ -154,6 +172,22 @@ public class BooleanPanel extends ScalarPanelAbstract {
         }
 
         return checkBox;
+    }
+
+    private static CheckBoxXConfig configFor(final boolean required) {
+        final CheckBoxXConfig config = new CheckBoxXConfig() {
+            {
+                // so can tab to the checkbox
+                // not part of the API, so have to use this object initializer
+                put(new Key<String>("tabindex"), "0");
+            }
+        };
+        return config
+                .withSize(CheckBoxXConfig.Sizes.lg)
+                .withEnclosedLabel(false)
+                .withIconChecked("<i class='fa fa-fw fa-check'></i>")
+                .withIconNull("<i class='fa fa-fw fa-square'></i>")
+                .withThreeState(!required);
     }
 
     @Override
@@ -174,10 +208,6 @@ public class BooleanPanel extends ScalarPanelAbstract {
         checkBox.setEnabled(false);
     }
 
-    @Override
-    protected void addFormComponentBehavior(Behavior behavior) {
-        checkBox.add(behavior);
-    }
 
     @Override
     public String getVariation() {
@@ -190,4 +220,11 @@ public class BooleanPanel extends ScalarPanelAbstract {
         }
         return variation;
     }
+
+    @Override
+    protected String getScalarPanelType() {
+        return "booleanPanel";
+    }
+
+
 }

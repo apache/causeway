@@ -26,9 +26,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +34,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -49,6 +44,9 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
@@ -58,12 +56,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectS
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Builds the meta-model.
@@ -95,7 +87,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //region > constructor, fields
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
-    private final DeploymentCategory deploymentCategory;
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
@@ -106,26 +97,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final List<LayoutMetadataReader> layoutMetadataReaders;
 
     public SpecificationLoader(
-            final DeploymentCategory deploymentCategory,
-            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders,
             final ServicesInjector servicesInjector) {
 
-        ensureThatArg(deploymentCategory, is(notNullValue()));
-        ensureThatArg(configuration, is(notNullValue()));
-        ensureThatArg(servicesInjector, is(notNullValue()));
-        ensureThatArg(programmingModel, is(notNullValue()));
-        ensureThatArg(metaModelValidator, is(notNullValue()));
-        ensureThatArg(layoutMetadataReaders, is(notNullValue()));
-        ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
-
-        this.deploymentCategory = deploymentCategory;
         this.servicesInjector = servicesInjector;
-
         this.programmingModel = programmingModel;
-
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(programmingModel);
@@ -138,7 +116,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         LOG.info("finalizing reflector factory " + this);
     }
 
+
     //endregion
+
 
     //region > init
 
@@ -176,11 +156,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private void loadSpecificationsForServices() {
         for (final Class<?> serviceClass : allServiceClasses()) {
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
-            if(domainService != null) {
-                if(domainService.nature() == NatureOfService.VIEW || domainService.nature() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-                    internalLoadSpecification(serviceClass, domainService.nature());
-                }
-            }
+            final NatureOfService nature = domainService != null ? domainService.nature() : NatureOfService.DOMAIN;
+            // will 'markAsService'
+            internalLoadSpecification(serviceClass, nature);
         }
     }
 
@@ -300,7 +278,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      */
     @Programmatic
     public ObjectSpecification loadSpecification(final String className) {
-        ensureThatArg(className, is(notNullValue()), "specification class name must be specified");
+        assert className != null;
 
         try {
             final Class<?> cls = loadBuiltIn(className);
@@ -337,7 +315,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        return internalLoadSpecification(type, null);
+        // superclasses tend to be loaded via this method, implicitly.
+        // what can happen is that a subclass domain service, eg a fake one such as FakeLocationLookupService
+        // can be registered first prior to the "real" implementation.  As belt-n-braces, if that superclass is
+        // annotated using @DomainService, then we ensure its own spec is created correctly as a service spec.
+        final DomainService domainServiceIfAny = type.getAnnotation(DomainService.class);
+        final NatureOfService natureOfServiceIfAny = domainServiceIfAny != null ? domainServiceIfAny.nature() : null;
+        return internalLoadSpecification(type, natureOfServiceIfAny);
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type, final NatureOfService nature) {
@@ -347,30 +331,38 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type, final NatureOfService nature) {
         Assert.assertNotNull(type);
+
         final String typeName = type.getName();
-
-        final SpecificationCacheDefault specificationCache = cache;
-        synchronized (specificationCache) {
-            final ObjectSpecification spec = specificationCache.get(typeName);
-            if (spec != null) {
-                return spec;
-            }
-            final ObjectSpecification specification = createSpecification(type);
-            if(nature != null) {
-                specification.markAsService();
-            }
-            if (specification == null) {
-                throw new IsisException("Failed to create specification for class " + typeName);
-            }
-
-            // put into the cache prior to introspecting, to prevent
-            // infinite loops
-            specificationCache.cache(typeName, specification);
-
-            introspectIfRequired(specification);
-
-            return specification;
+        final ObjectSpecification spec = cache.get(typeName);
+        if (spec != null) {
+            return spec;
         }
+
+        return loadSpecificationForSubstitutedClassSynchronized(type, nature);
+    }
+
+    private synchronized ObjectSpecification loadSpecificationForSubstitutedClassSynchronized(
+            final Class<?> type,
+            final NatureOfService natureOfService) {
+
+        final String typeName = type.getName();
+        final ObjectSpecification spec = cache.get(typeName);
+        if (spec != null) {
+            // because caller isn't synchronized.
+            return spec;
+        }
+        final ObjectSpecification specification = createSpecification(type, natureOfService);
+        if (specification == null) {
+            throw new IsisException("Failed to create specification for class " + typeName);
+        }
+
+        // put into the cache prior to introspecting, to prevent
+        // infinite loops
+        cache.cache(typeName, specification);
+
+        introspectIfRequired(specification);
+
+        return specification;
     }
 
     /**
@@ -401,7 +393,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecification createSpecification(final Class<?> cls) {
+    private ObjectSpecification createSpecification(
+            final Class<?> cls,
+            final NatureOfService natureOfServiceIfAny) {
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
@@ -412,7 +406,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                     new FacetedMethodsBuilderContext(
                             this, facetProcessor, layoutMetadataReaders);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
-                    servicesInjector, facetProcessor);
+                    servicesInjector, facetProcessor, natureOfServiceIfAny);
         }
     }
 
@@ -522,6 +516,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
         return objectSpecification;
     }
+
+
     //endregion
 
 

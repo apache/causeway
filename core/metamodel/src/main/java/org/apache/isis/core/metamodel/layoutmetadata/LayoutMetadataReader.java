@@ -43,7 +43,7 @@ public interface LayoutMetadataReader {
         }
 
         @Override
-        public synchronized Throwable fillInStackTrace() {
+        public Throwable fillInStackTrace() {
             return null;
         }
     }

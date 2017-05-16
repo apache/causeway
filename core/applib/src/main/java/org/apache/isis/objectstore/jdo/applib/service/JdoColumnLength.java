@@ -18,55 +18,169 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service;
 
+import org.apache.isis.applib.annotation.CommandExecuteIn;
+import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.publish.EventType;
+import org.apache.isis.applib.services.audit.AuditEntryPropertyIdType;
+import org.apache.isis.applib.services.audit.AuditEntryPropertyValueType;
+import org.apache.isis.applib.services.publish.PublishedEventStateType;
+import org.apache.isis.applib.services.publish.StatusMessageMessageType;
+import org.apache.isis.applib.types.DescriptionType;
+import org.apache.isis.applib.services.settings.SettingTypes;
+import org.apache.isis.applib.types.MemberIdentifierType;
+import org.apache.isis.applib.types.TargetActionType;
+import org.apache.isis.applib.types.TargetClassType;
+
+/**
+ * @deprecated
+ */
+@Deprecated
 public final class JdoColumnLength {
 
     private JdoColumnLength() {
     }
 
-    public final static int TRANSACTION_ID = 36;
-    // ie OID str (based on the defacto limit of a request URL in web browsers such as IE8)
-    public final static int BOOKMARK = 2000; 
-    public static final int MEMBER_IDENTIFIER = 255;
-    public static final int USER_NAME = 50;
-    public final static int TARGET_CLASS = 50;
-    public final static int TARGET_ACTION = 50;
-    
-    public static final int DESCRIPTION = 254;
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public final static int TRANSACTION_ID = HasTransactionId.TransactionIdType.Meta.MAX_LEN;
 
+    /**
+     * ie OID str (based on the defacto limit of a request URL in web browsers such as IE8)
+     *
+     * @deprecated
+     */
+    @Deprecated
+    public final static int BOOKMARK = Bookmark.AsStringType.Meta.MAX_LEN;
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public static final int MEMBER_IDENTIFIER = MemberIdentifierType.Meta.MAX_LEN;
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public static final int USER_NAME = UserMemento.NameType.Meta.MAX_LEN;
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public final static int TARGET_CLASS = TargetClassType.Meta.MAX_LEN;
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public final static int TARGET_ACTION = TargetActionType.Meta.MAX_LEN;
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public static final int DESCRIPTION = DescriptionType.Meta.MAX_LEN;
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class SettingAbstract {
         private SettingAbstract(){}
-        
-        public static final int SETTING_KEY = 128;
-        public static final int SETTING_TYPE = 20;
-        public static final int VALUE_RAW = 255;
+
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int SETTING_KEY = SettingTypes.KeyType.Meta.MAX_LEN;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int SETTING_TYPE = SettingTypes.TypeType.Meta.MAX_LEN;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int VALUE_RAW = SettingTypes.ValueRawType.Meta.MAX_LEN;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class Command {
         private Command() {
         }
-        public static final int EXECUTE_IN = 10;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int EXECUTE_IN = CommandExecuteIn.Type.Meta.MAX_LEN;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class AuditEntry {
 
         private AuditEntry() {
         }
-        public static final int PROPERTY_ID = 50;
-        public static final int PROPERTY_VALUE = 255;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int PROPERTY_ID = AuditEntryPropertyIdType.Meta.MAX_LEN;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int PROPERTY_VALUE = AuditEntryPropertyValueType.Meta.MAX_LEN;
     }
-    
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class PublishedEvent {
 
         private PublishedEvent() {
         }
-        
-        public static final int TITLE = 255;
-        public static final int EVENT_TYPE = 20;
-        public static final int STATE = 20;
+
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int TITLE = EventMetadata.TitleType.Meta.MAX_LEN;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int EVENT_TYPE = EventType.Type.Meta.MAX_LEN;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int STATE = PublishedEventStateType.Meta.MAX_LEN;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static final class StatusMessage {
-        public static final int MESSAGE = 255;
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static final int MESSAGE = StatusMessageMessageType.Meta.MAX_LEN;
+        /**
+         * @deprecated
+         */
+        @Deprecated
         public static final int URI = BOOKMARK;
     }
 

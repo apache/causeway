@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault;
 
 public class AuthenticationSessionStrategyTrusted extends AuthenticationSessionStrategyDefault {
@@ -37,6 +38,7 @@ public class AuthenticationSessionStrategyTrusted extends AuthenticationSessionS
 
         // will always succeed.
         final AuthenticationRequestExploration request = new AuthenticationRequestExploration();
-        return IsisContext.getAuthenticationManager().authenticate(request);
+        return isisSessionFactoryFrom(httpServletRequest).getAuthenticationManager().authenticate(request);
     }
+
 }

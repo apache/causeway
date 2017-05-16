@@ -26,7 +26,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -53,13 +52,13 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
             }
         });
 
-        setValue(value = new LongWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new LongWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one", null);
+            value.parseTextEntry(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -67,18 +66,18 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testOutputAsString() {
-        assertEquals("367,322", value.displayTitleOf(longObj, (Localization) null));
+        assertEquals("367,322", value.displayTitleOf(longObj));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "120", null);
+        final Object parsed = value.parseTextEntry(null, "120");
         assertEquals("120", parsed.toString());
     }
 
     @Test
     public void testParseWithBadlyFormattedEntry() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "1,20.0", null);
+        final Object parsed = value.parseTextEntry(null, "1,20.0");
         assertEquals("120", parsed.toString());
     }
 

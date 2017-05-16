@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -70,7 +71,8 @@ public class ServicesInjectorDefaultTest {
     public void setUp() throws Exception {
         final Object[] services = { mockContainer, mockService1, mockService2 };
 
-        injector = new ServicesInjector(Arrays.asList(services), new InjectorMethodEvaluatorDefault());
+        IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault();
+        injector = new ServicesInjector(Arrays.asList(services), stubConfiguration, new InjectorMethodEvaluatorDefault());
     }
 
     @After

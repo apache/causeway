@@ -31,16 +31,23 @@ public class ServiceInitializer {
 
     private final static Logger LOG = LoggerFactory.getLogger(ServiceInitializer.class);
 
-    private Map<String, String> props;
+    private final List<Object> services;
+
+    private final Map<String, String> props;
 
     private Map<Object, Method> postConstructMethodsByService = Maps.newLinkedHashMap(); 
-    private Map<Object, Method> preDestroyMethodsByService = Maps.newLinkedHashMap(); 
+    private Map<Object, Method> preDestroyMethodsByService = Maps.newLinkedHashMap();
 
-    // //////////////////////////////////////
-
-    public void validate(final IsisConfiguration configuration, final List<Object> services) {
-        
+    public ServiceInitializer(
+            final IsisConfiguration configuration,
+            final List<Object> services) {
         this.props = configuration.asMap();
+        this.services = services;
+    }
+
+    //region > validate
+
+    public void validate() {
         
         for (final Object service : services) {
             LOG.debug("checking for @PostConstruct and @PostDestroy methods on " + service.getClass().getName());
@@ -96,11 +103,14 @@ public class ServiceInitializer {
         }
 
     }
+    //endregion
 
-    // //////////////////////////////////////
+    //region > postConstruct
 
     public void postConstruct() {
-        LOG.info("calling @PostConstruct on all domain services");
+        if(LOG.isInfoEnabled()) {
+            LOG.info("calling @PostConstruct on all domain services");
+        }
 
         for (final Map.Entry<Object, Method> entry : postConstructMethodsByService.entrySet()) {
             final Object service = entry.getKey();
@@ -122,8 +132,14 @@ public class ServiceInitializer {
         }
     }
 
+    //endregion
+
+    //region > preDestroy
+
     public void preDestroy() {
-        LOG.info("calling @PreDestroy on all domain services");
+        if(LOG.isInfoEnabled()) {
+            LOG.info("calling @PreDestroy on all domain services");
+        }
         for (final Map.Entry<Object, Method> entry : preDestroyMethodsByService.entrySet()) {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
@@ -140,5 +156,7 @@ public class ServiceInitializer {
             }
         }
     }
+
+    //endregion
 
 }

@@ -25,11 +25,11 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 
 /**
- * All {@link CollectionTypeRegistry collection types} are intrinsically
+ * All {@link CollectionUtils collection types} are intrinsically
  * {@link ParentedCollectionFacet parented}.
  * 
  * <p> 

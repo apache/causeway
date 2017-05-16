@@ -22,7 +22,7 @@ package org.apache.isis.core.webapp;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 public final class WebAppConstants {
 
@@ -44,10 +44,10 @@ public final class WebAppConstants {
     public static final String CONFIGURATION_BUILDER_KEY = "isis.configurationBuilder";
 
     /**
-     * Key under which the {@link IsisSystem} is bound as a servlet context
+     * Key under which the {@link IsisSessionFactoryBuilder} is bound as a servlet context
      * attribute ( <tt>ServletContext#getAttribute(String)</tt>).
      */
-    public final static String ISIS_SYSTEM_KEY = WebAppConstants.class.getPackage().getName() + ".isisSystem";
+    public final static String ISIS_SESSION_FACTORY = WebAppConstants.class.getPackage().getName() + ".isisSessionFactory";
 
     /**
      * Key under which the {@link AuthenticationSession} is bound as a session

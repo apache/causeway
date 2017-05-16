@@ -31,7 +31,10 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
  * <p>
  * For example, a webapp want to have a registration/sign-up page, or a 'lost
  * password' page.
+ *
+ * @deprecated - unused by framework and not part of applib
  */
+@Deprecated
 public class AnonymousSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;

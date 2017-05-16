@@ -67,7 +67,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -89,7 +89,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
 
         class Customer {
@@ -110,7 +110,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForNonStringsProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
 
         class Customer {
@@ -129,7 +129,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForPrimitiveOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
 
         class Customer {

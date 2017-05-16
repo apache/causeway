@@ -22,14 +22,9 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 
 /**
  * @deprecated
@@ -44,13 +39,8 @@ public class ActionInvocationFacetForDomainEventFromActionInteractionAnnotation
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final IsisConfiguration isisConfiguration,
-            final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager,
-            final TransactionStateProviderInternal transactionStateProviderInternal) {
-        super(eventType, method, onType, returnType, holder, deploymentCategory, isisConfiguration, servicesInjector, authenticationSessionProvider, adapterManager,
-                transactionStateProviderInternal);
+            final ServicesInjector servicesInjector) {
+        super(eventType, method, onType, returnType, holder, servicesInjector
+        );
     }
 }

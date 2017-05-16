@@ -21,17 +21,18 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Comparator;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
-    
+
+    private final SpecificationLoader specificationLoader;
+
+    public BookmarkTreeNodeComparator(final SpecificationLoader specificationLoader){
+        this.specificationLoader = specificationLoader;
+    }
+
     @Override
     public int compare(BookmarkTreeNode o1, BookmarkTreeNode o2) {
         
@@ -63,24 +64,7 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
 
     private String classNameOf(RootOid oid) {
         ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        return getSpecificationLoader().lookupBySpecId(objectSpecId).getIdentifier().getClassName();
-    }
-
-    private RootOid oidOf(PageParameters pp) {
-        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pp);
-        return getOidMarshaller().unmarshal(oidStr, RootOid.class);
-    }
-    
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-    
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-    
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return specificationLoader.lookupBySpecId(objectSpecId).getIdentifier().getClassName();
     }
 
 }

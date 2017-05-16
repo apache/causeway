@@ -19,16 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.value;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
  * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
+ * {@link ScalarPanelAbstract2 panel} to render them.
  * 
  * <p>
  * This is a fallback panel; values are expected to be {@link Parser parseable}
@@ -37,19 +35,14 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
 public class ValuePanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     public ValuePanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
+        super(id, scalarModel);
     }
 
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("valuePanel");
+    protected String getScalarPanelType() {
+        return "valuePanel";
     }
 }

@@ -20,14 +20,18 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements MixinFacet {
+public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String> implements MixinFacet {
 
     private final Class<?> mixinType;
     private final Class<?> constructorType;
@@ -39,10 +43,10 @@ public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements 
 
     public MixinFacetAbstract(
             final Class<?> mixinType,
-            final Class<?> constructorType,
+            final String value, final Class<?> constructorType,
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
-        super(type(), holder);
+        super(type(), value, holder);
         this.mixinType = mixinType;
         this.constructorType = constructorType;
         this.servicesInjector = servicesInjector;
@@ -83,6 +87,44 @@ public abstract class MixinFacetAbstract extends MarkerFacetAbstract implements 
             // shouldn't happen; ought we to fail-fast instead?
             return null;
         }
+    }
+
+    @Override
+    public ObjectAdapter mixedIn(ObjectAdapter mixinAdapter, final Policy policy) {
+
+        final Object mixin = mixinAdapter.getObject();
+
+        final Field[] declaredFields = mixinType.getDeclaredFields();
+        for (final Field declaredField : declaredFields) {
+            if(declaredField.getType().isAssignableFrom(constructorType)) {
+                declaredField.setAccessible(true);
+                try {
+                    Object o = declaredField.get(mixin);
+                    return getAdapterManager().adapterFor(o);
+                } catch (IllegalAccessException e) {
+                    if(policy == Policy.FAIL_FAST) {
+                        throw new RuntimeException(
+                                "Unable to access " + declaredField + " for " + getTitleService().titleOf(mixin));
+                    }
+                    // otherwise continue to next possible field.
+                }
+            }
+        }
+        if(policy == Policy.FAIL_FAST) {
+            throw new RuntimeException(
+                    "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixin)
+                            + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
+        }
+        // else just...
+        return null;
+    }
+
+    private AdapterManager getAdapterManager() {
+        return servicesInjector.getPersistenceSessionServiceInternal();
+    }
+
+    private TitleService getTitleService() {
+        return servicesInjector.lookupService(TitleService.class);
     }
 
 }

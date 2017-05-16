@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.title.parser;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,12 +39,12 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectServicesInto(parser);
+        getServicesInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
     @Override
-    public String title(final ObjectAdapter adapter, final Localization localization) {
+    public String title(final ObjectAdapter adapter) {
         if (adapter == null) {
             return null;
         }
@@ -53,13 +52,13 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (object == null) {
             return null;
         }
-        getDependencyInjector().injectServicesInto(parser);
-        return parser.displayTitleOf(object, localization);
+        getServicesInjector().injectServicesInto(parser);
+        return parser.displayTitleOf(object);
     }
 
     @Override
-    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter, Localization localization) {
-        return title(targetAdapter, localization);
+    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter) {
+        return title(targetAdapter);
     }
 
     /**
@@ -73,7 +72,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (object == null) {
             return null;
         }
-        getDependencyInjector().injectServicesInto(parser);
+        getServicesInjector().injectServicesInto(parser);
         return parser.displayTitleOf(object, usingMask);
     }
 
@@ -85,7 +84,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     /**
      * @return the dependencyInjector
      */
-    public ServicesInjector getDependencyInjector() {
+    public ServicesInjector getServicesInjector() {
         return dependencyInjector;
     }
 

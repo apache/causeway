@@ -37,7 +37,7 @@ public class BigDecimalValueFacetUsingSemanticsProviderFactory extends ValueFace
         if (type != BigDecimal.class) {
             return;
         }
-        addFacets(new BigDecimalValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new BigDecimalValueSemanticsProvider(holder, getContext()));
         return;
     }
 

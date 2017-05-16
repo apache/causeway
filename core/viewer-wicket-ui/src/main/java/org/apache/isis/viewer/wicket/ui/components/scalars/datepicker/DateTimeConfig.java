@@ -33,7 +33,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Configuration holder for all {@link org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker} configurations.
+ * Configuration holder for all {@link TextFieldWithDateTimePicker} configurations.
  * Provides settings for <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime picker</a>
  * JavaScript widget
  */
@@ -71,6 +71,21 @@ public class DateTimeConfig extends AbstractConfig {
      * show the date and time picker side by side
      */
     private static final IKey<Boolean> SideBySide = newKey("sideBySide", false);
+
+    /**
+     * @see <a href="http://eonasdan.github.io/bootstrap-datetimepicker/Options/#usecurrent">online reference</a>
+     */
+    private static final IKey<Boolean> UseCurrent = newKey("useCurrent", true);
+
+    /**
+     * @see <a href="http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate">online reference</a>
+     */
+    private static final IKey<String> MinDate = newKey("minDate", null);
+
+    /**
+     * @see <a href="http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate">online reference</a>
+     */
+    private static final IKey<String> MaxDate = newKey("maxDate", null);
 
 
     /**
@@ -321,6 +336,21 @@ public class DateTimeConfig extends AbstractConfig {
      */
     public DateTimeConfig calendarWeeks(final boolean value) {
         put(CalendarWeeks, value);
+        return this;
+    }
+
+    public DateTimeConfig useCurrent(final boolean value) {
+        put(UseCurrent, value);
+        return this;
+    }
+
+    public DateTimeConfig minDate(final String value) {
+        put(MinDate, value);
+        return this;
+    }
+
+    public DateTimeConfig maxDate(final String value) {
+        put(MaxDate, value);
         return this;
     }
 

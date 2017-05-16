@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.swagger;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,8 @@ import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGener
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class SwaggerServiceDefault implements SwaggerService {
 
@@ -71,7 +71,7 @@ public class SwaggerServiceDefault implements SwaggerService {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
 }

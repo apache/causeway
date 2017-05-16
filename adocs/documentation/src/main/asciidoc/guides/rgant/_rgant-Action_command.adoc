@@ -1,0 +1,134 @@
+[[_rgant-Action_command]]
+= `command()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+The `@Action(command=...)` attribute (and the related `@Action(commandPersistence=...)` and  `@Action(commandExecuteIn=...)` attributes) allows an action invocation to be made into a concrete object such that it can be inspected and persisted.  The primary use case for this is enhanced profiling/auditing, and it also supports the deferring the execution of the action such that it can be invoked in the background.
+
+The annotation works with (and is influenced by the behaviour of) a number of domain services:
+
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundService[`BackgroundService`] and
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]
+
+
+Each action invocation is reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
+
+If an appropriate `CommandService` is configured (for example using (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module), then the `Command` itself is persisted.
+
+By default, actions are invoked in directly in the thread of the invocation.   If there is an implementation of `BackgroundCommandService` (as the http://github.com/isisaddons/isis-module-command[Isis addons' command] module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
+
+[NOTE]
+====
+If background ``Command``s are used, then an external scheduler, using xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[headless access], must also be configured.
+====
+
+
+
+The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).
+
+The default is `AS_CONFIGURED`, meaning that the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.command.actions` is used to determine the whether the action is reified:
+
+* `all` +
++
+all actions are reified
+
+* `ignoreSafe` (or `ignoreQueryOnly`) +
++
+actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
+
+* `none` +
++
+no actions are reified.
+
+If there is no configuration property in `isis.properties` then all actions are reified into ``Command``s.
+
+[NOTE]
+====
+Note: `Command` reification does not necessarily imply that `Command` objects will be persisted; that depends on whether there is a xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] configured that will persist said ``Command``s.
+====
+
+This default can be overridden on an action-by-action basis; if `command()` is set to `ENABLED` then the action is reified irrespective of the configured value; if set to `DISABLED` then the action is NOT reified irrespective of the configured value.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @Action(command=CommandReification.ENABLED)
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+corresponds to the behaviour described above; the `Command` object is persisted (assuming an appropriate `CommandService` is defined, and executed immediately in the foreground).
+
+
+
+
+== `commandPersistence()`
+
+If the action has been reified, then the `commandPersistence()` attribute determines whether that `Command` object
+should then also be persisted (the default), or not persisted, or only if hinted.
+
+To explain this last alternative:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandPersistence=CommandPersistence.IF_HINTED
+    )
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+will suppress the persistence of the `Command` object _unless_ a child background `Command` has been created in the body of the action by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`].
+
+On the other hand:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,
+        commandPersistence=CommandPersistence.NOT_PERSISTED
+    )
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+will prevent the parent `Command` object from being persisted, _even if_ a child background `Command` is created.
+
+
+
+
+
+== `commandExecuteIn()`
+
+For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
+
+Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.BACKGROUND)
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+will result in the `Command` being persisted but its execution deferred to a background execution mechanism. The
+returned object from this action is the persisted `Command` itself.
+
+
+
+

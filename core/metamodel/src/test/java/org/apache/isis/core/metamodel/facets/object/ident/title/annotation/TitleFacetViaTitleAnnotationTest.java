@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -58,13 +57,10 @@ public class TitleFacetViaTitleAnnotationTest {
     @Mock
     private AdapterManager mockAdapterManager;
     
-    @Mock
-    private LocalizationProviderInternal mockLocalizationProviderInternal;
-
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 
         @Title
-        public String screwedTitle() {
+        public String brokenTitle() {
             throw new NullPointerException();
         }
 
@@ -116,7 +112,7 @@ public class TitleFacetViaTitleAnnotationTest {
             }
         });
 
-        final String title = facet.title(mockObjectAdapter, null);
+        final String title = facet.title(mockObjectAdapter);
         assertThat(title, is("Normal Domain Object"));
     }
 
@@ -136,7 +132,7 @@ public class TitleFacetViaTitleAnnotationTest {
             }
         });
 
-        final String title = facet.title(mockObjectAdapter, null);
+        final String title = facet.title(mockObjectAdapter);
         assertThat(title, is("Failed Title"));
     }
 

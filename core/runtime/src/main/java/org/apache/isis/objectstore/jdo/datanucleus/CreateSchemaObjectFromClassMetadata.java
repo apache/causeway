@@ -27,8 +27,11 @@ import java.util.Map;
 
 import com.google.common.base.Strings;
 
+import org.datanucleus.ClassLoaderResolver;
+import org.datanucleus.enhancer.EnhancementNucleusContextImpl;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.metadata.MetaDataListener;
+import org.datanucleus.store.encryption.ConnectionEncryptionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, DataNucleusPropertiesAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusPersistenceMechanismInstaller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CreateSchemaObjectFromClassMetadata.class);
 
     //region > persistenceManagerFactory, properties
 
@@ -63,7 +66,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
         final String driverName = properties.get("javax.jdo.option.ConnectionDriverName");
         final String url = properties.get("javax.jdo.option.ConnectionURL");
         final String userName = properties.get("javax.jdo.option.ConnectionUserName");
-        final String password = properties.get("javax.jdo.option.ConnectionPassword");
+        final String password = getConnectionPassword();
 
         try {
 
@@ -158,7 +161,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
     }
     //endregion
 
-    //region > helpers: closeSafely
+    //region > helpers: closeSafely, getConnectionPassword
     protected void closeSafely(final AutoCloseable connection) {
         if(connection != null) {
             try {
@@ -168,6 +171,37 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
             }
         }
     }
+        
+    // copied and adapted from org.datanucleus.store.AbstractStoreManager.getConnectionPassword()    
+    /**
+     * Convenience accessor for the password to use for the connection.
+     * Will perform decryption if the persistence property "datanucleus.ConnectionPasswordDecrypter" has
+     * also been specified.
+     * @return Password
+     */
+    private String getConnectionPassword() {
+    	String password = properties.get("javax.jdo.option.ConnectionPassword");
+        if (password != null)
+        {
+            String decrypterName = properties.get("datanucleus.ConnectionPasswordDecrypter");
+            if (decrypterName != null)
+            {
+                // Decrypt the password using the provided class
+                ClassLoaderResolver clr = new EnhancementNucleusContextImpl("JDO", properties).getClassLoaderResolver(null);
+                try
+                {
+                    Class decrypterCls = clr.classForName(decrypterName);
+                    ConnectionEncryptionProvider decrypter = (ConnectionEncryptionProvider) decrypterCls.newInstance();
+                    password = decrypter.decrypt(password);
+                }
+                catch (Exception e)
+                {
+                    LOG.warn("Error invoking decrypter class " + decrypterName, e);
+                }
+            }
+        }
+        return password;
+	}    
     //endregion
 
     //region > injected dependencies

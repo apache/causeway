@@ -88,7 +88,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         addOrReplace(outerDiv);
 
         ActionModel actionModel = entityCollectionModel.getActionModelHint();
-        ObjectAction action = actionModel.getActionMemento().getAction();
+        ObjectAction action = actionModel.getActionMemento().getAction(entityCollectionModel.getSpecificationLoader());
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
         CssClassAppender.appendCssClassTo(outerDiv, action.getOnType().getFullIdentifier().replace('.', '-') + "_" + action.getId());
@@ -141,7 +141,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
     @Override
     public ObjectAdapterToggleboxColumn createToggleboxColumn() {
 
-        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
         final EntityCollectionModel entityCollectionModel = getModel();
         if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
@@ -176,7 +176,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         final BulkActionsLinkFactory linkFactory =
                 new BulkActionsLinkFactory(getModel(), toggleboxColumn);
 
-        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
         List<LinkAndLabel> links = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
             @Override

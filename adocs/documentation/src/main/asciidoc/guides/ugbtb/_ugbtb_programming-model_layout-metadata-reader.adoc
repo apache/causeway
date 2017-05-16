@@ -1,0 +1,88 @@
+[[_ugbtb_programming-model_layout-metadata-reader]]
+= Layout Metadata Reader (deprecated)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+The metadata for domain objects is obtained both xref:../ugvw/ugvw.adoc#_ugvw_layout_annotation-based[annotations] and xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[files].
+There is also deprecated support for reading layouts from `.layout.json` files.
+This service provides an SPI (and default implementation) for reading layouts defined in this fashion.
+
+
+== Default implementation
+
+The default implementation for reading dynamic layout metadata is `org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson`, which is responsible for reading from the `Xxx.layout.json` files on the classpath (for each domain entity `Xxx`).
+
+You can also implement your own metadata readers and plug them into Apache Isis.  These could read from a different file format, or they could, even, read data dynamically from a URL or database.  (Indeed, one could imagine an implementation whereby users could share layouts, all stored in some central repository).
+
+
+
+
+== API and Implementation
+
+Any reader must implement Apache Isis' internal `LayoutMetadataReader` interface:
+
+[source,java]
+----
+public interface LayoutMetadataReader {
+    public Properties asProperties(Class<?> domainClass) throws ReaderException;
+}
+----
+
+The implementation "simply" returns a set of properties where the property key is a unique identifier to both the class member and also the facet of the class member to which the metadata relates.
+
+See the implementation of the built-in `LayoutMetadataReaderFromJson` for more detail.
+
+Returning either `null` or throwing an exception indicates that the reader was unable to load any metadata for the specified class.
+
+
+=== Extended API
+
+Optionally the reader can implement the extended `LayoutMetadaReader2` API:
+
+[source,java]
+----
+public interface LayoutMetadataReader2 extends LayoutMetadataReader {
+    public static class Support {
+        public static Support entitiesOnly() {
+            return new Support(false,false,false,false,false,false,false);
+        }
+        ...
+        public boolean interfaces() { ... } // <1>
+        public boolean anonymous() { ... }  // <2>
+        public boolean synthetic() { ... }  // <3>
+        public boolean array() { ... }      // <4>
+        public boolean enums() { ... }      // <5>
+        public boolean applibValueTypes() { // <6>
+        public boolean services() { ... }   // <7>
+    }
+    Support support();
+}
+----
+<1> whether this implementation can provide metadata for interface types.
+<2> whether this implementation can provide metadata for anonymous classes.
+<3> whether this implementation can provide metadata for synthetic types.
+<4> whether this implementation can provide metadata for arrays.
+<5> whether this implementation can provide metadata for enums.
+<6> whether this implementation can provide metadata for applib value types.
+<7> whether this implementation can provide metadata for domain services.
+
+The `support()` method returns a struct class that describes the types of classes are supported by this implementation.
+
+The `LayoutMetadataReaderFromJson` implements this extended API.
+
+
+
+== Configuration
+
+Once you have implemented your validator, you must register it with the framework by defining the appropriate configuration property:
+
+[source,ini]
+----
+isis.reflector.layoutMetadataReaders=\
+           com.mycompany.myapp.MyMetaModelValidator,\
+           org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson   # <1>
+----
+<1> the property replaces any existing metadata readers; if you want to preserve the ability to read from `Xxx.layout.json` then also register Apache Isis' built-in implementation.
+

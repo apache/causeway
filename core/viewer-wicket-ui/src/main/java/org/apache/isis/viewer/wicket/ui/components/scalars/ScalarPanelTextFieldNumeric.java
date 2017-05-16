@@ -24,9 +24,14 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
-
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
+
+import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * Panel for rendering numeric scalars.
@@ -48,7 +53,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         this.converter = converter;
     }
 
-    protected Component addComponentForCompact() {
+    protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
             @Override
@@ -60,11 +65,21 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         label.setEnabled(false);
 
         compactFragment.add(label);
-        scalarTypeContainer.addOrReplace(compactFragment);
         return label;
     }
 
-    public IConverter<T> getConverter() {
-        return converter;
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        ObjectAdapter object = scalarModel.getObject();
+        final T value = object != null ? (T) object.getObject() : null;
+        final String str =
+                value != null
+                        ? converter.convertToString(value, getLocaleProvider().getLocale())
+                        : null;
+        return Model.of(str);
     }
+
+    private LocaleProvider getLocaleProvider() {
+        return IsisContext.getSessionFactory().getServicesInjector().lookupService(LocaleProvider.class);
+    }
+
 }

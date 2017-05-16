@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
 
@@ -57,6 +58,19 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
     @Override
     public boolean isCloneable(Object pojo) {
         return pojo != null && pojo instanceof ViewModel.Cloneable;
+    }
+
+    @Override
+    public boolean isImplicitlyImmutable() {
+        final FacetHolder facetHolder = getFacetHolder();
+        if(facetHolder instanceof ObjectSpecificationDefault) {
+            final ObjectSpecificationDefault objectSpec = (ObjectSpecificationDefault) facetHolder;
+            final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+            if(ViewModel.Cloneable.class.isAssignableFrom(correspondingClass)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

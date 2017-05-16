@@ -37,10 +37,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
  * Processes the {@link Value} annotation.
@@ -88,7 +86,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         // create from annotation, if present
         final Value annotation = Annotations.getAnnotation(cls, Value.class);
         if (annotation != null) {
-            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getConfiguration(), createValueSemanticsProviderContext());
+            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -97,7 +95,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         // otherwise, try to create from configuration, if present
         final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, getConfiguration());
         if (!Strings.isNullOrEmpty(semanticsProviderName)) {
-            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getConfiguration(), createValueSemanticsProviderContext());
+            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -107,19 +105,5 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         return null;
     }
 
-    protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
-        return new ValueSemanticsProviderContext(getDeploymentCategory(), getSpecificationLoader(), adapterManager, servicesInjector);
-    }
-
-
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    PersistenceSessionServiceInternal adapterManager;
 
 }

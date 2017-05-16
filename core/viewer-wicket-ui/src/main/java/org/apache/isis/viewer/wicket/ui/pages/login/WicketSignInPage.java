@@ -19,17 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import javax.inject.Inject;
-
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
+
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -38,7 +37,13 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS = "isis.viewer.wicket.rememberMe.suppress";
+    /**
+     * @deprecated - use {@link #ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS} instead.
+     */
+    @Deprecated
     public static final String ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME = "isis.viewer.wicket.suppressRememberMe";
+
     public static final String ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP = "isis.viewer.wicket.suppressSignUp";
     public static final String ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET = "isis.viewer.wicket.suppressPasswordReset";
     public static final String ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION = "isis.viewer.wicket.clearOriginalDestination";
@@ -79,7 +84,12 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     }
 
     protected SignInPanel addSignInPanel() {
-        final boolean suppressRememberMe = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME, false);
+
+        final boolean rememberMeSuppress = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_REMEMBER_ME_SUPPRESS, false);
+        final boolean rememberMeSuppressDeprecated = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME, false);
+
+        final boolean suppressRememberMe = rememberMeSuppress || rememberMeSuppressDeprecated;
+
         final boolean suppressSignUpLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP, false);
         final boolean suppressPasswordResetLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET, false);
         final boolean clearOriginalDestination = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION, false);
@@ -102,6 +112,6 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         return signInPanel;
     }
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageNavigationService pageNavigationService;
 }

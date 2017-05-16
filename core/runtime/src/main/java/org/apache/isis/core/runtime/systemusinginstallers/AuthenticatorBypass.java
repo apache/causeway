@@ -29,7 +29,7 @@ class AuthenticatorBypass extends AuthenticatorAbstract {
     }
 
     @Override
-    public boolean isValid(final AuthenticationRequest request) {
+    protected boolean isValid(final AuthenticationRequest request) {
         return true;
     }
 

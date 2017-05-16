@@ -25,7 +25,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -50,7 +49,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
         holder = new FacetHolderImpl();
 
-        setValue(adapter = new PercentageValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new PercentageValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
@@ -61,19 +60,19 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testParseTextEntryWithNumber() {
-        final Percentage parsed = adapter.parseTextEntry(percentage, "21%", null);
+        final Percentage parsed = adapter.parseTextEntry(percentage, "21%");
         assertEquals(new Percentage(0.21f), parsed);
     }
 
     @Test
     public void testParseTextEntryWithNumberAndDecimalPoint() {
-        final Percentage parsed = adapter.parseTextEntry(percentage, "21.4%", null);
+        final Percentage parsed = adapter.parseTextEntry(percentage, "21.4%");
         assertEquals(new Percentage(0.214f), parsed);
     }
 
     @Test
     public void testParseTextEntryWithBlank() {
-        final Percentage parsed = adapter.parseTextEntry(percentage, "", null);
+        final Percentage parsed = adapter.parseTextEntry(percentage, "");
         assertEquals(null, parsed);
     }
 
@@ -85,7 +84,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testTitleOf() {
-        assertEquals("10%", adapter.displayTitleOf(percentage, (Localization) null));
+        assertEquals("10%", adapter.displayTitleOf(percentage));
     }
 
     @Test

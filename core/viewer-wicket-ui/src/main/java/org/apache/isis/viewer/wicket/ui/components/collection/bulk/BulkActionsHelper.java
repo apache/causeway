@@ -21,15 +21,18 @@ package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 public class BulkActionsHelper implements Serializable {
@@ -46,7 +49,7 @@ public class BulkActionsHelper implements Serializable {
         return model;
     }
 
-    public List<ObjectAction> getBulkActions() {
+    public List<ObjectAction> getBulkActions(final IsisSessionFactory isisSessionFactory) {
         final EntityCollectionModel model = getModel();
 
         if(model.isParented()) {
@@ -57,15 +60,10 @@ public class BulkActionsHelper implements Serializable {
 
         List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
 
-        if ( isExploring() || isPrototyping()) {
-            List<ObjectAction> explorationActions = typeSpec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            List<ObjectAction> prototypeActions = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            objectActions.addAll(explorationActions);
+        final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
+        if ( !deploymentCategory.isProduction()) {
+            List<ObjectAction> prototypeActions   = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
             objectActions.addAll(prototypeActions);
-        }
-        if (isDebugMode()) {
-            List<ObjectAction> debugActions = typeSpec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            objectActions.addAll(debugActions);
         }
 
         List<ObjectAction> flattenedActions = objectActions;
@@ -77,26 +75,11 @@ public class BulkActionsHelper implements Serializable {
     @SuppressWarnings("deprecation")
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
 
-
-    //region > from context
-
-    public boolean isExploring() {
-        return IsisContext.getDeploymentType().isExploring();
-    }
-    public boolean isPrototyping() {
-        return IsisContext.getDeploymentType().isPrototyping();
-    }
-
     /**
      * Protected so can be overridden in testing if required.
      */
     protected boolean isDebugMode() {
-        // TODO: need to figure out how to switch into debug mode;
-        // probably call a Debug toggle page, and stuff into
-        // Session.getMetaData()
         return true;
     }
-
-    //endregion
 
 }

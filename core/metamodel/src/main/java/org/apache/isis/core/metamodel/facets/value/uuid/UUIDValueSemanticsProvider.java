@@ -23,13 +23,12 @@ import java.util.UUID;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<UUID> implements UUIDValueFacet {
 
@@ -46,11 +45,11 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
      * {@link EncoderDecoder}.
      */
     public UUIDValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public UUIDValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, UUID.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public UUIDValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, UUID.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -67,13 +66,13 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return object == null ? "" : object.toString();
     }
 
     @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
-        return titleString(object, null);
+        return titleString(object);
     }
 
     // //////////////////////////////////////////////////////////////////

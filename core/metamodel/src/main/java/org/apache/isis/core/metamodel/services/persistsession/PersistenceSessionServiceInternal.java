@@ -22,9 +22,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public interface PersistenceSessionServiceInternal extends AdapterManager {
 
@@ -60,7 +63,10 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
      *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
+     *
+     * @deprecated - left over from manual object resolving.
      */
+    @Deprecated
     @Programmatic
     void resolve(Object parent, Object field);
 
@@ -82,7 +88,7 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
 
     //endregion
 
-    //region > beginTran, flush, commit
+    //region > beginTran, flush, commit, currentTransaction
 
     @Programmatic
     void beginTran();
@@ -105,6 +111,12 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
     @Programmatic
     void commit();
 
+    @Programmatic
+    Transaction currentTransaction();
+
+
+    @Programmatic
+    TransactionState getTransactionState();
 
     //endregion
 
@@ -151,6 +163,9 @@ public interface PersistenceSessionServiceInternal extends AdapterManager {
      */
     @Programmatic
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
+
+    void executeWithinTransaction(TransactionalClosure transactionalClosure);
+
 
     //endregion
 

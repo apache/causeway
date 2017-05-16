@@ -19,10 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -30,11 +29,13 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -54,7 +55,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
         TestClock.initialize();
         date = new Date(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder, mockConfiguration, mockContext) {
+        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder, mockServicesInjector) {
             @Override
             protected String defaultFormat() {
                 return "iso";
@@ -65,7 +66,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            adapter.parseTextEntry(null, "date", null);
+            adapter.parseTextEntry(null, "date");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -73,12 +74,12 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testTitleOf() {
-        assertEquals("1970-01-01", adapter.displayTitleOf(date, (Localization) null));
+        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), adapter.displayTitleOf(date));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = adapter.parseTextEntry(null, "1/1/1980", null);
+        final Object newValue = adapter.parseTextEntry(null, "1/1/1980");
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

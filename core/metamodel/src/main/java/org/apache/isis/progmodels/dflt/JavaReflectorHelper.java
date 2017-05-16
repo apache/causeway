@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -43,7 +42,6 @@ public final class JavaReflectorHelper  {
     private JavaReflectorHelper(){}
     
     public static SpecificationLoader createObjectReflector(
-            final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final Collection<MetaModelRefiner> metaModelRefiners,
@@ -62,9 +60,7 @@ public final class JavaReflectorHelper  {
             programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
         }
 
-        return new SpecificationLoader(
-                deploymentCategory, configuration,
-                programmingModel, metaModelValidator, layoutMetadataReaders, servicesInjector);
+        return new SpecificationLoader(programmingModel, metaModelValidator, layoutMetadataReaders, servicesInjector);
     }
 
 }

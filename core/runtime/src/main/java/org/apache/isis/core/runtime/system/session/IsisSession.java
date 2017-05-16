@@ -19,26 +19,15 @@
 
 package org.apache.isis.core.runtime.system.session;
 
-import java.text.SimpleDateFormat;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Analogous to (and in essence a wrapper for) a JDO <code>PersistenceManager</code>;
@@ -53,53 +42,29 @@ public class IsisSession implements SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisSession.class);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM HH:mm:ss,SSS");
-    private static int nextId = 1;
-
-    private final IsisSessionFactory isisSessionFactory;
+    //region > constructor, fields
 
     private final AuthenticationSession authenticationSession;
-    private PersistenceSession persistenceSession; // only non-final so can be
-    // replaced in tests.
-    private final int id;
-    private long accessTime;
-    private String debugSnapshot;
+    private PersistenceSession persistenceSession; // only non-final so can be replaced in tests.
 
-    //region > constructor
     public IsisSession(
-            final IsisSessionFactory sessionFactory,
             final AuthenticationSession authenticationSession,
             final PersistenceSession persistenceSession) {
 
-        // global context
-        ensureThatArg(sessionFactory, is(not(nullValue())), "execution context factory is required");
-
-        // session
-        ensureThatArg(authenticationSession, is(not(nullValue())), "authentication session is required");
-        ensureThatArg(persistenceSession, is(not(nullValue())), "persistence session is required");
-
-        this.isisSessionFactory = sessionFactory;
-
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
-
-        setSessionOpenTime(System.currentTimeMillis());
-
-        this.id = nextId++;
-
     }
     //endregion
 
     //region > open, close
-    public void open() {
+    void open() {
         persistenceSession.open();
     }
 
     /**
      * Closes session.
      */
-    public void close() {
-        final PersistenceSession persistenceSession = getPersistenceSession();
+    void close() {
         if(persistenceSession != null) {
             persistenceSession.close();
         }
@@ -107,45 +72,6 @@ public class IsisSession implements SessionScopedComponent {
 
     //endregion
 
-    //region > shutdown
-    /**
-     * Shuts down all components.
-     *
-     * Normal lifecycle is managed using callbacks in
-     * {@link SessionScopedComponent}. This method is to allow the outer
-     * {@link ApplicationScopedComponent}s to shutdown, closing any and all
-     * running {@link IsisSession}s.
-     */
-    public void closeAll() {
-        close();
-
-        persistenceSession.close();
-    }
-
-    //endregion
-
-    //region > convenience methods
-    /**
-     * Convenience method.
-     */
-    public DeploymentType getDeploymentType() {
-        return isisSessionFactory.getDeploymentType();
-    }
-
-    /**
-     * Convenience method.
-     */
-    public IsisConfiguration getConfiguration() {
-        return isisSessionFactory.getConfiguration();
-    }
-
-    /**
-     * Convenience method.
-     */
-    public SpecificationLoader getSpecificationLoader() {
-        return isisSessionFactory.getSpecificationLoader();
-    }
-    //endregion
 
     //region > AuthenticationSession
     /**
@@ -154,19 +80,6 @@ public class IsisSession implements SessionScopedComponent {
      */
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
-    }
-
-    private String getSessionUserName() {
-        return getAuthenticationSession().getUserName();
-    }
-    //endregion
-
-    //region > id
-    /**
-     * A descriptive identifier for this {@link IsisSession}.
-     */
-    public String getId() {
-        return "#" + id + getSessionUserName();
     }
     //endregion
 
@@ -180,11 +93,6 @@ public class IsisSession implements SessionScopedComponent {
 
     //endregion
 
-    private void setSessionOpenTime(final long accessTime) {
-        this.accessTime = accessTime;
-    }
-    //endregion
-
     //region > transaction
 
     /**
@@ -192,7 +100,7 @@ public class IsisSession implements SessionScopedComponent {
      * session, if any.
      */
     public IsisTransaction getCurrentTransaction() {
-        return getTransactionManager().getTransaction();
+        return getTransactionManager().getCurrentTransaction();
     }
 
     //endregion
@@ -201,7 +109,6 @@ public class IsisSession implements SessionScopedComponent {
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
-        asString.append("context", getId());
         asString.append("authenticationSession", getAuthenticationSession());
         asString.append("persistenceSession", getPersistenceSession());
         asString.append("transaction", getCurrentTransaction());

@@ -53,7 +53,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                ContainedToggleboxPanel.this.onSubmit(target);
+                ContainedToggleboxPanel.this.toggle(target);
             }
         };
         form.add(checkbox);
@@ -77,6 +77,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
      */
     public void toggle(AjaxRequestTarget target) {
         checkbox.setModelObject(!checkbox.getModelObject());
+        final boolean checkboxValue = checkbox.getModelObject();
         onSubmit(target);
     }
     

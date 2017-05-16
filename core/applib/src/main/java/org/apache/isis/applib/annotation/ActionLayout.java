@@ -124,6 +124,12 @@ public @interface ActionLayout {
         PANEL_DROPDOWN
     }
 
+    /**
+     * How this parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
+     */
+    PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;
+
+
     // //////////////////////////////////////
 
     /**

@@ -24,12 +24,11 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>1.13.0-SNAPSHOT</version>
+		<version>1.15.0-SNAPSHOT</version>
 	</parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-viewer-wicket-ui</artifactId>
-	<name>Isis Wicket Viewer UI Components</name>
+	<artifactId>isis-core-viewer-wicket-ui</artifactId>
+	<name>Apache Isis Wicket Viewer UI Components</name>
 
 	<build>
 		<resources>
@@ -57,9 +56,10 @@
 	</build>
 
 	<dependencies>
+
 		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-model</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-wicket-model</artifactId>
 		</dependency>
 
 		<dependency>
@@ -93,7 +93,7 @@
 			<artifactId>wicketstuff-select2</artifactId>
 		</dependency>
 
-        <dependency>
+		<dependency>
             <groupId>org.webjars</groupId>
             <artifactId>select2</artifactId>
         </dependency>

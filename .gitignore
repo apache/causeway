@@ -3,6 +3,7 @@
 *.class
 bin/
 target/
+.asciidoctor/
 target-ide/
 logs/
 .settings/
@@ -43,3 +44,4 @@ JArchitectOut/
 core/integtestsupport/fixture-data
 
 rebel.xml
+**/.DS_Store

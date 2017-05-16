@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.fixtures;
 
 import java.util.List;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -27,14 +28,15 @@ import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class SwitchUserServiceImpl implements SwitchUserService {
 
@@ -55,11 +57,13 @@ public class SwitchUserServiceImpl implements SwitchUserService {
     }
 
     private void reopenSession(final AuthenticationRequest authRequest) {
-        getTransactionManager().endTransaction();
-        IsisContext.closeSession();
-        final AuthenticationSession session = getAuthenticationManager().authenticate(authRequest);
-        IsisContext.openSession(session);
-        getTransactionManager().startTransaction();
+        persistenceSessionServiceInternal.commit();
+        isisSessionFactory.closeSession();
+
+        final AuthenticationSession authenticationSession = authenticationManager.authenticate(authRequest);
+
+        isisSessionFactory.openSession(authenticationSession);
+        persistenceSessionServiceInternal.beginTran();
     }
 
 
@@ -72,12 +76,13 @@ public class SwitchUserServiceImpl implements SwitchUserService {
         }
     }
 
-    protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
-    }
+    @javax.inject.Inject
+    AuthenticationManager authenticationManager;
 
-    protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
-    }
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

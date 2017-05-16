@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -51,7 +52,7 @@ public class PropertyLayoutData
         implements ActionLayoutDataOwner,
                    Serializable,
                    Owned<FieldSet>,
-                   HasCssClass, HasDescribedAs, HasHidden, HasNamed {
+                   HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
 
     private static final long serialVersionUID = 1L;
 
@@ -170,6 +171,19 @@ public class PropertyLayoutData
     public void setNamedEscaped(Boolean namedEscaped) {
         this.namedEscaped = namedEscaped;
     }
+
+
+    private PromptStyle promptStyle;
+
+    @XmlAttribute(required = false)
+    public PromptStyle getPromptStyle() {
+        return promptStyle;
+    }
+
+    public void setPromptStyle(PromptStyle promptStyle) {
+        this.promptStyle = promptStyle;
+    }
+
 
 
     private Boolean renderedAsDayBefore;

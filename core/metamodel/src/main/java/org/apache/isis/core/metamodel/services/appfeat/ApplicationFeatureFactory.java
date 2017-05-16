@@ -18,14 +18,13 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ApplicationFeatureFactory {
 
@@ -33,7 +32,7 @@ public class ApplicationFeatureFactory {
         return factoryService.instantiate(ApplicationFeature.class);
     }
 
-    @Inject
+    @javax.inject.Inject
     FactoryService factoryService;
 
 }

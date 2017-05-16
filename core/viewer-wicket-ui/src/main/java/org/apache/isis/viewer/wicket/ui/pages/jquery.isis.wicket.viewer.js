@@ -27,7 +27,10 @@ $(function() {
     window.Isis = {
         Topic: {
             OPEN_IN_NEW_TAB: 'openInNewTab',
-            FOCUS_FIRST_ACTION_PARAMETER: 'focusFirstActionParameter'
+            OPEN_SELECT2: 'openSelect2',
+            CLOSE_SELECT2: 'closeSelect2',
+            FOCUS_FIRST_PARAMETER: 'focusFirstParameter',
+            FOCUS_FIRST_PROPERTY: 'focusFirstProperty'
         },
         copyModalShown: false
     };
@@ -78,9 +81,37 @@ $(function() {
         if(win) { win.focus(); }
     });
 
-    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, function(jqEvent, modalWindowId) {
+    Wicket.Event.subscribe(Isis.Topic.OPEN_SELECT2, function(jqEvent, panelId) {
         setTimeout(function() {
-            $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select').filter(':visible:first').focus();
+            var $panel = $('#'+panelId);
+             console.log($panel);
+            $($panel).find('select').select2('open');
+//            $($panel).find('select').filter(':visible:first').focus();
+        }, 0);
+    });
+
+    Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
+        setTimeout(function() {
+            var $panel = $('#'+panelId);
+             console.log($panel);
+            $($panel).find('select').select2('close');
+            $($panel).find('select').filter(':visible:first').focus();
+        }, 0);
+    });
+
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
+        setTimeout(function() {
+            $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,select,div.cbx').filter(':visible:first').focus();
+        }, 0);
+    });
+
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PROPERTY, function(jqEvent, elementId) {
+        setTimeout(function() {
+            if(elementId) {
+                $("#" + elementId).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
+            } else {
+                $(document).find('a.scalarValueInlinePromptLink').filter(':visible:first').focus();
+            }
         }, 0);
     });
 

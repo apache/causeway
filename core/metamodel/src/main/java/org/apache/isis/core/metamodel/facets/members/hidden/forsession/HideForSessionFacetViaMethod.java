@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionUtils;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -66,7 +65,7 @@ public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract im
         }
         final int len = method.getParameterTypes().length;
         final Object[] parameters = new Object[len];
-        parameters[0] = AuthenticationSessionUtils.createUserMemento(session);
+        parameters[0] = session.createUserMemento();
         // TODO: need to change to pick up as non-static rather than static
         final Boolean isHidden = (Boolean) MethodExtensions.invokeStatic(method, parameters);
         return isHidden.booleanValue() ? "Hidden" : null;

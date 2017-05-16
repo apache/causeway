@@ -25,20 +25,9 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**
- * Will be called whenever an auditable entity has changed its state.
- *
- * <p>
- * Typically entities are marked as auditable using the {@link org.apache.isis.applib.annotation.Audited}
- * annotation.
- *
- * <p>
- * There are currently two implementations, <tt>AuditingServiceJdo</tt> (part of the
- * <tt>o.a.i.module:isis-module-audit-jdo</tt>) and the demo
- * {@link org.apache.isis.applib.services.audit.AuditingService3.Stderr}.
- *
- * <p>
- * To use either service, must include on the classpath and also register the service (eg in <tt>isis.properties</tt>).
+ * @deprecated - use {@link AuditerService} (to support multiple transactions within an interaction)
  */
+@Deprecated
 public interface AuditingService3 {
     
     @Programmatic

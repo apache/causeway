@@ -23,25 +23,23 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.components.InstallerAbstract;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
-public abstract class FixturesInstallerAbstract extends InstallerAbstract implements FixturesInstaller {
+public abstract class FixturesInstallerAbstract {
 
-    private final FixturesInstallerDelegate delegate = new FixturesInstallerDelegate();
+    private final FixturesInstallerDelegate delegate;
+    protected final IsisConfiguration configuration;
 
-    private LogonFixture logonFixture;
-
-    public FixturesInstallerAbstract(final String name, final IsisConfigurationDefault isisConfiguration) {
-        super(FixturesInstaller.TYPE, name, isisConfiguration);
+    public FixturesInstallerAbstract(
+            final IsisSessionFactory isisSessionFactory) {
+        delegate = new FixturesInstallerDelegate(isisSessionFactory);
+        configuration = isisSessionFactory.getConfiguration();
     }
 
-    @Override
     public void installFixtures() {
         addFixturesTo(delegate);
-
         delegate.installFixtures();
-        logonFixture = delegate.getLogonFixture();
     }
 
     /**
@@ -50,14 +48,13 @@ public abstract class FixturesInstallerAbstract extends InstallerAbstract implem
      */
     protected abstract void addFixturesTo(FixturesInstallerDelegate delegate);
 
-    @Override
     public LogonFixture getLogonFixture() {
-        return logonFixture;
+        return delegate.getLogonFixture();
     }
 
-    @Override
     public List<Class<?>> getTypes() {
         return Collections.emptyList();
     }
+
 
 }

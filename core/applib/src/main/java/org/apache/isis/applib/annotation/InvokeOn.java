@@ -44,13 +44,13 @@ public enum InvokeOn {
     COLLECTION_ONLY;
 
     @Deprecated
-    public static Bulk.AppliesTo from(final InvokeOn appliesToPolicy) {
-        if(appliesToPolicy == null) return null;
-        if(appliesToPolicy == OBJECT_AND_COLLECTION) return Bulk.AppliesTo.BULK_AND_REGULAR;
-        if(appliesToPolicy == COLLECTION_ONLY) return Bulk.AppliesTo.BULK_ONLY;
-        if(appliesToPolicy == OBJECT_ONLY) throw new IllegalArgumentException("No corresponding Bulk.AppliesTo enum for " + appliesToPolicy);
+    public static Bulk.AppliesTo from(final InvokeOn invokeOn) {
+        if(invokeOn == null) return null;
+        if(invokeOn == OBJECT_AND_COLLECTION) return Bulk.AppliesTo.BULK_AND_REGULAR;
+        if(invokeOn == COLLECTION_ONLY) return Bulk.AppliesTo.BULK_ONLY;
+        if(invokeOn == OBJECT_ONLY) return Bulk.AppliesTo.REGULAR_ONLY;
         // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized appliesTo: " + appliesToPolicy);
+        throw new IllegalArgumentException("Unrecognized appliesTo: " + invokeOn);
     }
 
     @Deprecated
@@ -58,6 +58,7 @@ public enum InvokeOn {
         if(appliesTo == null) return null;
         if(appliesTo == Bulk.AppliesTo.BULK_AND_REGULAR) return OBJECT_AND_COLLECTION;
         if(appliesTo == Bulk.AppliesTo.BULK_ONLY) return COLLECTION_ONLY;
+        if(appliesTo == Bulk.AppliesTo.REGULAR_ONLY) return OBJECT_ONLY;
         // shouldn't happen
         throw new IllegalArgumentException("Unrecognized appliesTo: " + appliesTo);
     }

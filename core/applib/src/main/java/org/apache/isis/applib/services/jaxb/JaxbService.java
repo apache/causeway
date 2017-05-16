@@ -231,7 +231,7 @@ public interface JaxbService {
         }
 
 
-        @Inject
+        @javax.inject.Inject
         DomainObjectContainer container;
     }
 

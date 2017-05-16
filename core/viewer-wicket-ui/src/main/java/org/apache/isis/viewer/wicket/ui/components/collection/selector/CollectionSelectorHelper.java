@@ -50,7 +50,7 @@ public class CollectionSelectorHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    static final String UIHINT_EVENT_VIEW_KEY = "view";
+    static final String UIHINT_EVENT_VIEW_KEY = EntityCollectionModel.HINT_KEY_SELECTED_ITEM;
 
     private final EntityCollectionModel model;
 
@@ -116,7 +116,7 @@ public class CollectionSelectorHelper implements Serializable {
     private String determineInitialFactory() {
 
         // try to load from session, if can
-        final Bookmark bookmark = domainObjectBookmarkIfAny();
+        final Bookmark bookmark = bookmarkHintIfAny();
         final String sessionAttribute = componentHintKey.get(bookmark);
         if(sessionAttribute != null) {
             return sessionAttribute;
@@ -133,7 +133,7 @@ public class CollectionSelectorHelper implements Serializable {
 
         // else @CollectionLayout#defaultView attribute
         if (hasDefaultViewFacet(model)) {
-            DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
+            DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection(model.getSpecificationLoader()).getFacet(DefaultViewFacet.class);
             for (ComponentFactory componentFactory : componentFactories) {
                 final String componentName = componentFactory.getName();
                 final String viewName = defaultViewFacet.value();
@@ -150,10 +150,10 @@ public class CollectionSelectorHelper implements Serializable {
 
     }
 
-    private Bookmark domainObjectBookmarkIfAny() {
+    private Bookmark bookmarkHintIfAny() {
         final EntityModel entityModel = this.model.getEntityModel();
         return entityModel != null
-                ? entityModel.getObjectAdapterMemento().asBookmark()
+                ? entityModel.getObjectAdapterMemento().asHintingBookmark()
                 : null;
     }
 
@@ -183,7 +183,7 @@ public class CollectionSelectorHelper implements Serializable {
     }
 
     private static UiHintContainer getUiHintContainer(final Component component) {
-        return UiHintContainer.Util.hintContainerOf(component, EntityModel.class);
+        return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModel.class);
     }
 
     private static boolean hasRenderEagerlyFacet(IModel<?> model) {
@@ -193,7 +193,7 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         final OneToManyAssociation collection =
-                entityCollectionModel.getCollectionMemento().getCollection();
+                entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
         RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
         return renderFacet != null && renderFacet.value() == Render.Type.EAGERLY;
     }
@@ -205,7 +205,7 @@ public class CollectionSelectorHelper implements Serializable {
         }
 
         final OneToManyAssociation collection =
-                entityCollectionModel.getCollectionMemento().getCollection();
+                entityCollectionModel.getCollectionMemento().getCollection(entityCollectionModel.getSpecificationLoader());
         DefaultViewFacet defaultViewFacet = collection.getFacet(DefaultViewFacet.class);
         return defaultViewFacet != null;
     }

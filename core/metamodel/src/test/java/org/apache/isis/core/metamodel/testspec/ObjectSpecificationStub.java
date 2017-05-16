@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -41,8 +40,8 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -66,15 +65,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private ObjectSpecId specId;
 
     private Persistability persistable;
-    private boolean isEncodeable;
 
     private ServicesInjector servicesInjector;
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
-        this.servicesInjector = new ServicesInjector(Collections.emptyList());
-        servicesInjector.addFallbackIfRequired(
-                ConfigurationServiceInternal.class, new IsisConfigurationDefault(null));
+        IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault(null);
+        this.servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
+        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, stubConfiguration);
     }
 
     @Override
@@ -242,12 +240,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String getTitle(final ObjectAdapter targetAdapter, final Localization localization) {
-        return getTitle(null, targetAdapter, localization);
+    public String getTitle(final ObjectAdapter targetAdapter) {
+        return getTitle(null, targetAdapter);
     }
 
     @Override
-    public String getTitle(final ObjectAdapter contextAdapterIfAny, final ObjectAdapter targetAdapter, final Localization localization) {
+    public String getTitle(
+            final ObjectAdapter contextAdapterIfAny,
+            final ObjectAdapter targetAdapter) {
         return title;
     }
 
@@ -268,7 +268,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public boolean isEncodeable() {
-        return isEncodeable;
+        return false;
     }
 
     @Override
@@ -370,10 +370,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void markAsService() {
-    }
-
-    @Override
     public List<ObjectAction> getObjectActions(final Contributed contributed) {
         return null;
     }
@@ -414,11 +410,19 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return false;
     }
 
+    @Override
+    public boolean isPersistenceCapable() {
+        return false;
+    }
+
+    @Override
+    public boolean isPersistenceCapableOrViewModel() {
+        return false;
+    }
 
     @Override
     public String toString() {
         return getFullIdentifier();
     }
-
 
 }

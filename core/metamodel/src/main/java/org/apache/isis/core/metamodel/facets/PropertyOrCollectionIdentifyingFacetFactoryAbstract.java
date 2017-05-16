@@ -22,9 +22,7 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         extends MethodPrefixBasedFacetFactoryAbstract
@@ -38,27 +36,10 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
 
     // //////////////////////////////////////
 
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
-
     protected boolean isCollectionOrArray(final Class<?> cls) {
-        return getCollectionTypeRepository().isCollectionType(cls) || getCollectionTypeRepository().isArrayType(cls);
+        return CollectionUtils.isCollectionType(cls) || CollectionUtils.isArrayType(cls);
     }
 
-    protected CollectionTypeRegistry getCollectionTypeRepository() {
-        return collectionTypeRegistry;
-    }
-
-    // //////////////////////////////////////
-
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    PersistenceSessionServiceInternal adapterManager;
 
 
 

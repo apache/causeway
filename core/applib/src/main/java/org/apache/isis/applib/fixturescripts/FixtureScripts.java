@@ -409,7 +409,7 @@ public abstract class FixtureScripts extends AbstractService {
                     }
                 }));
     }
-    public String disableRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
+    public String disableRunFixtureScript() {
         return getFixtureScriptList().isEmpty()? "No fixture scripts found under package '" + getPackagePrefix() + "'": null;
     }
     public String validateRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {

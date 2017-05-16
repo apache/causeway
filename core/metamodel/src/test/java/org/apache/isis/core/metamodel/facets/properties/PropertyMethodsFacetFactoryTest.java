@@ -89,7 +89,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
         final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -113,7 +113,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
    public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-       facetFactory.setServicesInjector(mockServicesInjector);
+       facetFactory.setServicesInjector(stubServicesInjector);
 
        class Customer {
             @SuppressWarnings("unused")
@@ -142,7 +142,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -171,7 +171,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -195,11 +195,11 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
 
-        facetFactoryForModify.setServicesInjector(mockServicesInjector);
+        facetFactoryForModify.setServicesInjector(stubServicesInjector);
 
         final PropertySetAndClearFacetFactory facetFactoryForSetter = new PropertySetAndClearFacetFactory();
 
-        facetFactoryForSetter.setServicesInjector(mockServicesInjector);
+        facetFactoryForSetter.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -230,14 +230,14 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testModifyMethodWithNoSetterInstallsNotPersistedFacetButDoesNotInstallADisabledFacets() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
 
-        facetFactoryForModify.setServicesInjector(mockServicesInjector);
+        facetFactoryForModify.setServicesInjector(stubServicesInjector);
 
         final DisabledFacetOnPropertyInferredFactory disabledFacetOnPropertyInferredFactory = new DisabledFacetOnPropertyInferredFactory();
-        disabledFacetOnPropertyInferredFactory.setServicesInjector(mockServicesInjector);
+        disabledFacetOnPropertyInferredFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -267,10 +267,10 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
 
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
-        facetFactoryForModify.setServicesInjector(mockServicesInjector);
+        facetFactoryForModify.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -307,7 +307,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testClearFacet() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -336,7 +336,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testClearFacetViaSetterIfNoExplicitClearMethod() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -363,7 +363,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testChoicesFacetFoundAndMethodRemoved() {
         final PropertyChoicesFacetViaMethodFactory facetFactory = new PropertyChoicesFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -393,7 +393,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testAutoCompleteFacetFoundAndMethodRemoved() {
 
         final PropertyAutoCompleteFacetMethodFactory facetFactory = new PropertyAutoCompleteFacetMethodFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
 //        context.checking(new Expectations(){{
 //            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
@@ -434,7 +434,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDefaultFacetFoundAndMethodRemoved() {
         final PropertyDefaultFacetViaMethodFactory facetFactory = new PropertyDefaultFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -464,7 +464,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testValidateFacetFoundAndMethodRemoved() {
         final PropertyValidateFacetViaMethodFactory facetFactory = new PropertyValidateFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -494,7 +494,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDisableFacetFoundAndMethodRemoved() {
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -524,7 +524,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -554,7 +554,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testHiddenFacetFoundAndMethodRemoved() {
         final HideForContextFacetViaMethodFactory facetFactory = new HideForContextFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -584,7 +584,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testHiddenFacetWithNoArgFoundAndMethodRemoved() {
         final HideForContextFacetViaMethodFactory facetFactory = new HideForContextFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -614,7 +614,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testPropertyFoundOnSuperclass() {
         final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -640,15 +640,15 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
         final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final HideForContextFacetViaMethodFactory facetFactoryForHide = new HideForContextFacetViaMethodFactory();
 
-        facetFactoryForHide.setServicesInjector(mockServicesInjector);
+        facetFactoryForHide.setServicesInjector(stubServicesInjector);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
 
-        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
+        facetFactoryForDisable.setServicesInjector(stubServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -744,7 +744,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameFirstName");
@@ -763,7 +763,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionFirstName");
@@ -782,7 +782,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideFirstName");
@@ -798,7 +798,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideLastName");
@@ -813,7 +813,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectFirstName");
@@ -830,7 +830,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectLastName");
@@ -846,7 +846,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideFirstName", new Class[] { UserMemento.class });
@@ -866,7 +866,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableFirstName", new Class[] { UserMemento.class });

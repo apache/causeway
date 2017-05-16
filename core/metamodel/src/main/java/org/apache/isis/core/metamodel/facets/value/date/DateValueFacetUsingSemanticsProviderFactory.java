@@ -39,7 +39,7 @@ public class DateValueFacetUsingSemanticsProviderFactory extends ValueFacetUsing
         if (type != org.apache.isis.applib.value.Date.class) {
             return;
         }
-        addFacets(new DateValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new DateValueSemanticsProvider(holder, getContext()));
     }
 
 }

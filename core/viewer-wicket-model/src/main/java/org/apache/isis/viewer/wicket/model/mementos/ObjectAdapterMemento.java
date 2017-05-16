@@ -20,39 +20,51 @@
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class ObjectAdapterMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
     /**
      * Factory method
      */
     public static ObjectAdapterMemento createOrNull(final ObjectAdapter adapter) {
         if (adapter == null) {
+            return null;
+        }
+        final Object object = adapter.getObject();
+        if(object == null) {
             return null;
         }
         return new ObjectAdapterMemento(adapter);
@@ -65,8 +77,114 @@ public class ObjectAdapterMemento implements Serializable {
         return new ObjectAdapterMemento(rootOid);
     }
 
-    public Bookmark asBookmark() {
-        return bookmark;
+    public static ObjectAdapterMemento createForList(
+            final ArrayList<ObjectAdapterMemento> list,
+            final ObjectSpecId objectSpecId) {
+        return new ObjectAdapterMemento(list, objectSpecId);
+    }
+
+    public static ObjectAdapterMemento createForList(
+            final Collection<ObjectAdapterMemento> list,
+            final ObjectSpecId objectSpecId) {
+        return list != null ? createForList(Lists.newArrayList(list), objectSpecId) :  null;
+    }
+
+    enum Sort {
+        /**
+         * represents a single object
+         */
+        SCALAR {
+
+            @Override
+            public ObjectAdapter asAdapter(
+                    final ObjectAdapterMemento oam,
+                    final ConcurrencyChecking concurrencyChecking,
+                    final PersistenceSession persistenceSession,
+                    final SpecificationLoader specificationLoader) {
+                return oam.type.getAdapter(oam, concurrencyChecking, persistenceSession, specificationLoader);
+            }
+
+            @Override
+            public int hashCode(final ObjectAdapterMemento oam) {
+                return oam.type.hashCode(oam);
+            }
+
+            @Override
+            public boolean equals(final ObjectAdapterMemento oam, final Object other) {
+                if (!(other instanceof ObjectAdapterMemento)) {
+                    return false;
+                }
+                final ObjectAdapterMemento otherOam = (ObjectAdapterMemento) other;
+                if(otherOam.sort != SCALAR) {
+                    return false;
+                }
+                return oam.type.equals(oam, (ObjectAdapterMemento) other);
+            }
+
+            @Override
+            public String asString(final ObjectAdapterMemento oam) {
+                return oam.type.toString(oam);
+            }
+        },
+        /**
+         * represents a list of objects
+         */
+        VECTOR {
+
+            @Override
+            public ObjectAdapter asAdapter(
+                    final ObjectAdapterMemento oam,
+                    final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
+                    final SpecificationLoader specificationLoader) {
+                final List<Object> listOfPojos =
+                        Lists.newArrayList(
+                            FluentIterable.from(oam.list)
+                                           .transform(Functions.toPojo(persistenceSession, specificationLoader))
+                                           .toList()
+                        );
+                return ObjectAdapter.Functions.adapterForUsing(persistenceSession).apply(listOfPojos);
+            }
+
+            @Override
+            public int hashCode(final ObjectAdapterMemento oam) {
+                return oam.list.hashCode();
+            }
+
+            @Override
+            public boolean equals(final ObjectAdapterMemento oam, final Object other) {
+                if (!(other instanceof ObjectAdapterMemento)) {
+                    return false;
+                }
+                final ObjectAdapterMemento otherOam = (ObjectAdapterMemento) other;
+                if(otherOam.sort != VECTOR) {
+                    return false;
+                }
+                return oam.list.equals(otherOam.list);
+            }
+
+            @Override
+            public String asString(final ObjectAdapterMemento oam) {
+                return oam.list.toString();
+            }
+        };
+
+        void ensure(final Sort sort) {
+            if(this == sort) {
+                return;
+            }
+            throw new IllegalStateException("Memento is not for " + sort);
+        }
+
+        public abstract ObjectAdapter asAdapter(
+                final ObjectAdapterMemento oam,
+                final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader);
+
+        public abstract int hashCode(final ObjectAdapterMemento oam);
+
+        public abstract boolean equals(final ObjectAdapterMemento oam, final Object other);
+
+        public abstract String asString(final ObjectAdapterMemento oam);
     }
 
     enum Type {
@@ -77,9 +195,13 @@ public class ObjectAdapterMemento implements Serializable {
          */
         ENCODEABLE {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
+            ObjectAdapter recreateAdapter(
+                    final ObjectAdapterMemento oam,
+                    final ConcurrencyChecking concurrencyChecking,
+                    final PersistenceSession persistenceSession,
+                    final SpecificationLoader specificationLoader) {
                 ObjectSpecId objectSpecId = oam.objectSpecId;
-                ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(objectSpecId);
+                ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(objectSpecId, specificationLoader);
                 final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
                 return encodableFacet.fromEncodedString(oam.encodableValue);
             }
@@ -100,7 +222,9 @@ public class ObjectAdapterMemento implements Serializable {
             }
 
             @Override
-            public void resetVersion(ObjectAdapterMemento objectAdapterMemento) {
+            public void resetVersion(
+                    ObjectAdapterMemento objectAdapterMemento,
+                    final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
             }
         },
         /**
@@ -109,10 +233,13 @@ public class ObjectAdapterMemento implements Serializable {
          */
         PERSISTENT {
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
-                RootOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
+            ObjectAdapter recreateAdapter(
+                    final ObjectAdapterMemento oam,
+                    ConcurrencyChecking concurrencyChecking,
+                    final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
+                RootOid oid = OID_MARSHALLER.unmarshal(oam.persistentOidStr, RootOid.class);
                 try {
-                    final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid, concurrencyChecking);
+                    final ObjectAdapter adapter = persistenceSession.adapterFor(oid, concurrencyChecking);
                     return adapter;
                     
                 } finally {
@@ -120,17 +247,21 @@ public class ObjectAdapterMemento implements Serializable {
                     // with the correct version, even when there is a concurrency exception
                     // we copy this updated oid string into our memento so that, if we retry, 
                     // we will succeed second time around
-                    
-                    oam.persistentOidStr = oid.enString(getOidMarshaller());
+
+                    oam.persistentOidStr = oid.enString();
                 }
             }
 
             @Override
-            public void resetVersion(ObjectAdapterMemento oam) {
+            public void resetVersion(
+                    ObjectAdapterMemento oam,
+                    final PersistenceSession persistenceSession,
+                    final SpecificationLoader specificationLoader) {
                 // REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
-                final ObjectAdapter adapter = recreateAdapter(oam, ConcurrencyChecking.NO_CHECK);
+                final ObjectAdapter adapter = recreateAdapter(
+                        oam, ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
                 Oid oid = adapter.getOid();
-                oam.persistentOidStr = oid.enString(getOidMarshaller());
+                oam.persistentOidStr = oid.enString();
             }
 
             @Override
@@ -158,7 +289,10 @@ public class ObjectAdapterMemento implements Serializable {
              * {@link AdapterManager.ConcurrencyChecking} is ignored for transients.
              */
             @Override
-            ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
+            ObjectAdapter recreateAdapter(
+                    final ObjectAdapterMemento oam,
+                    final ConcurrencyChecking concurrencyChecking,
+                    final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
                 return oam.transientMemento.recreateObject();
             }
 
@@ -178,64 +312,105 @@ public class ObjectAdapterMemento implements Serializable {
             }
 
             @Override
-            public void resetVersion(ObjectAdapterMemento objectAdapterMemento) {
+            public void resetVersion(
+                    final ObjectAdapterMemento objectAdapterMemento,
+                    final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
             }
         };
 
-        public synchronized ObjectAdapter getAdapter(final ObjectAdapterMemento nom, ConcurrencyChecking concurrencyChecking) {
-            return recreateAdapter(nom, concurrencyChecking);
+        public ObjectAdapter getAdapter(
+                final ObjectAdapterMemento nom,
+                final ConcurrencyChecking concurrencyChecking,
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
+            return recreateAdapter(nom, concurrencyChecking, persistenceSession, specificationLoader);
         }
 
-        abstract ObjectAdapter recreateAdapter(ObjectAdapterMemento nom, ConcurrencyChecking concurrencyChecking);
+        abstract ObjectAdapter recreateAdapter(
+                final ObjectAdapterMemento nom,
+                final ConcurrencyChecking concurrencyChecking,
+                final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader);
 
         public abstract boolean equals(ObjectAdapterMemento oam, ObjectAdapterMemento other);
         public abstract int hashCode(ObjectAdapterMemento objectAdapterMemento);
         
         public abstract String toString(ObjectAdapterMemento adapterMemento);
 
-        public abstract void resetVersion(ObjectAdapterMemento objectAdapterMemento);
+        public abstract void resetVersion(
+                ObjectAdapterMemento objectAdapterMemento,
+                final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader);
     }
 
+
+
+    private final Sort sort;
+    private final ObjectSpecId objectSpecId;
+
+    /**
+     * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     */
     private Type type;
 
-    private final ObjectSpecId objectSpecId;
+    /**
+     * Populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
+     */
     private String titleHint;
 
     /**
-     * The current value, if {@link Type#ENCODEABLE}.
-     * 
+     * The current value, if {@link Type#ENCODEABLE}; will be <tt>null</tt> otherwise.
+     *
      * <p>
-     * Will be <tt>null</tt> otherwise.
+     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     private String encodableValue;
     
     /**
-     * The current value, if {@link Type#PERSISTENT}.
-     * 
+     * The current value, if {@link Type#PERSISTENT}, will be <tt>null</tt> otherwise.
+     *
      * <p>
-     * Will be <tt>null</tt> otherwise.
+     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     private String persistentOidStr;
 
     /**
-     * The current value, if {@link Type#PERSISTENT}.
+     * The current value, if {@link Type#PERSISTENT}, will be <tt>null</tt> otherwise.
      *
      * <p>
-     * Will be <tt>null</tt> otherwise.
+     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     private Bookmark bookmark;
 
     /**
-     * The current value, if {@link Type#TRANSIENT}.
-     * 
+     * Only populated for {@link ObjectAdapter#getObject() domain object}s that implement {@link HintStore.HintIdProvider}.
+     */
+    private String hintId;
+
+    /**
+     * The current value, if {@link Type#TRANSIENT}, will be <tt>null</tt> otherwise.
+     *
      * <p>
-     * Will be <tt>null</tt> otherwise.
+     * Also, populated only if {@link #getSort() sort} is {@link Sort#SCALAR scalar}
      */
     private Memento transientMemento;
 
+    /**
+     * opulated only if {@link #getSort() sort} is {@link Sort#VECTOR vector}
+     */
+    private ArrayList<ObjectAdapterMemento> list;
+
+    public ObjectAdapterMemento(final ArrayList<ObjectAdapterMemento> list, final ObjectSpecId objectSpecId) {
+        this.sort = Sort.VECTOR;
+        this.list = list;
+        this.objectSpecId = objectSpecId;
+    }
+
     private ObjectAdapterMemento(final RootOid rootOid) {
-        Ensure.ensureThatArg(rootOid, Oid.Matchers.isPersistent());
-        this.persistentOidStr = rootOid.enString(getOidMarshaller());
+
+        assert !rootOid.isTransient();
+
+        this.sort = Sort.SCALAR;
+
+        this.persistentOidStr = rootOid.enString();
         this.bookmark = rootOid.asBookmark();
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
@@ -245,6 +420,7 @@ public class ObjectAdapterMemento implements Serializable {
         if (adapter == null) {
             throw new IllegalArgumentException("adapter cannot be null");
         }
+        this.sort = Sort.SCALAR;
         final ObjectSpecification specification = adapter.getSpecification();
         objectSpecId = specification.getSpecId();
         init(adapter);
@@ -267,17 +443,46 @@ public class ObjectAdapterMemento implements Serializable {
             transientMemento = new Memento(adapter);
             type = Type.TRANSIENT;
             return;
-        } 
-        
-        persistentOidStr = oid.enString(getOidMarshaller());
+        }
+
+        persistentOidStr = oid.enString();
         bookmark = oid.asBookmark();
+        if(adapter.getObject() instanceof HintStore.HintIdProvider) {
+            HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getObject();
+            this.hintId = provider.hintId();
+        }
         type = Type.PERSISTENT;
     }
 
-    public void resetVersion() {
-        type.resetVersion(this);
+    public Sort getSort() {
+        return sort;
     }
-    
+
+    public ArrayList<ObjectAdapterMemento> getList() {
+        ensureVector();
+        return list;
+    }
+
+
+    public void resetVersion(
+            final PersistenceSession persistenceSession,
+            final SpecificationLoader specificationLoader) {
+        ensureScalar();
+        type.resetVersion(this, persistenceSession, specificationLoader);
+    }
+
+
+    public Bookmark asBookmark() {
+        ensureScalar();
+        return bookmark;
+    }
+
+    public Bookmark asHintingBookmark() {
+        Bookmark bookmark = asBookmark();
+        return hintId != null && bookmark != null
+                ? new HintStore.BookmarkWithHintId(bookmark, hintId)
+                : bookmark;
+    }
 
     /**
      * Lazily looks up {@link ObjectAdapter} if required.
@@ -289,19 +494,20 @@ public class ObjectAdapterMemento implements Serializable {
      * best to call once and then hold onto the value thereafter. Alternatively,
      * can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.
      */
-    public ObjectAdapter getObjectAdapter(ConcurrencyChecking concurrencyChecking) {
-        return type.getAdapter(this, concurrencyChecking);
+    public ObjectAdapter getObjectAdapter(
+            final ConcurrencyChecking concurrencyChecking,
+            final PersistenceSession persistenceSession,
+            final SpecificationLoader specificationLoader) {
+        return sort.asAdapter(this, concurrencyChecking, persistenceSession, specificationLoader);
     }
 
     /**
      * Updates the memento if the adapter's state has changed.
      * 
-     * <p>
-     * This is a no-op for
-     * 
      * @param adapter
      */
     public void setAdapter(final ObjectAdapter adapter) {
+        ensureScalar();
         init(adapter);
     }
 
@@ -313,16 +519,23 @@ public class ObjectAdapterMemento implements Serializable {
      * Analogous to {@link List#contains(Object)}, but does not perform
      * {@link ConcurrencyChecking concurrency checking} of the OID.
      */
-    public boolean containedIn(List<ObjectAdapterMemento> list) {
+    public boolean containedIn(
+            List<ObjectAdapterMemento> list,
+            final PersistenceSession persistenceSession,
+            final SpecificationLoader specificationLoader) {
+
+        ensureScalar();
+
         // REVIEW: heavy handed, ought to be possible to just compare the OIDs
         // ignoring the concurrency checking
-        final ObjectAdapter currAdapter = getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter currAdapter = getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession,
+                specificationLoader);
         for (ObjectAdapterMemento each : list) {
             if(each == null) {
                 continue;
             }
             final ObjectAdapter otherAdapter = each.getObjectAdapter(
-                    ConcurrencyChecking.NO_CHECK);
+                    ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
             if(currAdapter == otherAdapter) {
                 return true;
             }
@@ -332,12 +545,12 @@ public class ObjectAdapterMemento implements Serializable {
 
     @Override
     public int hashCode() {
-        return type.hashCode(this);
+        return sort.hashCode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof ObjectAdapterMemento) && type.equals(this, (ObjectAdapterMemento)obj);
+        return sort.equals(this, obj);
     }
 
 
@@ -347,7 +560,7 @@ public class ObjectAdapterMemento implements Serializable {
     }
 
     public String asString() {
-        return type.toString(this);
+        return sort.asString(this);
     }
 
 
@@ -371,20 +584,22 @@ public class ObjectAdapterMemento implements Serializable {
             };
         }
 
-        public static Function<OneToOneAssociation, PropertyMemento> fromProperty() {
+        public static Function<OneToOneAssociation, PropertyMemento> fromProperty(
+                final IsisSessionFactory isisSessionFactory) {
             return new Function<OneToOneAssociation, PropertyMemento>() {
                 @Override
                 public PropertyMemento apply(final OneToOneAssociation from) {
-                    return new PropertyMemento(from);
+                    return new PropertyMemento(from, isisSessionFactory);
                 }
             };
         }
 
-        public static Function<OneToManyAssociation, CollectionMemento> fromCollection() {
+        public static Function<OneToManyAssociation, CollectionMemento> fromCollection(
+                final IsisSessionFactory isisSessionFactory) {
             return new Function<OneToManyAssociation, CollectionMemento>() {
                 @Override
                 public CollectionMemento apply(final OneToManyAssociation from) {
-                    return new CollectionMemento(from);
+                    return new CollectionMemento(from, isisSessionFactory);
                 }
             };
         }
@@ -427,13 +642,15 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
 
-        public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(final
-        ConcurrencyChecking concurrencyChecking) {
+        public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(
+                final ConcurrencyChecking concurrencyChecking,
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
             return new Function<ObjectAdapterMemento, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final ObjectAdapterMemento from) {
                     try {
-                        return from.getObjectAdapter(concurrencyChecking);
+                        return from.getObjectAdapter(concurrencyChecking, persistenceSession, specificationLoader);
                     } catch (ObjectNotFoundException e) {
                         // this can happen if for example the object is not visible (due to the security tenanted facet)
                         return null;
@@ -453,21 +670,32 @@ public class ObjectAdapterMemento implements Serializable {
             };
         }
 
+        public static Function<? super ObjectAdapterMemento, Object> toPojo(
+                final PersistenceSession persistenceSession,
+                final SpecificationLoader specificationLoader) {
+            return new Function<ObjectAdapterMemento, Object>() {
+                @Nullable @Override public Object apply(@Nullable final ObjectAdapterMemento input) {
+                    if(input == null) {
+                        return null;
+                    }
+                    final ObjectAdapter objectAdapter = input
+                            .getObjectAdapter(ConcurrencyChecking.NO_CHECK, persistenceSession, specificationLoader);
+                    if(objectAdapter == null) {
+                        return null;
+                    }
+                    return objectAdapter.getObject();
+                }
+            };
+        }
     }
 
-    
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-
-    private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    private void ensureScalar() {
+        getSort().ensure(Sort.SCALAR);
     }
 
-	public static OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
-
+    private void ensureVector() {
+        getSort().ensure(Sort.VECTOR);
+    }
 
 
 

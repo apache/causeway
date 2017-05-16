@@ -19,13 +19,23 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+
 import com.google.common.collect.Maps;
+import com.google.common.eventbus.Subscribe;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.events.system.FixturesInstalledEvent;
+import org.apache.isis.applib.events.system.FixturesInstallingEvent;
+import org.apache.isis.applib.services.WithTransactionScope;
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -37,11 +47,15 @@ import org.apache.isis.applib.annotation.Programmatic;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
-public class QueryResultsCache {
+public class QueryResultsCache implements WithTransactionScope {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCache.class);
+
 
     public static class Key {
         private final Class<?> callingClass;
@@ -129,17 +143,35 @@ public class QueryResultsCache {
 
     @Programmatic
     public <T> T execute(final Callable<T> callable, final Class<?> callingClass, final String methodName, final Object... keys) {
+        if(control.isFixturesInstalling()) {
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         final Key cacheKey = new Key(callingClass, methodName, keys);
-        return execute(callable, cacheKey);
+        return executeWithCaching(callable, cacheKey);
     }
 
     @Programmatic
     @SuppressWarnings("unchecked")
     public <T> T execute(final Callable<T> callable, final Key cacheKey) {
+        if(control.isFixturesInstalling()) {
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return executeWithCaching(callable, cacheKey);
+    }
+
+    protected <T> T executeWithCaching(final Callable<T> callable, final Key cacheKey) {
         try {
             final Value<?> cacheValue = cache.get(cacheKey);
             logHitOrMiss(cacheKey, cacheValue);
-            if(cacheValue != null) { 
+            if(cacheValue != null) {
                 return (T) cacheValue.getResult();
             }
 
@@ -188,4 +220,54 @@ public class QueryResultsCache {
         String hitOrMiss = cacheValue != null ? "HIT" : "MISS";
         LOG.debug( hitOrMiss + ": " + cacheKey.toString());
     }
+
+    /**
+     * Not API: for framework to call at end of transaction, to clear out the cache.
+     *
+     * <p>
+     * (This service really ought to be considered
+     * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
+     * </p>
+     */
+    @Programmatic
+    @Override
+    public void resetForNextTransaction() {
+        cache.clear();
+    }
+
+    /**
+     * In separate class because {@link QueryResultsCache} itself is request-scoped
+     */
+    @DomainService(
+            nature = NatureOfService.DOMAIN,
+            menuOrder = "" + Integer.MAX_VALUE
+    )
+    public static class Control extends AbstractSubscriber {
+
+        @Programmatic
+        @Subscribe
+        @org.axonframework.eventhandling.annotation.EventHandler
+        public void on(FixturesInstallingEvent ev) {
+            fixturesInstalling = true;
+        }
+
+        @Programmatic
+        @Subscribe
+        @org.axonframework.eventhandling.annotation.EventHandler
+        public void on(FixturesInstalledEvent ev) {
+            fixturesInstalling = false;
+        }
+
+        private boolean fixturesInstalling;
+        @Programmatic
+        public boolean isFixturesInstalling() {
+            return fixturesInstalling;
+        }
+    }
+
+
+    @Inject
+    protected Control control;
+
+
 }

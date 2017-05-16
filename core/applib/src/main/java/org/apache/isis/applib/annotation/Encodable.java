@@ -37,9 +37,12 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
  *
  *
  * <p>
- *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
+ *     Note: This annotation is only incompletely recognized by the framework.
  * </p>
+ *
+ * @deprecated
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

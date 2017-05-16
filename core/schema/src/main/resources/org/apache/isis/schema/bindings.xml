@@ -25,7 +25,7 @@
                xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
 			  http://jaxb2-commons.dev.java.net/namespace-prefix http://java.net/projects/jaxb2-commons/sources/svn/content/namespace-prefix/trunk/src/main/resources/prefix-namespace-schema.xsd"
 >
-    <jaxb:bindings schemaLocation="chg/chg-1.0.xsd">
+    <jaxb:bindings schemaLocation="chg/chg-1.1.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
@@ -38,7 +38,7 @@
         </jaxb:bindings>
     </jaxb:bindings>
 
-    <jaxb:bindings schemaLocation="ixn/ixn-1.0.xsd">
+    <jaxb:bindings schemaLocation="ixn/ixn-1.1.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
@@ -50,8 +50,8 @@
             <namespace:prefix name="ixn" />
         </jaxb:bindings>
     </jaxb:bindings>
-    <!-- since ixn-1.0.xsd does an xs:import of common-1.0.xsd, we need to specify common's package bindings -->
-    <jaxb:bindings schemaLocation="common/common-1.0.xsd">
+    <!-- since ixn-1.1.xsd does an xs:import of common-1.1.xsd, we need to specify common's package bindings -->
+    <jaxb:bindings schemaLocation="common/common-1.1.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
@@ -63,8 +63,8 @@
             <namespace:prefix name="com" />
         </jaxb:bindings>
     </jaxb:bindings>
-    <!-- since ixn-1.0.xsd does an xs:import of cmd-1.0.xsd, we need to specify common's package bindings -->
-    <jaxb:bindings schemaLocation="cmd/cmd-1.0.xsd">
+    <!-- since ixn-1.1.xsd does an xs:import of cmd-1.2.xsd, we need to specify common's package bindings -->
+    <jaxb:bindings schemaLocation="cmd/cmd-1.2.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the

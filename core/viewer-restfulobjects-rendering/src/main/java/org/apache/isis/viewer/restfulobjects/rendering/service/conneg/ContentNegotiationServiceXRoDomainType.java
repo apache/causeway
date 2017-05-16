@@ -20,12 +20,10 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -50,10 +48,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conmap.ContentMap
  * </p>
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@DomainServiceLayout(
-        menuOrder = "1000" // in effect, is the relative priority (lower numbers have higher priority)
+        nature = NatureOfService.DOMAIN,
+        // in effect, is the relative priority (lower numbers have higher priority)
+        menuOrder = "" + (Integer.MAX_VALUE - 20)
 )
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 
@@ -166,9 +163,9 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-    @Inject
+    @javax.inject.Inject
     List<org.apache.isis.applib.conmap.ContentMappingService> contentMappingServices;
 
-    @Inject
+    @javax.inject.Inject
     List<ContentMappingService> legacyContentMappingServices;
 }

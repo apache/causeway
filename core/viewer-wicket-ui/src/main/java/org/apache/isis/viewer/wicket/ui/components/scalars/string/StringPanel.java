@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
@@ -30,22 +28,17 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
 public class StringPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_SCALAR_VALUE = "scalarValue";
 
     
     public StringPanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
+        super(id, scalarModel);
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("stringPanel");
+    protected String getScalarPanelType() {
+        return "stringPanel";
     }
 
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
-    
+
     
 }

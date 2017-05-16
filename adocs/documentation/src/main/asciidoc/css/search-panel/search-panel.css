@@ -1,0 +1,31 @@
+.searchLink {
+    font-size: larger;
+    color:#10B061;
+}
+
+.searchScore {
+    font-size: 12px;
+    color: #D5810A;
+ }
+
+.searchUrl {
+    font-size: 12px;
+    color: #D5810A;
+ }
+
+.searchDescription {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#search-panel {
+    display: none;
+    border: lightgray solid 1px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#search-panel.active {
+    display: inherit;
+}

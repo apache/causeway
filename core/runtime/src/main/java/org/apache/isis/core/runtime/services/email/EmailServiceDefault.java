@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.services.email;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -38,18 +39,25 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * A service that sends email notifications when specific events occur
  */
 @com.google.inject.Singleton // necessary because is registered in and injected by google guice
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class EmailServiceDefault implements EmailService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceDefault.class);
+
+    public static class EmailServiceException extends RuntimeException {
+        static final long serialVersionUID = 1L;
+        public EmailServiceException(final EmailException cause) {
+            super(cause);
+        }
+    }
 
     //region > constants
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
@@ -64,9 +72,19 @@ public class EmailServiceDefault implements EmailService {
     private static final String ISIS_SERVICE_EMAIL_TLS_ENABLED = "isis.service.email.tls.enabled";
     private static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
 
-    private String senderEmailAddress;
-    private String senderEmailPassword;
-    private Integer senderEmailPort;
+    private static final String ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL = "isis.service.email.throwExceptionOnFail";
+    private static final boolean ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT = true;
+
+    private static final String ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT = "isis.service.email.socketTimeout";
+    private static final int ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT_DEFAULT = 2000;
+
+    private static final String ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT = "isis.service.email.socketConnectionTimeout";
+    private static final int ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT = 2000;
+
+    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_TO = "isis.service.email.override.to";
+    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_CC = "isis.service.email.override.cc";
+    private static final String ISIS_SERVICE_EMAIL_OVERRIDE_BCC = "isis.service.email.override.bcc";
+
     //endregion
 
     //region > init
@@ -83,10 +101,6 @@ public class EmailServiceDefault implements EmailService {
             return;
         }
 
-        senderEmailAddress = getSenderEmailAddress();
-        senderEmailPassword = getSenderEmailPassword();
-        senderEmailPort = getSenderEmailPort();
-
         initialized = true;
 
         if(!isConfigured()) {
@@ -97,30 +111,57 @@ public class EmailServiceDefault implements EmailService {
     }
 
     protected String getSenderEmailAddress() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
     }
 
     protected String getSenderEmailPassword() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
     }
 
     protected String getSenderEmailHostName() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
+        return configuration.getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
     }
 
     protected Integer getSenderEmailPort() {
-        return getConfiguration().getInteger(ISIS_SERVICE_EMAIL_PORT, ISIS_SERVICE_EMAIL_PORT_DEFAULT);
+        return configuration.getInteger(ISIS_SERVICE_EMAIL_PORT, ISIS_SERVICE_EMAIL_PORT_DEFAULT);
     }
 
     protected Boolean getSenderEmailTlsEnabled() {
-        return getConfiguration().getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
+        return configuration.getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
     }
+
+    protected Boolean isThrowExceptionOnFail() {
+        return configuration.getBoolean(ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL, ISIS_SERVICE_EMAIL_THROW_EXCEPTION_ON_FAIL_DEFAULT);
+    }
+
+    protected int getSocketTimeout() {
+        return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_TIMEOUT_DEFAULT);
+    }
+
+    protected int getSocketConnectionTimeout() {
+        return configuration.getInteger(ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT, ISIS_SERVICE_EMAIL_SOCKET_CONNECTION_TIMEOUT_DEFAULT);
+    }
+
+    protected String getEmailOverrideTo() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_TO);
+    }
+
+    protected String getEmailOverrideCc() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_CC);
+    }
+
+    protected String getEmailOverrideBcc() {
+        return configuration.getString(ISIS_SERVICE_EMAIL_OVERRIDE_BCC);
+    }
+
     //endregion
 
     //region > isConfigured
 
     @Override
     public boolean isConfigured() {
+        final String senderEmailAddress = getSenderEmailAddress();
+        final String senderEmailPassword = getSenderEmailPassword();
         return !Strings.isNullOrEmpty(senderEmailAddress) && !Strings.isNullOrEmpty(senderEmailPassword);
     }
     //endregion
@@ -133,22 +174,33 @@ public class EmailServiceDefault implements EmailService {
 
         try {
             final ImageHtmlEmail email = new ImageHtmlEmail();
+
+            final String senderEmailAddress = getSenderEmailAddress();
+            final String senderEmailPassword = getSenderEmailPassword();
+            final String senderEmailHostName = getSenderEmailHostName();
+            final Integer senderEmailPort = getSenderEmailPort();
+            final Boolean senderEmailTlsEnabled = getSenderEmailTlsEnabled();
+            final int socketTimeout = getSocketTimeout();
+            final int socketConnectionTimeout = getSocketConnectionTimeout();
+
             email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
-            email.setHostName(getSenderEmailHostName());
+            email.setHostName(senderEmailHostName);
             email.setSmtpPort(senderEmailPort);
-            email.setStartTLSEnabled(getSenderEmailTlsEnabled());
+            email.setStartTLSEnabled(senderEmailTlsEnabled);
             email.setDataSourceResolver(new DataSourceClassPathResolver("/", true));
+
+            email.setSocketTimeout(socketTimeout);
+            email.setSocketConnectionTimeout(socketConnectionTimeout);
 
             final Properties properties = email.getMailSession().getProperties();
 
-            // TODO ISIS-987: check whether all these are required and extract as configuration settings
             properties.put("mail.smtps.auth", "true");
             properties.put("mail.debug", "true");
             properties.put("mail.smtps.port", "" + senderEmailPort);
             properties.put("mail.smtps.socketFactory.port", "" + senderEmailPort);
             properties.put("mail.smtps.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             properties.put("mail.smtps.socketFactory.fallback", "false");
-            properties.put("mail.smtp.starttls.enable", "" + getSenderEmailTlsEnabled());
+            properties.put("mail.smtp.starttls.enable", "" + senderEmailTlsEnabled);
 
             email.setFrom(senderEmailAddress);
 
@@ -161,20 +213,32 @@ public class EmailServiceDefault implements EmailService {
                 }
             }
 
-            if(notEmpty(toList)) {
-                email.addTo(toList.toArray(new String[toList.size()]));
+
+            final String overrideTo = getEmailOverrideTo();
+            final String overrideCc = getEmailOverrideCc();
+            final String overrideBcc = getEmailOverrideBcc();
+
+            final String[] toListElseOverride = actually(toList, overrideTo);
+            if(notEmpty(toListElseOverride)) {
+                email.addTo(toListElseOverride);
             }
-            if(notEmpty(ccList)) {
-                email.addCc(ccList.toArray(new String[ccList.size()]));
+            final String[] ccListElseOverride = actually(ccList, overrideCc);
+            if(notEmpty(ccListElseOverride)) {
+                email.addCc(ccListElseOverride);
             }
-            if(notEmpty(bccList)) {
-                email.addBcc(bccList.toArray(new String[bccList.size()]));
+            final String[] bccListElseOverride = actually(bccList, overrideBcc);
+            if(notEmpty(bccListElseOverride)) {
+                email.addBcc(bccListElseOverride);
             }
 
             email.send();
 
         } catch (EmailException ex) {
-            LOG.error("An error occurred while trying to send an email about user email verification", ex);
+            LOG.error("An error occurred while trying to send an email", ex);
+            final Boolean throwExceptionOnFail = isThrowExceptionOnFail();
+            if(throwExceptionOnFail) {
+                throw new EmailServiceException(ex);
+            }
             return false;
         }
 
@@ -182,16 +246,27 @@ public class EmailServiceDefault implements EmailService {
     }
     //endregion
 
+
     //region > helper methods
-    private boolean notEmpty(final List<String> toList) {
-        return toList != null && !toList.isEmpty();
+
+    static String[] actually(final List<String> original, final String overrideIfAny) {
+        final List<String> addresses = Strings.isNullOrEmpty(overrideIfAny)
+                ? original == null
+                    ? Collections.<String>emptyList()
+                    : original
+                : Collections.singletonList(overrideIfAny);
+        return addresses.toArray(new String[addresses.size()]);
+    }
+
+    static boolean notEmpty(final String[] addresses) {
+        return addresses != null && addresses.length > 0;
     }
     //endregion
 
-    //region > dependencies
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
+
     //endregion
+
+    @javax.inject.Inject
+    IsisConfiguration configuration;
 
 }

@@ -19,11 +19,14 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
@@ -42,7 +45,7 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         authorizor = new Authorizor() {
 
             @Override
-            public void init() {
+            public void init(final DeploymentCategory deploymentCategory) {
             }
 
             @Override
@@ -75,8 +78,8 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     // init, shutddown
     // /////////////////////////////////////////////////////////
 
-    public void init() {
-        authorizor.init();
+    public void init(final DeploymentCategory deploymentCategory) {
+        authorizor.init(deploymentCategory);
     }
 
     public void shutdown() {
@@ -90,6 +93,9 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     @Override
     public boolean isUsable(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
+            return true;
+        }
+        if(containsSudoSuperuserRole(session)) {
             return true;
         }
         if (authorizor.isUsableInAnyRole(identifier)) {
@@ -114,6 +120,9 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
             return true;
         }
 
+        if(containsSudoSuperuserRole(session)) {
+            return true;
+        }
         if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }
@@ -123,6 +132,11 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
             }
         }
         return false;
+    }
+
+    private static boolean containsSudoSuperuserRole(final AuthenticationSession session) {
+        final List<String> roles = session.getRoles();
+        return roles != null && roles.contains(SudoService.ACCESS_ALL_ROLE);
     }
 
     private boolean isPerspectiveMember(final Identifier identifier) {

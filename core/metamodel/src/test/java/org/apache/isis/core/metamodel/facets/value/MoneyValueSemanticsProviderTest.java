@@ -27,7 +27,6 @@ import java.util.Locale;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -46,7 +45,7 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     public void setUpObjects() throws Exception {
         Locale.setDefault(Locale.UK);
         holder = new FacetHolderImpl();
-        setValue(adapter = new MoneyValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new MoneyValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     private Money createMoney(final double amount, final String currency) {
@@ -75,30 +74,30 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Test
     public void testTitleOfWithPounds() {
         originalMoney = new Money(10.5, "gbp");
-        assertEquals(POUND_SYMBOL + "10.50", adapter.displayTitleOf(originalMoney, (Localization) null));
+        assertEquals(POUND_SYMBOL + "10.50", adapter.displayTitleOf(originalMoney));
     }
 
     @Test
     public void testTitleOfWithNonLocalCurrency() {
-        assertEquals("10.50 USD", adapter.displayTitleOf(createMoney(10.50, "usd"), (Localization) null));
+        assertEquals("10.50 USD", adapter.displayTitleOf(createMoney(10.50, "usd")));
     }
 
     @Test
     public void testTitleWithUnknownCurrency() {
-        assertEquals("10.50 UNK", adapter.displayTitleOf(createMoney(10.50, "UNK"), (Localization) null));
+        assertEquals("10.50 UNK", adapter.displayTitleOf(createMoney(10.50, "UNK")));
     }
 
     @Test
     public void testUserEntryWithCurrency() {
         final Money money = createMoney(10.5, "gbp");
-        final Money parsed = adapter.parseTextEntry(money, "22.45 USD", null);
+        final Money parsed = adapter.parseTextEntry(money, "22.45 USD");
         assertEquals(new Money(22.45, "usd"), parsed);
     }
 
     @Test
     public void testNewUserEntryUsesPreviousCurrency() {
         originalMoney = new Money(10.5, "gbp");
-        final Object parsed = adapter.parseTextEntry(originalMoney, "22.45", null);
+        final Object parsed = adapter.parseTextEntry(originalMoney, "22.45");
         assertEquals(new Money(22.45, "gbp"), parsed);
     }
 
@@ -106,28 +105,28 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     public void testReplacementEntryForDefaultCurrency() {
         // MoneyValueSemanticsProvider adapter = new
         // MoneyValueSemanticsProvider(new Money(10.3, "gbp"));
-        final Object parsed = adapter.parseTextEntry(originalMoney, POUND_SYMBOL + "80.90", null);
+        final Object parsed = adapter.parseTextEntry(originalMoney, POUND_SYMBOL + "80.90");
         assertEquals(new Money(80.90, "gbp"), parsed);
     }
 
     @Test
     public void testSpecifyingCurrencyInEntry() {
-        final Object parsed = adapter.parseTextEntry(originalMoney, "3021.50 EUr", null);
-        assertEquals("3,021.50 EUR", adapter.displayTitleOf(parsed, (Localization) null));
+        final Object parsed = adapter.parseTextEntry(originalMoney, "3021.50 EUr");
+        assertEquals("3,021.50 EUR", adapter.displayTitleOf(parsed));
     }
 
     @Test
     public void testUsingLocalCurrencySymbol() {
         // MoneyValueSemanticsProvider adapter = new
         // MoneyValueSemanticsProvider(new Money(0L, "gbp"));
-        final Object parsed = adapter.parseTextEntry(originalMoney, POUND_SYMBOL + "3021.50", null);
-        assertEquals(POUND_SYMBOL + "3,021.50", adapter.titleString(parsed, null));
+        final Object parsed = adapter.parseTextEntry(originalMoney, POUND_SYMBOL + "3021.50");
+        assertEquals(POUND_SYMBOL + "3,021.50", adapter.titleString(parsed));
     }
 
     @Test
     public void testInvalidCurrencyCodeIsRejected() throws Exception {
         try {
-            adapter.parseTextEntry(originalMoney, "3021.50  XYZ", null);
+            adapter.parseTextEntry(originalMoney, "3021.50  XYZ");
             fail("invalid code accepted " + adapter);
         } catch (final TextEntryParseException expected) {
         }
@@ -136,7 +135,7 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Test
     public void testInvalidCurrencySymbolIsRejected() throws Exception {
         try {
-            adapter.parseTextEntry(originalMoney, EURO_SYMBOL + "3021.50", null);
+            adapter.parseTextEntry(originalMoney, EURO_SYMBOL + "3021.50");
             fail("invalid code accepted " + adapter);
         } catch (final TextEntryParseException expected) {
         }
@@ -144,15 +143,15 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testNewValueDefaultsToLocalCurrency() throws Exception {
-        final Money parsed = adapter.parseTextEntry(originalMoney, "3021.50", null);
-        assertEquals(POUND_SYMBOL + "3,021.50", adapter.displayTitleOf(parsed, (Localization) null));
+        final Money parsed = adapter.parseTextEntry(originalMoney, "3021.50");
+        assertEquals(POUND_SYMBOL + "3,021.50", adapter.displayTitleOf(parsed));
     }
 
     @Test
     public void testUnrelatedCurrencySymbolIsRejected() throws Exception {
         final Money money = createMoney(1, "eur");
         try {
-            adapter.parseTextEntry(money, "$3021.50", null);
+            adapter.parseTextEntry(money, "$3021.50");
             fail("invalid code accepted " + adapter);
         } catch (final TextEntryParseException expected) {
         }

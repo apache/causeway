@@ -39,7 +39,8 @@ public class ValueModel extends ModelAbstract<ObjectAdapter> {
 
     @Override
     protected ObjectAdapter load() {
-        return adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+        return adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
+                getSpecificationLoader());
     }
 
     // //////////////////////////////////////

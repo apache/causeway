@@ -20,14 +20,16 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -43,7 +45,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     protected final JsonRepresentation representation;
     private final Map<String,String> mediaTypeParams = Maps.newLinkedHashMap();
 
-    private final DeploymentType deploymentType;
+    private final DeploymentCategory deploymentCategory;
     private final InteractionInitiatedBy interactionInitiatedBy;
 
     protected boolean includesSelf;
@@ -58,15 +60,15 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         this.representationType = representationType;
         this.representation = representation;
 
-        this.deploymentType = determineDeploymentTypeFrom(this.rendererContext);
+        this.deploymentCategory = determineDeploymentCategoryFrom(this.rendererContext);
         this.interactionInitiatedBy = determineInteractionInitiatedByFrom(this.rendererContext);
     }
 
-    private static DeploymentType determineDeploymentTypeFrom(final RendererContext rendererContext) {
+    private static DeploymentCategory determineDeploymentCategoryFrom(final RendererContext rendererContext) {
         if(rendererContext instanceof RendererContext3) {
-            return ((RendererContext3) rendererContext).getDeploymentType();
+            return ((RendererContext3) rendererContext).getDeploymentCategory();
         } else {
-            return DeploymentType.SERVER; // fallback
+            return DeploymentCategory.PRODUCTION; // fallback
         }
     }
 
@@ -80,8 +82,8 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         }
     }
 
-    protected DeploymentType getDeploymentType() {
-        return deploymentType;
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
     }
 
     protected InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -222,7 +224,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected List<ObjectAdapter> getServiceAdapters() {
-        return IsisContext.getPersistenceSession().getServices();
+        return rendererContext.getPersistenceSession().getServices();
     }
 
 }

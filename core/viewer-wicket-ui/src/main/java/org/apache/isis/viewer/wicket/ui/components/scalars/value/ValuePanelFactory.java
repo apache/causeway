@@ -48,7 +48,10 @@ public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
         if(valueFacet == null) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        return appliesIf(!scalarModel.hasChoices());
+        final boolean hasChoices = scalarModel.hasChoices();
+        // autoComplete not supported on values, only references
+        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
+        return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );
     }
 
     @Override

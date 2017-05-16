@@ -63,7 +63,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
 
         final AuthenticationRequestPassword request = new AuthenticationRequestPassword(user, password);
         final AuthenticationSession authSession =
-                getAuthenticationManager().authenticate(request);
+                authenticationManagerFrom(httpServletRequest).authenticate(request);
         return authSession;
     }
 
@@ -82,13 +82,5 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
         return new String(new Base64().decode(encodedDigest.getBytes()));
     }
 
-
-    // //////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////
-
-    protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
-    }
 
 }

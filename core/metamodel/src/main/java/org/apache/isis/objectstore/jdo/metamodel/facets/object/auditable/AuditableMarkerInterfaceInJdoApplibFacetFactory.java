@@ -22,6 +22,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.objectstore.jdo.applib.Auditable;
 
 /**
@@ -29,7 +30,7 @@ import org.apache.isis.objectstore.jdo.applib.Auditable;
  * {@link Auditable} marker interface.
  */
 @Deprecated
-public class AuditableMarkerInterfaceInJdoApplibFacetFactory extends FacetFactoryAbstract {
+public class AuditableMarkerInterfaceInJdoApplibFacetFactory extends FacetFactoryAbstract implements DeprecatedMarker {
 
     public AuditableMarkerInterfaceInJdoApplibFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

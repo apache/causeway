@@ -22,7 +22,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
 import com.google.common.collect.Lists;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -42,9 +44,11 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -67,40 +71,33 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     private static final Logger LOG = LoggerFactory.getLogger(ShiroAuthenticatorOrAuthorizor.class);
 
+    private static final String ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY = "isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated";
+    private static final boolean ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT = false;
+
+    //region > constructor and fields
     private final IsisConfiguration configuration;
+    private final boolean autoLogout;
 
-
-    // //////////////////////////////////////////////////////
-    // constructor
-    // //////////////////////////////////////////////////////
+    private DeploymentCategory deploymentCategory;
 
     public ShiroAuthenticatorOrAuthorizor(final IsisConfiguration configuration) {
         this.configuration = configuration;
+        autoLogout = configuration.getBoolean(
+                ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY,
+                ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT);
     }
 
-    // //////////////////////////////////////////////////////
-    // init, shutdown
-    // //////////////////////////////////////////////////////
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    //endregion
+
+    //region > init, shutdown
 
     @Override
-    public void init() {
-    }
-
-    /**
-     * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
-     * (if shiro is configured for both components).
-     */
-    protected synchronized RealmSecurityManager getSecurityManager() {
-        SecurityManager securityManager;
-        try {
-            securityManager = SecurityUtils.getSecurityManager();
-        } catch(UnavailableSecurityManagerException ex) {
-            return null;
-        }
-        if(!(securityManager instanceof RealmSecurityManager)) {
-            return null;
-        }
-        return (RealmSecurityManager) securityManager;
+    public void init(final DeploymentCategory deploymentCategory) {
+        this.deploymentCategory = deploymentCategory;
     }
 
 
@@ -108,9 +105,14 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     public void shutdown() {
     }
 
-    // //////////////////////////////////////////////////////
-    // Authenticator API
-    // //////////////////////////////////////////////////////
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    //endregion
+
+    //region > Authenticator API
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -130,41 +132,60 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         
         final Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
-            // TODO: verify the code passed in that this session is still alive?
-            
-            // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and
-            // just retrieve it?
-            
-            // for now, just log them out.
-            currentSubject.logout();
+
+            if(autoLogout) {
+                // this is preserving behaviour pre 1.13.0.  However, there is a suspicion that this might
+                // produce a race condition.  In 1.13.0 the default is to simply reuse the session.
+                //
+                // See this thread for further info: http://markmail.org/message/hsjljwgkhhrzxbrm
+                currentSubject.logout();
+            } else {
+
+                // TODO: should we verify the code passed in that this session is still alive?
+                // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and just retrieve it?
+
+                return authenticationSessionFor(request, code, token, currentSubject);
+            }
         }
         try {
             currentSubject.login(token);
         } catch ( UnknownAccountException uae ) { 
-            LOG.debug("Unable to authenticate", uae);
+            LOG.info("Unknown account: {}", request.getName());
             return null;
         } catch ( IncorrectCredentialsException ice ) {
-            LOG.debug("Unable to authenticate", ice);
+            LOG.info("Incorrect credentials for user: {}", request.getName());
             return null;
         } catch ( CredentialsException ice ) {
-            LOG.debug("Unable to authenticate", ice);
+            LOG.error("Unable to authenticate", ice);
             return null;
         } catch ( LockedAccountException lae ) {
-            LOG.info("Unable to authenticate", lae);
+            LOG.info("Locked account for user: {}", request.getName());
             return null;
         } catch ( ExcessiveAttemptsException eae ) { 
-            LOG.info("Unable to authenticate", eae);
+            LOG.info("Excessive attempts for user: {}", request.getName());
             return null;
         } catch ( AuthenticationException ae ) {
             LOG.error("Unable to authenticate", ae);
             return null;
         }
-        
+
+        return authenticationSessionFor(request, code, token, currentSubject);
+    }
+
+    @Override
+    public void logout(final AuthenticationSession session) {
+        Subject currentSubject = SecurityUtils.getSubject();
+        if(currentSubject.isAuthenticated()) {
+            currentSubject.logout();
+        }
+    }
+
+    AuthenticationSession authenticationSessionFor(AuthenticationRequest request, String code, AuthenticationToken token, Subject currentSubject) {
         List<String> roles = getRoles(currentSubject, token);
         // copy over any roles passed in
-        // (this is used by the Wicket viewer, for example).s
+        // (this is used by the Wicket viewer, for example).
         roles.addAll(request.getRoles());
-        
+
         return new SimpleSession(request.getName(), roles, code);
     }
 
@@ -212,19 +233,9 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         
         return new UsernamePasswordToken(username, password);
     }
+    //endregion
 
-
-    /**
-     * UNUSED (see [ISIS-292]).
-     */
-    @Override
-    public boolean isValid(AuthenticationRequest request) {
-        return false;
-    }
-
-    // //////////////////////////////////////////////////////
-    // Authorizor API
-    // //////////////////////////////////////////////////////
+    //region > Authorizor API
 
     @Override
     public boolean isVisibleInAnyRole(Identifier identifier) {
@@ -287,15 +298,28 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     public boolean isUsableInRole(String role, Identifier identifier) {
         return false;
     }
-    
-    // //////////////////////////////////////////////////////
-    // Injected (via constructor)
-    // //////////////////////////////////////////////////////
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
+    //endregion
+
+    //region > Injected (via Shiro service locator)
+
+    /**
+     * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
+     * (if shiro is configured for both components).
+     */
+    protected RealmSecurityManager getSecurityManager() {
+        SecurityManager securityManager;
+        try {
+            securityManager = SecurityUtils.getSecurityManager();
+        } catch(UnavailableSecurityManagerException ex) {
+            return null;
+        }
+        if(!(securityManager instanceof RealmSecurityManager)) {
+            return null;
+        }
+        return (RealmSecurityManager) securityManager;
     }
 
-
+    //endregion
 
 }

@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -49,7 +48,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         super.setUp();
 
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override
@@ -189,12 +188,14 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
 
         @Override
-        public MyValueSemanticsProviderThatIsAParser parseTextEntry(final Object context, final String entry, Localization localization) {
+        public MyValueSemanticsProviderThatIsAParser parseTextEntry(
+                final Object context,
+                final String entry) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object, final Localization localization) {
+        public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object) {
             return null;
         }
 
@@ -398,12 +399,14 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
 
         @Override
-        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(final Object context, final String entry, Localization localization) {
+        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
+                final Object context,
+                final String entry) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object, final Localization localization) {
+        public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object) {
             return null;
         }
 
@@ -449,12 +452,14 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         }
 
         @Override
-        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(final Object context, final String entry, Localization localization) {
+        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
+                final Object context,
+                final String entry) {
             return null;
         }
 
         @Override
-        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object, final Localization localization) {
+        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object) {
             return null;
         }
 

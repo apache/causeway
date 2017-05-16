@@ -175,19 +175,20 @@ public class RestfulResponse<T> {
             if (httpStatusCode != null) {
                 return httpStatusCode;
             }
-            return syncStatusFor(statusCode);
+            return statusForSynchronized(statusCode);
         }
 
         public final static HttpStatusCode statusFor(final Status status) {
             return statii.get(status);
         }
 
-        private final static synchronized HttpStatusCode syncStatusFor(final int statusCode) {
+        private final static synchronized HttpStatusCode statusForSynchronized(final int statusCode) {
             HttpStatusCode httpStatusCode = statusCodes.get(statusCode);
-            if (httpStatusCode == null) {
-                httpStatusCode = new HttpStatusCode(statusCode, null);
-                statusCodes.put(statusCode, httpStatusCode);
+            if (httpStatusCode != null) {
+                return httpStatusCode;
             }
+            httpStatusCode = new HttpStatusCode(statusCode, null);
+            statusCodes.put(statusCode, httpStatusCode);
             return httpStatusCode;
         }
 

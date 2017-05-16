@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -52,7 +50,7 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.wrapper.handlers.ProxyContextHandler;
@@ -69,7 +67,10 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  * <tt>o.a.i.core:isis-core-wrapper</tt> on the classpath, the service is automatically registered; no further
  * configuration is required.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class WrapperFactoryDefault implements WrapperFactory {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
@@ -241,16 +242,18 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final ExecutionMode wrapperMode = wrapperObject.__isis_executionMode();
             if(wrapperMode != mode) {
                 final Object underlyingDomainObject = wrapperObject.__isis_wrapped();
-                return (T)createProxy(underlyingDomainObject, mode);
+                return (T)createProxy(underlyingDomainObject, mode, isisSessionFactory);
             }
             return domainObject;
         }
-        return createProxy(domainObject, mode);
+        return createProxy(domainObject, mode, isisSessionFactory);
     }
 
-    protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLoader,
-                persistenceSessionServiceInternal);
+    protected <T> T createProxy(
+            final T domainObject,
+            final ExecutionMode mode,
+            final IsisSessionFactory isisSessionFactory) {
+        return proxyContextHandler.proxy(domainObject, mode, isisSessionFactory);
     }
 
     @Override
@@ -298,13 +301,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     AuthenticationSessionProvider authenticationSessionProvider;
 
-    @Inject
-    SpecificationLoader specificationLoader;
+//    @javax.inject.Inject
+//    SpecificationLoader specificationLoader;
 
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
 }

@@ -21,23 +21,30 @@ import java.math.RoundingMode;
 import java.sql.Timestamp;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
 
+/**
+ * This class is deprecated with no replacement.
+ *
+ * @deprecated - with no replacement
+ */
+@Deprecated
 public class Util {
 
     private Util() {}
 
+    @Deprecated
     public static Bookmark bookmarkFor(final String str) {
         return str != null? new Bookmark(str): null;
     }
 
+    @Deprecated
     public static String asString(Bookmark bookmark) {
         return bookmark != null? bookmark.toString(): null;
     }
 
+    @Deprecated
     public static Object lookupBookmark(Bookmark bookmark, final BookmarkService bookmarkService, DomainObjectContainer container) {
         try {
             return bookmarkService != null
@@ -52,11 +59,13 @@ public class Util {
         }
     }
 
-    
+
+    @Deprecated
     public static String abbreviated(final String str, final int maxLength) {
         return str != null? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "..."): null;
     }
 
+    @Deprecated
     public static BigDecimal durationBetween(Timestamp startedAt, Timestamp completedAt) {
         if(completedAt == null) {
             return null;

@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -40,7 +41,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * @deprecated
  */
 @Deprecated
-public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, DeprecatedMarker {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
 
@@ -67,7 +68,7 @@ public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstrac
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        validator.setConfiguration((IsisConfigurationDefault)servicesInjector.lookupService(ConfigurationServiceInternal.class));
+        validator.setConfiguration(servicesInjector.lookupService(ConfigurationServiceInternal.class));
     }
 
 

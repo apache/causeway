@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
@@ -32,63 +33,43 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
-
 
     public static Class<? extends Facet> type() {
         return AutoCompleteFacet.class;
     }
 
-    private final Class<?> repositoryClass;
-    private final String actionName;
-
     private final DeploymentCategory deploymentCategory;
-    private final SpecificationLoader specificationLoader;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
+    private final Class<?> repositoryClass;
+    private final Method repositoryMethod;
 
     /**
      * lazily populated
      */
     private Integer minLength;
 
-    /**
-     * cached once searched for
-     */
-    private ObjectAction repositoryAction;
-    private boolean cachedRepositoryAction = false;
-    
-    private boolean cachedRepositoryObject = false;
-    private Object repository;
-
     public AutoCompleteFacetAbstract(
             final FacetHolder holder,
             final Class<?> repositoryClass,
-            final String actionName,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
+            final Method repositoryMethod,
+            final ServicesInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
+
         this.repositoryClass = repositoryClass;
-        this.actionName = actionName;
-        this.deploymentCategory = deploymentCategory;
-        this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
+        this.repositoryMethod = repositoryMethod;
+
+        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
+        this.adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
-        this.authenticationSessionProvider = servicesInjector.lookupService(AuthenticationSessionProvider.class);
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
     }
 
     @Override
@@ -96,15 +77,23 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        cacheRepositoryAndRepositoryActionIfRequired();
-        if(repositoryAction == null || repository == null) {
-            return Collections.emptyList();
-        }
-        
-        final ObjectAdapter repositoryAdapter = adapterManager.getAdapterFor(repository);
-        final ObjectAdapter searchAdapter = adapterManager.adapterFor(search);
-        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, null, new ObjectAdapter[] { searchAdapter},
-                interactionInitiatedBy);
+        final ObjectAdapter resultAdapter =
+                getPublishingServiceInternal().withPublishingSuppressed(new PublishingServiceInternal.Block<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter exec() {
+                final Object list = invoke();
+                return adapterManager.adapterFor(list);
+            }
+
+            private Object invoke()  {
+                try {
+                    return repositoryMethod.invoke(getRepository(), search);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    return Collections.emptyList();
+                }
+            }
+        });
+
         // check a collection was returned
         if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {
             return Collections.emptyList();
@@ -113,73 +102,24 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
         final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
 
-        return ObjectAdapter.Util.visibleAdapters(
-                        adapterList, interactionInitiatedBy);
+        return ObjectAdapter.Util.visibleAdapters(adapterList, interactionInitiatedBy);
     }
 
-
-    private void cacheRepositoryAndRepositoryActionIfRequired() {
-        if(!cachedRepositoryAction) {
-            cacheRepositoryAction();
-        }
-        if(!cachedRepositoryObject) {
-            cacheRepositoryObject();
-        }
+    private Object getRepository() {
+        return servicesInjector.lookupService(repositoryClass);
     }
+
+    private PublishingServiceInternal getPublishingServiceInternal() {
+        return servicesInjector.lookupService(PublishingServiceInternal.class);
+    }
+
 
     @Override
     public int getMinLength() {
         if(minLength == null) {
-            final Method method = findMethod();
-            minLength = MinLengthUtil.determineMinLength(method);
+            minLength = MinLengthUtil.determineMinLength(repositoryMethod);
         }
         return minLength;
-    }
-
-    private Method findMethod() {
-        if(!cachedRepositoryAction) {
-            cacheRepositoryAction();
-        }
-
-        final ActionInvocationFacet invocationFacet = repositoryAction.getFacet(ActionInvocationFacet.class);
-        if(invocationFacet instanceof ImperativeFacet) {
-            return findMethod((ImperativeFacet) invocationFacet);
-        }
-        final Facet underlyingFacet = invocationFacet.getUnderlyingFacet();
-        if(underlyingFacet instanceof ImperativeFacet) {
-            return findMethod((ImperativeFacet) underlyingFacet);
-        }
-        return null;
-    }
-
-    private Method findMethod(final ImperativeFacet invocationFacet) {
-        final ImperativeFacet facet = invocationFacet;
-        final List<Method> methods = facet.getMethods();
-        for (Method method : methods) {
-            final ImperativeFacet.Intent intent = facet.getIntent(method);
-            if(intent == ImperativeFacet.Intent.EXECUTE) {
-                return method;
-            }
-        }
-        return null;
-    }
-
-    private void cacheRepositoryAction() {
-        try {
-            final ObjectSpecification repositorySpec = specificationLoader.loadSpecification(repositoryClass);
-            final List<ObjectAction> objectActions =
-                    repositorySpec.getObjectActions(
-                            ActionType.USER, Contributed.EXCLUDED, ObjectAction.Filters.withId(actionName));
-
-            repositoryAction = objectActions.size() == 1? objectActions.get(0): null;
-        } finally {
-            cachedRepositoryAction = true;
-        }
-    }
-
-    private void cacheRepositoryObject() {
-        repository = servicesInjector.lookupService(repositoryClass);
-        cachedRepositoryObject = true;
     }
 
     protected DeploymentCategory getDeploymentCategory() {

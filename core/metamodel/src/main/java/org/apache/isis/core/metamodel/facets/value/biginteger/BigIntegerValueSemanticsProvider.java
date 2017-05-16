@@ -25,13 +25,12 @@ import java.text.NumberFormat;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigInteger> implements BigIntegerValueFacet {
 
@@ -50,12 +49,12 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
      * {@link EncoderDecoder}.
      */
     public BigIntegerValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public BigIntegerValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+    public BigIntegerValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
 
-        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
         format = determineNumberFormat("value.format.int");
     }
 
@@ -73,7 +72,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return titleString(format, object);
     }
 

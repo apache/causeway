@@ -23,15 +23,15 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -44,9 +44,9 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
     }
 
     @SuppressWarnings("unchecked")
-    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.timestamp");
+    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
+        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, context);
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.timestamp");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {
@@ -75,21 +75,29 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
     }
 
     @Override
-    protected DateFormat format(final Localization localization) {
-        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, localization.getLocale());
-        dateFormat.setTimeZone(localization.getTimeZone());
+    protected DateFormat format() {
+
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, locale);
+        dateFormat.setTimeZone(timeZone);
+
         return dateFormat;
     }
 
-    protected List<DateFormat> formatsToTry(Localization localization) {
-        List<DateFormat> formats = new ArrayList<DateFormat>();
+    protected List<DateFormat> formatsToTry() {
+        final List<DateFormat> formats = new ArrayList<DateFormat>();
 
-        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, localization.getLocale()));
-        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, localization.getLocale()));
+        final Locale locale = Locale.getDefault();
+        final TimeZone timeZone = TimeZone.getDefault();
+
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, locale));
+        formats.add(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG, locale));
         formats.add(createDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
 
-        for (DateFormat format : formats) {
-            format.setTimeZone(localization.getTimeZone());
+        for (final DateFormat format : formats) {
+            format.setTimeZone(timeZone);
         }
 
         return formats;

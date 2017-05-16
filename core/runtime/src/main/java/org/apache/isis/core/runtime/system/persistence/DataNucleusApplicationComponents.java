@@ -40,7 +40,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.objectstore.jdo.datanucleus.CreateSchemaObjectFromClassMetadata;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
@@ -81,19 +81,22 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     private final Set<String> persistableClassNameSet;
     private final IsisConfiguration jdoObjectstoreConfig;
+    private final SpecificationLoader specificationLoader;
     private final Map<String, String> datanucleusProps;
     
     private Map<String, JdoNamedQuery> namedQueryByName;
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents(
-            final IsisConfiguration jdoObjectstoreConfig,
+            final IsisConfiguration configuration,
+            final SpecificationLoader specificationLoader,
             final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
-    
+        this.specificationLoader = specificationLoader;
+
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
-        this.jdoObjectstoreConfig = jdoObjectstoreConfig;
+        this.jdoObjectstoreConfig = configuration;
 
         initialize();
         
@@ -229,10 +232,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return properties;
     }
 
-    private static Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
+    private Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
-            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(persistableClassName);
+            final ObjectSpecification spec = specificationLoader.loadSpecification(persistableClassName);
             final JdoQueryFacet facet = spec.getFacet(JdoQueryFacet.class);
             if (facet == null) {
                 continue;
@@ -243,29 +246,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         }
         return namedQueryByName;
     }
-    
+
     public PersistenceManagerFactory getPersistenceManagerFactory() {
         return persistenceManagerFactory;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    public void init() {
-    }
-
-    public void shutdown() {
-    }
-
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    public JdoNamedQuery getNamedQuery(String queryName) {
-        return namedQueryByName.get(queryName);
     }
 
     

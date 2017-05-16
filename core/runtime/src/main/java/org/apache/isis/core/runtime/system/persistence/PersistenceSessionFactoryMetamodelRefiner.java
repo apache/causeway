@@ -41,25 +41,25 @@ public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefin
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
         programmingModel.addFactory(
-                JdoPersistenceCapableAnnotationFacetFactory.class, ProgrammingModel.Position.BEGINNING);
-        programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
+                new JdoPersistenceCapableAnnotationFacetFactory(), ProgrammingModel.Position.BEGINNING);
+        programmingModel.addFactory(new JdoDatastoreIdentityAnnotationFacetFactory());
 
-        programmingModel.addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoNotPersistentAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoVersionAnnotationFacetFactory.class);
+        programmingModel.addFactory(new JdoPrimaryKeyAnnotationFacetFactory());
+        programmingModel.addFactory(new JdoNotPersistentAnnotationFacetFactory());
+        programmingModel.addFactory(new JdoDiscriminatorAnnotationFacetFactory());
+        programmingModel.addFactory(new JdoVersionAnnotationFacetFactory());
 
-        programmingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
+        programmingModel.addFactory(new JdoQueryAnnotationFacetFactory());
 
-        programmingModel.addFactory(BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class);
-        programmingModel.addFactory(MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class);
+        programmingModel.addFactory(new BigDecimalDerivedFromJdoColumnAnnotationFacetFactory());
+        programmingModel.addFactory(new MaxLengthDerivedFromJdoColumnAnnotationFacetFactory());
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
-        programmingModel.addFactory(MandatoryFromJdoColumnAnnotationFacetFactory.class);
+        programmingModel.addFactory(new MandatoryFromJdoColumnAnnotationFacetFactory());
 
-        programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
-        programmingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);
+        programmingModel.addFactory(new AuditableAnnotationInJdoApplibFacetFactory());
+        programmingModel.addFactory(new AuditableMarkerInterfaceInJdoApplibFacetFactory());
     }
 
     @Override

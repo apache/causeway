@@ -1,0 +1,66 @@
+[[_ugodn_configuring_properties]]
+= Configuration Properties
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+These configuration properties are typically stored in `WEB-INF/persistor_datanucleus.properties`.  However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
+
+== Configuration Properties for Apache Isis itself
+
+
+.JDO/DataNucleus Objectstore Configuration Properties
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.persistor.` +
+`datanucleus.` +
+`classMetadataLoadedListener`
+|`FQCN`
+|The default (`o.a.i.os.jdo.dn.CreateSchemaObjectFromClassMetadata`) creates a DB schema object
+
+
+|`isis.persistor.datanucleus.` +
+`RegisterEntities.packagePrefix`
+|fully qualified package names (CSV)
+|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_eagerly-registering-entities[discussion below].
+
+This property is IGNORED if the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
+
+
+|`isis.persistor.datanucleus.` +
+`PublishingService.serializedForm`
+| zipped
+|
+
+|===
+
+
+
+== Configuration Properties passed through directly to DataNucleus.
+
+.JDO/DataNucleus Objectstore Configuration Properties
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.persistor.datanucleus.impl.*`
+|
+| Passed through directly to Datanucleus (with `isis.persistor.datanucleus.impl` prefix stripped)
+
+|`isis.persistor.datanucleus.impl.` +
+`datanucleus.persistenceByReachabilityAtCommit`
+|`false`
+|We recommend this setting is disabled.  +
+Further xref:../ugodn/ugodn.adoc#_ugodn_configuring_disabling-persistence-by-reachability[discussion below].
+
+|===
+

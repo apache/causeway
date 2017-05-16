@@ -23,13 +23,12 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>isis-core-wrapper</artifactId>
 
-	<name>Isis Wrapper Service</name>
-	<description>Isis Wrapper Service</description>
+	<name>Apache Isis Wrapper Service</name>
 
 	<dependencies>
         <dependency>

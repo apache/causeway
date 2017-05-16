@@ -1,11 +1,5 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<%#encoding:UTF-8%><!DOCTYPE html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <title><%= document.name %></title>
-
     <!--
         Licensed to the Apache Software Foundation (ASF) under one
         or more contributor license agreements.  See the NOTICE file
@@ -25,664 +19,249 @@
         under the License.
     -->
 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- No caching headers -->
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="expires" content="-1" />
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="expires" content="-1"/>
 
+    <title><%= document.name %></title>
 
-    <!-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
-    <link href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css" rel="stylesheet" />
-    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
-    <link href="<%= (attr :_basedir) %>css/asciidoctor/colony.css" rel="stylesheet">
-    <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
-
-
-
-    <link href="<%= (attr :_basedir) %>css/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.css" rel="stylesheet" />
-    <!--[if lt IE 9]>
-      <link href="<%= (attr :_basedir) %>css/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.ie.css" rel="stylesheet" />
-    <![endif]-->
-
-
-
-    <style type="text/css">
-        pre code {
-            background-color: inherit;
-            border-style: none;
-        }
-
-        pre code > span:first-child {
-            margin-left: -5px;
-        }
-
-    <style>
+    <link rel="icon" type="image/png" href="<%= (attr :_basedir) %>images/isis-favicon.png"/>
 
     <!--
+        Based on DataNucleus' template,
+        that was in turn based on an earlier version of Apache Isis' template,
+        that was in turn based on Apache Deltaspike's template.
+
+        This template uses
+        * Bootstrap v3.3.7 (https://getbootstrap.com/) for navbar.
+        * Bootstrap TOC plugin v0.4.1 (https://afeld.github.io/bootstrap-toc/)
+          for the table of contents.
+        * jQuery (necessary for Bootstrap's JavaScript plugins)
+        * Font-Awesome for some icons used by Asciidoctor
+
+        Also:
+        * Bootswatch "flatly" theme for Bootstrap (https://bootswatch.com/flatly).
+        * slick.js (carousel)
+        * add a link to all headers (home-grown, adapted from blog posts)
+        * integration of elasticlunr.js (home-grown, adapted from blog posts)
+    -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
+    <link href="<%= (attr :_basedir) %>css/bootstrap-toc/0.4.1/bootstrap-toc.min.css" rel="stylesheet"/>
+
+    <link href="<%= (attr :_basedir) %>css/asciidoctor/foundation.css" rel="stylesheet"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <%
+       def is_toc?
+         not (attributes.has_key?('notoc'))
+       end
+    %>
+
+    <link href="<%= (attr :_basedir) %>css/slick/1.5.0/slick.css" rel="stylesheet">
+    <link href="<%= (attr :_basedir) %>css/slick/1.5.0/slick-theme.css" rel="stylesheet">
+
+    <link href="<%= (attr :_basedir) %>css/search-panel/search-panel.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/header-links/header-links.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/sticky-header/sticky-header.css" rel="stylesheet"/>
+    <link href="<%= (attr :_basedir) %>css/customisations.css" rel="stylesheet"/>
+
+    <!-- Coderay syntax formatter -->
     <style type="text/css">
         <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
-
-        pre.CodeRay code {
-            background-color: inherit;
-            border-style: none;
-        }
-
-        pre.CodeRay code > span:first-child {
-            margin-left: -5px;
-        }
-
-        .literalblock pre,
-        .listingblock pre:not(.highlight),
-        .listingblock pre[class="highlight"],
-        .listingblock pre[class^="highlight "],
-        .listingblock pre.CodeRay,
-        .listingblock pre.prettyprint {
-            background: rgb(253, 250, 246);
-         }
-        .sidebarblock .literalblock pre,
-        .sidebarblock .listingblock pre:not(.highlight),
-        .sidebarblock .listingblock pre[class="highlight"],
-        .sidebarblock .listingblock pre[class^="highlight "],
-        .sidebarblock .listingblock pre.CodeRay,
-        .sidebarblock .listingblock pre.prettyprint {
-            background: rgb(253, 250, 246);
-         }
-
-    <style>
-    -->
-
-    <style>
-    .github-fork-ribbon-wrapper.right {
-        position: fixed;
-    }
-    .github-fork-ribbon {
-        background: #090;
-    }
-    .github-fork-ribbon a:hover {
-        background:#0D0;
-        color:#fff;
-        font-size: 1.1em;
-    }
     </style>
-
-    <style>
-        @media only screen and (min-width: 40.063em) {
-          .top-bar {
-            .contain-to-grid .top-bar {
-                max-width: 80rem;
-            }
-          }
-        }
-        .row {
-            max-width: 80rem;
-        }
-    </style>
-
-    <style>
-        .extended-quote,
-        .extended-quote-first {
-            margin-left: 40px;
-            margin-right: 40px;
-            font-style: italic;
-        }
-        .extended-quote-attribution {
-            text-align: right;
-            margin-right: 100px;
-            color: #10B061;
-        }
-
-        .extended-quote-first:before {
-            content: "\201c";
-            float: left;
-            font-size: 2.75em;
-            font-weight: bold;
-            line-height: 0.6em;
-            margin-left: -0.6em;
-            color: #003b6b;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-    </style>
-
-    <style>
-        body {
-          position: relative;
-        }
-
-        *:not(pre) a > code {
-            color: #210DDC;
-        }
-
-        *:not(pre) > code {
-            background-color: inherit;
-            border: none;
-            font-weight: normal;
-        }
-
-        body div#toc li,
-        body div#toc2 li {
-            list-style-type: none;
-        }
-
-        div#doc-content {
-            margin-top: 30px;
-        }
-
-        div.documentation-page table.frame-all {
-            border-left: none;
-            border-right: none;
-        }
-
-        body div#toc li.active-region:before,
-        body div#toc2 li.active-region:before {
-            content: "\00BB \0020";
-            margin-left: -12px;
-        }
-
-        body div#toc li a.active,
-        body div#toc2 li a.active {
-            color: red;
-        }
-
-        body div#toc.toc,
-        body div#toc.toc2 {
-            position: fixed;
-            left: auto;
-            padding-top: 60px;
-            z-index: auto;
-            background-color: white;
-            border-left-color: #eee;
-            border-left-style: solid;
-            border-right: none;
-            min-height: 2000px;
-        }
-
-    </style>
-
-    <style>
-
-        @media only screen and (min-width: 768px) {
-          #toc.toc2 ul ul { margin-left: -10px; }
-        }
-
-
-        body div#toc .tocify-subheader ul {
-            margin-bottom: 0px;
-        }
-
-        body div#toc .tocify-subheader li {
-            font-size: 14px;
-        }
-        .tocify li.tocify-item, .tocify ul.tocify-item {
-            line-height: 24px;
-        }
-
-        body div#toc li.tocify-item.active:before,
-        body div#toc2 li.tocify-item.active:before {
-            content: "\00BB \0020";
-            margin-left: -12px;
-        }
-
-        body div#toc li.tocify-item.active a,
-        body div#toc2 li.tocify-item.active a {
-            color: red;
-        }
-    </style>
-
-    <style>
-        footer {
-            margin-top: 1000px;
-        }
-    </style>
-
-    <style>
-        /* overriding colony.css stylesheet */
-        .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] {
-           /*padding: 1.25em 1.5625em 1.125em 1.5625em;*/
-           padding: 0.3em 0.6em 0.25em 0.6em;
-        }
-        @media only screen and (min-width: 1280px)
-        #toc.toc2 {
-          /*width: 20em;*/
-          width: 25em;
-        }
-
-        #doc-content a {
-          color: #210DDC;
-        }
-
-        .top-bar h1 {
-            border-bottom: inherit;
-        }
-
-        h2 {
-          margin-top: 80px;
-        }
-        h3 {
-          margin-top: 40px;
-        }
-        h4,h5 {
-          margin-top: 30px;
-        }
-
-        .admonitionblock.tip > table td.content {
-            color: #10B061;
-        }
-        .admonitionblock.note > table td.content {
-            color: #B509AB;
-        }
-        .admonitionblock.important > table td.content {
-            color: #D5810A;
-        }
-
-        .admonitionblock .title {
-            font-size: larger;
-            font-style: italic;
-        }
-
-        .imageblock img {
-            margin-bottom: 10px;
-        }
-    </style>
-
-    <style>
-        /* from http://ben.balter.com/2014/03/13/pages-anchor-links/ */
-        .header-link {
-          position: absolute;
-          left: -0.5em;
-          opacity: 0;
-
-          /*
-          -webkit-transition: opacity 0.2s ease-in-out 0.1s;
-          -moz-transition: opacity 0.2s ease-in-out 0.1s;
-          -ms-transition: opacity 0.2s ease-in-out 0.1s;
-          */
-        }
-
-        h2:hover .header-link,
-        h3:hover .header-link,
-        h4:hover .header-link,
-        h5:hover .header-link,
-        h6:hover .header-link {
-          opacity: 1;
-        }
-    </style>
-
-    <style>
-        .top-bar
-        {
-            -webkit-transition-duration: .5s;
-            transition-duration: .5s;
-
-            -webkit-transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
-            transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
-
-            -webkit-transition-property: -webkit-transform;
-            transition-property: transform;
-        }
-
-        /*
-        http://osvaldas.info/auto-hide-sticky-header
-        MIT license
-        */
-        .header--hidden
-        {
-            -webkit-transform: translateY( -100% );
-            -ms-transform: translateY( -100% );
-            transform: translateY( -100% );
-
-            transition-duration: .5s;
-            transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
-            -webkit-transition-property: -webkit-transform;
-            transition-property: transform;
-        }
-    </style>
-
-    <style>
-        #doc-content a.guide {
-            color: white;
-        }
-    </style>
-
-    <style>
-        .tocify {
-            margin-top: 80px;
-        }
-    </style>
-
-
-</script>
-
 </head>
-<body>
 
-<<div class="github-fork-ribbon-wrapper right" style="position: fixed;">
-    <div class="github-fork-ribbon">
-        <a href="https://github.com/apache/isis#fork-destination-box">Fork me on GitHub</a>
-    </div>
-</div>
+<body data-spy="scroll" data-target="#toc">
 
+<div id="basedir" style="display:none;"><%= (attr :_basedir) %></div>
+<div id="docname" style="display:none;"><%= (attr :docname) %></div>
+<div id="filetype" style="display:none;"><%= (attr :filetype) %></div>
 
-<div class="row">
+<!-- Navbar -->
+<nav class="navbar navbar-default navbar-static-top header">
+    <div class="container">
+        <div class="navbar-header">
+            <!-- Three line menu button for use on mobile screens -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-    <div class="fixed contain-to-grid header">
-        <nav class="top-bar" data-topbar role="navigation" style="max-width: 80rem">
-            <ul class="title-area">
-                <li class="name">
-                    <h1>
-                        <a href="<%= (attr :sitebasedir) %>/index.html">Apache Isis&trade;</a>
-                    </h1>
-                </li>
-                <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-            </ul>
+            <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">
+                <img alt="Brand" src="<%= (attr :_basedir) %>images/isis-logo-48x48.png"/>
+            </a>
 
-            <section class="top-bar-section">
-                <ul class="right">
+            <a class="navbar-brand" href="<%= (attr :_basedir) %>index.html">Apache Isis</a>
 
-                    <li class="has-form">
-                       <FORM class="searchbox navbar-form navbar-right" id="searchbox_012614087480249044419:dn-q5gtwxya" action="http://www.google.com/cse">
-                        <div class="row collapse">
-                            <input type="hidden" name="cx" value="012614087480249044419:dn-q5gtwxya">
-                            <INPUT type="hidden" name="cof" value="FORID:0">
-                            <INPUT class="form-control" name="q" type="text" placeholder="Search">
-                        </div>
-                    </FORM>
-                     </li>
-
-                </ul>
-
-                <!-- Left Nav Section -->
-                <ul class="left">
-
-                    <li><a href="<%= (attr :sitebasedir) %>/documentation.html">Documentation</a></li>
-                    <li><a href="<%= (attr :sitebasedir) %>/downloads.html">Downloads</a></li>
-                    <li><a href="<%= (attr :sitebasedir) %>/help.html">Help</a></li>
-                    <li><a href="<%= (attr :sitebasedir) %>/asf.html">@ASF</a></li>
-
-                </ul>
-
-            </section>
-        </nav>
-    </div>
-</div>
-
-<div class="row">
-
-    <div id="doc-content-left" class="large-9 medium-9 columns">
-
-
-        <div id="doc-content">
-          <%= document.content %>
         </div>
 
-        <footer>
-          <hr>
-          <p class="small">
-          Copyright &copy; 2010~2016 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
-          <br/>
-          Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
-          </p>
-        </footer>
+        <!-- Navbar that will collapse on mobile screens -->
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Documentation<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<%= (attr :_basedir) %>documentation.html">Table of Contents</a></li>
 
-    </div>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">User Guides</li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugfun/ugfun.html">Fundamentals</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugvw/ugvw.html">Wicket Viewer</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugvro/ugvro.html">Restful Objects Viewer</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugsec/ugsec.html">Security</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugtst/ugtst.html">Testing</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/ugbtb/ugbtb.html">Beyond the Basics</a></li>
 
-    <div id="doc-content-right" class="large-3 medium-3 xcolumns">
-        <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
-            <div class="fallback-toc">
-                <%= converter.convert_with_options @document, 'outline', :toclevels => 4 %>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Reference Guides</li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgant/rgant.html">Annotations</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgsvc/rgsvc.html">Domain Services</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgcfg/rgcfg.html">Core Config' Properties</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgcms/rgcms.html">Classes, Methods and Schema</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgmvn/rgmvn.html">Maven plugin</a></li>
+                        <li><a href="<%= (attr :_basedir) %>./guides/rgfis/rgfis.html">Framework Internal Services</a></li>
+
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Javadoc</li>
+                        <li><a href="http://javadoc.io/doc/org.apache.isis.core/isis-core-applib">Applib</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="dropdown  hidden-sm hidden-md">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Downloads<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<%= (attr :_basedir) %>downloads.html">Downloads</a></li>
+                        <li><a href="<%= (attr :_basedir) %>release-notes/release-notes.html">Release Notes</a></li>
+                        <li><a href="<%= (attr :_basedir) %>migration-notes/migration-notes.html">Migration Notes</a></li>
+
+                        <li role="separator" class="divider"></li>
+                        <li><a href="<%= (attr :_basedir) %>guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype">Maven archetype</a></li>
+
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://issues.apache.org/jira/browse/ISIS">ASF JIRA</a></li>
+                        <li><a href="https://github.com/apache/isis">Github mirror</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown  hidden-sm">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Support<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<%= (attr :_basedir) %>support.html">Mailing lists</a></li>
+                        <li><a href="https://lists.apache.org/list.html?users&#0064;isis.apache.org">Archives (ASF Pony mail)</a></li>
+                        <li><a href="http://isis.markmail.org/search/?q=">Archives (Markmail)</a></li>
+                        <li><a href="http://stackoverflow.com/questions/tagged/isis">Stack Overflow</a></li>
+                        <li><a href="guides/dg.html/dg.html">How to contribute</a></li>
+                        <li><a href="<%= (attr :_basedir) %>help.html">Other resources</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown hidden-sm hidden-md">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@ASF<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="http://www.apache.org/">Apache Homepage</a></li>
+                        <li><a href="http://www.apache.org/licenses/">Licenses</a></li>
+                        <li><a href="http://www.apache.org/security/">Security</a></li>
+                        <li><a href="http://www.apache.org/foundation/sponsorship.html/">Sponsorship</a></li>
+                        <li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li>
+
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://whimsy.apache.org/board/minutes/Isis.html">PMC board minutes</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <div class="nav navbar-nav navbar-right">
+
+                <!-- 'style' added to fix height of input box. FIX THIS -->
+                <form class="navbar-form" role="search" id="search-form" style="padding: 1px 15px;">
+                    <div class="form-group">
+                        <input class="form-control" id="search-field" type="text" size="30" placeholder="Search"/>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</nav>
+
+
+<div class="container">
+
+    <% if is_toc? then %>
+        <div class="row-fluid">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                <div id="search-panel">
+                    <div id="search-results"></div>
+                    <div>
+                        <br/>
+                        <a href="#" id="search-results-clear">clear</a>
+                    </div>
+                </div>
+                <div class="page-title">
+                    <h1><%= document.name %></h1>
+                </div>
+                <div id="doc-content">
+                    <%= document.content %>
+                </div>
+            </div>
+            <div class="hidden-xs hidden-sm hidden-md col-lg-3">
+                <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
+            </div>
+        </div>
+    <% else %>
+        <!-- Front Page, no TOC and no heading -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="search-panel">
+                    <div id="search-results"></div>
+                    <div>
+                        <br/>
+                        <a href="#" id="search-results-clear">clear</a>
+                    </div>
+                </div>
+                <div id="doc-content">
+                    <%= document.content %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+
 
 </div>
 
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+        <p class="text-center small text-muted">
+              Copyright &copy; 2010~2017 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
+              <br/>
+              Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
+        </p>
+        </div>
+    </div>
+</footer>
 
-<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/jquery.js"></script>
-<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/bootstrap-toc/0.4.1/bootstrap-toc.min.js"></script>
 
-
-<link href="<%= (attr :_basedir) %>css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
 <script src="<%= (attr :_basedir) %>js/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script src="<%= (attr :_basedir) %>js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
+<script src="<%= (attr :_basedir) %>js/slick/1.5.0/slick.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/elasticlunr/elasticlunr.min.js"></script>
 
-
-
-<script type="text/javascript">
-    $(function () {
-        $("#toc").tocify({
-            scrollTo: 50,
-            extendPage: true,
-            context: "#doc-content",
-            highlightOnScroll: true,
-            hashGenerator: "pretty",
-            hideEffect: "slideUp",
-            selectors: "h2,h3,h4,h5"
-        });
-        $(".fallback-toc").hide();
-    });
-</script>
-
-<script type="text/javascript">
-
-  /****
-
-      $(document).foundation();
-
-      $(document).ready(function(){
-        // Cache selectors
-        var lastId,
-            topMenu = $("div#toc ul"),
-            topMenuHeight = 100,
-
-            menuItems = topMenu.find("a"),
-            menuItemsHrefs = menuItems.map(function(){
-              var item = $($(this).attr("href"));
-              if (item.length) { return item; }
-            });
-
-        // Bind click handler to menu items to scroll animation
-        menuItems.click(function(e){
-          var href = $(this).attr("href"),
-              offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
-          $('html, body').stop().animate({
-              scrollTop: offsetTop
-          }, 300);
-
-          e.preventDefault();
-        });
-
-        // Bind to scroll of window
-        $(  window ).scroll(function(){
-
-           // Get container scroll position
-           var fromTop = $(this).scrollTop()+topMenuHeight;
-
-           var cur = menuItemsHrefs.map(function(){
-             if ($(this).offset().top < fromTop)
-               return this;
-           });
-
-           // Get the id of the current element
-           cur = cur[cur.length-1];
-
-           var id = cur && cur.length ? cur[0].id : "";
-
-           if (lastId !== id && id) {
-               scrollTo(id);
-           }
-
-           window.history.pushState({}, "", window.location.origin + window.location.pathname + "#" + id);
-        });
-
-        scrollTo = function(id) {
-              lastId = id;
-
-              menuItems
-                .removeClass("active");
-
-              menuItems
-                .parents()
-                .removeClass("active-region");
-
-              menuItems
-                .parents("ul").hide();
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .addClass("active");
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .parents("ul").show();
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .parent().children("ul").show();
-
-              menuItems
-                .filter("[href=#"+id+"]")
-                .parents("li").addClass("active-region");
-
-        }
-      menuItems
-        .removeClass("active");
-
-      menuItems
-        .parents()
-        .removeClass("active-region");
-
-        var syncMenuItem;
-        if(window.location.hash!=="") {
-            var menuItemFor = $.grep(menuItems, function(e) {
-                return e.hash === window.location.hash;
-            });
-            console.log(menuItemFor);
-            if(menuItemFor.length === 1) {
-                syncMenuItem = menuItemFor[0];
-            }
-        }
-
-        if(!syncMenuItem){
-            syncMenuItem = menuItems[0];
-        }
-
-        $(syncMenuItem).click();
-
-      });
-
-    ***/
-
-</script>
-
-<script type="text/javascript">
-
-$(document).ready(function(){
-    if("Documentation" === "<%= document.name %>") {
-        console.log( "processing 'Documentation'" );
-
-        $("#doc-content-left").removeClass("large-9").removeClass("medium-9").addClass("large-12").addClass("medium-12");
-        $("#doc-content-right").removeClass("large-3").removeClass("medium-3").hide();
-    }
-
-});
-
-</script>
-
-
-<script>
-
-$( document ).ready(function() {
-
-    (function() {
-      $(function() {
-        return $("#doc-content h2, #doc-content h3, #doc-content h4, #doc-content h5, #doc-content h6").each(function(i, el) {
-          var $el, icon, id;
-          $el = $(el);
-          id = $el.attr('id');
-          icon = '<i class="fa fa-link"></i>';
-          if (id) {
-            return $el.prepend($("<a />").addClass("header-link").attr("href", "#" + id).html(icon));
-          }
-        });
-      });
-    }).call(this);
-
-
-
-	/*
-        http://osvaldas.info/auto-hide-sticky-header
-        MIT license
-	*/
-	;( function( $, window, document, undefined )
-	{
-		'use strict';
-
-		var elSelector		= '.header',
-			elClassHidden	= 'header--hidden',
-			throttleTimeout	= 500,
-			$element		= $( elSelector );
-
-		if( !$element.length ) return true;
-
-		var $window			= $( window ),
-			wHeight			= 0,
-			wScrollCurrent	= 0,
-			wScrollBefore	= 0,
-			wScrollDiff		= 0,
-			$document		= $( document ),
-			dHeight			= 0,
-
-			throttle = function( delay, fn )
-			{
-				var last, deferTimer;
-				return function()
-				{
-					var context = this, args = arguments, now = +new Date;
-					if( last && now < last + delay )
-					{
-						clearTimeout( deferTimer );
-						deferTimer = setTimeout( function(){ last = now; fn.apply( context, args ); }, delay );
-					}
-					else
-					{
-						last = now;
-						fn.apply( context, args );
-					}
-				};
-			};
-
-		$window.on( 'scroll', throttle( throttleTimeout, function()
-		{
-			dHeight			= $document.height();
-			wHeight			= $window.height();
-			wScrollCurrent	= $window.scrollTop();
-			wScrollDiff		= wScrollBefore - wScrollCurrent;
-
-			if( wScrollCurrent <= 0 ) // scrolled to the very top; element sticks to the top
-				$element.removeClass( elClassHidden );
-
-			else if( wScrollDiff > 0 && $element.hasClass( elClassHidden ) ) // scrolled up; element slides in
-				$element.removeClass( elClassHidden );
-
-			else if( wScrollDiff < 0 ) // scrolled down
-			{
-				if( wScrollCurrent + wHeight >= dHeight && $element.hasClass( elClassHidden ) ) // scrolled to the very bottom; element slides in
-					$element.removeClass( elClassHidden );
-
-				else // scrolled down; element slides out
-					$element.addClass( elClassHidden );
-			}
-
-			wScrollBefore = wScrollCurrent;
-		}));
-
-	})( jQuery, window, document );
-
-
-});
-</script>
+<script src="<%= (attr :_basedir) %>js/sticky-header/sticky-header.js"></script>
+<script src="<%= (attr :_basedir) %>js/search-panel/search-panel.js"></script>
+<script src="<%= (attr :_basedir) %>js/header-link/header-link.js"></script>
+<script src="<%= (attr :_basedir) %>js/toc-scroll/toc-scroll.js"></script>
 
 </body>
 </html>

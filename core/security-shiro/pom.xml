@@ -23,14 +23,14 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>isis-core-security-shiro</artifactId>
-    <version>1.13.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
 
-	<name>Isis Security Shiro</name>
+	<name>Apache Isis Security Shiro</name>
 
 	<build>
 		<pluginManagement>
@@ -65,7 +65,7 @@
 			<dependency>
 			    <groupId>org.apache.isis.core</groupId>
 			    <artifactId>isis-core-security-shiro</artifactId>
-				<version>1.13.0-SNAPSHOT</version>
+				<version>1.15.0-SNAPSHOT</version>
 			</dependency>
     	</dependencies>
     </dependencyManagement>

@@ -43,15 +43,12 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityCollectionPanel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
@@ -151,9 +148,9 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                     })
                     .toList();
         final List<LinkAndLabel> entityActionLinks =
-                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(getModel(), visibleActions);
+                LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);
 
-        if(!entityActionLinks.isEmpty()) {
+        if (!entityActionLinks.isEmpty()) {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
             visible = true;
         } else {
@@ -274,7 +271,11 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                 final String id = collectionRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(collection);
 
-                final EntityCollectionPanel collectionPanel = new EntityCollectionPanel(id, entityModelWithHints);
+                // the entityModel's getLayoutData() provides the hint as to which collection of the entity to render.
+                final ComponentFactory componentFactory =
+                        getComponentFactoryRegistry().findComponentFactory(
+                                ComponentType.ENTITY_COLLECTION, entityModelWithHints);
+                final Component collectionPanel = componentFactory.createComponent(id, entityModelWithHints);
                 collectionRv.add(collectionPanel);
             }
             div.add(collectionRv);
@@ -316,12 +317,5 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         return visible;
     }
 
-    ///////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ///////////////////////////////////////////////////////
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
 }

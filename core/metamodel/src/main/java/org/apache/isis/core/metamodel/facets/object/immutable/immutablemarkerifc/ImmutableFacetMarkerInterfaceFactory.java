@@ -25,8 +25,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 
-public class ImmutableFacetMarkerInterfaceFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class ImmutableFacetMarkerInterfaceFactory extends FacetFactoryAbstract implements DeprecatedMarker {
 
     public ImmutableFacetMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);

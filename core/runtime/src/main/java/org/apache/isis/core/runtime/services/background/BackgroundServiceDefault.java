@@ -43,14 +43,14 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
 import javassist.util.proxy.MethodFilter;
@@ -63,7 +63,8 @@ import javassist.util.proxy.ProxyObject;
  * be configured.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class BackgroundServiceDefault implements BackgroundService2 {
 
@@ -97,7 +98,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {
-        return getSpecificationLoader().loadSpecification(type);
+        return specificationLoader.loadSpecification(type);
     }
 
 
@@ -272,7 +273,7 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     @Programmatic
     @Override
     public ActionInvocationMemento asActionInvocationMemento(Method method, Object domainObject, Object[] args) {
-        throw new RuntimeException("Replaced by CommandMementoService");
+        throw new RuntimeException("Replaced by InteractionDtoServiceInternal");
     }
 
 
@@ -290,15 +291,14 @@ public class BackgroundServiceDefault implements BackgroundService2 {
     @javax.inject.Inject
     private FactoryService factoryService;
 
+    @javax.inject.Inject
+    private SpecificationLoader specificationLoader;
 
-    // //////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
+    @javax.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
 
     protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
 }

@@ -36,7 +36,7 @@ public class BooleanPrimitiveValueFacetUsingSemanticsProviderFactory extends Val
         if (type != boolean.class) {
             return;
         }
-        addFacets(new BooleanPrimitiveValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new BooleanPrimitiveValueSemanticsProvider(holder, getContext()));
     }
 
 }

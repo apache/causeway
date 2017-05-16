@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -30,7 +30,7 @@ public class BrandName extends Label {
 
     private final Placement placement;
 
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 

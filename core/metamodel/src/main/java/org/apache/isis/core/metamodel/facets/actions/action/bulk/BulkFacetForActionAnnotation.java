@@ -39,15 +39,7 @@ public class BulkFacetForActionAnnotation extends BulkFacetAbstract {
             return null;
         }
 
-        switch (invokeOn) {
-            case OBJECT_ONLY:
-                return null;
-            case OBJECT_AND_COLLECTION:
-                return new BulkFacetForActionAnnotation(InvokeOn.from(invokeOn), holder);
-            case COLLECTION_ONLY:
-                return new BulkFacetForActionAnnotation(InvokeOn.from(invokeOn), holder);
-        }
-        return null;
+        return new BulkFacetForActionAnnotation(InvokeOn.from(invokeOn), holder);
     }
 
     private BulkFacetForActionAnnotation(

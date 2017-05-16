@@ -19,9 +19,5 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-
-public interface SingleStringValueFacet extends Facet {
-
-    public String value();
+public interface SingleStringValueFacet extends SingleValueFacet<String> {
 }

@@ -23,102 +23,159 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>simpleapp-webapp</artifactId>
-    <name>Simple App Webapp</name>
+    <name>SimpleApp Webapp</name>
 
-    <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
+    <description>This assemblies and runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
     <packaging>war</packaging>
 
+    <properties>
+
+        <isis-maven-plugin.swagger.appManifest>domainapp.application.manifest.DomainAppAppManifest</isis-maven-plugin.swagger.appManifest>
+        <isis-maven-plugin.swagger.dependency.groupId>${project.groupId}</isis-maven-plugin.swagger.dependency.groupId>
+        <isis-maven-plugin.swagger.dependency.artifactId>${project.parent.artifactId}-application</isis-maven-plugin.swagger.dependency.artifactId>
+
+        <jetty-console-maven-plugin.backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</jetty-console-maven-plugin.backgroundImage>
+
+        <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
+
+        <docker-plugin.imageName>DOCKER_REGISTRY_ACCOUNT/${project.parent.artifactId}</docker-plugin.imageName>
+        <docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
+
+        <docker-plugin.releaseServerId>docker-hub</docker-plugin.releaseServerId>
+        <docker-plugin.releaseRegistryUrl>https://index.docker.io/v1/</docker-plugin.releaseRegistryUrl>
+        <docker-plugin.snapshotServerId>docker-hub</docker-plugin.snapshotServerId>
+        <docker-plugin.snapshotRegistryUrl>https://index.docker.io/v1/</docker-plugin.snapshotRegistryUrl>
+
+    </properties>
+
     <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <shortRevisionLength>8</shortRevisionLength>
+                    <timestampFormat>{0,date,yyyy-MM-dd HH:mm:ss}</timestampFormat>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>1.8</version>
-                  <executions>
+                <executions>
                     <execution>
-                      <phase>validate</phase>
-                      <goals>
-                        <goal>maven-version</goal>
-                      </goals>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>maven-version</goal>
+                        </goals>
                     </execution>
-                  </executions>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.odavid.maven.plugins</groupId>
+                <artifactId>mixin-maven-plugin</artifactId>
+                <version>0.1-alpha-39</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <mixins>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>standard</artifactId>
+                            <version>${mavenmixin-standard.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>enforcerrelaxed</artifactId>
+                            <version>${mavenmixin-enforcerrelaxed.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>isisswagger</artifactId>
+                            <version>${mavenmixin-isisswagger.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>jettywar</artifactId>
+                            <version>${mavenmixin-jettywar.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>jettyconsole</artifactId>
+                            <version>${mavenmixin-jettyconsole.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>docker</artifactId>
+                            <version>${mavenmixin-docker.version}</version>
+                        </mixin>
+                    </mixins>
+                </configuration>
             </plugin>
 
         </plugins>
     </build>
 
     <dependencies>
+
+        <!-- this app -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>simpleapp-app</artifactId>
+            <artifactId>simpleapp-application</artifactId>
         </dependency>
+
+        <!-- isis -->
         <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-wicket-impl</artifactId>
+            <groupId>com.danhaywood.mavendeps</groupId>
+            <artifactId>isiswebapp</artifactId>
+            <version>${mavendeps-isiswebapp.version}</version>
+            <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-security-shiro</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_3.0_spec</artifactId>
+            <groupId>com.danhaywood.mavendeps</groupId>
+            <artifactId>isisintellij</artifactId>
+            <version>${mavendeps-isisintellij.version}</version>
+            <type>pom</type>
         </dependency>
-
     </dependencies>
 
     <profiles>
-        <profile>
-            <id>package-war</id>
-            <activation>
-                <property>
-                    <name>!skip.package-war</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <warName>simpleapp</warName>
-                            <archive>
-                                <manifest>
-                                    <addClasspath>false</addClasspath>
-                                </manifest>
-                                <manifestEntries>
-                                    <Build-Time>${maven.build.timestamp}</Build-Time>
-                                    <Build-Host>${agent.name}</Build-Host>
-                                    <Build-User>${user.name}</Build-User>
-                                    <Build-Maven>Maven ${maven.version}</Build-Maven>
-                                    <Build-Java>${java.version}</Build-Java>
-                                    <Build-OS>${os.name}</Build-OS>
-                                    <Build-Label>${project.version}</Build-Label>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
         <profile>
             <id>jdbc-hsqldb</id>
@@ -154,7 +211,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        <!--
         <profile>
             <id>jdbc-postgres</id>
             <activation>
@@ -170,7 +226,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        -->
         <!--
         <profile>
             <id>jdbc-mssql</id>
@@ -195,66 +250,6 @@
             </dependencies>
         </profile>
         -->
-
-        <profile>
-            <id>intellij</id>
-            <activation>
-                <property>
-                    <name>idea.version</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-core-webserver</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>eclipse-m2e</id>
-            <activation>
-                <property>
-                    <name>m2e.version</name>
-                </property>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                        <plugin>
-                            <groupId>org.eclipse.m2e</groupId>
-                            <artifactId>lifecycle-mapping</artifactId>
-                            <version>1.0.0</version>
-                            <configuration>
-                                <lifecycleMappingMetadata>
-                                    <pluginExecutions>
-                                        <pluginExecution>
-                                            <pluginExecutionFilter>
-                                                <groupId>
-                                                    org.codehaus.mojo
-                                                </groupId>
-                                                <artifactId>
-                                                    build-helper-maven-plugin
-                                                </artifactId>
-                                                <versionRange>
-                                                    [1.5,)
-                                                </versionRange>
-                                                <goals>
-                                                    <goal>maven-version</goal>
-                                                </goals>
-                                            </pluginExecutionFilter>
-                                            <action>
-                                                <ignore></ignore>
-                                            </action>
-                                        </pluginExecution>
-                                    </pluginExecutions>
-                                </lifecycleMappingMetadata>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
     </profiles>
 
 </project>

@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -206,6 +207,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
         init(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
+        setCommandExecutor(Command.Executor.USER);
+
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
@@ -242,6 +245,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+
+        setCommandExecutor(Command.Executor.USER);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
@@ -454,6 +459,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final String urlUnencodedQueryString = UrlEncodingUtils.urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, urlUnencodedQueryString);
 
+        setCommandExecutor(Command.Executor.USER);
+
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
@@ -479,6 +486,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, body);
 
+        setCommandExecutor(Command.Executor.USER);
+
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
         
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
@@ -503,6 +512,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final InputStream body) {
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE,
                 body);
+
+        setCommandExecutor(Command.Executor.USER);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
         

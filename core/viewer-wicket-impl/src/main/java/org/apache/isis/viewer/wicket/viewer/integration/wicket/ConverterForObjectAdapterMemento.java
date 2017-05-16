@@ -28,10 +28,11 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 /**
@@ -52,7 +53,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
+        final Oid oid = RootOid.deStringEncoded(value);
         final ObjectAdapter adapter = getPersistenceSession().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }
@@ -66,27 +67,30 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (memento == null) {
             return null;
         }
-        final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getOid();
+        final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
+                getSpecificationLoader()).getOid();
         if (oid == null) {
             // values don't have an Oid...
             // REVIEW: is this right?
             return memento.toString();
         }
-        return oid.enString(getOidMarshaller());
+        return oid.enString();
     }
-    
-
 
     // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

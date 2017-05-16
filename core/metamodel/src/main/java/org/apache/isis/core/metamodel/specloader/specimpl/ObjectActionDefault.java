@@ -47,13 +47,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
@@ -92,7 +89,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
-    private List<ObjectActionParameter> parameters;
+    List<ObjectActionParameter> parameters;
 
     //endregion
 
@@ -156,15 +153,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private static ActionType getType(final FacetHolder facetHolder) {
-        Facet facet = facetHolder.getFacet(DebugFacet.class);
-        if (facet != null) {
-            return ActionType.DEBUG;
-        }
-        facet = facetHolder.getFacet(ExplorationFacet.class);
-        if (facet != null) {
-            return ActionType.EXPLORATION;
-        }
-        facet = facetHolder.getFacet(PrototypeFacet.class);
+        Facet facet = facetHolder.getFacet(PrototypeFacet.class);
         if (facet != null) {
             return ActionType.PROTOTYPE;
         }
@@ -179,10 +168,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return getFacetedMethod().getParameters().size();
     }
 
-    @Override
-    public boolean promptForParameters(final ObjectAdapter target) {
-        return getParameterCount() != 0;
-    }
 
     /**
      * Build lazily by {@link #getParameters()}.
@@ -192,28 +177,41 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * so there shouldn't be any thread race conditions.
      */
     @Override
-    public synchronized List<ObjectActionParameter> getParameters() {
-        if (this.parameters == null) {
-            final int parameterCount = getParameterCount();
-            final List<ObjectActionParameter> parameters = Lists.newArrayList();
-            final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
-            for (int i = 0; i < parameterCount; i++) {
-                final TypedHolder paramPeer = paramPeers.get(i);
-                final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLoader(), paramPeer.getType());
-                
-                if (!specification.isNotCollection()) {
-                    throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
-                }
-                final ObjectActionParameter parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
-                parameters.add(parameter);
-            }
-            this.parameters = parameters;
+    public List<ObjectActionParameter> getParameters() {
+        if (parameters == null) {
+            parameters = determineParameters();
+        }
+        return parameters;
+    }
+
+    protected synchronized List<ObjectActionParameter> determineParameters() {
+        if (parameters != null) {
+            // because possible race condition (caller isn't synchronized)
+            return parameters;
+        }
+        final int parameterCount = getParameterCount();
+        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
+
+        final List<ObjectActionParameter> parameters = Lists.newArrayList();
+        for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
+            final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
+
+            final ObjectSpecification specification = ObjectMemberAbstract
+                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
+
+            // previously we threw an exception here if the specification represented a collection.  No longer!
+            final ObjectActionParameter parameter =
+                    paramPeer.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+                            ? new OneToOneActionParameterDefault(paramNum, this, paramPeer)
+                            : new OneToManyActionParameterDefault(paramNum, this, paramPeer);
+
+            parameters.add(parameter);
         }
         return parameters;
     }
 
     @Override
-    public synchronized List<ObjectSpecification> getParameterTypes() {
+    public List<ObjectSpecification> getParameterTypes() {
         final List<ObjectSpecification> parameterTypes = Lists.newArrayList();
         final List<ObjectActionParameter> parameters = getParameters();
         for (final ObjectActionParameter parameter : parameters) {
@@ -556,7 +554,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * Internal API
      */
     @Override
-    public void setupActionInvocationContext(final ObjectAdapter targetAdapter) {
+    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
 
         final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
 
@@ -577,6 +575,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
         }
+    }
+
+    @Override
+    public boolean isPrototype() {
+        return getType().isPrototype();
     }
 
     /**

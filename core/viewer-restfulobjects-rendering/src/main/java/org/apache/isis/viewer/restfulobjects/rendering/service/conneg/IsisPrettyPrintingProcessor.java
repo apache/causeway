@@ -25,8 +25,9 @@ import org.jboss.resteasy.annotations.DecorateTypes;
 import org.jboss.resteasy.spi.interception.DecoratorProcessor;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DecorateTypes({"text/*+xml", "application/*+xml"})
 public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshaller, PrettyPrinting> {
@@ -42,8 +43,8 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
 
     protected boolean shouldPrettyPrint() {
         try {
-            final DeploymentType deploymentType = getDeploymentType();
-            return getConfiguration().getBoolean(KEY_PRETTY_PRINT, !deploymentType.isProduction());
+            final DeploymentCategory deploymentCategory = getDeploymentCategory();
+            return getConfiguration().getBoolean(KEY_PRETTY_PRINT, !deploymentCategory.isProduction());
         } catch (Exception e) {
             return true;
         }
@@ -58,11 +59,17 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
         }
     }
 
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
+
+
+    protected DeploymentCategory getDeploymentCategory() {
+        return getIsisSessionFactory().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

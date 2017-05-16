@@ -110,12 +110,4 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
-    public static DifferenceDto numberObjectPropertiesModifiedFor(final ObjectCountsDto objectCountsDto) {
-        DifferenceDto differenceDto = objectCountsDto.getPropertiesModified();
-        if(differenceDto == null) {
-            differenceDto = new DifferenceDto();
-            objectCountsDto.setPropertiesModified(differenceDto);
-        }
-        return differenceDto;
-    }
 }

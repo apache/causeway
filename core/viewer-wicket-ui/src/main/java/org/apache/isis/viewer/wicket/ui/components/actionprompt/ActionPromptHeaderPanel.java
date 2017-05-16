@@ -46,12 +46,12 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
         final Label label = new Label(ID_ACTION_NAME, new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                final ObjectAction action = model.getActionMemento().getAction();
+                final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
                 return action.getName();
             }
         });
 
-        final ObjectAction action = model.getActionMemento().getAction();
+        final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
         NamedFacet namedFacet = action.getFacet(NamedFacet.class);
         if (namedFacet != null) {
             label.setEscapeModelStrings(namedFacet.escaped());

@@ -22,7 +22,9 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Validates that an email is or is not already in use by another user
@@ -42,10 +44,10 @@ public class EmailAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-        IsisContext.doInSession(new Runnable() {
+        getIsisSessionFactory().doInSession(new Runnable() {
             @Override
             public void run() {
-                UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                UserRegistrationService userRegistrationService = getServicesInjector().lookupService(UserRegistrationService.class);
                 String email = validatable.getValue();
                 boolean emailExists1 = userRegistrationService.emailExists(email);
                 if (emailExists1 != emailExists) {
@@ -54,5 +56,11 @@ public class EmailAvailableValidator implements IValidator<String> {
             }
         });
 
+    }ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

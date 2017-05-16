@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.webapp.IsisSessionFilter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -79,7 +80,10 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         renderer.includesSelf();
 
         // we do the logout (removes this session from those valid)
-        getAuthenticationManager().closeSession(getResourceContext().getAuthenticationSession());
+        // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
+        final AuthenticationSession authenticationSession = getResourceContext().getAuthenticationSession();
+        getAuthenticationManager().closeSession(authenticationSession);
+        getIsisSessionFactory().closeSession();
 
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).

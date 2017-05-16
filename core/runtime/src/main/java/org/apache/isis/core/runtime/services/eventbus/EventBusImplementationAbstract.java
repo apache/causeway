@@ -18,17 +18,18 @@ package org.apache.isis.core.runtime.services.eventbus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public abstract class EventBusImplementationAbstract implements EventBusImplementation {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventBusImplementationAbstract.class);
 
-    protected static void processException(
+    protected void processException(
             final Throwable exception,
             final Object event) {
         if (!(event instanceof AbstractDomainEvent)) {
@@ -65,17 +66,18 @@ public abstract class EventBusImplementationAbstract implements EventBusImplemen
     }
 
 
-    // region > exception handling
-
-    private static void abortTransaction(final Throwable exception) {
-        getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
-        return;
+    private void abortTransaction(final Throwable exception) {
+        getTransactionManager().getCurrentTransaction().setAbortCause(new IsisApplicationException(exception));
     }
 
-    private static IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+
+
+
+    private IsisTransactionManager getTransactionManager() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager();
     }
 
-    // endregion
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
 }

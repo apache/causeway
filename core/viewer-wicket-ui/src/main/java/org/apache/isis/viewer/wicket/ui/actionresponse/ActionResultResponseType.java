@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -45,7 +45,7 @@ public enum ActionResultResponseType {
     OBJECT {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter);
+            final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, model.getIsisSessionFactory());
             return toEntityPage(model, actualAdapter, null);
         }
 
@@ -57,7 +57,7 @@ public enum ActionResultResponseType {
     COLLECTION {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
+            final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel.getIsisSessionFactory());
             // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
             final ActionModel actionModelCopy = actionModel.copy();
             collectionModel.setActionHint(actionModelCopy);
@@ -125,18 +125,23 @@ public enum ActionResultResponseType {
         throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
     }
 
-    private static ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter) {
+    private static ObjectAdapter determineActualAdapter(
+            final ObjectAdapter resultAdapter,
+            final IsisSessionFactory isisSessionFactory) {
         if (resultAdapter.getSpecification().isNotCollection()) {
             return resultAdapter;
         } else {
             // will only be a single element
             final List<Object> pojoList = asList(resultAdapter);
             final Object pojo = pojoList.get(0);
-            return adapterFor(pojo);
+            return adapterFor(pojo, isisSessionFactory);
         }
     }
-    private static ObjectAdapter adapterFor(final Object pojo) {
-        return IsisContext.getPersistenceSession().adapterFor(pojo);
+
+    private static ObjectAdapter adapterFor(
+            final Object pojo,
+            final IsisSessionFactory isisSessionFactory) {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession().adapterFor(pojo);
     }
 
     private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, final ConcurrencyException exIfAny) {

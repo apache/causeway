@@ -40,7 +40,7 @@ public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFa
     protected void setUp() throws Exception {
         super.setUp();
         facetFactory = new CollectionAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override

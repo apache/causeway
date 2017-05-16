@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.TitleUiEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -88,7 +87,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     }
 
     @Override
-    public String title(final ObjectAdapter owningAdapter, final Localization localization) {
+    public String title(final ObjectAdapter owningAdapter) {
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 

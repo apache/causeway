@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends FacetFactoryAbstract {

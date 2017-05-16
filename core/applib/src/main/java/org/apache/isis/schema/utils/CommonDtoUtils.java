@@ -20,6 +20,7 @@ package org.apache.isis.schema.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collection;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
@@ -33,6 +34,7 @@ import org.joda.time.LocalTime;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.cmd.v1.ParamDto;
+import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.EnumDto;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.ValueDto;
@@ -124,6 +126,9 @@ public final class CommonDtoUtils {
             final BookmarkService bookmarkService) {
         setValueOn((ValueDto)valueWithTypeDto, valueType, val, bookmarkService);
         valueWithTypeDto.setNull(val == null);
+        if(val instanceof Collection) {
+            valueWithTypeDto.setType(ValueType.COLLECTION);
+        }
         return valueWithTypeDto;
     }
 
@@ -132,6 +137,12 @@ public final class CommonDtoUtils {
             final ValueType valueType,
             final Object val,
             final BookmarkService bookmarkService) {
+        if(val instanceof Collection) {
+            final Collection collection = (Collection) val;
+            final CollectionDto collectionDto = asCollectionDto(collection, valueType, bookmarkService);
+            valueDto.setCollection(collectionDto);
+            return valueDto;
+        }
         switch (valueType) {
         case STRING: {
             final String argValue = (String) val;
@@ -215,6 +226,9 @@ public final class CommonDtoUtils {
         }
         case ENUM: {
             final Enum argValue = (Enum) val;
+            if(argValue == null) {
+                return null;
+            }
             final EnumDto enumDto = new EnumDto();
             valueDto.setEnum(enumDto);
             enumDto.setEnumType(argValue.getClass().getName());
@@ -227,19 +241,34 @@ public final class CommonDtoUtils {
                     : bookmarkService.bookmarkFor(val);
 
             if (bookmark != null) {
-                OidDto argValue = bookmark != null ? bookmark.toOidDto() : null;
+                OidDto argValue = bookmark.toOidDto();
                 valueDto.setReference(argValue);
             }
             return valueDto;
         }
-        case VOID:
+        case VOID: {
             return null;
+        }
         default:
             // should never happen; all cases are listed above
             throw new IllegalArgumentException(String.format(
                     "newValueDto(): do not recognize valueType %s (likely a framework error)",
                     valueType));
         }
+    }
+
+    private static CollectionDto asCollectionDto(
+            final Iterable iterable,
+            final ValueType valueType,
+            final BookmarkService bookmarkService) {
+        final CollectionDto collectionDto = new CollectionDto();
+        collectionDto.setType(valueType);
+        for (Object o : iterable) {
+            final ValueDto valueDto = new ValueDto();
+            setValueOn(valueDto, valueType, o, bookmarkService);
+            collectionDto.getValue().add(valueDto);
+        }
+        return collectionDto;
     }
     //endregion
 

@@ -1,0 +1,31 @@
+[[_ugfun_available-domain-services_incode-catalog]]
+= Incode Catalog
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+The link:http://catalog.incode.org[Incode Catalog] website also provides a number of reusable modules, focusing on business logic for generic subdomains.
+
+This section surveys the functionality available.
+
+
+[WARNING]
+====
+Note that the Incode Catalog, although maintained by Apache Isis committers, are not part of the ASF.
+====
+
+
+
+The modules themselves fall into a number of broader groups:
+
+* modules that provide standalone domain entities (and supporting services) for a particular subdomain +
++
+The http://github.com/incodehq/incode-module-alias[alias], http://github.com/incodehq/incode-module-classification[classification], http://github.com/incodehq/incode-module-commchannel[commchannel], http://github.com/incodehq/incode-module-communications[communications], http://github.com/incodehq/incode-module-country[country], http://github.com/incodehq/incode-module-docfragment[docfragment],
+http://github.com/incodehq/incode-module-document[document] and http://github.com/incodehq/incode-module-document[note] modules fall into this category.
+
+* modules that provide developer/testing utilities +
++
+The http://github.com/incodehq/incode-module-fixturesupport[fixturesupport], http://github.com/incodehq/incode-module-integtestsupport[integtestsupport] and http://github.com/incodehq/incode-module-unittestsupport[unittestsupport] modules fall into this category.
+
+Each of the modules has a full README and demo application demonstrating their usage.  The sections below briefly outline the capabilities of these modules.

@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to an object-store specific implementation of {@link Query}.
@@ -41,20 +42,29 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
     private final QueryCardinality cardinality;
     private final Map<String, ObjectAdapter> argumentsAdaptersByParameterName;
 
-    public PersistenceQueryFindUsingApplibQueryDefault(final ObjectSpecification specification, final String queryName, final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, final QueryCardinality cardinality, final long ... range) {
-        super(specification, range);
+    public PersistenceQueryFindUsingApplibQueryDefault(
+            final ObjectSpecification specification,
+            final String queryName,
+            final Map<String, ObjectAdapter> argumentsAdaptersByParameterName,
+            final QueryCardinality cardinality,
+            final SpecificationLoader specificationLoader,
+            final long... range) {
+        super(specification, specificationLoader, range);
         this.queryName = queryName;
         this.cardinality = cardinality;
         this.argumentsAdaptersByParameterName = argumentsAdaptersByParameterName;
         initialized();
     }
 
-    public PersistenceQueryFindUsingApplibQueryDefault(final DataInputExtended input, final long ... range) throws IOException {
-        super(input, range);
+    public PersistenceQueryFindUsingApplibQueryDefault(
+            final DataInputExtended input,
+            final SpecificationLoader specificationLoader,
+            final long... range) throws IOException {
+        super(input, specificationLoader, range);
         this.queryName = input.readUTF();
         this.cardinality = QueryCardinality.valueOf(input.readUTF());
         // TODO: need to read from input
-        this.argumentsAdaptersByParameterName = new HashMap<String, ObjectAdapter>();
+        this.argumentsAdaptersByParameterName = new HashMap<>();
         initialized();
     }
 

@@ -23,11 +23,9 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
 public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements ImperativeFacet {
@@ -54,7 +52,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
     }
 
     @Override
-    public String title(final ObjectAdapter object, final Localization localization) {
+    public String title(final ObjectAdapter object) {
         return object.getObject().toString();
     }
 

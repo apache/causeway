@@ -19,7 +19,6 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,6 +31,7 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Path("/swagger")
 public class SwaggerSpecResource {
@@ -71,7 +71,7 @@ public class SwaggerSpecResource {
 
     private String swagger(final SwaggerService.Visibility visibility) {
         final SwaggerService.Format format = deriveFrom(httpHeaders);
-        String spec = IsisContext.doInSession(new MyCallable(visibility, format));
+        String spec = getIsisSessionFactory().doInSession(new MyCallable(visibility, format));
         return spec;
     }
 
@@ -93,7 +93,8 @@ public class SwaggerSpecResource {
         return SwaggerService.Format.JSON;
     }
 
-    static class MyCallable implements Callable<String> {
+
+    class MyCallable implements Callable<String> {
 
         private final SwaggerService.Visibility visibility;
         private final SwaggerService.Format format;
@@ -111,7 +112,7 @@ public class SwaggerSpecResource {
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
 
-        @Inject
+        @javax.inject.Inject
         SwaggerService swaggerService;
 
         ServicesInjector getServicesInjector() {
@@ -119,7 +120,13 @@ public class SwaggerSpecResource {
         }
 
         PersistenceSession getPersistenceSession() {
-            return IsisContext.getPersistenceSession();
+            return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
         }
     }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
+
 }

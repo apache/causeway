@@ -21,11 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
-
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -50,9 +45,9 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
     public void setUp() throws Exception {
         super.setUp();
-        this.facetFactory =  new ActionAnnotationFacetFactory();;
+        this.facetFactory =  new ActionAnnotationFacetFactory();
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setServicesInjector(stubServicesInjector);
 
     }
 
@@ -149,7 +144,8 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod,
+                mockSpecificationLoader);
 
         facetFactory.processInvocation(new ProcessMethodContext(CustomerEx.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
 
@@ -163,13 +159,13 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
 
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForChoices.setServicesInjector(mockServicesInjector);
+        facetFactoryForChoices.setServicesInjector(stubServicesInjector);
 
-        facetFactoryForChoices.setServicesInjector(mockServicesInjector);
+        facetFactoryForChoices.setServicesInjector(stubServicesInjector);
 
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
+        facetFactoryForDisable.setServicesInjector(stubServicesInjector);
 
 
         class Customer {
@@ -205,7 +201,8 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod,
+                mockSpecificationLoader);
 
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, null, actionMethod, methodRemover, facetHolderWithParms);
         facetFactory.processInvocation(processMethodContext);

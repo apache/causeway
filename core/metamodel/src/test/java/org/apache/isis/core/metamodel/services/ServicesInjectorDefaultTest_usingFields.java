@@ -28,6 +28,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -52,26 +53,26 @@ public class ServicesInjectorDefaultTest_usingFields {
     static class SomeDomainService3 { }
 
     static class SomeDomainService1 {
-        @Inject
+        @javax.inject.Inject
         private DomainObjectContainer container;
         DomainObjectContainer getContainer() {
             return container;
         }
-        @Inject
+        @javax.inject.Inject
         private SomeDomainService2Abstract someDomainService2;
         SomeDomainService2Abstract getSomeDomainService2() {
             return someDomainService2;
         }
     }
     static abstract class SomeDomainService2Abstract {
-        @Inject
+        @javax.inject.Inject
         private SomeDomainService1 someDomainService1;
         SomeDomainService1 getSomeDomainService1() {
             return someDomainService1;
         }
     }
     static class SomeDomainService2 extends SomeDomainService2Abstract {
-        @Inject
+        @javax.inject.Inject
         private SomeDomainService3 someDomainService3;
         SomeDomainService3 getSomeDomainService3() {
             return someDomainService3;
@@ -84,7 +85,8 @@ public class ServicesInjectorDefaultTest_usingFields {
         service1 = new SomeDomainService1();
         service3 = new SomeDomainService3();
         service2 = new SomeDomainService2();
-        injector = new ServicesInjector(Arrays.asList(container, service1, service3, service2));
+        final IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault();
+        injector = new ServicesInjector(Arrays.asList(container, service1, service3, service2), stubConfiguration);
     }
 
     @Test

@@ -25,13 +25,11 @@ import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInjectorAware {
@@ -76,17 +74,17 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     }
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return servicesInjector.lookupService(AuthenticationSessionProvider.class);
+        return servicesInjector.getAuthenticationSessionProvider();
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
+        return servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration() {
         final ConfigurationServiceInternal configurationServiceInternal = servicesInjector
                 .getConfigurationServiceInternal();
-        return (IsisConfigurationDefault)configurationServiceInternal;
+        return configurationServiceInternal;
     }
 
     //endregion

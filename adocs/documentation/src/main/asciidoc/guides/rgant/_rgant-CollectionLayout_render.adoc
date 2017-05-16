@@ -1,0 +1,43 @@
+[[_rgant-CollectionLayout_render]]
+= `render()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+The `render()` attribute specifies that the collection be rendered either "eagerly" (shown open, displaying its contents) or "lazily" (shown closed, hiding its contents). The terminology here is based on the similar concept of lazy loading of collections in the domain/persistence layer boundary (except that the rendering relates to the presentation/domain layer boundary).
+
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @CollectionLayout(render=RenderType.EAGERLY)
+    public SortedSet<LineItem> getDetails() { ... }
+    ...
+}
+----
+
+
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+
+NOTE: FIXME - change to .layout.xml syntax instead.
+
+[source,javascript]
+----
+"details": {
+    "collectionLayout": {
+        "render": "EAGERLY"
+    }
+}
+----
+
+
+[NOTE]
+====
+Note that xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed collections] (which, under the covers are just action invocations against a domain service) are always rendered eagerly.
+
+Also, if a xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] attribute has been specified then that will take precedence over the value of the `render()` attribute.
+====
+

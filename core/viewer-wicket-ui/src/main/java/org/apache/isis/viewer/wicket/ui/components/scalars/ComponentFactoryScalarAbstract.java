@@ -48,8 +48,10 @@ public abstract class ComponentFactoryScalarAbstract extends ComponentFactoryAbs
         if(!scalarModel.isScalarTypeAnyOf(scalarTypes)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final boolean hasNoChoices = !scalarModel.hasChoices();
-        return appliesIf(hasNoChoices);
+        final boolean hasChoices = scalarModel.hasChoices();
+        // autoComplete not supported on values, only references
+        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
+        return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );
     }
 
     @Override

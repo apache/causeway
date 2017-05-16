@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.authentication;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.encoding.Encodable;
 
 /**
@@ -32,14 +33,14 @@ public interface AuthenticationSession extends Encodable, Serializable {
     /**
      * The name of the authenticated user; for display purposes only.
      */
-    public String getUserName();
+    String getUserName();
 
-    public boolean hasUserNameOf(String userName);
+    boolean hasUserNameOf(String userName);
 
     /**
      * The roles this user belongs to
      */
-    public List<String> getRoles();
+    List<String> getRoles();
 
     /**
      * A unique code given to this session during authentication.
@@ -50,28 +51,23 @@ public interface AuthenticationSession extends Encodable, Serializable {
      * <tt>""</tt>) if this is unauthenticated user (i.e., as created within an
      * exploration system).
      */
-    public String getValidationCode();
+    String getValidationCode();
 
     /**
      * For viewers (in particular) to store additional attributes, analogous to
      * an <tt>HttpSession</tt>.
      */
-    public Object getAttribute(String attributeName);
+    Object getAttribute(String attributeName);
 
     /**
      * @see #getAttribute(String)
      */
-    public void setAttribute(String attributeName, Object attribute);
+    void setAttribute(String attributeName, Object attribute);
 
     /**
      * The {@link MessageBroker} that holds messages for this user.
      */
-    public MessageBroker getMessageBroker();
-    /**
-     * Providing the ability for a {@link MessageBroker} to be set on this
-     * {@link AuthenticationSession} (is lazily created by the runtime).
-     */
-    public void setMessageBroker(MessageBroker messageBroker);
-    
-    
+    MessageBroker getMessageBroker();
+
+    UserMemento createUserMemento();
 }

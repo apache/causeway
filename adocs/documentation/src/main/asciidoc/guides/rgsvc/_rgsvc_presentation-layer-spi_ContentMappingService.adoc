@@ -1,0 +1,102 @@
+[[_rgsvc_presentation-layer-spi_ContentMappingService]]
+= `ContentMappingService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+The `ContentMappingService` supports the (default implementation of the)
+xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] allowing the
+xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified
+by the HTTP `Accept` header.
+
+See xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] for further discussion.
+
+
+[NOTE]
+====
+Unlike most other domain services, the framework (that is, `ContentNegotiationService`) will check _all_ available
+implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely
+the first implementation found; in other words it uses the chain-of-responsibility pattern.  Services are checked
+in the ordering defined by xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+The mapped object used will be the first non-`null` result returned by an implementation.
+====
+
+
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface ContentMappingService {
+    Object map(Object object,                           // <1>
+               List<MediaType> acceptableMediaTypes);   // <2>
+}
+
+----
+<1> typically the input is a domain object (whose structure might change over time), and the output is a DTO (whose structure is guaranteed to be preserved over time)
+<2> as per the caller's HTTP `Accept` header
+
+
+In versions prior to `v1.12.0`, this interface resided in a different package, internal to the
+xref:../ugvro/ugvro.adoc#[Restful Objects] viewer, and defined a slightly different signature that used an internal enum:
+
+[source,java]
+----
+public interface ContentMappingService {
+    Object map(Object object,
+               List<MediaType> acceptableMediaTypes,
+               RepresentationType representationType);   // <1>
+
+}
+
+----
+<1> enum representing the requested representation; only ever take a value of ``DOMAIN_OBJECT`` or ``ACTION_RESULT``.
+
+
+
+== Implementations
+
+No default implementations are provided by Apache Isis framework itself.
+
+However, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] includes a sample implementation to convert its `ToDoItem` entity into a (JAXB annotated) `ToDoItemDto`.  The source code is:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ContentMappingServiceForToDoItem implements ContentMappingService {
+    @Override
+    public Object map(
+            final Object object,
+            final List<MediaType> acceptableMediaTypes) {
+        if(object instanceof ToDoItem) {
+            for (MediaType acceptableMediaType : acceptableMediaTypes) {
+                final Map<String, String> parameters = acceptableMediaType.getParameters();
+                final String className = parameters.get("x-ro-domain-type");
+                if(className.eqausl(ToDoItemV1_1.class.getName())) {
+                    return newToDoItemV1_1((ToDoItem) object);
+                }
+            }
+        }
+        return null;
+    }
+    private ToDoItemV1_1 newToDoItemV1_1(final ToDoItem toDoItem) {
+        final ToDoItemV1_1 dto = new ToDoItemV1_1();
+        dto.setToDoItem(toDoItem);
+        dto.setDescription(toDoItem.getDescription());
+        ...
+        return dto;
+    }
+    ...
+}
+----
+
+
+
+
+== Related Services
+
+This service is a companion to the default implementation of the xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`].

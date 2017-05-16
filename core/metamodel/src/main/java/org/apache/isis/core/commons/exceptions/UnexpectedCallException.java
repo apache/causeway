@@ -30,8 +30,4 @@ public class UnexpectedCallException extends IsisException {
         super("This method call was not expected");
     }
 
-    public UnexpectedCallException(final String arg0) {
-        super(arg0);
-    }
-
 }

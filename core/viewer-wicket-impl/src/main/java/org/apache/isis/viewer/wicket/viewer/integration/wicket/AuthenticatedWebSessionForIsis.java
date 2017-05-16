@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -32,19 +31,15 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -68,11 +63,11 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     private AuthenticationSession authenticationSession;
 
     public AuthenticatedWebSessionForIsis(final Request request) {
-        super(Ensure.ensureThatArg(request, is(not(nullValue(Request.class)))));
+        super(request);
     }
 
     @Override
-    public boolean authenticate(final String username, final String password) {
+    public synchronized boolean authenticate(final String username, final String password) {
         AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
         authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
@@ -85,7 +80,31 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public void onInvalidate() {
+    public synchronized void invalidateNow() {
+
+        // similar code in Restful Objects viewer (UserResourceServerside#logout)
+        // this needs to be done here because Wicket will expire the HTTP session
+        // while the Shiro authenticator uses the session to obtain the details of the principals for it to logout
+        //
+        //        org.apache.catalina.session.StandardSession.getAttribute(StandardSession.java:1195)
+        //        org.apache.catalina.session.StandardSessionFacade.getAttribute(StandardSessionFacade.java:108)
+        //        org.apache.shiro.web.session.HttpServletSession.getAttribute(HttpServletSession.java:146)
+        //        org.apache.shiro.session.ProxiedSession.getAttribute(ProxiedSession.java:121)
+        //        org.apache.shiro.subject.support.DelegatingSubject.getRunAsPrincipalsStack(DelegatingSubject.java:469)
+        //        org.apache.shiro.subject.support.DelegatingSubject.getPrincipals(DelegatingSubject.java:153)
+        //        org.apache.shiro.mgt.DefaultSecurityManager.logout(DefaultSecurityManager.java:547)
+        //        org.apache.shiro.subject.support.DelegatingSubject.logout(DelegatingSubject.java:363)
+        //        org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor.logout(ShiroAuthenticatorOrAuthorizor.java:179)
+        //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
+
+        getAuthenticationManager().closeSession(authenticationSession);
+        getIsisSessionFactory().closeSession();
+
+        super.invalidateNow();
+    }
+
+    @Override
+    public synchronized void onInvalidate() {
         super.onInvalidate();
 
         SessionLoggingService.CausedBy causedBy = RequestCycle.get() != null
@@ -100,12 +119,12 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
-    public AuthenticationSession getAuthenticationSession() {
+    public synchronized AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
 
     @Override
-    public Roles getRoles() {
+    public synchronized Roles getRoles() {
         if (!isSignedIn()) {
             return null;
         }
@@ -114,7 +133,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     }
 
     @Override
-    public void detach() {
+    public synchronized void detach() {
         breadcrumbModel.detach();
         super.detach();
     }
@@ -139,7 +158,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     // /////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        return getIsisSessionFactory().getAuthenticationManager();
     }
 
     // /////////////////////////////////////////////////
@@ -152,29 +171,31 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             final SessionLoggingService.CausedBy causedBy) {
         final SessionLoggingService sessionLoggingService = getSessionLoggingService();
         if (sessionLoggingService != null) {
-            IsisContext.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
-                    int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-                    sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
-                }
-            });
+            getIsisSessionFactory().doInSession(new Runnable() {
+                    @Override
+                    public void run() {
+                        // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
+                        int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
+                        sessionLoggingService.log(type, username, Clock.getTimeAsDateTime().toDate(), causedBy, Integer.toString(sessionHashCode));
+                    }
+                });
         }
     }
 
     protected SessionLoggingService getSessionLoggingService() {
-        return IsisContext.doInSession(new Callable<SessionLoggingService>() {
-            @Override
-            public SessionLoggingService call() throws Exception {
-                return IsisContext.getPersistenceSession().getServicesInjector().lookupService(SessionLoggingService.class);
-            }
-        });
+        return getIsisSessionFactory().getServicesInjector().lookupService(SessionLoggingService.class);
     }
 
     @Override
-    public void replaceSession() {
+    public synchronized void replaceSession() {
         // do nothing here because this will lead to problems with Shiro
         // see https://issues.apache.org/jira/browse/ISIS-1018
     }
+
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
+
 }

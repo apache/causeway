@@ -36,7 +36,7 @@ public class LongPrimitiveValueFacetUsingSemanticsProviderFactory extends ValueF
         if (type != long.class) {
             return;
         }
-        addFacets(new LongPrimitiveValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new LongPrimitiveValueSemanticsProvider(holder, getContext()));
     }
 
 }

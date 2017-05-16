@@ -19,31 +19,29 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import java.util.Iterator;
-import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
-import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
+import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.model.IModel;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
@@ -72,6 +70,10 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     public void detach() {
         super.detach();
         model.detach();
+    }
+
+    public EntityCollectionModel getEntityCollectionModel() {
+        return model;
     }
 
     @Override
@@ -156,14 +158,16 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             public int compare(final ObjectAdapter p, final ObjectAdapter q) {
                 final ObjectAdapter pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
                 final ObjectAdapter qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-                Ordering<ObjectAdapter> naturalOrdering = 
-                        ascending 
-                            ? ORDERING_BY_NATURAL.nullsFirst() 
-                            : ORDERING_BY_NATURAL.nullsLast();
+                Ordering<ObjectAdapter> naturalOrdering;
+                if(ascending){
+                    naturalOrdering = ORDERING_BY_NATURAL.nullsFirst();
+                } else {
+                    naturalOrdering = ORDERING_BY_NATURAL.reverse().nullsLast();
+                }
                 return naturalOrdering.compare(pSort, qSort);
             }
         };
-        return ascending?ordering:ordering.reverse();
+        return ordering;
     }
 
     private static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
@@ -184,15 +188,6 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         }
     };
 
-    // //////////////////////////////////////
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
-    }
 
 
 }

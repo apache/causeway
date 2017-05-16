@@ -26,12 +26,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -44,10 +42,10 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     }
 
     @SuppressWarnings("unchecked")
-    public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("time", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
+    public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
+        super("time", holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, context);
 
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.time");
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.time");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {
@@ -81,17 +79,20 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     }
     
 @Override 
-     protected DateFormat format(final Localization localization) { 
-         final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, localization.getLocale()); 
+     protected DateFormat format() {
+
+        final Locale locale = Locale.getDefault();
+        final DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
          dateFormat.setTimeZone(UTC_TIME_ZONE); 
          return dateFormat; 
      } 
   
-     protected List<DateFormat> formatsToTry(Localization localization) { 
-         List<DateFormat> formats = new ArrayList<DateFormat>(); 
-          
-         Locale locale = localization == null ? Locale.getDefault() : localization.getLocale(); 
-         formats.add(DateFormat.getTimeInstance(DateFormat.LONG, locale)); 
+     protected List<DateFormat> formatsToTry() {
+         List<DateFormat> formats = new ArrayList<DateFormat>();
+
+         final Locale locale = Locale.getDefault();
+
+         formats.add(DateFormat.getTimeInstance(DateFormat.LONG, locale));
          formats.add(DateFormat.getTimeInstance(DateFormat.MEDIUM, locale)); 
          formats.add(DateFormat.getTimeInstance(DateFormat.SHORT, locale)); 
          formats.add(createDateFormat("HH:mm:ss.SSS")); 

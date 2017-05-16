@@ -23,15 +23,14 @@ import java.text.DecimalFormat;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Color;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Color> implements ColorValueFacet {
 
@@ -47,11 +46,11 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
      * {@link EncoderDecoder}.
      */
     public ColorValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public ColorValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Color.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
+    public ColorValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, Color.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -74,7 +73,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         final Color color = (Color) object;
         return color.title();
     }

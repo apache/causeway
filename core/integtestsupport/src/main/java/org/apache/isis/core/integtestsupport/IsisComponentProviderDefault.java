@@ -19,27 +19,16 @@
 
 package org.apache.isis.core.integtestsupport;
 
-import java.util.List;
-
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 
 public class IsisComponentProviderDefault extends IsisComponentProviderDefault2 {
 
     public IsisComponentProviderDefault(
-            final DeploymentType deploymentType,
             final AppManifest appManifestIfAny,
-            final List<Object> servicesOverride,
-            final List<InstallableFixture> fixturesOverride,
-            final IsisConfiguration configurationOverride,
-            final ProgrammingModel programmingModelOverride,
-            final MetaModelValidator metaModelValidatorOverride) {
-        super(deploymentType, appManifestIfAny, servicesOverride, fixturesOverride, configurationOverride, programmingModelOverride, metaModelValidatorOverride);
+            final IsisConfiguration configurationOverride) {
+        super(appManifestIfAny, configurationOverride);
 
     }
 }

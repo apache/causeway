@@ -50,7 +50,7 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
     @SuppressWarnings("unused")
     private final PageClassList pageClassList;
 
-    @Inject
+    @com.google.inject.Inject
     public PageClassRegistryDefault(final PageClassList pageClassList) {
         this.pageClassList = pageClassList;
         pageClassList.registerPages(this);

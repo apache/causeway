@@ -31,20 +31,22 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v1.ActionDto;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
@@ -57,7 +59,8 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
@@ -97,7 +100,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {
-        return getSpecificationLoader().loadSpecification(type);
+        return specificationLoader.loadSpecification(type);
     }
 
 
@@ -180,7 +183,8 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         dto.setMajorVersion("1");
         dto.setMinorVersion("0");
 
-        dto.setTransactionId(UUID.randomUUID().toString());
+        String transactionId = determineTransactionId().toString();
+        dto.setTransactionId(transactionId);
 
         for (ObjectAdapter targetAdapter : targetAdapters) {
             final RootOid rootOid = (RootOid) targetAdapter.getOid();
@@ -189,6 +193,15 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             targets.getOid().add(bookmark.toOidDto());
         }
         return dto;
+    }
+
+    protected UUID determineTransactionId() {
+        Command command = commandContext.getCommand();
+        if (command != null && command.getTransactionId() != null) {
+            return command.getTransactionId();
+        } else {
+            return UUID.randomUUID();
+        }
     }
 
     @Override
@@ -234,21 +247,24 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     // //////////////////////////////////////
 
+    //region > injected services
+    @javax.inject.Inject
+    CommandContext commandContext;
 
     @javax.inject.Inject
     private BookmarkService bookmarkService;
 
+    @javax.inject.Inject
+    SpecificationLoader specificationLoader;
 
-    // //////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
 
     protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession();
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
+    //endregion
 
 
 }

@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
@@ -25,23 +25,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 public interface MixedInMember extends ObjectMember {
 
     /**
-     * If the mixin uses a method of precisely this name, then the corresponding {@link ObjectMember#getName() name} and
-     * {@link ObjectMember#getId() id} will instead be inferred from the mixin class' {@link ObjectSpecification#getShortIdentifier() name}.
-     *
-     * <p>
-     *     This makes it easier to avoid silly spelling mistakes in supporting methods, with the name of the member
-     *     in essence specified in only just one place, namely the mixin class' name.
-     * </p>
-     *
-     * <p>
-     *     Remarks: originally intended to use a single (or perhaps two) underscore, however these may not be valid
-     *     identifiers after Java 8.
-     * </p>
-     */
-    public static final String DEFAULT_MEMBER_NAME = "$$";
-
-    /**
-     * The id if it was originally {@link #DEFAULT_MEMBER_NAME the default member name}.
+     * The id if it was originally {@link Mixin#DEFAULT_METHOD_NAME the default member name}.
      */
     String getOriginalId();
 

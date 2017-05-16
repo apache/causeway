@@ -23,9 +23,8 @@ import java.math.BigInteger;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.BigIntegerConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
@@ -40,25 +39,26 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInte
     private static final String ID_SCALAR_VALUE = "scalarValue";
     
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, BigInteger.class, BigIntegerConverter.INSTANCE);
+        super(id, scalarModel, BigInteger.class, new BigIntegerConverter());
     }
 
     @Override
-    protected AbstractTextComponent<BigInteger> createTextFieldForRegular() {
-        return new TextField<BigInteger>(ID_SCALAR_VALUE, new TextFieldValueModel<BigInteger>(this), BigInteger.class) {
+    protected AbstractTextComponent<BigInteger> createTextFieldForRegular(final String id) {
+        final TextFieldValueModel<BigInteger> textFieldValueModel = new TextFieldValueModel<>(this);
+        return new TextField<BigInteger>(id, textFieldValueModel, BigInteger.class) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) (type == BigInteger.class? BigIntegerConverter.INSTANCE: super.getConverter(type));
+                return (IConverter<C>) (type == BigInteger.class? new BigIntegerConverter(): super.getConverter(type));
             }
         };
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("javaMathBigIntegerPanel");
+    protected String getScalarPanelType() {
+        return "javaMathBigIntegerPanel";
     }
 
 }

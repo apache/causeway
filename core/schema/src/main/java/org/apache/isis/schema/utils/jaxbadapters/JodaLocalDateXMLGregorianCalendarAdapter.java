@@ -18,6 +18,7 @@
  */
 package org.apache.isis.schema.utils.jaxbadapters;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
@@ -53,6 +54,19 @@ public final class JodaLocalDateXMLGregorianCalendarAdapter {
         xgc.setDay(dateTime.getDayOfMonth());
 
         return xgc;
+    }
+
+    public static class ForJaxb extends XmlAdapter<XMLGregorianCalendar, LocalDate> {
+
+        @Override
+        public LocalDate unmarshal(final XMLGregorianCalendar localDateStr) throws Exception {
+            return JodaLocalDateXMLGregorianCalendarAdapter.parse(localDateStr);
+        }
+
+        @Override
+        public XMLGregorianCalendar marshal(final LocalDate LocalDate) throws Exception {
+            return JodaLocalDateXMLGregorianCalendarAdapter.print(LocalDate);
+        }
     }
 
 }

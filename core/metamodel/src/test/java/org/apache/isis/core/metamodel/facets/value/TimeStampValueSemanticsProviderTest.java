@@ -49,18 +49,18 @@ public class TimeStampValueSemanticsProviderTest extends ValueSemanticsProviderA
         TestClock.initialize();
         timestamp = new TimeStamp(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new TimeStampValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new TimeStampValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Override
     public void testParseEmptyString() {
-        final Object parsed = adapter.parseTextEntry(null, "", null);
+        final Object parsed = adapter.parseTextEntry(null, "");
         assertNull(parsed);
     }
 
     @Test
     public void testTitle() {
-        assertEquals("01/01/70 00:00:00 UTC", adapter.titleString(timestamp, null));
+        assertEquals("01/01/70 00:00:00 UTC", adapter.titleString(timestamp));
     }
 
     @Test

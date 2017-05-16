@@ -22,20 +22,8 @@ package org.apache.isis.core.commons.exceptions;
 public class UnknownTypeException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public UnknownTypeException() {
-        super();
-    }
-
     public UnknownTypeException(final String message) {
         super(message);
-    }
-
-    public UnknownTypeException(final Throwable cause) {
-        super(cause);
-    }
-
-    public UnknownTypeException(final String message, final Throwable cause) {
-        super(message, cause);
     }
 
     public UnknownTypeException(final Object object) {

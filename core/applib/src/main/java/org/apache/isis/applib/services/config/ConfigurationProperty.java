@@ -38,7 +38,8 @@ import org.apache.isis.applib.annotation.Title;
         }
 )
 @DomainObject(
-        editing = Editing.DISABLED
+        editing = Editing.DISABLED,
+        objectType = "isisApplib.ConfigurationProperty"
 )
 @DomainObjectLayout(
         paged = 999

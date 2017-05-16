@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -40,7 +41,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * @deprecated
  */
 @Deprecated
-public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory extends FacetFactoryAbstract
+        implements MetaModelValidatorRefiner, DeprecatedMarker {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
 
@@ -97,7 +99,7 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
+        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         validator.setConfiguration(configuration);
     }
 

@@ -1,0 +1,23 @@
+[[_ugodn_configuring_eagerly-registering-entities]]
+= Eagerly Registering Entities
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+Both Apache Isis and DataNucleus have their own metamodels of the domain entities. Apache Isis builds its metamodel by walking the graph of types of the domain services.  The JDO/DataNucleus objectstore then takes these types and registers them with DataNucleus.
+
+In some cases, though, not every entity type is discoverable from the API of the service actions. This is especially the case if you have lots of subtypes (where the action method specifies only the supertype). In such cases the Isis and JDO metamodels is built lazily, when an instance of that (sub)type is first encountered.
+
+Apache Isis is quite happy for the metamodel to be lazily created, and - to be fair - DataNucleus also works well in most cases. In some cases, though, we have found that the JDBC driver (eg HSQLDB) will deadlock if DataNucleus tries to submit some DDL (for a lazily discovered type) intermingled with DML (for updating).  In any case, it's probably not good practice to have DataNucleus work this way.
+
+The framework thus provide mechanisms to search for all `@PersistenceCapable` entities under specified package(s), and registers them all eagerly.  In fact there are two:
+
+* as of 1.9.0 the recommended (and simpler) approach is to specify an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], either as a xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property or programmatically.
+
+* for earlier versions the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` configuration property can be specified.  To bootstrap as a webapp this is usually specified in `persistor_datanucleus.properties`.  (This is also supported in 1.9.0 if no `AppManifest` is specified.  For integration testing this can be specified programatically.
+
+Further discussion on specifying the package(s) in integration testing (for either approach) can be found in the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[user guide].
+
+

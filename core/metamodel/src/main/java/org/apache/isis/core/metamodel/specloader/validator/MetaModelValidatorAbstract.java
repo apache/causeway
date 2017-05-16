@@ -33,6 +33,4 @@ public abstract class MetaModelValidatorAbstract implements MetaModelValidator {
     @Override
     public void shutdown() {
     }
-
-
 }

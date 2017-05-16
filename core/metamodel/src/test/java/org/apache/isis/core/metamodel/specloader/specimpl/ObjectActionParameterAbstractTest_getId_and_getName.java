@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import com.google.common.collect.Lists;
 
 import org.jmock.Expectations;
@@ -31,7 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,6 +37,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ObjectActionParameterAbstractTest_getId_and_getName {
 
@@ -64,7 +63,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
     private final static class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
-            super(number, objectAction, peer);
+            super(FeatureType.ACTION_PARAMETER_SCALAR, number, objectAction, peer);
         }
 
         private ObjectSpecification objectSpec;
@@ -83,7 +82,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         public String isValid(
                 final ObjectAdapter objectAdapter,
                 final Object proposedValue,
-                final InteractionInitiatedBy interactionInitiatedBy, final Localization localization) {
+                final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 

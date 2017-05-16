@@ -40,6 +40,10 @@ import org.apache.isis.schema.common.v1.OidsDto;
 
 public final class CommandDtoUtils {
 
+    public static void init() {
+        getJaxbContext();
+    }
+
     //region > marshalling
     static JAXBContext jaxbContext;
     static JAXBContext getJaxbContext() {

@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -39,7 +37,7 @@ public class JodaLocalDatePanel extends ScalarPanelTextFieldDatePickerAbstract<L
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("jodaDateTimePanel");
+    protected String getScalarPanelType() {
+        return "jodaDateTimePanel";
     }
 }

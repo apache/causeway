@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -39,9 +38,9 @@ import org.apache.wicket.util.lang.Generics;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
@@ -50,16 +49,22 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
     
     static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
-    private final ISortableDataProvider<T, S> dataProvider;
+    private final CollectionContentsSortableDataProvider dataProvider;
+    private final ObjectAdapterToggleboxColumn toggleboxColumn;
 
     private IsisAjaxFallbackHeadersToolbar<S> headersToolbar;
     private IsisAjaxNavigationToolbar navigationToolbar;
 
-    public IsisAjaxFallbackDataTable(final String id, final List<? extends IColumn<T, S>> columns,
-        final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
+    public IsisAjaxFallbackDataTable(
+            final String id,
+            final List<? extends IColumn<T, S>> columns,
+            final CollectionContentsSortableDataProvider dataProvider,
+            final int rowsPerPage,
+            final ObjectAdapterToggleboxColumn toggleboxColumn)
     {
-        super(id, columns, dataProvider, rowsPerPage);
+        super(id, columns, (ISortableDataProvider<T, S>)dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
+        this.toggleboxColumn = toggleboxColumn;
         setOutputMarkupId(true);
         setVersioned(false);
         setItemReuseStrategy(new PreserveModelReuseStrategy());
@@ -75,7 +80,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         headersToolbar = new IsisAjaxFallbackHeadersToolbar<>(this, this.dataProvider);
         addTopToolbar(headersToolbar);
 
-        navigationToolbar = new IsisAjaxNavigationToolbar(this);
+        navigationToolbar = new IsisAjaxNavigationToolbar(this, this.toggleboxColumn);
         addBottomToolbar(navigationToolbar);
 
         addBottomToolbar(new NoRecordsToolbar(this));

@@ -26,6 +26,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -33,13 +34,14 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 public class BookmarkTreeNode implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private final List<BookmarkTreeNode> children = Lists.newArrayList();
     private final int depth;
 
@@ -60,8 +62,8 @@ public class BookmarkTreeNode implements Serializable {
             final int depth) {
         pageParameters = bookmarkableModel.getPageParameters();
         RootOid oid = oidFrom(pageParameters);
-        this.oidNoVerStr = getOidMarshaller().marshalNoVersion(oid);
-        this.oidNoVer = getOidMarshaller().unmarshal(oidNoVerStr, RootOid.class);
+        this.oidNoVerStr = OID_MARSHALLER.marshalNoVersion(oid);
+        this.oidNoVer = OID_MARSHALLER.unmarshal(oidNoVerStr, RootOid.class);
         
         // replace oid with the noVer equivalent.
         PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
@@ -209,8 +211,8 @@ public class BookmarkTreeNode implements Serializable {
                 final Oid possibleParentOid = possibleParentAdapter.getOid();
                 if(possibleParentOid == null) {
                     continue;
-                } 
-                final String possibleParentOidStr = possibleParentOid.enStringNoVersion(getOidMarshaller());
+                }
+                final String possibleParentOidStr = possibleParentOid.enStringNoVersion();
                 if(Objects.equal(this.oidNoVerStr, possibleParentOidStr)) {
                     this.addChild(candidateBookmarkableModel);
                     whetherAdded = true;
@@ -246,7 +248,7 @@ public class BookmarkTreeNode implements Serializable {
             return null;
         }
         try {
-            return getOidMarshaller().unmarshal(oidStr, RootOid.class);
+            return OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
         } catch(Exception ex) {
             return null;
         }
@@ -254,17 +256,7 @@ public class BookmarkTreeNode implements Serializable {
 
     public static String oidStrFrom(BookmarkableModel<?> candidateBookmarkableModel) {
         final RootOid oid = oidFrom(candidateBookmarkableModel.getPageParameters());
-        return oid != null? getOidMarshaller().marshalNoVersion(oid): null;
+        return oid != null? OID_MARSHALLER.marshalNoVersion(oid): null;
     }
-
-
-    // //////////////////////////////////////
-
-    protected static OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
-
-
-
 
 }

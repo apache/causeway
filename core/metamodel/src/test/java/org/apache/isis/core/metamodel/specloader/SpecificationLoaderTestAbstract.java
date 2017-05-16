@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -44,10 +45,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -70,11 +68,7 @@ public abstract class SpecificationLoaderTestAbstract {
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
-    private TransactionStateProviderInternal mockTransactionStateProviderInternal;
-    @Mock
-    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
-    @Mock
-    private LocalizationProviderInternal mockLocalizationProviderInternal;
+    private MessageService mockMessageService;
 
     ServicesInjector stubServicesInjector;
     IsisConfigurationDefault stubConfiguration;
@@ -94,32 +88,28 @@ public abstract class SpecificationLoaderTestAbstract {
             ignoring(mockGridService).existsFor(with(any(Class.class)));
 
             ignoring(mockPersistenceSessionServiceInternal);
-            ignoring(mockTransactionStateProviderInternal);
-            ignoring(mockMessageBrokerServiceInternal);
-            ignoring(mockLocalizationProviderInternal);
+            ignoring(mockMessageService);
 
         }});
 
         stubConfiguration = new IsisConfigurationDefault(null);
 
         stubServicesInjector =
-                new ServicesInjector(Lists.newArrayList(
+                new ServicesInjector(
+                    Lists.newArrayList(
                         mockAuthenticationSessionProvider,
                         stubConfiguration,
                         mockDeploymentCategoryProvider,
                         mockPersistenceSessionServiceInternal,
-                        mockLocalizationProviderInternal,
-                        mockMessageBrokerServiceInternal,
-                        mockTransactionStateProviderInternal,
+                            mockMessageService,
                         mockGridService,
-                        mockDeploymentCategoryProvider));
+                        mockDeploymentCategoryProvider),
+                    stubConfiguration);
 
         final SpecificationLoader specificationLoader =
-                new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                        stubConfiguration,
-                        new ProgrammingModelFacetsJava5(),
-                        new MetaModelValidatorDefault(),
-                        Lists.<LayoutMetadataReader>newArrayList(
+                new SpecificationLoader(
+                        new ProgrammingModelFacetsJava5(stubConfiguration),
+                        new MetaModelValidatorDefault(), Lists.<LayoutMetadataReader>newArrayList(
                                 new LayoutMetadataReaderFromJson()), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
@@ -130,32 +120,6 @@ public abstract class SpecificationLoaderTestAbstract {
     }
 
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
-
-    @Test
-    public void testLayoutMetadataReaderEmptyList() {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("illegal argument, expected: is not an empty collection");
-
-        new SpecificationLoader(DeploymentCategory.PRODUCTION ,
-                stubConfiguration,
-                new ProgrammingModelFacetsJava5(),
-                new MetaModelValidatorDefault(),
-                Lists.<LayoutMetadataReader>newArrayList(),
-                stubServicesInjector);
-    }
-
-    @Test
-    public void testLayoutMetadataReaderNull() {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("illegal argument, expected: is not null");
-
-        new SpecificationLoader(DeploymentCategory.PRODUCTION,
-                stubConfiguration,
-                new ProgrammingModelFacetsJava5(),
-                new MetaModelValidatorDefault(),
-                null,
-                stubServicesInjector);
-    }
 
     @Test
     public void testCollectionFacet() throws Exception {

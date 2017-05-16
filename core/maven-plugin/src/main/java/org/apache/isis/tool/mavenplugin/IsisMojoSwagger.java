@@ -34,7 +34,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Mojo(
         name = "swagger",
@@ -75,10 +75,10 @@ public class IsisMojoSwagger extends IsisMojoAbstract {
 
     @Override
     protected void doExecute(
-            final ContextForMojo context, final IsisSystem system)
+            final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
             throws MojoFailureException, IOException {
 
-        final SwaggerService swaggerService = system.getSessionFactory().getServicesInjector().lookupService(SwaggerService.class);
+        final SwaggerService swaggerService = isisSessionFactory.getServicesInjector().lookupService(SwaggerService.class);
 
         final MavenProject mavenProject = context.getMavenProject();
         final File outputDir = determineOutputDir(mavenProject, output);

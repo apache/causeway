@@ -28,7 +28,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -36,7 +38,6 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.msgbroker.MessageBrokerServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -73,7 +74,7 @@ public class OneToManyAssociationDefaultTest {
     @Mock
     private SpecificationLoader mockSpecificationLoader;
     @Mock
-    private MessageBrokerServiceInternal mockMessageBrokerServiceInternal;
+    private MessageService mockMessageService;
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
@@ -85,17 +86,18 @@ public class OneToManyAssociationDefaultTest {
     private CollectionAddToFacet mockCollectionAddToFacet;
 
     private ServicesInjector stubServicesInjector;
+    private IsisConfigurationDefault stubConfiguration;
 
     private OneToManyAssociation association;
 
     @Before
     public void setUp() {
+        stubConfiguration = new IsisConfigurationDefault();
         stubServicesInjector = new ServicesInjector(Lists.newArrayList(
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
-                mockMessageBrokerServiceInternal,
-                mockPersistenceSessionServiceInternal
-        ));
+                mockMessageService,
+                mockPersistenceSessionServiceInternal), stubConfiguration);
 
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();

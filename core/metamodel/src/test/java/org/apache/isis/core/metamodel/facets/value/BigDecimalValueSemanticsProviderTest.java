@@ -28,7 +28,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -41,7 +40,8 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
     private FacetHolder holder;
 
     @Before
-    public void setUpObjects() throws Exception {
+    public void setUp() throws Exception {
+        super.setUp();
         context.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.value.format.decimal");
@@ -53,19 +53,19 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
         allowMockAdapterToReturn(bigDecimal);
         holder = new FacetHolderImpl();
 
-        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = value.parseTextEntry(null, "2142342334", null);
+        final Object newValue = value.parseTextEntry(null, "2142342334");
         assertEquals(new BigDecimal(2142342334L), newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "214xxx2342334", null);
+            value.parseTextEntry(null, "214xxx2342334");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -73,7 +73,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testTitleOf() {
-        assertEquals("34,132.199", value.displayTitleOf(bigDecimal, (Localization) null));
+        assertEquals("34,132.199", value.displayTitleOf(bigDecimal));
     }
 
     @Test

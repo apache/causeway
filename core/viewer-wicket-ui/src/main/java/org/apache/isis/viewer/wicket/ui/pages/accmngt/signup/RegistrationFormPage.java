@@ -19,8 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 
-import com.google.inject.Inject;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
@@ -34,7 +34,7 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
     
     private static final long serialVersionUID = 1L;
 
-    @Inject
+    @com.google.inject.Inject
     private PageNavigationService pageNavigationService;
 
     public RegistrationFormPage(final PageParameters parameters) {

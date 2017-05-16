@@ -50,6 +50,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -57,7 +58,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -73,12 +73,14 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
-import org.apache.isis.core.metamodel.transactions.TransactionState;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -91,13 +93,12 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
-    private final AdapterManager adapterManager;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
     private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
     private final ServicesInjector servicesInjector;
     private final IsisConfiguration configuration;
-    private final TransactionStateProviderInternal transactionStateProviderInternal;
     private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
@@ -107,25 +108,18 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final IsisConfiguration configuration,
-            final ServicesInjector servicesInjector,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager,
-            final TransactionStateProviderInternal transactionStateProviderInternal) {
+            final ServicesInjector servicesInjector) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
         this.onType = onType;
         this.returnType = returnType;
-        this.deploymentCategory = deploymentCategory;
-        this.authenticationSessionProvider = authenticationSessionProvider;
-        this.adapterManager = adapterManager;
+        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
+        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
-        this.configuration = configuration;
-        this.transactionStateProviderInternal = transactionStateProviderInternal;
+        this.configuration = servicesInjector.getConfigurationServiceInternal();
         this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
-
     }
 
     /**
@@ -161,6 +155,26 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final ObjectAdapter[] holder = new ObjectAdapter[1];
+
+        getPersistenceSessionServiceInternal().executeWithinTransaction(
+                new TransactionalClosure(){
+                    @Override
+                    public void execute() {
+                        holder[0] = doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+
+                    }
+                }
+        );
+        return holder[0];
+    }
+
+    ObjectAdapter doInvoke(
+            final ObjectAction owningAction,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
+            final ObjectAdapter[] argumentAdapters,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
 
         final CommandContext commandContext = getCommandContext();
@@ -185,22 +199,24 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         "Unable to persist command for action '%s'; CommandService does not support persistent commands ",
                         actionId));
             }
-            returnedAdapter = getAdapterManager().adapterFor(command);
+            returnedAdapter = getPersistenceSessionServiceInternal().adapterFor(command);
 
         } else {
-
             // otherwise, go ahead and execute action in the 'foreground'
-            owningAction.setupActionInvocationContext(targetAdapter);
+            final ObjectAdapter mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
+            owningAction.setupBulkActionInvocationContext(mixinElseRegularAdapter);
+
+            final Object mixinElseRegularPojo = ObjectAdapter.Util.unwrap(mixinElseRegularAdapter);
+
             final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);
             final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(argumentAdapterList);
 
-            final String targetMember = CommandUtil.targetMemberNameFor(owningAction);
-            final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
+            final String targetMember = targetNameFor(owningAction, mixedInAdapter);
+            final String targetClass = CommandUtil.targetClassNameFor(mixinElseRegularAdapter);
 
             final Interaction.ActionInvocation execution =
-                    new Interaction.ActionInvocation(interaction, actionId, targetPojo, argumentPojos, targetMember,
+                    new Interaction.ActionInvocation(interaction, actionId, mixinElseRegularPojo, argumentPojos, targetMember,
                             targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
@@ -208,12 +224,13 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 @Override
                 public Object execute(final Interaction.ActionInvocation currentExecution) {
 
+
                     try {
 
                         // update the current execution with the DTO (memento)
                         final ActionInvocationDto invocationDto =
                                 getInteractionDtoServiceInternal().asActionInvocationDto(
-                                        owningAction, targetAdapter, argumentAdapterList);
+                                        owningAction, mixinElseRegularAdapter, argumentAdapterList);
                         currentExecution.setDto(invocationDto);
 
 
@@ -243,7 +260,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         // invoke method
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
 
-                        final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, targetAdapter);
+                        final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
 
                         // ... post the executed event
@@ -307,7 +324,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
             final Object returnedPojo = priorExecution.getReturned();
-            returnedAdapter = adapterManager.adapterFor(returnedPojo);
+            returnedAdapter = persistenceSessionServiceInternal.adapterFor(returnedPojo);
 
             // sync DTO with result
             getInteractionDtoServiceInternal().updateResult(priorExecution.getDto(), owningAction, returnedPojo);
@@ -333,6 +350,24 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
+    }
+
+    // TODO: could improve this, currently have to go searching for the mixin
+    private static String targetNameFor(ObjectAction owningAction, ObjectAdapter mixedInAdapter) {
+        if(mixedInAdapter != null) {
+            ObjectSpecification onType = owningAction.getOnType();
+            ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
+            List<ObjectAction> objectActions1 = mixedInSpec.getObjectActions(Contributed.INCLUDED);
+            for (ObjectAction objectAction : objectActions1) {
+                if(objectAction instanceof MixedInMember2) {
+                    MixedInMember2 action = (MixedInMember2) objectAction;
+                    if(action.getMixinType() == onType) {
+                        return action.getName();
+                    }
+                }
+            }
+        }
+        return CommandUtil.targetMemberNameFor(owningAction);
     }
 
     private static String trim(String message, final int maxLen) {
@@ -380,7 +415,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         // to remove boilerplate from the domain, we automatically clone the returned object if it is a view model.
 
         if (resultPojo != null) {
-            final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(resultPojo);
+            final ObjectAdapter resultAdapter = getPersistenceSessionServiceInternal().adapterFor(resultPojo);
             return cloneIfViewModelElse(resultAdapter, resultAdapter);
         } else {
             // if void or null, attempt to clone the original target, else return null.
@@ -397,7 +432,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         final Object clone = viewModelFacet.clone(adapter.getObject());
 
-        final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
+        final ObjectAdapter clonedAdapter = getPersistenceSessionServiceInternal().adapterFor(clone);
 
         // copy over TypeOfFacet if required
         final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
@@ -438,19 +473,19 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     private MetaModelService2 getMetaModelService() {
-        return lookupServiceIfAny(MetaModelService2.class);
+        return servicesInjector.lookupServiceElseFail(MetaModelService2.class);
     }
 
     private TransactionService getTransactionService() {
-        return lookupServiceIfAny(TransactionService.class);
+        return servicesInjector.lookupServiceElseFail(TransactionService.class);
     }
 
     private BookmarkService getBookmarkService() {
-        return lookupServiceIfAny(BookmarkService.class);
+        return servicesInjector.lookupServiceElseFail(BookmarkService.class);
     }
 
     private RepositoryService getRepositoryService() {
-        return lookupServiceIfAny(RepositoryService.class);
+        return servicesInjector.lookupServiceElseFail(RepositoryService.class);
     }
 
     protected ObjectAdapter filteredIfRequired(
@@ -481,7 +516,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                             Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
                             method.getReturnType());
             if (visibleObjects != null) {
-                return getAdapterManager().adapterFor(visibleObjects);
+                return getPersistenceSessionServiceInternal().adapterFor(visibleObjects);
             }
 
             // would be null if unable to take a copy (unrecognized return type)
@@ -528,43 +563,30 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     // /////////////////////////////////////////////////////////
 
     private CommandContext getCommandContext() {
-        return lookupService(CommandContext.class);
+        return servicesInjector.lookupServiceElseFail(CommandContext.class);
     }
     private InteractionContext getInteractionContext() {
-        return lookupService(InteractionContext.class);
+        return servicesInjector.lookupServiceElseFail(InteractionContext.class);
     }
 
     private QueryResultsCache getQueryResultsCache() {
-        return lookupService(QueryResultsCache.class);
+        return servicesInjector.lookupServiceElseFail(QueryResultsCache.class);
     }
 
     private CommandService getCommandService() {
-        return lookupService(CommandService.class);
+        return servicesInjector.lookupServiceElseFail(CommandService.class);
     }
 
     private ClockService getClockService() {
-        return lookupService(ClockService.class);
+        return servicesInjector.lookupServiceElseFail(ClockService.class);
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return lookupService(PublishingServiceInternal.class);
+        return servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return lookupService(InteractionDtoServiceInternal.class);
-    }
-
-
-    private <T> T lookupService(final Class<T> serviceClass) {
-        T service = lookupServiceIfAny(serviceClass);
-        if(service == null) {
-            throw new IllegalStateException("The '" + serviceClass.getName() + "' service is not registered!");
-        }
-        return service;
-    }
-
-    private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
+        return servicesInjector.lookupServiceElseFail(InteractionDtoServiceInternal.class);
     }
 
     // /////////////////////////////////////////////////////////
@@ -572,12 +594,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     // /////////////////////////////////////////////////////////
 
 
-    private AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
-
-    private ServicesInjector getServicesInjector() {
-        return servicesInjector;
+    private PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
+        return persistenceSessionServiceInternal;
     }
 
     public IsisConfiguration getConfiguration() {
@@ -593,6 +611,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     public TransactionState getTransactionState() {
-        return transactionStateProviderInternal.getTransactionState();
+        return persistenceSessionServiceInternal.getTransactionState();
     }
 }

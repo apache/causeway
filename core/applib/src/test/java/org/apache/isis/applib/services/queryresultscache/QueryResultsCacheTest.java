@@ -16,22 +16,30 @@
  */
 package org.apache.isis.applib.services.queryresultscache;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.concurrent.Callable;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.events.system.FixturesInstallingEvent;
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class QueryResultsCacheTest {
 
     private QueryResultsCache queryResultsCache;
 
+    QueryResultsCache.Control control;
+
     @Before
     public void setUp() throws Exception {
         queryResultsCache = new QueryResultsCache();
+        control = new QueryResultsCache.Control();
+        queryResultsCache.control = control;
     }
+
     @Test
     public void execute() {
         
@@ -80,4 +88,33 @@ public class QueryResultsCacheTest {
         assertThat(i[0], is(5));
     }
     
+    @Test
+    public void cachingDisabled() {
+
+        // given fixtures installing, hence caching disabled
+        control.on(new FixturesInstallingEvent(new FixtureScriptsDefault()));
+
+        final int[] i = new int[]{0};
+
+        Callable<String> callable = new Callable<String>(){
+
+            @Override
+            public String call() throws Exception {
+                i[0]++;
+                return "foo";
+            }
+
+        };
+
+        // when, then (a cache miss)
+        assertThat(i[0], is(0));
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
+        assertThat(i[0], is(1));
+
+        // when, then should also be a cache miss - would've been a hit previously
+        assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
+        assertThat(i[0], is(2));
+
+    }
+
 }

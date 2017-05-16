@@ -43,8 +43,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -64,10 +62,15 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
  * their backing model.
- * 
+ *
  * <p>
  * Supports the concept of being {@link Rendering#COMPACT} (eg within a table) or
  * {@link Rendering#REGULAR regular} (eg within a form).
+ *
+ * <p>
+ *     REVIEW: this has been replaced by {@link ScalarPanelAbstract2} and is unused by the core framework.
+ *     It is however still used by some wicket addons (specifically, pdfjs).
+ * </p>
  */
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
 
@@ -154,13 +157,13 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected Fragment getCompactFragment(CompactType type) {
         Fragment compactFragment;
         switch (type) {
-            case INPUT_CHECKBOX:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract.this);
-                break;
-            case SPAN:
-            default:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstract.this);
-                break;
+        case INPUT_CHECKBOX:
+            compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract.this);
+            break;
+        case SPAN:
+        default:
+            compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstract.this);
+            break;
         }
         return compactFragment;
     }
@@ -201,7 +204,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     /**
      * hook for highly dynamic components, eg conditional choices.
-     * 
+     *
      * <p>
      * Returning <tt>true</tt> means that the component is always rebuilt prior to
      * every {@link #onBeforeRender() render}ing.
@@ -212,22 +215,22 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     /**
      * Builds GUI lazily prior to first render.
-     * 
+     *
      * <p>
      * This design allows the panel to be configured first.
      *
      * @see #onBeforeRender()
      */
     private void buildGui() {
-        
+
         // REVIEW: this is nasty, both write to the same entityLink field
         // even though only one is used
         componentIfCompact = addComponentForCompact();
         componentIfRegular = addComponentForRegular();
-        
+
         getRendering().buildGui(this);
         addCssForMetaModel();
-        
+
         if(!subscribers.isEmpty()) {
             addFormComponentBehavior(new ScalarUpdatingBehavior());
         }
@@ -245,6 +248,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             for (ScalarModelSubscriber subscriber : subscribers) {
                 subscriber.onUpdate(target, ScalarPanelAbstract.this);
             }
+
+            // hmmm... this doesn't seem to be picked up...
+            target.appendJavaScript(
+                    String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId()));
         }
 
         @Override
@@ -270,7 +277,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                    getPersistenceSession(), getSpecificationLoader());
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
@@ -366,14 +374,14 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
         if (facet != null) {
             switch (facet.label()) {
-                case LEFT:
-                    return "label-left";
-                case RIGHT:
-                    return "label-right";
-                case NONE:
-                    return "label-none";
-                case TOP:
-                    return "label-top";
+            case LEFT:
+                return "label-left";
+            case RIGHT:
+                return "label-right";
+            case NONE:
+                return "label-none";
+            case TOP:
+                return "label-top";
             }
         }
         return "label-left";
@@ -405,19 +413,24 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     /**
      * Optional hook method
-     * 
+     *
      * @return true - indicates has been updated, so update dynamically via ajax
      */
     public boolean updateChoices(ObjectAdapter[] pendingArguments) {
         return false;
     }
 
+    /**
+     * Repaints this panel of just some of its children
+     *
+     * @param target The Ajax request handler
+     */
+    public void repaint(AjaxRequestTarget target) {
+        target.add(this);
+    }
+
 
     // ///////////////////////////////////////////////////////////////////
-
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
     @Override
     public AdapterManager getAdapterManager() {

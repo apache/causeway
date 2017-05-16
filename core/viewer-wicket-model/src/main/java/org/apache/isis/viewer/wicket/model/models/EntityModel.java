@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -63,6 +63,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     private static final long serialVersionUID = 1L;
 
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
     // //////////////////////////////////////////////////////////
@@ -78,7 +80,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         final Boolean persistent = adapter != null && adapter.representsPersistent();
 
         if (persistent) {
-            final String oidStr = adapter.getOid().enStringNoVersion(getOidMarshaller());
+            final String oidStr = adapter.getOid().enStringNoVersion();
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -175,7 +177,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     }
 
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return getOidMarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
+        return OID_MARSHALLER.unmarshal(oidStr(pageParameters), RootOid.class);
     }
 
 
@@ -195,7 +197,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return createPageParameters(getObject());
     }
 
-    static class HintPageParameterSerializer implements Serializable {
+    class HintPageParameterSerializer implements Serializable {
 
         private static final long serialVersionUID = 1L;
         private static final String PREFIX = "hint-";
@@ -209,7 +211,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         public void hintStoreToPageParameters(
                 final PageParameters pageParameters) {
             final HintStore hintStore = getHintStore();
-            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asBookmark();
+            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asHintingBookmark();
             Set<String> hintKeys = hintStore.findHintKeys(bookmark);
             for (String hintKey : hintKeys) {
                 ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
@@ -220,7 +222,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
                 final PageParameters pageParameters) {
             Set<String> namedKeys = pageParameters.getNamedKeys();
             if(namedKeys.contains("no-hints")) {
-                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asBookmark());
+                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asHintingBookmark());
                 return;
             }
             List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
@@ -230,17 +232,15 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
                     String key = namedKey.substring(5);
                     final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
                     newComponentHintKeys.add(componentHintKey);
-                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asBookmark();
+                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asHintingBookmark();
                     componentHintKey.set(bookmark, value);
                 }
             }
         }
 
         protected HintStore getHintStore() {
-            return IsisContext.getPersistenceSession().getServicesInjector().lookupService(HintStore.class);
+            return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class);
         }
-
-
     }
 
     // //////////////////////////////////////////////////////////
@@ -251,7 +251,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
         if(componentHintKey != null) {
-            return componentHintKey.get(getObjectAdapterMemento().asBookmark());
+            return componentHintKey.get(getObjectAdapterMemento().asHintingBookmark());
         }
         return null;
     }
@@ -259,7 +259,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
-        componentHintKey.set(this.getObjectAdapterMemento().asBookmark(), hintValue);
+        componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmark(), hintValue);
     }
 
     @Override
@@ -331,7 +331,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             return null;
         }
         
-        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(concurrencyChecking);
+        final ObjectAdapter objectAdapter =
+                adapterMemento.getObjectAdapter(concurrencyChecking, getPersistenceSession(), getSpecificationLoader());
         return objectAdapter;
     }
 
@@ -354,6 +355,17 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     public void setObject(final ObjectAdapter adapter) {
         super.setObject(adapter);
         adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
+    }
+
+    public void setObjectMemento(
+            final ObjectAdapterMemento memento,
+            final PersistenceSession persistenceSession,
+            final SpecificationLoader specificationLoader) {
+        super.setObject(
+                memento != null
+                        ? memento.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader)
+                        : null);
+        adapterMemento = memento;
     }
 
 
@@ -385,12 +397,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
      * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
-        adapterMemento.resetVersion();
+        adapterMemento.resetVersion(getPersistenceSession(), getSpecificationLoader());
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
             final ObjectAdapter associatedAdapter =
-                    pm.getProperty().get(adapter, InteractionInitiatedBy.USER);
+                    pm.getProperty(getSpecificationLoader()).get(adapter, InteractionInitiatedBy.USER);
             scalarModel.setObject(associatedAdapter);
         }
     }
@@ -528,7 +540,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
         private ObjectAdapter getPendingAdapter() {
             final ObjectAdapterMemento memento = getObject();
-            return memento != null ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK) : null;
+            return memento != null
+                    ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                                entityModel.getPersistenceSession(), entityModel.getSpecificationLoader())
+                    : null;
         }
 
         public ObjectAdapter getPendingElseCurrentAdapter() {
@@ -626,18 +641,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     }
     
-
-    // //////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////
-
-    protected static OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
-	}
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
 
 
 }

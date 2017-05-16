@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.publish;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,10 @@ import org.apache.isis.schema.ixn.v1.InteractionDto;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class PublisherServiceLogging implements PublisherService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublisherServiceLogging.class);
@@ -71,10 +73,10 @@ public class PublisherServiceLogging implements PublisherService {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     private CommandContext commandContext;
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
 }

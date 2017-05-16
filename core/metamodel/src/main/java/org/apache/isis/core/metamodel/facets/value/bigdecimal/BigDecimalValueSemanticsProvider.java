@@ -26,14 +26,13 @@ import java.util.Locale;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements BigDecimalValueFacet {
 
@@ -54,11 +53,11 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
      * {@link EncoderDecoder}.
      */
     public BigDecimalValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public BigDecimalValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public BigDecimalValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
         format = determineNumberFormat("value.format.decimal");
     }
 
@@ -100,7 +99,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     @Override
-    public String titleString(final Object object, final Localization localization) {
+    public String titleString(final Object object) {
         return titleString(format, object);
     }
 

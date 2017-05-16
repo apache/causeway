@@ -39,7 +39,7 @@ public class JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory extends Va
         if (type != LocalDateTime.class) {
             return;
         }
-        addFacets(new JodaLocalDateTimeValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new JodaLocalDateTimeValueSemanticsProvider(holder, getContext()));
     }
 
 }

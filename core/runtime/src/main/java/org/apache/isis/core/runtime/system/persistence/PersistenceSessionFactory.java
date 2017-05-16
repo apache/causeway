@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
@@ -66,29 +65,39 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
 
     //region > init, createDataNucleusApplicationComponents
 
+    public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
+    public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
+
+
     private DataNucleusApplicationComponents applicationComponents;
 
     @Programmatic
-    public void init() {
-        this.applicationComponents = createDataNucleusApplicationComponents(configuration);
+    public void init(final SpecificationLoader specificationLoader) {
+        this.applicationComponents = createDataNucleusApplicationComponents(configuration, specificationLoader);
+    }
+
+    @Programmatic
+    public boolean isInitialized() {
+        return this.applicationComponents != null;
     }
 
     private DataNucleusApplicationComponents createDataNucleusApplicationComponents(
-            final IsisConfiguration configuration) {
+            final IsisConfiguration configuration, final SpecificationLoader specificationLoader) {
 
         if (applicationComponents == null || applicationComponents.isStale()) {
 
             final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
-                    DataNucleusPersistenceMechanismInstaller. JDO_OBJECTSTORE_CONFIG_PREFIX);
+                    JDO_OBJECTSTORE_CONFIG_PREFIX);
 
-            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DataNucleusPersistenceMechanismInstaller.DATANUCLEUS_CONFIG_PREFIX);
+            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap(), specificationLoader);
             final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
 
-            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, datanucleusProps, classesToBePersisted);
+            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, specificationLoader,
+                    datanucleusProps, classesToBePersisted);
         }
 
         return applicationComponents;
@@ -153,6 +162,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     //endregion
 
     //region > shutdown
+    @Programmatic
     public final void shutdown() {
         // no-op
     }
@@ -168,7 +178,6 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
     @Programmatic
     public PersistenceSession createPersistenceSession(
             final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader,
             final AuthenticationSession authenticationSession) {
 
         final FixturesInstalledFlag fixturesInstalledFlag = this;
@@ -176,7 +185,7 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
                 applicationComponents.getPersistenceManagerFactory();
 
         return new PersistenceSession(
-                configuration, servicesInjector, specificationLoader,
+                servicesInjector,
                 authenticationSession, persistenceManagerFactory,
                 fixturesInstalledFlag);
     }

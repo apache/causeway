@@ -21,6 +21,7 @@ package org.apache.isis.applib.fixtures;
 
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
  * Convenience class for creating fixtures, with support to allow
@@ -30,7 +31,10 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
  * Note that unlike {@link AbstractFixture}, fixtures inheriting from
  * this class <i>cannot</i> be used as domain objects (the {@link SwitchUserService} does
  * not conform to the domain object programming conventions).
+ *
+ * @deprecated - use {@link FixtureScript} instead.
  */
+@Deprecated
 public abstract class AbstractFixtureSusa extends AbstractFixture implements SwitchUserServiceAware {
 
     public AbstractFixtureSusa() {
@@ -41,21 +45,20 @@ public abstract class AbstractFixtureSusa extends AbstractFixture implements Swi
         super(fixtureType);
     }
 
-
-    // {{ User
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     protected void switchUser(final String username, final String... roles) {
         switchUserService.switchUser(username, roles);
     }
 
-    // }}
 
-    // {{ Injected: SwitchUserService
     private SwitchUserService switchUserService;
 
     @Override
-    public void setService(final SwitchUserService fixtureService) {
-        this.switchUserService = fixtureService;
+    public void setService(final SwitchUserService switchUserService) {
+        this.switchUserService = switchUserService;
     }
-    // }}
 
 }

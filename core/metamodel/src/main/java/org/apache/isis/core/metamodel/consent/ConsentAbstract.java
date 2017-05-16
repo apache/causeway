@@ -19,12 +19,7 @@
 
 package org.apache.isis.core.metamodel.consent;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.nonEmptyStringOrNull;
-import static org.hamcrest.CoreMatchers.is;
-
 import java.io.Serializable;
-
-import org.apache.isis.core.commons.ensure.Ensure;
 
 public abstract class ConsentAbstract implements Serializable, Consent {
 
@@ -86,10 +81,12 @@ public abstract class ConsentAbstract implements Serializable, Consent {
         this(null, description, reason);
     }
 
-    private ConsentAbstract(final InteractionResult interactionResult, final String description, final String reason) {
+    private ConsentAbstract(
+            final InteractionResult interactionResult,
+            final String description,
+            final String reason) {
         this.interactionResult = interactionResult;
         this.description = description;
-        Ensure.ensureThatArg(reason, is(nonEmptyStringOrNull()));
         this.reason = reason;
     }
 

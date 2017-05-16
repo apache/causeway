@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public final class JdoObjectIdSerializer {
@@ -217,6 +218,10 @@ public final class JdoObjectIdSerializer {
     }
 
     private static SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+    static IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 }

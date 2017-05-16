@@ -1,3 +1,4 @@
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -56,6 +57,10 @@ body {
     width: 100%;
     opacity: 0.5;
     filter: alpha(opacity=50);
+}
+
+#veil .text-center {
+    margin-top: 100px;
 }
 
 .table .table td {
@@ -492,7 +497,7 @@ div.additionalLinkList {
 .col .additionalLinksAndSelectorDropDown,
 .entityPropertiesPanel .additionalLinks,
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
-    margin-top: -4px;
+    margin-top: -6px;
 }
 
 .collection.panel-body {
@@ -600,12 +605,19 @@ div.label-left .choicesPlaceholder {
 }
 
 div.label-right .scalarValueWrapper {
-    padding-left: 28.5%;
+    padding-left: 30%;
 }
 
 div.label-right .scalarValueWrapper .control-label{
     vertical-align: sub;
 }
+
+div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
+    padding-left: 30%;
+    width: 70%;
+    float: left;
+}
+
 /* Labels on the left/top/none END */
 
 
@@ -793,17 +805,44 @@ tr.headers th form input {
 .editing .edit {
     padding-top: 2px;
     float: right;
-    margin-bottom: 10px;
+}
+
+.multiLineStringPanel .scalarValueInput .editing .edit {
+    margin-top: -30px;
+}
+
+.scalarValueInput .editing .edit {
+    margin-top: -20px;
+	z-index: 20000;
+}
+
+.referencePanel .scalarValueInput .editing .edit,
+.isisBlobPanel .scalarValueInput .editing .edit,
+.isisClobPanel .scalarValueInput .editing .edit,
+.booleanPanel .scalarValueInput .editing .edit {
+    margin-top: 0px;
+}
+
+@-moz-document url-prefix() {
+    .scalarValueInput .editing .edit {
+        margin-right: -17px;
+    }
 }
 
 .actions-right .scalarPlaceholder .scalarValueInput {
     width: 90%;
     float: left;
+    margin-bottom: 0px;
 }
 
-.actions-right .additionalLinkListInline {
-    margin-top: -22px;
+.characterPanel .actions-right .scalarPlaceholder .scalarValueInput {
+    margin-bottom: 4px;
 }
+.multiLineStringPanel .actions-right .scalarPlaceholder .scalarValueInput {
+    margin-bottom: 4px;
+}
+
+
 
 .booleanPanel .actions-right .additionalLinkListInline {
     margin-top: 0px;
@@ -827,3 +866,59 @@ tr.headers th form input {
     padding-top: 3px;
     padding-bottom: 7px;
 }
+
+.propertyEditForm .buttons .wicket-ajax-indicator,
+.actionParametersForm .buttons .wicket-ajax-indicator,
+.additionalLinkList .wicket-ajax-indicator {
+    margin-left: 4px;
+    margin-right: 10px;
+}
+
+.select2-container-multi.input-sm {
+    height: inherit;
+}
+
+.scalarNameAndValueComponentType .inlinePromptForm {
+    border: 2px solid;
+    padding: 10px;
+    margin-bottom: 20px
+}
+
+.scalarNameAndValueComponentType .inlinePromptForm .form-group {
+    padding-left: 5px;
+    padding-right: 15px;
+}
+
+.booleanPanel .form-control.scalarValueInlinePromptLink,
+.referencePanel .form-control.scalarValueInlinePromptLink {
+    display: inline-block;
+    width: 85%;
+}
+
+.booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
+.referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
+    width: 85%;
+}
+.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
+    margin-right: 10px;
+}
+.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityTitle {
+    display: none;
+}
+
+#container  a:focus,
+#container  .btn:focus,
+#container  input:focus,
+#container  :focus {
+//    outline-color: darkorange;
+//    outline-color: sienna;
+//    outline-color: darkred;
+    outline-color: maroon;
+    outline-style: solid;
+    outline-width: 2px;
+}
+
+#container  a.edit:focus {
+    padding: 3px;
+}
+

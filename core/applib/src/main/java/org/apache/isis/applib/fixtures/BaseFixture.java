@@ -21,12 +21,21 @@ package org.apache.isis.applib.fixtures;
 import org.apache.isis.applib.AbstractContainedObject;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
+/**
+ * @deprecated - use {@link FixtureScript} instead.
+ */
+@Deprecated
 abstract class BaseFixture extends AbstractContainedObject implements InstallableFixture {
 
     private final FixtureType fixtureType;
     FixtureClock clock = null;
 
+    /**
+     * @deprecated - use {@link FixtureScript} instead.
+     */
+    @Deprecated
     public BaseFixture(final FixtureType fixtureType) {
         this.fixtureType = fixtureType;
         try {
@@ -38,26 +47,25 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
         }
     }
 
-    // /////////////////////////////////////////////////
-    // FixtureType
-    // /////////////////////////////////////////////////
-
     /**
      * As specified in constructor.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     @Override
     public final FixtureType getType() {
         return fixtureType;
     }
 
-    // /////////////////////////////////////////////////
-    // FixtureClock
-    // /////////////////////////////////////////////////
 
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     public void setDate(final int year, final int month, final int day) {
         if (shouldIgnoreCallBecauseNoClockSetup("setDate()")) {
             return;
@@ -68,7 +76,10 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     public void setTime(final int hour, final int minute) {
         if (shouldIgnoreCallBecauseNoClockSetup("setTime()")) {
             return;
@@ -82,7 +93,10 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
      * <p>
      * Will return <tt>null</tt> if {@link FixtureClock} could not be
      * {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     public FixtureClock getFixtureClock() {
         return clock;
     }
@@ -90,7 +104,10 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could
      * not be {@link FixtureClock#initialize() initialized}.
+     *
+     * @deprecated - use {@link FixtureScript} instead.
      */
+    @Deprecated
     public void resetClock() {
         if (shouldIgnoreCallBecauseNoClockSetup("resetClock()")) {
             return;
@@ -105,6 +122,5 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
         }
         return false;
     }
-    // }}
 
 }

@@ -26,7 +26,10 @@ import org.apache.isis.applib.annotation.Immutable;
  * persisted.
  * 
  * Use {@link Immutable} annotation in preference to this marker interface.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface NeverImmutable {
 
 }

@@ -20,8 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.pages.mmverror;
 
 import java.util.List;
+import java.util.Set;
 
-import com.google.inject.Inject;
+import com.google.common.collect.Lists;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
@@ -36,9 +37,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
@@ -53,30 +56,34 @@ public class MmvErrorPage extends WebPage {
     private static final String ID_APPLICATION_NAME = "applicationName";
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationCss")
     private String applicationCss;
     
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationJs")
     private String applicationJs;
 
     private static final String ID_ERROR = "error";
     private static final String ID_ERROR_MESSAGE = "errorMessage";
 
-    public MmvErrorPage(final IModel<List<? extends String>> model) {
+    public MmvErrorPage(Set<String> validationErrors) {
+        this(Model.ofList(Lists.newArrayList(validationErrors)));
+    }
+
+    public MmvErrorPage(final IModel<List<String>> model) {
         super(model);
         addPageTitle();
         addApplicationName();
@@ -84,8 +91,8 @@ public class MmvErrorPage extends WebPage {
     }
 
     @SuppressWarnings("unchecked")
-    private IModel<List<? extends String>> getModel() {
-        return (IModel<List<? extends String>>) getDefaultModel();
+    private IModel<List<String>> getModel() {
+        return (IModel<List<String>>) getDefaultModel();
     }
 
     private MarkupContainer addPageTitle() {
@@ -131,7 +138,11 @@ public class MmvErrorPage extends WebPage {
     // ///////////////////////////////////////////////////
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return getIsisSessionFactory().getConfiguration();
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

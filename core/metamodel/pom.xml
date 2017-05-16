@@ -23,11 +23,11 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-metamodel</artifactId>
-    <name>Isis MetaModel</name>
+    <name>Apache Isis MetaModel</name>
 
     <dependencies>
         <dependency>

@@ -19,11 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionInteraction;
@@ -50,10 +46,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.disabled.DisabledFacetForDisabledAnnotationOnAction;
@@ -87,10 +82,8 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -112,8 +105,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation prototypeValidator = new MetaModelValidatorForDeprecatedAnnotation(Prototype.class);
 
 
-
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     public ActionAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -210,9 +201,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getDeploymentCategory(), getConfiguration(), servicesInjector,
-                                getAuthenticationSessionProvider(), adapterManager,
-                                transactionStateProviderInternal
+                                servicesInjector
                         ), processMethodContext);
             } else
             // deprecated (but more recently)
@@ -220,27 +209,21 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getDeploymentCategory(), getConfiguration(), servicesInjector,
-                                getAuthenticationSessionProvider(), adapterManager,
-                                transactionStateProviderInternal
+                                servicesInjector
                         ), processMethodContext);
             } else
             // current
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), getConfiguration(),
-                        servicesInjector, getAuthenticationSessionProvider(),
-                        adapterManager, transactionStateProviderInternal
+                        servicesInjector
                 );
             } else
             // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getDeploymentCategory(), getConfiguration(),
-                        servicesInjector, getAuthenticationSessionProvider(),
-                        adapterManager, transactionStateProviderInternal
+                        servicesInjector
                 );
             }
             FacetUtil.addFacet(actionInvocationFacet);
@@ -354,6 +337,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         if(facet == null) {
             facet = BulkFacetForActionAnnotation.create(action, holder);
         }
+        if(facet == null) {
+            facet = new BulkFacetObjectOnly(holder);
+        }
 
         FacetUtil.addFacet(facet);
     }
@@ -428,94 +414,42 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final Class<?> methodReturnType = method.getReturnType();
-        if (!collectionTypeRegistry.isCollectionType(methodReturnType) && !collectionTypeRegistry.isArrayType(methodReturnType)) {
+        if (!CollectionUtils.isCollectionType(methodReturnType) && !CollectionUtils.isArrayType(methodReturnType)) {
             return;
         }
 
-        TypeOfFacet facet;
+        TypeOfFacet typeOfFacet = null;
 
         // check for deprecated @TypeOf
         final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
-        facet = typeOfValidator.flagIfPresent(
+        typeOfFacet = typeOfValidator.flagIfPresent(
                 TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder), processMethodContext);
 
         // check for @Action(typeOf=...)
-        if(facet == null) {
+        if(typeOfFacet == null) {
             final Action action = Annotations.getAnnotation(method, Action.class);
             if (action != null) {
                 final Class<?> typeOf = action.typeOf();
                 if(typeOf != null && typeOf != Object.class) {
-                    facet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
+                    typeOfFacet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
                 }
             }
         }
 
         // infer from return type
-        if(facet == null) {
+        if(typeOfFacet == null) {
             final Class<?> returnType = method.getReturnType();
-            if (returnType.isArray()) {
-                final Class<?> componentType = returnType.getComponentType();
-                facet = new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLoader());
-            }
+            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(holder, returnType, getSpecificationLoader());
         }
 
         // infer from generic return type
-        if(facet == null) {
-            facet = inferFromGenericReturnType(processMethodContext);
+        if(typeOfFacet == null) {
+            final Class<?> cls = processMethodContext.getCls();
+            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, holder,
+                    getSpecificationLoader());
         }
 
-        FacetUtil.addFacet(facet);
-    }
-
-    private TypeOfFacet inferFromGenericReturnType(
-            final ProcessMethodContext processMethodContext) {
-
-        final Method method = processMethodContext.getMethod();
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-
-        final Type type = method.getGenericReturnType();
-        if (!(type instanceof ParameterizedType)) {
-            return null;
-        }
-
-        final ParameterizedType methodParameterizedType = (ParameterizedType) type;
-        final Type[] methodActualTypeArguments = methodParameterizedType.getActualTypeArguments();
-
-        if (methodActualTypeArguments.length == 0) {
-            return null;
-        }
-
-        final Object methodActualTypeArgument = methodActualTypeArguments[0];
-        if (methodActualTypeArgument instanceof Class) {
-            final Class<?> actualType = (Class<?>) methodActualTypeArgument;
-            return new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLoader());
-        }
-
-        if (methodActualTypeArgument instanceof TypeVariable) {
-
-            final TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
-            final GenericDeclaration methodGenericClassDeclaration = methodTypeVariable.getGenericDeclaration();
-
-            // try to match up with the actual type argument of the generic superclass.
-            final Type genericSuperclass = processMethodContext.getCls().getGenericSuperclass();
-            if(genericSuperclass instanceof ParameterizedType) {
-                final ParameterizedType parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
-                if(parameterizedTypeOfSuperclass.getRawType() == methodGenericClassDeclaration) {
-                    final Type[] genericSuperClassActualTypeArguments = parameterizedTypeOfSuperclass.getActualTypeArguments();
-                    // simplification: if there's just one, then use it.
-                    if(methodActualTypeArguments.length == 1) {
-                        final Type actualType = genericSuperClassActualTypeArguments[0];
-                        if(actualType instanceof Class) {
-                            // just being safe
-                            final Class<?> actualCls = (Class<?>) actualType;
-                            return new TypeOfFacetInferredFromGenerics(actualCls, holder, getSpecificationLoader());
-                        }
-                    }
-                }
-            }
-            // otherwise, what to do?
-        }
-        return null;
+        FacetUtil.addFacet(typeOfFacet);
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -556,15 +490,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         hiddenValidator.setConfiguration(configuration);
         disabledValidator.setConfiguration(configuration);
         prototypeValidator.setConfiguration(configuration);
-
-        this.transactionStateProviderInternal =
-                servicesInjector.lookupService(TransactionStateProviderInternal.class);
-
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-
-    private TransactionStateProviderInternal transactionStateProviderInternal;
-    PersistenceSessionServiceInternal adapterManager;
 
 }

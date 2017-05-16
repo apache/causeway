@@ -25,7 +25,6 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
@@ -44,13 +43,13 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
         holder = new FacetHolderImpl();
-        setValue(value = new CharWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new CharWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testParseLongString() throws Exception {
         try {
-            value.parseTextEntry(null, "one", null);
+            value.parseTextEntry(null, "one");
             fail();
         } catch (final InvalidEntryException expected) {
         }
@@ -58,12 +57,12 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
 
     @Test
     public void testTitleOf() {
-        assertEquals("r", value.displayTitleOf(character, (Localization) null));
+        assertEquals("r", value.displayTitleOf(character));
     }
 
     @Test
     public void testValidParse() throws Exception {
-        final Object parse = value.parseTextEntry(null, "t", null);
+        final Object parse = value.parseTextEntry(null, "t");
         assertEquals(Character.valueOf('t'), parse);
     }
 

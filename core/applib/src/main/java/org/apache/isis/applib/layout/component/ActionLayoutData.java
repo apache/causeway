@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -206,6 +207,17 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
         this.position = position;
     }
 
+
+    private PromptStyle promptStyle;
+
+    @XmlAttribute(required = false)
+    public PromptStyle getPromptStyle() {
+        return promptStyle;
+    }
+
+    public void setPromptStyle(PromptStyle promptStyle) {
+        this.promptStyle = promptStyle;
+    }
 
 
 

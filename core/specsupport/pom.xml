@@ -15,11 +15,11 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-specsupport</artifactId>
-    <name>Isis Spec Support</name>
+    <name>Apache Isis Spec Support</name>
 
     <dependencies>
         <dependency>

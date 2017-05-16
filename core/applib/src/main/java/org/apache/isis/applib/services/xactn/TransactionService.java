@@ -29,6 +29,11 @@ public interface TransactionService {
      * <p>
      * Occasionally useful to ensure that newly persisted domain objects
      * are flushed to the database prior to a subsequent repository query.
+     * </p>
+     *
+     * <p>
+     *     Equivalent to {@link Transaction#flush()} (with {@link Transaction} obtained using {@link #currentTransaction()}).
+     * </p>
      */
     @Programmatic
     void flushTransaction();
@@ -38,5 +43,11 @@ public interface TransactionService {
      */
     @Programmatic
     void nextTransaction();
+
+    /**
+     * Returns a representation of the current transaction.
+     */
+    @Programmatic
+    Transaction currentTransaction();
 
 }

@@ -19,16 +19,50 @@
 
 package org.apache.isis.core.metamodel.facets.object.ignore.jdo;
 
+import java.lang.reflect.Method;
+import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.AbstractRemoveMethodsFacetFactory;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 /**
  * Removes all methods inherited from <tt>javax.jdo.spi.PersistenceCapable</tt> (if JDO is on the classpath).
  */
-public class RemoveJdoEnhancementTypesFacetFactory extends AbstractRemoveMethodsFacetFactory {
+public class RemoveJdoEnhancementTypesFacetFactory extends FacetFactoryAbstract {
+
+    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes> jdoEnhancementmethodsToIgnore = Lists.newArrayList();
 
     public RemoveJdoEnhancementTypesFacetFactory() {
-        super("javax.jdo.spi.PersistenceCapable");
+        super(FeatureType.OBJECTS_ONLY);
+
+        final String typeToIgnoreIfOnClasspath = "javax.jdo.spi.PersistenceCapable";
+        try {
+            Class<?> typeToIgnore = InstanceUtil.loadClass(typeToIgnoreIfOnClasspath);
+            addMethodsToBeIgnored(typeToIgnore);
+        } catch(Exception ex) {
+            // ignore
+        }
     }
+
+    private void addMethodsToBeIgnored(Class<?> typeToIgnore) {
+        final Method[] methods = typeToIgnore.getMethods();
+        for (final Method method : methods) {
+            jdoEnhancementmethodsToIgnore
+                    .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+        }
+    }
+
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        for (final RemoveMethodsFacetFactory.MethodAndParameterTypes mapt : jdoEnhancementmethodsToIgnore) {
+            processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
+        }
+    }
+
 
 }

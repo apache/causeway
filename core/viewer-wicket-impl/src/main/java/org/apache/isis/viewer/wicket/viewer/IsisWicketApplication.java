@@ -23,12 +23,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
@@ -38,6 +40,8 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.SharedResources;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
@@ -51,7 +55,7 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,10 +71,16 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
+import org.apache.isis.core.webapp.WebAppConstants;
+import org.apache.isis.schema.utils.ChangesDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -128,7 +138,7 @@ import net.ftlines.wicketsource.WicketSource;
  */
 public class IsisWicketApplication
         extends AuthenticatedWebApplication
-        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
+        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor {
 
     private static final long serialVersionUID = 1L;
     
@@ -141,6 +151,10 @@ public class IsisWicketApplication
     private static final String WICKET_SOURCE_PLUGIN_KEY = "isis.viewer.wicket.wicketSourcePlugin";
     private static final boolean WICKET_SOURCE_PLUGIN_DEFAULT = false;
 
+    private static final String WICKET_REMEMBER_ME_COOKIE_KEY = "isis.viewer.wicket.rememberMe.cookieKey";
+    private static final String WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT = "isisWicketRememberMe";
+    private static final String WICKET_REMEMBER_ME_ENCRYPTION_KEY = "isis.viewer.wicket.rememberMe.encryptionKey";
+
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
@@ -151,43 +165,55 @@ public class IsisWicketApplication
     }
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private ComponentFactoryRegistry componentFactoryRegistry;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
     @SuppressWarnings("unused")
-    @Inject
+    @com.google.inject.Inject
     private ImageResourceCache imageCache;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
     @SuppressWarnings("unused")
-    @Inject
+    @com.google.inject.Inject
     private WicketViewerSettings wicketViewerSettings;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
+    /**
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
+     */
+    @com.google.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
-    private IsisSystem isisSystem;
+    @com.google.inject.Inject
+    private IsisConfiguration configuration;
+
+    /**
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
+     */
+    @com.google.inject.Inject
+    private DeploymentCategory deploymentCategory;
+
+    @com.google.inject.Inject
+    private WicketViewerSettings settings;
 
 
-    private boolean determiningDeploymentType;
+    private boolean determiningConfigurationType;
     private DeploymentTypeWicketAbstract deploymentType;
-
-    private final List<String> validationErrors = Lists.newArrayList();
 
 
     // /////////////////////////////////////////////////
@@ -200,7 +226,7 @@ public class IsisWicketApplication
 
     /**
      * Although there are warnings about not overriding this method, it doesn't seem possible
-     * to call {@link #setResourceSettings(org.apache.wicket.settings.IResourceSettings)} in the
+     * to call {@link #setResourceSettings(org.apache.wicket.settings.ResourceSettings)} in the
      * {@link #init()} method.
      */
     @Override
@@ -220,37 +246,45 @@ public class IsisWicketApplication
      */
     @Override
     protected void init() {
+        List<Future<Object>> futures = null;
         try {
             super.init();
 
-            configureWebJars();
-            configureWicketBootstrap();
-            configureWicketSelect2();
+            futures = startBackgroundInitializationThreads();
 
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
 
             configureLogging(isisConfigDir);
     
-            getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
+            getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
 
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
-            isisConfigurationBuilder.addDefaultConfigurationResources();
+            isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
             final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
 
-            deploymentType = determineDeploymentType(configuration.getString("isis.deploymentType"));
+            DeploymentTypeWicketAbstract deploymentType =
+                    determineDeploymentType(configuration.getString("isis.deploymentType"));
 
             RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
             IRequestCycleListener requestCycleListenerForIsis = newWebRequestCycleForIsis();
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
-            final IsisInjectModule isisModule = newIsisModule(deploymentType, configuration);
+            //
+            // create IsisSessionFactory
+            //
+            final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
+            final IsisInjectModule isisModule = newIsisModule(deploymentCategory, configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
-            injector.injectMembers(this);
+
+            injector.injectMembers(this); // populates this.isisSessionFactory
+
+            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, this.isisSessionFactory);
+
 
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
@@ -259,6 +293,8 @@ public class IsisWicketApplication
             
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
+            configureSecurity(configuration);
+
             getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
 
             // must be done after injected componentFactoryRegistry into the app itself
@@ -266,7 +302,7 @@ public class IsisWicketApplication
 
             filterJavascriptContributions();
 
-            configureWicketSourcePluginIfNecessary(configuration);
+            configureWicketSourcePluginIfNecessary();
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
@@ -279,18 +315,91 @@ public class IsisWicketApplication
 
             final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
             if(mmie != null) {
-                this.validationErrors.addAll(mmie.getValidationErrors());
-                log(this.validationErrors);
+                log(mmie.getValidationErrors());
             }
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
             LOG.error("Failed to initialize", ex);
             throw ex;
+        } finally {
+            ThreadPoolSupport.join(futures);
         }
     }
 
-    private void log(final List<String> validationErrors) {
+    protected List<Future<Object>> startBackgroundInitializationThreads() {
+        return ThreadPoolSupport.invokeAll(Lists.newArrayList(
+                new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        configureWebJars();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        configureWicketBootstrap();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        configureWicketSelect2();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override public Object call() throws Exception {
+                        ChangesDtoUtils.init();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override public Object call() throws Exception {
+                        InteractionDtoUtils.init();
+                        return null;
+                    }
+                },
+                new Callable<Object>() {
+                    @Override public Object call() throws Exception {
+                        CommandDtoUtils.init();
+                        return null;
+                    }
+                }
+        ));
+    }
+
+    /**
+     * protected visibility to allow ad-hoc overriding of some other authentication strategy.
+     */
+    protected void configureSecurity(final IsisConfiguration configuration) {
+        getSecuritySettings().setAuthenticationStrategy(newAuthenticationStrategy(configuration));
+    }
+
+    /**
+     * protected visibility to allow ad-hoc overriding of some other authentication strategy.
+     */
+    protected IAuthenticationStrategy newAuthenticationStrategy(final IsisConfiguration configuration) {
+        final String cookieKey = configuration.getString(WICKET_REMEMBER_ME_COOKIE_KEY,
+                WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT);
+        final String encryptionKey = configuration.getString(WICKET_REMEMBER_ME_ENCRYPTION_KEY, defaultEncryptionKeyIfNotConfigured());
+        return new DefaultAuthenticationStrategy(cookieKey, encryptionKey);
+    }
+
+    /**
+     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}; if an encryption key for the 'rememberMe'
+     * cookie hasn't been configured, then use a different encryption key for the 'rememberMe' cookie each time the
+     * app is restarted.
+     */
+    protected String defaultEncryptionKeyIfNotConfigured() {
+        return getDeploymentCategory().isProduction()
+                ? UUID.randomUUID().toString()
+                : "PrototypingEncryptionKey";
+    }
+
+    private void log(final Set<String> validationErrors) {
         log("");
         logBanner();
         log("");
@@ -308,17 +417,16 @@ public class IsisWicketApplication
         ApplicationSettings select2Settings = ApplicationSettings.get();
         select2Settings.setCssReference(new Select2BootstrapCssReference());
         select2Settings.setJavaScriptReference(new Select2JsReference());
-        select2Settings.setIncludeJqueryUI(false);
     }
 
-    protected void configureWicketSourcePluginIfNecessary(final IsisConfiguration configuration) {
-        if(isWicketSourcePluginEnabled(configuration)) {
+    protected void configureWicketSourcePluginIfNecessary() {
+        if(isWicketSourcePluginEnabled(this.configuration)) {
             configureWicketSourcePlugin();
         }
     }
 
     protected void configureWicketSourcePlugin() {
-        if(!deploymentType.isProduction()) {
+        if(!deploymentCategory.isProduction()) {
             WicketSource.configure(this);
         }
     }
@@ -343,7 +451,7 @@ public class IsisWicketApplication
         settings.setDeferJavascript(false);
         Bootstrap.install(this, settings);
 
-        getHeaderContributorListenerCollection().add(new IHeaderContributor() {
+        getHeaderContributorListeners().add(new IHeaderContributor() {
             @Override
             public void renderHead(IHeaderResponse response) {
                 BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
@@ -387,7 +495,7 @@ public class IsisWicketApplication
             return;
         }
 
-        determiningDeploymentType = true;
+        determiningConfigurationType = true;
         try {
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
 
@@ -395,7 +503,7 @@ public class IsisWicketApplication
             String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
             deploymentType = determineDeploymentType(deploymentTypeFromConfig);
         } finally {
-            determiningDeploymentType = false;
+            determiningConfigurationType = false;
         }
     }
 
@@ -560,13 +668,6 @@ public class IsisWicketApplication
 
     // //////////////////////////////////////
 
-    /**
-     * The validation errors, if any, that occurred on {@link #init() startup}.
-     */
-    public List<String> getValidationErrors() {
-        return validationErrors;
-    }
-    
     private void logError(String validationError) {
         log(validationError);
     }
@@ -624,10 +725,10 @@ public class IsisWicketApplication
     @Override
     protected void onDestroy() {
         try {
-            if (isisSystem != null) {
-                isisSystem.shutdown();
+            if (isisSessionFactory != null) {
+                isisSessionFactory.destroyServicesAndShutdown();
             }
-            IsisContext.shutdown();
+            getServletContext().setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, null);
             super.onDestroy();
         } catch(final RuntimeException ex) {
             // symmetry with #init()
@@ -640,7 +741,7 @@ public class IsisWicketApplication
 
     @Override
     public RuntimeConfigurationType getConfigurationType() {
-        if(determiningDeploymentType) {
+        if(determiningConfigurationType) {
             // avoiding an infinite loop; have already passed through here once before
             // this time around, just delegate to web-inf
             return super.getConfigurationType();
@@ -650,17 +751,15 @@ public class IsisWicketApplication
     }
     
     protected IsisInjectModule newIsisModule(
-            final DeploymentType deploymentType,
+            final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault isisConfiguration) {
-        return new IsisInjectModule(deploymentType, isisConfiguration);
+        return new IsisInjectModule(deploymentCategory, isisConfiguration);
     }
 
     // //////////////////////////////////////
 
 
     protected void initWicketComponentInjection(final Injector injector) {
-        // if serializable, then brings in dependency on cglib, and in turn asm.
-        // This would block us from migrating to DN 4.0.x
         getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
     }
 
@@ -717,7 +816,6 @@ public class IsisWicketApplication
         return pageClassRegistry;
     }
 
-    
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
      */
@@ -725,7 +823,6 @@ public class IsisWicketApplication
     public Class<? extends Page> getHomePage() {
         return getPageClassRegistry().getPageClass(PageType.HOME);
     }
-
 
     /**
      * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
@@ -760,13 +857,17 @@ public class IsisWicketApplication
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
     }
 
-
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return isisSessionFactory.getCurrentSession().getAuthenticationSession();
     }
-
 
     public DeploymentCategory getDeploymentCategory() {
-        return deploymentType.getDeploymentCategory();
+        return deploymentCategory;
     }
+
+    @Override
+    public WicketViewerSettings getSettings() {
+        return settings;
+    }
+
 }

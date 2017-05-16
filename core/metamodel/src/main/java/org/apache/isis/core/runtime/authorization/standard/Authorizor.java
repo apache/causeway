@@ -21,24 +21,25 @@ package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 public interface Authorizor extends ApplicationScopedComponent {
 
-    public void init();
-    public void shutdown();
+    void init(final DeploymentCategory deploymentCategory);
+    void shutdown();
 
-    public boolean isVisibleInAnyRole(final Identifier identifier);
-    public boolean isUsableInAnyRole(final Identifier identifier);
-
-    /**
-     * Checked for each of the user's roles.
-     */
-    public boolean isVisibleInRole(final String role, final Identifier identifier);
+    boolean isVisibleInAnyRole(final Identifier identifier);
+    boolean isUsableInAnyRole(final Identifier identifier);
 
     /**
      * Checked for each of the user's roles.
      */
-    public boolean isUsableInRole(final String role, final Identifier identifier);
+    boolean isVisibleInRole(final String role, final Identifier identifier);
+
+    /**
+     * Checked for each of the user's roles.
+     */
+    boolean isUsableInRole(final String role, final Identifier identifier);
 
 
 }

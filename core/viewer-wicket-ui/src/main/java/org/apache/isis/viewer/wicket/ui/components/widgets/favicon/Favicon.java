@@ -16,8 +16,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.favicon;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.util.string.Strings;
@@ -27,11 +27,11 @@ import org.apache.wicket.util.string.Strings;
  */
 public class Favicon extends WebComponent {
 
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("faviconUrl")
     private String url;
 
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("faviconContentType")
     private String contentType;
 

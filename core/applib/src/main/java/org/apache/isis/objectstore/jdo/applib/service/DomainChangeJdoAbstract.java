@@ -23,7 +23,6 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -37,8 +36,10 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.BookmarkService2;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService2;
+import org.apache.isis.applib.services.metamodel.MetaModelService3;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -168,12 +169,14 @@ public abstract class DomainChangeJdoAbstract {
 
     @Programmatic
     public Bookmark getTarget() {
-        return Util.bookmarkFor(getTargetStr());
+        final String str = getTargetStr();
+        return str != null? new Bookmark(str): null;
     }
     
     @Programmatic
     public void setTarget(Bookmark target) {
-        setTargetStr(Util.asString(target));
+        final String targetStr = target != null ? target.toString() : null;
+        setTargetStr(targetStr);
     }
 
     // //////////////////////////////////////
@@ -244,7 +247,17 @@ public abstract class DomainChangeJdoAbstract {
     )
     @MemberOrder(name="TargetStr", sequence="1")
     public Object openTargetObject() {
-        return Util.lookupBookmark(getTarget(), bookmarkService, container);
+        try {
+            return bookmarkService != null
+                    ? bookmarkService.lookup(getTarget(), BookmarkService2.FieldResetPolicy.DONT_RESET)
+                    : null;
+        } catch(RuntimeException ex) {
+            if(ex.getClass().getName().contains("ObjectNotFoundException")) {
+                messageService.warnUser("Object not found - has it since been deleted?");
+                return null;
+            }
+            throw ex;
+        }
     }
 
     public boolean hideOpenTargetObject() {
@@ -256,7 +269,7 @@ public abstract class DomainChangeJdoAbstract {
         if (targetObject == null) {
             return null;
         }
-        final MetaModelService2.Sort sortOfObject = metaModelService.sortOf(getTarget());
+        final MetaModelService2.Sort sortOfObject = metaModelService.sortOf(getTarget(), MetaModelService3.Mode.RELAXED);
         return !(sortOfObject.isViewModel() || sortOfObject.isJdoEntity())
                 ? "Can only open view models or entities"
                 : null;
@@ -363,12 +376,12 @@ public abstract class DomainChangeJdoAbstract {
     // //////////////////////////////////////
     
     @javax.inject.Inject
-    protected BookmarkService bookmarkService;
+    protected BookmarkService2 bookmarkService;
     
     @javax.inject.Inject
-    protected DomainObjectContainer container;
+    protected MessageService messageService;
 
     @javax.inject.Inject
-    protected MetaModelService2 metaModelService;
+    protected MetaModelService3 metaModelService;
 
 }

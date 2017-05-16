@@ -21,14 +21,13 @@ package org.apache.isis.core.metamodel.facets.value.chars;
 
 import java.text.DecimalFormat;
 
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character> implements CharValueFacet {
 
@@ -40,8 +39,8 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     private static final int MAX_LENGTH = 1;
     private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
-    public CharValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Character> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public CharValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Character> adaptedClass, final ServicesInjector context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -58,7 +57,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    public String titleString(final Object value, final Localization localization) {
+    public String titleString(final Object value) {
         return value == null ? "" : value.toString();
     }
 

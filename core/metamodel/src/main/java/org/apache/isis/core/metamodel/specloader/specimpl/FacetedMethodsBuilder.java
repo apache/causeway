@@ -74,12 +74,21 @@ public class FacetedMethodsBuilder {
         }
 
         @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
+        public void removeMethod(
+                final MethodScope methodScope,
+                final String methodName,
+                final Class<?> returnType,
+                final Class<?>[] parameterTypes) {
             MethodUtil.removeMethod(methods, methodScope, methodName, returnType, parameterTypes);
         }
 
         @Override
-        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+        public List<Method> removeMethods(
+                final MethodScope methodScope,
+                final String prefix,
+                final Class<?> returnType,
+                final boolean canBeVoid,
+                final int paramCount) {
             return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
@@ -474,7 +483,7 @@ public class FacetedMethodsBuilder {
             return null;
         }
 
-        final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod);
+        final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod, getSpecificationLoader());
 
         // process facets on the action & parameters
         getFacetProcessor().process(introspectedClass, actionMethod, methodRemover, action, FeatureType.ACTION, metadataProperties);

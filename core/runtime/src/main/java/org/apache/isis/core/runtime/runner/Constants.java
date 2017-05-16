@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.runner;
 
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderInstaller;
 import org.apache.isis.core.runtime.logging.LoggingConstants;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -34,9 +33,6 @@ public final class Constants {
     public static final String TYPE_SERVER_PROTOTYPE = DeploymentType.SERVER_PROTOTYPE.friendlyName();
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
 
-    public static final String REFLECTOR_OPT = "l";
-    public static final String REFLECTOR_LONG_OPT = SpecificationLoaderInstaller.TYPE;
-
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";
 
@@ -49,17 +45,11 @@ public final class Constants {
     public static final String HELP_OPT = "h";
     public static final String HELP_LONG_OPT = "help";
 
-    public static final String NO_SPLASH_OPT = "s";
-    public static final String NO_SPLASH_LONG_OPT = "nosplash";
-
     public static final String USER_OPT = "u";
     public static final String USER_LONG_OPT = "user";
 
     public static final String PASSWORD_OPT = "p";
     public static final String PASSWORD_LONG_OPT = "password";
-
-    public static final String DIAGNOSTICS_OPT = "diagnostics";
-    public static final String VERSION_OPT = "version";
 
     public static final String DEBUG_OPT = LoggingConstants.DEBUG_OPT;
     public static final String VERBOSE_OPT = LoggingConstants.VERBOSE_OPT;

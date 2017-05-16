@@ -48,8 +48,6 @@ public class DateConverterForJodaLocalDateTimeTest {
                 will(returnValue("yyyy-MM-dd"));
                 allowing(settings).getDateTimePattern();
                 will(returnValue("yyyy-MM-dd HH:mm"));
-                allowing(settings).getDatePickerPattern();
-                will(returnValue("yy-mm-dd"));
             }
         });
     }

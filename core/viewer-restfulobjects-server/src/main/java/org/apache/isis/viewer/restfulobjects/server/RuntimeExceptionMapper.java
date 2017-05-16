@@ -27,6 +27,7 @@ import com.google.common.base.Throwables;
 import org.jboss.resteasy.spi.Failure;
 import org.apache.isis.core.commons.exceptions.ExceptionUtils;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
@@ -38,7 +39,8 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
     @Override
     public Response toResponse(final RuntimeException ex) {
         // since have rendered...
-        final IsisTransaction currentTransaction = IsisContext.getTransactionManager().getTransaction();
+        final IsisTransaction currentTransaction = getIsisSessionFactory().getCurrentSession()
+                .getPersistenceSession().getTransactionManager().getCurrentTransaction();
 
         final Throwable rootCause = Throwables.getRootCause(ex);
         final List<Throwable> causalChain = Throwables.getCausalChain(ex);
@@ -64,4 +66,9 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
             return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
         }
     }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
 }

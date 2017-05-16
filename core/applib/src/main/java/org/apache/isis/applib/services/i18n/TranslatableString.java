@@ -25,7 +25,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Value;
 
+@Value
 public final class TranslatableString {
 
     //region > tr, trn (factory methods); constructor

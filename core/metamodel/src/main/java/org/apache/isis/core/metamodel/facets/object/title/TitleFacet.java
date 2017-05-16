@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.title;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -39,18 +38,18 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 public interface TitleFacet extends Facet {
 
     /**
-     * Provide a title for the target object, with respect to the specified {@link Localization}.
+     * Provide a title for the target object.
      */
-    String title(final ObjectAdapter targetAdapter, Localization localization);
+    String title(final ObjectAdapter targetAdapter);
 
     /**
-     * Provide a title for the target object, in the context of the context object, with respect to the specified {@link Localization}.
+     * Provide a title for the target object, in the context of the context object.
      * 
      * <p>
      * For example, if the title is of an object within a parented collection, then the
      * context object would be the parent.  Thus, the title might be shortened so that it does not
      * needlessly incorporate the title of the parent (context) object.
      */
-    String title(final ObjectAdapter contextAdapter, final ObjectAdapter targetAdapter, Localization localization);
+    String title(final ObjectAdapter contextAdapter, final ObjectAdapter targetAdapter);
 
 }

@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.Collection;
-import java.util.Queue;
+import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
 
 /**
  * Base interface for {@link OneToManyAssociation} only.
@@ -36,36 +35,6 @@ import java.util.Queue;
  */
 public interface OneToManyFeature extends ObjectFeature {
 
-    public enum CollectionSemantics {
-        LIST, ARRAY, SET, OTHER;
-
-        /**
-         * The corresponding class is not a subclass of {@link Collection}.
-         */
-        public boolean isArray() {
-            return this == ARRAY;
-        }
-
-        public boolean isList() {
-            return this == LIST;
-        }
-
-        public boolean isSet() {
-            return this == SET;
-        }
-
-        /**
-         * For example, {@link Queue}, or some other 3rdparty implementation of
-         * {@link Collection}.
-         */
-        public boolean isOther() {
-            return this == OTHER;
-        }
-
-        public boolean isListOrArray() {
-            return isList() || isArray();
-        }
-    }
-
     CollectionSemantics getCollectionSemantics();
+
 }

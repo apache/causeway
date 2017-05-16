@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -42,7 +41,8 @@ import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServi
  * TODO: unify these two type hierarchies...
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ConfigurationServiceDefault implements ConfigurationService {
 
@@ -85,7 +85,7 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 
 
 
-    @Inject
+    @javax.inject.Inject
     ConfigurationServiceInternal configurationServiceInternal;
 
 }

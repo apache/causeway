@@ -41,6 +41,7 @@ public @interface PropertyLayout {
      */
     String describedAs() default "";
 
+
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.
      */
@@ -69,6 +70,11 @@ public @interface PropertyLayout {
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
     boolean namedEscaped() default true;
+
+    /**
+     * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
+     */
+    PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;
 
     /**
      * For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day

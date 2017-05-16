@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete;
 
-import org.apache.isis.applib.annotation.AutoComplete;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import java.lang.reflect.Method;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * @deprecated
@@ -34,37 +32,12 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 @Deprecated
 public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFacetAbstract {
 
-    public static AutoCompleteFacet create(
-            final AutoComplete annotation,
-            final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
-
-        if(annotation == null) {
-            return null;
-        }
-
-        final Class<?> repositoryClass = annotation.repository();
-        final String actionName = annotation.action();
-
-        return new AutoCompleteFacetForAutoCompleteAnnotation(holder, repositoryClass, actionName, deploymentCategory,
-                specificationLoader, servicesInjector, adapterManager
-        );
-    }
-
-    private AutoCompleteFacetForAutoCompleteAnnotation(
+    public AutoCompleteFacetForAutoCompleteAnnotation(
             final FacetHolder holder,
             final Class<?> repositoryClass,
-            final String actionName,
-            final DeploymentCategory deploymentCategory,
-            final SpecificationLoader specificationLoader,
-            final ServicesInjector servicesInjector,
-            final AdapterManager adapterManager) {
-        super(holder, repositoryClass, actionName, deploymentCategory, specificationLoader, servicesInjector,
-                adapterManager
-        );
+            final Method actionName,
+            final ServicesInjector servicesInjector) {
+        super(holder, repositoryClass, actionName, servicesInjector);
     }
 
 

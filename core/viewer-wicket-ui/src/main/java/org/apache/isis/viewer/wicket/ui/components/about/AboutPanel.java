@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 
 import java.io.InputStream;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
@@ -38,7 +37,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
 
     private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
 
-    @Inject
+    @com.google.inject.Inject
     @Named("aboutMessage")
     private String aboutMessage;
     
@@ -49,7 +48,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
      *     Is <code>transient</code> because
      * </p>
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("metaInfManifest")
     private transient InputStream metaInfManifestIs;
     

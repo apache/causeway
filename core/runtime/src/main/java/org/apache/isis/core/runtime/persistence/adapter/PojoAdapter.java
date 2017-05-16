@@ -23,26 +23,25 @@ import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -56,7 +55,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
-    private final Localization localization;
     private final PersistenceSession persistenceSession;
 
     /**
@@ -77,16 +75,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final Object pojo,
             final Oid oid,
             final AuthenticationSession authenticationSession,
-            final Localization localization,
             final SpecificationLoader specificationLoader,
             final PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;
-
-        Ensure.ensureThatArg(specificationLoader, is(notNullValue()));
-
         this.specificationLoader = specificationLoader;
-        this.localization = localization;
         this.authenticationSession = authenticationSession;
         
         if (pojo instanceof ObjectAdapter) {
@@ -313,7 +306,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return (String) getObject();
         }
         final ObjectSpecification specification = getSpecification();
-        String title = specification.getTitle(contextAdapterIfAny, this, localization);
+        String title = specification.getTitle(contextAdapterIfAny, this);
         
         if (title == null) {
             title = getDefaultTitle();
@@ -350,7 +343,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     @Override
-    public synchronized String toString() {
+    public String toString() {
         final ToString str = new ToString(this);
         toString(str);
 

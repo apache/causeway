@@ -22,6 +22,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public class ExceptionRecognizerTranslate implements MethodRule {
 
@@ -57,10 +58,14 @@ public class ExceptionRecognizerTranslate implements MethodRule {
      * Simply invokes {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#recognize(Throwable)} for all registered {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}s for the provided exception, so that the message will be translated.
      */
     private void recognize(final Throwable ex) {
-        final List<ExceptionRecognizer> exceptionRecognizers = IsisContext.getPersistenceSession().getServicesInjector().lookupServices(ExceptionRecognizer.class);
+        final List<ExceptionRecognizer> exceptionRecognizers = getIsisSessionFactory().getServicesInjector().lookupServices(ExceptionRecognizer.class);
         for (final ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
             final String unused = exceptionRecognizer.recognize(ex);
         }
+    }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

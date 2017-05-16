@@ -20,10 +20,6 @@
 -->
     <modelVersion>4.0.0</modelVersion>
 
-    <!--
-    Heavily adapted from deltaspike's Asciidoctor website; many thanks!
-    -->
-
     <parent>
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
@@ -33,7 +29,7 @@
 
     <groupId>org.apache.isis.docs</groupId>
     <artifactId>isis-documentation</artifactId>
-    <version>1.13.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache Isis Docs</name>
@@ -44,17 +40,20 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <asciidoctor.maven.plugin.version>1.5.3</asciidoctor.maven.plugin.version>
         <asciidoctorj.pdf.version>1.5.0-alpha.11</asciidoctorj.pdf.version>
-        <asciidoctorj.version>1.5.4</asciidoctorj.version>
-        <jruby.version>1.7.21</jruby.version>
+        <asciidoctorj.version>1.5.4.1</asciidoctorj.version>
+        <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
+        <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
+        <incode-asciidoctor-extension-improvethisdoc.version>0.0.4-SNAPSHOT</incode-asciidoctor-extension-improvethisdoc.version>
 
-        <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
+        <jruby.version>9.1.8.0</jruby.version>
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-        <isis-site.dir>../../../isis-site/content</isis-site.dir>
-        <redirects.dir>../redirects/content</redirects.dir>
+        <isis-site-content.dir>../../../isis-site/content</isis-site-content.dir>
+        <isis-site-search.dir>../../../isis-site/search</isis-site-search.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
@@ -83,33 +82,10 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>de.saumya.mojo</groupId>
-                    <artifactId>gem-maven-plugin</artifactId>
-                    <version>1.0.5</version>
-                    <configuration>
-                        <!-- align JRuby version with AsciidoctorJ to avoid redundant downloading -->
-                        <jrubyVersion>${jruby.version}</jrubyVersion>
-                        <gemHome>${project.build.directory}/gems</gemHome>
-                        <gemPath>${project.build.directory}/gems</gemPath>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>initialize</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.asciidoctor</groupId>
                     <artifactId>asciidoctor-maven-plugin</artifactId>
                     <version>${asciidoctor.maven.plugin.version}</version>
                     <dependencies>
-                        <dependency>
-                            <groupId>org.asciidoctor</groupId>
-                            <artifactId>asciidoctorj-pdf</artifactId>
-                            <version>${asciidoctorj.pdf.version}</version>
-                        </dependency>
                         <!-- Comment this section to use the default jruby artifact provided by the plugin -->
                         <dependency>
                             <groupId>org.jruby</groupId>
@@ -122,27 +98,41 @@
                             <artifactId>asciidoctorj</artifactId>
                             <version>${asciidoctorj.version}</version>
                         </dependency>
+                        <dependency>
+                            <groupId>org.asciidoctor</groupId>
+                            <artifactId>asciidoctorj-diagram</artifactId>
+                            <version>${asciidoctorj.diagram.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.incode.asciidoctor.monotree</groupId>
+                            <artifactId>incode-asciidoctor-extension-monotree</artifactId>
+                            <version>${incode-asciidoctor-extension-monotree.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.incode.asciidoctor.improvethisdoc</groupId>
+                            <artifactId>incode-asciidoctor-extension-improvethisdoc</artifactId>
+                            <version>${incode-asciidoctor-extension-improvethisdoc.version}</version>
+                        </dependency>
                     </dependencies>
+                    <configuration>
+                        <!-- If you set baseDir to ${project.basedir}, top-level includes are resolved relative to the project root -->
+                        <!--
+                        <baseDir>${project.basedir}</baseDir>
+                        -->
+                        <!-- Attributes common to all output formats -->
+                        <attributes>
+                            <endpoint-url>http://isis.apache.org</endpoint-url>
+                            <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                            <project-version>${project.version}</project-version>
+                        </attributes>
+                        <requires>
+                            <require>asciidoctor-diagram</require>
+                        </requires>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>rubygems</groupId>
-            <artifactId>asciidoctor-diagram</artifactId>
-            <version>1.2.1</version>
-            <type>gem</type>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>rubygems</groupId>
-                    <artifactId>asciidoctor</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>
@@ -167,11 +157,12 @@
                                 <configuration>
                                     <backend>html5</backend>
 
-                                    <sourceDirectory>src/main/asciidoc</sourceDirectory>
-                                    <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
-
-                                    <!-- The gem-maven-plugin appends the scope (e.g., provided) to the gemPath defined in the plugin configuration -->
-                                    <gemPath>${project.build.directory}/gems-provided</gemPath>
+                                    <sourceDirectory>src/main/asciidoc/</sourceDirectory>
+                                    <outputDirectory>${project.reporting.outputDirectory}/</outputDirectory>
+                                    <!--
+                                    <sourceDocumentName>guides/ugvw/ugvw.adoc</sourceDocumentName>
+                                    <sourceDocumentName>guides/rgsvc/rgsvc.adoc</sourceDocumentName>
+                                    -->
 
                                     <sourceHighlighter>coderay</sourceHighlighter>
                                     <templateDir>../template</templateDir>
@@ -185,6 +176,14 @@
 
                                         <toc>right</toc>
                                         <icons>font</icons>
+                                        <version>${project.version}</version>
+
+                                        <improvethisdoc.rootDir>/adocs/documentation</improvethisdoc.rootDir>
+                                        <improvethisdoc.srcDir>/src/main/asciidoc</improvethisdoc.srcDir>
+                                        <improvethisdoc.organisation>apache</improvethisdoc.organisation>
+                                        <improvethisdoc.repo>isis</improvethisdoc.repo>
+                                        <improvethisdoc.branch>master</improvethisdoc.branch>
+                                        <improvethisdoc.label>Edit</improvethisdoc.label>
                                     </attributes>
                                 </configuration>
                             </execution>
@@ -193,54 +192,7 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>pdf</id>
-            <activation>
-                <property>
-                    <name>!skip.pdf</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctor-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-pdf-doc</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>pdf</backend>
 
-                                    <sourceDirectory>src/main/asciidoc/guides</sourceDirectory>
-                                    <outputDirectory>${project.reporting.outputDirectory}/guides</outputDirectory>
-
-                                    <sourceHighlighter>rouge</sourceHighlighter>
-                                    <preserveDirectories>true</preserveDirectories>
-                                    <relativeBaseDir>true</relativeBaseDir>
-                                    <doctype>book</doctype>
-
-                                    <attributes>
-                                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
-                                        <imagesdir/>
-
-                                        <icons>font</icons>
-                                        <pagenums/>
-                                        <toc/>
-                                        <idprefix/>
-                                        <idseparator>-</idseparator>
-                                    </attributes>
-
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
         <profile>
             <id>delete</id>
@@ -262,10 +214,10 @@
                                     <target>
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="deleting everything in ${isis-site.dir}"/>
+                                        <echo message="deleting everything in ${isis-site-content.dir}"/>
                                         <echo message=""/>
                                         <delete includeemptydirs="true">
-                                            <fileset dir="${isis-site.dir}" includes="**/*"/>
+                                            <fileset dir="${isis-site-content.dir}" includes="**/*"/>
                                         </delete>
                                     </target>
                                 </configuration>
@@ -299,33 +251,40 @@
                                     <target>
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${redirects.dir} to ${isis-site.dir}"/>
-                                        <echo message=""/>
-                                        <copy todir="${isis-site.dir}">
-                                            <fileset dir="${redirects.dir}"/>
-                                        </copy>
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
+                                        <echo message="copying from ${build.dir} to ${isis-site-content.dir}"/>
                                         <echo message=""/>
-                                        <copy todir="${isis-site.dir}" overwrite="true" force="true">
+                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
                                             <fileset dir="${build.dir}"/>
                                         </copy>
 
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="converting CRLF to LF for all text files under ${isis-site.dir}"/>
+                                        <echo message="using node to rebuild search index"/>
+                                        <exec executable="node" dir="${isis-site-search.dir}">
+                                            <arg value="--max_old_space_size=2048"/>
+                                            <arg value="_scripts/index.js"/>
+                                            <arg value="../content/"/>
+                                            <arg value="-o"/>
+                                            <arg value="../content/elasticlunr/index.json"/>
+                                            <arg value="-V"/>
+                                        </exec>
+
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="converting CRLF to LF for all text files under ${isis-site-content.dir}"/>
 
                                         <echo message="... .html files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.html"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="true"/>
 
                                         <echo message="... .xml files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.xml"
                                                  eol="lf"
                                                  eof="remove"
@@ -333,56 +292,56 @@
 
 
                                         <echo message="... .xsd files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.xsd"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .css files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.css"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .svg files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.svg"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .less files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.less"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .scss files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.scss"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .js files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.js"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .sh files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.sh"
                                                  eol="lf"
                                                  eof="remove"
                                                  fixlast="false"/>
 
                                         <echo message="... .rdf files"/>
-                                        <fixcrlf srcdir="${isis-site.dir}"
+                                        <fixcrlf srcdir="${isis-site-content.dir}"
                                                  includes="**/*.rdf"
                                                  eol="lf"
                                                  eof="remove"
@@ -392,12 +351,53 @@
                                              apply fixcrlf, so just copy over again... -->
                                         <echo message=""/>
                                         <echo message=""/>
-                                        <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site.dir}"/>
+                                        <echo message="copying over slick CSS and SCSS from ${build.dir} to ${isis-site-content.dir}"/>
                                         <echo message=""/>
-                                        <copy todir="${isis-site.dir}" overwrite="true" force="true">
+                                        <copy todir="${isis-site-content.dir}" overwrite="true" force="true">
                                             <fileset dir="${build.dir}"  includes="**/css/slick/**/*"/>
                                         </copy>
 
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>reindex</id>
+            <activation>
+                <property>
+                    <name>reindex</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>compile</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <target>
+                                        <echo message=""/>
+                                        <echo message=""/>
+                                        <echo message="using node to rebuild search index"/>
+                                        <exec executable="node" dir=".">
+                                            <arg value="--max_old_space_size=2048"/>
+                                            <arg value="${isis-site-search.dir}/_scripts/index.js"/>
+                                            <arg value="target/site"/>
+                                            <arg value="-o"/>
+                                            <arg value="target/site/elasticlunr/index.json"/>
+                                            <arg value="-V"/>
+                                        </exec>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -432,7 +432,7 @@
                                 </goals>
                                 <configuration>
                                     <source>
-                                        def siteDir = new File("${isis-site.dir}", "..")
+                                        def siteDir = new File("${isis-site-content.dir}", "..")
 
                                         "git add content --all".execute(null, siteDir).in.text
                                         "git reset content/guides".execute(null, siteDir).in.text
@@ -472,7 +472,7 @@
                                         <echo message=""/>
                                         <echo message="git commit -m '${message}' "/>
                                         <echo message=""/>
-                                        <exec executable="git" dir="${isis-site.dir}">
+                                        <exec executable="git" dir="${isis-site-content.dir}">
                                             <arg value="commit"/>
                                             <arg value="-m"/>
                                             <arg value="${message}"/>
@@ -482,7 +482,7 @@
                                         <echo message=""/>
                                         <echo message="git reset --hard"/>
                                         <echo message=""/>
-                                        <exec executable="git" dir="${isis-site.dir}">
+                                        <exec executable="git" dir="${isis-site-content.dir}">
                                             <arg value="reset"/>
                                             <arg value="--hard"/>
                                         </exec>

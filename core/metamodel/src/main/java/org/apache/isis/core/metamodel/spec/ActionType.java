@@ -22,25 +22,11 @@ package org.apache.isis.core.metamodel.spec;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
 public enum ActionType {
-    DEBUG, EXPLORATION, PROTOTYPE, USER;
+    PROTOTYPE, USER;
 
     public String getName() {
         return name();
-    }
-
-    public boolean matchesTypeOf(final ObjectAction action) {
-        return action != null && action.getType().equals(this);
-    }
-
-    public boolean isDebug() {
-        return this == DEBUG;
-    }
-
-    public boolean isExploration() {
-        return this == EXPLORATION;
     }
 
     public boolean isPrototype() {

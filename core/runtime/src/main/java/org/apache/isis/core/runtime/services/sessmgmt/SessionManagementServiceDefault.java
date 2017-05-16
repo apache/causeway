@@ -24,24 +24,33 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class SessionManagementServiceDefault implements SessionManagementService {
-
 
     @Programmatic
     @Override
     public void nextSession() {
-        final AuthenticationSession authenticationSession = IsisContext.getAuthenticationSession();
 
-        IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
-        IsisContext.closeSession();
-        IsisContext.openSession(authenticationSession);
-        IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
+        final AuthenticationSession authenticationSession =
+                isisSessionFactory.getCurrentSession().getAuthenticationSession();
+
+        persistenceSessionServiceInternal.commit();
+        isisSessionFactory.closeSession();
+
+        isisSessionFactory.openSession(authenticationSession);
+        persistenceSessionServiceInternal.beginTran();
     }
 
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+    @javax.inject.Inject
+    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 }

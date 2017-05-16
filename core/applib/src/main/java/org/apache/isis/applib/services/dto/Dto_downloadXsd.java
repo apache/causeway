@@ -118,10 +118,10 @@ public class Dto_downloadXsd {
     }
 
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 }
 

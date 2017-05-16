@@ -24,7 +24,8 @@ import java.io.Serializable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * {@link Serializable} representation of a {@link OneToManyAssociation} (a
@@ -34,8 +35,11 @@ public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static ObjectSpecification owningSpecFor(final OneToManyAssociation association) {
-        return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
+    private static ObjectSpecification owningSpecFor(
+            final OneToManyAssociation association,
+            final IsisSessionFactory isisSessionFactory) {
+        final SpecificationLoader specificationLoader = isisSessionFactory.getSpecificationLoader();
+        return specificationLoader.loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
     private final ObjectSpecId owningType;
@@ -43,12 +47,14 @@ public class CollectionMemento implements Serializable {
 
     private transient OneToManyAssociation collection;
 
-    public CollectionMemento(final ObjectSpecId owningType, final String id) {
-        this(owningType, id, collectionFor(owningType, id));
+    public CollectionMemento(
+            final ObjectSpecId owningType,
+            final String id, final SpecificationLoader specificationLoader) {
+        this(owningType, id, collectionFor(owningType, id, specificationLoader));
     }
 
-    public CollectionMemento(final OneToManyAssociation collection) {
-        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
+    public CollectionMemento(final OneToManyAssociation collection, final IsisSessionFactory isisSessionFactory) {
+        this(owningSpecFor(collection, isisSessionFactory).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
     }
 
     private CollectionMemento(final ObjectSpecId owningType, final String id, final OneToManyAssociation collection) {
@@ -72,19 +78,22 @@ public class CollectionMemento implements Serializable {
         return id;
     }
 
-    public String getName() {
-        return getCollection().getName();
+    public String getName(final SpecificationLoader specificationLoader) {
+        return getCollection(specificationLoader).getName();
     }
 
-    public OneToManyAssociation getCollection() {
+    public OneToManyAssociation getCollection(final SpecificationLoader specificationLoader) {
         if (collection == null) {
-            collection = collectionFor(owningType, id);
+            collection = collectionFor(owningType, id, specificationLoader);
         }
         return collection;
     }
 
-    private static OneToManyAssociation collectionFor(ObjectSpecId owningType, String id) {
-        return (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(id);
+    private static OneToManyAssociation collectionFor(
+            ObjectSpecId owningType,
+            String id,
+            final SpecificationLoader specificationLoader) {
+        return (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType, specificationLoader).getAssociation(id);
     }
 
 }

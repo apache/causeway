@@ -37,12 +37,5 @@ public abstract class PersistenceCommandAbstract implements PersistenceCommand {
         return adapter;
     }
 
-    // /////////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////////////////
-
-    protected static AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
-    }
 
 }

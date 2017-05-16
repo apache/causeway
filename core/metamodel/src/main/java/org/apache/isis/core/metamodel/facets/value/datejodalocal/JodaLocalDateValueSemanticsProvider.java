@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.value.datejodalocal;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
@@ -32,14 +33,13 @@ import org.joda.time.format.DateTimeFormatter;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDate> implements JodaLocalDateValueFacet {
 
@@ -140,15 +140,14 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * {@link EncoderDecoder}.
      */
     public JodaLocalDateValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public JodaLocalDateValueSemanticsProvider(
-            final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public JodaLocalDateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
 
         String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").trim();
         updateTitleStringFormatter(configuredNameOrPattern);
@@ -169,7 +168,9 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected LocalDate doParse(final Object context, final String entry, final Localization localization) {
+    protected LocalDate doParse(
+            final String entry,
+            final Object context) {
 
         updateTitleStringFormatterIfOverridden();
         
@@ -181,7 +182,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         } else if (dateString.startsWith("-")  && contextDate != null) {
             return JodaLocalDateUtil.relativeDate(contextDate, dateString, false);
         } else {
-            return parseDate(dateString, contextDate, localization);
+            return parseDate(dateString, contextDate);
         }
     }
 
@@ -196,8 +197,8 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         updateTitleStringFormatter(overridePattern);
     }
 
-    private LocalDate parseDate(final String dateStr, final Object original, final Localization localization) {
-        return JodaLocalDateUtil.parseDate(dateStr, localization, PARSE_FORMATTERS);
+    private LocalDate parseDate(final String dateStr, final Object original) {
+        return JodaLocalDateUtil.parseDate(dateStr, PARSE_FORMATTERS);
     }
     
 
@@ -206,15 +207,12 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String titleString(final Object value, final Localization localization) {
+    public String titleString(final Object value) {
         if (value == null) {
             return null;
         }
         final LocalDate date = (LocalDate) value;
-        DateTimeFormatter f = titleStringFormatter;
-        if (localization != null) {
-            f = titleStringFormatter.withLocale(localization.getLocale());
-        }
+        DateTimeFormatter f = titleStringFormatter.withLocale(Locale.getDefault());
         return JodaLocalDateUtil.titleString(f, date);
     }
 

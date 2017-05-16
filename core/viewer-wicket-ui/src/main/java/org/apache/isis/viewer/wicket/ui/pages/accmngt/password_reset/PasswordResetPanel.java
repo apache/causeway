@@ -19,13 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import javax.inject.Inject;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -34,11 +31,16 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
 
 /**
  * A panel with a form for creation of new users
@@ -76,12 +78,13 @@ public class PasswordResetPanel extends Panel {
 
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
-                Boolean passwordUpdated = IsisContext.doInSession(new Callable<Boolean>() {
+                Boolean passwordUpdated = getIsisSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
                         String email = accountConfirmationMap.get(uuid);
 
-                        UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        UserRegistrationService userRegistrationService = getIsisSessionFactory().getServicesInjector()
+                                .lookupServiceElseFail(UserRegistrationService.class);
                         return userRegistrationService.updatePasswordByEmail(email, password);
                     }
                 });
@@ -109,8 +112,12 @@ public class PasswordResetPanel extends Panel {
         return message;
     }
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
+
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
 
 }
 

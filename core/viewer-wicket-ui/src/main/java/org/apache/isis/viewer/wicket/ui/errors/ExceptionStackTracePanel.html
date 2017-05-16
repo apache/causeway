@@ -19,14 +19,9 @@
   under the License.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"  
       lang="en">
-    <head>
-        <wicket:link>
-            <!--<link href="ExceptionStackTracePanel.css" rel="stylesheet" type="text/css"/>-->
-        </wicket:link>
-    </head>
     <body>
         <wicket:panel>
             <div class="exceptionStackTracePanel">
@@ -39,7 +34,7 @@
                             </h2>
                         </div>
                         <div class="panel-body" wicket:id="ticketDetailsDiv">
-                            <h3><span wicket:id="ticketDetails">[ticket details]</span></h3>
+                            <h3 wicket:id="ticketDetails">[ticket details]</h3>
                         </div>
                         <div class="panel-body" wicket:id="ticketReferenceDiv">
                             <h4>Please quote reference: <span wicket:id="ticketReference">[ticket reference]</span></h4>

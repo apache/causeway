@@ -1,0 +1,107 @@
+[[_ugfun_getting-started_datanucleus-enhancer]]
+= Datanucleus Enhancer
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+link:http://www.datanucleus.org/[DataNucleus] is the reference implementation of the JDO (Java data objects) spec, and Apache Isis integrates with DataNucleus as its persistence layer.  Datanucleus is a very powerful library, allowing domain entities to be mapped not only to relational database tables, but also to NoSQL stores such as link:http://neo4j.com/[Neo4J], link:http://www.mongodb.org/[MongoDB] and link:http://cassandra.apache.org/[Apache Cassandra].
+
+With such power comes a little bit of complexity to the development environment: all domain entities must be enhanced through the DataNucleus enhancer.
+
+[NOTE]
+====
+Bytecode enhancement is actually a requirement of the JDO spec; the process is described in outline http://db.apache.org/jdo/enhancement.html[here].
+====
+
+What this means is that the enhancer -- available as both a Maven plugin and as an Eclipse plugin -- must, one way or another, be integrated into your development environment.
+
+If working from the Maven command line, JDO enhancement is done using the `maven-datanucleus-plugin`.  As of 1.9.0, we put all the configuration into an (always active) profile:
+
+[TIP]
+====
+The configuration described below is automatically set up by the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+====
+
+
+[source,xml]
+----
+<profile>
+    <id>enhance</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+        <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-maven-plugin</artifactId>
+                <version>${datanucleus-maven-plugin.version}</version>
+                <configuration>
+                    <fork>false</fork>
+                    <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
+                    <verbose>true</verbose>
+                    <props>${basedir}/datanucleus.properties</props>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-api-jdo</artifactId>
+        </dependency>
+    </dependencies>
+</profile>
+----
+
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]  sets up the plugin correctly in the `dom` (domain object model) module.  (It's actually a little bit more complex to cater for users of the Eclipse IDE using Eclipse's m2e plugin).
+
+
+
+
+== `META-INF/persistence.xml`
+
+It's also a good idea to ensure that the `dom` module has a JDO `META-INF/persistence.xml` file:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+
+    <persistence-unit name="simple"> <!--1-->
+    </persistence-unit>
+</persistence>
+----
+<1> change as required; typically is the name of the app.
+
+Again, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] does this.
+
+[WARNING]
+====
+If running on Windows, then there's a good chance you'll hit the http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath[maximum path length limit].   In this case the `persistence.xml` file is mandatory rather than optional.
+
+This file is also required if you are using developing in Eclipse and relying on the DataNucleus plugin for Eclipse rather than the DataNucleus plugin for Maven.  More information can be found xref:../dg/dg.adoc#_dg_ide_eclipse[here].
+====

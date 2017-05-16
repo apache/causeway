@@ -25,12 +25,12 @@ import java.util.Date;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
 import org.apache.isis.core.metamodel.facets.value.DateAndTimeValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time
@@ -46,11 +46,11 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
      * {@link EncoderDecoder}.
      */
     public JavaUtilDateValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, configuration, context);
+    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, context);
     }
 
     @Override

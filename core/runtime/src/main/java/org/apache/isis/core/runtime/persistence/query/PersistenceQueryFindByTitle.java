@@ -23,6 +23,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Corresponds to {@link QueryFindByTitle}.
@@ -30,8 +31,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class PersistenceQueryFindByTitle extends PersistenceQueryBuiltInAbstract {
     private final String title;
 
-    public PersistenceQueryFindByTitle(final ObjectSpecification specification, final String title, final long ... range) {
-        super(specification, range);
+    public PersistenceQueryFindByTitle(
+            final ObjectSpecification specification,
+            final String title,
+            final SpecificationLoader specificationLoader,
+            final long... range) {
+        super(specification, specificationLoader, range);
         this.title = title == null ? "" : title.toLowerCase();
     }
 

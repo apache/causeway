@@ -36,7 +36,10 @@ import org.apache.isis.applib.annotation.Programmatic;
  * and available for use; no further configuration is required.
  * </p>
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
 public class ActionInvocationContext {
 

@@ -28,12 +28,10 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
@@ -45,10 +43,10 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
         FORMATS.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
-    public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("date", holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue, configuration, context);
+    public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue, final ServicesInjector context) {
+        super("date", holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue, context);
 
-        final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.date");
+        final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.date");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
         } else {
@@ -92,16 +90,20 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
     }
 
     @Override
-    protected DateFormat format(final Localization localization) {
-        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, localization.getLocale());
+    protected DateFormat format() {
+        final Locale locale = Locale.getDefault();
+
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
         dateFormat.setTimeZone(UTC_TIME_ZONE);
         return dateFormat;
     }
 
-    protected List<DateFormat> formatsToTry(Localization localization) {
+    protected List<DateFormat> formatsToTry() {
+
+        final Locale locale = Locale.getDefault();
+
         List<DateFormat> formats = new ArrayList<>();
 
-        Locale locale = localization == null ? Locale.getDefault() : localization.getLocale();
         formats.add(DateFormat.getDateInstance(DateFormat.LONG, locale));
         formats.add(DateFormat.getDateInstance(DateFormat.MEDIUM, locale));
         formats.add(DateFormat.getDateInstance(DateFormat.SHORT, locale));

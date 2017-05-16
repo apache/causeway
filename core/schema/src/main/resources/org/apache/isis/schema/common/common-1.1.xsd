@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<xs:schema targetNamespace="http://isis.apache.org/schema/common"
+           elementFormDefault="qualified"
+           xmlns="http://isis.apache.org/schema/common"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="valueDto">
+        <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element name="string" type="xs:string"/>
+            <xs:element name="byte" type="xs:byte"/>
+            <xs:element name="short" type="xs:short"/>
+            <xs:element name="int" type="xs:int"/>
+            <xs:element name="long" type="xs:long"/>
+            <xs:element name="float" type="xs:float"/>
+            <xs:element name="double" type="xs:double"/>
+            <xs:element name="boolean" type="xs:boolean"/>
+            <xs:element name="char" type="xs:string"/>
+            <xs:element name="bigInteger" type="xs:integer"/>
+            <xs:element name="bigDecimal" type="xs:decimal"/>
+            <xs:element name="dateTime" type="xs:dateTime"/>
+            <xs:element name="localDate" type="xs:date"/>
+            <xs:element name="localDateTime" type="xs:dateTime"/>
+            <xs:element name="localTime" type="xs:time"/>
+            <xs:element name="timestamp" type="xs:dateTime"/>
+            <xs:element name="enum" type="enumDto"/>
+            <xs:element name="reference" type="oidDto"/>
+            <xs:element name="collection" type="collectionDto"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="oidDto">
+        <xs:sequence>
+            <xs:element name="objectType" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Deprecated, use the 'objectType' attribute instead.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="objectIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Deprecated, use the 'id' attribute instead.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="objectState" type="bookmarkObjectState">
+            <xs:annotation>
+                <xs:documentation>In previous versions of this schema the 'objectState' attribute was defaulted, but is now assumed to be 'persistent'</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="id" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="collectionDto">
+        <xs:annotation>
+            <xs:documentation>A collection of (argument) values
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="value" type="valueDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="type" use="required" type="valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="oidsDto">
+        <xs:annotation>
+            <xs:documentation>A list of OIDs
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="enumDto">
+        <xs:sequence>
+            <xs:element name="enumType" type="xs:string"/>
+            <xs:element name="enumName" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="bookmarkObjectState">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="persistent"/>
+            <xs:enumeration value="transient"/>
+            <xs:enumeration value="viewModel"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="valueType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="string"/>
+            <xs:enumeration value="byte"/>
+            <xs:enumeration value="short"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="long"/>
+            <xs:enumeration value="float"/>
+            <xs:enumeration value="double"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="char"/>
+            <xs:enumeration value="bigInteger"/>
+            <xs:enumeration value="bigDecimal"/>
+            <xs:enumeration value="javaSqlTimestamp"/>
+            <xs:enumeration value="jodaDateTime"/>
+            <xs:enumeration value="jodaLocalDate"/>
+            <xs:enumeration value="jodaLocalTime"/>
+            <xs:enumeration value="jodaLocalDateTime"/>
+            <xs:enumeration value="enum"/>
+            <xs:enumeration value="reference"/>
+            <xs:enumeration value="collection"/>
+            <xs:enumeration value="void">
+                <xs:annotation>
+                    <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="periodDto">
+        <xs:annotation>
+            <xs:documentation>Captures a period of time, eg for capturing metrics/timings.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="startedAt" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>The point in time that this period of time started.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="completedAt" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>The point in time that this period of time completed.  The duration is the difference between 'start' and 'complete'.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="differenceDto">
+        <xs:annotation>
+            <xs:documentation>Captures a pair of numbers representing a difference.  Used for example to capture metrics (number objects modified before and after).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="before" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The initial quantity.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="after" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>The final quantity, once known.  The difference is therefore the computation of (after - before).
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="valueWithTypeDto">
+        <xs:annotation>
+            <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="valueDto">
+                <xs:attribute name="type" use="required" type="valueType"/>
+                <xs:attribute name="null" use="optional" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:simpleType name="interactionType" >
+        <xs:annotation>
+            <xs:documentation>Whether this interaction with a member is invoking an action, or editing a property.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="action_invocation" />
+            <xs:enumeration value="property_edit" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

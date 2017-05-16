@@ -39,7 +39,7 @@ public class EnumFacetUsingValueFacetUsingSemanticsProviderFactory<T extends Enu
             return;
         }
 
-        addFacets(new EnumValueSemanticsProvider<T>(holder, asT(cls), getConfiguration(), getContext()));
+        addFacets(new EnumValueSemanticsProvider<T>(holder, asT(cls), getContext()));
         FacetUtil.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
     }
 

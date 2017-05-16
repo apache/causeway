@@ -16,8 +16,6 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -48,7 +46,7 @@ public class Object_downloadLayoutXml {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "700.1")
+    @MemberOrder(name = "datanucleusIdLong", sequence = "700.1")
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName,
@@ -65,10 +63,10 @@ public class Object_downloadLayoutXml {
         return LayoutService.Style.NORMALIZED;
     }
 
-    @Inject
+    @javax.inject.Inject
     LayoutService layoutService;
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
 }

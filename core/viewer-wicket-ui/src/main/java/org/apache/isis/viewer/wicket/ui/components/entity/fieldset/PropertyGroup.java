@@ -40,6 +40,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -49,7 +51,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -106,11 +108,21 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                 .transform(new Function<PropertyLayoutData, ObjectAssociation>() {
                     @Override
                     public ObjectAssociation apply(final PropertyLayoutData propertyLayoutData) {
-                        return  adapter.getSpecification().getAssociation(propertyLayoutData.getId());
+                        ObjectSpecification adapterSpecification = adapter.getSpecification();
+                        try {
+                            // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
+                            // suggesting that in some cases the GridService can get it wrong.  This is therefore a hack...
+                            return adapterSpecification.getAssociation(propertyLayoutData.getId());
+                        } catch (ObjectSpecificationException e) {
+                            return null;
+                        }
                     }
                 })
                 .filter(new Predicate<ObjectAssociation>() {
                     @Override public boolean apply(@Nullable final ObjectAssociation objectAssociation) {
+                        if(objectAssociation == null) {
+                            return false;
+                        }
                         final Consent visibility =
                                 objectAssociation .isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
                         return visibility.isAllowed();
@@ -152,19 +164,19 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             final OneToOneAssociation otoa,
             final WebMarkupContainer container,
             final List<LinkAndLabel> entityActions) {
-        final PropertyMemento pm = new PropertyMemento(otoa);
 
+        final PropertyMemento pm = new PropertyMemento(otoa, entityModel.getIsisSessionFactory());
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
         getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
+        final ObjectAdapter adapter = entityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
         final List<ObjectAction> associatedActions =
-                EntityActionUtil.getObjectActionsForAssociation(entityModel, otoa, getDeploymentCategory());
+                ObjectAction.Util.findForAssociation(adapter, otoa, getDeploymentCategory());
 
         entityActions.addAll(
-                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
+                LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null));
     }
-
 
     private boolean visible = false;
     @Override

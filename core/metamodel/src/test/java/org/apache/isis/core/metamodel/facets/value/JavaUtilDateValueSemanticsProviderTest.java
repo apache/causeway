@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -30,11 +28,13 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -54,7 +54,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         date = new java.util.Date(0);
 
         holder = new FacetHolderImpl();
-        setValue(new JavaUtilDateValueSemanticsProvider(holder, mockConfiguration, mockContext) {
+        setValue(new JavaUtilDateValueSemanticsProvider(holder, mockServicesInjector) {
             @Override
             protected String defaultFormat() {
                 return "iso";
@@ -65,7 +65,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "invalid entry", null);
+            getValue().parseTextEntry(null, "invalid entry");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -78,13 +78,13 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
      */
     @Test
     public void testTitleOf() {
-        final String EXPECTED = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date(0));
-        assertEquals(EXPECTED, getValue().displayTitleOf(date, (Localization) null));
+        final String EXPECTED = DateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.SHORT).format(new java.util.Date(0));
+        assertEquals(EXPECTED, getValue().displayTitleOf(date));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40", null);
+        final Object newValue = getValue().parseTextEntry(null, "1980-01-01 10:40");
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 
 public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
+
     private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
 
     /**
@@ -52,7 +53,7 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
         attachHideFacetIfHideMethodIsFound(processMethodContext);
     }
 
-    public static void attachHideFacetIfHideMethodIsFound(final ProcessMethodContext processMethodContext) {
+    private void attachHideFacetIfHideMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(getMethod.getName());
@@ -60,10 +61,18 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
         final Class<?> cls = processMethodContext.getCls();
         Method hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
         if (hideMethod == null) {
-            hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
-            if (hideMethod == null) {
-                return;
+
+            boolean noParamsOnly = getConfiguration().getBoolean(
+                    ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
+                    ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
+            boolean searchExactMatch = !noParamsOnly;
+            if(searchExactMatch) {
+                hideMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, getMethod.getParameterTypes());
             }
+        }
+
+        if (hideMethod == null) {
+            return;
         }
 
         processMethodContext.removeMethod(hideMethod);

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -40,7 +39,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
@@ -208,6 +208,6 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     }
 
 
-    @Inject
+    @javax.inject.Inject
     List<ContentNegotiationService> contentNegotiationServices;
 }

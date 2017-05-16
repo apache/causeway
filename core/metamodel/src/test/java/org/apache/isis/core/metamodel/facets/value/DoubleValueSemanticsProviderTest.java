@@ -26,7 +26,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -49,7 +48,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         });
 
         holder = new FacetHolderImpl();
-        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockServicesInjector));
 
         doubleObj = new Double(32.5d);
         allowMockAdapterToReturn(doubleObj);
@@ -57,13 +56,13 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testValue() {
-        assertEquals("32.5", getValue().displayTitleOf(doubleObj, (Localization) null));
+        assertEquals("32.5", getValue().displayTitleOf(doubleObj));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            getValue().parseTextEntry(null, "one", null);
+            getValue().parseTextEntry(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -71,18 +70,18 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testTitleOf() {
-        assertEquals("35,000,000", getValue().displayTitleOf(Double.valueOf(35000000.0), (Localization) null));
+        assertEquals("35,000,000", getValue().displayTitleOf(Double.valueOf(35000000.0)));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "120.56", null);
+        final Object newValue = getValue().parseTextEntry(null, "120.56");
         assertEquals(120.56, ((Double) newValue).doubleValue(), 0.0);
     }
 
     @Test
     public void testParse2() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "1,20.0", null);
+        final Object newValue = getValue().parseTextEntry(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
     }
 }

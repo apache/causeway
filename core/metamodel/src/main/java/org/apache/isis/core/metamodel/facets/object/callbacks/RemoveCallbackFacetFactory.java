@@ -48,8 +48,9 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final List<Facet> facets = new ArrayList<Facet>();
         final List<Method> methods = new ArrayList<Method>();
 
-        Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        Method method = MethodFinderUtils
+                .findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVING_PREFIX, void.class,
+                        NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);

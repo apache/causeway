@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -49,8 +48,6 @@ public interface RendererContext {
     Where getWhere();
 
     List<List<String>> getFollowLinks();
-
-    Localization getLocalization();
 
     boolean honorUiHints();
 

@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Component;
@@ -38,6 +37,7 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -58,12 +58,11 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
@@ -104,7 +103,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
-    
+
+    private static final String LIVE_RELOAD_URL_KEY = "isis.viewer.wicket.liveReloadUrl";
+
     // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
     private static final String ID_THEME = "theme";
@@ -119,6 +120,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     public static final String ID_MENU_LINK = "menuLink";
 
+    public static final String UIHINT_FOCUS = "focus";
+
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
      * if there is a problem rendering this page.
@@ -128,31 +131,32 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private final List<ComponentType> childComponentIds;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("applicationCss")
     private String applicationCss;
     
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      *///
-    @Inject(optional = true)
+    @com.google.inject.Inject(optional = true)
     @Named("applicationJs")
     private String applicationJs;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
+
 
     /**
      * Top-level &lt;div&gt; to which all content is added.
@@ -271,13 +275,42 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
+        String liveReloadUrl = getConfiguration().getString(LIVE_RELOAD_URL_KEY);
+        if(liveReloadUrl != null) {
+            response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
+        }
         if(isModernBrowser()) {
             addBootLint(response);
         }
+
+        String markupId = null;
+        EntityModel entityModel = getUiHintContainerIfAny();
+        if(entityModel != null) {
+            String path = entityModel.getHint(getPage(), PageAbstract.UIHINT_FOCUS);
+            if(path != null) {
+                Component childComponent = get(path);
+                if(childComponent != null) {
+                    markupId = childComponent.getMarkupId();
+                }
+
+            }
+        }
+        String javaScript = markupId != null
+            ? String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY, '%s')", markupId)
+            : "Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PROPERTY)";
+
+        response.render(OnDomReadyHeaderItem.forScript(javaScript));
+
+    }
+
+    protected EntityModel getUiHintContainerIfAny() {
+        return null;
     }
 
     private void addBootLint(final IHeaderResponse response) {
-        response.render(BootlintHeaderItem.INSTANCE);
+        // rather than using the default BootlintHeaderItem.INSTANCE;
+        // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
+        response.render(new BootlintHeaderItem("bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
     }
 
     private boolean isModernBrowser() {
@@ -412,45 +445,43 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
     
 
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
 
+    //region > getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
     }
+    //endregion
 
-    protected <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
+
+    //region > injected (application-scope) 
+
+    // REVIEW: can't inject because not serializable.
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
-    // ///////////////////////////////////////////////////
-    // System components
-    // ///////////////////////////////////////////////////
+    protected IsisConfiguration getConfiguration() {
+        return getIsisSessionFactory().getConfiguration();
+    }
 
     protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return getIsisSessionFactory().getServicesInjector();
     }
+
+    //endregion
+
+    //region > derived from injected components (session-scope)
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-    
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
-    
-    protected MessageBroker getMessageBroker() {
-        return IsisContext.getMessageBroker();
-    }
-    
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
+
+    //endregion
+
 
 }

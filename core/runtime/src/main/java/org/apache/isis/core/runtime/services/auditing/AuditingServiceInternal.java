@@ -18,21 +18,22 @@
  */
 package org.apache.isis.core.runtime.services.auditing;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
@@ -43,23 +44,40 @@ import org.apache.isis.core.runtime.services.changes.PreAndPostValues;
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditingService3}.  Is a no-op if there is no injected service.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class AuditingServiceInternal {
 
+    Boolean whetherCanAudit;
 
-    @Programmatic
-    public boolean canAudit() {
-        return auditingServiceIfAny != null;
+    private boolean canAudit() {
+        if(whetherCanAudit == null) {
+            whetherCanAudit = determineWhetherCanAudit();
+        }
+        return whetherCanAudit;
+    }
+
+    private boolean determineWhetherCanAudit() {
+        if (auditingServiceIfAny != null) {
+            return true;
+        }
+        for (final AuditerService auditerService : auditerServices) {
+            if (auditerService.isEnabled()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Programmatic
     public void audit() {
-        final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
-                changedObjectsServiceInternal.getChangedObjectProperties();
-
         if(!canAudit()) {
             return;
         }
+        final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
+                changedObjectsServiceInternal.getChangedObjectProperties();
 
         final String currentUser = userService.getUser().getName();
         final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();
@@ -90,32 +108,47 @@ public class AuditingServiceInternal {
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
 
-
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
 
-        final Command command = commandContext.getCommand();
-        final UUID transactionId = command.getTransactionId();
+        Transaction transaction = transactionService.currentTransaction();
+        final UUID transactionId = transaction.getTransactionId();
+        final int sequence = transaction.getSequence();
 
-        auditingServiceIfAny
-                .audit(transactionId, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
+
+        if(auditingServiceIfAny != null) {
+            auditingServiceIfAny
+                    .audit(transactionId, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
+        }
+        for (AuditerService auditerService : auditerServices) {
+            if (auditerService.isEnabled()) {
+                auditerService
+                        .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
+            }
+        }
     }
 
     /**
      * could be null if none has been registered.
      */
-    @Inject
+    @javax.inject.Inject
     private AuditingService3 auditingServiceIfAny;
 
-    @Inject
+    @javax.inject.Inject
+    private List<AuditerService> auditerServices;
+
+    @javax.inject.Inject
     private ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     UserService userService;
 
-    @Inject
+    @javax.inject.Inject
     ClockService clockService;
 
-    @Inject
-    CommandContext commandContext;
+    @javax.inject.Inject
+    InteractionContext interactionContext;
+
+    @javax.inject.Inject
+    TransactionService transactionService;
 
 }

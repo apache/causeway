@@ -31,7 +31,8 @@ import org.apache.isis.applib.services.guice.GuiceBeanProvider;
  * that uses the Injector configured for Wicket
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class GuiceBeanProviderWicket implements GuiceBeanProvider {
 

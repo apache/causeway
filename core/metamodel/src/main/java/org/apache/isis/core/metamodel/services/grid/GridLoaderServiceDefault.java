@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 
 import com.google.common.base.Function;
@@ -46,7 +45,8 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class GridLoaderServiceDefault implements GridLoaderService {
 
@@ -186,16 +186,16 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     //region > injected dependencies
 
-    @Inject
+    @javax.inject.Inject
     DeploymentCategoryProvider deploymentCategoryProvider;
 
-    @Inject
+    @javax.inject.Inject
     DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
     JaxbService jaxbService;
 
-    @Inject
+    @javax.inject.Inject
     List<GridSystemService> gridSystemServices;
     //endregion
 

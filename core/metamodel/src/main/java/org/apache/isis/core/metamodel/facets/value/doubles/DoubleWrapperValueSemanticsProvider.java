@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value.doubles;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class DoubleWrapperValueSemanticsProvider extends DoubleValueSemanticsProviderAbstract {
 
@@ -32,11 +32,11 @@ public class DoubleWrapperValueSemanticsProvider extends DoubleValueSemanticsPro
      * {@link EncoderDecoder}.
      */
     public DoubleWrapperValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public DoubleWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, Double.class, configuration, context);
+    public DoubleWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, Double.class, context);
     }
 
 }

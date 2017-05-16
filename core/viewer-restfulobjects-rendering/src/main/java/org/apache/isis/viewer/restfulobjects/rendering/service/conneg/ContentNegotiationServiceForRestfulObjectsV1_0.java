@@ -28,7 +28,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -52,10 +51,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPrope
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@DomainServiceLayout(
-        menuOrder = "" + Integer.MAX_VALUE // default
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 

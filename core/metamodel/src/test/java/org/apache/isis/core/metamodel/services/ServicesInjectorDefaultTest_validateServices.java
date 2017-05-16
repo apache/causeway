@@ -26,6 +26,8 @@ import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+
 public class ServicesInjectorDefaultTest_validateServices {
 
     ServicesInjector servicesInjector;
@@ -45,10 +47,12 @@ public class ServicesInjectorDefaultTest_validateServices {
     public static class ValidateServicesTestValidateServices extends ServicesInjectorDefaultTest_validateServices {
 
         List<Object> serviceList;
+        IsisConfigurationDefault stubConfiguration;
 
         @Before
         public void setUp() throws Exception {
             serviceList = Lists.newArrayList();
+            stubConfiguration = new IsisConfigurationDefault();
         }
 
         @Test(expected=IllegalStateException.class)
@@ -58,7 +62,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDuplicateId());
 
-            servicesInjector = new ServicesInjector(serviceList, null);
+            servicesInjector = new ServicesInjector(serviceList, stubConfiguration, null);
 
             // when
             servicesInjector.validateServices();
@@ -70,7 +74,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDifferentId());
 
-            servicesInjector = new ServicesInjector(serviceList, null);
+            servicesInjector = new ServicesInjector(serviceList, stubConfiguration, null);
 
             // when
             servicesInjector.validateServices();

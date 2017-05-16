@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.junit.Rule;
 
@@ -38,7 +40,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.services.transtate.TransactionStateProviderInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -63,13 +64,12 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected ServicesInjector mockServicesInjector;
+    protected ServicesInjector stubServicesInjector;
     protected TranslationService mockTranslationService;
     protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
 
-    protected TransactionStateProviderInternal mockTransactionStateProviderInternal;
     protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
     protected IsisConfigurationDefault stubConfiguration;
@@ -102,61 +102,41 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
-                facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
+                FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class
+        );
 
         methodRemover = new ProgrammableMethodRemover();
 
         mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        mockServicesInjector = context.mock(ServicesInjector.class);
+        stubServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
         stubConfiguration = new IsisConfigurationDefault();
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
         mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
-        mockTransactionStateProviderInternal = context.mock(TransactionStateProviderInternal.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
+        stubServicesInjector = new ServicesInjector(Lists.newArrayList(
+                stubConfiguration,
+                mockAuthenticationSessionProvider,
+                mockSpecificationLoader,
+                mockDeploymentCategoryProvider,
+                mockPersistenceSessionServiceInternal
+        ), stubConfiguration);
+
         context.checking(new Expectations() {{
-
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(stubConfiguration));
-
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getSpecificationLoader();
-            will(returnValue(mockSpecificationLoader));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
 
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
-
-            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            will(returnValue(mockPersistenceSessionServiceInternal));
-
-            allowing(mockServicesInjector).lookupService(TransactionStateProviderInternal.class);
-            will(returnValue(mockTransactionStateProviderInternal));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
-
         }});
-
-
     }
+
+
 
     protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
         context.checking(new Expectations() {{

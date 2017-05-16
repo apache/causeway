@@ -22,11 +22,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshotBuilder;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
@@ -38,7 +37,8 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * that it is automatically registered and available for use; no further configuration is required.
  */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
 )
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 
@@ -63,8 +63,7 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
             XmlSnapshot xmlSnapshot = builder.build();
             return xmlSnapshot;
         }
-    } 
-
+    }
 
     /**
      * Creates a simple snapshot of the domain object.
@@ -72,8 +71,8 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     @Programmatic
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
-        final ObjectAdapter adapter = gerPersistenceSession().adapterFor(domainObject);
-        return new XmlSnapshot(adapter, getOidMarshaller());
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
+        return new XmlSnapshot(adapter);
     }
 
     /**
@@ -90,13 +89,15 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     
     // //////////////////////////////////////
 
-    protected PersistenceSession gerPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory;
+
+    protected PersistenceSession getPersistenceSession() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
+
 
 
 }

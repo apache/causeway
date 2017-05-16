@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -63,8 +61,9 @@ import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetF
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -101,6 +100,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFac
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -294,8 +294,9 @@ public abstract class GridSystemServiceAbstract<G extends Grid> implements GridS
                 FacetUtil.addOrReplaceFacet(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
                 FacetUtil.addOrReplaceFacet(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
                 FacetUtil.addOrReplaceFacet(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction));
+                FacetUtil.addOrReplaceFacet(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
                 FacetUtil.addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addOrReplaceFacet(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
             }
 
             @Override
@@ -311,6 +312,8 @@ public abstract class GridSystemServiceAbstract<G extends Grid> implements GridS
                 FacetUtil.addOrReplaceFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addOrReplaceFacet(
+                        PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(
                         RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
@@ -678,22 +681,22 @@ public abstract class GridSystemServiceAbstract<G extends Grid> implements GridS
 
     // //////////////////////////////////////
 
-    @Inject
+    @javax.inject.Inject
     protected SpecificationLoader specificationLoader;
 
-    @Inject
+    @javax.inject.Inject
     protected TranslationService translationService;
 
-    @Inject
+    @javax.inject.Inject
     protected JaxbService jaxbService;
 
-    @Inject
+    @javax.inject.Inject
     protected DomainObjectContainer container;
 
-    @Inject
+    @javax.inject.Inject
     protected MessageService messageService;
 
-    @Inject
+    @javax.inject.Inject
     DeploymentCategoryProvider deploymentCategoryProvider;
 
 

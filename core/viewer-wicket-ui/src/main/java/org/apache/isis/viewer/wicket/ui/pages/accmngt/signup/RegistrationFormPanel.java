@@ -22,7 +22,14 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.cookies.CookieUtils;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
@@ -33,16 +40,6 @@ import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.util.cookies.CookieUtils;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
-
-import com.google.inject.name.Named;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -109,19 +106,19 @@ public class RegistrationFormPanel extends Panel {
         form.add(signUpButton);
     }
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailNotificationService emailNotificationService;
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailService emailService;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private EmailVerificationUrlService emailVerificationUrlService;
 
-    @Inject
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
     private PageNavigationService pageNavigationService;
 
-    @Inject
-    @Named("applicationName")
+    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
+    @com.google.inject.name.Named("applicationName")
     private String applicationName;
 
 }

@@ -26,7 +26,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -52,13 +51,13 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         allowMockAdapterToReturn(float1);
 
         holder = new FacetHolderImpl();
-        setValue(value = new FloatWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new FloatWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testInvalidParse() throws Exception {
         try {
-            value.parseTextEntry(null, "one", null);
+            value.parseTextEntry(null, "one");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -66,18 +65,18 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testTitleOf() {
-        assertEquals("32.5", value.displayTitleOf(float1, (Localization) null));
+        assertEquals("32.5", value.displayTitleOf(float1));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "120.50", null);
+        final Object parsed = value.parseTextEntry(null, "120.50");
         assertEquals(120.5f, ((Float) parsed).floatValue(), 0.0);
     }
 
     @Test
     public void testParseBadlyFormatedEntry() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "1,20.0", null);
+        final Object parsed = value.parseTextEntry(null, "1,20.0");
         assertEquals(120.0f, ((Float) parsed).floatValue(), 0.0);
     }
 

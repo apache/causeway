@@ -1,0 +1,121 @@
+[[_rgsvc_application-layer-spi_CommandService]]
+= `CommandService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+The `CommandService` service supports the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service such
+that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
+
+As of `1.13.0`, the primary use case for persistent ``Command``s is in support of background commands; they
+act as a parent to any background commands that can be persisted either explicitly using the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], or implicitly by way of the
+xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
+
+In previous versions of the framework, persistent ``Command``s also supported a number of other use cases:
+
+* they enable profiling of the running application (which actions are invoked then most often, what is their response time)
+* if xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] or
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] (latter deprecated) is configured, they provide
+better traceability as the `Command` is also correlated with any published events, again through the unique
+`transactionId` GUID
+* if xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] or
+xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] (latter deprecated) is configured, they provide better audit
+information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
+the action) through the `transactionId` GUID
+
+As of `1.13.0`, these other uses cases are now more fully supported through the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the
+``Interaction`` object, eg as provided by the (non-ASF)
+http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module.
+
+
+
+== Screencast
+
+The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+
+
+[NOTE]
+====
+Note that this screencast shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+
+== SPI
+
+The `CommandService` service defines the following very simple API:
+
+[source,java]
+----
+public interface CommandService {
+    Command create();                                               // <1>
+    @Deprecated
+    void startTransaction(Command command, UUID transactionId);     // <2>
+    boolean persistIfPossible(Command command);                     // <3>
+    void complete(Command command);                                 // <4>
+}
+----
+<1> Instantiate the appropriate instance of the `Command` (as defined by the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service).  Its members will be populated automatically by
+the framework.
+<2> this method (as of `1.13.0`) is *NO LONGER CALLED* and is deprecated: the framework automatically populates the ``Command``'s `timestamp`,
+`user` and `transactionId` fields, so there is no need for the service implementation to initialize any of these.  In
+particular, the ``Command`` will already have been initialized with the provided `transactionId` argument.
+<3> Set the hint that the `Command` should be persisted if possible (when completed, see below).
+<4> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()`
+flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.  +
++
+The framework will automatically have set the `completedAt` property of the `Command`.
+
+
+== Implementation
+
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.  It further provides a number of supporting services:
+
+* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
+
+* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
+
+
+
+== Usage
+
+The typical way to indicate that an action should be reified into a `Command` is by annotating the action using xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`].
+
+
+
+
+== Registering the Services
+
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation
+of this service (`CommandService`), and also provides a number of related domain services
+(`CommandJdoRepository` and `CommandServiceJdoContributions`).  This
+module also provides service implementations of the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCommandService`].
+
+Assuming that an `AppManifest` is being used to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a
+xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+
+
+
+
+== Related Services
+
+As discussed above, this service supports the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`], providing the ability for `Command` objects to be
+persisted. This is closely related to the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]that allows the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] to schedule commands for background/asynchronous execution.
+
+The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
+
+The services provided by this module combines very well with the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`].  The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+
+You may also want to configure the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
+
+All three of these services collaborate implicitly by way of the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] interface.
+

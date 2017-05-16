@@ -44,7 +44,6 @@ import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -54,7 +53,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -99,6 +97,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
@@ -193,14 +192,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.servicesInjector = servicesInjector;
         this.facetProcessor = facetProcessor;
 
-        this.deploymentCategory = servicesInjector.lookupService(DeploymentCategoryProvider.class).getDeploymentCategory();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
     //endregion
 
     //region > Stuff immediately derivable from class
@@ -387,14 +383,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     //region > Title, Icon
 
     @Override
-    public String getTitle(final ObjectAdapter targetAdapter, final Localization localization) {
-        return getTitle(null, targetAdapter, localization);
+    public String getTitle(final ObjectAdapter targetAdapter) {
+        return getTitle(null, targetAdapter);
     }
 
     @Override
-    public String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, Localization localization) {
+    public String getTitle(
+            ObjectAdapter contextAdapterIfAny,
+            ObjectAdapter targetAdapter) {
         if (titleFacet != null) {
-            final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter, localization);
+            final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
             if (titleString != null && !titleString.equals("")) {
                 return titleString;
             }
@@ -663,7 +661,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(oa != null) {
             return oa;
         }
-        if(!getDeploymentCategory().isProduction()) {
+        if(! deploymentCategory.isProduction()) {
             // automatically refresh if not in production
             // (better support for jrebel)
             
@@ -684,7 +682,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return oa;
             }
         }
-        throw new ObjectSpecificationException("No association called '" + id + "' in '" + getSingularName() + "'");
+        throw new ObjectSpecificationException(
+                String.format("No association called '%s' in '%s'", id, getSingularName()));
     }
 
     private ObjectAssociation getAssociationWithId(final String id) {
@@ -742,9 +741,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-                if (containsDoOpFacet(MixinFacet.class) || containsDoOpFacet(DomainServiceFacet.class)) {
+                final boolean containsMixin = containsDoOpFacet(MixinFacet.class);
+                final boolean containsDomainService = containsDoOpFacet(DomainServiceFacet.class);
+                final boolean isService = isService();
+                if (containsMixin || containsDomainService || isService) {
                     // don't contribute to mixins themselves!
-                    // don't contribute to services either (nb: can't use isService(), not necessarily setup)
+                    // don't contribute to services either
+                    // - isService() is sufficient check for internal services registered directly with ServicesInjector
+                    // - checking for DomainServiceFacet is for application services (isService() may not have been called, for these)
                 } else {
                     actions.addAll(createContributeeActions());
                     actions.addAll(createMixedInActions());
@@ -973,7 +977,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
 
-        final List<ObjectActionDefault> mixinActions = getObjectActions(specification);
+        final List<ObjectActionDefault> mixinActions = objectActionsOf(specification);
 
         final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList(
                 Iterables.transform(
@@ -992,19 +996,20 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                                 return true;
                             }
                         }),
-                        createMixedInAssociationFunctor(this, mixinType)
+                        createMixedInAssociationFunctor(this, mixinType, mixinFacet.value())
                 ));
 
         toAppendTo.addAll(mixedInAssociations);
     }
 
-    private List getObjectActions(final ObjectSpecification specification) {
+    private List objectActionsOf(final ObjectSpecification specification) {
         return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
             final ObjectSpecification mixedInType,
-            final Class<?> mixinType) {
+            final Class<?> mixinType,
+            final String mixinMethodName) {
         return new Function<ObjectActionDefault, ObjectAssociation>(){
             @Override
             public ObjectAssociation apply(final ObjectActionDefault mixinAction) {
@@ -1018,10 +1023,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 final ObjectSpecification returnType = mixinAction.getReturnType();
                 if (returnType.isNotCollection()) {
                     return new OneToOneAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, servicesInjector);
+                            mixinAction, mixedInType, mixinType, mixinMethodName, servicesInjector);
                 } else {
                     return new OneToManyAssociationMixedIn(
-                            mixinAction, mixedInType, mixinType, servicesInjector);
+                            mixinAction, mixedInType, mixinType, mixinMethodName, servicesInjector);
                 }
             }
         };
@@ -1135,11 +1140,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private void addMixedInActionsIfAny(
             final Class<?> mixinType,
             final List<ObjectAction> mixedInActionsToAppendTo) {
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(mixinType);
-        if (specification == this) {
+
+        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinType);
+        if (mixinSpec == this) {
             return;
         }
-        final MixinFacet mixinFacet = specification.getFacet(MixinFacet.class);
+        final MixinFacet mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; perhaps it would be more correct to throw an exception?
             return;
@@ -1149,7 +1155,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
 
         final List<ObjectAction> actions = Lists.newArrayList();
-        final List<ObjectAction> mixinActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
+        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
                 .<ObjectAction>any());
         for (final ObjectAction mixinTypeAction : mixinActions) {
             if (isAlwaysHidden(mixinTypeAction)) {
@@ -1160,12 +1166,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
             final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
             final NotContributedFacet notContributedFacet = mixinAction.getFacet(NotContributedFacet.class);
-            if(notContributedFacet.toActions()) {
+            if(notContributedFacet != null && notContributedFacet.toActions()) {
                 continue;
             }
 
             ObjectActionMixedIn mixedInAction =
-                    new ObjectActionMixedIn(mixinType, mixinAction, this, servicesInjector);
+                    new ObjectActionMixedIn(mixinType, mixinFacet.value(), mixinAction, this, servicesInjector);
             facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
             actions.add(mixedInAction);
         }
@@ -1245,6 +1251,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public boolean isValueOrIsParented() {
         return isValue() || isParented();
+    }
+
+    @Override
+    public boolean isPersistenceCapable() {
+        return containsFacet(JdoPersistenceCapableFacet.class);
+    }
+
+    @Override
+    public boolean isPersistenceCapableOrViewModel() {
+        return isViewModel() || isPersistenceCapable();
     }
 
 

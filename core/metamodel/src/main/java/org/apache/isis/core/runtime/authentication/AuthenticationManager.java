@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.authentication;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
@@ -31,7 +32,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 public interface AuthenticationManager extends ApplicationScopedComponent {
 
     @Programmatic
-    void init();
+    void init(final DeploymentCategory deploymentCategory);
 
     @Programmatic
     void shutdown();

@@ -1,0 +1,353 @@
+[[_rgant_aaa_deprecated]]
+= Deprecated Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+As Apache Isis has evolved and grown, we found ourselves adding more and more annotations; but most of these related to either an object type (entity, view model, service) or an object member (property, collection, action).
+Over time it became harder and harder for end programmers to discover these new features.
+
+Accordingly, (in v1.8.0) we decided to unify the semantics into the main (core) annotations listed xref:../rgant/rgant.adoc#_rgant-aaa_main[above].
+
+The annotations listed in the table below are still supported by Apache Isis, but will be retired in Apache Isis v2.0.
+
+
+.Deprecated Annotations
+[cols="2,4a,3a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Use instead
+|Layer
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
+
+|`@ActionOrder`
+|Order of buttons and menu items representing actions.
+|xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+|UI
+|Yes
+
+|`@ActionInteraction`
+|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after an action has been invoked.
+|xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`]
+|Domain
+|
+
+|`@ActionSemantics`
+|Query-only, idempotent or non-idempotent.
+|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
+|Domain
+|
+
+|`@Audited`
+|Audit changes to an object.
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#` +
+`auditing()`]
+|Domain
+|
+
+|`@AutoComplete`
+|Repository method to search for entities
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject` +
+`#autoCompleteRepository()`]
+|UI/Domain
+|
+
+|`@Bookmarkable`
+|Whether (and how) to create a bookmark for visited object.
+|xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_bookmarking[`@DomainObjectLayout` +
+`#bookmarking()`]
+|UI
+|
+
+|`@Bounded`
+|Bounded (and limited) number of instances of an entity type, translates into a drop-down for any property of that type.
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
+|Domain
+|
+
+|`@Bulk`
+|Indicates an action is a bulk action, can be applied to multiple instances.
+|xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]
+|UI, Domain
+|
+
+|`@CollectionInteraction`
+|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a collection has been added to or removed from.
+|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`]
+|Domain
+|
+
+|`@Command`
+|Action invocation should be reified as a command object, optionally persistable for profiling and enhanced auditing, and background/async support.
+|xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`]
+|Domain
+|
+
+|`@CssClass`
+|Allow visual representation of individual objects or object members layout to be customized by application-specific CSS.
+|`#cssClass()` attribute for: xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout`],  xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[`@ParameterLayout`]
+|UI
+|Yes
+
+|`@CssClassFa`
+|So that font awesome icons can be applied to action buttons/menu items and optionally as an object icon.
+|`cssClassFa()` attribute for: xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`DomainObjectLayout`] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[`ViewModelLayout`]
+|UI
+|Yes
+
+|`@Debug`
+|Action only invokable in debug mode.
+|Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
+|UI
+|
+
+|`@DescribedAs`
+|Provide a longer description/tool-tip of an object or object member.
+|`#describedAs()` attribute for xref:../rgant/rgant.adoc#_rgant-DomainObject_describedAs[`@DomainObjectLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[`@ParameterLayout`]
+|UI
+|Yes
+
+|`@Disabled`
+|Object property cannot be edited, an object collection cannot be added to/removed from, or an object action cannot be invoked.
+|`#editing()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_editing[`@Property`],  xref:../rgant/rgant.adoc#_rgant-Collection_editing[`@Collection`] and xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject`]
+|UI, Domain
+|Yes
+
+|`@Exploration`
+|Action available in special 'exploration' mode.
+|Not supported by either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]; use prototype mode instead (xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`])
+|UI
+|
+
+|`@FieldOrder`
+|Order of properties and collections.
+|xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+|UI
+|Yes
+
+|`@Hidden`
+|Object member is not visible, or on domain service (to indicate that none of its actions are visible).
+|For domain object members, use `#hidden()` attribute of xref:../rgant/rgant.adoc#_rgant-Action_hidden[`Action`], xref:../rgant/rgant.adoc#_rgant-Property_hidden[`Property`] or xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`Collection`].  +
+For domain service, use xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService(` +
+`nature=DOMAIN)`]
+|UI, Domain
+|Yes
+
+|`@Idempotent`
+|Whether an action is idempotent (can be invoked multiple times with same post-condition).
+|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics`]
+|Domain
+|
+
+|`@Ignore`
+|Exclude this method from the metamodel.
+|xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]. +
+
+`@Ignore` was deprecated because it can easily clash with `@org.junit.Ignore`.
+|Domain
+|
+
+|`@Immutable`
+|An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from).
+Actions can still be invoked.
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]
+|Domain
+|
+
+|`@Mask`
+|How to parse/render values (never properly supported)
+|(None)
+|UI/domain
+|
+
+|`@MaxLength`
+|Maximum length of a property value (strings).
+|`#maxLength()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_maxLength[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[`@Parameter`]
+|Domain
+|
+
+|`@MemberGroups`
+|Layout of properties and collections of a domain object or view model object.
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
+|UI
+|Yes
+
+|@MemberGroupLayout`
+|Grouping of properties into groups, and organizing of properties, collections into columns.
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic `.layout.xml`] files
+|UI
+|Yes
+
+
+|`@MultiLine`
+|Render string property over multiple lines (a textarea rather than a textbox).
+|`#multiLine()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_multiLine[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_multiLine[`@Parameter`]
+|UI
+|Yes
+
+|`@MustSatisfy`
+|Specify arbitrary specification constraints on a property or action parameter.
+|`#mustSatisfy()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property`] or xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter`]
+|Domain
+|
+
+|`@Named`
+|Override name inferred from class. Required for parameter names (prior to Java8).
+|`#named()` attribute for xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[`@DomainServiceLayout`], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[`@DomainObjectLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout`]
+|UI
+|Yes
+
+|`@NotContributed`
+|Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters.
+For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
+|Use xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
+For individual actions, use xref:../rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout#` +
+`contributedAs()`] to specify whether any individual action should be contributed only as an action or as an association (property or collection).
+|UI
+|
+
+|`@NotInServiceMenu`
+|Indicates that a domain service should not be rendered in the application menu (at top of page in Wicket viewer).
+|xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] to signify that none of the actions in a domain service should appear in the menu bars
+|UI
+|
+
+|`@NotPersisted`
+|Indicates that an object property is not persisted (meaning it is excluded from view model mementos, and should not be audited).
+|`#notPersisted()` attribute of xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[`@Property`] and xref:../rgant/rgant.adoc#_rgant-Collection_notPersisted[`@Collection`]
+|Domain, Persistence
+|
+
+|`@ObjectType`
+|For constructing the external identifier (URI) of an entity instance (part of its URL in both Wicket viewer and Restful Objects viewer).
+Also part of the toString representation of bookmarks, if using the Bookmark Service
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`]
+|Domain
+|
+
+|`@Optional`
+|Specifies that a property or action parameter is not mandatory.
+|`#optionality()` attribute for xref:../rgant/rgant.adoc#_rgant-Property_optionality[`@Property`] or  xref:../rgant/rgant.adoc#_rgant-Parameter_optionality[`@Parameter`]
+|Domain
+|
+
+|`@Paged`
+|Number of instances to display in tables representing (standalone or parented) collections.
+|`#paged()` attribute for xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[`@DomainObjectLayout`] or xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[`@CollectionLayout`]
+|UI
+|Yes
+
+|`@Plural`
+|For the irregular plural form of an entity type.
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_plural[`@DomainObjectLayout` +
+`#plural()`]
+|UI
+|
+
+|`@PostsAction` +
+`InvokedEvent`
+|Post a domain event to the Event Bus Service indicating that an action has been invoked.
+|xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`]
+|Domain
+|
+
+|`@PostsCollection` +
+`AddedToEvent`
+|Post a domain event to the Event Bus Service indicating that an element has been added to a collection.
+|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`]
+|Domain
+|
+
+|`@PostsCollection` +
+`RemovedFromEvent`
+|Post a domain event to the Event Bus Service indicating that an element has been removed from a collection.
+|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`]
+|Domain
+|
+
+|`@PostsProperty` +
+`ChangedEvent`
+|Post a domain event to the Event Bus Service indicating that the value of a property has changed.
+|xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]
+|Domain
+|
+
+|`@PropertyInteraction`
+|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a property has been modified or cleared.
+|xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]
+|Domain
+|
+
+|`@Prototype`
+|Indicates that an action should only be visible in 'prototype' mode.
+|xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`]
+|UI
+|Yes
+
+|`@PublishedAction`
+|Action invocation should be serialized and published by configured PublishingService (if any), eg to other systems.
+|xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`]
+|Domain
+|
+
+|`@PublishedObject`
+|Change to object should be serialized and published by configured PublishingService (if any), eg to other systems.
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]
+|Domain
+|
+
+|`@QueryOnly`
+|Whether an action is query-only (has no side-effects).
+|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
+|Domain
+|
+
+|`@RegEx`
+|Validate change to value of string property.
+|`#regexPattern()` for xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`@Property`] or  xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`@Parameter`].
+|Domain
+|
+
+|`@Render`
+|Eagerly (or lazily) render the contents of a collection.
+|xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout` +
+`#render()`]
+|UI
+|Yes
+
+|`@RenderedAsDayBefore`
+|Render dates as the day before; ie store [a,b) internally but render [a,b-1]) to end-user.
+|`#renderedAsDayBefore()` attribute for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`@ParameterLayout`].
+|UI
+|
+
+|`@Resolve`
+|Eagerly (or lazily) render the contents of a collection (same as `@Render)`
+|xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout` +
+`#render()`]
+|UI
+|Yes
+
+|`@SortedBy`
+|Display instances in collections in the order determined by the provided Comparator.
+|xref:../rgant/rgant.adoc#_rgant-CollectionLayout_sortedBy[`@CollectionLayout` +
+`#sortedBy()`]
+|UI
+|Yes
+
+|`@TypeOf`
+|The type of entity stored within a collection, or as the result of invoking an action, if cannot be otherwise inferred, eg from generics.
+|`#typeOf()` attribute for xref:../rgant/rgant.adoc#_rgant-Collection_typeOf[`@Collection`] and xref:../rgant/rgant.adoc#_rgant-Action_typeOf[`@Action`]
+|Domain
+|
+
+|`@TypicalLength`
+|The typical length of a string property, eg to determine a sensible length for a textbox.
+|`#typicalLength()` attribute for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_typicalLength[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_typicalLength[`@ParameterLayout`]
+|UI
+|Yes
+
+|===
+

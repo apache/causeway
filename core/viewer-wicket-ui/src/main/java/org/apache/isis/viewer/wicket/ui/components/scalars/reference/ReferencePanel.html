@@ -19,38 +19,73 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"  
       lang="en">
     <body>
         <wicket:panel>
-            <div class="referencePanel scalarNameAndValueComponentType">
-                <div class="form-group" wicket:id="scalarIfRegular">
-                    <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
+            <div class="scalarNameAndValueComponentType"
+                 wicket:id="scalarTypeContainer"
+            >
+
+                <div class="form-group"
+                     wicket:id="scalarIfRegular">
+
+                    <label class="scalarName control-label"
+                            wicket:id="scalarName"
+                    >[Label text]</label>
+
                     <span class="scalarValueWrapper">
+
                         <div class="scalarPlaceholder entityLinkSelect2Panel entityLinkComponentType">
+
                             <span class="entityLink wrapper">
+
                                 <span class="scalarValueInput">
                                     <span class="editing">
+
                                         <span class="autoCompletePlaceholder">
                                             <span wicket:id="entityLink">link or drop down</span>
                                             <span wicket:id="entityIconAndTitle">[icon and title]</span>
                                         </span>
                                         <span wicket:id="entityTitleIfNull">(none)</span>
-                                        <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+
+                                        <a href="#"
+                                           class="edit fa fa-pencil-square-o"
+                                           wicket:id="editProperty"></a>
+
+                                        <a href="#"
+                                           name="scalarValueInlinePromptLink"
+                                           class="form-control input-sm scalarValueInlinePromptLink"
+                                           wicket:id="scalarValueInlinePromptLink">
+                                            <span wicket:id="scalarValueInlinePromptLabel"></span>
+                                        </a>
+
+
                                     </span>
                                 </span>
                             </span>
-                            <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight"></span>
+                            <span class="associatedActionLinksRight"
+                                  wicket:id="associatedActionLinksRight"
+                            >[drop down]</span>
                         </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
-                    <div class="clearfix"/>
+                    <div class="clearfix"></div>
                 </div>
-                <div wicket:id="scalarIfCompact" class="scalarIfCompact">
+
+                <div class="inlinePromptForm"
+                     wicket:id="scalarIfRegularInlinePromptForm" >
+                    <div><span>[property edit form]</span></div>
+                </div>
+
+                <div class="scalarIfCompact"
+                     wicket:id="scalarIfCompact" >
                     <div class="scalarValue">
-                        <div class="entityLink" wicket:id="entityLink">[property or parameter value]</div>
+                        <div class="entityLink"
+                             wicket:id="entityLink"
+                        >[property or parameter value]</div>
                     </div>
                 </div>
             </div>

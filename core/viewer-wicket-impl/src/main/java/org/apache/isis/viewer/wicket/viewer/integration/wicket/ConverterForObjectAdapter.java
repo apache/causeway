@@ -25,10 +25,10 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,
@@ -44,7 +44,7 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
      */
     @Override
     public ObjectAdapter convertToObject(final String value, final Locale locale) {
-        final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
+        final Oid oid = RootOid.deStringEncoded(value);
         return getPersistenceSession().getAdapterFor(oid);
     }
 
@@ -58,8 +58,8 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
             // values don't have an Oid
             return null;
         }
-        
-        return oid.enString(getOidMarshaller());
+
+        return oid.enString();
     }
     
 
@@ -68,12 +68,12 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,15 +27,10 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command2;
-import org.apache.isis.applib.services.command.Command3;
-import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -45,18 +39,12 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.core.metamodel.transactions.TransactionState;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
-import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -70,7 +58,8 @@ import static org.hamcrest.Matchers.not;
  * the {@link IsisTransactionManager} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
-public class IsisTransaction implements TransactionScopedComponent {
+public class IsisTransaction implements TransactionScopedComponent, Transaction {
+
 
     public static class Placeholder {
         public static Placeholder NEW = new Placeholder("[NEW]");
@@ -137,14 +126,6 @@ public class IsisTransaction implements TransactionScopedComponent {
 
 
         /**
-         * Whether it is valid to {@link IsisTransaction#flush() flush} this
-         * {@link IsisTransaction transaction}.
-         */
-        public boolean canFlush() {
-            return this == IN_PROGRESS;
-        }
-
-        /**
          * Whether it is valid to {@link IsisTransaction#commit() commit} this
          * {@link IsisTransaction transaction}.
          */
@@ -177,57 +158,43 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
+
+    //region > constructor, fields
+
+    private final UUID interactionId;
+    private final int sequence;
+    private final AuthenticationSession authenticationSession;
 
     private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
-
-    private final ServicesInjector servicesInjector;
-
-    private final CommandContext commandContext;
-    private final CommandService commandService;
-
-    private final InteractionContext interactionContext;
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
-    private final ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
+    private final List<WithTransactionScope> withTransactionScopes;
 
-    private final UUID transactionId;
-        
-    private State state;
     private IsisException abortCause;
 
-
-
-
     public IsisTransaction(
-            final IsisTransactionManager transactionManager,
-            final MessageBroker messageBroker,
-            final ServicesInjector servicesInjector,
-            final UUID transactionId) {
-        
-        ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
-        ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
-        ensureThatArg(servicesInjector, is(not(nullValue())), "services injector is required");
+            final UUID interactionId,
+            final int sequence,
+            final AuthenticationSession authenticationSession,
+            final ServicesInjector servicesInjector) {
 
-        this.transactionManager = transactionManager;
-        this.messageBroker = messageBroker;
-        this.servicesInjector = servicesInjector;
-        
-        this.commandContext = lookupService(CommandContext.class);
-        this.commandService = lookupService(CommandService.class);
+        this.interactionId = interactionId;
+        this.sequence = sequence;
+        this.authenticationSession = authenticationSession;
 
-        this.interactionContext = lookupService(InteractionContext.class);
+        final PersistenceSessionServiceInternalDefault persistenceSessionService = servicesInjector
+                .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
+        this.transactionManager = persistenceSessionService.getTransactionManager();
 
-        this.publishingServiceInternal = lookupService(PublishingServiceInternal.class);
-        this.auditingServiceInternal = lookupService(AuditingServiceInternal.class);
-        this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
+        this.messageBroker = authenticationSession.getMessageBroker();
+        this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
+        this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
 
-
-        this.transactionId = transactionId;
+        withTransactionScopes = servicesInjector.lookupServices(WithTransactionScope.class);
 
         this.state = State.IN_PROGRESS;
 
@@ -236,19 +203,33 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
+    //endregion
 
-    // ////////////////////////////////////////////////////////////////
-    // GUID
-    // ////////////////////////////////////////////////////////////////
+    //region > transactionId
 
+    @Programmatic
     public final UUID getTransactionId() {
-        return transactionId;
+        return interactionId;
     }
-    
-    
-    // ////////////////////////////////////////////////////////////////
-    // State
-    // ////////////////////////////////////////////////////////////////
+
+    /**
+     * Just throws an exception (the issue is that {@link HasTransactionId} really ought not to expose the setter).
+     */
+    @Override
+    public void setTransactionId(UUID transactionId) {
+        throw new IllegalStateException("Transaction Id cannot be set on Transaction object");
+    }
+
+    @Override
+    public int getSequence() {
+        return sequence;
+    }
+
+    //endregion
+
+    //region > state
+
+    private State state;
 
     public State getState() {
         return state;
@@ -258,10 +239,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.state = state;
     }
 
-    
-    // //////////////////////////////////////////////////////////
-    // Commands
-    // //////////////////////////////////////////////////////////
+    //endregion
+
+    //region > commands
+
 
     /**
      * Add the non-null command to the list of commands to execute at the end of
@@ -298,13 +279,43 @@ public class IsisTransaction implements TransactionScopedComponent {
         persistenceCommands.add(command);
     }
 
+    private boolean alreadyHasCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
+        return getCommand(commandClass, onObject) != null;
+    }
 
+    private boolean alreadyHasCreate(final ObjectAdapter onObject) {
+        return alreadyHasCommand(CreateObjectCommand.class, onObject);
+    }
 
-    // ////////////////////////////////////////////////////////////////
-    // flush
-    // ////////////////////////////////////////////////////////////////
+    private boolean alreadyHasDestroy(final ObjectAdapter onObject) {
+        return alreadyHasCommand(DestroyObjectCommand.class, onObject);
+    }
 
-    public synchronized final void flush() {
+    private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
+        for (final PersistenceCommand command : persistenceCommands) {
+            if (command.onAdapter().equals(onObject)) {
+                if (commandClass.isAssignableFrom(command.getClass())) {
+                    return command;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void removeCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
+        final PersistenceCommand toDelete = getCommand(commandClass, onObject);
+        persistenceCommands.remove(toDelete);
+    }
+
+    private void removeCreate(final ObjectAdapter onObject) {
+        removeCommand(CreateObjectCommand.class, onObject);
+    }
+
+    //endregion
+
+    //region > flush
+
+    public final void flush() {
 
         // have removed THIS guard because we hit a situation where a xactn is aborted
         // from a no-arg action, the Wicket viewer attempts to render a new page that (of course)
@@ -382,14 +393,13 @@ public class IsisTransaction implements TransactionScopedComponent {
         
     }
 
+    //endregion
 
-    // ////////////////////////////////////////////////////////////////
-    // preCommit, commit
-    // ////////////////////////////////////////////////////////////////
+    //region > preCommit, commit
 
-    synchronized void preCommit() {
-        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
-        ensureThatState(abortCause, is(nullValue()), "cannot commit: an abort cause has been set");
+    void preCommit() {
+        assert getState().canCommit();
+        assert abortCause == null;
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("preCommit transaction " + this);
@@ -403,72 +413,25 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         try {
-            // ensureCommandsPersistedIfDirtyXactn
-            final Command command = commandContext.getCommand();
-
-            // ensure that any changed objects means that the command should be persisted
-            final boolean hasChangedAdapters = changedObjectsServiceInternal.hasChangedAdapters();
-            if(hasChangedAdapters && command.getMemberIdentifier() != null) {
-                command.setPersistHint(true);
-            }
-
             auditingServiceInternal.audit();
 
             publishingServiceInternal.publishObjects();
             doFlush();
 
-            final ActionInvocationContext actionInvocationContext = lookupService(ActionInvocationContext.class);
-            if(actionInvocationContext != null) {
-                Bulk.InteractionContext.current.set(null);
-            }
-
-            completeCommandAndInteractionAndClearDomainEvents();
-            doFlush();
-
-
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
-            completeCommandAndInteractionAndClearDomainEvents();
             throw ex;
         } finally {
-            changedObjectsServiceInternal.clearChangedObjectProperties();
+            for (WithTransactionScope withTransactionScope : withTransactionScopes) {
+                withTransactionScope.resetForNextTransaction();
+            }
         }
     }
 
-    private void completeCommandAndInteractionAndClearDomainEvents() {
 
-        final Command command = commandContext.getCommand();
-        final Interaction interaction = interactionContext.getInteraction();
-
-        if(command.getStartedAt() != null && command.getCompletedAt() == null) {
-            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
-
-            // copy over from the most recent interaction
-            Interaction.Execution priorExecution = interaction.getPriorExecution();
-            final Timestamp completedAt = priorExecution.getCompletedAt();
-            command.setCompletedAt(completedAt);
-        }
-
-        commandService.complete(command);
-
-        if(command instanceof Command3) {
-            final Command3 command3 = (Command3) command;
-            command3.flushActionDomainEvents();
-        } else
-        if(command instanceof Command2) {
-            final Command2 command2 = (Command2) command;
-            command2.flushActionInteractionEvents();
-        }
-
-        interaction.clear();
-    }
-
-
-    // ////////////////////////////////////////////////////////////////
-
-    public synchronized void commit() {
-        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
-        ensureThatState(abortCause, is(nullValue()), "cannot commit: an abort cause has been set");
+    void commit() {
+        assert getState().canCommit();
+        assert abortCause == null;
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("postCommit transaction " + this);
@@ -485,25 +448,22 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
 
-    
-    // ////////////////////////////////////////////////////////////////
-    // markAsAborted
-    // ////////////////////////////////////////////////////////////////
+    //endregion
 
-    public synchronized final void markAsAborted() {
-        ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
+    //region > abortCause, markAsAborted
+
+    /**
+     * internal API called by IsisTransactionManager only
+     */
+    final void markAsAborted() {
+        assert getState().canAbort();
+
         if (LOG.isInfoEnabled()) {
             LOG.info("abort transaction " + this);
         }
 
         setState(State.ABORTED);
     }
-
-    
-    
-    /////////////////////////////////////////////////////////////////////////
-    // handle exceptions on load, flush or commit
-    /////////////////////////////////////////////////////////////////////////
 
 
     /**
@@ -512,8 +472,12 @@ public class IsisTransaction implements TransactionScopedComponent {
      * 
      * <p>
      * If the cause is subsequently rendered by code higher up the stack, then the
-     * cause can be {@link #clearAbortCause() cleared}.  However, it is not possible
-     * to change the state from {@link State#MUST_ABORT}.
+     * cause can be {@link #clearAbortCause() cleared}.  Note that this keeps the transaction in a state of
+     * {@link State#MUST_ABORT}.
+     *
+     * <p>
+     * If the cause is to be discarded completely (eg background command execution), then
+     * {@link #clearAbortCauseAndContinue()} can be used.
      */
     public void setAbortCause(IsisException abortCause) {
         setState(State.MUST_ABORT);
@@ -524,71 +488,37 @@ public class IsisTransaction implements TransactionScopedComponent {
         return abortCause;
     }
 
-    /**
-     * If the cause has been rendered higher up in the stack, then clear the cause so that
-     * it won't be picked up and rendered elsewhere.
-     */
+    @Override
     public void clearAbortCause() {
         abortCause = null;
     }
 
-    
-    // //////////////////////////////////////////////////////////
-    // Helpers
-    // //////////////////////////////////////////////////////////
-
-    private boolean alreadyHasCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        return getCommand(commandClass, onObject) != null;
+    public void clearAbortCauseAndContinue() {
+        setState(State.IN_PROGRESS);
+        clearAbortCause();
     }
 
-    private boolean alreadyHasCreate(final ObjectAdapter onObject) {
-        return alreadyHasCommand(CreateObjectCommand.class, onObject);
-    }
 
-    private boolean alreadyHasDestroy(final ObjectAdapter onObject) {
-        return alreadyHasCommand(DestroyObjectCommand.class, onObject);
-    }
 
-    private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        for (final PersistenceCommand command : persistenceCommands) {
-            if (command.onAdapter().equals(onObject)) {
-                if (commandClass.isAssignableFrom(command.getClass())) {
-                    return command;
-                }
-            }
-        }
-        return null;
-    }
 
-    private void removeCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        final PersistenceCommand toDelete = getCommand(commandClass, onObject);
-        persistenceCommands.remove(toDelete);
-    }
+    //endregion
 
-    private void removeCreate(final ObjectAdapter onObject) {
-        removeCommand(CreateObjectCommand.class, onObject);
-    }
-
-    // ////////////////////////////////////////////////////////////////
-    // toString
-    // ////////////////////////////////////////////////////////////////
+    //region > toString
 
     @Override
     public String toString() {
         return appendTo(new ToString(this)).toString();
     }
 
-    protected ToString appendTo(final ToString str) {
+    private ToString appendTo(final ToString str) {
         str.append("state", state);
         str.append("commands", persistenceCommands.size());
         return str;
     }
 
+    //endregion
 
-    // ////////////////////////////////////////////////////////////////
-    // Depenendencies (from constructor)
-    // ////////////////////////////////////////////////////////////////
-
+    //region > getMessageBroker
 
     /**
      * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
@@ -602,20 +532,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         return messageBroker;
     }
 
+    //endregion
 
-    ////////////////////////////////////////////////////////////////////////
-    // Dependencies (lookup)
-    ////////////////////////////////////////////////////////////////////////
-
-    private <T> T lookupService(Class<T> serviceType) {
-        T service = lookupServiceIfAny(serviceType);
-        if(service == null) {
-            throw new IllegalStateException("Could not locate service of type '" + serviceType + "'");
-        }
-        return service;
-    }
-
-    private <T> T lookupServiceIfAny(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
-    }
 }
+
+

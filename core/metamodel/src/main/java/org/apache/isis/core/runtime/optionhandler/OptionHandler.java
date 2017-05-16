@@ -24,12 +24,11 @@ import org.apache.commons.cli.Options;
 
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 
-public interface OptionHandler  {
+public interface OptionHandler extends IsisConfigurationBuilder.Primer {
 
     void addOption(Options options);
 
     boolean handle(CommandLine commandLine, BootPrinter bootPrinter, Options options);
 
-    void prime(IsisConfigurationBuilder isisConfigurationBuilder);
 
 }

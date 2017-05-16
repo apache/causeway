@@ -6,20 +6,21 @@
 :toc: right
 
 
-pass:[<br/><br/><br/>]
 
 
-== Help:
+[[__help_help]]
+== Help
 
 * link:support.html[Mailing Lists]
-* link:http://isis.markmail.org/search/?q=[Mailing List Archives]
-* link:https://issues.apache.org/jira/browse/ISIS[JIRA]
-* link:http://github.com/apache/isis[Github mirror]
-* link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
+
+* Mailing List Archives: https://lists.apache.org/list.html?users&#0064;isis.apache.org[ASF Pony mail], http://isis.markmail.org/search/?q=[Markmail]
+* https://issues.apache.org/jira/browse/ISIS[JIRA]
+* http://github.com/apache/isis[Github mirror]
+* http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
 * link:guides/dg.html#_dg_contributing[How to contribute]
 
 
-
+[[__help_commonly-used-resources]]
 == Commonly-used Resources
 
 *  Browse link:http://github.com/apache/isis[Github mirror]
@@ -27,22 +28,12 @@ pass:[<br/><br/><br/>]
 *  link:http://stackoverflow.com/questions/tagged/isis[Stackoverflow (tagged=isis)] and link:http://stackoverflow.com/feeds/tag/isis[Stackoverflow (RSS feed)]
 
 
+[[__help_other-resources]]
 == Other Resources
 
 *  link:download.html[Source code repo] (on Apache)
 *  link:https://cwiki.apache.org/confluence/display/ISIS/Index[Confluence Wiki] (register then request perms via mailing list)
-*  link:doap_isis.rdf[DOAP RDF file] (as per [Apache requirements](http://projects.apache.org/doap.html))
-*  link:https://builds.apache.org/job/isis-core-ubuntu/[CI Builds]
+*  link:doap_isis.rdf[DOAP RDF file] (as per link:http://projects.apache.org/doap.html[Apache requirements])
 *  link:https://fisheye6.atlassian.com/changelog/isis-git[Fisheye]
-*  link:https://analysis.apache.org/dashboard/index/org.apache.isis.core:isis[Sonar (@Apache)] (core module only)
-*  link:http://nemo.sonarsource.org/dashboard/index/org.apache.isis:isis-all[Sonar (3rd party)] (all modules)
 
-== Example apps (open-source)
 
-*  link:https://github.com/estatio/estatio[Estatio]
-
-== Committers' Blogs
-
-*  link:http://danhaywood.com/[Dan Haywood]
-*  link:http://www.objectconnexions.co.uk/[Rob Matthews]
-*  link:http://www.kmz.co.za/blog/[Kevin Meyer]

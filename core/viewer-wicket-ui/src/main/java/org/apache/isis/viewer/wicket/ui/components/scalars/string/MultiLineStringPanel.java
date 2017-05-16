@@ -24,14 +24,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldStringModel;
 
 /**
  * Panel for rendering MultiLine scalars of type String
@@ -41,28 +40,13 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
     private static final long serialVersionUID = 1L;
     
     public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
-        super(id, ID_SCALAR_VALUE, scalarModel);
+        super(id, scalarModel);
     }
 
     @Override
-    protected AbstractTextComponent<String> createTextFieldForRegular() {
-        final TextArea<String> textField = new TextArea<String>(idTextField, new Model<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return getModel().getObjectAsString();
-            }
-
-            @Override
-            public void setObject(final String object) {
-                if (object == null) {
-                    getModel().setObject(null);
-                } else {
-                    getModel().setObjectAsString(object);
-                }
-            }
-        });
+    protected AbstractTextComponent<String> createTextFieldForRegular(final String id) {
+        TextFieldStringModel model = new TextFieldStringModel(this);
+        final TextArea<String> textField = new TextArea<String>(id, model);
 
         final MultiLineFacet multiLineFacet = getModel().getFacet(MultiLineFacet.class);
         setAttribute(textField, "rows", multiLineFacet.numberOfLines());
@@ -78,14 +62,15 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         return textField;
     }
 
+
     @Override
     protected Fragment createTextFieldFragment(String id) {
         return new Fragment(id, "textarea", MultiLineStringPanel.this);
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("multiLineStringPanel");
+    protected String getScalarPanelType() {
+        return "multiLineStringPanel";
     }
 
     private Component setAttribute(final TextArea<String> textField, final String attributeName, final int i) {

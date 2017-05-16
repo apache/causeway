@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import java.sql.Timestamp;
-
 import com.google.common.base.Objects;
-
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -45,9 +42,13 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+
+import java.sql.Timestamp;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -60,6 +61,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
     private final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
 
     private final ServicesInjector servicesInjector;
+    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 
     public PropertySetterOrClearFacetForDomainEventAbstract(
@@ -76,6 +78,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
         this.propertyDomainEventFacet = propertyDomainEventFacet;
+        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
         this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
@@ -151,6 +154,26 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
     }
 
     private void setOrClearProperty(
+            final Style style,
+            final OneToOneAssociation owningProperty,
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter newValueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        getPersistenceSessionServiceInternal().executeWithinTransaction(
+                new TransactionalClosure(){
+                    @Override
+                    public void execute() {
+                        doSetOrClearProperty(style, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
+                    }
+                }
+        );
+
+
+
+    }
+
+    private void doSetOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
             final ObjectAdapter targetAdapter,
@@ -286,7 +309,6 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             }
 
         }
-
     }
 
     private Class<? extends PropertyDomainEvent<?, ?>> eventType() {
@@ -303,42 +325,31 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return lookupService(InteractionDtoServiceInternal.class);
-    }
-
-    private ServicesInjector getServicesInjector() {
-        return servicesInjector;
+        return servicesInjector.lookupServiceElseFail(InteractionDtoServiceInternal.class);
     }
 
     private CommandContext getCommandContext() {
-        return lookupService(CommandContext.class);
+        return servicesInjector.lookupServiceElseFail(CommandContext.class);
     }
 
     private InteractionContext getInteractionContext() {
-        return lookupService(InteractionContext.class);
+        return servicesInjector.lookupServiceElseFail(InteractionContext.class);
     }
 
     private CommandService getCommandService() {
-        return lookupService(CommandService.class);
+        return servicesInjector.lookupServiceElseFail(CommandService.class);
     }
 
     private ClockService getClockService() {
-        return lookupService(ClockService.class);
+        return servicesInjector.lookupServiceElseFail(ClockService.class);
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return lookupService(PublishingServiceInternal.class);
+        return servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
-    private <T> T lookupService(final Class<T> serviceClass) {
-        T service = lookupServiceIfAny(serviceClass);
-        if(service == null) {
-            throw new IllegalStateException("The '" + serviceClass.getName() + "' service is not registered!");
-        }
-        return service;
-    }
-    private <T> T lookupServiceIfAny(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
+    private PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
+        return persistenceSessionServiceInternal;
     }
 
 

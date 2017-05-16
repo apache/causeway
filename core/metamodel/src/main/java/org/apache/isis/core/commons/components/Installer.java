@@ -38,19 +38,6 @@ import java.util.List;
  */
 public interface Installer extends ApplicationScopedComponent {
 
-    /**
-     * The type of the installer, meaning the component type, and consistent
-     * with the long option of the command line flag where applicable.
-     * 
-     * <p>
-     * Examples are <tt>authentication</tt> or <tt>persistor</tt>.
-     * 
-     * <p>
-     * Because all implementations of a given subinterface of {@link Installer}
-     * should return the same value for this method, by convention these
-     * subinterfaces define a constant which the implementation can just return.
-     */
-    String getType();
 
     /**
      * The name (qualified by type).

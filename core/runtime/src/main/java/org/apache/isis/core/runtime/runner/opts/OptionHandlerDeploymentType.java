@@ -24,6 +24,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -81,7 +82,7 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
     @Override
     public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         final String type = deploymentType.nameLowerCase();
-        isisConfigurationBuilder.addConfigurationResource(type + ".properties", NotFoundPolicy.CONTINUE);
+        isisConfigurationBuilder.addConfigurationResource(type + ".properties", NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
 
         isisConfigurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
     }

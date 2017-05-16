@@ -23,6 +23,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Image;
 
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,16 +40,29 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 public class ImageValueSemanticsProviderAbstractTest {
 
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
     private FacetHolder mockFacetHolder;
+
+    @Mock
+    private ServicesInjector mockServicesInjector;
+
+    @Mock
+    private ConfigurationServiceInternal mockConfiguration;
 
     private TestImageSemanticsProvider adapter;
 
     @Before
     public void setUp() throws Exception {
-        adapter = new TestImageSemanticsProvider(mockFacetHolder);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).getConfigurationServiceInternal();
+            will(returnValue(mockConfiguration));
+
+        }});
+
+        adapter = new TestImageSemanticsProvider(mockFacetHolder, mockServicesInjector);
     }
     
     @Test
@@ -66,8 +82,8 @@ public class ImageValueSemanticsProviderAbstractTest {
 
 class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int[][]> {
 
-    TestImageSemanticsProvider(final FacetHolder holder) {
-        super(holder, null, null, null);
+    TestImageSemanticsProvider(final FacetHolder holder, ServicesInjector servicesInjector) {
+        super(holder, null, servicesInjector);
     }
 
     @Override

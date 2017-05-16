@@ -19,24 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.object.bounded;
 
-import org.jmock.Expectations;
-
 import org.apache.isis.applib.marker.Bounded;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
+import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
 public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractFacetFactoryTest {
-
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ChoicesFacetFromBoundedMarkerInterfaceFactory facetFactory;
 
@@ -44,28 +35,8 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractF
     protected void setUp() throws Exception {
         super.setUp();
 
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-
-        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
-        context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
-
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
-
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-        }});
-
         facetFactory = new ChoicesFacetFromBoundedMarkerInterfaceFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-
+        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override

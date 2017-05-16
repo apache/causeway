@@ -36,6 +36,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
@@ -94,7 +95,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
     /**
      * Register user form.
      */
-    private static class RegisterForm extends StatelessForm<UserDetails>
+    private class RegisterForm extends StatelessForm<UserDetails>
     {
         private static final long serialVersionUID = 1L;
 
@@ -123,20 +124,22 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         {
             final UserDetails userDetails = getModelObject();
 
-            IsisContext.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+            getIsisSessionFactory().doInSession(new Runnable() {
+                    @Override
+                    public void run() {
+                        final UserRegistrationService userRegistrationService = getIsisSessionFactory()
+                                .getServicesInjector().lookupService(UserRegistrationService.class);
 
-                    IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
-                        @Override
-                        public void execute() {
-                            userRegistrationService.registerUser(userDetails);
-                            removeAccountConfirmation();
-                        }
-                    });
-                }
-            });
+                        getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
+                                .executeWithinTransaction(new TransactionalClosure() {
+                            @Override
+                            public void execute() {
+                                userRegistrationService.registerUser(userDetails);
+                                removeAccountConfirmation();
+                            }
+                        });
+                    }
+                });
 
             signIn(userDetails.getUsername(), userDetails.getPassword());
             setResponsePage(getApplication().getHomePage());
@@ -192,4 +195,9 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         usernameFormGroup.add(username);
         return usernameFormGroup;
     }
+
+    IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
+    }
+
 }

@@ -45,8 +45,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyDefault;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
@@ -312,6 +311,7 @@ public class IsisSessionFilter implements Filter {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
+        final IsisSessionFactory sessionFactory = isisSessionFactoryFrom(httpServletRequest);
         try {
             final String queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString.contains(QUERY_STRING_FORCE_LOGOUT)) {
@@ -337,7 +337,7 @@ public class IsisSessionFilter implements Filter {
             if (authSession != null) {
                 authSessionStrategy.bind(httpServletRequest, httpServletResponse, authSession);
 
-                openSession(authSession); // is closed in the finally block
+                sessionFactory.openSession(authSession);
                 chain.doFilter(request, response);
                 return;
             }
@@ -355,7 +355,7 @@ public class IsisSessionFilter implements Filter {
             }
 
         } finally {
-            closeSession();
+            sessionFactory.closeSession();
         }
 
     }
@@ -388,17 +388,9 @@ public class IsisSessionFilter implements Filter {
         return false;
     }
 
-    protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+    // REVIEW: it ought to be possible to remove this static lookup by binding the IsisSessionFactory to the request in an earlier filter
+    private IsisSessionFactory isisSessionFactoryFrom(final HttpServletRequest httpServletRequest) {
+        return IsisContext.getSessionFactory();
     }
-
-    private IsisSession openSession(final AuthenticationSession authSession) {
-        return IsisContext.openSession(authSession);
-    }
-
-    private void closeSession() {
-        IsisContext.closeSession();
-    }
-
 
 }

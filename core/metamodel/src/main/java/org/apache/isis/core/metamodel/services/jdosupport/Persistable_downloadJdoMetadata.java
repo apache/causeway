@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.services.jdosupport;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 import javax.xml.bind.JAXBException;
@@ -37,7 +36,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.value.Clob;
 
-@Mixin
+@Mixin(method = "exec")
 public class Persistable_downloadJdoMetadata {
 
     private final Persistable persistable;
@@ -57,8 +56,8 @@ public class Persistable_downloadJdoMetadata {
             cssClassFa = "fa-download",
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(name = "Metadata", sequence = "710.1")
-    public Clob $$(
+    @MemberOrder(name = "datanucleusIdLong", sequence = "710.1")
+    public Clob exec(
             @ParameterLayout(named = ".jdo file name")
             final String fileName) throws JAXBException, IOException {
 
@@ -71,7 +70,7 @@ public class Persistable_downloadJdoMetadata {
         return new Clob(Util.withSuffix(fileName, "jdo"), "text/xml", xml);
     }
 
-    public String default0$$() {
+    public String default0Exec() {
         return Util.withSuffix(persistable.getClass().getName(), "jdo");
     }
 
@@ -79,7 +78,7 @@ public class Persistable_downloadJdoMetadata {
         return jdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
     }
 
-    @Inject
+    @javax.inject.Inject
     IsisJdoSupport jdoSupport;
 
 }

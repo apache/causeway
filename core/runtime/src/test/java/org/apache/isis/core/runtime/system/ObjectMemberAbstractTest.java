@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -50,6 +51,7 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -81,13 +83,14 @@ public class ObjectMemberAbstractTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
+    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    @Mock
     private AuthenticationSession mockAuthenticationSession;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
 
-    //    @Mock
-//    ServicesInjector mockServicesInjector;
     ServicesInjector stubServicesInjector;
+    private IsisConfigurationDefault stubConfiguration;
 
     @Mock
     private ObjectSpecification mockSpecForCustomer;
@@ -99,9 +102,9 @@ public class ObjectMemberAbstractTest {
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
+        stubConfiguration = new IsisConfigurationDefault();
         stubServicesInjector = new ServicesInjector(Lists.<Object>newArrayList(
-                mockSpecificationLoader, mockSpecificationLoader
-        ));
+                mockSpecificationLoader, mockSpecificationLoader, mockPersistenceSessionServiceInternal), stubConfiguration);
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();

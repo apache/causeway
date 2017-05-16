@@ -51,7 +51,7 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         TestClock.initialize();
         time = new Time(8, 13);
         holder = new FacetHolderImpl();
-        setValue(adapter = new TimeValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new TimeValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
@@ -61,14 +61,14 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testParseEntryOfHoursMinutesText() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "8:30", null);
+        final Object parsed = adapter.parseTextEntry(null, "8:30");
         assertEquals(new Time(8, 30), parsed);
     }
 
     @Test
     @Ignore
     public void testParseEntryOfHoursMinutesSecondsText() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "8:30:45", null); 
+        final Object parsed = adapter.parseTextEntry(null, "8:30:45");
         // I can't get the text parser to parse HH:mm:ss before HH:mm!!
         final Time expected = new Time(8, 30, 45);
         assertEquals(expected, parsed);
@@ -76,31 +76,31 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testParseEntryOfHoursAfterTime() throws Exception {
-        final Object parsed = adapter.parseTextEntry(time, "+5H", null);
+        final Object parsed = adapter.parseTextEntry(time, "+5H");
         assertEquals(new Time(13, 13), parsed);
     }
 
     @Test
     public void testParseEntryOfHoursAfterNow() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "+5H", null);
+        final Object parsed = adapter.parseTextEntry(null, "+5H");
         assertEquals(new Time(2, 30, 25), parsed);
     }
 
     @Test
     public void testParseEntryOfHoursBeforeTime() throws Exception {
-        final Object parsed = adapter.parseTextEntry(time, "-7H", null);
+        final Object parsed = adapter.parseTextEntry(time, "-7H");
         assertEquals(new Time(1, 13), parsed);
     }
 
     @Test
     public void testParseEntryOfHoursBeforeToNow() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "-5H", null);
+        final Object parsed = adapter.parseTextEntry(null, "-5H");
         assertEquals(new Time(16, 30, 25), parsed);
     }
 
     @Test
     public void testParseEntryOfKeywordNow() throws Exception {
-        final Object parsed = adapter.parseTextEntry(time, "now", null);
+        final Object parsed = adapter.parseTextEntry(time, "now");
         assertEquals(new Time(), parsed);
     }
 

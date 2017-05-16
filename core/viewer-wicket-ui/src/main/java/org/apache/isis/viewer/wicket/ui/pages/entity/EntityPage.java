@@ -33,11 +33,10 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -128,6 +127,11 @@ public class EntityPage extends PageAbstract {
         breadcrumbModel.remove(entityModel);
     }
 
+    @Override
+    public EntityModel getUiHintContainerIfAny() {
+        return model;
+    }
+
     /**
      * A rather crude way of intercepting the redirect-and-post strategy.
      * 
@@ -169,12 +173,12 @@ public class EntityPage extends PageAbstract {
         }
 
         final ObjectSpecification objectSpec = model.getTypeOfSpecification();
-        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-        if(facet != null) {
+        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
+        if(gridFacet != null) {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final Grid unused = facet.getGrid();
+            final Grid unused = gridFacet.getGrid();
         }
 
         if(titleString == null) {
@@ -185,6 +189,13 @@ public class EntityPage extends PageAbstract {
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
         CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getFullIdentifier().replace('.','-'));
         CssClassAppender.appendCssClassTo(entityPageContainer, objectSpec.getCorrespondingClass().getSimpleName());
+
+        CssClassFacet cssClassFacet = objectSpec.getFacet(CssClassFacet.class);
+        if(cssClassFacet != null) {
+            final String cssClass = cssClassFacet.cssClass(objectAdapter);
+            CssClassAppender.appendCssClassTo(entityPageContainer, cssClass);
+        }
+
         themeDiv.addOrReplace(entityPageContainer);
 
         addChildComponents(entityPageContainer, model);
@@ -196,13 +207,8 @@ public class EntityPage extends PageAbstract {
         addBookmarkedPages(entityPageContainer);
     }
 
-    private DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
-
     protected DeploymentCategory getDeploymentCategory() {
-        return getDeploymentType().getDeploymentCategory();
+        return getIsisSessionFactory().getDeploymentCategory();
     }
-
 
 }

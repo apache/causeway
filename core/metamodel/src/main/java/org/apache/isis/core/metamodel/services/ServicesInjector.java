@@ -27,8 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
@@ -38,23 +36,27 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
-import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -68,6 +70,9 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjector.class);
+
+    public static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
+    public static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
 
     //region > constructor, fields
     /**
@@ -84,22 +89,45 @@ public class ServicesInjector implements ApplicationScopedComponent {
     private final Map<Class<?>, Object> serviceByConcreteType = Maps.newHashMap();
 
     private final InjectorMethodEvaluator injectorMethodEvaluator;
+    private final boolean autowireSetters;
+    private final boolean autowireInject;
 
-    public ServicesInjector(final List<Object> services) {
-        this(services, null);
+    public ServicesInjector(final List<Object> services, final IsisConfiguration configuration) {
+        this(services, null, configuration);
     }
 
     /**
      * For testing.
      */
-    public ServicesInjector(final List<Object> services, final InjectorMethodEvaluator injectorMethodEvaluator) {
+    public ServicesInjector(
+            final List<Object> services,
+            final IsisConfigurationDefault configuration,
+            final InjectorMethodEvaluator injectorMethodEvaluator) {
+        this(services, injectorMethodEvaluator, defaultAutowiring(configuration));
+    }
+
+    private static IsisConfiguration defaultAutowiring(final IsisConfigurationDefault configuration) {
+        configuration.put(KEY_SET_PREFIX, ""+true);
+        configuration.put(KEY_INJECT_PREFIX, ""+false);
+        return configuration;
+    }
+
+    /**
+     * For testing.
+     */
+    private ServicesInjector(
+            final List<Object> services,
+            final InjectorMethodEvaluator injectorMethodEvaluator,
+            final IsisConfiguration configuration) {
         this.services.addAll(services);
+
         this.injectorMethodEvaluator =
                 injectorMethodEvaluator != null
                         ? injectorMethodEvaluator
                         : new InjectorMethodEvaluatorDefault();
 
-        autowireServicesAndContainer();
+        this.autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
+        this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
     }
 
     //endregion
@@ -127,8 +155,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
         // invalidate
         servicesAssignableToType.clear();
         serviceByConcreteType.clear();
-
-        autowireServicesAndContainer();
+        autowire();
     }
 
     public boolean isRegisteredService(final Class<?> cls) {
@@ -153,25 +180,13 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     /**
-     * Validate domain service Ids are unique, and that the {@link PostConstruct} method, if present, must either
-     * take no arguments or take a {@link Map} object), and that the {@link PreDestroy} method, if present, must take
-     * no arguments.
-     *
-     * <p>
-     * TODO: there seems to be some duplication/overlap with {@link ServiceInitializer}.
+     * Validate domain service Ids are unique.
      */
     public void validateServices() {
         validate(getRegisteredServices());
     }
 
     private static void validate(List<Object> serviceList) {
-        for (Object service : serviceList) {
-            final Method[] methods = service.getClass().getMethods();
-            for (Method method : methods) {
-                validatePostConstructMethods(service, method);
-                validatePreDestroyMethods(service, method);
-            }
-        }
         ListMultimap<String, Object> servicesById = ArrayListMultimap.create();
         for (Object service : serviceList) {
             String id = ServiceUtil.id(service);
@@ -199,33 +214,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return buf.toString();
     }
 
-    private static void validatePostConstructMethods(Object service, Method method) {
-        final PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
-        if(postConstruct == null) {
-            return;
-        }
-        final int numParams = method.getParameterTypes().length;
-        if(numParams == 0) {
-            return;
-        }
-        if(numParams == 1 && method.getParameterTypes()[0].isAssignableFrom(Map.class)) {
-            return;
-        }
-        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PostConstruct method " + method.getName() + "; such methods must take either no argument or 1 argument of type Map<String,String>");
-    }
-
-    private static void validatePreDestroyMethods(Object service, Method method) {
-        final PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
-        if(preDestroy == null) {
-            return;
-        }
-        final int numParams = method.getParameterTypes().length;
-        if(numParams == 0) {
-            return;
-        }
-        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PreDestroy method " + method.getName() + "; such methods must take no arguments");
-    }
-
 
     static boolean contains(final List<Object> services, final Class<?> serviceClass) {
         for (Object service : services) {
@@ -244,21 +232,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
         return Collections.unmodifiableList(services);
     }
 
-    private void addServices(final List<Object> services) {
-        for (final Object service : services) {
-            if (service instanceof List) {
-                final List<Object> serviceList = ObjectExtensions.asListT(service, Object.class);
-                addServices(serviceList);
-            } else {
-                addService(service);
-            }
-        }
-    }
-
-    private boolean addService(final Object service) {
-        return services.add(service);
-    }
-
     //endregion
 
     //region > injectServicesInto
@@ -270,9 +243,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
      * Called in multiple places from metamodel and facets.
      */
     public void injectServicesInto(final Object object) {
-        Assert.assertNotNull("no services", services);
-
-        injectServices(object, Collections.unmodifiableList(services));
+        injectServices(object, services);
     }
 
     /**
@@ -281,7 +252,8 @@ public class ServicesInjector implements ApplicationScopedComponent {
      */
     public void injectServicesInto(final List<Object> objects) {
         for (final Object object : objects) {
-            injectServicesInto(object);
+            injectInto(object); // if implements ServiceInjectorAware
+            injectServicesInto(object); // via @javax.inject.Inject or setXxx(...)
         }
     }
 
@@ -308,8 +280,13 @@ public class ServicesInjector implements ApplicationScopedComponent {
         final Class<?> cls = object.getClass();
 
         autowireViaFields(object, services, cls);
-        autowireViaPrefixedMethods(object, services, cls, "set");
-        autowireViaPrefixedMethods(object, services, cls, "inject");
+
+        if(autowireSetters) {
+            autowireViaPrefixedMethods(object, services, cls, "set");
+        }
+        if(autowireInject) {
+            autowireViaPrefixedMethods(object, services, cls, "inject");
+        }
     }
 
     private void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {
@@ -445,12 +422,22 @@ public class ServicesInjector implements ApplicationScopedComponent {
         }
     }
 
-    private void autowireServicesAndContainer() {
-        injectServicesInto(this.services);
-    }
+
 
 
     //endregion
+
+
+
+    //region > autoWire
+
+    @Programmatic
+    public void autowire() {
+        injectServicesInto(this.services);
+    }
+
+    //endregion
+
 
     //region > lookupService, lookupServices
 
@@ -468,6 +455,15 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public <T> T lookupService(final Class<T> serviceClass) {
         final List<T> services = lookupServices(serviceClass);
         return !services.isEmpty() ? services.get(0) : null;
+    }
+
+    @Programmatic
+    public <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+        T service = lookupService(serviceClass);
+        if(service == null) {
+            throw new IllegalStateException("Could not locate service of type '" + serviceClass + "'");
+        }
+        return service;
     }
 
     /**
@@ -516,7 +512,25 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
     //endregion
 
-    //region > convenience lookups
+    //region > convenience lookups (singletons only, cached)
+
+    private AuthenticationManager authenticationManager;
+
+    @Programmatic
+    public AuthenticationManager getAuthenticationManager() {
+        return authenticationManager != null
+                ? authenticationManager
+                : (authenticationManager = lookupServiceElseFail(AuthenticationManager.class));
+    }
+
+    private AuthorizationManager authorizationManager;
+
+    @Programmatic
+    public AuthorizationManager getAuthorizationManager() {
+        return authorizationManager != null
+                ? authorizationManager
+                : (authorizationManager = lookupServiceElseFail(AuthorizationManager.class));
+    }
 
     private SpecificationLoader specificationLoader;
 
@@ -524,7 +538,15 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader != null
                 ? specificationLoader
-                : (specificationLoader = lookupService(SpecificationLoader.class));
+                : (specificationLoader = lookupServiceElseFail(SpecificationLoader.class));
+    }
+
+    private AuthenticationSessionProvider authenticationSessionProvider;
+    @Programmatic
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider != null
+                ? authenticationSessionProvider
+                : (authenticationSessionProvider = lookupServiceElseFail(AuthenticationSessionProvider.class));
     }
 
     private PersistenceSessionServiceInternal persistenceSessionServiceInternal;
@@ -532,7 +554,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
         return persistenceSessionServiceInternal != null
                 ? persistenceSessionServiceInternal
-                : (persistenceSessionServiceInternal = lookupService(PersistenceSessionServiceInternal.class));
+                : (persistenceSessionServiceInternal = lookupServiceElseFail(PersistenceSessionServiceInternal.class));
     }
 
     private ConfigurationServiceInternal configurationServiceInternal;
@@ -540,8 +562,17 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public ConfigurationServiceInternal getConfigurationServiceInternal() {
         return configurationServiceInternal != null
                 ? configurationServiceInternal
-                : (configurationServiceInternal = lookupService(ConfigurationServiceInternal.class));
+                : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
     }
+
+    private DeploymentCategoryProvider deploymentCategoryProvider;
+    @Programmatic
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return deploymentCategoryProvider != null
+                ? deploymentCategoryProvider
+                : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
+    }
+
 
     //endregion
 

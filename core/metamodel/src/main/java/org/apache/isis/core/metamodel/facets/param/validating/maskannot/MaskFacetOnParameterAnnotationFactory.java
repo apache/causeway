@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.mask.MaskFacet;
 import org.apache.isis.core.metamodel.facets.object.mask.TitleFacetBasedOnMask;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.progmodel.DeprecatedMarker;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -39,7 +40,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * @deprecated
  */
 @Deprecated
-public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, DeprecatedMarker {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Mask.class);
 
@@ -94,7 +95,7 @@ public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        IsisConfiguration configuration = (IsisConfiguration) servicesInjector.getConfigurationServiceInternal();
+        IsisConfiguration configuration = servicesInjector.getConfigurationServiceInternal();
         validator.setConfiguration(configuration);
     }
 

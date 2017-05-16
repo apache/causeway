@@ -23,7 +23,7 @@ import java.util.Collection;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public final class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
+public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
     public interface Visitor {
         /**

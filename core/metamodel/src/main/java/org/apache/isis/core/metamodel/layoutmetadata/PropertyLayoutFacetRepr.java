@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.layoutmetadata;
 
 
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 
 public class PropertyLayoutFacetRepr {
@@ -29,6 +30,7 @@ public class PropertyLayoutFacetRepr {
     public int multiLine;
     public String named;
     public boolean namedEscaped = true;
+    public PromptStyle promptStyle;
     public boolean renderedAsDayBefore;
     public int typicalLength;
 

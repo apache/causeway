@@ -20,7 +20,6 @@
 package org.apache.isis.applib.adapters;
 
 import org.apache.isis.applib.annotation.TypicalLength;
-import org.apache.isis.applib.profiles.Localization;
 
 /**
  * Provides a mechanism for parsing and rendering string representations of
@@ -88,7 +87,7 @@ public interface Parser<T> {
      *            - the context domain object for which the text is being
      *            parsed. For example +3 might mean add 3 to the current number.
      */
-    T parseTextEntry(Object contextPojo, String entry, Localization localization);
+    T parseTextEntry(Object contextPojo, String entry);
 
     /**
      * The typical length of objects that can be parsed.
@@ -98,7 +97,7 @@ public interface Parser<T> {
     /**
      * The title of the object.
      */
-    String displayTitleOf(T object, Localization localization);
+    String displayTitleOf(T object);
 
     /**
      * The title of the object using a mask.

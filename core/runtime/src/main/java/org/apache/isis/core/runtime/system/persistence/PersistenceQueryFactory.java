@@ -59,27 +59,28 @@ public class PersistenceQueryFactory {
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {
             final QueryFindAllInstances<?> queryFindAllInstances = (QueryFindAllInstances<?>) query;
-            return new PersistenceQueryFindAllInstances(noSpec, queryFindAllInstances.getStart(), queryFindAllInstances.getCount());
+            return new PersistenceQueryFindAllInstances(noSpec, specificationLoader, queryFindAllInstances.getStart(), queryFindAllInstances.getCount());
         }
         if (query instanceof QueryFindByTitle) {
             final QueryFindByTitle<?> queryByTitle = (QueryFindByTitle<?>) query;
             final String title = queryByTitle.getTitle();
-            return new PersistenceQueryFindByTitle(noSpec, title, queryByTitle.getStart(), queryByTitle.getCount());
+            return new PersistenceQueryFindByTitle(noSpec, title, specificationLoader, queryByTitle.getStart(), queryByTitle.getCount());
         }
         if (query instanceof QueryFindByPattern) {
             final QueryFindByPattern<?> queryByPattern = (QueryFindByPattern<?>) query;
             final Object pattern = queryByPattern.getPattern();
             final ObjectAdapter patternAdapter = adapterManager.adapterFor(pattern);
-            return new PersistenceQueryFindByPattern(noSpec, patternAdapter, queryByPattern.getStart(), queryByPattern.getCount());
+            return new PersistenceQueryFindByPattern(noSpec, patternAdapter, specificationLoader, queryByPattern.getStart(), queryByPattern.getCount());
         }
         if (query instanceof QueryDefault) {
             final QueryDefault<?> queryDefault = (QueryDefault<?>) query;
             final String queryName = queryDefault.getQueryName();
             final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = wrap(queryDefault.getArgumentsByParameterName());
-            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, argumentsAdaptersByParameterName, cardinality, queryDefault.getStart(), queryDefault.getCount());
+            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, argumentsAdaptersByParameterName, cardinality,
+                    specificationLoader, queryDefault.getStart(), queryDefault.getCount());
         }
         // fallback; generic serializable applib query.
-        return new PersistenceQueryFindUsingApplibQuerySerializable(noSpec, query, cardinality);
+        return new PersistenceQueryFindUsingApplibQuerySerializable(noSpec, query, cardinality, specificationLoader);
     }
 
     /**

@@ -24,15 +24,14 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public abstract class InstallerAbstract implements Installer {
 
     //region > constructor, fields
 
-    private final String type;
     private final String name;
-    private final IsisConfigurationDefault isisConfiguration;
+    private final IsisConfiguration isisConfiguration;
 
     /**
      * Subclasses should pass in the type defined as a constant in the
@@ -45,33 +44,19 @@ public abstract class InstallerAbstract implements Installer {
      * to this constructor.
      */
     public InstallerAbstract(
-            final String type,
             final String name,
-            final IsisConfigurationDefault isisConfiguration) {
-        this.type = type;
+            final IsisConfiguration isisConfiguration) {
         this.name = name;
         this.isisConfiguration = isisConfiguration;
     }
 
-    //endregion
-
-    //region > type, name
-
-    @Override
-    public String getType() {
-        return type;
-    }
 
     @Override
     public String getName() {
         return name;
     }
 
-    //endregion
-
-    //region > configuration (injected)
-
-    public IsisConfigurationDefault getConfiguration() {
+    public IsisConfiguration getConfiguration() {
         return isisConfiguration;
     }
     //endregion

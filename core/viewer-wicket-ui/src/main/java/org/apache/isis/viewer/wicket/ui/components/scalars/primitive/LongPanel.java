@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.LongConverter;
 
@@ -42,8 +40,9 @@ public class LongPanel extends ScalarPanelTextFieldNumeric<Long> {
     }
 
     @Override
-    protected AbstractTextComponent<Long> createTextFieldForRegular() {
-        return new TextField<Long>(ID_SCALAR_VALUE, new TextFieldValueModel<Long>(this), Long.class) {
+    protected AbstractTextComponent<Long> createTextFieldForRegular(final String id) {
+        final TextFieldValueModel<Long> textFieldValueModel = new TextFieldValueModel<>(this);
+        return new TextField<Long>(id, textFieldValueModel, Long.class) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
@@ -55,8 +54,8 @@ public class LongPanel extends ScalarPanelTextFieldNumeric<Long> {
     }
 
     @Override
-    protected IModel<String> getScalarPanelType() {
-        return Model.of("longPanel");
+    protected String getScalarPanelType() {
+        return "longPanel";
     }
 
 }

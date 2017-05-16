@@ -22,8 +22,6 @@ package org.apache.isis.core.runtime.services.ixn;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -47,7 +45,10 @@ import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
 
 
@@ -81,8 +82,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,
                 actionDto.getMemberIdentifier(),
-                parameterDtos, currentUser,
-                transactionIdStr);
+                parameterDtos, currentUser
+        );
     }
 
     @Override @Programmatic
@@ -107,7 +108,6 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ObjectAdapter newValueAdapterIfAny) {
 
         final Interaction interaction = interactionContext.getInteraction();
-        final UUID transactionId = interaction.getTransactionId();
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
@@ -124,25 +124,23 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         commandDtoServiceInternal.addPropertyValue(property, propertyDto, newValueAdapterIfAny);
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
 
-        final String transactionIdStr = transactionId.toString();
-
         return InteractionDtoUtils.newPropertyEdit(
                 nextEventSequence, targetBookmark, targetTitle,
                 propertyDto.getMemberIdentifier(),
-                newValue, currentUser,
-                transactionIdStr);
+                newValue, currentUser
+        );
     }
 
-    @Inject
+    @javax.inject.Inject
     CommandDtoServiceInternal commandDtoServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     private BookmarkService bookmarkService;
 
-    @Inject
+    @javax.inject.Inject
     private InteractionContext interactionContext;
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
 

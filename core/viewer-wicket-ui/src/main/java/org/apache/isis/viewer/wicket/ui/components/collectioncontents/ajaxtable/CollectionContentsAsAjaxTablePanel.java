@@ -20,27 +20,29 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
+import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -101,8 +103,8 @@ public class CollectionContentsAsAjaxTablePanel
         addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
         addPropertyColumnsIfRequired(columns);
 
-        final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
-        dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize());
+        final CollectionContentsSortableDataProvider dataProvider = new CollectionContentsSortableDataProvider(model);
+        dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
         dataTable.honourHints();
 
@@ -174,7 +176,8 @@ public class CollectionContentsAsAjaxTablePanel
         
         final ObjectSpecification parentSpecIfAny = 
                 getModel().isParented() 
-                    ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification() 
+                    ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                        getPersistenceSession(), getSpecificationLoader()).getSpecification()
                     : null;
         
         @SuppressWarnings("unchecked")
@@ -184,9 +187,47 @@ public class CollectionContentsAsAjaxTablePanel
                 associationDoesNotReferenceParent(parentSpecIfAny));
         
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED, filter);
+        final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
         for (final ObjectAssociation property : propertyList) {
+            propertyById.put(property.getId(), property);
+        }
+        List<String> propertyIds = Lists.newArrayList(propertyById.keySet());
+
+        // optional SPI to reorder
+        final List<TableColumnOrderService> tableColumnOrderServices =
+                getServicesInjector().lookupServices(TableColumnOrderService.class);
+
+        for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
+            final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
+            if(propertyReorderedIds != null) {
+                propertyIds = propertyReorderedIds;
+                break;
+            }
+        }
+
+        for (final String propertyId : propertyIds) {
+            final ObjectAssociation property = propertyById.get(propertyId);
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
             columns.add(nopc);
+        }
+    }
+
+    private List<String> reordered(
+            final TableColumnOrderService tableColumnOrderService,
+            final List<String> propertyIds) {
+
+        final Class<?> collectionType = getModel().getTypeOfSpecification().getCorrespondingClass();
+
+        final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
+        if(parentObjectAdapterMemento != null) {
+            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento
+                    .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
+            final Object parent = parentObjectAdapter.getObject();
+            final String collectionId = getModel().getCollectionMemento().getId();
+
+            return tableColumnOrderService.orderParented(parent, collectionId, collectionType, propertyIds);
+        } else {
+            return tableColumnOrderService.orderStandalone(collectionType, propertyIds);
         }
     }
 
@@ -236,11 +277,17 @@ public class CollectionContentsAsAjaxTablePanel
 
     //region > dependencies
 
-    @Inject
+    @com.google.inject.Inject
     private WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
     }
+
+
+    protected ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
 
     //endregion
 

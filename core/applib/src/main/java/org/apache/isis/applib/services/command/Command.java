@@ -39,8 +39,8 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  This intention is reified as a
- * {@link Command#getMemento() memento} by way of the (internal) <tt>CommandMementoService</tt>; typically corresponding
- * to the XML equivalent of a {@link CommandDto}.
+ * {@link Command#getMemento() memento} by way of the (internal) <tt>CommandDtoServiceInternal</tt> domain service;
+ * typically corresponding to the XML equivalent of a {@link CommandDto}.
  *
  * <p>
  *     The {@link Command} interface also captures details of the corresponding action invocation (or property edit),
@@ -72,7 +72,6 @@ public interface Command extends HasTransactionId {
      */
     @Deprecated
     String ACTION_IDENTIFIER_FOR_EDIT = "(edit)";
-
 
 
     //region > user (property)
@@ -140,7 +139,7 @@ public interface Command extends HasTransactionId {
      * Implementation notes: set when the action is invoked (in <tt>ActionInvocationFacet</tt>) or in
      * property edited (in <tt>PropertySetterFacet</tt>).
      */
-    void setMemberIdentifier(String actionIdentifier);
+    void setMemberIdentifier(String memberIdentifier);
 
     //endregion
 

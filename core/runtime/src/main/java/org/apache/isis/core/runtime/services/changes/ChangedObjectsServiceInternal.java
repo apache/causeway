@@ -24,8 +24,6 @@ import java.util.Set;
 
 import javax.enterprise.context.RequestScoped;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -34,14 +32,19 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
-public class ChangedObjectsServiceInternal {
+public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
@@ -65,6 +68,12 @@ public class ChangedObjectsServiceInternal {
 
     // used for publishing
     private final Map<ObjectAdapter,PublishedObject.ChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
+
+    @Programmatic
+    public boolean isEnlisted(ObjectAdapter adapter) {
+        return changeKindByEnlistedAdapter.containsKey(adapter);
+    }
+
 
     /**
      * Auditing and publishing support: for object stores to enlist an object that has just been created,
@@ -126,7 +135,7 @@ public class ChangedObjectsServiceInternal {
             }
             if(enlistedObjectProperties.containsKey(aap)) {
                 // already enlisted, so ignore
-                return;
+                continue;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             enlistedObjectProperties.put(aap, papv);
@@ -172,9 +181,6 @@ public class ChangedObjectsServiceInternal {
 
 
     /**
-     *
-     * @param adapter
-     * @param current
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
     private boolean enlistForPublishing(final ObjectAdapter adapter, final PublishedObject.ChangeKind current) {
@@ -209,19 +215,9 @@ public class ChangedObjectsServiceInternal {
         return previous == null;
     }
 
-
-    @Programmatic
-    public boolean hasChangedAdapters() {
-        final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
-
-        final Set<ObjectAdapter> changedAdapters = Sets.newHashSet(
-                        Iterables.transform(
-                                changedObjectProperties,
-                                AdapterAndProperty.Functions.GET_ADAPTER)
-                        );
-        return !changedAdapters.isEmpty();
-    }
-
+    /**
+     * Intended to be called at the end of the transaction.  Use {@link #resetForNextTransaction()} once fully read.
+     */
     @Programmatic
     public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
         return changedObjectProperties != null
@@ -257,20 +253,10 @@ public class ChangedObjectsServiceInternal {
                 Sets.filter(processedObjectProperties1.entrySet(), PreAndPostValues.Predicates.CHANGED));
     }
 
-    @Programmatic
-    public void clearChangedObjectProperties() {
-        enlistedObjectProperties.clear();
-    }
-
-    private static final Predicate<ObjectAdapter> IS_TRANSACTION_ID = new Predicate<ObjectAdapter>() {
-        @Override
-        public boolean apply(ObjectAdapter input) {
-            return HasTransactionId.class.isAssignableFrom(input.getSpecification().getCorrespondingClass());
-        }
-    };
-
     protected boolean shouldIgnore(final ObjectAdapter adapter) {
-        return IS_TRANSACTION_ID.apply(adapter);
+        final ObjectSpecification adapterSpec = adapter.getSpecification();
+        final Class<?> adapterClass = adapterSpec.getCorrespondingClass();
+        return HasTransactionId.class.isAssignableFrom(adapterClass);
     }
 
 
@@ -286,7 +272,22 @@ public class ChangedObjectsServiceInternal {
 
     @Programmatic
     public int numberObjectPropertiesModified() {
-        return enlistedObjectProperties.size();
+        if(changedObjectProperties == null) {
+            // normally done during auditing, but in case none of the objects in this xactn are audited...
+            getChangedObjectProperties();
+        }
+        return changedObjectProperties.size();
+    }
+
+    /**
+     * Intended to be called at the end of a transaction.  (This service really ought to be considered
+     * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
+     */
+    @Override
+    @Programmatic
+    public void resetForNextTransaction() {
+        enlistedObjectProperties.clear();
+        changedObjectProperties = null;
     }
 
 

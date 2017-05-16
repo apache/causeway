@@ -49,6 +49,7 @@ public class PublishedObjectsDefault implements PublishedObjects {
 
     //region > constructor, fields
     private UUID transactionUuid;
+    private final int sequence;
     private final String userName;
     private final Timestamp completedAt;
     private final int numberLoaded;
@@ -57,12 +58,14 @@ public class PublishedObjectsDefault implements PublishedObjects {
 
     public PublishedObjectsDefault(
             final UUID transactionUuid,
+            final int sequence,
             final String userName,
             final Timestamp completedAt,
             final int numberLoaded,
             final int numberObjectPropertiesModified,
             final Map<ObjectAdapter, PublishedObject.ChangeKind> changesByAdapter) {
         this.transactionUuid = transactionUuid;
+        this.sequence = sequence;
         this.userName = userName;
         this.completedAt = completedAt;
         this.numberLoaded = numberLoaded;
@@ -210,13 +213,14 @@ public class PublishedObjectsDefault implements PublishedObjects {
     }
 
     protected ChangesDto newChangesDto(final ObjectsDto objectsDto) {
-        final String transactionId = transactionUuid.toString();
         final ChangesDto changesDto = new ChangesDto();
 
         changesDto.setMajorVersion("1");
         changesDto.setMinorVersion("0");
 
-        changesDto.setTransactionId(transactionId);
+        changesDto.setTransactionId(transactionUuid.toString());
+        changesDto.setSequence(sequence);
+
         changesDto.setUser(userName);
         changesDto.setCompletedAt(JavaSqlTimestampXmlGregorianCalendarAdapter.print(completedAt));
 
@@ -226,5 +230,6 @@ public class PublishedObjectsDefault implements PublishedObjects {
 
 
     //endregion
+
 
 }

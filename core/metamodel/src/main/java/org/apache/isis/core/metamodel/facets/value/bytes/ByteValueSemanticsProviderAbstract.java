@@ -23,14 +23,12 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Byte> implements ByteValueFacet {
 
@@ -44,8 +42,8 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
 
     private final NumberFormat format;
 
-    public ByteValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Byte> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+    public ByteValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Byte> adaptedClass, final ServicesInjector context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
         format = determineNumberFormat("value.format.byte");
     }
 
@@ -63,7 +61,7 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    public String titleString(final Object value, final Localization localization) {
+    public String titleString(final Object value) {
         return titleString(format, value);
     }
 

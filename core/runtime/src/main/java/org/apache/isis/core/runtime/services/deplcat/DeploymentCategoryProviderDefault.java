@@ -16,19 +16,24 @@
  */
 package org.apache.isis.core.runtime.services.deplcat;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
-@DomainService(nature = NatureOfService.DOMAIN)
+// registered as a fallback
 public class DeploymentCategoryProviderDefault implements DeploymentCategoryProvider {
+
+    private final DeploymentCategory deploymentCategory;
+
+    public DeploymentCategoryProviderDefault(final DeploymentCategory deploymentCategory) {
+        this.deploymentCategory = deploymentCategory;
+    }
+
 
     @Programmatic
     @Override
     public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+        return deploymentCategory;
     }
+
 }

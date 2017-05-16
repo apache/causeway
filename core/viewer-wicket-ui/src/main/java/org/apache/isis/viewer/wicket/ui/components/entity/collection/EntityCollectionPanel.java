@@ -19,8 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.collection;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Provider;
+
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -64,13 +68,19 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
     private final ComponentHintKey selectedItemHintKey;
 
+    CollectionSelectorPanel selectorDropdownPanel;
+
     final WebMarkupContainer div;
 
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemHintKey = ComponentHintKey.create(this, EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
+        selectedItemHintKey = ComponentHintKey.create(getSelectorDropdownPanel(), EntityCollectionModel.HINT_KEY_SELECTED_ITEM);
         div = buildGui();
+    }
+
+    Provider<Component> getSelectorDropdownPanel() {
+        return new SelectorDropDownPanelProvider();
     }
 
     /**
@@ -96,7 +106,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getCollectionMemento().getId());
         CssClassAppender.appendCssClassTo(div, entityCollectionModel.getTypeOfSpecification().getFullIdentifier().replace('.','-'));
 
-        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
+        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection(
+                entityCollectionModel.getSpecificationLoader());
         final ObjectAdapter objectAdapter = getModel().getObject();
         final Consent visibility = association.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
@@ -110,7 +121,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
                 CssClassAppender.appendCssClassTo(div, cssClass);
             }
 
-            final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
+            final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, entityCollectionModel);
             div.addOrReplace(collectionPanel);
 
 
@@ -136,9 +147,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
             if (componentFactories.size() <= 1) {
                 permanentlyHide(ID_SELECTOR_DROPDOWN);
             } else {
-                CollectionSelectorPanel selectorDropdownPanel =
-                        new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
-                                entityCollectionModel, selectedItemHintKey);
+                selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
+                        entityCollectionModel, selectedItemHintKey);
 
                 final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
@@ -156,6 +166,10 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         return div;
     }
 
+    protected CollectionPanel newCollectionModel(String id, EntityCollectionModel entityCollectionModel) {
+        return new CollectionPanel(id, entityCollectionModel);
+    }
+
 
     private boolean visible = false;
     @Override
@@ -163,4 +177,10 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         return visible;
     }
 
+    private class SelectorDropDownPanelProvider implements Provider<Component>, Serializable {
+        @Override
+        public Component get() {
+            return selectorDropdownPanel;
+        }
+    }
 }

@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -29,11 +28,13 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -47,8 +48,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel
-            implements IHeaderContributor, PersistenceSessionProvider {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
 
     private static final long serialVersionUID = 1L;
 
@@ -116,11 +116,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
         return UiHintContainer.Util.hintContainerOf(this);
     }
 
-    // seemes to be unused
-    public <T extends UiHintContainer> T getUiHintContainer(final Class<T> additionalConstraint) {
-        return UiHintContainer.Util.hintContainerOf(this, additionalConstraint);
-    }
-
 
     // ///////////////////////////////////////////////////////////////////
     // Convenience
@@ -133,26 +128,9 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
      * @return
      */
     public AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
     }
 
-    public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext)
-    // ///////////////////////////////////////////////////////////////////
-
-    @Override
-    public PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
-    }
 
     // /////////////////////////////////////////////////
     // Dependency Injection
@@ -189,7 +167,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-        final String context = IsisSystem.class.getName();
+        final String context = IsisSessionFactoryBuilder.class.getName();
         final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
         final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
         final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
@@ -203,6 +181,32 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel
                 .withBtnCancelClass("btn btn-default");
 
         component.add(new ConfirmationBehavior(confirmationConfig));
+    }
+
+
+    public DeploymentCategory getDeploymentCategory() {
+        return getIsisSessionFactory().getDeploymentCategory();
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////
+    // Dependencies (from IsisContext)
+    // ///////////////////////////////////////////////////////////////////
+
+    public PersistenceSession getPersistenceSession() {
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    public SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
+
+    protected ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
+    }
+
+    protected IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 

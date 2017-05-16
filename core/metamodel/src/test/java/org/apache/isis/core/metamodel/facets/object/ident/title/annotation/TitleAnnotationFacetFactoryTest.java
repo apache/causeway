@@ -44,9 +44,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationDefault;
-import org.apache.isis.core.metamodel.services.l10n.LocalizationProviderInternal;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -57,9 +54,6 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     @Mock
     private ObjectAdapter mockObjectAdapter;
-    @Allowing
-    @Mock
-    private LocalizationProviderInternal mockLocalizationProviderInternal;
     @Mock
     private AuthenticationSession mockAuthenticationSession;
 
@@ -78,9 +72,6 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
                 allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
                 will(returnValue(mockDeploymentCategoryProvider));
-
-                allowing(mockLocalizationProviderInternal).getLocalization();
-                will(returnValue(new LocalizationDefault()));
 
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
                 will(returnValue(DeploymentCategory.PRODUCTION));
@@ -183,7 +174,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProviderInternal.getLocalization());
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
 
@@ -259,7 +250,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter, mockLocalizationProviderInternal.getLocalization());
+        final String title = titleFacetViaTitleAnnotation.title(mockObjectAdapter);
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 

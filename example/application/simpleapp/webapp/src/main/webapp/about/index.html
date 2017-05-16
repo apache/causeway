@@ -58,12 +58,17 @@ th, td {
              
             <p>
                 This app has been generated using Apache Isis'
-                <a href="http://isis.apache.org/intro/getting-started/simple%61pp-archetype.html" target="_blank">SimpleApp</a> archetype,
+                <a href="http://isis.apache.org/guides/ugfun.html#_ugfun_getting-started_simple%61pp-archetype" target="_blank">SimpleApp</a> archetype,
                 to create a purposefully minimal application that nevertheless includes fixture data, integration tests and BDD specs.
                 <br/>
                 <br/>
-                The app itself consists of a single domain class, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/dom/src/main/java/dom/simple/SimpleObject.java"  target="_blank"><tt>SimpleObject</tt></a>,
-                along with an equally simple (factory/repository) domain service, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/dom/src/main/java/dom/simple/SimpleObjects.java"  target="_blank"><tt>SimpleObjects</tt></a>.
+                The application's business logic resides in a single (maven) module, <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple"  target="_blank">module-simple</a>, that in turn contains a single domain entity, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/module-simple/src/main/java/domainapp/modules/simple/dom/impl/SimpleObject.java"  target="_blank">SimpleObject</a>.  The module has its own <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple/src/main/java/domainapp/modules/simple/fixture" target="_blank">fixtures</a>, <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple/src/test/java/domainapp/modules/simple/dom/impl" target="_blank">unit tests</a> and <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/module-simple/src/test/java/domainapp/modules/simple/integtests/tests" target="_blank">integration tests</a>.  New modules can be created by copying this first simple module.
+                <br/>
+                <br/>
+                The app also defines the <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/application"  target="_blank">application</a> (maven) module; this holds <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/application/src/main/java/domainapp/application/fixture"  target="_blank">fixtures</a>, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/test/java/domainapp/application/integtests" target="_blank">integration/smoke tests</a> and <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/test/java/domainapp/application/bdd" target="_blank">BDD specs</a> to exercise the entire application.  It also holds the <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/manifest/DomainAppAppManifest.java" target="_blank">AppManifest</a> used to bootstrap the entire application, as well as application-scoped <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/application/src/main/java/domainapp/application/services" target="_blank">domain services</a> (eg a home page service).
+                <br/>
+                <br/>
+                The app's <a href="https://github.com/apache/isis/tree/master/example/application/simple%61pp/webapp"  target="_blank">webapp</a> (maven) module is used to assemble the application into a WAR file.
             </p>
 
             <p>To access the app:</p>
@@ -74,7 +79,7 @@ th, td {
                     </p>
                     <p>
                         provides access to a generic UI for end-users,
-                        Isis' <a href="http://isis.apache.org/components/viewers/wicket/about.html" target="_blank">Wicket Viewer</a>.
+                        Isis' <a href="http://isis.apache.org/guides/ugvw.html" target="_blank">Wicket Viewer</a>.
                         As its name suggests, this viewer is built on top of <a href="http://wicket.apache.org" target="_blank">Apache Wicket</a>&trade;.
                     </p>
                 </li>
@@ -86,15 +91,17 @@ th, td {
                     </p>
                     <p>
                         provides access to a Swagger UI which uses a subset of the framework's automatically
-                        generated <a href="restful/">RESTful API</a>.  There are three versions of the Swagger
-                        spec files (that drive the UI): <a href="restful/swagger/public">public</a> (for use by
-                        "third-party" apps), <a href="restful/swagger/private">private</a> (for use by internal apps),
-                        and <a href="restful/swagger/prototyping">prototyping</a> (an extended version of the private
+                        generated <a href="restful/">RESTful API</a> (provided by the 
+                        <a href="http://isis.apache.org/guides/ugvro.html"  target="_blank">Restful Objects viewer</a>).  There are 
+                        three versions of the Swagger spec files (that drive the UI): 
+                        <a href="restful/swagger/public">public</a> (for use by "third-party" apps), 
+                        <a href="restful/swagger/private">private</a> (for use by internal apps), and 
+                        <a href="restful/swagger/prototyping">prototyping</a> (an extended version of the private
                         API).  The Swagger spec files are themselves dynamically generated and can be used to generate
                         client-side stubs.
                     </p>
                     <p>The RESTful API can return both simple representations and also richer hypermedia representations
-                        that are conformant with the <a href="http://restfulobjects.org">Restful Objects</a> spec.
+                        that are conformant with the <a href="http://restfulobjects.org"  target="_blank">Restful Objects</a> spec.
                         The HTTP <code>Accept</code> header is used to select which representation should be generated.
                     </p>
                 </li>

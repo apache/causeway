@@ -29,11 +29,32 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     private final List<FacetFactory> facetFactories = Lists.newArrayList();
-    private final List<Object> facetFactoryInstancesOrClasses = Lists.newArrayList();
+    private final List<Object> facetFactoryInstancesOrClasses = Lists.newLinkedList();
+
+    public static final String KEY_IGNORE_DEPRECATED = "isis.reflector.facets.ignoreDeprecated";
+
+    public enum DeprecatedPolicy {
+        IGNORE,
+        HONOUR;
+
+        public static DeprecatedPolicy parse(final IsisConfiguration configuration) {
+            boolean ignoreDep = configuration.getBoolean(KEY_IGNORE_DEPRECATED, false);
+            return ignoreDep ? IGNORE : HONOUR;
+        }
+    }
+
+    protected final DeprecatedPolicy deprecatedPolicy;
+
+    public ProgrammingModelAbstract(
+            final ProgrammingModelFacetsJava5.DeprecatedPolicy deprecatedPolicy) {
+
+        this.deprecatedPolicy = deprecatedPolicy;
+    }
 
     @Override
     public void init() {
@@ -99,6 +120,17 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     private void addFactory(final Object facetFactoryInstanceOrClass, final Position position) {
         assertNotInitialized();
+        if(deprecatedPolicy == DeprecatedPolicy.IGNORE) {
+            if( facetFactoryInstanceOrClass instanceof FacetFactory) {
+                if(facetFactoryInstanceOrClass instanceof DeprecatedMarker) {
+                    return;
+                }
+            } else if (facetFactoryInstanceOrClass instanceof Class) {
+                if(DeprecatedMarker.class.isAssignableFrom((Class)facetFactoryInstanceOrClass)) {
+                    return;
+                }
+            }
+        }
         switch (position){
             case BEGINNING:
                 facetFactoryInstancesOrClasses.add(0, facetFactoryInstanceOrClass);

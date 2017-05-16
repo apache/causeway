@@ -49,10 +49,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 public class FacetProcessor implements ServicesInjectorAware {
 
     private final ProgrammingModel programmingModel;
@@ -123,8 +119,6 @@ public class FacetProcessor implements ServicesInjectorAware {
     private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
     public FacetProcessor(final ProgrammingModel programmingModel) {
-        ensureThatState(programmingModel, is(notNullValue()));
-
         this.programmingModel = programmingModel;
     }
 
@@ -335,8 +329,7 @@ public class FacetProcessor implements ServicesInjectorAware {
     }
 
     /**
-     * Attaches all facets applicable to the provided
-     * {@link FeatureType#ACTION_PARAMETER parameter}), to the supplied
+     * Attaches all facets applicable to the provided parameter to the supplied
      * {@link FacetHolder}.
      * 
      * <p>
@@ -359,7 +352,19 @@ public class FacetProcessor implements ServicesInjectorAware {
             final int paramNum,
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
+        for (FeatureType featureType : FeatureType.PARAMETERS_ONLY) {
+            processParams(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter, featureType);
+        }
+    }
+
+    public void processParams(
+            final Class<?> introspectedClass,
+            final Method method,
+            final int paramNum,
+            final MethodRemover methodRemover,
+            final FacetedMethodParameter facetedMethodParameter,
+            final FeatureType featureType) {
+        final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         final ProcessParameterContext processParameterContext =
                 new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);
         for (final FacetFactory facetFactory : factoryList) {
@@ -367,9 +372,6 @@ public class FacetProcessor implements ServicesInjectorAware {
         }
     }
 
-
-    
-    
     private List<FacetFactory> getFactoryListByFeatureType(final FeatureType featureType) {
         cacheByFeatureTypeIfRequired();
         List<FacetFactory> list = factoryListByFeatureType.get(featureType);

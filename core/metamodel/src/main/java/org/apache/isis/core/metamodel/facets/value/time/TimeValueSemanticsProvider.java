@@ -28,9 +28,9 @@ import com.google.common.collect.Maps;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Time;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract<org.apache.isis.applib.value.Time> {
 
@@ -45,11 +45,11 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
      * {@link EncoderDecoder}.
      */
     public TimeValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public TimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, org.apache.isis.applib.value.Time.class, configuration, context);
+    public TimeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, org.apache.isis.applib.value.Time.class, context);
     }
 
     @Override

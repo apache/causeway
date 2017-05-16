@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.Identifier;
@@ -72,6 +71,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
+            final String mixinMethodName,
             final ServicesInjector servicesInjector) {
         super(mixinAction.getFacetedMethod(), mixinAction.getReturnType(), servicesInjector);
 
@@ -99,7 +99,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         // adjust name if necessary
         final String name = getName();
 
-        if(Strings.isNullOrEmpty(name) || Objects.equal(name, DEFAULT_MEMBER_NAME)) {
+        if(Strings.isNullOrEmpty(name) || name.equalsIgnoreCase(mixinMethodName)) {
             String memberName = ObjectActionMixedIn.determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }

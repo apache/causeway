@@ -21,13 +21,11 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
@@ -51,10 +49,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPrope
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 @DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@DomainServiceLayout(
-        menuOrder = "1500"
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + (Integer.MAX_VALUE - 10)
 )
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
@@ -399,6 +395,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     }
 
 
-    @Inject
+    @javax.inject.Inject
     protected DomainObjectContainer container;
 }

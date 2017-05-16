@@ -26,26 +26,21 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.chg.v1.ChangesDto;
-import org.apache.isis.schema.chg.v1.ObjectsDto;
-import org.apache.isis.schema.common.v1.OidDto;
-import org.apache.isis.schema.common.v1.OidsDto;
-import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 public final class ChangesDtoUtils {
+
+    public static void init() {
+        getJaxbContext();
+    }
 
     //region > marshalling
     static JAXBContext jaxbContext;

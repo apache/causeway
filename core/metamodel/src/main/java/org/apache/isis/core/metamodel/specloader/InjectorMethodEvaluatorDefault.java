@@ -35,12 +35,15 @@ public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvalu
     public boolean isInjectorMethodFor(
             final Method method,
             final Class<?> serviceClass) {
+
+        // there's no need to synchronize this access.
+        // if there were a race condition, then at worst a result of the determineXxx method might be discard
+        // (but it would end up being calculated next time around)
+
         Map<Class<?>, Boolean> classBooleanMap = isInjectorMethod.get(method);
         if(classBooleanMap == null) {
-            synchronized (isInjectorMethod) {
-                classBooleanMap = Maps.newConcurrentMap();
-                isInjectorMethod.put(method, classBooleanMap);
-            }
+            classBooleanMap = Maps.newConcurrentMap();
+            isInjectorMethod.put(method, classBooleanMap);
         }
         Boolean result = classBooleanMap.get(serviceClass);
         if(result == null) {

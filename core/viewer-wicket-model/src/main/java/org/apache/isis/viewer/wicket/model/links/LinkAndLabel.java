@@ -20,10 +20,13 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
 import java.util.List;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.markup.html.link.AbstractLink;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -48,15 +51,15 @@ public class LinkAndLabel implements Serializable {
             final String disabledReasonIfAny,
             final boolean blobOrClob) {
 
-        final String name = ObjectAction.Utils.nameFor(objectAction);
+        final String name = ObjectAction.Util.nameFor(objectAction);
 
-        final boolean explorationOrPrototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
-        final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
-        final String description = ObjectAction.Utils.descriptionOf(objectAction);
-        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);
-        final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
-        final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
-        final ActionLayout.Position actionLayoutPosition = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
+        final boolean explorationOrPrototype = objectAction.isPrototype();
+        final String actionIdentifier = ObjectAction.Util.actionIdentifierFor(objectAction);
+        final String description = ObjectAction.Util.descriptionOf(objectAction);
+        final String cssClass = ObjectAction.Util.cssClassFor(objectAction, objectAdapter);
+        final String cssClassFa = ObjectAction.Util.cssClassFaFor(objectAction);
+        final CssClassFaPosition cssClassFaPosition = ObjectAction.Util.cssClassFaPositionFor(objectAction);
+        final ActionLayout.Position actionLayoutPosition = ObjectAction.Util.actionLayoutPositionOf(objectAction);
         final ActionSemantics.Of semantics = objectAction.getSemantics();
 
         return new LinkAndLabel(
@@ -79,9 +82,6 @@ public class LinkAndLabel implements Serializable {
 
         public boolean isNoParameters() {
             return this == NO_PARAMETERS;
-        }
-        public boolean isTakesParameters() {
-            return this == TAKES_PARAMETERS;
         }
     }
 
@@ -190,4 +190,11 @@ public class LinkAndLabel implements Serializable {
             };
         }
     }
+
+    public static class Util {
+        private Util(){}
+
+
+    }
+
 }

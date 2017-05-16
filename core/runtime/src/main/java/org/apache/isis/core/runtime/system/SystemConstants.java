@@ -41,17 +41,6 @@ public final class SystemConstants {
 
 
 
-    /**
-     * Key used to lookup {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory persistor} in
-     * {@link IsisConfiguration}, and root for any
-     * {@link PersistenceMechanismInstaller persistor}-specific configuration
-     * keys.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public final static String OBJECT_PERSISTOR_INSTALLER_KEY = ConfigurationConstants.ROOT + PersistenceMechanismInstaller.TYPE;
-
 
     /**
      * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
@@ -110,18 +99,6 @@ public final class SystemConstants {
     @Deprecated
     public final static String PASSWORD_KEY = ConfigurationConstants.ROOT + "password";
 
-
-    /**
-     * Key as to whether to show splash (eg via command line) is made available
-     * in {@link IsisConfiguration}.
-     * 
-     * <p>
-     * Use {@link Splash#valueOf(String)} to decode.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    public static final String NOSPLASH_KEY = ConfigurationConstants.ROOT + "nosplash";
 
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
 

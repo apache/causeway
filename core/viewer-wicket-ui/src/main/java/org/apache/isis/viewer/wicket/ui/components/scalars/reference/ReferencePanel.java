@@ -21,17 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Settings;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -39,29 +34,30 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -69,12 +65,13 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel extends ScalarPanelAbstract {
+public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
+
 
     /**
      * Determines the behaviour of dependent choices for the dependent; either to autoselect the first available choice, or to select none.
@@ -82,22 +79,24 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
 
     private EntityLinkSelect2Panel entityLink;
-    Select2Choice<ObjectAdapterMemento> select2Field;
 
     private EntityLinkSimplePanel entitySimpleLink;
+
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 
-    
-    // //////////////////////////////////////
-    // addComponentFor{Compact/Regular}
+
+    Select2 getSelect2() {
+        return select2;
+    }
+
     // //////////////////////////////////////
 
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected Component addComponentForCompact() {
+    protected Component createComponentForCompact() {
 
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
@@ -109,59 +108,38 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         final WebMarkupContainer labelIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         labelIfCompact.add(entitySimpleLink);
-        
-        addOrReplace(labelIfCompact);
 
         return labelIfCompact;
     }
 
-
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected FormGroup addComponentForRegular() {
-        final ScalarModel scalarModel = getModel();
-        final String name = scalarModel.getName();
-        
+    protected FormGroup createComponentForRegular() {
+
         entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), this);
+
+        entityLink.setRequired(getModel().isRequired());
+        this.select2 = createSelect2AndSemantics();
+        entityLink.addOrReplace(select2.component());
+
         syncWithInput();
 
         setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
-        entityLink.setLabel(Model.of(name));
+        select2.component().setOutputMarkupId(true);
 
-        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, entityLink);
-        labelIfRegular.add(entityLink);
-        
-        final String describedAs = getModel().getDescribedAs();
-        if(describedAs != null) {
-            labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
-        }
-        
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
-        labelIfRegular.add(scalarName);
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
+        final String name = scalarModel.getName();
+        select2.setLabel(Model.of(name));
 
-        // find the links...
-        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
+        final FormGroup formGroup = createFormGroupAndName(this.entityLink, ID_SCALAR_IF_REGULAR, ID_SCALAR_NAME);
 
-        addPositioningCssTo(labelIfRegular, entityActions);
-
-        addOrReplace(labelIfRegular);
-        addFeedbackOnlyTo(labelIfRegular, entityLink);
-        addEditPropertyTo(labelIfRegular);
-
-        // ... add entity links to panel (below and to right)
-        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
 
         // add semantics
-        entityLink.setRequired(getModel().isRequired());
-        entityLink.add(new IValidator<ObjectAdapter>() {
-        
+        this.entityLink.setRequired(getModel().isRequired());
+        this.entityLink.add(new IValidator<ObjectAdapter>() {
+
             private static final long serialVersionUID = 1L;
-        
+
             @Override
             public void validate(final IValidatable<ObjectAdapter> validatable) {
                 final ObjectAdapter proposedAdapter = validatable.getValue();
@@ -174,23 +152,89 @@ public class ReferencePanel extends ScalarPanelAbstract {
             }
         });
 
-        if(getModel().isRequired()) {
-            scalarName.add(new CssClassAppender("mandatory"));
-        }
-        return labelIfRegular;
+
+        return formGroup;
     }
+
+    @Override
+    protected Component getScalarValueComponent() {
+        return select2.component();
+    }
+
+    private Select2 createSelect2AndSemantics() {
+
+        final Select2 select2 = createSelect2(ID_AUTO_COMPLETE);
+
+
+        final Settings settings = select2.getSettings();
+
+        // one of these three case should be true
+        // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
+        if(getModel().hasChoices()) {
+
+            settings.setPlaceholder(getModel().getName());
+
+        } else if(getModel().hasAutoComplete()) {
+
+            final int minLength = getModel().getAutoCompleteMinLength();
+            settings.setMinimumInputLength(minLength);
+            settings.setPlaceholder(getModel().getName());
+
+        } else if(hasObjectAutoComplete()) {
+            final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+            final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+            final int minLength = autoCompleteFacet.getMinLength();
+            settings.setMinimumInputLength(minLength);
+        }
+
+        return select2;
+    }
+
+
 
     // //////////////////////////////////////
 
-    // called from buildGui
     @Override
-    protected void addFormComponentBehavior(Behavior behavior) {
-        if(select2Field != null) {
-            select2Field.add(behavior);
-        }
+    protected InlinePromptConfig getInlinePromptConfig() {
+        return InlinePromptConfig.supportedAndHide(
+                scalarModel.getMode() == EntityModel.Mode.EDIT ||
+                scalarModel.getKind() == ScalarModel.Kind.PARAMETER
+                        ? select2.component()
+                        : null);
     }
 
-    
+    @Override
+    protected IModel<String> obtainPromptInlineLinkModel() {
+        final IModel<ObjectAdapterMemento> model = select2.getModel();
+        return new IModel<String>() {
+            @Override
+            public String getObject() {
+                final ObjectAdapterMemento oam = model.getObject();
+                if(oam == null) {
+                    return null;
+                }
+                ObjectAdapter objectAdapter = oam
+                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
+                                getSpecificationLoader());
+                return objectAdapter != null ? objectAdapter.titleString(null) : null;
+            }
+
+            @Override
+            public void setObject(final String s) {
+                // gnore
+            }
+
+            @Override
+            public void detach() {
+                // ignore
+            }
+        };
+    }
+
+
+
+
+
     // //////////////////////////////////////
     // onBeforeRender*
     // //////////////////////////////////////
@@ -241,7 +285,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 
                 final ComponentFactory componentFactory = 
                         getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-                final Component component = componentFactory.createComponent(entityModelForLink);
+                final Component component = componentFactory.createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), entityModelForLink);
+                if(scalarModel.getPromptStyle() == PromptStyle.INLINE) {
+                    // bit of a hack... allows us to suppress the title using CSS
+                    component.add(new CssClassAppender("inlinePrompt"));
+                }
                 
                 componentForRegular.addOrReplace(component);
 
@@ -262,44 +310,27 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
         // syncLinkWithInputIfAutoCompleteOrChoices
         if(isEditableWithEitherAutoCompleteOrChoices()) {
-            final IModel<ObjectAdapterMemento> model = Util.createModel(getModel().asScalarModelWithPending());       
-            
-            if(select2Field == null) {
-                entityLink.setRequired(getModel().isRequired());
-                select2Field = Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, model, getModel());
-                setProviderAndCurrAndPending(select2Field, getModel().getActionArgsHint());
-                if(!getModel().hasChoices()) {
-                    final Settings settings = select2Field.getSettings();
-                    final int minLength = getModel().getAutoCompleteMinLength();
-                    settings.setMinimumInputLength(minLength);
-                    settings.setPlaceholder(getModel().getName());
-                }
-                if(hasObjectAutoComplete()) {
-                    final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
-                    final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                    final Settings settings = select2Field.getSettings();
-                    final int minLength = autoCompleteFacet.getMinLength();
-                    settings.setMinimumInputLength(minLength);
-                }
-                entityLink.addOrReplace(select2Field);
+
+            if(select2 == null) {
+                throw new IllegalStateException("select2 should be created already");
             } else {
                 //
-                // the select2Field already exists, so the widget has been rendered before.  If it is
+                // the select2Choice already exists, so the widget has been rendered before.  If it is
                 // being re-rendered now, it may be because some other property/parameter was invalid.
                 // when the form was submitted, the selected object (its oid as a string) would have
                 // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
-                // would be correctly converted and processed by the select2Field's choiceProvider.  However,
+                // would be correctly converted and processed by the select2Choice's choiceProvider.  However,
                 // an invalid property/parameter means that the webpage is re-rendered in another request,
                 // and the rawInput can no longer be interpreted.  The net result is that the field appears
                 // with no input.
                 //
-                // The fix is therefore (I think) simply to clear any rawInput, so that the select2Field
+                // The fix is therefore (I think) simply to clear any rawInput, so that the select2Choice
                 // renders its state from its model.
                 //
                 // see: FormComponent#getInputAsArray()
                 // see: Select2Choice#renderInitializationScript()
                 //
-                select2Field.clearInput();
+                select2.clearInput();
             }
 
             if(getComponentForRegular() != null) {
@@ -310,9 +341,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
 
             // syncUsability
-            if(select2Field != null) {
+            if(select2 != null) {
                 final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
-                select2Field.setEnabled(mutability);
+                select2.setEnabled(mutability);
             }
 
             Components.permanentlyHide(entityLink, "entityLinkIfNull");
@@ -320,7 +351,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
             Components.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
-            select2Field = null; // this forces recreation next time around
+            // setSelect2(null); // this forces recreation next time around
         }
         
     }
@@ -329,27 +360,19 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // setProviderAndCurrAndPending
     // //////////////////////////////////////
     
-    // called by syncWithInput, updateChoices
-    private void setProviderAndCurrAndPending(
-            final Select2Choice<ObjectAdapterMemento> select2Field, 
-            final ObjectAdapter[] argsIfAvailable) {
-        if (getModel().hasChoices()) {
-            
-            final List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
-            ObjectAdapterMementoProviderAbstract providerForChoices = providerForChoices(choiceMementos);
+    @Override
+    protected ChoiceProvider<ObjectAdapterMemento> buildChoiceProvider(final ObjectAdapter[] argsIfAvailable) {
 
-            select2Field.setProvider(providerForChoices);
-            getModel().clearPending();
-            
-            resetIfCurrentNotInChoices(select2Field, choiceMementos);
-            
-        } else if(hasParamOrPropertyAutoComplete()) {
-            select2Field.setProvider(providerForParamOrPropertyAutoComplete());
-            getModel().clearPending();
-        } else {
-            select2Field.setProvider(providerForObjectAutoComplete());
-            getModel().clearPending();
+        if (getModel().hasChoices()) {
+            List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
+            return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), wicketViewerSettings, choiceMementos);
         }
+
+        if(getModel().hasAutoComplete()) {
+            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(getModel(), wicketViewerSettings);
+        }
+
+        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel(), wicketViewerSettings);
     }
 
     // called by setProviderAndCurrAndPending
@@ -358,28 +381,39 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession(), getDeploymentCategory()));
         }
-        // take a copy otherwise is only lazily evaluated
+        // take a copy (otherwise is only lazily evaluated)
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
     }
 
     // called by setProviderAndCurrAndPending
-    private void resetIfCurrentNotInChoices(final Select2Choice<ObjectAdapterMemento> select2Field, final List<ObjectAdapterMemento> choiceMementos) {
-        final ObjectAdapterMemento curr = select2Field.getModelObject();
-        if(curr == null) {
-            select2Field.getModel().setObject(null);
-            getModel().setObject(null);
-            return;
-        }
-        
-        if(!curr.containedIn(choiceMementos)) {
-            if(!choiceMementos.isEmpty() && autoSelect()) {
-                final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
-                select2Field.getModel().setObject(newAdapterMemento);
-                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
-            } else {
-                select2Field.getModel().setObject(null);
+    @Override
+    protected void resetIfCurrentNotInChoices(final Select2 select2, final List<ObjectAdapterMemento> choiceMementos) {
+        final ObjectAdapterMemento curr = select2.getModelObject();
+
+        if(!getModel().isCollection()) {
+
+            if(curr == null) {
+                select2.getModel().setObject(null);
                 getModel().setObject(null);
+                return;
             }
+
+            if(!curr.containedIn(choiceMementos, getPersistenceSession(), getSpecificationLoader())) {
+                if(!choiceMementos.isEmpty() && autoSelect()) {
+                    final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
+                    select2.getModel().setObject(newAdapterMemento);
+                    getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                            getPersistenceSession(), getSpecificationLoader()));
+                } else {
+                    select2.getModel().setObject(null);
+                    getModel().setObject(null);
+                }
+            }
+
+        } else {
+
+            // TODO
+
         }
     }
 
@@ -389,60 +423,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoSelect;
     }
 
-    // called by setProviderAndCurrAndPending
-    private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
-                final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                final List<ObjectAdapter> autoCompleteAdapters =
-                        autoCompleteFacet.execute(term,
-                                InteractionInitiatedBy.USER);
-                // take a copy otherwise so is eagerly evaluated and memento objects correctly built
-                return Lists.newArrayList(
-                        Lists.transform(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter()));
-            }
-        };
-    }
-
-    // called by setProviderAndCurrAndPending
-    private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
-            
-            private static final long serialVersionUID = 1L;
-            
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final List<ObjectAdapter> autoCompleteChoices = Lists.newArrayList();
-                if(getScalarModel().hasAutoComplete()) {
-                    final List<ObjectAdapter> autoCompleteAdapters =
-                            getScalarModel().getAutoComplete(term, getAuthenticationSession(), getDeploymentCategory());
-                    autoCompleteChoices.addAll(autoCompleteAdapters);
-                }
-                // take a copy otherwise so is eagerly evaluated and memento objects correctly built
-                return Lists.newArrayList(
-                        Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
-            }
-            
-        };
-    }
-
-    // called by setProviderAndCurrAndPending
-    private ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
-        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                return obtainMementos(term, choiceMementos);
-            }
-        };
-    }
-
-    
     // //////////////////////////////////////
     // getInput, convertInput
     // //////////////////////////////////////
@@ -460,14 +440,16 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             // flush changes to pending
-            ObjectAdapterMemento convertedInput = select2Field.getConvertedInput();
+            ObjectAdapterMemento convertedInput =
+                    select2.getConvertedInput();
             
             getModel().setPending(convertedInput);
-            if(select2Field != null) {
-                select2Field.getModel().setObject(convertedInput);
+            if(select2 != null) {
+                select2.getModel().setObject(convertedInput);
             }
             
-            final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null;
+            final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
+                    getPersistenceSession(), getSpecificationLoader()):null;
             getModel().setObject(adapter);
         }
     
@@ -475,27 +457,22 @@ public class ReferencePanel extends ScalarPanelAbstract {
         entityLink.setConvertedInput(pendingAdapter);
     }
 
-    // //////////////////////////////////////
-    // updateChoices
-    // //////////////////////////////////////
-
-    /**
-     * Hook method to refresh choices when changing.
-     * 
-     * <p>
-     * called from onUpdate callback
-     */
-    @Override
-    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if(select2Field != null) {
-            setProviderAndCurrAndPending(select2Field, argsIfAvailable);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     
+    // //////////////////////////////////////
+
+    @Override
+    public void onUpdate(
+            final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
+
+        super.onUpdate(target, scalarPanel);
+
+        target.appendJavaScript(
+                String.format("Wicket.Event.publish(Isis.Topic.CLOSE_SELECT2, '%s')", getMarkupId()));
+
+    }
+
+
     // //////////////////////////////////////
     // helpers querying model state
     // //////////////////////////////////////
@@ -509,12 +486,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         if(getModel().isViewMode()) {
             return false;
         }
-        return getModel().hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
-    }
-
-    // called by isEditableWithEitherAutoCompleteOrChoices, also syncProviderAndCurrAndPending
-    private boolean hasParamOrPropertyAutoComplete() {
-        return getModel().hasAutoComplete();
+        return getModel().hasChoices() || getModel().hasAutoComplete() || hasObjectAutoComplete();
     }
 
     // called by isEditableWithEitherAutoCompleteOrChoices
@@ -526,12 +498,21 @@ public class ReferencePanel extends ScalarPanelAbstract {
     }
 
 
-    @Inject
-    private WicketViewerSettings wicketViewerSettings;
-
-    IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+    @Override
+    protected String getScalarPanelType() {
+        return "referencePanel";
     }
 
 
+    // //////////////////////////////////////
+
+    @com.google.inject.Inject
+    WicketViewerSettings wicketViewerSettings;
+
+    IsisConfiguration getConfiguration() {
+        return getIsisSessionFactory().getConfiguration();
+    }
+
 }
+
+

@@ -48,7 +48,12 @@ public @interface Bulk {
          * @deprecated - see {@link InvokeOn#COLLECTION_ONLY}
          */
         @Deprecated
-        BULK_ONLY
+        BULK_ONLY,
+        /**
+         * @deprecated - see {@link InvokeOn#OBJECT_ONLY}
+         */
+        @Deprecated
+        REGULAR_ONLY
     }
 
     /**
@@ -64,7 +69,10 @@ public @interface Bulk {
      * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext}.
      */
     @Deprecated
-    @DomainService(nature = NatureOfService.DOMAIN)
+    @DomainService(
+            nature = NatureOfService.DOMAIN,
+            menuOrder = "" + Integer.MAX_VALUE
+    )
     @RequestScoped
     public static class InteractionContext {
 

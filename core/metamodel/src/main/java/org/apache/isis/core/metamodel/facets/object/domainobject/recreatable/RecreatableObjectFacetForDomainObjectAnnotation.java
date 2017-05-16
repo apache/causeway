@@ -45,11 +45,6 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends
         }
 
         final Nature nature = domainObject.nature();
-
-        if(nature == null) {
-            return null;
-        }
-
         switch (nature)
         {
             case NOT_SPECIFIED:

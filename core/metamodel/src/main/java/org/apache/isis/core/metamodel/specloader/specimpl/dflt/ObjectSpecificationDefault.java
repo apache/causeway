@@ -31,6 +31,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -70,18 +71,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationDefault.class);
 
-    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    private static final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
-    // //////////////////////////////////////////////////////////////
-    // fields
-    // //////////////////////////////////////////////////////////////
-
-    private boolean isService;
+    //region > constructor, fields
 
     /**
      * Lazily built by {@link #getMember(Method)}.
@@ -89,23 +86,27 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private Map<Method, ObjectMember> membersByMethod = null;
     
     private final FacetedMethodsBuilder facetedMethodsBuilder;
+    private final boolean isService;
 
-
-    // //////////////////////////////////////////////////////////////////////
-    // Constructor
-    // //////////////////////////////////////////////////////////////////////
 
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
             final ServicesInjector servicesInjector,
-            final FacetProcessor facetProcessor) {
+            final FacetProcessor facetProcessor,
+            final NatureOfService natureOfServiceIfAny) {
         super(correspondingClass, determineShortName(correspondingClass),
                 servicesInjector, facetProcessor);
 
+        this.isService = natureOfServiceIfAny != null;
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
     }
 
+
+
+    //endregion
+
+    //region > introspectTypeHierarchyAndMembers
     @Override
     public void introspectTypeHierarchyAndMembers() {
 
@@ -203,10 +204,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // create associations and actions
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > create associations and actions
     private List<ObjectAssociation> createAssociations(Properties properties) {
         final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods(properties);
         final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -251,26 +251,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // Whether a service or not
-    // //////////////////////////////////////////////////////////////////////
-
-    @Override
-    public boolean isService() {
-        return isService;
-    }
-
-    @Override
-    public void markAsService() {
-        isService = true;
-    }
-
-
-
-    // //////////////////////////////////////////////////////////////
-    // view models and wizards
-    // //////////////////////////////////////////////////////////////
+    //region > isXxx
 
     @Override
     public boolean isViewModel() {
@@ -297,10 +280,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return containsFacet(WizardFacet.class);
     }
 
+    @Override
+    public boolean isService() {
+        return isService;
+    }
 
-    // //////////////////////////////////////////////////////////////////////
-    // getObjectAction
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > getObjectAction
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
@@ -364,11 +351,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return null;
     }
 
+    //endregion
 
-
-    // //////////////////////////////////////////////////////////////////////
-    // getMember, catalog... (not API)
-    // //////////////////////////////////////////////////////////////////////
+    //region > getMember, catalog... (not API)
 
     public ObjectMember getMember(final Method method) {
         if (membersByMethod == null) {
@@ -413,10 +398,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // toString
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > toString
     @Override
     public String toString() {
         final ToString str = new ToString(this);
@@ -427,5 +411,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return str.toString();
     }
 
+    //endregion
 
 }

@@ -23,13 +23,13 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-schema</artifactId>
 
     <packaging>jar</packaging>
-    <name>Isis Schemas</name>
+    <name>Apache Isis Schemas</name>
     <description>
         Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
     </description>
@@ -78,10 +78,10 @@
                                 <configuration>
                                     <schemaDirectory>src/main/resources/org/apache/isis/schema</schemaDirectory>
                                     <schemaIncludes>
-                                        <schemaInclude>common/common-1.0.xsd</schemaInclude>
-                                        <schemaInclude>cmd/cmd-1.0.xsd</schemaInclude>
-                                        <schemaInclude>ixn/ixn-1.0.xsd</schemaInclude>
-                                        <schemaInclude>chg/chg-1.0.xsd</schemaInclude>
+                                        <schemaInclude>common/common-1.1.xsd</schemaInclude>
+                                        <schemaInclude>cmd/cmd-1.2.xsd</schemaInclude>
+                                        <schemaInclude>ixn/ixn-1.1.xsd</schemaInclude>
+                                        <schemaInclude>chg/chg-1.1.xsd</schemaInclude>
                                     </schemaIncludes>
                                     <bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
                                     <bindingIncludes>

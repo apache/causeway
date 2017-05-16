@@ -26,7 +26,6 @@ import java.util.List;
 import com.google.common.base.Function;
 
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -167,19 +166,19 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Corresponds to the {@link TitleFacet#value()) value} of
      * {@link TitleFacet}; is not necessarily immutable.
      * 
-     * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter, Localization)}
+     * @deprecated use {@link #getTitle(ObjectAdapter, ObjectAdapter)}
      */
     @Deprecated
-    String getTitle(ObjectAdapter adapter, Localization localization);
+    String getTitle(ObjectAdapter adapter);
 
     /**
      * Returns the title to display of target adapter, rendered within the context
      * of some other adapter (if any).
      * 
      * <p>
-     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter, org.apache.isis.applib.profiles.Localization)
+     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
      */
-    String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, Localization localization);
+    String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter);
 
     /**
      * Returns the name of an icon to use for the specified object.
@@ -266,7 +265,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
      * therefore will return NOT {@link #isParentedOrFreeCollection()}
      * 
-     * @see #isCollection().
+     * @see #isParentedOrFreeCollection().
      */
     boolean isNotCollection();
 
@@ -349,7 +348,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     boolean isService();
 
-    public void markAsService();
 
 
     // //////////////////////////////////////////////////////////////
@@ -360,4 +358,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     boolean isMixin();
     boolean isViewModelCloneable(ObjectAdapter targetAdapter);
     boolean isWizard();
+
+    boolean isPersistenceCapable();
+    boolean isPersistenceCapableOrViewModel();
 }

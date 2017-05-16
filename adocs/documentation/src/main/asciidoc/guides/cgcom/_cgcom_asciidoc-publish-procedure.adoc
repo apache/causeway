@@ -1,0 +1,99 @@
+[[_cgcom_publishing-the-docs]]
+= Publishing the Docs
+
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_imagesdir: images/
+:toc: right
+
+
+Apache Isis' documentation (meaning the website and the users' guide, the reference guide and this contributors' guide) is written using link:http://www.methods.co.nz/asciidoc/[Asciidoc], specifically the link:asciidoctor.org/[Asciidoctor] implementation.
+
+The website and guides are created by running build tools (documented below) which create the HTML version of the site and guides.
+You can therefore easily check the documentation before raising a pull request (as a contributor) or publishing the site (if a committer).
+
+For details of authoring/updating the documents and website, see the xref:../dg/dg.adoc#_dg_asciidoc[developers' guide].
+To help write the Asciidoc text itself, we provide some xref:../dg/dg.adoc#_dg_asciidoc-templates[Asciidoc templates].
+
+Publishing is performed by copying the generated HTML to a different git repository (link:https://git-wip-us.apache.org/repos/asf?p=isis-site.git[isis-site]).
+This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
+This can only be done by Apache Isis committers, and is discussed below.
+
+
+
+== One-time setup
+
+The generated site is published by copying into the `content/` directory of the https://git-wip-us.apache.org/repos/asf/isis-site.git[isis-site git repo]. You therefore need to check this out this repo.
+
+The procedure assumes that two git repos (for https://git-wip-us.apache.org/repos/asf/isis.git[isis] itself and for isis-site) are checked out into the same parent directory, eg:
+
+[source]
+----
+/APACHE/
+    isis/                       # checkout of isis.git
+        adocs/
+            documentation/
+                README.adoc     # this file you are reading right now
+                ...
+    isis-site/                  # checkout of isis-site.git
+        content/                # the published website
+----
+
+If this isn't the case, then it is possible to override the relative directory by passing in a system property to the mvn goal; see below.
+
+You also need to know that ASF's publishing script work from the 'asf-site' branch, NOT from the 'master' branch. Therefore, in the `isis.git` repo site:
+
+[source,bash]
+----
+git checkout asf-site
+----
+
+== Publishing (full build)
+
+Back in the `adocs/documentation` directory of the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo, run:
+
+[source,bash]
+----
+mvn clean package
+----
+
+This deletes the entire content of `contents`, and replaces with the content under `target/site`.  It also fixes up line endings, standardizing on unix-style LFs.
+
+[TIP]
+====
+If you have checked out the `isis-site.git` repo into some other directory (relative to `isis.site.git), then this can be overridden by specifying `-Disis-site.dir=...` when calling `mvn`.
+====
+
+
+To copy and to also commit the generated documents to the `isis-site.git` repo , run:
+
+[source,bash]
+----
+sh publish.sh "ISIS-nnnn: a custom commit message"
+----
+
+Behind the scenes this just calls `mvn clean install -Dmessage=...`.
+
+It's also possible to omit the message, in which case `publish.sh` will reuse the most recent commit message from the main `isis.git` repo.
+
+Pushing the commits (in the `isis-site.git` directory, of course) will publishing the changes:
+
+[source,bash]
+----
+git push
+----
+
+Double check at http://isis.apache.org[isis.apache.org].
+
+
+
+
+== Publishing (partial build)
+
+If none of the guides have been changed, and if you have run the full rebuild recently, then you can skip the generation of PDFs using:
+
+[source,bash]
+----
+mvn install -Dskip.pdf -D"ISIS-nnnn: a custom commit message"
+----
+
+The `clean` goal *must not* be included though (else all the guides will disappear from the site content).

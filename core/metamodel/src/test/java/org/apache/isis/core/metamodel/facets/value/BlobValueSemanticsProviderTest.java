@@ -26,7 +26,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -44,12 +43,12 @@ public class BlobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(blob);
         holder = new FacetHolderImpl();
 
-        setValue(value = new BlobValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new BlobValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testTitleOf() {
-        assertEquals("myfile1.docx", value.displayTitleOf(blob, (Localization) null));
+        assertEquals("myfile1.docx", value.displayTitleOf(blob));
     }
 
     @Test

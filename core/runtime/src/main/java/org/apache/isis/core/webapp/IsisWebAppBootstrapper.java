@@ -35,17 +35,18 @@ import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
- * Initialize the {@link IsisSystem} when the web application starts, and
+ * Initialize the {@link IsisSessionFactoryBuilder} when the web application starts, and
  * destroys it when it ends.
  * <p>
  * Implementation note: we use a number of helper builders to keep this class as
@@ -57,14 +58,17 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppBootstrapper.class);
     
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
-    private Injector injector;
+
+    @com.google.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
+
 
     /**
-     * Convenience for servlets that need to obtain the {@link IsisSystem}.
+     * Convenience for servlets that need to obtain the {@link IsisSessionFactoryBuilder}.
      */
-    public static IsisSystem getSystemBoundTo(final ServletContext servletContext) {
-        final Object system = servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
-        return (IsisSystem) system;
+    public static IsisSessionFactoryBuilder getSystemBoundTo(final ServletContext servletContext) {
+        final Object system = servletContext.getAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
+        return (IsisSessionFactoryBuilder) system;
     }
 
     // /////////////////////////////////////////////////////
@@ -80,21 +84,21 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainIsisConfigurationBuilder(servletContext);
-            isisConfigurationBuilder.addDefaultConfigurationResources();
+            isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
             final DeploymentType deploymentType = determineDeploymentType(servletContext, isisConfigurationBuilder);
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
 
             final String webappDir = servletContext.getRealPath("/");
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
-            isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
             final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
+            final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
+            final IsisInjectModule isisModule = new IsisInjectModule(deploymentCategory, isisConfiguration);
+            final Injector injector = Guice.createInjector(isisModule);
+            injector.injectMembers(this);
 
-            injector = createGuiceInjector(isisConfiguration, deploymentType);
-            final IsisSystem system = injector.getInstance(IsisSystem.class);
-
-            servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);
+            servletContext.setAttribute(WebAppConstants.ISIS_SESSION_FACTORY, isisSessionFactory);
 
         } catch (final RuntimeException e) {
             LOG.error("startup failed", e);
@@ -131,9 +135,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final ServletContext servletContext,
             final IsisConfigurationBuilder isisConfigurationBuilder) {
 
-        isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
-        isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());
-        isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
 
         // will load either from WEB-INF, from the classpath or from config directory.
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
@@ -142,13 +143,19 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
         } else {
             LOG.info( "Config override location: No override location configured" );
+
+            isisConfigurationBuilder.addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create());
+            isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceCurrentClassClassPath());
+            isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
         }
+
+
     }
 
     private Injector createGuiceInjector(
             final IsisConfigurationDefault isisConfiguration,
-            final DeploymentType deploymentType) {
-        final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfiguration);
+            final DeploymentCategory deploymentCategory) {
+        final IsisInjectModule isisModule = new IsisInjectModule(deploymentCategory, isisConfiguration);
         return Guice.createInjector(isisModule);
     }
 
@@ -196,7 +203,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final IsisConfigurationBuilder isisConfigurationBuilder,
             final DeploymentType deploymentType) {
         final String resourceName = deploymentType.name().toLowerCase() + ".properties";
-        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE);
+        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
     }
 
 
@@ -210,14 +217,13 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         final ServletContext servletContext = ev.getServletContext();
 
         try {
-            final IsisSystem system = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
-            if (system != null) {
+            final IsisSessionFactory isisSessionFactory = (IsisSessionFactory) servletContext.getAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
+            if (isisSessionFactory != null) {
                 LOG.info("calling system shutdown");
-                system.shutdown();
-                IsisContext.shutdown();
+                isisSessionFactory.destroyServicesAndShutdown();
             }
         } finally {
-            servletContext.removeAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
+            servletContext.removeAttribute(WebAppConstants.ISIS_SESSION_FACTORY);
             LOG.info("server shut down");
         }
     }

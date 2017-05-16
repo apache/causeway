@@ -26,7 +26,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -64,7 +63,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     }
 
     @Override
-    public String title(final ObjectAdapter owningAdapter, final Localization localization) {
+    public String title(final ObjectAdapter owningAdapter) {
         try {
             final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
             if(returnValue instanceof String) {

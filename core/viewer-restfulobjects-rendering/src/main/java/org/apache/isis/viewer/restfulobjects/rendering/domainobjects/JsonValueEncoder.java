@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 /**
@@ -50,10 +51,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
  */
 public final class JsonValueEncoder {
 
-
     private JsonValueEncoder(){}
 
-    
     public static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
     }
@@ -846,7 +845,11 @@ public final class JsonValueEncoder {
     }
 
     private static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+
+    static IsisSessionFactory getIsisSessionFactory() {
+        return IsisContext.getSessionFactory();
     }
 
 }

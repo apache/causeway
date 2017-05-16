@@ -25,7 +25,6 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -43,37 +42,37 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
         facetHolder = new FacetHolderImpl();
-        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder, mockConfiguration, mockContext));
+        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder, mockServicesInjector));
     }
 
     @Test
     public void testParseFalseString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "faLSe", null);
+        final Object parsed = value.parseTextEntry(null, "faLSe");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseStringWithPrecedingSpace() throws Exception {
-        final Object parsed = value.parseTextEntry(null, " false", null);
+        final Object parsed = value.parseTextEntry(null, " false");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseStringWithTrailingSpace() throws Exception {
-        final Object parsed = value.parseTextEntry(null, " false", null);
+        final Object parsed = value.parseTextEntry(null, " false");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
     public void testParseTrueString() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "TRue", null);
+        final Object parsed = value.parseTextEntry(null, "TRue");
         assertEquals(Boolean.valueOf(true), parsed);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(null, "yes", null);
+            value.parseTextEntry(null, "yes");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -81,12 +80,12 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("True", value.displayTitleOf(booleanObj, (Localization) null));
+        assertEquals("True", value.displayTitleOf(booleanObj));
     }
 
     @Test
     public void testTitleWhenNotSet() throws Exception {
-        assertEquals("", value.titleString(null, null));
+        assertEquals("", value.titleString(null));
     }
 
     @Test

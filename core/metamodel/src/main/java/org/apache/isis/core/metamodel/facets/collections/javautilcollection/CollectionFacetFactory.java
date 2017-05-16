@@ -29,11 +29,9 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 
 public class CollectionFacetFactory extends FacetFactoryAbstract {
-
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     public CollectionFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -42,9 +40,9 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
 
-        if (collectionTypeRegistry.isCollectionType(processClassContaxt.getCls())) {
+        if (CollectionUtils.isCollectionType(processClassContaxt.getCls())) {
             processCollectionType(processClassContaxt);
-        } else if (collectionTypeRegistry.isArrayType(processClassContaxt.getCls())) {
+        } else if (CollectionUtils.isArrayType(processClassContaxt.getCls())) {
             processAsArrayType(processClassContaxt);
         }
 

@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import java.util.IllegalFormatWidthException;
 
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -29,9 +30,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
@@ -52,7 +51,7 @@ public class ParseableFacetUsingParserTest {
     @Mock
     private ServicesInjector mockServicesInjector;
     @Mock
-    private AdapterManager mockAdapterManager;
+    private PersistenceSessionServiceInternal mockAdapterManager;
 
     private ParseableFacetUsingParser parseableFacetUsingParser;
 
@@ -69,6 +68,12 @@ public class ParseableFacetUsingParserTest {
 
                 allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
 
+                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+                will(returnValue(mockAuthenticationSessionProvider));
+
+                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+                will(returnValue(mockAdapterManager));
+
                 allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
             }
@@ -76,7 +81,7 @@ public class ParseableFacetUsingParserTest {
 
         final Parser<String> parser = new Parser<String>() {
             @Override
-            public String parseTextEntry(final Object contextPojo, final String entry, Localization localization) {
+            public String parseTextEntry(final Object contextPojo, final String entry) {
                 if (entry.equals("invalid")) {
                     throw new ParsingException();
                 }
@@ -95,7 +100,7 @@ public class ParseableFacetUsingParserTest {
             }
 
             @Override
-            public String displayTitleOf(final String object, final Localization localization) {
+            public String displayTitleOf(final String object) {
                 return null;
             }
 
@@ -109,8 +114,7 @@ public class ParseableFacetUsingParserTest {
                 return null;
             }
         };
-        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder,
-                mockServicesInjector, mockAdapterManager);
+        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder, mockServicesInjector);
     }
 
     @Ignore
@@ -141,16 +145,16 @@ public class ParseableFacetUsingParserTest {
 
     @Test(expected = TextEntryParseException.class)
     public void parsingExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "invalid", InteractionInitiatedBy.USER, null);
+        parseableFacetUsingParser.parseTextEntry(null, "invalid", InteractionInitiatedBy.USER);
     }
 
     @Test(expected = TextEntryParseException.class)
     public void numberFormatExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "number", InteractionInitiatedBy.USER, null);
+        parseableFacetUsingParser.parseTextEntry(null, "number", InteractionInitiatedBy.USER);
     }
 
     @Test(expected = TextEntryParseException.class)
     public void illegalFormatExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "format", InteractionInitiatedBy.USER, null);
+        parseableFacetUsingParser.parseTextEntry(null, "format", InteractionInitiatedBy.USER);
     }
 }

@@ -61,7 +61,7 @@ public class OidMarshallerTest_unmarshal {
     
     @Before
     public void setUp() throws Exception {
-        oidMarshaller = new OidMarshaller();
+        oidMarshaller = OidMarshaller.INSTANCE;
     }
     
     @Test

@@ -21,12 +21,15 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public interface Authenticator extends ApplicationScopedComponent {
 
-    public void init();
-    public void shutdown();
+    void init(final DeploymentCategory deploymentCategory);
+    void shutdown();
+
+    DeploymentCategory getDeploymentCategory();
 
     /**
      * Whether the provided {@link AuthenticationRequest} is recognized by this
@@ -35,23 +38,11 @@ public interface Authenticator extends ApplicationScopedComponent {
     boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass);
 
     /**
-     * UNUSED ... IMPLEMENTATIONS SHOULD PROVIDE A STUB METHOD ONLY.
-     * 
-     * <p>
-     * This method is only ever called from {@link AuthenticatorAbstract}, and as such should
-     * not be defined as part of the API.
-     * 
-     * <p>
-     * TODO: remove in 2.0.0 [ISIS-292]
-     */
-    @Deprecated
-    boolean isValid(AuthenticationRequest request);
-
-    /**
      * @param code
      *            - a hint; is guaranteed to be unique, but the authenticator
      *            decides whether to use it or not.
      */
     AuthenticationSession authenticate(AuthenticationRequest request, String code);
 
+    void logout(AuthenticationSession session);
 }

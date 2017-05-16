@@ -36,7 +36,7 @@ public class ShortWrapperValueFacetUsingSemanticsProviderFactory extends ValueFa
         if (type != Short.class) {
             return;
         }
-        addFacets(new ShortWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
+        addFacets(new ShortWrapperValueSemanticsProvider(holder, getContext()));
     }
 
 }

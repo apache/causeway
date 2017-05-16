@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
@@ -40,14 +41,12 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
 
     /**
      * Necessary because {@link FormComponentPanel} overrides this as <tt>true</tt>, whereas we want to
-     * report on the state of the underlying {@link org.wicketstuff.select2.Select2Choice}.
+     * report on the state of the underlying {@link org.wicketstuff.select2.Select2Choice} or
+     * {@link Select2MultiChoice}.
      */
     @Override
     public boolean checkRequired() {
-        if(owningPanel.select2Field != null) {
-            return owningPanel.select2Field.checkRequired();
-        }
-        return super.checkRequired();
+        return owningPanel.getSelect2().checkRequired();
     }
 
     /**
@@ -60,7 +59,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
     }
 
     @Override
-    protected void convertInput() {
+    public void convertInput() {
         owningPanel.convertInput();
     }
 

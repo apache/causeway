@@ -26,6 +26,7 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 class PoWriter extends PoAbstract {
 
@@ -51,6 +52,14 @@ class PoWriter extends PoAbstract {
 
     @Override
     void shutdown() {
+        if(IsisContext.getMetaModelInvalidExceptionIfAny() != null) {
+            // suppress logging translations
+            return;
+        }
+        logTranslations();
+    }
+
+    private void logTranslations() {
         final StringBuilder buf = new StringBuilder();
 
         buf.append("\n");
@@ -105,6 +114,9 @@ class PoWriter extends PoAbstract {
 
     public String translate(final String context, final String msgId) {
 
+        if(msgId == null) {
+            return null;
+        }
         final Block block = blockFor(msgId);
         block.contexts.add(context);
 
@@ -114,6 +126,9 @@ class PoWriter extends PoAbstract {
     @Override
     String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
 
+        if(msgId == null) {
+            return null;
+        }
         final Block block = blockFor(msgId);
         block.contexts.add(context);
         block.msgIdPlural = msgIdPlural;
@@ -121,7 +136,7 @@ class PoWriter extends PoAbstract {
         return null;
     }
 
-    private Block blockFor(final String msgId) {
+    private synchronized Block blockFor(final String msgId) {
         Block block = blocksByMsgId.get(msgId);
         if(block == null) {
             block = new Block(msgId);

@@ -47,7 +47,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
         TestClock.initialize();
         holder = new FacetHolderImpl();
-        setValue(adapter = new DateTimeValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(adapter = new DateTimeValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
     }
 
     private void assertEntry(final String entry, final int year, final int month, final int day, final int hour, final int minute, final int second) {
-        final Object object = adapter.parseTextEntry(null, entry, null);
+        final Object object = adapter.parseTextEntry(null, entry);
         assertEquals(new DateTime(year, month, day, hour, minute, second), object);
     }
 
@@ -100,7 +100,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
     @Test
     public void testEmptyClears() {
-        assertNull(adapter.parseTextEntry(null, "", null));
+        assertNull(adapter.parseTextEntry(null, ""));
     }
 
     @Test

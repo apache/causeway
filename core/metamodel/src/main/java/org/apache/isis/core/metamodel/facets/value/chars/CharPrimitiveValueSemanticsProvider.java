@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value.chars;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+
 
 public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProviderAbstract implements PropertyDefaultFacet {
 
@@ -34,11 +34,11 @@ public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProvi
      * {@link EncoderDecoder}.
      */
     public CharPrimitiveValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public CharPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, char.class, configuration, context);
+    public CharPrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, char.class, context);
     }
 
     // //////////////////////////////////////////////////////////////////

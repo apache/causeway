@@ -18,13 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * TODO: roll-up in the future (introduced only so that API does not break)
  */
 public interface RendererContext3 extends RendererContext2 {
 
-    public DeploymentType getDeploymentType();
+    public DeploymentCategory getDeploymentCategory();
 
 }

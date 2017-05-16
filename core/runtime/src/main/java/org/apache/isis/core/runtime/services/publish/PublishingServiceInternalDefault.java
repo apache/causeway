@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -70,39 +69,41 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Wrapper around {@link PublishingService}.  Is a no-op if there is no injected service.
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 @RequestScoped
 public class PublishingServiceInternalDefault implements PublishingServiceInternal {
 
+    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     //region > static helper functions
-    private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY =
-            new Function<ObjectAdapter, ObjectAdapter>() {
-        public ObjectAdapter apply(ObjectAdapter adapter) {
-            if(adapter == null) {
-                return null;
-            }
-            if (!adapter.isDestroyed()) {
+    private Function<ObjectAdapter, ObjectAdapter> notDestroyedElseEmpty() {
+        return new Function<ObjectAdapter, ObjectAdapter>() {
+            public ObjectAdapter apply(ObjectAdapter adapter) {
+                if (adapter == null) {
+                    return null;
+                }
+                if (!adapter.isDestroyed()) {
+                    return adapter;
+                }
+                // objectstores such as JDO prevent the underlying pojo from being touched once it has been deleted.
+                // we therefore replace that pojo with an 'empty' one.
+
+                Object replacementObject = getPersistenceSession()
+                        .instantiateAndInjectServices(adapter.getSpecification());
+                getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
                 return adapter;
             }
-            // objectstores such as JDO prevent the underlying pojo from being touched once it has been deleted.
-            // we therefore replace that pojo with an 'empty' one.
-
-            Object replacementObject = getPersistenceSession().instantiateAndInjectServices(adapter.getSpecification());
-            getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
-            return adapter;
-        }
-        protected PersistenceSession getPersistenceSession() {
-            return IsisContext.getPersistenceSession();
-        }
-
-    };
+        };
+    }
     //endregion
 
     //region > publishObjects
@@ -184,7 +185,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
 
         final int numberLoaded = metricsService.numberObjectsLoaded();
-        final int numberObjectPropertiesModified = metricsService.numberObjectPropertiesModified();
+        final int numberObjectPropertiesModified = changedObjectsServiceInternal.numberObjectPropertiesModified();
         final PublishedObjects publishedObjects = newPublishedObjects(numberLoaded, numberObjectPropertiesModified,
                 changeKindByPublishedAdapter);
 
@@ -204,7 +205,11 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         final String userName = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        return new PublishedObjectsDefault(transactionUuid, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
+        final Interaction interaction = interactionContext.getInteraction();
+
+        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
+
+        return new PublishedObjectsDefault(transactionUuid, nextEventSequence, userName, timestamp, numberLoaded, numberObjectPropertiesModified, changeKindByPublishedAdapter);
     }
 
     //endregion
@@ -249,7 +254,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         }
 
         final RootOid adapterOid = (RootOid) targetAdapter.getOid();
-        final String oidStr = getOidMarshaller().marshal(adapterOid);
+        final String oidStr = OID_MARSHALLER.marshal(adapterOid);
         final Identifier actionIdentifier = objectAction.getIdentifier();
         final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
 
@@ -310,9 +315,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
                     if(object == null) {
                         return null;
                     }
-                    final ObjectAdapter adapter = IsisContext.getPersistenceSession().adapterFor(object);
+                    final ObjectAdapter adapter = isisSessionFactory.getCurrentSession()
+                            .getPersistenceSession().adapterFor(object);
                     Oid oid = adapter.getOid();
-                    return oid != null? oid.enString(getOidMarshaller()): encodedValueOf(adapter);
+                    return oid != null? oid.enString(): encodedValueOf(adapter);
                 }
                 private String encodedValueOf(ObjectAdapter adapter) {
                     EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
@@ -327,12 +333,12 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             };
     }
 
-    private static List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
-        return Lists.newArrayList(Iterables.transform(parameters, NOT_DESTROYED_ELSE_EMPTY));
+    private List<ObjectAdapter> undeletedElseEmpty(List<ObjectAdapter> parameters) {
+        return Lists.newArrayList(Iterables.transform(parameters, notDestroyedElseEmpty()));
     }
 
-    private static ObjectAdapter undeletedElseEmpty(ObjectAdapter adapter) {
-        return NOT_DESTROYED_ELSE_EMPTY.apply(adapter);
+    private ObjectAdapter undeletedElseEmpty(ObjectAdapter adapter) {
+        return notDestroyedElseEmpty().apply(adapter);
     }
 
     private EventMetadata newEventMetadata(
@@ -416,39 +422,38 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
     //endregion
 
     //region > injected services
-    @Inject
+    @javax.inject.Inject
     private List<PublisherService> publisherServices;
 
-    @Inject
+    @javax.inject.Inject
     private PublishingService publishingServiceIfAny;
 
-    @Inject
+    @javax.inject.Inject
     private ChangedObjectsServiceInternal changedObjectsServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     private InteractionDtoServiceInternal interactionDtoServiceInternal;
 
-    @Inject
+    @javax.inject.Inject
     private CommandContext commandContext;
 
-    @Inject
+    @javax.inject.Inject
     private InteractionContext interactionContext;
 
-    @Inject
+    @javax.inject.Inject
     private ClockService clockService;
 
-    @Inject
+    @javax.inject.Inject
     private UserService userService;
 
-    @Inject
+    @javax.inject.Inject
     private MetricsService metricsService;
 
-    protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
-    }
+    @javax.inject.Inject
+    private IsisSessionFactory isisSessionFactory;
 
-    private IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    private PersistenceSession getPersistenceSession() {
+        return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
     //endregion
 

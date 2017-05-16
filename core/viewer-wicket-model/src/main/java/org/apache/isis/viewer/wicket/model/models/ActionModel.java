@@ -47,26 +47,31 @@ import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -78,12 +83,15 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
  * action's {@link Mode#PARAMETERS parameters}, or the handling of the
  * {@link Mode#RESULTS results} once invoked.
  */
-public class ActionModel extends BookmarkableModel<ObjectAdapter> {
-    
+public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
+
     private static final long serialVersionUID = 1L;
     
+    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     private static final String NULL_ARG = "$nullArg$";
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
+
 
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
@@ -95,10 +103,15 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 
-    
+    public ActionModel copy() {
+        return new ActionModel(this);
+    }
+
+
     //////////////////////////////////////////////////
     // Factory methods
     //////////////////////////////////////////////////
+
 
     /**
      * @param objectAdapter
@@ -112,23 +125,25 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return new ActionModel(serviceMemento, homePageActionMemento, mode);
     }
 
-    public static ActionModel createForPersistent(final PageParameters pageParameters) {
-        return new ActionModel(pageParameters);
+    public static ActionModel createForPersistent(
+            final PageParameters pageParameters,
+            final SpecificationLoader specificationLoader) {
+        return new ActionModel(pageParameters, specificationLoader);
     }
 
     /**
      * Factory method for creating {@link PageParameters}.
      * 
-     * see {@link #ActionModel(PageParameters)}
+     * see {@link #ActionModel(PageParameters, SpecificationLoader)}
      */
     public static PageParameters createPageParameters(
             final ObjectAdapter adapter, final ObjectAction objectAction, final ConcurrencyChecking concurrencyChecking) {
         
         final PageParameters pageParameters = PageParametersUtils.newPageParameters();
-        
+
         final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
-                adapter.getOid().enString(getOidMarshaller()):
-                adapter.getOid().enStringNoVersion(getOidMarshaller());
+                adapter.getOid().enString():
+                adapter.getOid().enStringNoVersion();
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
         
         final ActionType actionType = objectAction.getType();
@@ -192,7 +207,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     public PageParameters getPageParameters() {
         final ObjectAdapter adapter = getTargetAdapter();
-        final ObjectAction objectAction = getActionMemento().getAction();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
         final PageParameters pageParameters = createPageParameters(
                 adapter, objectAction, ConcurrencyChecking.NO_CHECK);
 
@@ -209,7 +224,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     @Override
     public String getTitle() {
         final ObjectAdapter adapter = getTargetAdapter();
-        final ObjectAction objectAction = getActionMemento().getAction();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
         
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
@@ -259,30 +274,34 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private final ActionMemento actionMemento;
     private Mode actionMode;
 
-
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
-    private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
+    private final Map<Integer, ActionArgumentModel> arguments = Maps.newHashMap();
 
 
-    private ActionModel(final PageParameters pageParameters) {
-        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFrom(pageParameters));
+    private ActionModel(final PageParameters pageParameters, final SpecificationLoader specificationLoader) {
+        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters, specificationLoader), actionModeFrom(pageParameters,
+                specificationLoader));
 
         setArgumentsIfPossible(pageParameters);
         setContextArgumentIfPossible(pageParameters);
     }
 
-    private static ActionMemento newActionMementoFrom(final PageParameters pageParameters) {
+    private static ActionMemento newActionMementoFrom(
+            final PageParameters pageParameters,
+            final SpecificationLoader specificationLoader) {
         final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-        return new ActionMemento(owningSpec, actionType, actionNameParms);
+        return new ActionMemento(owningSpec, actionType, actionNameParms, specificationLoader);
     }
 
-    private static Mode actionModeFrom(final PageParameters pageParameters) {
-        final ActionMemento actionMemento = newActionMementoFrom(pageParameters);
-        if(actionMemento.getAction().getParameterCount() == 0) {
+    private static Mode actionModeFrom(
+            final PageParameters pageParameters,
+            final SpecificationLoader specificationLoader) {
+        final ActionMemento actionMemento = newActionMementoFrom(pageParameters, specificationLoader);
+        if(actionMemento.getAction(specificationLoader).getParameterCount() == 0) {
             return Mode.RESULTS;
         }
         final List<String> listFrom = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
@@ -301,7 +320,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     private static RootOid oidFor(final PageParameters pageParameters) {
         final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return getOidMarshaller().unmarshal(oidStr, RootOid.class);
+        return OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
     }
 
 
@@ -321,18 +340,19 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         //this.actionPrompt = actionModel.actionPrompt;
         
         primeArgumentModels();
-        final Map<Integer, ScalarModel> argumentModelByIdx = actionModel.arguments;
-        for (final Map.Entry<Integer,ScalarModel> argumentModel : argumentModelByIdx.entrySet()) {
+        final Map<Integer, ActionArgumentModel> argumentModelByIdx = actionModel.arguments;
+        for (final Map.Entry<Integer,ActionArgumentModel> argumentModel : argumentModelByIdx.entrySet()) {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
 
-        this.executingPanel = actionModel.executingPanel;
+        this.formExecutor = actionModel.formExecutor;
     }
 
-    private void setArgumentsIfPossible(final PageParameters pageParameters) {
+    private void setArgumentsIfPossible(
+            final PageParameters pageParameters) {
         final List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
 
-        final ObjectAction action = actionMemento.getAction();
+        final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
         final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
 
         for (int paramNum = 0; paramNum < args.size(); paramNum++) {
@@ -351,7 +371,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             return false;
         }
 
-        final ObjectAction action = actionMemento.getAction();
+        final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
         final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
         final int parameterCount = parameterTypes.size();
 
@@ -383,8 +403,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
             return encodeable.toEncodedString(adapter);
         }
-        
-        return adapter.getOid().enStringNoVersion(getOidMarshaller());
+
+        return adapter.getOid().enStringNoVersion();
     }
 
     private ObjectAdapter decodeArg(final ObjectSpecification objSpec, final String encoded) {
@@ -398,7 +418,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
         
         try {
-            final RootOid oid = RootOid.deStringEncoded(encoded, getOidMarshaller());
+            final RootOid oid = RootOid.deStringEncoded(encoded);
             return getPersistenceSession().adapterFor(oid);
         } catch (final Exception e) {
             return null;
@@ -406,27 +426,28 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     private void setArgument(final int paramNum, final ObjectAdapter argumentAdapter) {
-        final ObjectAction action = actionMemento.getAction();
+        final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
         final ObjectActionParameter actionParam = action.getParameters().get(paramNum);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
-        final ScalarModel argumentModel = getArgumentModel(apm);
-        argumentModel.setObject(argumentAdapter);
+        final ActionArgumentModel actionArgumentModel = getArgumentModel(apm);
+        actionArgumentModel.setObject(argumentAdapter);
     }
 
 
-    public ScalarModel getArgumentModel(final ActionParameterMemento apm) {
+    public ActionArgumentModel getArgumentModel(final ActionParameterMemento apm) {
         final int i = apm.getNumber();
-		ScalarModel scalarModel = arguments.get(i);
-        if (scalarModel == null) {
-            scalarModel = new ScalarModel(targetAdapterMemento, apm);
-            final int number = scalarModel.getParameterMemento().getNumber();
-            arguments.put(number, scalarModel);
+		ActionArgumentModel actionArgumentModel = arguments.get(i);
+        if (actionArgumentModel == null) {
+            actionArgumentModel = new ScalarModel(targetAdapterMemento, apm);
+            final int number = actionArgumentModel.getParameterMemento().getNumber();
+            arguments.put(number, actionArgumentModel);
         }
-        return scalarModel;
+        return actionArgumentModel;
     }
 
     public ObjectAdapter getTargetAdapter() {
-        return targetAdapterMemento.getObjectAdapter(getConcurrencyChecking());
+        return targetAdapterMemento.getObjectAdapter(getConcurrencyChecking(), getPersistenceSession(),
+                getSpecificationLoader());
     }
 
     protected ConcurrencyChecking getConcurrencyChecking() {
@@ -461,7 +482,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] arguments = getArgumentsAsArray();
-        final ObjectAction action = getActionMemento().getAction();
+        final ObjectAction action = getActionMemento().getAction(getSpecificationLoader());
 
         // if this action is a mixin, then it will fill in the details automatically.
         final ObjectAdapter mixedInAdapter = null;
@@ -487,7 +508,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     public String getReasonInvalidIfAny() {
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] proposedArguments = getArgumentsAsArray();
-        final ObjectAction objectAction = getActionMemento().getAction();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
         final Consent validity = objectAction.isProposedArgumentSetValid(targetAdapter, proposedArguments,
                 InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
@@ -499,28 +520,28 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     public ObjectAdapter[] getArgumentsAsArray() {
-    	if(this.arguments.size() < this.getActionMemento().getAction().getParameterCount()) {
+    	if(this.arguments.size() < this.getActionMemento().getAction(getSpecificationLoader()).getParameterCount()) {
     		primeArgumentModels();
     	}
     	
-        final ObjectAction objectAction = getActionMemento().getAction();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] arguments = new ObjectAdapter[objectAction.getParameterCount()];
         for (int i = 0; i < arguments.length; i++) {
-            final ScalarModel scalarModel = this.arguments.get(i);
-            arguments[i] = scalarModel.getObject();
+            final ActionArgumentModel actionArgumentModel = this.arguments.get(i);
+            arguments[i] = actionArgumentModel.getObject();
         }
         return arguments;
     }
 
     public void reset() {
-        this.actionMode = determineMode(actionMemento.getAction());
+        this.actionMode = determineMode(actionMemento.getAction(getSpecificationLoader()));
     }
 
     public void clearArguments() {
-        for (final ScalarModel argumentModel : arguments.values()) {
-            argumentModel.reset();
+        for (final ActionArgumentModel actionArgumentModel : arguments.values()) {
+            actionArgumentModel.reset();
         }
-        this.actionMode = determineMode(actionMemento.getAction());
+        this.actionMode = determineMode(actionMemento.getAction(getSpecificationLoader()));
     }
 
     /**
@@ -528,7 +549,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     public boolean isBookmarkable() {
-        final ObjectAction action = getActionMemento().getAction();
+        final ObjectAction action = getActionMemento().getAction(getSpecificationLoader());
         final BookmarkPolicyFacet bookmarkPolicy = action.getFacet(BookmarkPolicyFacet.class);
         final boolean safeSemantics = action.getSemantics().isSafeInNature();
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
@@ -560,7 +581,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             // equivalent to calling DomainObjectContainer#raiseError(...)
             final RecoverableException appEx = getApplicationExceptionIfAny(ex);
             if (appEx != null) {
-                IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
+                final MessageBroker messageBroker = getCurrentSession().getAuthenticationSession().getMessageBroker();
+                messageBroker.setApplicationError(appEx.getMessage());
 
                 // there's no need to set the abort cause on the transaction, it will have already been done
                 // (in IsisTransactionManager#executeWithinTransaction(...)).
@@ -639,7 +661,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     // //////////////////////////////////////
     
     public List<ActionParameterMemento> primeArgumentModels() {
-        final ObjectAction objectAction = getActionMemento().getAction();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
 
         final List<ObjectActionParameter> parameters = objectAction.getParameters();
         final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
@@ -660,38 +682,63 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     //////////////////////////////////////////////////
 
-    private ExecutingPanel executingPanel;
+    private FormExecutor formExecutor;
 
     /**
      * A hint passed from one Wicket UI component to another.
      *
      * Mot actually used by the model itself.
      */
-    public ExecutingPanel getExecutingPanel() {
-        return executingPanel;
+    public FormExecutor getFormExecutor() {
+        return formExecutor;
     }
 
-    public void setExecutingPanel(final ExecutingPanel executingPanel) {
-        this.executingPanel = executingPanel;
+    public void setFormExecutor(final FormExecutor formExecutor) {
+        this.formExecutor = formExecutor;
     }
 
+
+    //////////////////////////////////////////////////
+
+    @Override
+    public PromptStyle getPromptStyle() {
+        final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
+        if(facet == null) {
+            return null;
+        }
+        return facet.value() == PromptStyle.INLINE
+                ? PromptStyle.INLINE
+                : PromptStyle.DIALOG;
+    }
+
+    public <T extends Facet> T getFacet(final Class<T> facetType) {
+        final FacetHolder facetHolder = getActionMemento().getAction(getSpecificationLoader());
+        return facetHolder.getFacet(facetType);
+    }
+
+
+    //////////////////////////////////////////////////
+
+    private InlinePromptContext inlinePromptContext;
+
+    /**
+     * Further hint, to support inline prompts...
+     */
+    public InlinePromptContext getInlinePromptContext() {
+        return inlinePromptContext;
+    }
+
+    public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
+        this.inlinePromptContext = inlinePromptContext;
+    }
 
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
-    
-    private static OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+
+
+    ServicesInjector getServicesInjector() {
+        return getIsisSessionFactory().getServicesInjector();
     }
-
-    public ActionModel copy() {
-        return new ActionModel(this);
-    }
-
-    protected ServicesInjector getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
-    }
-
-
 
 }

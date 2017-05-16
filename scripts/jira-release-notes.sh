@@ -64,9 +64,13 @@ function rawurlencode() {
 function jira_by_type () {
 
     type=$1
-    type_url_encoded=$( rawurlencode "$type" )
+    type_trimmed=$( echo "$type" | awk '{$1=$1};1' )
+    type_url_encoded=$( rawurlencode "$type_trimmed" )
     
     jira_url="https://issues.apache.org/jira/rest/api/2/search?jql=project%20in%20($project_upper)%20AND%20fixVersion%20in%20($version)%20AND%20type=\"$type_url_encoded\"&fields=summary"
+
+    #echo $jira_url
+
     jira_json=$(curl -s "$jira_url")
     if [ $? -ne 0 ]; then
         die "Failed to query JIRA for issue; url: $jira_url"
@@ -76,8 +80,16 @@ function jira_by_type () {
     #echo $jira_json | jq '.issues []  | { key: .key, summary: .fields .summary }'
 
     #so instead, let's do a cheap-n-nasty approach of creating two simple arrays of same length
-    keys=($(echo $jira_json | jq --raw-output '.issues []  | .key '))
-    echo $jira_json | jq --raw-output '.issues []  | .fields .summary ' > /tmp/$$.1
+    echo $jira_json | jq --raw-output '.issues []  | .key '             > /tmp/$$.keys
+    echo $jira_json | jq --raw-output '.issues []  | .fields .summary ' > /tmp/$$.summaries
+    
+    keys=()
+    i=0
+    while read line
+    do
+        keys[i]=$line
+        i=$(($i + 1))
+    done < /tmp/$$.keys
 
     summaries=()
     i=0
@@ -85,7 +97,7 @@ function jira_by_type () {
     do
         summaries[i]=$line
         i=$(($i + 1))
-    done < /tmp/$$.1
+    done < /tmp/$$.summaries
 
 
     echo
@@ -96,7 +108,9 @@ function jira_by_type () {
     total=${#keys[*]}
     for (( i=0; i<=$(( $total -1 )); i++ ))
     do
-        echo "* link:https://issues.apache.org/jira/browse/${keys[$i]}[${keys[$i]}] - ${summaries[$i]}"
+        key=$(echo "${keys[$i]}" | xargs )
+        summary="${summaries[$i]}"
+        echo "* link:https://issues.apache.org/jira/browse/$key[$key] - $summary"
     done
 
     
@@ -130,10 +144,13 @@ fi
 
 echo $jira_json | jq --raw-output '.issues []  | .fields .issuetype .name ' > /tmp/$$.1
 known_types=()
+
+
+
 i=0
 while read line
 do
-    known_types[i]=$line
+    known_types[i]=$(echo $line | awk '{$1=$1};1')
     i=$(($i + 1))
 done < /tmp/$$.1
 
@@ -152,12 +169,14 @@ for ordered_type in "${ordered_types[@]}"; do
         types+=("$ordered_type")
     fi
 done
+
 # for all $known_types that we haven't yet seen, add into $types
 for known_type in "${known_types[@]}"; do
     if [ $(contains "${types[@]}" "$known_type") == "n" ]; then 
         types+=("$known_type")
     fi
 done
+
 
 
 #

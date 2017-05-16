@@ -32,6 +32,8 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
@@ -58,7 +60,10 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
         for (final BS3Tab bs3Tab : tablist) {
             final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
-            tabs.add(new AbstractTab(Model.of(bs3Tab.getName())) {
+            String translateContext = entityModel.getTypeOfSpecification().getFullIdentifier();
+            String bs3TabName = bs3Tab.getName();
+            String tabName = getTranslationService().translate(translateContext, bs3TabName);
+            tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -73,6 +78,10 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
             });
         }
         return tabs;
+    }
+
+    static TranslationService getTranslationService() {
+        return IsisContext.getSessionFactory().getServicesInjector().lookupService(TranslationService.class);
     }
 
     public TabGroupPanel(String id, final EntityModel entityModel) {
@@ -90,13 +99,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     @Override
     public TabbedPanel setSelectedTab(final int index) {
-        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asBookmark(), ""+index);
+        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asHintingBookmark(), ""+index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel) {
-        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asBookmark());
+        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asHintingBookmark());
         final Integer tabIndex = parse(selectedTabStr);
         if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
@@ -124,4 +133,8 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
             }
         });
     }
+
+
+
+
 }

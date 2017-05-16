@@ -52,7 +52,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     private final Multimap<ComponentType, ComponentFactory> componentFactoriesByType;
 
-    @Inject
+    @javax.inject.Inject
     public ComponentFactoryRegistryDefault(final ComponentFactoryRegistrar componentFactoryList) {
         componentFactoriesByType = Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(), new Supplier<List<ComponentFactory>>() {
             @Override
@@ -83,7 +83,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
         ensureAllComponentTypesRegistered();
     }
 
-    protected synchronized void registerComponentFactory(final ComponentFactory componentFactory) {
+    protected void registerComponentFactory(final ComponentFactory componentFactory) {
         componentFactoriesByType.put(componentFactory.getComponentType(), componentFactory);
     }
 

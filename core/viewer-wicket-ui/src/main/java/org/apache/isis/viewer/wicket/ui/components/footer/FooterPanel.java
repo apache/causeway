@@ -18,11 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
-import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,6 +25,12 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
+import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * A panel for the default page footer

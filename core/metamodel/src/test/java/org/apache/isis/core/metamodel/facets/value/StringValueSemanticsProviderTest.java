@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
@@ -41,17 +40,17 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     public void setUpObjects() throws Exception {
         string = "text entry";
         holder = new FacetHolderImpl();
-        setValue(value = new StringValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(value = new StringValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testTitleOf() {
-        assertEquals("text entry", value.displayTitleOf(string, (Localization) null));
+        assertEquals("text entry", value.displayTitleOf(string));
     }
 
     @Test
     public void testParse() throws Exception {
-        final Object parsed = value.parseTextEntry(null, "tRUe", null);
+        final Object parsed = value.parseTextEntry(null, "tRUe");
         assertEquals("tRUe", parsed.toString());
     }
 

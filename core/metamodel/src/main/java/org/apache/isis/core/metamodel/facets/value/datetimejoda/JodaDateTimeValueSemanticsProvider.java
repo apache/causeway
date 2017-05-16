@@ -21,13 +21,16 @@ package org.apache.isis.core.metamodel.facets.value.datetimejoda;
 
 import java.util.Date;
 
+import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.joda.time.DateTime;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 public class JodaDateTimeValueSemanticsProvider extends JodaDateTimeValueSemanticsProviderAbstract<DateTime> {
 
@@ -40,11 +43,11 @@ public class JodaDateTimeValueSemanticsProvider extends JodaDateTimeValueSemanti
      * {@link EncoderDecoder}.
      */
     public JodaDateTimeValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public JodaDateTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(holder, DateTime.class, DEFAULT_VALUE, configuration, context);
+    public JodaDateTimeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+        super(holder, DateTime.class, DEFAULT_VALUE, context);
     }
 
     @Override
@@ -69,4 +72,34 @@ public class JodaDateTimeValueSemanticsProvider extends JodaDateTimeValueSemanti
     protected DateTime setDate(final Date date) {
         return new DateTime(date.getTime());
     }
+
+    // //////////////////////////////////////////////////////////////////
+    // EncoderDecoder
+    // //////////////////////////////////////////////////////////////////
+
+    private final DateTimeFormatter encodingFormatter = ISODateTimeFormat.basicDateTime();
+
+    @Override
+    protected String doEncode(final Object object) {
+        final DateTime date = (DateTime) object;
+        return encode(date);
+    }
+
+    private synchronized String encode(final DateTime date) {
+        return encodingFormatter.print(date);
+    }
+
+    @Override
+    protected DateTime doRestore(final String data) {
+        try {
+            return parse(data);
+        } catch (final IllegalArgumentException e) {
+            throw new EncodingException(e);
+        }
+    }
+
+    private synchronized DateTime parse(final String data) {
+        return encodingFormatter.parseDateTime(data);
+    }
+
 }

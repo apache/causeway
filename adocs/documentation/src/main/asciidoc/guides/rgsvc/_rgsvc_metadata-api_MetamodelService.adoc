@@ -1,0 +1,68 @@
+[[_rgsvc_metadata-api_MetamodelService]]
+= `MetaModelService3`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+The `MetaModelService3` service provides access to a number of aspects of Apache Isis' internal metamodel.
+
+
+== API
+
+
+The API defined by the service is:
+
+[source,java]
+----
+public interface MetaModelService2 {
+    Class<?> fromObjectType(String objectType);   // <1>
+    String toObjectType(Class<?> domainType);     // <2>
+    void rebuild(Class<?> domainType);            // <3>
+    List<DomainMember> export();                  // <4>
+
+    enum Sort {                                   // <5>
+        VIEW_MODEL, JDO_ENTITY, DOMAIN_SERVICE,
+        MIXIN, VALUE, COLLECTION, UNKNOWN;
+    }
+    enum Mode {
+        STRICT,
+        RELAXED
+    }
+    Sort sortOf(Class<?> domainType);             // <6>
+    Sort sortOf(Bookmark bookmark);
+    Sort sortOf(Class<?> domainType, Mode mode);
+    Sort sortOf(Bookmark bookmark, Mode mode);
+}
+----
+<1> reverse lookup of a domain class' object type
+<2> lookup of a domain class' object type
+<3> invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified domain type.
+<4> returns a list of representations of each of member of each domain class.
+<5> what sort of object a domain type is (or bookmark) represents
+<6> whether to throw an exception or return `Sort.UNKNOWN` if the object type is not recognized.  (The overloads with no `Mode` parameter default to strict mode).
+
+
+== Implementation
+
+The framework provides a default implementation of this service, `o.a.i.c.m.services.metamodel.MetaModelServiceDefault`.
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `MetamodelService` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
+
+To use an alternative implementation, use
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
+
+== Related Services
+
+The `MetaModelServiceMenu` provides a method to download all domain members as a CSV.  Internally
+this calls `MetaModelService#export()`.  Under the covers this uses the API provided by the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service.

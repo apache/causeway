@@ -28,7 +28,6 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -40,7 +39,8 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     private FacetHolder holder;
 
     @Before
-    public void setUpObjects() throws Exception {
+    public void setUp() throws Exception {
+        super.setUp();
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
@@ -52,19 +52,19 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         });
 
         holder = new FacetHolderImpl();
-        setValue(new BigIntegerValueSemanticsProvider(holder, mockConfiguration, mockContext));
+        setValue(new BigIntegerValueSemanticsProvider(holder, mockServicesInjector));
     }
 
     @Test
     public void testParseValidString() throws Exception {
-        final Object newValue = getValue().parseTextEntry(null, "2142342334", null);
+        final Object newValue = getValue().parseTextEntry(null, "2142342334");
         assertEquals(new BigInteger("2142342334"), newValue);
     }
 
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            getValue().parseTextEntry(null, "214xxx2342334", null);
+            getValue().parseTextEntry(null, "214xxx2342334");
             fail();
         } catch (final TextEntryParseException expected) {
         }
@@ -72,7 +72,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Test
     public void testTitle() throws Exception {
-        assertEquals("132,199", getValue().displayTitleOf(bigInt, (Localization) null));
+        assertEquals("132,199", getValue().displayTitleOf(bigInt));
     }
 
     @Test

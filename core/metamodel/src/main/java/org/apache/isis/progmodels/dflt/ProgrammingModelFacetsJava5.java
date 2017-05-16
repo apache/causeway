@@ -17,14 +17,14 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
-import org.apache.isis.core.metamodel.facets.actions.debug.annotation.DebugFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.PrototypeFacetForExplorationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFace
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
@@ -86,29 +86,20 @@ import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainSe
 import org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg.EncodableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.facets.annotation.FacetsFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.fieldorder.annotation.FieldOrderFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.annotation.HiddenFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemovePostConstructOrPreDestroyAnnotationMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveSubscriberMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveGetClassMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveInitMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveInjectMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveJavaLangComparableMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveSyntheticOrAbstractMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
@@ -217,295 +208,332 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
-    public ProgrammingModelFacetsJava5() {
+    public ProgrammingModelFacetsJava5(final IsisConfiguration configuration) {
+        this(DeprecatedPolicy.parse(configuration));
+    }
+
+    public ProgrammingModelFacetsJava5(final DeprecatedPolicy deprecatedPolicy) {
+        super(deprecatedPolicy);
 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
-        addFactory(FallbackFacetFactory.class);
+        addFactory(new FallbackFacetFactory());
 
-        addFactory(ObjectSpecIdFacetDerivedFromClassNameFactory.class);
-        addFactory(DomainServiceFacetAnnotationFactory.class);
+        addFactory(new ObjectSpecIdFacetDerivedFromClassNameFactory());
+        addFactory(new DomainServiceFacetAnnotationFactory());
 
-        addFactory(IteratorFilteringFacetFactory.class);
-        addFactory(RemoveSyntheticOrAbstractMethodsFacetFactory.class);
-        addFactory(RemoveSuperclassMethodsFacetFactory.class);
-        addFactory(RemoveJavaLangObjectMethodsFacetFactory.class);
-        addFactory(RemoveJavaLangComparableMethodsFacetFactory.class);
-        addFactory(RemoveSetDomainObjectContainerMethodFacetFactory.class);
-        addFactory(RemoveInitMethodFacetFactory.class);
-        addFactory(RemoveInjectMethodsFacetFactory.class);
-        addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
-        addFactory(RemoveGetClassMethodFacetFactory.class);
-        addFactory(RemovePostConstructOrPreDestroyAnnotationMethodsFacetFactory.class);
-        addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);
-        addFactory(RemoveSubscriberMethodsFacetFactory.class);
+        addFactory(new IteratorFilteringFacetFactory());
+
+        addFactory(new RemoveMethodsFacetFactory());
+
+        addFactory(new RemoveStaticGettersAndSettersFacetFactory());
+
+        addFactory(new RemoveAnnotatedMethodsFacetFactory());
 
         // come what may, we have to ignore the PersistenceCapable supertype.
-        addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
+        addFactory(new RemoveJdoEnhancementTypesFacetFactory());
         // so we may as well also just ignore any 'jdo' prefixed methods here also.
-        addFactory(RemoveJdoPrefixedMethodsFacetFactory.class);
+        addFactory(new RemoveJdoPrefixedMethodsFacetFactory());
         // DN 4.x
-        addFactory(RemoveDatanucleusPersistableTypesFacetFactory.class);
-        addFactory(RemoveDnPrefixedMethodsFacetFactory.class);
+        addFactory(new RemoveDatanucleusPersistableTypesFacetFactory());
+        addFactory(new RemoveDnPrefixedMethodsFacetFactory());
 
         // must be before any other FacetFactories that install
         // MandatoryFacet.class facets
-        addFactory(MandatoryFacetOnProperyDefaultFactory.class);
-        addFactory(MandatoryFacetOnParametersDefaultFactory.class);
+        addFactory(new MandatoryFacetOnProperyDefaultFactory());
+        addFactory(new MandatoryFacetOnParametersDefaultFactory());
 
-        addFactory(PropertyValidateFacetDefaultFactory.class);
+        addFactory(new PropertyValidateFacetDefaultFactory());
 
         // enum support
-        addFactory(EnumFacetUsingValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ActionParameterChoicesFacetDerivedFromChoicesFacetFactory.class);
-        addFactory(PropertyChoicesFacetDerivedFromChoicesFacetFactory.class);
+        addFactory(new EnumFacetUsingValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ActionParameterChoicesFacetDerivedFromChoicesFacetFactory());
+        addFactory(new PropertyChoicesFacetDerivedFromChoicesFacetFactory());
 
         // properties
-        addFactory(PropertyAccessorFacetViaAccessorFactory.class);
-        addFactory(PropertySetAndClearFacetFactory.class);
+        addFactory(new PropertyAccessorFacetViaAccessorFactory());
+        addFactory(new PropertySetAndClearFacetFactory());
         // must come after PropertySetAndClearFacetFactory (replaces setter facet with modify if need be)
-        addFactory(PropertyModifyFacetFactory.class);
+        addFactory(new PropertyModifyFacetFactory());
 
-        addFactory(PropertyValidateFacetViaMethodFactory.class);
-        addFactory(PropertyChoicesFacetViaMethodFactory.class);
-        addFactory(PropertyAutoCompleteFacetMethodFactory.class);
-        addFactory(PropertyDefaultFacetViaMethodFactory.class);
-        addFactory(MandatoryFacetOnPropertyStaticMethodFactory.class);
+        addFactory(new PropertyValidateFacetViaMethodFactory());
+        addFactory(new PropertyChoicesFacetViaMethodFactory());
+        addFactory(new PropertyAutoCompleteFacetMethodFactory());
+        addFactory(new PropertyDefaultFacetViaMethodFactory());
+        
+        addFactory(new MandatoryFacetOnPropertyStaticMethodFactory());
 
         // collections
-        addFactory(CollectionAccessorFacetViaAccessorFactory.class);
-        addFactory(CollectionClearFacetFactory.class);
-        addFactory(CollectionAddToRemoveFromAndValidateFacetFactory.class);
-        addFactory(SortedByFacetAnnotationFactory.class);
+        addFactory(new CollectionAccessorFacetViaAccessorFactory());
+        addFactory(new CollectionClearFacetFactory());
+        addFactory(new CollectionAddToRemoveFromAndValidateFacetFactory());
+        
+        addFactory(new SortedByFacetAnnotationFactory());
 
         // actions
-        addFactory(ActionNamedDebugExplorationFacetFactory.class);
-        addFactory(ActionValidationFacetViaMethodFactory.class);
-        addFactory(ActionChoicesFacetViaMethodFactory.class);
-        addFactory(ActionParameterChoicesFacetViaMethodFactory.class);
-        addFactory(ActionParameterAutoCompleteFacetViaMethodFactory.class);
-        addFactory(ActionDefaultsFacetViaMethodFactory.class);
-        addFactory(ActionParameterDefaultsFacetViaMethodFactory.class);
+        
+        addFactory(new ActionValidationFacetViaMethodFactory());
+        addFactory(new ActionChoicesFacetViaMethodFactory());
+        addFactory(new ActionParameterChoicesFacetViaMethodFactory());
+        addFactory(new ActionParameterAutoCompleteFacetViaMethodFactory());
+        addFactory(new ActionDefaultsFacetViaMethodFactory());
+        addFactory(new ActionParameterDefaultsFacetViaMethodFactory());
 
         // members in general
-        addFactory(NamedFacetStaticMethodFactory.class);
-        addFactory(DescribedAsFacetStaticMethodFactory.class);
-        addFactory(DisableForSessionFacetViaMethodFactory.class);
-        addFactory(DisableForContextFacetViaMethodFactory.class);
-        addFactory(DisabledFacetStaticMethodFacetFactory.class);
-        addFactory(HideForSessionFacetViaMethodFactory.class);
-        addFactory(HiddenFacetStaticMethodFactory.class);
-        addFactory(HideForContextFacetViaMethodFactory.class);
-        addFactory(RenderFacetOrResolveFactory.class);
+        
+        addFactory(new NamedFacetStaticMethodFactory());
+        
+        addFactory(new DescribedAsFacetStaticMethodFactory());
+        addFactory(new DisableForSessionFacetViaMethodFactory());
+        addFactory(new DisableForContextFacetViaMethodFactory());
+        
+        addFactory(new DisabledFacetStaticMethodFacetFactory());
+        addFactory(new HideForSessionFacetViaMethodFactory());
+        
+        addFactory(new HiddenFacetStaticMethodFactory());
+        addFactory(new HideForContextFacetViaMethodFactory());
+        addFactory(new RenderFacetOrResolveFactory());
 
-        addFactory(CreatedCallbackFacetFactory.class);
-        addFactory(LoadCallbackFacetFactory.class);
-        addFactory(PersistCallbackViaSaveMethodFacetFactory.class);
-        addFactory(PersistCallbackFacetFactory.class);
-        addFactory(UpdateCallbackFacetFactory.class);
-        addFactory(RemoveCallbackFacetFactory.class);
+        addFactory(new CreatedCallbackFacetFactory());
+        addFactory(new LoadCallbackFacetFactory());
+        addFactory(new PersistCallbackViaSaveMethodFacetFactory());
+        addFactory(new PersistCallbackFacetFactory());
+        addFactory(new UpdateCallbackFacetFactory());
+        addFactory(new RemoveCallbackFacetFactory());
 
-        addFactory(ValidateObjectFacetMethodFactory.class);
-        addFactory(ObjectValidPropertiesFacetImplFactory.class);
-        addFactory(PluralFacetStaticMethodFactory.class);
-        addFactory(org.apache.isis.core.metamodel.facets.object.named.staticmethod.NamedFacetStaticMethodFactory.class);
+        addFactory(new ValidateObjectFacetMethodFactory());
+        addFactory(new ObjectValidPropertiesFacetImplFactory());
+        
+        addFactory(new PluralFacetStaticMethodFactory());
+        
+        addFactory(new org.apache.isis.core.metamodel.facets.object.named.staticmethod.NamedFacetStaticMethodFactory());
 
-        addFactory(MemberOrderFacetFactory.class);
-        addFactory(ActionOrderFacetAnnotationFactory.class);
-        addFactory(FieldOrderFacetAnnotationFactory.class);
-        addFactory(MemberGroupLayoutFacetFactory.class);
+        addFactory(new MemberOrderFacetFactory());
+        
+        addFactory(new ActionOrderFacetAnnotationFactory());
+        
+        addFactory(new FieldOrderFacetAnnotationFactory());
+        addFactory(new MemberGroupLayoutFacetFactory());
 
-        addFactory(AggregatedAnnotationFactory.class);
-        addFactory(BookmarkPolicyFacetViaBookmarkableAnnotationFactory.class);
-        addFactory(HomePageFacetAnnotationFactory.class);
-        addFactory(ChoicesFacetFromBoundedMarkerInterfaceFactory.class);
-        addFactory(DebugFacetAnnotationFactory.class);
+        addFactory(new AggregatedAnnotationFactory());
+        
+        addFactory(new BookmarkPolicyFacetViaBookmarkableAnnotationElseFallbackFactory());
+        addFactory(new HomePageFacetAnnotationFactory());
+        addFactory(new ChoicesFacetFromBoundedMarkerInterfaceFactory());
 
-        addFactory(DefaultedFacetAnnotationElseConfigurationFactory.class);
-        addFactory(PropertyDefaultFacetDerivedFromTypeFactory.class);
-        addFactory(ActionParameterDefaultFacetDerivedFromTypeFactory.class);
+        addFactory(new DefaultedFacetAnnotationElseConfigurationFactory());
+        addFactory(new PropertyDefaultFacetDerivedFromTypeFactory());
+        addFactory(new ActionParameterDefaultFacetDerivedFromTypeFactory());
 
-        addFactory(DescribedAsFacetOnTypeAnnotationFactory.class);
-        addFactory(DescribedAsFacetOnMemberFactory.class);
-        addFactory(DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory.class);
+        
+        addFactory(new DescribedAsFacetOnTypeAnnotationFactory());
+        addFactory(new DescribedAsFacetOnMemberFactory());
+        addFactory(new DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory());
 
-        addFactory(BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory.class);
-        addFactory(BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory.class);
+        addFactory(new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory());
+        addFactory(new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory());
 
-        addFactory(DisabledFacetOnMemberFromPropertiesFactory.class);
-        addFactory(EncodableFacetAnnotationElseConfigurationFactory.class);
-        addFactory(ExplorationFacetAnnotationFactory.class);
-        addFactory(NotContributedFacetAnnotationFactory.class);
-        addFactory(NotInServiceMenuFacetAnnotationFactory.class);
-        addFactory(NotInServiceMenuFacetViaMethodFactory.class);
+        addFactory(new DisabledFacetOnMemberFromPropertiesFactory());
+        addFactory(new EncodableFacetAnnotationElseConfigurationFactory());
+        
+        addFactory(new PrototypeFacetForExplorationAnnotationFactory());
 
-        addFactory(NotContributedFacetDerivedFromDomainServiceFacetFactory.class);
-        addFactory(NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory.class);
+        addFactory(new NotContributedFacetAnnotationFactory());
 
-        addFactory(HiddenFacetOnTypeAnnotationFactory.class);
+        addFactory(new NotInServiceMenuFacetAnnotationFactory());
+
+        addFactory(new NotInServiceMenuFacetViaMethodFactory());
+
+        addFactory(new NotContributedFacetDerivedFromDomainServiceFacetFactory());
+        addFactory(new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory());
+
+        
+        addFactory(new HiddenFacetOnTypeAnnotationFactory());
         // must come after the TitleAnnotationFacetFactory, because can act as an override
-        addFactory(HiddenFacetOnMemberFromPropertiesFactory.class);
+        
+        addFactory(new HiddenFacetOnMemberFromPropertiesFactory());
 
-        addFactory(CssClassFacetOnTypeAnnotationFactory.class);
-        addFactory(CssClassFacetOnMemberFactory.class);
+        
+            addFactory(new CssClassFacetOnTypeAnnotationFactory());
+        addFactory(new CssClassFacetOnMemberFactory());
         // must come after CssClassFacetOnMemberFactory
-        addFactory(CssClassFacetOnActionFromConfiguredRegexFactory.class);
+        addFactory(new CssClassFacetOnActionFromConfiguredRegexFactory());
 
-        // addFactory(CssClassFaFacetOnTypeAnnotationFactory.class);
-        addFactory(CssClassFaFacetOnMemberFactory.class);
+        // addFactory(new CssClassFaFacetOnTypeAnnotationFactory());
+        addFactory(new CssClassFaFacetOnMemberFactory());
 
-        addFactory(HiddenObjectFacetViaMethodFactory.class);
-        addFactory(DisabledObjectFacetViaMethodFactory.class);
+        addFactory(new HiddenObjectFacetViaMethodFactory());
+        addFactory(new DisabledObjectFacetViaMethodFactory());
 
-        addFactory(CopyImmutableFacetOntoMembersFactory.class);
-        addFactory(ImmutableFacetMarkerInterfaceFactory.class);
+        addFactory(new CopyImmutableFacetOntoMembersFactory());
+        addFactory(new ImmutableFacetMarkerInterfaceFactory());
 
-        addFactory(RecreatableObjectFacetFactory.class);
-        addFactory(MixinFacetForMixinAnnotationFactory.class);
+        addFactory(new RecreatableObjectFacetFactory());
+        addFactory(new MixinFacetForMixinAnnotationFactory());
 
 
-        addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
-        addFactory(MaxLengthFacetOnActionAnnotationFactory.class);
+        
+        addFactory(new MaxLengthFacetOnTypeAnnotationFactory());
 
-        addFactory(MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory.class);
+        addFactory(new MaxLengthFacetOnActionAnnotationFactory());
 
-        addFactory(MultiLineFacetOnTypeAnnotationFactory.class);
-        addFactory(MultiLineFacetOnPropertyFactory.class);
-        addFactory(MultiLineFacetOnParameterAnnotationFactory.class);
+
+        addFactory(new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory());
+
+        
+        addFactory(new MultiLineFacetOnTypeAnnotationFactory());
+        addFactory(new MultiLineFacetOnPropertyFactory());
+        addFactory(new MultiLineFacetOnParameterAnnotationFactory());
 
         // must come after RecreatableObjectFacetFactory
-        addFactory(DomainObjectAnnotationFacetFactory.class);
+        addFactory(new DomainObjectAnnotationFacetFactory());
 
         // must come after the property/collection accessor+mutator facet factories
-        addFactory(ActionAnnotationFacetFactory.class);
+        addFactory(new ActionAnnotationFacetFactory());
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
-        addFactory(PropertyAnnotationFacetFactory.class);
+        addFactory(new PropertyAnnotationFacetFactory());
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
-        addFactory(CollectionAnnotationFacetFactory.class);
+        addFactory(new CollectionAnnotationFacetFactory());
 
-        addFactory(ParameterAnnotationFacetFactory.class);
+        addFactory(new ParameterAnnotationFacetFactory());
 
         // must come after DomainObjectAnnotationFacetFactory
-        addFactory(DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory.class);
-        addFactory(DisabledFacetOnCollectionDerivedFromViewModelFacetFactory.class);
+        addFactory(new DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory());
+        addFactory(new DisabledFacetOnCollectionDerivedFromViewModelFacetFactory());
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
-        addFactory(NotContributedFacetDerivedFromMixinFacetFactory.class);
+        addFactory(new NotContributedFacetDerivedFromMixinFacetFactory());
 
-        addFactory(GridFacetFactory.class);
+        addFactory(new GridFacetFactory());
 
-        addFactory(DomainServiceLayoutFacetFactory.class);
-        addFactory(DomainObjectLayoutFacetFactory.class);
+        addFactory(new DomainServiceLayoutFacetFactory());
+        addFactory(new DomainObjectLayoutFacetFactory());
         // must come after MultiLine
-        addFactory(PropertyLayoutFacetFactory.class);
-        addFactory(ParameterLayoutFacetFactory.class);
-        addFactory(ActionLayoutFacetFactory.class);
-        addFactory(CollectionLayoutFacetFactory.class);
+        addFactory(new PropertyLayoutFacetFactory());
+        addFactory(new ParameterLayoutFacetFactory());
+        addFactory(new ActionLayoutFacetFactory());
+        addFactory(new CollectionLayoutFacetFactory());
 
         // must come after DomainObjectLayoutFacetFactory
-        addFactory(TitleAnnotationFacetFactory.class);
-        addFactory(TitleFacetViaMethodsFactory.class);
-        addFactory(IconFacetMethodFactory.class);
-        addFactory(CssClassFacetMethodFactory.class);
+        addFactory(new TitleAnnotationFacetFactory());
+        addFactory(new TitleFacetViaMethodsFactory());
+        addFactory(new IconFacetMethodFactory());
+        addFactory(new CssClassFacetMethodFactory());
 
-        addFactory(NamedFacetOnTypeAnnotationFactory.class);
-        addFactory(NamedFacetOnMemberFactory.class);
-        addFactory(NamedFacetOnParameterAnnotationFactory.class);
+        
+        addFactory(new NamedFacetOnTypeAnnotationFactory());
+        addFactory(new NamedFacetOnMemberFactory());
+        
+        addFactory(new NamedFacetOnParameterAnnotationFactory());
 
-        addFactory(NotPersistableFacetAnnotationFactory.class);
-        addFactory(NotPersistableFacetMarkerInterfaceFactory.class);
+        addFactory(new NotPersistableFacetAnnotationFactory());
+        addFactory(new NotPersistableFacetMarkerInterfaceFactory());
 
-        addFactory(ParseableFacetAnnotationElseConfigurationFactory.class);
-        addFactory(PluralAnnotationFacetFactory.class);
-        addFactory(PagedFacetOnTypeAnnotationFactory.class);
-        addFactory(PagedFacetOnCollectionFactory.class);
-        addFactory(PagedFacetOnActionFactory.class);
+        addFactory(new ParseableFacetAnnotationElseConfigurationFactory());
+        
+        addFactory(new PluralAnnotationFacetFactory());
+
+        addFactory(new PagedFacetOnTypeAnnotationFactory());
+
+        addFactory(new PagedFacetOnCollectionFactory());
+
+        addFactory(new PagedFacetOnActionFactory());
 
         // must come after any facets that install titles
-        addFactory(MaskFacetOnTypeAnnotationFactory.class);
-        addFactory(MaskFacetOnPropertyAnnotationFactory.class);
-        addFactory(MaskFacetOnParameterAnnotationFactory.class);
+        
+        addFactory(new MaskFacetOnTypeAnnotationFactory());
+        addFactory(new MaskFacetOnPropertyAnnotationFactory());
+        
+        addFactory(new MaskFacetOnParameterAnnotationFactory());
 
         // must come after any facets that install titles, and after mask
         // if takes precedence over mask.
-        addFactory(RegExFacetOnTypeAnnotationFactory.class);
+        
+        addFactory(new RegExFacetOnTypeAnnotationFactory());
 
-        addFactory(TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory.class);
-        addFactory(TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory.class);
+        addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
+        addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
 
-        addFactory(TypicalLengthFacetOnTypeAnnotationFactory.class);
-        addFactory(TypicalLengthOnPropertyFacetFactory.class);
-        addFactory(TypicalLengthFacetOnParameterAnnotationFactory.class);
-        addFactory(RenderedAsDayBeforeAnnotationOnPropertyFacetFactory.class);
-        addFactory(RenderedAsDayBeforeFacetOnParameterAnnotationFactory.class);
+        
+        addFactory(new TypicalLengthFacetOnTypeAnnotationFactory());
+        addFactory(new TypicalLengthOnPropertyFacetFactory());
+        
+        addFactory(new TypicalLengthFacetOnParameterAnnotationFactory());
+        
+        addFactory(new RenderedAsDayBeforeAnnotationOnPropertyFacetFactory());
+        
+        addFactory(new RenderedAsDayBeforeFacetOnParameterAnnotationFactory());
 
         // built-in value types for Java language
-        addFactory(BooleanPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(BooleanWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(BytePrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ByteWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ShortPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ShortWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(IntPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(IntWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(LongPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(LongWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FloatPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(FloatWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(DoublePrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(DoubleWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(CharPrimitiveValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(CharWrapperValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(BigIntegerValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(BigDecimalValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(JavaSqlDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(JavaSqlTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(JavaUtilDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(StringValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(URLValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(UUIDValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(new BooleanPrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new BooleanWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new BytePrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ByteWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ShortPrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ShortWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new IntPrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new IntWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new LongPrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new LongWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new FloatPrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new FloatWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new DoublePrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new DoubleWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new CharPrimitiveValueFacetUsingSemanticsProviderFactory());
+        addFactory(new CharWrapperValueFacetUsingSemanticsProviderFactory());
+        addFactory(new BigIntegerValueFacetUsingSemanticsProviderFactory());
+        addFactory(new BigDecimalValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JavaSqlDateValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JavaSqlTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JavaUtilDateValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory());
+        addFactory(new StringValueFacetUsingSemanticsProviderFactory());
+        addFactory(new URLValueFacetUsingSemanticsProviderFactory());
+        addFactory(new UUIDValueFacetUsingSemanticsProviderFactory());
 
-        addFactory(JavaAwtImageValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(new JavaAwtImageValueFacetUsingSemanticsProviderFactory());
 
         // applib values
-        addFactory(BlobValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ClobValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(DateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(DateTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ColorValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(MoneyValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(PasswordValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(PercentageValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(TimeStampValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(TimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(ImageValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(new BlobValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ClobValueFacetUsingSemanticsProviderFactory());
+        addFactory(new DateValueFacetUsingSemanticsProviderFactory());
+        addFactory(new DateTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ColorValueFacetUsingSemanticsProviderFactory());
+        addFactory(new MoneyValueFacetUsingSemanticsProviderFactory());
+        addFactory(new PasswordValueFacetUsingSemanticsProviderFactory());
+        addFactory(new PercentageValueFacetUsingSemanticsProviderFactory());
+        addFactory(new TimeStampValueFacetUsingSemanticsProviderFactory());
+        addFactory(new TimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new ImageValueFacetUsingSemanticsProviderFactory());
 
         // jodatime values
-        addFactory(JodaLocalDateValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory.class);
-        addFactory(JodaDateTimeValueFacetUsingSemanticsProviderFactory.class);
+        addFactory(new JodaLocalDateValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JodaDateTimeValueFacetUsingSemanticsProviderFactory());
 
         // written to not trample over TypeOf if already installed
-        addFactory(CollectionFacetFactory.class);
+        addFactory(new CollectionFacetFactory());
         // must come after CollectionFacetFactory
-        addFactory(ParentedFacetSinceCollectionFactory.class);
+        addFactory(new ParentedFacetSinceCollectionFactory());
 
         // so we can dogfood the applib "value" types
-        addFactory(ValueFacetAnnotationOrConfigurationFactory.class);
+        addFactory(new ValueFacetAnnotationOrConfigurationFactory());
 
-        addFactory(DisabledFacetOnPropertyDerivedFromImmutableFactory.class);
-        addFactory(DisabledFacetOnCollectionDerivedFromImmutableFactory.class);
+        addFactory(new DisabledFacetOnPropertyDerivedFromImmutableFactory());
+        addFactory(new DisabledFacetOnCollectionDerivedFromImmutableFactory());
 
         // should come near the end, after any facets that install PropertySetterFacet have run.
-        addFactory(DisabledFacetOnPropertyInferredFactory.class);
+        addFactory(new DisabledFacetOnPropertyInferredFactory());
 
-        addFactory(AuditableFacetMarkerInterfaceFactory.class);
 
-        addFactory(FacetsFacetAnnotationFactory.class);
+        addFactory(new ActionChoicesForCollectionParameterFacetFactory());
+
+        addFactory(new AuditableFacetMarkerInterfaceFactory());
+
+        addFactory(new FacetsFacetAnnotationFactory());
 
         // must be after all named facets and description facets have been installed
-        addFactory(TranslationFacetFactory.class);
+        addFactory(new TranslationFacetFactory());
 
-        addFactory(ViewModelSemanticCheckingFacetFactory.class);
+        addFactory(new ViewModelSemanticCheckingFacetFactory());
     }
 }

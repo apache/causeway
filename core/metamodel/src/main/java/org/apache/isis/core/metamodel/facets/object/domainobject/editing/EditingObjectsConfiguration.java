@@ -25,7 +25,7 @@ public enum EditingObjectsConfiguration {
     TRUE,
     FALSE;
 
-    private static final String EDIT_OBJECTS_KEY = "isis.objects.editing";
+    public static final String EDIT_OBJECTS_KEY = "isis.objects.editing";
 
     public static EditingObjectsConfiguration parse(final IsisConfiguration configuration) {
         final String configuredValue = configuration.getString(EDIT_OBJECTS_KEY);
