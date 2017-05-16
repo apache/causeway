@@ -36,6 +36,7 @@ import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
+import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 
 public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
         implements FormExecutor {
@@ -130,15 +131,13 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             onExecuteAndProcessResults(targetIfAny);
 
             final ObjectAdapter targetAdapter = targetEntityModel.load();
-            final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
-
-            if (targetAdapter != resultAdapter || redirectEvenIfSameObject || targetIfAny == null) {
+            if (shouldForward(page, resultAdapter, targetAdapter) || targetIfAny == null) {
 
                 forwardOntoResult(resultAdapter, targetIfAny);
 
             } else {
                 final AjaxRequestTarget target = targetIfAny; // only in this branch if there *is* a target to use
-                addComponentsToRedraw(target, page);
+                addComponentsToRedraw(target);
             }
 
             return true;
@@ -170,7 +169,41 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         }
     }
 
-    private void addComponentsToRedraw(final AjaxRequestTarget target, final Page pageUNUSED) {
+    private boolean shouldForward(
+            final Page page,
+            final ObjectAdapter resultAdapter,
+            final ObjectAdapter targetAdapter) {
+        if (shouldForward(resultAdapter, targetAdapter)) {
+            return true;
+        }
+
+        // this is a bit of a hack... currently the blob/clob panel doesn't correctly redraw itself.
+        // we therefore force a reforward (unless is declared as unchanging).
+        final Object hasBlobsOrClobs = page.visitChildren(IsisBlobOrClobPanelAbstract.class,
+                new IVisitor<IsisBlobOrClobPanelAbstract, Object>() {
+                    @Override
+                    public void component(final IsisBlobOrClobPanelAbstract object, final IVisit<Object> visit) {
+                        if (!isUnchanging(object)) {
+                            visit.stop(true);
+                        }
+                    }
+
+                    private boolean isUnchanging(final IsisBlobOrClobPanelAbstract object) {
+                        final ScalarModel scalarModel = (ScalarModel) object.getModel();
+                        final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
+                        return unchangingFacet != null && unchangingFacet.value();
+                    }
+
+                });
+        return hasBlobsOrClobs != null;
+    }
+
+    private boolean shouldForward(final ObjectAdapter resultAdapter, final ObjectAdapter targetAdapter) {
+        final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
+        return targetAdapter != resultAdapter || redirectEvenIfSameObject;
+    }
+
+    private void addComponentsToRedraw(final AjaxRequestTarget target) {
         final List<Component> componentsToRedraw = Lists.newArrayList();
         final List<Component> componentsNotToRedraw = Lists.newArrayList();
 
