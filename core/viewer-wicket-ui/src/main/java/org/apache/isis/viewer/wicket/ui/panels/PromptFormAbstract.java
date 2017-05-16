@@ -227,7 +227,10 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
                 // the Wicket ajax callbacks will have just started to hide the veil
                 // we now show it once more, so that a veil continues to be shown until the
                 // new page is rendered.
-                target.appendJavaScript("isisShowVeil();\n");
+
+                // REVIEW: commenting out, this is throwing a javascript error (function not defined).
+                // in any case, with the new design (of not forwarding unless necessary), not certain it's needed.
+                // target.appendJavaScript("isisShowVeil();\n");
             }
 
             okButton.send(getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
