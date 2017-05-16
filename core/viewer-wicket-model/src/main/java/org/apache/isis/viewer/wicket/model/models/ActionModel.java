@@ -92,7 +92,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     private static final String NULL_ARG = "$nullArg$";
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
 
-
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
      * results
@@ -507,6 +506,21 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
         return resultAdapter;
     }
+
+    public String getReasonDisabledIfAny() {
+
+        final ObjectAdapter targetAdapter = getTargetAdapter();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+
+        final Consent usability =
+                objectAction.isUsable(
+                        targetAdapter,
+                        InteractionInitiatedBy.USER,
+                        Where.OBJECT_FORMS);
+        final String disabledReasonIfAny = usability.getReason();
+        return disabledReasonIfAny;
+    }
+
 
     public String getReasonInvalidIfAny() {
         final ObjectAdapter targetAdapter = getTargetAdapter();

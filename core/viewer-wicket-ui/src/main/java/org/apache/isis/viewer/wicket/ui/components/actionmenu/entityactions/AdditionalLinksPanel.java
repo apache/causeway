@@ -35,6 +35,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
@@ -105,15 +106,22 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
 
                 final AbstractLink link = linkAndLabel.getLink();
+                if(link instanceof ActionLink) {
+                    final ActionLink actionLink = (ActionLink) link;
 
-                item.add(new AttributeModifier("title",  new Model<String>() {
-                    @Override
-                    public String getObject() {
-                        // TODO: for this to update immediately, need to pass through the ActionMemento etc
-                        // (rather than reifying into LinkAndLabel)
-                        return first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
-                    }
-                }));
+                    item.add(new AttributeModifier("title",  new Model<String>() {
+                        @Override
+                        public String getObject() {
+                            final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
+                            return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
+                        }
+                    }));
+
+                } else {
+                    item.add(new AttributeModifier("title",
+                            first(linkAndLabel.getReasonDisabledIfAny(), linkAndLabel.getDescriptionIfAny())));
+                }
+
 
                 // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
                 // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
@@ -129,7 +137,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getDisabledReasonIfAny() == null) {
+                if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getReasonDisabledIfAny() == null) {
                     addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
 

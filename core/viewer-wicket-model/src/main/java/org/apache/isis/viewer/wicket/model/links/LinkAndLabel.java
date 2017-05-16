@@ -136,7 +136,7 @@ public class LinkAndLabel implements Serializable {
         return label;
     }
 
-    public String getDisabledReasonIfAny() {
+    public String getReasonDisabledIfAny() {
         return disabledReasonIfAny;
     }
 

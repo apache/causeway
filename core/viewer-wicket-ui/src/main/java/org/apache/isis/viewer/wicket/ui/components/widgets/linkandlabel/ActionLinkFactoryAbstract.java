@@ -24,8 +24,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
 
@@ -46,15 +44,13 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
@@ -70,7 +66,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
     }
 
-    protected AbstractLink newLink(
+    protected ActionLink newLink(
             final String linkId,
             final ObjectAction action) {
 
@@ -83,45 +79,13 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
         final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 
-        final AbstractLink link = getSettings().isUseIndicatorForNoArgAction()
-                ? new IndicatingAjaxLink<Object>(linkId) {
+        final ActionLink link =
+                new ActionLink(linkId, actionModel) {
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         ActionLinkFactoryAbstract.this.onClick(target, ajaxDeferredBehaviour, actionModel, this);
-                    }
-
-                    @Override
-                    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                        super.updateAjaxAttributes(attributes);
-                        ActionLinkFactoryAbstract.this.updateAjaxAttributes(attributes, this);
-                    }
-
-                    @Override
-                    protected void onComponentTag(ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        Buttons.fixDisabledState(this, tag);
-                    }
-                } :
-                new AjaxLink<Object>(linkId) {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        ActionLinkFactoryAbstract.this.onClick(target, ajaxDeferredBehaviour, actionModel, this);
-                    }
-
-                    @Override
-                    protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                        super.updateAjaxAttributes(attributes);
-                        ActionLinkFactoryAbstract.this.updateAjaxAttributes(attributes, this);
-                    }
-
-                    @Override
-                    protected void onComponentTag(ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        Buttons.fixDisabledState(this, tag);
                     }
                 };
 
@@ -134,8 +98,10 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return link;
     }
 
-    private static AjaxDeferredBehaviour determineDeferredBehaviour(final ObjectAction action,
+    private static AjaxDeferredBehaviour determineDeferredBehaviour(
+            final ObjectAction action,
             final ActionModel actionModel) {
+
         // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
         if (isNoArgReturnTypeRedirect(action)) {
             /**
@@ -195,7 +161,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final AjaxRequestTarget target,
             final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny,
             final ActionModel actionModel,
-            final AjaxLink<Object> ajaxLink) {
+            final AjaxLink<ObjectAdapter> ajaxLink) {
 
         if (ajaxDeferredBehaviourIfAny != null) {
             ajaxDeferredBehaviourIfAny.initiate(target);
@@ -248,16 +214,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     }
 
-    private void updateAjaxAttributes(
-            final AjaxRequestAttributes attributes,
-            final AjaxLink<Object> ajaxLink) {
-        if(getSettings().isPreventDoubleClickForNoArgAction()) {
-            PanelUtil.disableBeforeReenableOnComplete(attributes, ajaxLink);
-        }
-
-        // allow the event to bubble so the menu is hidden after click on an item
-        attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
-    }
 
     protected LinkAndLabel newLinkAndLabel(
             final ObjectAdapter objectAdapter,
