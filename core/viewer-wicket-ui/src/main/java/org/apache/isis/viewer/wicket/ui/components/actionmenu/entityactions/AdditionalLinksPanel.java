@@ -108,8 +108,12 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final String itemTitle = first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
                 if(itemTitle != null) {
                     item.add(new AttributeAppender("title", itemTitle));
-                    // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side 
-                    link.add(new AttributeAppender("data-selector", "true"));
+
+                    // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side
+                    // backing this out, because interfers with the 'areYouSure' confirmation dialog for no-arg actions (a few lines below)
+                    // think a better solution would be to use some JQuery tooltip plugin.
+
+                    // link.add(new AttributeAppender("data-selector", "true"));
                 }
 
                 final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
