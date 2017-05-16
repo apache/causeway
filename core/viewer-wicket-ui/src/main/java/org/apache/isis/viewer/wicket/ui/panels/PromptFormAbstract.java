@@ -235,6 +235,8 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
             okButton.send(getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
 
+            rebuildGuiAfterInlinePromptDoneIfNec(target);
+
         } else {
 
             final StringBuilder builder = new StringBuilder();
@@ -248,8 +250,6 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
             String buf = builder.toString();
             target.appendJavaScript(buf);
         }
-
-        rebuildGuiAfterInlinePromptDoneIfNec(target);
 
         target.add(form);
 
