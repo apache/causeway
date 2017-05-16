@@ -28,6 +28,7 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -73,7 +74,8 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
         okButton = addOkButton();
         cancelButton = addCancelButton();
-        configureButtons(okButton, cancelButton);
+        doConfigureOkButton(okButton);
+        doConfigureCancelButton(cancelButton);
     }
 
     @Override
@@ -95,18 +97,11 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
             @Override
             public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                final ActionPrompt actionPromptIfAny = ActionPromptProvider.Util.getFrom(parentPanel)
-                        .getActionPrompt();
-                if (actionPromptIfAny != null) {
-                    actionPromptIfAny.closePrompt(target);
-                }
-
-                onSubmitOf(target, form, this);
+                onOkSubmittedOf(target, form, this);
             }
 
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
                 if (settings.isPreventDoubleClickForFormSubmit()) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
@@ -114,7 +109,6 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
                 target.add(form);
             }
         }
@@ -123,12 +117,11 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
             @Override
             public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                onSubmitOf(target, form, this);
+                onOkSubmittedOf(target, form, this);
             }
 
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
                 if (settings.isPreventDoubleClickForFormSubmit()) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
@@ -136,7 +129,6 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
                 target.add(form);
             }
         };
@@ -152,55 +144,46 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
 
             @Override
             public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-                final ActionPrompt actionPromptIfAny = ActionPromptProvider.Util.getFrom(parentPanel)
-                        .getActionPrompt();
-                if (actionPromptIfAny != null) {
-                    actionPromptIfAny.closePrompt(target);
-                }
+                closePromptIfAny(target);
 
-                onCancel(target);
-
+                onCancelSubmitted(target);
             }
         };
         // so can submit with invalid content (eg mandatory params missing)
         cancelButton.setDefaultFormProcessing(false);
+
+        if (formExecutorContext.getPromptStyle() == PromptStyle.INLINE) {
+            cancelButton.add(new FireOnEscapeKey() {
+                @Override
+                protected void respond(final AjaxRequestTarget target) {
+                    onCancelSubmitted(target);
+                }
+            });
+        }
 
         add(cancelButton);
 
         return cancelButton;
     }
 
-    protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
-
-        if (formExecutorContext.getPromptStyle() == PromptStyle.INLINE) {
-            cancelButton.add(new AbstractDefaultAjaxBehavior() {
-
-                private static final String PRE_JS =
-                        "" + "$(document).ready( function() { \n"
-                                + "  $(document).bind('keyup', function(evt) { \n"
-                                + "    if (evt.keyCode == 27) { \n";
-                private static final String POST_JS =
-                        "" + "      evt.preventDefault(); \n   "
-                                + "    } \n"
-                                + "  }); \n"
-                                + "});";
-
-                @Override
-                public void renderHead(final Component component, final IHeaderResponse response) {
-                    super.renderHead(component, response);
-
-                    final String javascript = PRE_JS + getCallbackScript() + POST_JS;
-                    response.render(
-                            JavaScriptContentHeaderItem.forScript(javascript, null, null));
-                }
-
-                @Override
-                protected void respond(final AjaxRequestTarget target) {
-                    onCancel(target);
-                }
-
-            });
+    protected void closePromptIfAny(final AjaxRequestTarget target) {
+        final ActionPrompt actionPromptIfAny =
+                ActionPromptProvider.Util.getFrom(parentPanel).getActionPrompt();
+        if (actionPromptIfAny != null) {
+            actionPromptIfAny.closePrompt(target);
         }
+    }
+
+    /**
+     * Optional hook
+     */
+    protected void doConfigureOkButton(final AjaxButton okButton) {
+    }
+
+    /**
+     * Optional hook
+     */
+    protected void doConfigureCancelButton(final AjaxButton cancelButton) {
     }
 
     private UiHintContainer getPageUiHintContainerIfAny() {
@@ -212,30 +195,20 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         return null;
     }
 
-    private void onSubmitOf(
+    private void onOkSubmittedOf(
             final AjaxRequestTarget target,
             final Form<?> form,
             final AjaxButton okButton) {
 
         setLastFocusHint();
 
-        final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
-        boolean succeeded = formExecutorContext.getFormExecutor()
-                .executeAndProcessResults(target.getPage(), target, form);
+        final FormExecutor formExecutor = formExecutorContext.getFormExecutor();
+        boolean succeeded = formExecutor.executeAndProcessResults(target.getPage(), target, form);
+
         if (succeeded) {
-            if (promptStyle == PromptStyle.DIALOG) {
-                // the Wicket ajax callbacks will have just started to hide the veil
-                // we now show it once more, so that a veil continues to be shown until the
-                // new page is rendered.
+            completePrompt(target);
 
-                // REVIEW: commenting out, this is throwing a javascript error (function not defined).
-                // in any case, with the new design (of not forwarding unless necessary), not certain it's needed.
-                // target.appendJavaScript("isisShowVeil();\n");
-            }
-
-            okButton.send(getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-
-            rebuildGuiAfterInlinePromptDoneIfNec(target);
+            okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
 
         } else {
 
@@ -252,8 +225,8 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         }
 
         target.add(form);
-
     }
+
 
     private void setLastFocusHint() {
 
@@ -279,23 +252,20 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         }
     }
 
-    public void onCancel(
-            final AjaxRequestTarget target) {
+    public void onCancelSubmitted(final AjaxRequestTarget target) {
 
         setLastFocusHint();
-
-        rebuildGuiAfterInlinePromptDoneIfNec(target);
-
+        completePrompt(target);
     }
 
-    private void rebuildGuiAfterInlinePromptDoneIfNec(final AjaxRequestTarget target) {
+    private void completePrompt(final AjaxRequestTarget target) {
+
         final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
-        if (promptStyle == PromptStyle.INLINE &&
-                formExecutorContext.getInlinePromptContext() != null) {
-
+        if (promptStyle == PromptStyle.INLINE && formExecutorContext.getInlinePromptContext() != null) {
             formExecutorContext.reset();
-
             rebuildGuiAfterInlinePromptDone(target);
+        } else {
+            closePromptIfAny(target);
         }
     }
 
@@ -347,5 +317,31 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         buffer.append(" />");
         buffer.append("</div>");
         this.getResponse().write(buffer);
+    }
+
+    static abstract class FireOnEscapeKey extends AbstractDefaultAjaxBehavior {
+
+        private static final String PRE_JS =
+                "" + "$(document).ready( function() { \n"
+                        + "  $(document).bind('keyup', function(evt) { \n"
+                        + "    if (evt.keyCode == 27) { \n";
+        private static final String POST_JS =
+                "" + "      evt.preventDefault(); \n   "
+                        + "    } \n"
+                        + "  }); \n"
+                        + "});";
+
+        @Override
+        public void renderHead(final Component component, final IHeaderResponse response) {
+            super.renderHead(component, response);
+
+            final String javascript = PRE_JS + getCallbackScript() + POST_JS;
+            response.render(
+                    JavaScriptContentHeaderItem.forScript(javascript, null, null));
+        }
+
+        @Override
+        protected abstract void respond(final AjaxRequestTarget target);
+
     }
 }

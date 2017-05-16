@@ -73,7 +73,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
     // REVIEW: this overload may not be necessary, recall that the important call needed is getScalarModel().reset(),
     // which is called in the superclass.
     @Override
-    public void onCancel(
+    public void onCancelSubmitted(
             final AjaxRequestTarget target) {
 
         final PromptStyle promptStyle = getScalarModel().getPromptStyle();
@@ -84,7 +84,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
             getScalarModel().clearPending();
         }
 
-        super.onCancel(target);
+        super.onCancelSubmitted(target);
     }
 
 }

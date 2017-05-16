@@ -86,8 +86,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected void configureButtons(final AjaxButton okButton, final AjaxButton cancelButton) {
-        super.configureButtons(okButton, cancelButton);
+    protected void doConfigureOkButton(final AjaxButton okButton) {
         applyAreYouSure(okButton);
     }
 
