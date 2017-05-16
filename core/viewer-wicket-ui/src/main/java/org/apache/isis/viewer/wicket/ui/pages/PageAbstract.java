@@ -31,6 +31,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -43,6 +44,7 @@ import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
@@ -188,6 +190,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
 
+            DebugBar debugBar = null;
+            if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+                debugBar = newDebugBar("debugBar");
+            }
+            if (debugBar != null) {
+                add(debugBar);
+            } else {
+                add(new EmptyPanel("debugBar").setVisible(false));
+            }
+
+
             MarkupContainer header = createPageHeader("header");
             themeDiv.add(header);
 
@@ -219,6 +232,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             throw new RestartResponseAtInterceptPageException(getSignInPage());
         }
     }
+
+    protected DebugBar newDebugBar(final String id) {
+        return new DebugBar(id);
+    }
+
 
     /**
      * Creates the component that should be used as a page header/navigation bar

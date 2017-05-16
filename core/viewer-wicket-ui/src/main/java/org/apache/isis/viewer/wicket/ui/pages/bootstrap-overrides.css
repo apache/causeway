@@ -925,3 +925,6 @@ tr.headers th form input {
 }
 */
 
+#wicketDebugBar {
+    padding-top: 60px;
+}
