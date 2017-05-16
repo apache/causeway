@@ -13,16 +13,21 @@ body > div.container {
 
 
 
+table a code, table a:visited code, table a:active code,
 a code, a:visited code, a:active code {
   text-decoration: none;
   border-bottom: 1px dashed;
 }
 
+table a:hover code,
 a:hover code {
   text-decoration: none;
   border-bottom: 1px solid;
 }
 
+table a:not(.btn), .table a:not(.btn) {
+    text-decoration: none;
+}
 
 
 
