@@ -20,9 +20,11 @@
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import java.util.List;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -32,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -57,7 +60,7 @@ public class HomePage extends PageAbstract {
         final ObjectAndAction objectAndAction = lookupHomePageAction();
         if(objectAndAction != null) {
             Components.permanentlyHide(themeDiv, ComponentType.WELCOME); 
-            final IModel<?> actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
+            final IModel<?> actionModel = ActionModel.create(new EntityModel(objectAndAction.objectAdapter), objectAndAction.action);
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.ACTION_PROMPT, actionModel);
         } else {
             Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);

@@ -52,6 +52,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -166,7 +167,10 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             final List<LinkAndLabel> entityActions) {
 
         final PropertyMemento pm = new PropertyMemento(otoa, entityModel.getIsisSessionFactory());
+
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+        scalarModel.setFormExecutor(new PropertyEditFormExecutor(scalarModel));
+
         getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 

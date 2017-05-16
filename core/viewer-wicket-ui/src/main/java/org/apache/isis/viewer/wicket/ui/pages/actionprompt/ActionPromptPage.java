@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -27,6 +26,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormExecutor;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -37,9 +37,6 @@ public class ActionPromptPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
-     */
     public ActionPromptPage(final ActionModel model) {
         super(new PageParameters(), model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
@@ -65,13 +62,15 @@ public class ActionPromptPage extends PageAbstract {
         super(pageParameters, model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
         
-        // no need to bookmark because the ActionPanel will have done so for us
+        // no need to bookmark because the ActionParametersPanel will have done so for us
         addBookmarkedPages(themeDiv);
     }
     
     private static ActionModel buildModel(
             final PageParameters pageParameters,
             final SpecificationLoader specificationLoader) {
-        return ActionModel.createForPersistent(pageParameters, specificationLoader);
+        final ActionModel actionModel = ActionModel.createForPersistent(pageParameters, specificationLoader);
+        actionModel.setFormExecutor(new ActionParametersFormExecutor(actionModel));
+        return actionModel;
     }
 }

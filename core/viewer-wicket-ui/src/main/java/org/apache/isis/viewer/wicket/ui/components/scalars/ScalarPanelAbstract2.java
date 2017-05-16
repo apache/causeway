@@ -53,10 +53,9 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormExecutor;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
+import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
@@ -157,11 +156,27 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void onInitialize() {
         super.onInitialize();
 
-        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
-        scalarTypeContainer.setOutputMarkupId(true);
-        scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
-        addOrReplace(scalarTypeContainer);
+        buildGuiAndCallHooks();
 
+        setOutputMarkupId(true);
+
+    }
+
+    private void buildGuiAndCallHooks() {
+        buildGui();
+
+        final ScalarModel scalarModel = getModel();
+        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+
+        if (scalarModel.isViewMode()) {
+            onInitializeWhenViewMode();
+        } else {
+            if (disableReasonIfAny != null) {
+                onInitializeWhenDisabled(disableReasonIfAny);
+            } else {
+                onInitializeWhenEnabled();
+            }
+        }
     }
 
     /**
@@ -186,27 +201,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      */
     protected abstract InlinePromptConfig getInlinePromptConfig();
 
-    @Override
-    protected void onBeforeRender() {
-
-        if ((!hasBeenRendered() || alwaysRebuildGui())) {
-            buildGui();
-        }
-
-        final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
-
-        if (scalarModel.isViewMode()) {
-            onBeforeRenderWhenViewMode();
-        } else {
-            if (disableReasonIfAny != null) {
-                onBeforeRenderWhenDisabled(disableReasonIfAny);
-            } else {
-                onBeforeRenderWhenEnabled();
-            }
-        }
-        super.onBeforeRender();
-    }
 
 
     /**
@@ -229,6 +223,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      * @see #onBeforeRender()
      */
     private void buildGui() {
+
+        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
+        scalarTypeContainer.setOutputMarkupId(true);
+        scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
+        addOrReplace(scalarTypeContainer);
 
         this.scalarIfCompact = createComponentForCompact();
         this.scalarIfRegular = createComponentForRegular();
@@ -291,19 +290,19 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     /**
      * Optional hook.
      */
-    protected void onBeforeRenderWhenViewMode() {
+    protected void onInitializeWhenViewMode() {
     }
 
     /**
      * Optional hook.
      */
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+    protected void onInitializeWhenDisabled(final String disableReason) {
     }
 
     /**
      * Optional hook.
      */
-    protected void onBeforeRenderWhenEnabled() {
+    protected void onInitializeWhenEnabled() {
     }
 
 
@@ -316,9 +315,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(
-                    AdapterManager.ConcurrencyChecking.NO_CHECK,
-                    getPersistenceSession(), getSpecificationLoader());
+
+            final ObjectAdapter parentAdapter =
+                    model.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
@@ -524,11 +524,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             protected void onEvent(final AjaxRequestTarget target) {
 
                 scalarModel.toEditMode();
-
-                // dynamically update the edit form.
-                final PropertyEditFormExecutor formExecutor =
-                        new PropertyEditFormExecutor(ScalarPanelAbstract2.this, scalarModel);
-                scalarModel.setFormExecutor(formExecutor);
 
                 switchFormForInlinePrompt(target);
 

@@ -95,4 +95,9 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     public boolean isUseIndicatorForNoArgAction() {
         return getConfiguration().getBoolean("isis.viewer.wicket.useIndicatorForNoArgAction", true);
     }
+
+    @Override
+    public boolean isRedirectEvenIfSameObject() {
+        return getConfiguration().getBoolean("isis.viewer.wicket.redirectEvenIfSameObject", false);
+    }
 }

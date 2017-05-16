@@ -82,8 +82,14 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |Positive integer.
 |the typical entry length of a field, use to determine the optimum width for display
 
-|===
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout_unchanging[`unchanging()`]
+|`false`, `true` +
+(`false`)
+|(`1.15.0-SNAPSHOT`) indicates that the value held by the property never changes over time (even if other properties of the object do change).
 
+Used as a hint to the viewer not to redraw the property if possible after an AJAX update.
+
+|===
 
 
 
@@ -134,6 +140,7 @@ include::_rgant-PropertyLayout_named.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_promptStyle.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_renderedAsDayBefore.adoc[leveloffset=+1]
 include::_rgant-PropertyLayout_typicalLength.adoc[leveloffset=+1]
+include::_rgant-PropertyLayout_unchanging.adoc[leveloffset=+1]
 
 
 

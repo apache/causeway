@@ -24,46 +24,28 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
 
 class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    ServiceActionLinkFactory() {
-        super(null);
+    ServiceActionLinkFactory(final EntityModel serviceEntityModel) {
+        super(serviceEntityModel, null);
     }
 
     @Override
     public LinkAndLabel newLink(
-            final String linkId,
-            final ObjectAdapterMemento adapterMemento,
-            final ObjectAction action) {
+            final ObjectAction objectAction, final String linkId) {
         
-        ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                getPersistenceSession(), getSpecificationLoader());
+        ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
 
-        final AbstractLink link = newLink(linkId, objectAdapter, action);
+        final AbstractLink link = newLink(linkId, objectAction);
 
-        return newLinkAndLabel(objectAdapter, action, link, null);
+        return newLinkAndLabel(objectAdapter, objectAction, link, null);
     }
 
-    SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-    PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
 
 }

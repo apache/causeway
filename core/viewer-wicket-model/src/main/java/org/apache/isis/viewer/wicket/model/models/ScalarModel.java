@@ -92,15 +92,17 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
             @Override
             public String getLongName(final ScalarModel scalarModel) {
-                ObjectSpecId objectSpecId = scalarModel.parentObjectAdapterMemento.getObjectSpecId();
+
+                ObjectSpecId objectSpecId =
+                        scalarModel.getParentEntityModel().getTypeOfSpecification().getSpecId();
+
                 final String specShortName = SpecUtils.getSpecificationFor(objectSpecId, scalarModel.getSpecificationLoader()).getShortIdentifier();
                 return specShortName + "-" + scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader()).getId();
             }
 
             @Override
             public String disable(final ScalarModel scalarModel, final Where where) {
-                final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(
-                        ConcurrencyChecking.CHECK, scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 try {
                     final Consent usable = property.isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
@@ -118,8 +120,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                     parseableFacet = property.getSpecification().getFacet(ParseableFacet.class);
                 }
                 try {
-                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                    final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                     final ObjectAdapter currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
                     final ObjectAdapter proposedAdapter =
                             parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
@@ -137,8 +138,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
             @Override
             public String validate(final ScalarModel scalarModel, final ObjectAdapter proposedAdapter) {
-                final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                        scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 try {
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
@@ -176,9 +176,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                     final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
-                ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento
-                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, scalarModel.getPersistenceSession(),
-                                scalarModel.getSpecificationLoader());
+                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
                 final ObjectAdapter[] choices = property.getChoices(
                         parentAdapter,
                         InteractionInitiatedBy.USER);
@@ -202,8 +200,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                        scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
                 final ObjectAdapter[] choices =
                         property.getAutoComplete(
                                 parentAdapter, searchArg,
@@ -226,8 +223,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             
             @Override
             public void resetVersion(ScalarModel scalarModel) {
-                scalarModel.parentObjectAdapterMemento.resetVersion(scalarModel.getPersistenceSession(),
-                        scalarModel.getSpecificationLoader());
+                scalarModel.getParentEntityModel().resetVersion();
             }
 
             @Override
@@ -278,9 +274,9 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             @Override
             public void reset(ScalarModel scalarModel) {
                 final OneToOneAssociation property = scalarModel.propertyMemento.getProperty(scalarModel.getSpecificationLoader());
-                final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
+
                 final ObjectAdapter associatedAdapter =
                         property.get(parentAdapter, InteractionInitiatedBy.USER);
                 scalarModel.setObject(associatedAdapter);
@@ -336,8 +332,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter(
                         scalarModel.getSpecificationLoader());
                 try {
-                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                    final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
                             InteractionInitiatedBy.USER
                     );
@@ -352,8 +347,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter(
                         scalarModel.getSpecificationLoader());
                 try {
-                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                            scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                    final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                     final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(),
                             InteractionInitiatedBy.USER
                     );
@@ -391,9 +385,9 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                     final DeploymentCategory deploymentCategory) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
-                final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
+
                 final ObjectAdapter[] choices =
                         actionParameter.getChoices(
                                 parentAdapter, argumentsIfAvailable,
@@ -417,8 +411,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                        scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
                 final ObjectAdapter[] choices = actionParameter.getAutoComplete(
                         parentAdapter, searchArg,
                         InteractionInitiatedBy.USER);
@@ -491,8 +484,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter(
                         scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
-                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                                scalarModel.getPersistenceSession(), scalarModel.getSpecificationLoader());
+                        scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
                 final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter);
                 scalarModel.setObject(defaultAdapter);
             }
@@ -602,7 +594,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
     private final Kind kind;
     
-    private final ObjectAdapterMemento parentObjectAdapterMemento;
+    private final EntityModel parentEntityModel;
 
     @Override
     public ObjectAdapter load() {
@@ -629,9 +621,9 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarModel(final ObjectAdapterMemento parentObjectAdapterMemento, final ActionParameterMemento apm) {
+    public ScalarModel(final EntityModel parentEntityModel, final ActionParameterMemento apm) {
         this.kind = Kind.PARAMETER;
-        this.parentObjectAdapterMemento = parentObjectAdapterMemento;
+        this.parentEntityModel = parentEntityModel;
         this.parameterMemento = apm;
 
         init();
@@ -643,13 +635,13 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
      * {@link #getObject() value of this model} to be current value of the
      * property.
      */
-    public ScalarModel(final ObjectAdapterMemento parentObjectAdapterMemento, final PropertyMemento pm) {
+    public ScalarModel(final EntityModel parentEntityModel, final PropertyMemento pm) {
         this.kind = Kind.PROPERTY;
-        this.parentObjectAdapterMemento = parentObjectAdapterMemento;
+        this.parentEntityModel = parentEntityModel;
         this.propertyMemento = pm;
 
         init();
-        getAndStore(parentObjectAdapterMemento);
+        getAndStore(parentEntityModel);
         setMode(Mode.VIEW);
     }
 
@@ -661,11 +653,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         kind.reset(this);
     }
 
-    public ObjectAdapterMemento getParentObjectAdapterMemento() {
-        return parentObjectAdapterMemento;
+    public EntityModel getParentEntityModel() {
+        return parentEntityModel;
     }
 
-    private void getAndStore(final ObjectAdapterMemento parentAdapterMemento) {
+    private void getAndStore(final EntityModel parentEntityModel) {
+        final ObjectAdapterMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
         final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
                 getPersistenceSession(), getSpecificationLoader());
@@ -942,8 +935,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
     public String getReasonInvalidIfAny() {
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
 
-        final ObjectAdapter adapter = getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK,
-                getPersistenceSession(), getSpecificationLoader());
+        final ObjectAdapter adapter = getParentEntityModel().load();
 
         final ObjectAdapter associate = getObject();
 

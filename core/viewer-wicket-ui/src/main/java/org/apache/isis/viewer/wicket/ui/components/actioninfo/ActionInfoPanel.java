@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.actions;
+package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
 import org.apache.wicket.markup.html.basic.Label;
 

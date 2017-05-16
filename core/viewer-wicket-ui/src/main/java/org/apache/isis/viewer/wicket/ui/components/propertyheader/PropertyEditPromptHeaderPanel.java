@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.property;
+package org.apache.isis.viewer.wicket.ui.components.propertyheader;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -30,9 +30,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-/**
- * A panel used as a title for the action prompts
- */
 public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
 
     private static final String ID_PROPERTY_NAME = "propertyName";
@@ -40,9 +37,7 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
     public PropertyEditPromptHeaderPanel(String id, final ScalarModel model) {
         super(id, model);
 
-        ObjectAdapter targetAdapter =
-                model.getParentObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK,
-                        getPersistenceSession(), getSpecificationLoader());
+        ObjectAdapter targetAdapter = model.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 

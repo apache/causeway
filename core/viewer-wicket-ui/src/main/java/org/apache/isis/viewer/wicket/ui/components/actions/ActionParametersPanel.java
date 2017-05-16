@@ -19,19 +19,20 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -41,11 +42,11 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * <p>
  * Based on the {@link ActionModel.Mode mode}, will render either parameter
  * dialog or the results.
- * 
+ *
  * <p>
- * TODO: on results panel, have a button to resubmit?
+ * Corresponding component to edit properties is {@link PropertyEditPanel}.
  */
-public class ActionPanel extends PanelAbstract<ActionModel> {
+public class ActionParametersPanel extends PanelAbstract<ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,14 +60,16 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
      */
     private boolean showHeader = true;
 
-    public ActionPanel(final String id, final ActionModel actionModel) {
+    public ActionParametersPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
-        actionModel.setFormExecutor(new ActionParametersFormExecutor(this, actionModel));
-        buildGui(getActionModel());
+        actionModel.setFormExecutor(new ActionParametersFormExecutor(actionModel));
+        //buildGui(getActionModel());
     }
 
     /**
      * Sets the owning action prompt (modal window), if any.
+     *
+     * REVIEW: I wonder if this is necessary... there isn't anything exactly the same for property edits...
      */
     public void setActionPrompt(ActionPrompt actionPrompt) {
         ActionParametersFormExecutor formExecutor =
@@ -74,11 +77,16 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
         formExecutor.setActionPrompt(actionPrompt);
     }
 
+    @Override protected void onInitialize() {
+        super.onInitialize();
+
+        buildGui(getModel());
+    }
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
 
-        buildGui(getModel());
     }
 
     private void buildGui(final ActionModel actionModel) {
@@ -93,7 +101,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
         return super.getModel();
     }
 
-    public ActionPanel setShowHeader(boolean showHeader) {
+    public ActionParametersPanel setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
         return this;
     }
@@ -107,7 +115,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
             targetAdapter = actionModel.getTargetAdapter();
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
+            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel.getParentEntityModel());
 
             final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
             header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
@@ -122,9 +130,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
             
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
+            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
 
-            getMessageBroker().addWarning(ex.getMessage());
+            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            messageService.warnUser(ex.getMessage());
         }
     }
 
@@ -140,9 +149,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
         return header;
     }
 
-    private void buildGuiForNoParameters(final ActionModel actionModel) {
+    private void buildGuiForNoParameters(final ActionModel formExecutor) {
 
-        boolean succeeded = actionModel.getFormExecutor().executeAndProcessResults(null, null);
+        final Page page = this.getPage();
+        boolean succeeded = formExecutor.getFormExecutor().executeAndProcessResults(page, null, null);
+
         if(succeeded) {
             // nothing to do
         } else {
@@ -152,17 +163,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> {
             // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
             // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
             // an error page, but is probably 'good enough').
-            final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+            final ObjectAdapter targetAdapter = formExecutor.getTargetAdapter();
 
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
-            resultResponse.getHandlingStrategy().handleResults(this, resultResponse, getIsisSessionFactory());
+            resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
         }
-    }
-
-
-
-    private MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
     }
 
 

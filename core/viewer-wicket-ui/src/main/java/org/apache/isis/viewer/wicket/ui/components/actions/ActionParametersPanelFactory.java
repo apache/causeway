@@ -28,14 +28,14 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
- * {@link ComponentFactory} for {@link ActionInfoPanel}.
+ * {@link ComponentFactory} for {@link ActionParametersPanel}.
  */
-public class ActionInfoPanelFactory extends ComponentFactoryAbstract {
+public class ActionParametersPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionInfoPanelFactory() {
-        super(ComponentType.ACTION_INFO, ActionInfoPanel.class);
+    public ActionParametersPanelFactory() {
+        super(ComponentType.ACTION_PROMPT, ActionParametersPanel.class);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ActionInfoPanelFactory extends ComponentFactoryAbstract {
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final ActionModel actionModel = (ActionModel) model;
-        return new ActionInfoPanel(id, actionModel);
+        return new ActionParametersPanel(id, actionModel);
     }
 
 }

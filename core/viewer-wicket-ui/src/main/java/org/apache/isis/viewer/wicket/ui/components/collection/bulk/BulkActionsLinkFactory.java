@@ -72,11 +72,14 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         this.toggleboxColumn = toggleboxColumn;
     }
 
-
+    /**
+     * @param objectAction
+     * @param linkId
+     */
     @Override
     public LinkAndLabel newLink(
-            final String linkId, final ObjectAdapterMemento objectAdapterMemento,
-            final ObjectAction objectAction) {
+            final ObjectAction objectAction,
+            final String linkId) {
 
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {
@@ -153,6 +156,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                     final ActionModel actionModel = model.getActionModelHint();
                     if(actionModel != null && actionModel.getActionMemento().getAction(getSpecificationLoader()).getSemantics().isIdempotentInNature()) {
+                        actionModel.detach(); // force reload
                         ObjectAdapter resultAdapter = actionModel.getObject();
                         model.setObjectList(resultAdapter);
                     } else {
@@ -162,7 +166,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     if(lastReturnedAdapter != null) {
                         final ActionResultResponse resultResponse =
                                 ActionResultResponseType.determineAndInterpretResult(actionModel, null, lastReturnedAdapter);
-                        resultResponse.getHandlingStrategy().handleResults(this, resultResponse, model.getIsisSessionFactory());
+                        resultResponse.getHandlingStrategy().handleResults(resultResponse, model.getIsisSessionFactory());
                     }
 
                 } catch(final ConcurrencyException ex) {

@@ -108,5 +108,30 @@ public @interface PropertyLayout {
      * The typical entry length of a field, use to determine the optimum width for display
      */
     int typicalLength() default -1;
+
+    /**
+     * Indicates that the value held by the property never changes over time, even when other properties of the object
+     * do change.
+     *
+     * <p>
+     *     Setting this attribute to <tt>true</tt> is used as a hint to the viewer to not redraw the property
+     *     after an AJAX update of some other property/ies of the object have changed.
+     *     This is primarily for performance, eg can improve the user experience when rendering PDFs/blobs.
+     * </p>
+     *
+     * <p>
+     *     Note that for this to work, the viewer will also ensure that none of the property's parent component
+     *     (such as a tab group panel) are re-rendered.
+     * </p>
+     *
+     * <p>
+     *     Design note: we considered implementing this an "immutable" flag on the {@link Property } annotation
+     *     (because this flag is typically appropriate for immutable/unchanging properties of a domain object).
+     *     However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact
+     *     within the framework than simply a hint for rendering.
+     * </p>
+     */
+    boolean unchanging() default false;
+
 }
 

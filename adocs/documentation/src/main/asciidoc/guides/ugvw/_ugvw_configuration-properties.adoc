@@ -135,6 +135,22 @@ for further details).
 | Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
 
 |`isis.viewer.wicket.` +
+`redirectEvenIfSameObject`
+| `true`,`false` +
+(`_false_`)
+| (`1.15.0-SNAPSHOT`) By default, an action invocation that returns the same object will result in the page being updated.
+The same is true for property edits.
+
+If this setting is enabled, then the viewer will always render to a new page.
+
+[NOTE]
+====
+Note that default behaviour is new in `1.15.0-SNAPSHOT`, and provides a better UI.
+Setting this option retains the behaviour of the viewer pre-1.15.0.
+====
+
+
+|`isis.viewer.wicket.` +
 `regularCase`
 | `true`,`false` +
 (`_false_`)

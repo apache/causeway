@@ -51,7 +51,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
+import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -277,8 +277,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                    getPersistenceSession(), getSpecificationLoader());
+            final ObjectAdapter parentAdapter = model.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
@@ -292,44 +291,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected abstract Component addComponentForCompact();
 
-    protected void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
-        markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
-    }
-
-    protected void addEditPropertyTo(final MarkupContainer markupContainer) {
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
-        if (disableReasonIfAny == null && scalarModel.isViewMode()) {
-            final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
-
-            editProperty.setOutputMarkupId(true);
-
-            editProperty.add(new AjaxEventBehavior("click") {
-                protected void onEvent(AjaxRequestTarget target) {
-
-                    final ActionPrompt prompt = ActionPromptProvider.Util
-                            .getFrom(ScalarPanelAbstract.this).getActionPrompt();
-
-                    PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
-                            scalarModel);
-
-                    final PropertyEditPanel propertyEditPanel =
-                            (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
-                                    ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(), scalarModel);
-
-                    propertyEditPanel.setShowHeader(false);
-
-                    prompt.setTitle(titlePanel, target);
-                    prompt.setPanel(propertyEditPanel, target);
-                    prompt.showPrompt(target);
-
-                }
-            });
-
-            markupContainer.addOrReplace(editProperty);
-        } else {
-            Components.permanentlyHide(markupContainer, ID_EDIT_PROPERTY);
-        }
-    }
 
     /**
      * Optional hook.

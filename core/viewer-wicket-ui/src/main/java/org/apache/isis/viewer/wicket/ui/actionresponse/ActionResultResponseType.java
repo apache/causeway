@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
+
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -50,8 +52,9 @@ public enum ActionResultResponseType {
         }
 
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-            return toEntityPage(model, targetAdapter, ex);
+        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter targetAdapter, final ConcurrencyException ex) {
+            final ActionResultResponse actionResultResponse = toEntityPage(model, targetAdapter, ex);
+            return actionResultResponse;
         }
     },
     COLLECTION {
@@ -169,15 +172,15 @@ public enum ActionResultResponseType {
 
     public static ActionResultResponse determineAndInterpretResult(
             final ActionModel model, 
-            final AjaxRequestTarget target, 
+            final AjaxRequestTarget targetIfAny,
             final ObjectAdapter resultAdapter) {
-        ActionResultResponseType arrt = determineFor(resultAdapter, target);
-        return arrt.interpretResult(model, target, resultAdapter);
+        ActionResultResponseType arrt = determineFor(resultAdapter, targetIfAny);
+        return arrt.interpretResult(model, targetIfAny, resultAdapter);
     }
 
     private static ActionResultResponseType determineFor(
             final ObjectAdapter resultAdapter, 
-            final AjaxRequestTarget target) {
+            final AjaxRequestTarget targetIfAny) {
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
         }
@@ -193,7 +196,7 @@ public enum ActionResultResponseType {
                     return ActionResultResponseType.VALUE_BLOB;
                 } 
                 if(value instanceof java.net.URL) {
-                    return target != null? ActionResultResponseType.VALUE_URL_AJAX: ActionResultResponseType.VALUE_URL_NOAJAX;
+                    return targetIfAny != null? ActionResultResponseType.VALUE_URL_AJAX: ActionResultResponseType.VALUE_URL_NOAJAX;
                 } 
                 // else
                 return ActionResultResponseType.VALUE;

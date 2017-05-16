@@ -210,6 +210,18 @@ public class PropertyLayoutData
     }
 
 
+    private Boolean unchanging;
+
+    @XmlAttribute(required = false)
+    public Boolean getUnchanging() {
+        return unchanging;
+    }
+
+    public void setUnchanging(Boolean unchanging) {
+        this.unchanging = unchanging;
+    }
+
+
 
     private List<ActionLayoutData> actions = Lists.newArrayList();
 

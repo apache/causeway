@@ -191,15 +191,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     // //////////////////////////////////////
 
-    protected void onBeforeRenderWhenViewMode() {
+    protected void onInitializeWhenViewMode() {
         updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE);
     }
 
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+    protected void onInitializeWhenDisabled(final String disableReason) {
         updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE);
     }
 
-    protected void onBeforeRenderWhenEnabled() {
+    protected void onInitializeWhenEnabled() {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE);
     }
 

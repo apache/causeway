@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 
-public interface FormExecutorContext {
+public interface FormExecutorContext extends ParentEntityModelProvider {
 
     FormExecutor getFormExecutor();
 

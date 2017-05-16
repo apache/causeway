@@ -31,6 +31,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -43,6 +44,7 @@ import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
@@ -66,6 +68,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
@@ -187,6 +190,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
 
+            DebugBar debugBar = null;
+            if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+                debugBar = newDebugBar("debugBar");
+            }
+            if (debugBar != null) {
+                add(debugBar);
+            } else {
+                add(new EmptyPanel("debugBar").setVisible(false));
+            }
+
+
             MarkupContainer header = createPageHeader("header");
             themeDiv.add(header);
 
@@ -218,6 +232,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             throw new RestartResponseAtInterceptPageException(getSignInPage());
         }
     }
+
+    protected DebugBar newDebugBar(final String id) {
+        return new DebugBar(id);
+    }
+
 
     /**
      * Creates the component that should be used as a page header/navigation bar
@@ -284,9 +303,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
 
         String markupId = null;
-        EntityModel entityModel = getUiHintContainerIfAny();
-        if(entityModel != null) {
-            String path = entityModel.getHint(getPage(), PageAbstract.UIHINT_FOCUS);
+        UiHintContainer hintContainer = getUiHintContainerIfAny();
+        if(hintContainer != null) {
+            String path = hintContainer.getHint(getPage(), PageAbstract.UIHINT_FOCUS);
             if(path != null) {
                 Component childComponent = get(path);
                 if(childComponent != null) {
@@ -303,7 +322,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     }
 
-    protected EntityModel getUiHintContainerIfAny() {
+    protected UiHintContainer getUiHintContainerIfAny() {
         return null;
     }
 

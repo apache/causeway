@@ -25,16 +25,18 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+/**
+ * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
+ */
 public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
     private static final long serialVersionUID = 1L;
@@ -44,14 +46,20 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
     private static final String ID_PROPERTY_NAME = "propertyName";
 
     /**
-     * Gives a chance to hide the header part of this action panel, e.g. when shown in an action prompt
+     * Gives a chance to hide the header part of this panel.
      */
     private boolean showHeader = true;
 
-    public PropertyEditPanel(final String id, final ScalarModel scalarModel) {
-        super(id, new ScalarModel(scalarModel.getParentObjectAdapterMemento(), scalarModel.getPropertyMemento()));
-        getScalarModel().setFormExecutor(new PropertyEditFormExecutor(this, getModel()));
-        buildGui(getScalarModel());
+    public PropertyEditPanel(
+            final String id,
+            final ScalarModel scalarModel) {
+        super(id, new ScalarModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento()));
+
+        final ScalarModel model = getModel();
+        final PropertyEditFormExecutor formExecutor = new PropertyEditFormExecutor(/*this, */model);
+        model.setFormExecutor(formExecutor);
+
+        buildGui(scalarModel);
     }
 
     @Override
@@ -78,16 +86,12 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
         WebMarkupContainer header = addHeader();
 
-        ObjectAdapter targetAdapter = null;
         try {
-            targetAdapter = scalarModel.getParentObjectAdapterMemento()
-                    .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK, scalarModel.getPersistenceSession(),
-                            scalarModel.getSpecificationLoader());
 
             scalarModel.toEditMode();
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
+            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentEntityModel());
 
             final OneToOneAssociation property = getScalarModel().getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
             final String propertyName = property.getName();
@@ -102,13 +106,9 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
         } catch (final ConcurrencyException ex) {
 
-            // second attempt should succeed, because the Oid would have
+            // should succeed, because the Oid would have
             // been updated in the attempt
-            if (targetAdapter == null) {
-                targetAdapter = scalarModel.getParentObjectAdapterMemento()
-                        .getObjectAdapter(AdapterManager.ConcurrencyChecking.CHECK, getPersistenceSession(),
-                                getSpecificationLoader());
-            }
+            ObjectAdapter targetAdapter = scalarModel.getParentEntityModel().load();
 
             // page redirect/handling
             final EntityPage entityPage = new EntityPage(targetAdapter, null);

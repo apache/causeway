@@ -101,4 +101,12 @@ public interface WicketViewerSettings extends Serializable {
      */
     boolean isUseIndicatorForNoArgAction();
 
+    /**
+     * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
+     * is the same as the previous page.
+     *
+     * This behaviour is disable by default; the viewer will update the existing page if it can.
+     */
+    boolean isRedirectEvenIfSameObject();
+
 }

@@ -35,11 +35,12 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -48,8 +49,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -307,39 +308,48 @@ class CssMenuItem implements Serializable {
      * Creates a {@link Builder} for a submenu item invoking an action on the provided {@link ObjectAdapterMemento
      * target adapter}.
      */
-    public Builder newSubMenuItem(
-            final ObjectAdapterMemento targetAdapterMemento,
-            final ObjectAction objectAction,
-            final boolean separator,
-            final ActionLinkFactory actionLinkFactory) {
+    Builder newSubMenuItem(ServiceAndAction serviceAndAction) {
+
+        final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
+        final ObjectAction objectAction = serviceAndAction.objectAction;
+        final boolean separator = serviceAndAction.separator;
+        final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
+
+        final ObjectAdapter serviceAdapter = targetEntityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+        final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+        if (serviceSpec.isHidden()) {
+            return null;
+        }
 
         // check visibility
-        final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                getPersistenceSession(), getSpecificationLoader());
-        final Consent visibility = objectAction.isVisible(adapter, InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION);
+        final Consent visibility = objectAction.isVisible(
+                                        serviceAdapter,
+                                        InteractionInitiatedBy.USER,
+                                        ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
             return null;
         }
 
-        // build the link
-        final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(
-                PageAbstract.ID_MENU_LINK, targetAdapterMemento, objectAction
-        );
-        if (linkAndLabel == null) {
-            // can only get a null if invisible, so this should not happen given guard above
-            return null;
-        }
-        final AbstractLink link = linkAndLabel.getLink();
-        final String actionLabel = linkAndLabel.getLabel();
-
+        // check usability
         final Consent usability = objectAction.isUsable(
-                adapter, InteractionInitiatedBy.USER,
-                ActionModel.WHERE_FOR_ACTION_INVOCATION
+                                        serviceAdapter,
+                                        InteractionInitiatedBy.USER,
+                                        ActionModel.WHERE_FOR_ACTION_INVOCATION
         );
         final String reasonDisabledIfAny = usability.getReason();
 
         final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
         final String descriptionIfAny = describedAsFacet != null ? describedAsFacet.value() : null;
+
+        // build the link
+        final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK);
+        if (linkAndLabel == null) {
+            // can only get a null if invisible, so this should not happen given the visibility guard above
+            return null;
+        }
+
+        final AbstractLink link = linkAndLabel.getLink();
+        final String actionLabel = linkAndLabel.getLabel();
 
         Builder builder = newSubMenuItem(actionLabel)
                 .link(link)
@@ -349,7 +359,7 @@ class CssMenuItem implements Serializable {
                 .prototyping(objectAction.isPrototype())
                 .requiresSeparator(separator)
                 .withActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
-                .withCssClass(ObjectAction.Util.cssClassFor(objectAction, adapter))
+                .withCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
                 .withCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
                 .withCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
 

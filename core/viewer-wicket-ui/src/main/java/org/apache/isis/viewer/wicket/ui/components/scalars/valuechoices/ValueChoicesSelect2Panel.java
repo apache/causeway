@@ -118,13 +118,13 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     }
 
     @Override
-    protected void onBeforeRenderWhenViewMode() { 
+    protected void onInitializeWhenViewMode() {
         // View: Read only
         select2.setEnabled(false);
     }
 
     @Override
-    protected void onBeforeRenderWhenEnabled() { 
+    protected void onInitializeWhenEnabled() {
         // Edit: read/write
         select2.setEnabled(true);
 
@@ -132,8 +132,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     }
 
     @Override
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
-        super.onBeforeRenderWhenDisabled(disableReason);
+    protected void onInitializeWhenDisabled(final String disableReason) {
+        super.onInitializeWhenDisabled(disableReason);
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
     }

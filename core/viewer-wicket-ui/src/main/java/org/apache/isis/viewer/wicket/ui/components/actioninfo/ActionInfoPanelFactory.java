@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.actions;
+package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -28,14 +28,14 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
- * {@link ComponentFactory} for {@link ActionPanel}.
+ * {@link ComponentFactory} for {@link ActionInfoPanel}.
  */
-public class ActionPanelFactory extends ComponentFactoryAbstract {
+public class ActionInfoPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionPanelFactory() {
-        super(ComponentType.ACTION_PROMPT, ActionPanel.class);
+    public ActionInfoPanelFactory() {
+        super(ComponentType.ACTION_INFO, ActionInfoPanel.class);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ActionPanelFactory extends ComponentFactoryAbstract {
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final ActionModel actionModel = (ActionModel) model;
-        return new ActionPanel(id, actionModel);
+        return new ActionInfoPanel(id, actionModel);
     }
 
 }
