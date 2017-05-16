@@ -32,6 +32,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -141,6 +142,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
     private final PendingModel pendingModel;
+
 
     /**
      * {@link ConcurrencyException}, if any, that might have occurred previously
@@ -609,19 +611,15 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    public Object getLayoutMetadata() {
-        return null;
+    private CollectionLayoutData collectionLayoutData;
+
+    public CollectionLayoutData getCollectionLayoutData() {
+        return collectionLayoutData;
     }
 
-    /**
-     * Returns a new copy that SHARES the property scalar models (for edit form).
-     */
-    public EntityModel cloneWithLayoutMetadata(final Object layoutMetadata) {
-        final EntityModel entityModel = new EntityModelWithLayoutHints(this, layoutMetadata);
-        return entityModel;
+    public void setCollectionLayoutData(final CollectionLayoutData collectionLayoutData) {
+        this.collectionLayoutData = collectionLayoutData;
     }
-
-
 
 
 

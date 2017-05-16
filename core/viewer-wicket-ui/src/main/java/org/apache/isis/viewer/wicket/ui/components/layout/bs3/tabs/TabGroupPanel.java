@@ -49,12 +49,11 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
     private final ComponentHintKey selectedTabHintKey;
     private final EntityModel entityModel;
 
-    private static List<ITab> tabsFor(final EntityModel entityModel) {
+    private static List<ITab> tabsFor(final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
         final List<ITab> tabs = Lists.newArrayList();
 
-        final BS3TabGroup tabGroup = (BS3TabGroup) entityModel.getLayoutMetadata();
         final List<BS3Tab> tablist = FluentIterable
-                .from(tabGroup.getTabs())
+                .from(bs3TabGroup.getTabs())
                 .filter(BS3Tab.Predicates.notEmpty())
                 .toList();
 
@@ -84,8 +83,8 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
         return IsisContext.getSessionFactory().getServicesInjector().lookupService(TranslationService.class);
     }
 
-    public TabGroupPanel(String id, final EntityModel entityModel) {
-        super(id, tabsFor(entityModel));
+    public TabGroupPanel(String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
+        super(id, tabsFor(entityModel, bs3TabGroup));
         this.entityModel = entityModel;
 
         this.selectedTabHintKey = ComponentHintKey.create(this, SESSION_ATTR_SELECTED_TAB);

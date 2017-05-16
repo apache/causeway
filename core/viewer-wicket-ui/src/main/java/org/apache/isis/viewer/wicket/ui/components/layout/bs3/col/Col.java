@@ -73,11 +73,11 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
     public Col(
             final String id,
-            final EntityModel entityModel) {
+            final EntityModel entityModel, final BS3Col bs3Col) {
 
         super(id, entityModel);
 
-        bs3Col = (BS3Col) entityModel.getLayoutMetadata();
+        this.bs3Col = bs3Col;
 
         buildGui();
     }
@@ -210,9 +210,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                     tabGroupRv.add(rowsRv);
                     break;
                 default:
-                    final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3TabGroup);
-
-                    final WebMarkupContainer tabGroup = new TabGroupPanel(id, entityModelWithHints);
+                    final WebMarkupContainer tabGroup = new TabGroupPanel(id, getModel(), bs3TabGroup);
 
                     tabGroupRv.add(tabGroup);
                     break;
@@ -241,9 +239,8 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             for (FieldSet fieldSet : fieldSetsWithProperties) {
 
                 final String id = fieldSetRv.newChildId();
-                final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(fieldSet);
 
-                final PropertyGroup propertyGroup = new PropertyGroup(id, entityModelWithHints);
+                final PropertyGroup propertyGroup = new PropertyGroup(id, getModel(), fieldSet);
                 fieldSetRv.add(propertyGroup);
             }
             div.add(fieldSetRv);
@@ -269,13 +266,16 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             for (CollectionLayoutData collection : collections) {
 
                 final String id = collectionRv.newChildId();
-                final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(collection);
+
+                // we successively trample over the layout data; but that's ok, this is synchronous code anyway...
+                final EntityModel entityModel = getModel();
+                entityModel.setCollectionLayoutData(collection);
 
                 // the entityModel's getLayoutData() provides the hint as to which collection of the entity to render.
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(
-                                ComponentType.ENTITY_COLLECTION, entityModelWithHints);
-                final Component collectionPanel = componentFactory.createComponent(id, entityModelWithHints);
+                                ComponentType.ENTITY_COLLECTION, entityModel);
+                final Component collectionPanel = componentFactory.createComponent(id, entityModel);
                 collectionRv.add(collectionPanel);
             }
             div.add(collectionRv);
@@ -299,12 +299,8 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                 new RepeatingViewWithDynamicallyVisibleContent(owningId);
 
         for(final BS3Row bs3Row: rows) {
-
             final String id = rowRv.newChildId();
-            final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3Row);
-
-            final Row row = new Row(id, entityModelWithHints);
-
+            final Row row = new Row(id, getModel(), bs3Row);
             rowRv.add(row);
         }
         return rowRv;

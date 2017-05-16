@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -13,11 +14,13 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.guice.GuiceBeanProvider;
+import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,6 +33,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
@@ -130,8 +134,9 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
             onExecuteAndProcessResults(targetIfAny);
 
-            final ObjectAdapter targetAdapter = targetEntityModel.load();
-            if (shouldForward(page, resultAdapter, targetAdapter) || targetIfAny == null) {
+            final ObjectAdapterMemento resultOam = ObjectAdapterMemento.createOrNull(resultAdapter);
+            final ObjectAdapterMemento targetOam = targetEntityModel.getObjectAdapterMemento();
+            if (shouldForward(page, resultOam, targetOam) || targetIfAny == null) {
 
                 forwardOntoResult(resultAdapter, targetIfAny);
 
@@ -171,9 +176,13 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
     private boolean shouldForward(
             final Page page,
-            final ObjectAdapter resultAdapter,
-            final ObjectAdapter targetAdapter) {
-        if (shouldForward(resultAdapter, targetAdapter)) {
+            final ObjectAdapterMemento resultOam,
+            final ObjectAdapterMemento targetOam) {
+
+        final Bookmark resultBookmark = resultOam.asHintingBookmark();
+        final Bookmark targetBookmark = targetOam.asHintingBookmark();
+
+        if (shouldForward(resultBookmark, targetBookmark)) {
             return true;
         }
 
@@ -198,9 +207,25 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         return hasBlobsOrClobs != null;
     }
 
-    private boolean shouldForward(final ObjectAdapter resultAdapter, final ObjectAdapter targetAdapter) {
+    private boolean shouldForward(final Bookmark resultBookmark, final Bookmark targetBookmark) {
         final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
-        return targetAdapter != resultAdapter || redirectEvenIfSameObject;
+
+        if(resultBookmark == null && targetBookmark == null) {
+            return redirectEvenIfSameObject;
+        }
+        if (resultBookmark == null || targetBookmark == null) {
+            return true;
+        }
+        final String resultBookmarkStr = asStr(resultBookmark);
+        final String targetBookmarkStr = asStr(targetBookmark);
+
+        return !Objects.equals(resultBookmarkStr, targetBookmarkStr)  || redirectEvenIfSameObject;
+    }
+
+    private static String asStr(final Bookmark bookmark) {
+        return bookmark instanceof HintStore.BookmarkWithHintId
+                ? ((HintStore.BookmarkWithHintId) bookmark).toStringUsingHintId()
+                : bookmark.toString();
     }
 
     private void addComponentsToRedraw(final AjaxRequestTarget target) {
@@ -266,7 +291,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             }
         }
 
-        //debug(componentsToRedraw, componentsNotToRedraw);
+        debug(componentsToRedraw, componentsNotToRedraw);
 
         for (Component component : componentsToRedraw) {
             target.add(component);

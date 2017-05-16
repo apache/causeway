@@ -52,9 +52,9 @@ public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstr
 
         final Grid grid = facet.getGrid();
         if (grid != null) {
-            final EntityModel entityModelWithLayoutMetadata = entityModel.cloneWithLayoutMetadata(grid);
             if(grid instanceof BS3Grid) {
-                return new BS3GridPanel(id, entityModelWithLayoutMetadata);
+                final BS3Grid bs3Grid = (BS3Grid) grid;
+                return new BS3GridPanel(id, entityModel, bs3Grid);
             }
         }
         return new EntityLinksSelectorPanel(id, entityModel, this);

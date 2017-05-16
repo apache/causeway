@@ -24,8 +24,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix.ClearFix;
@@ -45,11 +43,12 @@ public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
     public Row(
             final String id,
-            final EntityModel entityModel) {
+            final EntityModel entityModel,
+            final BS3Row bs3Row) {
 
         super(id, entityModel);
 
-        bs3Row = (BS3Row) entityModel.getLayoutMetadata();
+        this.bs3Row = bs3Row;
 
         buildGui();
     }
@@ -62,16 +61,19 @@ public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         for(final BS3RowContent bs3RowContent: bs3Row.getCols()) {
 
             final String id = rv.newChildId();
-            final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3RowContent);
 
             final WebMarkupContainer rowContent;
             if(bs3RowContent instanceof BS3Col) {
-                Col col = new Col(id, entityModelWithHints);
+
+                final BS3Col bs3Col = (BS3Col) bs3RowContent;
+                final Col col = new Col(id, getModel(), bs3Col);
+
                 visible = visible || col.isVisible();
                 rowContent = col;
 
             } else if (bs3RowContent instanceof BS3ClearFix) {
-                rowContent = new ClearFix(id, entityModelWithHints);
+                final BS3ClearFix bs3ClearFix = (BS3ClearFix) bs3RowContent;
+                rowContent = new ClearFix(id, getModel(), bs3ClearFix);
             } else {
                 throw new IllegalStateException("Unrecognized implementation of BS3RowContent");
             }

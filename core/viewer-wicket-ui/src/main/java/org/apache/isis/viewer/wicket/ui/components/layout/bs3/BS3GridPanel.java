@@ -36,9 +36,9 @@ public class BS3GridPanel extends PanelAbstract<EntityModel> {
 
     private final BS3Grid bs3Page;
 
-    public BS3GridPanel(final String id, final EntityModel entityModel) {
+    public BS3GridPanel(final String id, final EntityModel entityModel, final BS3Grid bs3Grid) {
         super(id, entityModel);
-        this.bs3Page = (BS3Grid) entityModel.getLayoutMetadata();
+        this.bs3Page = bs3Grid;
         buildGui();
     }
 
@@ -49,12 +49,8 @@ public class BS3GridPanel extends PanelAbstract<EntityModel> {
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 
         for(final BS3Row bs3Row: this.bs3Page.getRows()) {
-
             final String id = rv.newChildId();
-            final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3Row);
-
-            final WebMarkupContainer row = new Row(id, entityModelWithHints);
-
+            final WebMarkupContainer row = new Row(id, getModel(), bs3Row);
             rv.add(row);
         }
         add(rv);

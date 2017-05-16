@@ -36,11 +36,11 @@ public class ClearFix extends PanelAbstract<EntityModel> {
 
     public ClearFix(
             final String id,
-            final EntityModel entityModel) {
+            final EntityModel entityModel,
+            final BS3ClearFix bs3ClearFix) {
 
         super(id, entityModel);
-
-        bs3ClearFix = (BS3ClearFix) entityModel.getLayoutMetadata();
+        this.bs3ClearFix = bs3ClearFix;
 
         buildGui();
     }

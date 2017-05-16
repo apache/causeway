@@ -70,9 +70,9 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     private final FieldSet fieldSet;
 
-    public PropertyGroup(final String id, final EntityModel model) {
+    public PropertyGroup(final String id, final EntityModel model, final FieldSet fieldSet) {
         super(id, model);
-        fieldSet = (FieldSet) model.getLayoutMetadata();
+        this.fieldSet = fieldSet;
 
         buildGui();
     }

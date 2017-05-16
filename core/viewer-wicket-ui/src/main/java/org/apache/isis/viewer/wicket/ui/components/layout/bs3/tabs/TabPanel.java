@@ -81,12 +81,8 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator, H
         final RepeatingViewWithDynamicallyVisibleContent rv = new RepeatingViewWithDynamicallyVisibleContent(ID_ROWS);
 
         for(final BS3Row bs3Row: bs3Tab.getRows()) {
-
             final String newChildId = rv.newChildId();
-            final EntityModel entityModelWithHints = model.cloneWithLayoutMetadata(bs3Row);
-
-            final Row row = new Row(newChildId, entityModelWithHints);
-
+            final Row row = new Row(newChildId, model, bs3Row);
             rv.add(row);
         }
         return rv;
