@@ -927,4 +927,21 @@ tr.headers th form input {
 
 #wicketDebugBar {
     padding-top: 60px;
+    padding-bottom: 30px;
+}
+#wicketDebugBar a#wicketDebugBarCollapse img {
+    margin-top: 2px;
+    margin-right: 20px;
+}
+#wicketDebugBar span#wicketDebugBarContents > span {
+    vertical-align: sub;
+}
+#wicketDebugBar span.wicketversioncontrib {
+    display: none;
+}
+#wicketDebugBar span#wicketDebugBarContents a img {
+    margin-top: -5px;
+}
+#wicketDebugBar span#wicketDebugBarContents a#wicketDebugBarRemove img {
+    margin-top: 2px;
 }
