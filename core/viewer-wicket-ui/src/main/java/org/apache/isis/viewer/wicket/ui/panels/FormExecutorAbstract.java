@@ -127,15 +127,19 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             getPersistenceSession().getPersistenceManager().flush();
 
             // update target, since version updated (concurrency checks)
+            // (but handle fact that the target object might, in fact, have just been deleted)
             final EntityModel targetEntityModel = model.getParentEntityModel();
 
             targetEntityModel.resetVersion();
-            targetEntityModel.resetPropertyModels();
+            final ObjectAdapterMemento targetOam = targetEntityModel.getObjectAdapterMemento();
+            final ObjectAdapter objectAdapter = targetEntityModel.load();
+            if(!objectAdapter.isDestroyed()) {
+                targetEntityModel.resetPropertyModels();
+            }
 
             onExecuteAndProcessResults(targetIfAny);
 
             final ObjectAdapterMemento resultOam = ObjectAdapterMemento.createOrNull(resultAdapter);
-            final ObjectAdapterMemento targetOam = targetEntityModel.getObjectAdapterMemento();
             if (shouldForward(page, resultOam, targetOam) || targetIfAny == null) {
 
                 forwardOntoResult(resultAdapter, targetIfAny);
@@ -147,7 +151,9 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
                 final ObjectAdapter targetAdapter = targetEntityModel.getObject();
                 if(targetAdapter != resultAdapter) {
                     targetEntityModel.setObject(resultAdapter);
-                    targetEntityModel.resetPropertyModels();
+                    if(!resultAdapter.isDestroyed()) {
+                        targetEntityModel.resetPropertyModels();
+                    }
                 }
 
                 final AjaxRequestTarget target = targetIfAny; // only in this branch if there *is* a target to use
