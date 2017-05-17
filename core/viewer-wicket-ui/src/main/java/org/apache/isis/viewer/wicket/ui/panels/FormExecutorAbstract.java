@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
-import javax.jdo.JDOException;
-import javax.jdo.Transaction;
-
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
@@ -50,11 +47,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
         implements FormExecutor {
@@ -105,7 +100,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
                 command = commandContext.getCommand();
                 command.setExecutor(Command.Executor.USER);
             }
-
 
 
             //
@@ -159,6 +153,9 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
                 // also in this branch we also know that there *is* an ajax target to use
                 addComponentsToRedraw(targetIfAny);
+
+                final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(getAuthenticationSession().getMessageBroker());
+                targetIfAny.appendJavaScript(jGrowlCalls);
             }
 
             return true;
@@ -186,121 +183,31 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
             // see if is an application-defined exception. If so, convert to an application error,
             final RecoverableException appEx = RecoverableException.Util.getRecoverableExceptionIfAny(ex);
+            String message = null;
             if (appEx != null) {
-                String message = appEx.getMessage();
-
-                // ... display as growl pop-up
-                final MessageBroker messageBroker = getCurrentSession().getAuthenticationSession().getMessageBroker();
-                messageBroker.setApplicationError(message);
-
-
-                Page responsePage;
-//                try {
-//                    // back out the change
-//                    getCurrentSession().getPersistenceSession().getPersistenceManager().currentTransaction().rollback();
-//                    getCurrentSession().getPersistenceSession().getPersistenceManager().currentTransaction().begin();
-//
-//                    // reset
-//                    targetEntityModel.resetVersion();
-//                    targetEntityModel.resetPropertyModels();
-//                    targetAdapter = targetEntityModel.load();
-//                    responsePage = new EntityPage(targetAdapter);
-//
-//                    if (feedbackFormIfAny != null && targetIfAny != null) {
-//                        // ... also show message on feedback form (since we can)
-//                        feedbackFormIfAny.error(message);
-//                        targetIfAny.add(feedbackFormIfAny);
-//                    }
-//
-//                } catch(JDOUserException ex2) {
-//
-//                }
-                // best we can do is just to redirect to void
-                responsePage = new VoidReturnPage(new VoidModel());
-
-
-//                // need to disable concurrency checking, because an application error doesn't mean a DN error,
-//                // and the Oid will have been bumped.
-//                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                    }
-//                });
-//                    final Page responsePage = new VoidReturnPage(new VoidModel());
-
-                final RequestCycle requestCycle = RequestCycle.get();
-                requestCycle.setResponsePage(responsePage);
-                throw ex;
+                message = appEx.getMessage();
             }
 
             // otherwise, attempt to recognize this exception using the ExceptionRecognizers
-            String message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
+            if(message == null) {
+                message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
+            }
 
-            // if we did recognize the message, then display to user
+            // if we did recognize the message, then display to user as a growl pop-up
             if (message != null) {
-
-                onExecuteAndProcessResults(targetIfAny);
-
-                targetEntityModel.resetVersion();
-                targetAdapter = targetEntityModel.load();
 
                 // ... display as growl pop-up
                 final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
                 messageBroker.setApplicationError(message);
-
-                // attempt to back out the change
-                try {
-                    final Transaction dnXactn =
-                            getCurrentSession().getPersistenceSession().getPersistenceManager().currentTransaction();
-                    dnXactn.rollback();
-                    dnXactn.begin();
-
-                    // reset
-                    targetEntityModel.resetVersion();
-                    targetEntityModel.resetPropertyModels();
-                    targetAdapter = targetEntityModel.load();
-
-                } catch(JDOException ex2) {
-                    ex2.printStackTrace();
-                    // ignore
-                }
-
-
-                if (targetAdapter.isDestroyed() || targetIfAny == null) {
-                    final Page responsePage;
-                    responsePage = new VoidReturnPage(new VoidModel());
-                    final RequestCycle requestCycle = RequestCycle.get();
-                    requestCycle.setResponsePage(responsePage);
-                } else {
-
-                    // ensure any jGrowl errors are shown
-                    String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(messageBroker);
-                    targetIfAny.appendJavaScript(errorMessagesIfAny);
-
-                    if (feedbackFormIfAny != null) {
-                        // ... also show message on feedback form (since we can)
-                        feedbackFormIfAny.error(message);
-                        targetIfAny.add(feedbackFormIfAny);
-                    }
-
-//                    final Page responsePage;
-//                    responsePage = new EntityPage(targetAdapter);
-//                    final RequestCycle requestCycle = RequestCycle.get();
-//                    requestCycle.setResponsePage(responsePage);
-
-                    addComponentsToRedraw(targetIfAny);
-                }
-
-
-                return false;
-                //throw ex;
             }
 
-            // message not recognized, so capture in the Command, and propagate
+            // irrespective, capture error in the Command, and propagate
             if (command != null) {
                 command.setException(Throwables.getStackTraceAsString(ex));
             }
 
+            // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)
+            // which will redirect to the error page.
             throw ex;
         }
     }

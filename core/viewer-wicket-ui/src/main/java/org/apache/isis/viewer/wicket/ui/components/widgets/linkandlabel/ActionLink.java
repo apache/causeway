@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -27,9 +28,12 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
@@ -75,8 +79,19 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
 
     @Override
     public boolean isEnabled() {
-        final String reasonDisabledIfAny = getReasonDisabledIfAny();
-        return reasonDisabledIfAny == null;
+        try {
+            final String reasonDisabledIfAny = getReasonDisabledIfAny();
+            return reasonDisabledIfAny == null;
+        } catch (ConcurrencyException ex) {
+            //
+            // this has to be here because it's the first method called by an action link listener
+            // on a potentially stale model.
+            //
+            // there is similar code for editing properties (ScalarPanelAbstract2)
+            //
+            IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
+            throw new RestartResponseException(new EntityPage(getActionModel().getTargetAdapter()));
+        }
     }
 
     @Override

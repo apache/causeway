@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -42,8 +43,10 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -60,6 +63,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOr
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices.ValueChoicesSelect2Panel;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -163,7 +167,20 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     }
 
     private void buildGuiAndCallHooks() {
-        buildGui();
+
+        try {
+            buildGui();
+        } catch (ConcurrencyException ex) {
+            //
+            // this has to be here because it's the first method called when editing a property
+            // on a potentially stale model.
+            //
+            // there is similar code for invoking actions (ActionLink)
+            //
+            IsisContext.getSessionFactory().getCurrentSession().getAuthenticationSession().getMessageBroker().addMessage(ex.getMessage());
+            final ObjectAdapter parentAdapter = getModel().getParentEntityModel().load();
+            throw new RestartResponseException(new EntityPage(parentAdapter));
+        }
 
         final ScalarModel scalarModel = getModel();
         final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
