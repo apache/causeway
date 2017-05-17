@@ -1,4 +1,4 @@
-package org.apache.isis.core.metamodel.facets.properties.editstyle;
+package org.apache.isis.core.metamodel.facets.properties.promptstyle;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -24,17 +24,17 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_none() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
+            oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
             will(returnValue(null));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
-        Assert.assertThat(editStyle, is(PromptStyle.DIALOG));
+        Assert.assertThat(editStyle, is(PromptStyle.INLINE));
     }
 
     @Test
     public void when_inline() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
+            oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
             will(returnValue("inline"));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -44,7 +44,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_inline_mixed_case_and_superfluous_characters() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
+            oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
             will(returnValue(" inLIne "));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -54,7 +54,7 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_dialog() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
+            oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
             will(returnValue("dialog"));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
@@ -64,11 +64,11 @@ public class PromptStyleConfiguration_Test {
     @Test
     public void when_invalid() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(mockIsisConfiguration).getString("isis.objects.promptStyle");
+            oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
             will(returnValue("garbage"));
         }});
         PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
-        Assert.assertThat(editStyle, is(PromptStyle.DIALOG));
+        Assert.assertThat(editStyle, is(PromptStyle.INLINE));
     }
 
 }

@@ -1,4 +1,4 @@
-package org.apache.isis.core.metamodel.facets.properties.editstyle;
+package org.apache.isis.core.metamodel.facets.properties.promptstyle;
 
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -21,7 +21,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
+public class PromptStyleFacetFromPropertyAnnotation_Test {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -36,7 +36,7 @@ public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
     PropertyLayout mockPropertyLayout;
 
 
-    public static class Create_Test extends PropertyEditStyleFacetFromPropertyAnnotation_Test {
+    public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
 
         @Test
         public void when_annotated_with_dialog() throws Exception {
@@ -80,7 +80,7 @@ public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
                 allowing(mockPropertyLayout).promptStyle();
                 will(returnValue(PromptStyle.AS_CONFIGURED));
 
-                oneOf(mockConfiguration).getString("isis.objects.promptStyle");
+                oneOf(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
                 will(returnValue(PromptStyle.INLINE.name()));
 
                 allowing(mockFacetHolder).containsDoOpFacet(PromptStyleFacet.class);
@@ -129,7 +129,7 @@ public class PropertyEditStyleFacetFromPropertyAnnotation_Test {
             PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
                     .create(mockPropertyLayout, mockConfiguration, mockFacetHolder);
 
-            Assert.assertThat(facet.value(), is(PromptStyle.DIALOG));
+            Assert.assertThat(facet.value(), is(PromptStyle.INLINE));
             Assert.assertThat(facet, is((Matcher) IsisMatchers.anInstanceOf(PromptStyleFacetFallBack.class)));
         }
 
