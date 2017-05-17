@@ -267,7 +267,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
            scalarModel.getMode() == EntityModel.Mode.VIEW     &&
-           scalarModel.getPromptStyle() != PromptStyle.INLINE) {
+                (scalarModel.getPromptStyle() != PromptStyle.INLINE || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
 
@@ -493,18 +493,25 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     }
 
     private WebMarkupContainer createInlinePromptLink() {
-        final IModel<?> inlineLinkModel = obtainPromptInlineLinkModel();
-        if(inlineLinkModel == null) {
-            throw new IllegalStateException(this.getClass().getName() + ": obtainPromptInlineLinkModel() returning null is not compatible with supportsInlinePrompt() returning true ");
+        final IModel<String> inlinePromptModel = obtainInlinePromptModel();
+        if(inlinePromptModel == null) {
+            throw new IllegalStateException(this.getClass().getName() + ": obtainInlinePromptModel() returning null is not compatible with supportsInlinePrompt() returning true ");
         }
 
         final WebMarkupContainer inlinePromptLink = new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
         inlinePromptLink.setOutputMarkupId(true);
 
-        final Label editInlineLinkLabel = new Label(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL, inlineLinkModel);
+        final Component editInlineLinkLabel = createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL,
+                inlinePromptModel
+        );
         inlinePromptLink.add(editInlineLinkLabel);
 
         return inlinePromptLink;
+    }
+
+    protected Component createInlinePromptComponent(
+            final String id, final IModel<String> inlinePromptModel) {
+        return new Label(id, inlinePromptModel);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -512,7 +519,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     /**
      * Components returning true for {@link #getInlinePromptConfig()} are required to override and return a non-null value.
      */
-    protected IModel<String> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainInlinePromptModel() {
         return null;
     }
 

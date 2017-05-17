@@ -204,7 +204,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     }
 
     @Override
-    protected IModel<String> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainInlinePromptModel() {
         final IModel<ObjectAdapterMemento> model = select2.getModel();
         return new IModel<String>() {
             @Override

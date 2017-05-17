@@ -42,9 +42,9 @@
 
                                 <a href="#"
                                    name="scalarValueInlinePromptLink"
-                                   class="form-control input-sm scalarValueInlinePromptLink"
+                                   class="scalarValueInlinePromptLink"
                                    wicket:id="scalarValueInlinePromptLink">
-                                    <span wicket:id="scalarValueInlinePromptLabel"></span>
+                                    <wicket:container wicket:id="scalarValueInlinePromptLabel"/>
                                 </a>
 
                                 <wicket:container wicket:id="scalarValueContainer"/>
@@ -80,6 +80,15 @@
                 class="form-control input-sm scalarValue"
                 wicket:id="scalarValue" />
     </wicket:fragment>
+
+    <wicket:fragment wicket:id="textInlinePrompt">
+        <span class="form-control input-sm" wicket:id="scalarValue"></span>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="textareaInlinePrompt">
+        <textarea rows="10" maxlength="4000" class="form-control input-sm" wicket:id="scalarValue"></textarea>
+    </wicket:fragment>
+
 
     <wicket:fragment wicket:id="textarea">
                 <textarea

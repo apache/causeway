@@ -70,11 +70,11 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         return new TextFieldWithDateTimePicker<>(id, newTextFieldValueModel(), cls, converter);
     }
 
-    @Override
-    protected Fragment createTextFieldFragment(String id) {
-        return new Fragment(id, "date", ScalarPanelTextFieldDatePickerAbstract.this);
-    }
 
+    @Override
+    protected String createTextFieldFragmentId() {
+        return "date";
+    }
 
     protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
@@ -98,7 +98,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         return label;
     }
 
-    protected IModel<String> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainInlinePromptModel() {
         return new Model<String>() {
             @Override public String getObject() {
                 ObjectAdapter object = scalarModel.getObject();

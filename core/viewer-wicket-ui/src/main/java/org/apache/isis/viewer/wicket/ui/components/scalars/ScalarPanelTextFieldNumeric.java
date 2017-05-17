@@ -68,7 +68,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         return label;
     }
 
-    protected IModel<String> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainInlinePromptModel() {
         ObjectAdapter object = scalarModel.getObject();
         final T value = object != null ? (T) object.getObject() : null;
         final String str =

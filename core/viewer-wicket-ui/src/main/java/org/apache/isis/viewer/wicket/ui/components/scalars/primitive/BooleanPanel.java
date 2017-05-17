@@ -109,7 +109,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected IModel<String> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainInlinePromptModel() {
         return new Model<String>() {
 
             private static final long serialVersionUID = 1L;

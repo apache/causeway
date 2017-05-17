@@ -185,8 +185,25 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return formGroup;
     }
 
-    protected Fragment createTextFieldFragment(String id) {
-        return new Fragment(id, "text", ScalarPanelTextFieldAbstract.this);
+    private Fragment createTextFieldFragment(String id) {
+        return new Fragment(id, createTextFieldFragmentId(), this);
+    }
+
+    protected String createTextFieldFragmentId() {
+        return "text";
+    }
+
+    /**
+     * Overrides default to use a fragment, allowing the inner rendering to switch between a simple span
+     * or a textarea
+     */
+    protected Component createInlinePromptComponent(
+            final String id,
+            final IModel<String> inlinePromptModel) {
+        final Fragment fragment = new Fragment(id, "textInlinePrompt", this);
+        final Label label = new Label("scalarValue", inlinePromptModel);
+        fragment.add(label);
+        return fragment;
     }
 
     protected void addStandardSemantics() {
@@ -195,7 +212,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         addValidatorForIsisValidation();
     }
-
 
     private void addValidatorForIsisValidation() {
         final ScalarModel scalarModel = getModel();
@@ -284,7 +300,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected IModel<String> obtainPromptInlineLinkModel() {
+    protected IModel<String> obtainInlinePromptModel() {
         IModel<T> model = textField.getModel();
         // must be "live", for ajax updates.
         return (IModel<String>) model;
