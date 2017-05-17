@@ -135,6 +135,14 @@ for further details).
 | Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
 
 |`isis.viewer.wicket.` +
+`promptStyle`
+|`dialog`,`inline` +
+(`inline`)
+|(`1.15.0-SNAPSHOT`) whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
+Can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
+
+
+|`isis.viewer.wicket.` +
 `redirectEvenIfSameObject`
 | `true`,`false` +
 (`_false_`)

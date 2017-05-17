@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.model.isis;
 
 import java.io.Serializable;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+
 public interface WicketViewerSettings extends Serializable {
 
     /**
@@ -102,10 +104,21 @@ public interface WicketViewerSettings extends Serializable {
     boolean isUseIndicatorForNoArgAction();
 
     /**
+     * Whether to use a modal dialog for property edits and for actions associated with properties.
+     * This can be overridden on a case-by-case basis using <code>@PropertyLayout#promptStyle</code> and
+     * <code>@ActionLayout#promptStyle</code>.
+     *
+     * This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother
+     * user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
+     */
+    PromptStyle getPromptStyle();
+
+    /**
      * Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit)
      * is the same as the previous page.
      *
-     * This behaviour is disable by default; the viewer will update the existing page if it can.
+     * This behaviour is disabled by default; the viewer will update the existing page if it can, making for a
+     * smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
      */
     boolean isRedirectEvenIfSameObject();
 

@@ -21,7 +21,9 @@ package org.apache.isis.viewer.wicket.viewer.settings;
 
 import com.google.inject.Singleton;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -94,6 +96,11 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     @Override
     public boolean isUseIndicatorForNoArgAction() {
         return getConfiguration().getBoolean("isis.viewer.wicket.useIndicatorForNoArgAction", true);
+    }
+
+    @Override
+    public PromptStyle getPromptStyle() {
+        return PromptStyleConfiguration.parse(getConfiguration());
     }
 
     @Override

@@ -24,14 +24,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class PromptStyleFacetAsConfigured extends PromptStyleFacetAbstract {
 
-    private final PromptStyle editStyle;
+    private final PromptStyle promptStyle;
 
-    public PromptStyleFacetAsConfigured(final PromptStyle editStyle, final FacetHolder holder) {
+    public PromptStyleFacetAsConfigured(final PromptStyle promptStyle, final FacetHolder holder) {
         super(holder);
-        this.editStyle = editStyle;
+        this.promptStyle = promptStyle;
     }
 
     @Override public PromptStyle value() {
-        return editStyle;
+        return promptStyle;
     }
 }

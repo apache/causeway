@@ -21,17 +21,17 @@ package org.apache.isis.applib.annotation;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * How prompting for new values (property edit) should be performed
+ * How prompting for new values of a property/arguments for an action should be performed
  */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
 )
 public enum PromptStyle {
     /**
-     * Edit the property according to the default edit style policy configured in <tt>isis.properties</tt>.
+     * Prompt using the style configured by <tt>isis.viewer.wicket.promptStyle</tt>.
      *
      * <p>
-     *      If no editing style is configured, then {@link #DIALOG} is assumed.
+     *      If no style is configured, then {@link #INLINE} is assumed.
      * </p>
      */
     AS_CONFIGURED,
@@ -40,7 +40,7 @@ public enum PromptStyle {
      */
     DIALOG,
     /**
-     * Show the form inline, replacing the rendering of the property.
+     * Show the form inline, temporarily replacing the rendering of the property.
      */
     INLINE
 }

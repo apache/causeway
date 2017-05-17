@@ -582,14 +582,6 @@ If enabled, this configuration property will ensure that domain services only de
 |Whether objects' properties and collections can be edited directly (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
 
 
-|`isis.objects.` +
-`promptStyle`
-|`dialog`,`inline` +
-(`dialog`)
-|(`1.15.0-SNAPSHOT`) whether the prompt for editing a domain object property is shown in a dialog box or inline within the form.
-Can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]).
-
-
 |`isis.persistor.` +
 `disable` +
 `ConcurrencyChecking`
@@ -670,12 +662,11 @@ See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Lay
 
 
 
-
-
 |`isis.viewers.` +
 `paged.parented`
 |positive integer (12)
 |Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
+
 
 |`isis.viewers.` +
 `paged.standalone`

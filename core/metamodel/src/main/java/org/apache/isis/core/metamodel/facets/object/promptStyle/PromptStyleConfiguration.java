@@ -26,7 +26,7 @@ public class PromptStyleConfiguration {
 
     private PromptStyleConfiguration() {}
 
-    public static final String PROMPT_STYLE_KEY = "isis.objects.promptStyle";
+    public static final String PROMPT_STYLE_KEY = "isis.viewer.wicket.promptStyle";
 
     public static PromptStyle parse(final IsisConfiguration configuration) {
         final String configuredValue = configuration.getString(PROMPT_STYLE_KEY);
@@ -34,9 +34,9 @@ public class PromptStyleConfiguration {
     }
 
     private static PromptStyle parse(final String value) {
-        return value != null && value.trim().equalsIgnoreCase(PromptStyle.INLINE.name())
-                ? PromptStyle.INLINE
-                : PromptStyle.DIALOG;
+        return value != null && value.trim().equalsIgnoreCase(PromptStyle.DIALOG.name())
+                ? PromptStyle.DIALOG
+                : PromptStyle.INLINE;
     }
 
 }

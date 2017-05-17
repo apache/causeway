@@ -7,8 +7,8 @@
 
 The `promptStyle()` attribute is used to specify whether, when invoking an action associated with a domain object property, the parameters for the action are prompted by way of a dialog box, or is prompted using an inline panel (replacing the property on the page).
 
-If the attribute is not set, then thevalue of the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.objects.promptStyle` is used.
-If this is itself not set, then a dialog box is used.
+If the attribute is not set, then the value of the xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[configuration property] `isis.viewer.wicket.promptStyle` is used.
+If this is itself not set, then an inline prompt is used.
 
 For example:
 
