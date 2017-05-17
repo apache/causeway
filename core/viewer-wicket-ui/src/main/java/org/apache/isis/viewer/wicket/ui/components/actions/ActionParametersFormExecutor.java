@@ -4,7 +4,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
@@ -43,18 +42,11 @@ public class ActionParametersFormExecutor extends FormExecutorAbstract<ActionMod
     }
 
     protected ObjectAdapter obtainResultAdapter() {
-        return model.executeHandlingApplicationExceptions();
+        return model.execute();
     }
 
-    protected void forwardOnConcurrencyException(
-            final ObjectAdapter targetAdapter,
-            final ConcurrencyException ex) {
-        ActionResultResponse resultResponse = ActionResultResponseType.OBJECT
-                .interpretResult(model, targetAdapter, ex);
-        resultResponse.getHandlingStrategy().handleResults(resultResponse, getIsisSessionFactory());
-    }
 
-    protected void forwardOntoResult(
+    protected void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget targetIfany) {
         ActionResultResponse resultResponse = ActionResultResponseType

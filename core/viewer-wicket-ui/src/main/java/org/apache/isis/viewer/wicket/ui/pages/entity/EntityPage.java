@@ -29,7 +29,6 @@ import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -131,18 +130,6 @@ public class EntityPage extends PageAbstract {
     @Override
     public UiHintContainer getUiHintContainerIfAny() {
         return model;
-    }
-
-    @Override
-    public void onBeforeRender() {
-        AdapterManager.ConcurrencyChecking.disable();
-        super.onBeforeRender();
-    }
-
-    @Override
-    public void onAfterRender() {
-        super.onAfterRender();
-        AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
     }
 
     private void buildPage() {

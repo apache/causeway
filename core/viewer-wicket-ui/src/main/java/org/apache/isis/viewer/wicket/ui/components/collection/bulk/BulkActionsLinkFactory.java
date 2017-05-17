@@ -178,7 +178,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                 } catch(final RuntimeException ex) {
 
-                    final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
+                    final RecoverableException appEx = RecoverableException.Util.getRecoverableExceptionIfAny(ex);
                     if (appEx != null) {
 
                         recover();

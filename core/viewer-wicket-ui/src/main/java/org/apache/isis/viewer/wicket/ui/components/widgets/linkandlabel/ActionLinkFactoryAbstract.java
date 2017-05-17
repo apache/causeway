@@ -22,7 +22,6 @@ import java.util.concurrent.Callable;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
@@ -49,7 +48,6 @@ import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
@@ -115,7 +113,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 @Override
                 protected IRequestHandler getRequestHandler() {
-                    ObjectAdapter resultAdapter = actionModel.executeHandlingApplicationExceptions();
+                    ObjectAdapter resultAdapter = actionModel.execute();
                     final Object value = resultAdapter.getObject();
                     return ActionModel.redirectHandler(value);
                 }
@@ -134,7 +132,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 @Override
                 protected IRequestHandler getRequestHandler() {
-                    final ObjectAdapter resultAdapter = actionModel.executeHandlingApplicationExceptions();
+                    final ObjectAdapter resultAdapter = actionModel.execute();
                     final Object value = resultAdapter.getObject();
                     return ActionModel.downloadHandler(value);
                 }

@@ -2,6 +2,10 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+
+import javax.jdo.JDOException;
+import javax.jdo.Transaction;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -11,11 +15,13 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -25,13 +31,16 @@ import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -41,8 +50,11 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
+import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
         implements FormExecutor {
@@ -68,12 +80,88 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             final AjaxRequestTarget targetIfAny,
             final Form<?> feedbackFormIfAny) {
 
+        Command command = null;
         ObjectAdapter targetAdapter = null;
+
+        final EntityModel targetEntityModel = model.getParentEntityModel();
+
         try {
+
+            // may immediately throw a concurrency exception if
+            // the Isis Oid held in the underlying EntityModel is stale w.r.t. the the DB.
             targetAdapter = obtainTargetAdapter();
 
             // no concurrency exception, so continue...
-            return doExecuteAndProcessResults(page, targetIfAny, feedbackFormIfAny);
+
+            // validate the proposed property value/action arguments
+            final String invalidReasonIfAny = getReasonInvalidIfAny();
+            if (invalidReasonIfAny != null) {
+                raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny);
+                return false;
+            }
+
+            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+            if (commandContext != null) {
+                command = commandContext.getCommand();
+                command.setExecutor(Command.Executor.USER);
+            }
+
+
+
+            //
+            // the following line will (attempt to) invoke the action, and will in turn either:
+            //
+            // 1. return a non-null result from a successful invocation
+            //
+            // 2. return a null result (from a successful action returning void)
+            //
+            // 3. throws a RuntimeException, either:
+            //    a) as result of application throwing RecoverableException/ApplicationException (DN xactn still intact)
+            //    b) as result of DB exception, eg uniqueness constraint violation (DN xactn marked to abort)
+            //    Either way, as a side-effect the Isis transaction will be set to MUST_ABORT (IsisTransactionManager does this)
+            //
+            // (The DB exception might actually be thrown by the flush() that follows.
+            //
+            final ObjectAdapter resultAdapter = obtainResultAdapter();
+            // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
+            getPersistenceSession().getTransactionManager().flushTransaction();
+            getPersistenceSession().getPersistenceManager().flush();
+
+
+            // update target, since version updated (concurrency checks)
+            targetEntityModel.resetVersion();
+            targetAdapter = targetEntityModel.load();
+            if(!targetAdapter.isDestroyed()) {
+                targetEntityModel.resetPropertyModels();
+            }
+
+
+            // hook to close prompt etc.
+            onExecuteAndProcessResults(targetIfAny);
+
+            if (resultDiffersOrAlwaysRedirect(targetAdapter, resultAdapter) ||
+                hasBlobsOrClobs(page)                                       ||
+                targetIfAny == null                                             ) {
+
+                redirectTo(resultAdapter, targetIfAny);
+
+            } else {
+
+                // in this branch the result must be same "logical" object as target, but
+                // the OID might have changed if a view model.
+                if (resultAdapter != null && targetAdapter != resultAdapter) {
+                    targetEntityModel.setObject(resultAdapter);
+                    targetAdapter = targetEntityModel.load();
+                }
+                if(!targetAdapter.isDestroyed()) {
+                    targetEntityModel.resetPropertyModels();
+                }
+
+                // also in this branch we also know that there *is* an ajax target to use
+                addComponentsToRedraw(targetIfAny);
+            }
+
+            return true;
 
         } catch (ConcurrencyException ex) {
 
@@ -87,104 +175,128 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
             final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
             messageService.warnUser(ex.getMessage());
+
             return false;
-        }
-    }
-
-    /**
-     *
-     * @param page
-     * @param targetIfAny
-     * @return whether to clear args or not (they aren't if there was a validation exception)
-     */
-    private boolean doExecuteAndProcessResults(
-            final Page page,
-            final AjaxRequestTarget targetIfAny,
-            final Form<?> feedbackFormIfAny) {
-
-        // validate the action parameters (if any)
-        final String invalidReasonIfAny = getReasonInvalidIfAny();
-
-        if (invalidReasonIfAny != null) {
-            raiseWarning(targetIfAny, feedbackFormIfAny, invalidReasonIfAny);
-            return false;
-        }
-
-        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-        final Command command;
-        if (commandContext != null) {
-            command = commandContext.getCommand();
-            command.setExecutor(Command.Executor.USER);
-        } else {
-            command = null;
-        }
-
-        // the object store could raise an exception (eg uniqueness constraint)
-        // so we handle it here.
-        try {
-            // could be programmatic flushing, so must include in the try... finally
-            final ObjectAdapter resultAdapter = obtainResultAdapter();
-
-            // flush any queued changes, so concurrency or violation exceptions (if any)
-            // will be thrown here
-            getTransactionManager().flushTransaction();
-            getPersistenceSession().getPersistenceManager().flush();
-
-            // update target, since version updated (concurrency checks)
-            // (but handle fact that the target object might, in fact, have just been deleted)
-            final EntityModel targetEntityModel = model.getParentEntityModel();
-
-            targetEntityModel.resetVersion();
-            final ObjectAdapterMemento targetOam = targetEntityModel.getObjectAdapterMemento();
-            final ObjectAdapter objectAdapter = targetEntityModel.load();
-            if(!objectAdapter.isDestroyed()) {
-                targetEntityModel.resetPropertyModels();
-            }
-
-            onExecuteAndProcessResults(targetIfAny);
-
-            final ObjectAdapterMemento resultOam = ObjectAdapterMemento.createOrNull(resultAdapter);
-            if (shouldForward(page, resultOam, targetOam) || targetIfAny == null) {
-
-                forwardOntoResult(resultAdapter, targetIfAny);
-
-            } else {
-
-                // in this branch the result must be same "logical" object as target, but
-                // the OID might have changed if a view model.
-                final ObjectAdapter targetAdapter = targetEntityModel.getObject();
-                if(targetAdapter != resultAdapter) {
-                    targetEntityModel.setObject(resultAdapter);
-                    if(!resultAdapter.isDestroyed()) {
-                        targetEntityModel.resetPropertyModels();
-                    }
-                }
-
-                final AjaxRequestTarget target = targetIfAny; // only in this branch if there *is* a target to use
-                addComponentsToRedraw(target);
-            }
-
-            return true;
 
         } catch (RuntimeException ex) {
 
-            String message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
+            // there's no need to set the abort cause on the transaction, it will have already been done
+            // (in IsisTransactionManager#executeWithinTransaction(...)).
 
-            if (message != null) {
-                // no need to add to message broker, should already have been added...
 
-                if (feedbackFormIfAny == null) {
-                    // forward on instead to void page
-                    // (otherwise, we'll have rendered an action parameters page
-                    // and so we'll be staying on that page)
-                    ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID
-                            .handleResults(null, getIsisSessionFactory());
-                }
+            // see if is an application-defined exception. If so, convert to an application error,
+            final RecoverableException appEx = RecoverableException.Util.getRecoverableExceptionIfAny(ex);
+            if (appEx != null) {
+                String message = appEx.getMessage();
 
-                return false;
+                // ... display as growl pop-up
+                final MessageBroker messageBroker = getCurrentSession().getAuthenticationSession().getMessageBroker();
+                messageBroker.setApplicationError(message);
+
+
+                Page responsePage;
+//                try {
+//                    // back out the change
+//                    getCurrentSession().getPersistenceSession().getPersistenceManager().currentTransaction().rollback();
+//                    getCurrentSession().getPersistenceSession().getPersistenceManager().currentTransaction().begin();
+//
+//                    // reset
+//                    targetEntityModel.resetVersion();
+//                    targetEntityModel.resetPropertyModels();
+//                    targetAdapter = targetEntityModel.load();
+//                    responsePage = new EntityPage(targetAdapter);
+//
+//                    if (feedbackFormIfAny != null && targetIfAny != null) {
+//                        // ... also show message on feedback form (since we can)
+//                        feedbackFormIfAny.error(message);
+//                        targetIfAny.add(feedbackFormIfAny);
+//                    }
+//
+//                } catch(JDOUserException ex2) {
+//
+//                }
+                // best we can do is just to redirect to void
+                responsePage = new VoidReturnPage(new VoidModel());
+
+
+//                // need to disable concurrency checking, because an application error doesn't mean a DN error,
+//                // and the Oid will have been bumped.
+//                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    }
+//                });
+//                    final Page responsePage = new VoidReturnPage(new VoidModel());
+
+                final RequestCycle requestCycle = RequestCycle.get();
+                requestCycle.setResponsePage(responsePage);
+                throw ex;
             }
 
-            // not handled, so capture and propagate
+            // otherwise, attempt to recognize this exception using the ExceptionRecognizers
+            String message = recognizeException(ex, targetIfAny, feedbackFormIfAny);
+
+            // if we did recognize the message, then display to user
+            if (message != null) {
+
+                onExecuteAndProcessResults(targetIfAny);
+
+                targetEntityModel.resetVersion();
+                targetAdapter = targetEntityModel.load();
+
+                // ... display as growl pop-up
+                final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
+                messageBroker.setApplicationError(message);
+
+                // attempt to back out the change
+                try {
+                    final Transaction dnXactn =
+                            getCurrentSession().getPersistenceSession().getPersistenceManager().currentTransaction();
+                    dnXactn.rollback();
+                    dnXactn.begin();
+
+                    // reset
+                    targetEntityModel.resetVersion();
+                    targetEntityModel.resetPropertyModels();
+                    targetAdapter = targetEntityModel.load();
+
+                } catch(JDOException ex2) {
+                    ex2.printStackTrace();
+                    // ignore
+                }
+
+
+                if (targetAdapter.isDestroyed() || targetIfAny == null) {
+                    final Page responsePage;
+                    responsePage = new VoidReturnPage(new VoidModel());
+                    final RequestCycle requestCycle = RequestCycle.get();
+                    requestCycle.setResponsePage(responsePage);
+                } else {
+
+                    // ensure any jGrowl errors are shown
+                    String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(messageBroker);
+                    targetIfAny.appendJavaScript(errorMessagesIfAny);
+
+                    if (feedbackFormIfAny != null) {
+                        // ... also show message on feedback form (since we can)
+                        feedbackFormIfAny.error(message);
+                        targetIfAny.add(feedbackFormIfAny);
+                    }
+
+//                    final Page responsePage;
+//                    responsePage = new EntityPage(targetAdapter);
+//                    final RequestCycle requestCycle = RequestCycle.get();
+//                    requestCycle.setResponsePage(responsePage);
+
+                    addComponentsToRedraw(targetIfAny);
+                }
+
+
+                return false;
+                //throw ex;
+            }
+
+            // message not recognized, so capture in the Command, and propagate
             if (command != null) {
                 command.setException(Throwables.getStackTraceAsString(ex));
             }
@@ -193,20 +305,47 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         }
     }
 
-    private boolean shouldForward(
-            final Page page,
-            final ObjectAdapterMemento resultOam,
-            final ObjectAdapterMemento targetOam) {
 
-        final Bookmark resultBookmark = resultOam.asHintingBookmark();
-        final Bookmark targetBookmark = targetOam.asHintingBookmark();
+    private boolean resultDiffersOrAlwaysRedirect(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter resultAdapter) {
+        final ObjectAdapterMemento targetOam = ObjectAdapterMemento.createOrNull(targetAdapter);
+        final ObjectAdapterMemento resultOam = ObjectAdapterMemento.createOrNull(resultAdapter);
 
-        if (shouldForward(resultBookmark, targetBookmark)) {
+        return resultDiffersOrAlwaysRedirect(targetOam, resultOam);
+    }
+
+    private boolean resultDiffersOrAlwaysRedirect(
+            final ObjectAdapterMemento targetOam,
+            final ObjectAdapterMemento resultOam) {
+
+        final Bookmark resultBookmark = resultOam != null ? resultOam.asHintingBookmark() : null;
+        final Bookmark targetBookmark = targetOam != null ? targetOam.asHintingBookmark() : null;
+
+        return resultDiffersOrAlwaysRedirect(targetBookmark, resultBookmark);
+    }
+
+    private boolean resultDiffersOrAlwaysRedirect(
+            final Bookmark targetBookmark,
+            final Bookmark resultBookmark) {
+        final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
+
+        if(resultBookmark == null && targetBookmark == null) {
+            return redirectEvenIfSameObject;
+        }
+        if (resultBookmark == null || targetBookmark == null) {
             return true;
         }
+        final String resultBookmarkStr = asStr(resultBookmark);
+        final String targetBookmarkStr = asStr(targetBookmark);
+
+        return !Objects.equals(resultBookmarkStr, targetBookmarkStr)  || redirectEvenIfSameObject;
+    }
+
+    private boolean hasBlobsOrClobs(final Page page) {
 
         // this is a bit of a hack... currently the blob/clob panel doesn't correctly redraw itself.
-        // we therefore force a reforward (unless is declared as unchanging).
+        // we therefore force a re-forward (unless is declared as unchanging).
         final Object hasBlobsOrClobs = page.visitChildren(IsisBlobOrClobPanelAbstract.class,
                 new IVisitor<IsisBlobOrClobPanelAbstract, Object>() {
                     @Override
@@ -226,26 +365,42 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
         return hasBlobsOrClobs != null;
     }
 
-    private boolean shouldForward(final Bookmark resultBookmark, final Bookmark targetBookmark) {
-        final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
-
-        if(resultBookmark == null && targetBookmark == null) {
-            return redirectEvenIfSameObject;
-        }
-        if (resultBookmark == null || targetBookmark == null) {
-            return true;
-        }
-        final String resultBookmarkStr = asStr(resultBookmark);
-        final String targetBookmarkStr = asStr(targetBookmark);
-
-        return !Objects.equals(resultBookmarkStr, targetBookmarkStr)  || redirectEvenIfSameObject;
-    }
-
     private static String asStr(final Bookmark bookmark) {
         return bookmark instanceof HintStore.BookmarkWithHintId
                 ? ((HintStore.BookmarkWithHintId) bookmark).toStringUsingHintId()
                 : bookmark.toString();
     }
+
+    private void forwardOnConcurrencyException(
+            final ObjectAdapter targetAdapter,
+            final ConcurrencyException ex) {
+
+        // this will not preserve the URL (because pageParameters are not copied over)
+        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
+        final EntityPage entityPage =
+
+                // disabling concurrency checking after the layout XML (grid) feature
+                // was throwing an exception when rebuild grid after invoking action
+                // not certain why that would be the case, but think it should be
+                // safe to simply disable while recreating the page to re-render back to user.
+                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                        new Callable<EntityPage>() {
+                            @Override public EntityPage call() throws Exception {
+                                return new EntityPage(targetAdapter, ex);
+                            }
+                        }
+                );
+
+        // force any changes in state etc to happen now prior to the redirect;
+        // in the case of an object being returned, this should cause our page mementos
+        // (eg EntityModel) to hold the correct state.  I hope.
+        getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
+
+        // "redirect-after-post"
+        final RequestCycle requestCycle = RequestCycle.get();
+        requestCycle.setResponsePage(entityPage);
+    }
+
 
     private void addComponentsToRedraw(final AjaxRequestTarget target) {
         final List<Component> componentsToRedraw = Lists.newArrayList();
@@ -339,7 +494,6 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
     private String recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
 
-        // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
         // REVIEW: similar code also in WebRequestCycleForIsis; combine?
 
         // see if the exception is recognized as being a non-serious error
@@ -379,8 +533,13 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
+
+    protected IsisSession getCurrentSession() {
+        return getIsisSessionFactory().getCurrentSession();
+    }
+
     protected PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+        return getCurrentSession().getPersistenceSession();
     }
 
     protected ServicesInjector getServicesInjector() {
@@ -400,7 +559,7 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+        return getCurrentSession().getAuthenticationSession();
     }
 
 
@@ -414,11 +573,8 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
 
     protected abstract ObjectAdapter obtainResultAdapter();
 
-    protected abstract void forwardOnConcurrencyException(
-            final ObjectAdapter targetAdapter,
-            final ConcurrencyException ex);
 
-    protected abstract void forwardOntoResult(
+    protected abstract void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target);
 

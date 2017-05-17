@@ -7,7 +7,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorAbstract;
@@ -35,7 +34,7 @@ public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> 
         ObjectAdapter targetAdapter = obtainTargetAdapter();
 
         final ObjectAdapter resultAdapter = this.model.applyValue(targetAdapter);
-        // (borrowed some code previously in EntityModel)
+
         if (resultAdapter != targetAdapter) {
             this.model.getParentEntityModel().setObject(targetAdapter);
         }
@@ -43,15 +42,7 @@ public class PropertyEditFormExecutor extends FormExecutorAbstract<ScalarModel> 
     }
 
 
-    protected void forwardOnConcurrencyException(
-            final ObjectAdapter targetAdapter,
-            final ConcurrencyException ex) {
-        final EntityPage entityPage = new EntityPage(targetAdapter, null);
-        final RequestCycle requestCycle = RequestCycle.get();
-        requestCycle.setResponsePage(entityPage);
-    }
-
-    protected void forwardOntoResult(
+    protected void redirectTo(
             final ObjectAdapter resultAdapter,
             final AjaxRequestTarget target) {
         // disabling concurrency checking after the layout XML (grid) feature

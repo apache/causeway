@@ -34,7 +34,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
@@ -209,22 +208,9 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
             completePrompt(target);
 
             okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
-
-        } else {
-
-            final StringBuilder builder = new StringBuilder();
-
-            // ensure any jGrowl errors are shown
-            // (normally would be flushed when traverse to next page).
-            String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(getAuthenticationSession().getMessageBroker());
-            builder.append(errorMessagesIfAny);
-
-            // append the JS to the response.
-            String buf = builder.toString();
-            target.appendJavaScript(buf);
+            target.add(form);
         }
 
-        target.add(form);
     }
 
 

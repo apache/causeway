@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import java.text.MessageFormat;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -34,7 +33,6 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
@@ -166,8 +164,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * {@link IsisTransaction transaction}.
      *
      * <p>
-     * If a transaction is {@link IsisContext#inTransaction() in progress}, then
-     * uses that. Otherwise will {@link #startTransaction() start} a transaction
+     * If a transaction is in progress, then uses that. Otherwise will {@link #startTransaction() start} a transaction
      * before running the block and {@link #endTransaction() commit} it at the
      * end.
      *  </p>
@@ -347,8 +344,20 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
 
             if(abortCause != null) {
-                // hasn't been rendered lower down the stack, so fall back
-                throw abortCause;
+                //
+                // previously (<1.15.0) we threw this exception.
+                // however, this results in an attempt to forward onto the error page, even if the error has been
+                // recognised at the UI layer.
+                //
+                // so instead we just return (mirroring DataNucleus' own logic on a failed attempt to abort, namely
+                // to just ignore the attempt to abort and carry on.)
+                //
+                // (have also manually verified that if the exception is NOT recognized by the UI layer, then the
+                //  exception does propagate to the top and we redirect to the error page correctly).
+                //
+
+                return;
+
             } else {
                 // assume that any rendering of the problem has been done lower down the stack.
                 return;

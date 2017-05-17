@@ -19,7 +19,13 @@
 
 package org.apache.isis.applib;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.common.base.Strings;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
+
 import org.apache.isis.applib.services.exceprecog.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
@@ -115,4 +121,18 @@ public class RecoverableException extends RuntimeException implements Translatab
     public String getTranslationContext() {
         return translationContext;
     }
+
+
+    public static class Util {
+        private Util() {}
+
+        public static RecoverableException getRecoverableExceptionIfAny(final Exception ex) {
+            final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+            final Iterable<RecoverableException> appEx =
+                    Iterables.filter(causalChain, RecoverableException.class);
+            final Iterator<RecoverableException> iterator = appEx.iterator();
+            return iterator.hasNext() ? iterator.next() : null;
+        }
+    }
+
 }

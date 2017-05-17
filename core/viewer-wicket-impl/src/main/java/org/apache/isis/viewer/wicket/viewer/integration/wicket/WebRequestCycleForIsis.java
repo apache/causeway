@@ -49,6 +49,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -94,10 +95,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler)
     {
 
-        final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+        if(handler instanceof RenderPageRequestHandler) {
+            AdapterManager.ConcurrencyChecking.disable();
 
-        if(mmie != null) {
-            if(handler instanceof RenderPageRequestHandler) {
+            final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
+
+            if(mmie != null) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
                 final IRequestablePage nextPage = requestHandler.getPage();
                 if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
@@ -106,7 +109,6 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 }
                 throw mmie;
             }
-            // can't figure out where we're heading, so continue anyway and let things turn out as they will.
         }
 
     }
@@ -120,6 +122,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
         if(LOG.isDebugEnabled()) {
             LOG.debug("onRequestHandlerExecuted: handler: " + handler);
+        }
+
+        if(handler instanceof RenderPageRequestHandler) {
+            AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
         }
 
         if (getIsisSessionFactory().inSession()) {

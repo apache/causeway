@@ -22,15 +22,12 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -45,7 +42,6 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -53,7 +49,6 @@ import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -575,51 +570,18 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     // //////////////////////////////////////
 
     /**
-     * Executes the action, handling any {@link RecoverableException}s that
-     * might be encountered.
+     * Simply executes the action.
      *
-     * <p>
-     * If an {@link RecoverableException} is encountered, then the application error will be
-     * {@link org.apache.isis.core.commons.authentication.MessageBroker#setApplicationError(String) set} so that a suitable message can be
-     * rendered higher up the call stack.
-     *
-     * <p>
-     * Any other types of exception will be ignored (to be picked up higher up in the callstack)
+     * Previously there was exception handling code here also, but this has now been centralized
+     * within FormExecutorAbstract
      */
-    public ObjectAdapter executeHandlingApplicationExceptions() {
-        try {
-            final ObjectAdapter resultAdapter = this.getObject();
-            return resultAdapter;
-
-        } catch (final RuntimeException ex) {
-
-            // see if is an application-defined exception
-            // if so, is converted to an application error,
-            // equivalent to calling DomainObjectContainer#raiseError(...)
-            final RecoverableException appEx = getApplicationExceptionIfAny(ex);
-            if (appEx != null) {
-                final MessageBroker messageBroker = getCurrentSession().getAuthenticationSession().getMessageBroker();
-                messageBroker.setApplicationError(appEx.getMessage());
-
-                // there's no need to set the abort cause on the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)).
-
-                return null;
-            }
-
-            // not handled, so propagate
-            throw ex;
-        }
+    public ObjectAdapter execute() {
+        final ObjectAdapter resultAdapter = this.getObject();
+        return resultAdapter;
     }
 
 
     // //////////////////////////////////////
-    
-    public static RecoverableException getApplicationExceptionIfAny(final Exception ex) {
-        final Iterable<RecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), RecoverableException.class);
-        final Iterator<RecoverableException> iterator = appEx.iterator();
-        return iterator.hasNext() ? iterator.next() : null;
-    }
 
     public static IRequestHandler redirectHandler(final Object value) {
         if(value instanceof java.net.URL) {
