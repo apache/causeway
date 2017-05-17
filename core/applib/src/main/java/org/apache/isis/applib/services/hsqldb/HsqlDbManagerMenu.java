@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.services.dbmanager;
+package org.apache.isis.applib.services.hsqldb;
 
 import java.util.Map;
 
@@ -26,6 +26,7 @@ import com.google.common.base.Strings;
 
 import org.hsqldb.util.DatabaseManagerSwing;
 
+import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -36,11 +37,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
-        objectType = "prototyping.HsqlDbManagerMenu"
+        objectType = "isisApplib.HsqlDbManagerMenu"
 )
 @DomainServiceLayout(
         named = "Prototyping",
-        menuOrder = "999",
+        menuOrder = "500.800",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 public class HsqlDbManagerMenu {
@@ -54,9 +55,12 @@ public class HsqlDbManagerMenu {
     }
 
 
+    public static class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<HsqlDbManagerMenu>{}
+
     @Action(
             semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
+            restrictTo = RestrictTo.PROTOTYPING,
+            domainEvent = ActionDomainEvent.class
     )
     @ActionLayout(
             named = "HSQL DB Manager",
@@ -67,6 +71,12 @@ public class HsqlDbManagerMenu {
         DatabaseManagerSwing.main(args);
     }
     public boolean hideHsqlDbManager() {
+        try {
+            // hsqldb is configured as optional in the applib's pom.xml
+            Thread.currentThread().getContextClassLoader().loadClass(DatabaseManagerSwing.class.getCanonicalName());
+        } catch (ClassNotFoundException e) {
+            return true;
+        }
         return Strings.isNullOrEmpty(url) || !url.contains("hsqldb:mem");
     }
 
