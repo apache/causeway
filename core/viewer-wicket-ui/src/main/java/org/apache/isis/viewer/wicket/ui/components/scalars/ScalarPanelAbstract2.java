@@ -203,16 +203,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
 
 
-    /**
-     * hook for highly dynamic components, eg conditional choices.
-     *
-     * <p>
-     * Returning <tt>true</tt> means that the component is always rebuilt prior to
-     * every {@link #onBeforeRender() render}ing.
-     */
-    protected boolean alwaysRebuildGui() {
-        return false;
-    }
 
     /**
      * Builds GUI lazily prior to first render.
@@ -256,14 +246,14 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 configureInlinePromptLinkCallback(inlinePromptLink);
             }
 
-            Component componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
-            if (componentToHideIfAny != null || promptStyle == PromptStyle.DIALOG) {
-                if (scalarModel.canEnterEditMode() && scalarModel.getPromptStyle() == PromptStyle.INLINE) {
-                    componentToHideIfAny.setVisibilityAllowed(false);
-                } else {
-                    inlinePromptLink.setVisibilityAllowed(false);
-                }
+            Component componentToHideIfAny = null;
+            if (scalarModel.canEnterEditMode() && promptStyle == PromptStyle.INLINE) {
+                componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
             }
+            if (componentToHideIfAny == null) {
+                componentToHideIfAny = inlinePromptLink;
+            }
+            componentToHideIfAny.setVisibilityAllowed(false);
         }
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
            scalarModel.getMode() == EntityModel.Mode.VIEW     &&

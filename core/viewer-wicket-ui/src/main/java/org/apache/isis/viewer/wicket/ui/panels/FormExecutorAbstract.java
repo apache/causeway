@@ -13,6 +13,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
@@ -44,6 +46,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOr
 
 public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
         implements FormExecutor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FormExecutorAbstract.class);
 
     protected final M model;
     protected final WicketViewerSettings settings;
@@ -306,7 +310,9 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
             }
         }
 
-        debug(componentsToRedraw, componentsNotToRedraw);
+        if(LOG.isDebugEnabled()) {
+            debug(componentsToRedraw, componentsNotToRedraw);
+        }
 
         for (Component component : componentsToRedraw) {
             target.add(component);
@@ -321,9 +327,9 @@ public abstract class FormExecutorAbstract<M extends BookmarkableModel<ObjectAda
     }
 
     private void debug(final String title, final List<Component> list) {
-        System.out.println(">>> " + title + ":");
+        LOG.debug(">>> " + title + ":");
         for (Component component : list) {
-            System.out.println(
+            LOG.debug(
                     String.format("%30s: %s",
                             component.getClass().getSimpleName(),
                             component.getPath()));

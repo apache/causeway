@@ -92,4 +92,9 @@ public class ActionParameterMemento implements Serializable {
         return getActionParameter(specificationLoader).getSpecification();
     }
 
+    @Override
+    public String toString() {
+        return getActionMemento().getNameParmsId() + "#" + getNumber();
+    }
+
 }

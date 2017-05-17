@@ -120,4 +120,9 @@ public class PropertyMemento implements Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return getOwningType().asString() + "#" + getIdentifier();
+    }
+
 }

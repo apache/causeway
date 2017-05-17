@@ -291,6 +291,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             public boolean isCollection(final ScalarModel scalarModel) {
                 return false;
             }
+
+            @Override
+            public String toStringOf(final ScalarModel scalarModel) {
+                return this.name() + ": " + scalarModel.getPropertyMemento().toString();
+            }
         },
         PARAMETER {
             @Override
@@ -525,6 +530,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
                 return actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
             }
+
+            @Override
+            public String toStringOf(final ScalarModel scalarModel) {
+                return this.name() + ": " + scalarModel.getParameterMemento().toString();
+            }
+
         };
 
         private static List<ObjectAdapter> choicesAsList(final ObjectAdapter[] choices) {
@@ -590,6 +601,8 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         public abstract ObjectAdapter load(final ScalarModel scalarModel);
 
         public abstract boolean isCollection(final ScalarModel scalarModel);
+
+        public abstract String toStringOf(final ScalarModel scalarModel);
     }
 
     private final Kind kind;
@@ -1060,6 +1073,8 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         return actionArgsHint;
     }
 
-
-
+    @Override
+    public String toString() {
+        return kind.toStringOf(this);
+    }
 }

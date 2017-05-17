@@ -112,10 +112,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
 
     // ///////////////////////////////////////////////////////////////////
 
-    @Override
-    protected boolean alwaysRebuildGui() {
-        return true;
-    }
 
     @Override
     protected void onInitializeWhenViewMode() {
