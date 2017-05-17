@@ -925,23 +925,23 @@ tr.headers th form input {
 }
 */
 
-#wicketDebugBar {
+#container.page #wicketDebugBar {
     padding-top: 60px;
     padding-bottom: 30px;
 }
-#wicketDebugBar a#wicketDebugBarCollapse img {
+#container.page #wicketDebugBar a#wicketDebugBarCollapse img {
     margin-top: 2px;
     margin-right: 20px;
 }
-#wicketDebugBar span#wicketDebugBarContents > span {
+#container.page #wicketDebugBar span#wicketDebugBarContents > span {
     vertical-align: sub;
 }
-#wicketDebugBar span.wicketversioncontrib {
+#container.page #wicketDebugBar span.wicketversioncontrib {
     display: none;
 }
-#wicketDebugBar span#wicketDebugBarContents a img {
+#container.page #wicketDebugBar span#wicketDebugBarContents a img {
     margin-top: -5px;
 }
-#wicketDebugBar span#wicketDebugBarContents a#wicketDebugBarRemove img {
+#container.page #wicketDebugBar span#wicketDebugBarContents a#wicketDebugBarRemove img {
     margin-top: 2px;
 }

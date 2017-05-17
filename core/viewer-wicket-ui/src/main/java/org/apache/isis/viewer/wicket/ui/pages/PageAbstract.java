@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +33,8 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
+import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -234,7 +237,18 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     protected DebugBar newDebugBar(final String id) {
-        return new DebugBar(id);
+        final DebugBar debugBar = new DebugBar(id);
+        final List<IDebugBarContributor> contributors = DebugBar.getContributors(getApplication());
+        for (Iterator<IDebugBarContributor> iterator = contributors.iterator(); iterator.hasNext(); ) {
+            final IDebugBarContributor contributor = iterator.next();
+            // the InspectorDebug invokes load on every model found.
+            // for ActionModels this has the rather unfortunate effect of invoking them!
+            // https://issues.apache.org/jira/browse/ISIS-1622 raised to refactor and then reinstate this
+            if(contributor == InspectorDebugPanel.DEBUG_BAR_CONTRIB) {
+                iterator.remove();
+            }
+        }
+        return debugBar;
     }
 
 
