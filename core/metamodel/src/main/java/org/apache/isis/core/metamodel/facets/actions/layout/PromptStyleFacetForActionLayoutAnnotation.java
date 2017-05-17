@@ -46,7 +46,7 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
         PromptStyle promptStyle = actionLayout != null? actionLayout.promptStyle() : null;
 
         if(promptStyle == null) {
-            if (holder.containsDoOpFacet(PromptStyleFacet.class)) {
+            if (holder.containsDoOpNotDerivedFacet(PromptStyleFacet.class)) {
                 // do not replace
                 return null;
             }

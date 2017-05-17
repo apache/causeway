@@ -25,11 +25,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class PromptStyleFacetFallBack extends PromptStyleFacetAbstract {
 
     public PromptStyleFacetFallBack(final FacetHolder holder) {
-        super(holder);
+        super(holder, Derivation.DERIVED);
     }
 
     @Override
     public PromptStyle value() {
-        return PromptStyle.DIALOG;
+        return PromptStyle.INLINE;
     }
 }

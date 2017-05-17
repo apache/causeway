@@ -56,6 +56,11 @@ public interface FacetHolder {
      */
     boolean containsDoOpFacet(Class<? extends Facet> facetType);
 
+    /**
+     * As {@link #containsDoOpFacet(Class)}, which additional requirement that the
+     * facet is not {@link Facet#isDerived()}.
+     */
+    boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType);
 
     /**
      * Returns all {@link Facet}s matching the specified {@link Filter}.

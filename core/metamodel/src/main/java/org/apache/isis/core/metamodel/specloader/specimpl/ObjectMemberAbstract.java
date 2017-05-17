@@ -136,6 +136,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     @Override
+    public boolean containsDoOpNotDerivedFacet(final Class<? extends Facet> facetType) {
+        return getFacetHolder().containsDoOpNotDerivedFacet(facetType);
+    }
+
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return getFacetHolder().getFacet(cls);
     }

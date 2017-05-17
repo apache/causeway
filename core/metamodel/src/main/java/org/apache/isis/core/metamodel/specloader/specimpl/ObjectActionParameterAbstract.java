@@ -221,6 +221,13 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
+    public boolean containsDoOpNotDerivedFacet(final Class<? extends Facet> facetType) {
+        final FacetHolder facetHolder = getFacetHolder();
+        return facetHolder != null && facetHolder.containsDoOpNotDerivedFacet(facetType);
+    }
+
+
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         final FacetHolder facetHolder = getFacetHolder();
         return facetHolder != null ? facetHolder.getFacet(cls) : null;

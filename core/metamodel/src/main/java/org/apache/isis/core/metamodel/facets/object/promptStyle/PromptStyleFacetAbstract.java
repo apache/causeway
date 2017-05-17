@@ -31,8 +31,12 @@ public abstract class PromptStyleFacetAbstract extends FacetAbstract
         return PromptStyleFacet.class;
     }
 
-    public PromptStyleFacetAbstract(final FacetHolder holder) {
-        super( type(), holder, Derivation.NOT_DERIVED);
+    protected PromptStyleFacetAbstract(final FacetHolder holder) {
+        this( holder, Derivation.NOT_DERIVED);
+    }
+
+    protected PromptStyleFacetAbstract(final FacetHolder holder, final Derivation derivation) {
+        super( type(), holder, derivation);
     }
 
 }
