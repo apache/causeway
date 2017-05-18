@@ -266,11 +266,12 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             Component componentToHideIfAny = null;
             if (scalarModel.canEnterEditMode() && promptStyle == PromptStyle.INLINE) {
                 componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
-            }
-            if (componentToHideIfAny == null) {
+            } else {
                 componentToHideIfAny = inlinePromptLink;
             }
-            componentToHideIfAny.setVisibilityAllowed(false);
+            if(componentToHideIfAny != null) {
+                componentToHideIfAny.setVisibilityAllowed(false);
+            }
         }
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
            scalarModel.getMode() == EntityModel.Mode.VIEW     &&
