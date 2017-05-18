@@ -908,13 +908,13 @@ tr.headers th form input {
 }
 
 /*
+instead of this CSS (which would force this highlighting everywhere, instead suggest use a browser extension
+such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebmfebjccbhmccmaoedlf
+
 #container  a:focus,
 #container  .btn:focus,
 #container  input:focus,
 #container  :focus {
-//    outline-color: darkorange;
-//    outline-color: sienna;
-//    outline-color: darkred;
     outline-color: maroon;
     outline-style: solid;
     outline-width: 2px;

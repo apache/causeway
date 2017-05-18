@@ -509,12 +509,25 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final WebMarkupContainer inlinePromptLink = new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
         inlinePromptLink.setOutputMarkupId(true);
 
+        configureInlinePromptLink(inlinePromptLink);
+
         final Component editInlineLinkLabel = createInlinePromptComponent(ID_SCALAR_VALUE_INLINE_PROMPT_LABEL,
                 inlinePromptModel
         );
         inlinePromptLink.add(editInlineLinkLabel);
 
         return inlinePromptLink;
+    }
+
+    protected void configureInlinePromptLink(final WebMarkupContainer inlinePromptLink) {
+        final String append = obtainInlinePromptLinkCssIfAny();
+        if(append != null) {
+            inlinePromptLink.add(new CssClassAppender(append));
+        }
+    }
+
+    protected String obtainInlinePromptLinkCssIfAny() {
+        return "form-control input-sm";
     }
 
     protected Component createInlinePromptComponent(

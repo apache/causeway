@@ -79,6 +79,15 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         return fragment;
     }
 
+    /**
+     * Most other components require 'form-control input-sm' on the owning inline prompt link.
+     * For this component, however, which uses a textarea, this instead appears on the textarea itself.
+     */
+    @Override
+    protected String obtainInlinePromptLinkCssIfAny() {
+        return null;
+    }
+
     @Override
     protected String getScalarPanelType() {
         return "multiLineStringPanel";
