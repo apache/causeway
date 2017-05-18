@@ -25,8 +25,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -134,12 +137,43 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 protected IRequestHandler getRequestHandler() {
                     final ObjectAdapter resultAdapter = actionModel.execute();
                     final Object value = resultAdapter.getObject();
-                    return ActionModel.downloadHandler(value);
+                    
+                    final IRequestHandler handler = ActionModel.downloadHandler(value);
+                    
+                    // ISIS-1619, prevent clients from caching the response content
+                    return isNonIdempotent(actionModel) 
+                    		? enforceNoCacheOnClientSide(handler)
+                    		: handler                    		
+                    		;
+                    
                 }
             };
         }
         return null;
     }
+    
+    // -- CLIENT SIDE CACHING ASPECTS (ISIS-1619) ...
+	
+    private static IRequestHandler enforceNoCacheOnClientSide(IRequestHandler downloadHandler){
+    	if(downloadHandler==null)
+    		return downloadHandler;
+		
+		if(downloadHandler instanceof ResourceStreamRequestHandler) 
+			((ResourceStreamRequestHandler) downloadHandler)
+				.setCacheDuration(Duration.seconds(0));
+		
+		return downloadHandler;
+	}
+
+    private static boolean isNonIdempotent(ActionModel actionModel) {
+		final ObjectAction action = actionModel.getActionMemento()
+        		.getAction(actionModel.getSpecificationLoader());
+        final SemanticsOf semanticsOf = SemanticsOf.from(action.getSemantics());
+        return semanticsOf==SemanticsOf.NON_IDEMPOTENT || 
+        		semanticsOf==SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE;
+	}
+    
+    // --
 
     // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
     private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
