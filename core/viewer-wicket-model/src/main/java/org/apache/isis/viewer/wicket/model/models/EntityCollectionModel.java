@@ -291,7 +291,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     /**
      * Additional links to render (if any)
      */
-    private List<LinkAndLabel> entityActions = Lists.newArrayList();
+    private List<LinkAndLabel> linkAndLabels = Lists.newArrayList();
 
     /**
      * Optionally populated only if {@link Type#PARENTED}.
@@ -462,13 +462,13 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         this.toggledMementosList.clear();
     }
 
-    public void addEntityActions(List<LinkAndLabel> entityActions) {
-        this.entityActions.addAll(entityActions);
+    public void addLinkAndLabels(List<LinkAndLabel> linkAndLabels) {
+        this.linkAndLabels.addAll(linkAndLabels);
     }
 
     @Override
     public List<LinkAndLabel> getLinks() {
-        return Collections.unmodifiableList(entityActions);
+        return Collections.unmodifiableList(linkAndLabels);
     }
 
     public EntityCollectionModel asDummy() {

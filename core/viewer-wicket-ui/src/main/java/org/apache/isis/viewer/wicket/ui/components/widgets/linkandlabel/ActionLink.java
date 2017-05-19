@@ -21,14 +21,18 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
@@ -40,9 +44,16 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAjaxIndicatorAware {
 
+    private static final long serialVersionUID = 1L;
+
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
 
+    final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny;
+
     public ActionLink(String id, ActionModel model) {
+        this(id, model, null);
+    }
+    ActionLink(String id, ActionModel model, ObjectAction action) {
         super(id, model);
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
@@ -54,11 +65,46 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
         if(this.indicatorAppenderIfAny != null) {
             this.add(this.indicatorAppenderIfAny);
         }
+
+        // trivial optimization; also store the objectAction if it is available (saves looking it up)
+        objectAction = action;
+
+        // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
+        // Otherwise can use default handling
+        // TODO: the method looks at the actual compile-time return type;
+        // TODO: cannot see a way to check at runtime what is returned.
+        // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
+        ajaxDeferredBehaviourIfAny = determineDeferredBehaviour();
+        if(ajaxDeferredBehaviourIfAny != null) {
+            this.add(ajaxDeferredBehaviourIfAny);
+        }
     }
+
+    @Override
+    public void onClick(AjaxRequestTarget target) {
+
+        if (ajaxDeferredBehaviourIfAny != null) {
+            ajaxDeferredBehaviourIfAny.initiate(target);
+            return;
+        }
+
+        doOnClick(target);
+    }
+
+    protected abstract void doOnClick(AjaxRequestTarget target);
 
     ActionModel getActionModel() {
         return (ActionModel) getModel();
     }
+
+    private transient ObjectAction objectAction;
+
+    public ObjectAction getObjectAction() {
+        return objectAction != null
+                ? objectAction
+                : (objectAction = getActionModel().getActionMemento().getAction(getSpecificationLoader()));
+    }
+
 
     @Override
     protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -72,9 +118,12 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     }
 
     public String getReasonDisabledIfAny() {
-        final ActionModel actionModel = getActionModel();
-        final String disabledReasonIfAny = actionModel.getReasonDisabledIfAny();
-        return disabledReasonIfAny;
+        return getActionModel().getReasonDisabledIfAny();
+    }
+
+    @Override
+    public boolean isVisible() {
+        return getActionModel().isVisible();
     }
 
     @Override
@@ -106,8 +155,73 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 : null;
     }
 
+
     protected WicketViewerSettings getSettings() {
         return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSessionFactory().getSpecificationLoader();
+    }
+
+    AjaxDeferredBehaviour determineDeferredBehaviour() {
+
+        final ObjectAction action = getObjectAction();
+        final ActionModel actionModel = this.getActionModel();
+
+        // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
+        if (isNoArgReturnTypeRedirect(action)) {
+            /**
+             * adapted from:
+             *
+             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
+             */
+            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.NEW_WINDOW) {
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected IRequestHandler getRequestHandler() {
+                    ObjectAdapter resultAdapter = actionModel.execute();
+                    final Object value = resultAdapter.getObject();
+                    return ActionModel.redirectHandler(value);
+                }
+            };
+        }
+        if (isNoArgReturnTypeDownload(action)) {
+
+            /**
+             * adapted from:
+             *
+             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
+             */
+            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.SAME_WINDOW) {
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected IRequestHandler getRequestHandler() {
+                    final ObjectAdapter resultAdapter = actionModel.execute();
+                    final Object value = resultAdapter.getObject();
+                    return ActionModel.downloadHandler(value);
+                }
+            };
+        }
+        return null;
+    }
+
+    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
+    private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
+        return action.getParameterCount() == 0 &&
+                action.getReturnType() != null &&
+                action.getReturnType().getCorrespondingClass() == java.net.URL.class;
+    }
+
+    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
+    private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
+        return action.getParameterCount() == 0 && action.getReturnType() != null &&
+                (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
+                        action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
 
 }

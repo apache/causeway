@@ -31,7 +31,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,7 +41,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -141,16 +139,16 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
         addAdditionalLinks(this, links);
     }
 
-    protected void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
-        if(links == null || links.isEmpty()) {
+    protected void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> linkAndLabels) {
+        if(linkAndLabels == null || linkAndLabels.isEmpty()) {
             Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
             return;
         }
-        links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
+        linkAndLabels = Lists.newArrayList(linkAndLabels); // copy, to serialize any lazy evaluation
 
         AdditionalLinksPanel.addAdditionalLinks(
                 markupContainer, ID_ADDITIONAL_LINKS,
-                links,
+                linkAndLabels,
                 AdditionalLinksPanel.Style.INLINE_LIST);
     }
 

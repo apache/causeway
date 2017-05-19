@@ -119,6 +119,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                         }
                     }
                 })
+                // TODO: this should probably be dynamic, as result of ISIS-1613 improved UI (no redirect)
                 .filter(new Predicate<ObjectAssociation>() {
                     @Override public boolean apply(@Nullable final ObjectAssociation objectAssociation) {
                         if(objectAssociation == null) {

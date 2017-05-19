@@ -31,7 +31,6 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
@@ -40,8 +39,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -139,13 +136,16 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                         }
                     })
                     .filter(Predicates.<ObjectAction>notNull())
-                    .filter(new Predicate<ObjectAction>() {
-                        @Override public boolean apply(@Nullable final ObjectAction objectAction) {
-                            final Consent visibility = objectAction
-                                    .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
-                            return visibility.isAllowed();
-                        }
-                    })
+                    //
+                    // visibility needs to be determined at point of rendering, by ActionLink itself
+                    //
+                    //.filter(new Predicate<ObjectAction>() {
+                    //    @Override public boolean apply(@Nullable final ObjectAction objectAction) {
+                    //        final Consent visibility = objectAction
+                    //                .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                    //        return visibility.isAllowed();
+                    //    }
+                    //})
                     .toList();
         final List<LinkAndLabel> entityActionLinks =
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);

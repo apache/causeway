@@ -22,9 +22,7 @@ import java.util.concurrent.Callable;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -70,111 +68,36 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         final ActionModel actionModel = ActionModel.create(this.targetEntityModel, action);
 
-        // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
-        // Otherwise can use default handling
-        // TODO: the method looks at the actual compile-time return type;
-        // TODO: cannot see a way to check at runtime what is returned.
-        // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
-        final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
-
         final ActionLink link =
-                new ActionLink(linkId, actionModel) {
+                new ActionLink(linkId, actionModel, action) {
                     private static final long serialVersionUID = 1L;
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        ActionLinkFactoryAbstract.this.onClick(target, ajaxDeferredBehaviour, actionModel, this);
+                    protected void doOnClick(AjaxRequestTarget target) {
+
+                        ActionLinkFactoryAbstract.this.onClick(this, target);
                     }
+
                 };
 
-        if (ajaxDeferredBehaviour != null) {
-            link.add(ajaxDeferredBehaviour);
-        }
-
         link.add(new CssClassAppender("noVeil"));
-
         return link;
     }
 
-    private static AjaxDeferredBehaviour determineDeferredBehaviour(
-            final ObjectAction action,
-            final ActionModel actionModel) {
-
-        // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-        if (isNoArgReturnTypeRedirect(action)) {
-            /**
-             * adapted from:
-             * 
-             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
-             */
-            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.NEW_WINDOW) {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected IRequestHandler getRequestHandler() {
-                    ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter.getObject();
-                    return ActionModel.redirectHandler(value);
-                }
-            };
-        }
-        if (isNoArgReturnTypeDownload(action)) {
-
-            /**
-             * adapted from:
-             * 
-             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
-             */
-            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.SAME_WINDOW) {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected IRequestHandler getRequestHandler() {
-                    final ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter.getObject();
-                    return ActionModel.downloadHandler(value);
-                }
-            };
-        }
-        return null;
-    }
-
-    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-    private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
-        return action.getParameterCount() == 0 &&
-                action.getReturnType() != null &&
-                action.getReturnType().getCorrespondingClass() == java.net.URL.class;
-    }
-
-    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-    private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
-        return action.getParameterCount() == 0 && action.getReturnType() != null &&
-                (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
-                action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
-    }
 
     private void onClick(
-            final AjaxRequestTarget target,
-            final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny,
-            final ActionModel actionModel,
-            final AjaxLink<ObjectAdapter> ajaxLink) {
+            final ActionLink actionLink,
+            final AjaxRequestTarget target) {
 
-        if (ajaxDeferredBehaviourIfAny != null) {
-            ajaxDeferredBehaviourIfAny.initiate(target);
-            return;
-        }
-
-
+        final ActionModel actionModel = actionLink.getActionModel();
 
         InlinePromptContext inlinePromptContext = determineInlinePromptContext();
         PromptStyle promptStyle = actionModel.getPromptStyle();
 
         if(inlinePromptContext == null || promptStyle != PromptStyle.INLINE) {
-            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(ajaxLink.getPage());
+            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
             final ActionPrompt prompt = promptProvider.getActionPrompt();
 
+            // REVIEW: I wonder if this is still needed after the ISIS-1613 rework?
             final ActionPromptHeaderPanel titlePanel =
                     PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                             new Callable<ActionPromptHeaderPanel>() {
@@ -184,6 +107,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     return new ActionPromptHeaderPanel(titleId, actionModel);
                                 }
                             });
+
             final ActionParametersPanel actionParametersPanel =
                     (ActionParametersPanel) getComponentFactoryRegistry().createComponent(
                             ComponentType.ACTION_PROMPT, prompt.getContentId(), actionModel);
@@ -203,14 +127,13 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                     ScalarPanelAbstract2.ID_SCALAR_IF_REGULAR_INLINE_PROMPT_FORM, ComponentType.PARAMETERS, actionModel);
 
-            // TODO: probably needs to be like the switchXxx, and update the parent of the placeholder editform
             inlinePromptContext.getScalarIfRegular().setVisible(false);
             inlinePromptContext.getScalarIfRegularInlinePromptForm().setVisible(true);
 
             target.add(scalarTypeContainer);
         }
-
     }
+
 
 
     protected LinkAndLabel newLinkAndLabel(

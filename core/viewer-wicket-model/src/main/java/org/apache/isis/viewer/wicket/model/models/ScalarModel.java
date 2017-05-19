@@ -857,11 +857,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
     /**
      * Additional links to render (if any)
      */
-    private List<LinkAndLabel> entityActions = Lists.newArrayList();
+    private List<LinkAndLabel> linkAndLabels = Lists.newArrayList();
 
     @Override
     public List<LinkAndLabel> getLinks() {
-        return Collections.unmodifiableList(entityActions);
+        return Collections.unmodifiableList(linkAndLabels);
     }
 
     /**

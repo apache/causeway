@@ -44,7 +44,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAction objectAction, final String linkId) {
+            final ObjectAction objectAction,
+            final String linkId) {
 
         final ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
         
@@ -54,15 +55,17 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
                     "Object '%s' is not persistent.", objectAdapter.titleString(null)));
         }
 
-        // check visibility and whether enabled
-        final Consent visibility =
-                objectAction.isVisible(
-                        objectAdapter,
-                        InteractionInitiatedBy.USER,
-                        Where.OBJECT_FORMS);
-        if (visibility.isVetoed()) {
-            return null;
-        }
+        // visibility needs to be determined at point of rendering, by ActionLink itself
+
+        // // check visibility and whether enabled
+        // final Consent visibility =
+        //                objectAction.isVisible(
+        //                        objectAdapter,
+        //                        InteractionInitiatedBy.USER,
+        //                        Where.OBJECT_FORMS);
+        // if (visibility.isVetoed()) {
+        //     return null;
+        // }
 
         
         final AbstractLink link = newLink(linkId, objectAction);

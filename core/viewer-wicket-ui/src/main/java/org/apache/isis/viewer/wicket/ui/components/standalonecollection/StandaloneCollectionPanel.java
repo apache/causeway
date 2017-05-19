@@ -178,14 +178,15 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
         final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
-        List<LinkAndLabel> links = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
+        List<LinkAndLabel> linkAndLabels = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
                 return linkFactory.newLink(objectAction, ID_ADDITIONAL_LINK);
             }
         });
 
-        AdditionalLinksPanel.addAdditionalLinks(outerDiv, ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
+        AdditionalLinksPanel.addAdditionalLinks(
+                outerDiv, ID_ADDITIONAL_LINKS, linkAndLabels, AdditionalLinksPanel.Style.INLINE_LIST);
         additionalLinksAdded = true;
 
     }

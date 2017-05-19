@@ -74,7 +74,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         entityActionLinks.addAll(
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null));
 
-        collectionModel.addEntityActions(entityActionLinks);
+        collectionModel.addLinkAndLabels(entityActionLinks);
     }
 
     @Override

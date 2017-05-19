@@ -328,7 +328,8 @@ public interface ObjectAction extends ObjectMember {
             @SuppressWarnings({ "unchecked", "deprecation" })
             Filter<ObjectAction> filter = org.apache.isis.applib.filter.Filters.and(
                     Filters.memberOrderOf(association),
-                    Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
+                    // visibility needs to be determined at point of rendering, by ActionLink itself
+                    // Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
                     Filters.notBulkOnly(),
                     Filters.excludeWizardActions(objectSpecification));
 

@@ -517,6 +517,20 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     }
 
 
+    public boolean isVisible() {
+
+        final ObjectAdapter targetAdapter = getTargetAdapter();
+        final ObjectAction objectAction = getActionMemento().getAction(getSpecificationLoader());
+
+        final Consent visibility =
+                objectAction.isVisible(
+                        targetAdapter,
+                        InteractionInitiatedBy.USER,
+                        Where.OBJECT_FORMS);
+        return visibility.isAllowed();
+    }
+
+
     public String getReasonInvalidIfAny() {
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] proposedArguments = getArgumentsAsArray();

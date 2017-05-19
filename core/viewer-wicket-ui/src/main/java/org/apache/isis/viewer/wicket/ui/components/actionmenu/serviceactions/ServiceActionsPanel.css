@@ -242,10 +242,11 @@
     margin-left: 0px;
 }
 
-.additionalLinkList li {
+.additionalLinkList li > span,
+.additionalLinkList li > a{
     float:left;
     margin-right:10px;
-    /*	margin-bottom: 2px;*/
+    margin-bottom: -5px;
 }
 .entityPropertiesPanel .additionalLinkList li {
     margin-right:0px;
