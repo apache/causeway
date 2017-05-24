@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :numbered:
+:generate_pdf:
 
 
 [[__ugsec]]

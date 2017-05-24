@@ -61,6 +61,9 @@
        def is_toc?
          not (attributes.has_key?('notoc'))
        end
+       def is_pdf?
+         attributes.has_key?('generate_pdf')
+       end
     %>
 
     <link href="<%= (attr :_basedir) %>css/slick/1.5.0/slick.css" rel="stylesheet">
@@ -206,6 +209,9 @@
                         <a href="#" id="search-results-clear">clear</a>
                     </div>
                 </div>
+                <% if is_pdf? then %>
+                    <span class="pdf-link"><a href="<%= (attr :docname) %>.pdf"><img src="<%= (attr :_basedir) %>images/PDF-50.png"></img></a></span>
+                <% end %>
                 <div class="page-title">
                     <h1><%= document.name %></h1>
                 </div>

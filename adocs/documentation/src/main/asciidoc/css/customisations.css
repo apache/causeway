@@ -43,3 +43,7 @@ table a:not(.btn), .table a:not(.btn) {
 }
 
 
+.pdf-link {
+    float: right;
+    padding-top: 20px;
+}
