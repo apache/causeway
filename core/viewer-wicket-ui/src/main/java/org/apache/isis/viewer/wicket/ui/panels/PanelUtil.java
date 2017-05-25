@@ -94,12 +94,14 @@ public final class PanelUtil {
             final Component component,
             final SemanticsOf semanticsOf,
             final ServicesInjector servicesInjector) {
-        final TranslationService translationService =
-                servicesInjector.lookupService(TranslationService.class);
 
         if (!semanticsOf.isAreYouSure()) {
             return;
         }
+        
+        final TranslationService translationService =
+                servicesInjector.lookupService(TranslationService.class);
+        
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
         final String context = IsisSessionFactoryBuilder.class.getName();

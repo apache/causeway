@@ -28,6 +28,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -35,34 +37,42 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
-
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public final class ServiceActionUtil {
 
     private ServiceActionUtil(){}
 
-
-
     static void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem, final MarkupContainer parent) {
-        Fragment leafItem;
+        
+    	Fragment leafItem;
         if (!menuItem.isSeparator()) {
             leafItem = new Fragment("content", "leafItem", parent);
 
@@ -76,6 +86,24 @@ public final class ServiceActionUtil {
                 subMenuItemLink.setEnabled(false);
                 TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
                 listItem.add(tooltipBehavior);
+            } else {
+            	
+            	if(!Strings.isNullOrEmpty(menuItem.getDescription())) {
+                	//XXX ISIS-1625, tooltips for menu actions 
+                	listItem.add(new AttributeModifier("title", Model.of(menuItem.getDescription())));
+                	
+                	// ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
+                    // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
+                	subMenuItemLink.add(new AttributeModifier("data-original-title", ""));
+            	}
+            	
+            	//XXX ISIS-1626, confirmation dialog for no-parameter menu actions
+                if (menuItem.requiresImmediateConfirmation()) {
+                	addConfirmationDialog(
+                			subMenuItemLink, 
+                			menuItem.getPersistenceSession().getServicesInjector());
+                }
+            	
             }
             if (menuItem.isPrototyping()) {
                 subMenuItemLink.add(new CssClassAppender("prototype"));
@@ -307,5 +335,28 @@ public final class ServiceActionUtil {
 
         return serviceActionsByName;
     }
+    
+    private static void addConfirmationDialog(Component component, final ServicesInjector servicesInjector) {
+        
+        final TranslationService translationService =
+                servicesInjector.lookupService(TranslationService.class);
+    	
+    	ConfirmationConfig confirmationConfig = new ConfirmationConfig();
+
+        final String context = IsisSessionFactoryBuilder.class.getName();
+        final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
+        final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
+        final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
+
+        confirmationConfig
+                .withTitle(areYouSure)
+                .withBtnOkLabel(confirm)
+                .withBtnCancelLabel(cancel)
+                .withPlacement(TooltipConfig.Placement.bottom)
+                .withBtnOkClass("btn btn-danger")
+                .withBtnCancelClass("btn btn-default");
+        
+        component.add(new ConfirmationBehavior(null, confirmationConfig));
+	}
 
 }
