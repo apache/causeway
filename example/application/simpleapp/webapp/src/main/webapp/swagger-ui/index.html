@@ -94,6 +94,16 @@
         showOperationIds: false
       });
 
+
+      // don't automatically load; let the developer change the user/password if required
+      // window.swaggerUi.load();
+
+      function log() {
+        if ('console' in window) {
+          console.log.apply(console, arguments);
+        }
+      }
+
       function addApiKeyAuthorization(){
         /*
         var key = encodeURIComponent($('#input_apiKey')[0].value);
@@ -126,16 +136,6 @@
       $('#input_user').val("sven");
       $('#input_pass').val("pass");
 
-
-
-
-      window.swaggerUi.load();
-
-      function log() {
-        if ('console' in window) {
-          console.log.apply(console, arguments);
-        }
-      }
   });
   </script>
 </head>
@@ -150,9 +150,9 @@
                 <div class='input'><input placeholder="pass" id="input_pass" name="pass" type="password" size="10"/></div>
 
                 <select id="input_baseUrl" name="baseUrl" style="height: 26px;">
-                    <option id="private" label="private" value="/restful/swagger/private"/>
-                    <option id="public" label="public" value="/restful/swagger/public"/>
-                    <option id="prototyping" label="prototyping" value="/restful/swagger/prototyping"/>
+                    <option id="private" label="private" value="/restful/swagger/private"></option>
+                    <option id="public" label="public" value="/restful/swagger/public"></option>
+                    <option id="prototyping" label="prototyping" value="/restful/swagger/prototyping"></option>
                 </select>
             </div>
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
