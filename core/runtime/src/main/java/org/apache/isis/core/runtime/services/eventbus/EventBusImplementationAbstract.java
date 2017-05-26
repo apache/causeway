@@ -32,46 +32,63 @@ public abstract class EventBusImplementationAbstract implements EventBusImplemen
     protected void processException(
             final Throwable exception,
             final Object event) {
-        if (!(event instanceof AbstractDomainEvent)) {
+        final AbstractDomainEvent<?> domainEvent = asDomainEvent(event);
+        if (domainEvent == null) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractDomainEvent", exception.getMessage(), exception.getClass().getName());
+                LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractDomainEvent",
+                        exception.getMessage(), exception.getClass().getName());
             }
             return;
         }
 
-        final AbstractDomainEvent<?> interactionEvent = (AbstractDomainEvent<?>) event;
-        final AbstractDomainEvent.Phase phase = interactionEvent.getEventPhase();
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("Exception stack trace (to help diagnose issue): ", exception);
+        }
+
+        final AbstractDomainEvent.Phase phase = domainEvent.getEventPhase();
         switch (phase) {
-        case HIDE:
-            LOG.warn("Exception thrown during HIDE phase, to be safe will veto (hide) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            interactionEvent.hide();
-            break;
-        case DISABLE:
-            LOG.warn("Exception thrown during DISABLE phase, to be safe will veto (disable) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            interactionEvent.disable(exception.getMessage() != null ? exception.getMessage() : exception.getClass().getName() + " thrown.");
-            break;
-        case VALIDATE:
-            LOG.warn("Exception thrown during VALIDATE phase, to be safe will veto (invalidate) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            interactionEvent.invalidate(exception.getMessage() != null ? exception.getMessage() : exception.getClass().getName() + " thrown.");
-            break;
-        case EXECUTING:
-            LOG.warn("Exception thrown during EXECUTING phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            abortTransaction(exception);
-            break;
-        case EXECUTED:
-            LOG.warn("Exception thrown during EXECUTED phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            abortTransaction(exception);
-            break;
+            case HIDE:
+            case DISABLE:
+            case VALIDATE:
+                veto(exception, domainEvent, phase);
+                break;
+            case EXECUTING:
+            case EXECUTED:
+                abort(exception, phase);
+                throw new RuntimeException(exception);
         }
     }
+
+    private void veto(
+            final Throwable exception,
+            final AbstractDomainEvent<?> domainEvent,
+            final AbstractDomainEvent.Phase phase) {
+        final String exceptionMessage = exception.getMessage();
+        LOG.warn("Exception thrown during {} phase, to be safe will veto the domain event, msg='{}', class='{}'",
+                phase, exceptionMessage, exception.getClass().getName());
+        final String message = exceptionMessage != null ? exceptionMessage : exception.getClass().getName() + " thrown.";
+        domainEvent.veto(message);
+    }
+
+    private void abort(final Throwable exception, final AbstractDomainEvent.Phase phase) {
+        LOG.warn("Exception thrown during {} phase, to be safe will abort the transaction, msg='{}', class='{}'",
+                phase, exception.getMessage(), exception.getClass().getName());
+        abortTransaction(exception);
+    }
+
+    /**
+     * Mandatory hook, called if exception; attempt to determine the underlying event that was fired.
+     *
+     * <p>
+     *     This is implementation specific; Axon for example wraps the event when reporting an error.
+     * </p>
+     */
+    protected abstract AbstractDomainEvent<?> asDomainEvent(final Object event);
 
 
     private void abortTransaction(final Throwable exception) {
         getTransactionManager().getCurrentTransaction().setAbortCause(new IsisApplicationException(exception));
     }
-
-
-
 
     private IsisTransactionManager getTransactionManager() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager();

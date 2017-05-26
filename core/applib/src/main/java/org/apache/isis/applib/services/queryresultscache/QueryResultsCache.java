@@ -24,7 +24,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import com.google.common.collect.Maps;
-import com.google.common.eventbus.Subscribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -245,14 +244,14 @@ public class QueryResultsCache implements WithTransactionScope {
     public static class Control extends AbstractSubscriber {
 
         @Programmatic
-        @Subscribe
+        @com.google.common.eventbus.Subscribe
         @org.axonframework.eventhandling.annotation.EventHandler
         public void on(FixturesInstallingEvent ev) {
             fixturesInstalling = true;
         }
 
         @Programmatic
-        @Subscribe
+        @com.google.common.eventbus.Subscribe
         @org.axonframework.eventhandling.annotation.EventHandler
         public void on(FixturesInstalledEvent ev) {
             fixturesInstalling = false;

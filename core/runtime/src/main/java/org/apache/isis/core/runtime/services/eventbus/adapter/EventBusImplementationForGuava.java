@@ -18,6 +18,8 @@ package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
+
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 
 /**
@@ -54,6 +56,13 @@ public class EventBusImplementationForGuava extends EventBusImplementationAbstra
     @Override
     public void post(final Object event) {
         eventBus.post(event);
+    }
+
+    @Override
+    protected AbstractDomainEvent<?> asDomainEvent(final Object event) {
+        return event instanceof AbstractDomainEvent
+                ? (AbstractDomainEvent<?>) event
+                : null;
     }
 
 

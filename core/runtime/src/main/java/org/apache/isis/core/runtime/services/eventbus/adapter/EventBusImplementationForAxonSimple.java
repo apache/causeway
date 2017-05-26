@@ -17,11 +17,15 @@
 package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import java.util.Map;
+
 import com.google.common.collect.Maps;
+
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
 import org.axonframework.eventhandling.SimpleEventBus;
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
+
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 
 /**
@@ -67,6 +71,27 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
         simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
     }
 
+
+    @Override
+    protected AbstractDomainEvent<?> asDomainEvent(final Object event) {
+        if(event instanceof GenericEventMessage) {
+            // this seems to be the case on error
+
+            final GenericEventMessage genericEventMessage = (GenericEventMessage) event;
+            final Object payload = genericEventMessage.getPayload();
+            return asDomainEventIfPossible(payload);
+        }
+        // don't think this occurs with axon, but this is the original behaviour
+        // before the above change to detect GenericEventMessage
+        return asDomainEventIfPossible(event);
+    }
+
+    private AbstractDomainEvent<?> asDomainEventIfPossible(final Object event) {
+        if (event instanceof AbstractDomainEvent)
+            return (AbstractDomainEvent<?>) event;
+        else
+            return null;
+    }
 
     class AxonEventListenerAdapter extends AnnotationEventListenerAdapter {
 
