@@ -236,7 +236,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
     private static boolean isNonIdempotent(ActionModel actionModel) {
 		final ObjectAction objectAction = actionModel.getActionMemento()
         		.getAction(actionModel.getSpecificationLoader());
-		return !SemanticsOf.from(objectAction.getSemantics()).isIdempotentInNature();
+		return ObjectAction.Util.isNonIdempotent(objectAction);
 	}
     
     // -- CLIENT SIDE CACHING ASPECTS ...
