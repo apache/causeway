@@ -135,7 +135,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     }
 
 
-
     protected LinkAndLabel newLinkAndLabel(
             final ObjectAdapter objectAdapter,
             final ObjectAction objectAction,

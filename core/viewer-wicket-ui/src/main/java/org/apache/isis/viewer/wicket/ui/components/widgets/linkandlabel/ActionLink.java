@@ -28,7 +28,9 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.IRequestHandler;
-
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.util.time.Duration;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -203,7 +205,14 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 protected IRequestHandler getRequestHandler() {
                     final ObjectAdapter resultAdapter = actionModel.execute();
                     final Object value = resultAdapter.getObject();
-                    return ActionModel.downloadHandler(value);
+                    
+                    final IRequestHandler handler = ActionModel.downloadHandler(value);
+                    
+                    //XXX ISIS-1619, prevent clients from caching the response content
+                    return isNonIdempotent(actionModel) 
+                    		? enforceNoCacheOnClientSide(handler)
+                    		: handler                    		
+                    		;
                 }
             };
         }
@@ -223,5 +232,26 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
                         action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
+    
+    private static boolean isNonIdempotent(ActionModel actionModel) {
+		final ObjectAction objectAction = actionModel.getActionMemento()
+        		.getAction(actionModel.getSpecificationLoader());
+		return !SemanticsOf.from(objectAction.getSemantics()).isIdempotentInNature();
+	}
+    
+    // -- CLIENT SIDE CACHING ASPECTS ...
+	
+    private static IRequestHandler enforceNoCacheOnClientSide(IRequestHandler downloadHandler){
+    	if(downloadHandler==null)
+    		return downloadHandler;
+		
+		if(downloadHandler instanceof ResourceStreamRequestHandler) 
+			((ResourceStreamRequestHandler) downloadHandler)
+				.setCacheDuration(Duration.seconds(0));
+		
+		return downloadHandler;
+	}
+    
+    // --
 
 }
