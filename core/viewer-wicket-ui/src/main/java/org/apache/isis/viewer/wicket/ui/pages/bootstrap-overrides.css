@@ -951,3 +951,9 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
 #container.page #wicketDebugBar span#wicketDebugBarContents a#wicketDebugBarRemove img {
     margin-top: 2px;
 }
+
+/* ISIS-1626, confirmation dialog for no-parameter menu actions
+   allow confirmation dialog popup to escape boundaries of parent html li element*/
+.open > .dropdown-menu {
+  overflow: visible;
+}

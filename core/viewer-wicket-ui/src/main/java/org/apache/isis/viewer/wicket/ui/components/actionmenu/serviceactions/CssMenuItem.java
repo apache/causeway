@@ -95,6 +95,16 @@ class CssMenuItem implements Serializable {
             cssMenuItem.setDescription(descriptionIfAny);
             return this;
         }
+        
+        /**
+         * @see CssMenuItem#requiresImmediateConfirmation
+         * @param requiresImmediateConfirmation
+         * @return
+         */
+        public Builder requiresImmediateConfirmation(boolean requiresImmediateConfirmation) {
+            cssMenuItem.setRequiresImmediateConfirmation(requiresImmediateConfirmation);
+            return this;
+        }
 
         public Builder returnsBlobOrClob(boolean blobOrClob) {
             cssMenuItem.setReturnsBlobOrClob(blobOrClob);
@@ -150,6 +160,7 @@ class CssMenuItem implements Serializable {
     private AbstractLink link;
     private boolean enabled = true; // unless disabled
     private String disabledReason;
+    private boolean requiresImmediateConfirmation = false; // unless set otherwise
     private boolean blobOrClob = false; // unless set otherwise
     private boolean prototype = false; // unless set otherwise
     private boolean requiresSeparator = false; // unless set otherwise
@@ -252,6 +263,28 @@ class CssMenuItem implements Serializable {
     private void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }
+    
+    /**
+     * A menu action with no parameters AND an are-you-sure semantics 
+     * does require an immediate confirmation dialog.
+     * <br/>
+     * Others don't.
+     * @return
+     */
+    public boolean requiresImmediateConfirmation() {
+		return requiresImmediateConfirmation;
+	}
+    
+    /**
+     * A menu action with no parameters AND an are-you-sure semantics 
+     * does require an immediate confirmation dialog.
+     * <br/>
+     * Others don't.
+     * @param requiresImmediateConfirmation
+     */
+    public void setRequiresImmediateConfirmation(boolean requiresImmediateConfirmation) {
+		this.requiresImmediateConfirmation = requiresImmediateConfirmation;
+	}
 
     public void setReturnsBlobOrClob(boolean blobOrClob) {
         this.blobOrClob = blobOrClob;
@@ -310,7 +343,7 @@ class CssMenuItem implements Serializable {
      */
     Builder newSubMenuItem(ServiceAndAction serviceAndAction) {
 
-        final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
+    	final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
         final ObjectAction objectAction = serviceAndAction.objectAction;
         final boolean separator = serviceAndAction.separator;
         final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
@@ -355,6 +388,9 @@ class CssMenuItem implements Serializable {
                 .link(link)
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
+                .requiresImmediateConfirmation(
+                		ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
+                		ObjectAction.Util.isNoParameters(objectAction))
                 .returnsBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
                 .prototyping(objectAction.isPrototype())
                 .requiresSeparator(separator)

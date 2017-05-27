@@ -721,11 +721,8 @@ public class PersistenceSession implements
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IsisException("Cannot create an instance of an abstract class: " + cls);
         }
+        
         final Object newInstance;
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
-        }
-
         try {
             newInstance = cls.newInstance();
         } catch (final IllegalAccessException | InstantiationException e) {

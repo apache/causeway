@@ -29,6 +29,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
@@ -221,6 +222,22 @@ public interface ObjectAction extends ObjectMember {
             return "(no name)";
         }
 
+        public static SemanticsOf semanticsOf(final ObjectAction objectAction) {
+        	return SemanticsOf.from(objectAction.getSemantics());
+        }
+        
+        public static boolean isAreYouSureSemantics(final ObjectAction objectAction) {
+        	return semanticsOf(objectAction).isAreYouSure();
+        }
+        
+        public static boolean isNonIdempotent(ObjectAction objectAction) {
+        	return !semanticsOf(objectAction).isIdempotentInNature();
+    	}
+        
+        public static boolean isNoParameters(ObjectAction objectAction) {
+        	return objectAction.getParameterCount()==0;
+		}
+        
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
             final ObjectSpecification returnType = objectAction.getReturnType();
             if (returnType != null) {
