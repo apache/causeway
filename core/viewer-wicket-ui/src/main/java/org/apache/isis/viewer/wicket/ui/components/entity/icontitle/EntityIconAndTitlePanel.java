@@ -65,8 +65,10 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     @SuppressWarnings("unused")
     private Image image;
 
-    public EntityIconAndTitlePanel(final String id, final ObjectAdapterModel entityModel) {
-        super(id, entityModel);
+    public EntityIconAndTitlePanel(
+            final String id,
+            final ObjectAdapterModel objectAdapterModel) {
+        super(id, objectAdapterModel);
     }
 
     /**
@@ -83,8 +85,20 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     }
 
     private void buildGui() {
-        addOrReplaceLinkWrapper();
+        if(isVisible()) {
+            addOrReplaceLinkWrapper();
+        }
+        if(getModel().isInlinePrompt()) {
+            // bit of a hack... allows us to suppress the title using CSS
+            add(new CssClassAppender("inlinePrompt"));
+        }
+
         setOutputMarkupId(true);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return getModel().getObject() != null;
     }
 
     private void addOrReplaceLinkWrapper() {

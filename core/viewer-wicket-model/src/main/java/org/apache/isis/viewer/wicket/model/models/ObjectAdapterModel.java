@@ -22,4 +22,6 @@ public interface ObjectAdapterModel extends IModel<ObjectAdapter> {
     EntityModel.Mode getMode();
 
     PageParameters getPageParameters();
+
+    boolean isInlinePrompt();
 }

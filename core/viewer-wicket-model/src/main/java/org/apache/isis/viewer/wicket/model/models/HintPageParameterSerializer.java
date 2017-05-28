@@ -42,6 +42,9 @@ class HintPageParameterSerializer implements Serializable {
     public static void hintStoreToPageParameters(
             final PageParameters pageParameters,
             final ObjectAdapterMemento objectAdapterMemento) {
+        if(objectAdapterMemento == null) {
+            return;
+        }
         final HintStore hintStore = getHintStore();
         final Bookmark bookmark = objectAdapterMemento.asHintingBookmark();
         Set<String> hintKeys = hintStore.findHintKeys(bookmark);
@@ -55,14 +58,17 @@ class HintPageParameterSerializer implements Serializable {
 //        updateHintStore(pageParameters, entityModel);
 //    }
 
-    public static void updateHintStore(final PageParameters pageParameters, final EntityModel entityModel) {
-        ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-        updateHintStore(pageParameters, objectAdapterMemento);
-    }
+//    public static void updateHintStore(final PageParameters pageParameters, final EntityModel entityModel) {
+//        ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
+//        updateHintStore(pageParameters, objectAdapterMemento);
+//    }
 
     public static void updateHintStore(
             final PageParameters pageParameters,
             final ObjectAdapterMemento objectAdapterMemento) {
+        if(objectAdapterMemento == null) {
+            return;
+        }
         Set<String> namedKeys = pageParameters.getNamedKeys();
         if (namedKeys.contains("no-hints")) {
             getHintStore().removeAll(objectAdapterMemento.asHintingBookmark());

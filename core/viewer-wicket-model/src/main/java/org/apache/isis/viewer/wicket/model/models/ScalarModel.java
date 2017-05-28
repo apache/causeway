@@ -1033,6 +1033,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
     // //////////////////////////////////////
 
+    @Override
+    public boolean isInlinePrompt() {
+        return getPromptStyle() == PromptStyle.INLINE && canEnterEditMode();
+    }
+
 
     private InlinePromptContext inlinePromptContext;
 

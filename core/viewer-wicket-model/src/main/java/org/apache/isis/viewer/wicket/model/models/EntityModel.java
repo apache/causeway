@@ -207,6 +207,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         return pageParameters;
     }
 
+    @Override
+    public boolean isInlinePrompt() {
+        return false;
+    }
+
     public PageParameters getPageParametersWithoutUiHints() {
         return createPageParameters(getObject());
     }
