@@ -277,31 +277,30 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
         // syncLinkWithInput
         final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
-        if (adapter != null) {
-            if(componentForRegular != null) {
+
+        if(componentForRegular != null) {
+
+            if (adapter != null) {
                 final EntityModelForReference entityModelForLink = new EntityModelForReference(getModel());
-                
+
                 entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
                 entityModelForLink.setRenderingHint(getModel().getRenderingHint());
-                
-                final ComponentFactory componentFactory = 
+
+                final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
                 final Component component = componentFactory.createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), entityModelForLink);
                 if(scalarModel.getPromptStyle() == PromptStyle.INLINE && scalarModel.canEnterEditMode()) {
                     // bit of a hack... allows us to suppress the title using CSS
                     component.add(new CssClassAppender("inlinePrompt"));
                 }
-                
+
                 componentForRegular.addOrReplace(component);
 
                 Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
 
-            }
 
+            } else {
 
-        } else {
-
-            if(componentForRegular != null) {
 
                 if(scalarModel.getPromptStyle() == PromptStyle.INLINE && scalarModel.canEnterEditMode()) {
                     Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
@@ -311,6 +310,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
                 Components.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
             }
+
         }
 
 
