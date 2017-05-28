@@ -269,7 +269,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     // //////////////////////////////////////
 
 
-    // called from onBeforeRender*
+    // called from onInitialize*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {
         final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
@@ -301,8 +301,13 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
         } else {
 
             if(componentForRegular != null) {
-                componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));
-                //Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+
+                if(scalarModel.getPromptStyle() == PromptStyle.INLINE && scalarModel.canEnterEditMode()) {
+                    Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+                } else {
+                    componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));
+                }
+
                 Components.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
             }
         }

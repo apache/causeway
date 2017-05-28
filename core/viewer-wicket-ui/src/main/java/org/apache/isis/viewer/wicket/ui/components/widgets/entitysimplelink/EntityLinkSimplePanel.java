@@ -85,6 +85,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
         } else {
             // represent no object by a simple label displaying '(none)'
             addOrReplace(new Label(ID_ENTITY_TITLE_NULL, "(none)"));
+            permanentlyHide(ID_ENTITY_TITLE_NULL);
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
         }
     }
