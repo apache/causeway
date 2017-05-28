@@ -31,10 +31,12 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -48,7 +50,7 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link EntityModel}.
  */
-public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
+public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,14 +65,14 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     @SuppressWarnings("unused")
     private Image image;
 
-    public EntityIconAndTitlePanel(final String id, final EntityModel entityModel) {
+    public EntityIconAndTitlePanel(final String id, final ObjectAdapterModel entityModel) {
         super(id, entityModel);
     }
 
     /**
      * For the {@link EntityActionLinkFactory}.
      */
-    public EntityModel getEntityModel() {
+    public ObjectAdapterModel getEntityModel() {
         return getModel();
     }
 
@@ -86,13 +88,13 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     private void addOrReplaceLinkWrapper() {
-        EntityModel entityModel = getModel();
+        ObjectAdapterModel entityModel = getModel();
         final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
         addOrReplace(entityLinkWrapper);
     }
 
-    protected WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
-        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
+    protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
+        final ObjectAdapter adapter = entityModel.getObject();
 
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
 
@@ -144,12 +146,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     private String determineTitle() {
-        EntityModel model = getModel();
+        ObjectAdapterModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
         return adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
     }
 
-    private int abbreviateTo(EntityModel model, String titleString) {
+    private int abbreviateTo(ObjectAdapterModel model, String titleString) {
         if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
             return getSettings().getMaxTitleLengthInStandaloneTables();
         } 
@@ -173,10 +175,10 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     public ObjectAdapter getContextAdapterIfAny() {
-        EntityModel model = getModel();
+        ObjectAdapterModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
         return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                model.getPersistenceSession(), model.getSpecificationLoader()): null;
+                isisSessionFactory.getCurrentSession().getPersistenceSession(), isisSessionFactory.getSpecificationLoader()): null;
     }
     
     static String abbreviated(final String str, final int maxLength) {
@@ -202,6 +204,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     // ///////////////////////////////////////////////
     // Dependency Injection
     // ///////////////////////////////////////////////
+
+    @com.google.inject.Inject
+    private transient IsisSessionFactory isisSessionFactory;
 
     @com.google.inject.Inject
     private ImageResourceCache imageCache;

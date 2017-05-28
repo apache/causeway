@@ -20,11 +20,8 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.Component;
@@ -33,8 +30,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -60,7 +55,7 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiHintContainer {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> implements ObjectAdapterModel, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -149,7 +144,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
      */
     private ConcurrencyException concurrencyException;
 
-    private final HintPageParameterSerializer hintPageParameterSerializer;
+
 
     // //////////////////////////////////////////////////////////
     // constructors
@@ -159,13 +154,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         this.adapterMemento = null;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = Maps.newHashMap();
-        this.hintPageParameterSerializer = new HintPageParameterSerializer(this);
     }
 
     public EntityModel(final PageParameters pageParameters) {
         this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
-        hintPageParameterSerializer.updateHintStore(pageParameters);
-
     }
 
     public EntityModel(final ObjectAdapter adapter) {
@@ -191,7 +183,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels;
-        this.hintPageParameterSerializer = new HintPageParameterSerializer(this);
     }
 
 
@@ -212,58 +203,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
-        hintPageParameterSerializer.hintStoreToPageParameters(pageParameters);
+        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, this);
         return pageParameters;
     }
 
     public PageParameters getPageParametersWithoutUiHints() {
         return createPageParameters(getObject());
-    }
-
-    class HintPageParameterSerializer implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-        private static final String PREFIX = "hint-";
-
-        private final EntityModel entityModel;
-
-        public HintPageParameterSerializer(final EntityModel entityModel) {
-            this.entityModel = entityModel;
-        }
-
-        public void hintStoreToPageParameters(
-                final PageParameters pageParameters) {
-            final HintStore hintStore = getHintStore();
-            final Bookmark bookmark= entityModel.getObjectAdapterMemento().asHintingBookmark();
-            Set<String> hintKeys = hintStore.findHintKeys(bookmark);
-            for (String hintKey : hintKeys) {
-                ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
-            }
-        }
-
-        public void updateHintStore(
-                final PageParameters pageParameters) {
-            Set<String> namedKeys = pageParameters.getNamedKeys();
-            if(namedKeys.contains("no-hints")) {
-                getHintStore().removeAll(entityModel.getObjectAdapterMemento().asHintingBookmark());
-                return;
-            }
-            List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
-            for (String namedKey : namedKeys) {
-                if(namedKey.startsWith(PREFIX)) {
-                    String value = pageParameters.get(namedKey).toString(null);
-                    String key = namedKey.substring(5);
-                    final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
-                    newComponentHintKeys.add(componentHintKey);
-                    final Bookmark bookmark = entityModel.getObjectAdapterMemento().asHintingBookmark();
-                    componentHintKey.set(bookmark, value);
-                }
-            }
-        }
-
-        protected HintStore getHintStore() {
-            return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class);
-        }
     }
 
     // //////////////////////////////////////////////////////////

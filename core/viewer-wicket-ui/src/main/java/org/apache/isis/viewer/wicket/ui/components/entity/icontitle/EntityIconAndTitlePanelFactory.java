@@ -22,25 +22,52 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
 /**
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
  */
-public class EntityIconAndTitlePanelFactory extends EntityComponentFactoryAbstract {
+public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    public EntityIconAndTitlePanelFactory(final ComponentType componentType, final @SuppressWarnings("rawtypes") Class componentClass) {
+        super(componentType, componentClass);
+    }
+
+    public EntityIconAndTitlePanelFactory(final ComponentType componentType, final String name, final @SuppressWarnings("rawtypes") Class componentClass) {
+        super(componentType, name, componentClass);
+    }
+
     public EntityIconAndTitlePanelFactory() {
-        super(ComponentType.ENTITY_ICON_AND_TITLE, EntityIconAndTitlePanel.class);
+        this(ComponentType.ENTITY_ICON_AND_TITLE, EntityIconAndTitlePanel.class);
+    }
+
+    @Override
+    protected ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof ObjectAdapterModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        final ObjectAdapterModel entityModel = (ObjectAdapterModel) model;
+        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
+        final boolean isObject = specification.isNotCollection();
+        final boolean isValue = specification.containsFacet(ValueFacet.class);
+        boolean b = isObject && !isValue;
+        if (!b) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+
+        return ApplicationAdvice.APPLIES;
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
+        final ObjectAdapterModel entityModel = (ObjectAdapterModel) model;
         return new EntityIconAndTitlePanel(id, entityModel);
     }
 }

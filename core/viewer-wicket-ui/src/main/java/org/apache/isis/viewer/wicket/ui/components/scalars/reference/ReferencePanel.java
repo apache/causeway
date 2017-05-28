@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -278,7 +279,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
         final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
         if (adapter != null) {
             if(componentForRegular != null) {
-                final EntityModel entityModelForLink = new EntityModel(adapter);
+                final EntityModelForReference entityModelForLink = new EntityModelForReference(getModel());
                 
                 entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
                 entityModelForLink.setRenderingHint(getModel().getRenderingHint());

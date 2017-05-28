@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 
 /**
@@ -38,7 +39,7 @@ public class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
     }
 
     @Override
-    protected WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
+    protected WebMarkupContainer addOrReplaceLinkWrapper(final ObjectAdapterModel entityModel) {
         WebMarkupContainer linkWrapper = super.addOrReplaceLinkWrapper(entityModel);
 
         ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK, entityModel);

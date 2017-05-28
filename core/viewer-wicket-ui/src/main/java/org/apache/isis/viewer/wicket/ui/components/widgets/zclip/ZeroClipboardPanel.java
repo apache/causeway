@@ -25,13 +25,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.jquery.util.Strings2;
 
-public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
+public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
     
@@ -42,7 +43,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     private AjaxLink<ObjectAdapter> copyLink;
     private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
-    public ZeroClipboardPanel(String id, EntityModel entityModel) {
+    public ZeroClipboardPanel(String id, ObjectAdapterModel entityModel) {
         super(id, entityModel);
     }
     
@@ -54,7 +55,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
             copyLink = createLink(ID_COPY_LINK);
             addOrReplace(copyLink);
         }
-        EntityModel model = getModel();
+        ObjectAdapterModel model = getModel();
         addSimpleClipboardModalWindow();
 
         EntityModel.RenderingHint renderingHint = model.getRenderingHint();
@@ -86,7 +87,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
 
                         final Class pageClass = ZeroClipboardPanel.this.getPage().getPageClass();
 
-                        final EntityModel entityModel = ZeroClipboardPanel.this.getModel();
+                        final ObjectAdapterModel entityModel = ZeroClipboardPanel.this.getModel();
                         final PageParameters pageParameters = entityModel.getPageParameters();
 
                         final CharSequence urlFor = getRequestCycle().urlFor(pageClass, pageParameters);
