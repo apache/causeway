@@ -464,6 +464,10 @@ span .fa {
     padding-right: 2px;
 }
 
+span .fontAwesomeIcon {
+    margin-right: 6px;
+}
+
 .additionalLinkList {
     float:left;
     margin:0;
@@ -905,7 +909,7 @@ tr.headers th form input {
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
-    width: 85%;
+    width: 88%;
 }
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
     margin-right: 10px;

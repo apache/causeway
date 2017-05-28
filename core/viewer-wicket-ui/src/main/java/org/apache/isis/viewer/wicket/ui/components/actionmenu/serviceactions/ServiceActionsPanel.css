@@ -248,6 +248,14 @@
     margin-right:10px;
     margin-bottom: -5px;
 }
+
+.additionalLinkList ul.dropdown-menu li > a{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-right: inherit;
+    margin-left: -20px;
+}
+
 .entityPropertiesPanel .additionalLinkList li {
     margin-right:0px;
 }
@@ -320,6 +328,8 @@
 }
 
 .dropdown-menu .fontAwesomeIcon {
+    margin-left: 10px;
+    margin-right: 10px;
     min-width: 20px;
 }
 
