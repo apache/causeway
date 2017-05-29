@@ -909,8 +909,13 @@ tr.headers th form input {
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
-    width: 88%;
+    width: 90%;
 }
+.booleanPanel div.label-left.actions-right .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
+.referencePanel div.label-left.actions-right .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
+    width: 85%;
+}
+
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
     margin-right: 10px;
 }

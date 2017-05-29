@@ -85,9 +85,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     }
 
     private void buildGui() {
-        if(isVisible()) {
-            addOrReplaceLinkWrapper();
-        }
+        addOrReplaceLinkWrapper();
         if(getModel().isInlinePrompt()) {
             // bit of a hack... allows us to suppress the title using CSS
             add(new CssClassAppender("inlinePrompt"));
