@@ -849,6 +849,7 @@ tr.headers th form input {
     margin-top: 0px;
 }
 
+.valuePanel .actions-right .additionalLinkListInline,
 .valueChoicesSelect2Panel .actions-right .additionalLinkListInline,
 .stringPanel .actions-right .additionalLinkListInline,
 .referencePanel .actions-right .additionalLinkListInline,
