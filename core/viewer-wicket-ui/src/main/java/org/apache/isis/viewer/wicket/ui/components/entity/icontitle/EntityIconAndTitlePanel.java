@@ -92,7 +92,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     protected WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
-        final ObjectAdapter adapter = entityModel.getObject();
+        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
 
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
 
