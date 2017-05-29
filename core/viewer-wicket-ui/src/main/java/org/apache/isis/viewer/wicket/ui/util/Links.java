@@ -57,13 +57,13 @@ public final class Links {
       };
     }
 
-    // TODO mgrigorov: what is the added value ?
     public static <T extends Page> AbstractLink newBookmarkablePageLink(
             final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
         return new BookmarkablePageLink<Void>(linkId, pageClass, pageParameters);
     }
 
+    // TODO: seemingly unused...
     public static <T extends Page> AbstractLink newBookmarkablePageLinkWithAnchor(
             final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 

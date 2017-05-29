@@ -1008,8 +1008,11 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         return adapter;
     }
 
-
-
+    @Override
+    protected void onDetach() {
+        clearPending();
+        super.onDetach();
+    }
 
     // //////////////////////////////////////
 

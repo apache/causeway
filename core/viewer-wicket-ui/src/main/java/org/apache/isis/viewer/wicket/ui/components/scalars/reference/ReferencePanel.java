@@ -222,7 +222,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
             @Override
             public void setObject(final String s) {
-                // gnore
+                // ignore
             }
 
             @Override

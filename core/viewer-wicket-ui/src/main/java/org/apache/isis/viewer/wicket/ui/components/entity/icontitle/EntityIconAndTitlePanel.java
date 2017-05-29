@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -44,7 +45,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.Links;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
@@ -94,11 +94,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         setOutputMarkupId(true);
     }
 
-    @Override
-    public boolean isVisible() {
-        return getModel().getObject() != null;
-    }
-
     private void addOrReplaceLinkWrapper() {
         ObjectAdapterModel entityModel = getModel();
         final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
@@ -116,36 +111,44 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return entityLinkWrapper;
     }
 
-    private AbstractLink createIconAndTitle(final ObjectAdapter adapter) {
-        final AbstractLink link = createLinkWrapper();
-        
-        final String title = determineTitle();
+    private AbstractLink createIconAndTitle(final ObjectAdapter adapterIfAny) {
+        final AbstractLink link = createDynamicallyVisibleLink();
 
-        final String iconName = adapter.getIconName();
-        final CssClassFaFacet cssClassFaFacet = adapter.getSpecification().getFacet(CssClassFaFacet.class);
-        if (iconName != null || cssClassFaFacet == null) {
-            link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapter));
-            Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
-        } else {
-            Label dummy = new Label(ID_ENTITY_FONT_AWESOME, "");
-            link.addOrReplace(dummy);
-            dummy.add(new CssClassAppender(cssClassFaFacet.value() + " fa-2x"));
-            Components.permanentlyHide(link, ID_ENTITY_ICON);
+        if(adapterIfAny != null) {
+            final String title = determineTitle();
+
+            final String iconName = adapterIfAny.getIconName();
+            final CssClassFaFacet cssClassFaFacet = adapterIfAny.getSpecification().getFacet(CssClassFaFacet.class);
+            if (iconName != null || cssClassFaFacet == null) {
+                link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapterIfAny));
+                Components.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+            } else {
+                Label dummy = new Label(ID_ENTITY_FONT_AWESOME, "");
+                link.addOrReplace(dummy);
+                dummy.add(new CssClassAppender(cssClassFaFacet.value() + " fa-2x"));
+                Components.permanentlyHide(link, ID_ENTITY_ICON);
+            }
+
+            link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title)));
+
+            String entityTypeName = adapterIfAny.getSpecification().getSingularName();
+            link.add(new AttributeModifier("title", entityTypeName + ": " + title));
         }
 
-        link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title)));
-
-        String entityTypeName = adapter.getSpecification().getSingularName();
-        link.add(new AttributeModifier("title", entityTypeName + ": " + title));
-        
         return link;
     }
 
-    private AbstractLink createLinkWrapper() {
+    private AbstractLink createDynamicallyVisibleLink() {
         final PageParameters pageParameters = getModel().getPageParametersWithoutUiHints();
         
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
-        return Links.newBookmarkablePageLink(ID_ENTITY_LINK, pageParameters, pageClass);
+
+        return new BookmarkablePageLink<Void>(ID_ENTITY_LINK, pageClass, pageParameters) {
+            @Override
+            public boolean isVisible() {
+                return EntityIconAndTitlePanel.this.getModel().getObject() != null;
+            }
+        };
     }
 
     private Label newLabel(final String id, final String title) {
