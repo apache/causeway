@@ -69,6 +69,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         return getFacet(CollectionSemanticsFacet.class).value();
     }
 
+
     //region > visible, usable
 
     @Override

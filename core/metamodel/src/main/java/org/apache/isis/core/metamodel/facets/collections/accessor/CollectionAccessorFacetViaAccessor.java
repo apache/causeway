@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionAccessorFacetViaAccessor
@@ -44,6 +45,7 @@ public class CollectionAccessorFacetViaAccessor
     private final Method method;
 
     public CollectionAccessorFacetViaAccessor(
+            final ObjectSpecification typeSpec,
             final Method method,
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
@@ -51,9 +53,7 @@ public class CollectionAccessorFacetViaAccessor
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
-        super(holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider,
-                adapterManager
-        );
+        super(typeSpec, holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterManager);
         this.method = method;
     }
 

@@ -210,6 +210,10 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final ActionDto actionDto,
             final ObjectAdapter[] argAdapters) {
         final String actionId = CommandUtil.memberIdentifierFor(objectAction);
+        final ObjectSpecification onType = objectAction.getOnType();
+        final String objectType = onType.getSpecId().asString();
+        final String localId = objectAction.getIdentifier().toNameIdentityString();
+        actionDto.setLogicalMemberIdentifier(objectType + "#" + localId);
         actionDto.setMemberIdentifier(actionId);
 
         List<ObjectActionParameter> actionParameters = objectAction.getParameters();
@@ -235,6 +239,10 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final ObjectAdapter valueAdapter) {
 
         final String actionIdentifier = CommandUtil.memberIdentifierFor(property);
+        final ObjectSpecification onType = property.getOnType();
+        final String objectType = onType.getSpecId().asString();
+        final String localId = property.getIdentifier().toNameIdentityString();
+        propertyDto.setLogicalMemberIdentifier(objectType + "#" + localId);
         propertyDto.setMemberIdentifier(actionIdentifier);
 
         final ObjectSpecification valueSpec = property.getSpecification();

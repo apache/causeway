@@ -355,7 +355,6 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
 
-
     //region > toString
 
     @Override

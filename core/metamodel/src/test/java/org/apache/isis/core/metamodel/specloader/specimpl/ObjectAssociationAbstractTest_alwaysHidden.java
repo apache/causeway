@@ -57,6 +57,8 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
     @Mock
     private ObjectSpecification mockObjectSpecification;
+    @Mock
+    private ObjectSpecification mockOnType;
 
     @Mock
     private ServicesInjector mockServicesInjector;

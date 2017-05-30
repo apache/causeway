@@ -36,6 +36,7 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
         extends FacetAbstract
         implements PropertyOrCollectionAccessorFacet {
 
+    private final ObjectSpecification onType;
     private final AdapterManager adapterManager;
     private final SpecificationLoader specificationLoader;
     private final IsisConfiguration configuration;
@@ -47,6 +48,7 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
     }
 
     public PropertyOrCollectionAccessorFacetAbstract(
+            final ObjectSpecification onType,
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
@@ -54,11 +56,17 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.onType = onType;
         this.adapterManager = adapterManager;
         this.specificationLoader = specificationLoader;
         this.configuration = configuration;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.deploymentCategory = deploymentCategory;
+    }
+
+    @Override
+    public ObjectSpecification getOnType() {
+        return onType;
     }
 
     @Override

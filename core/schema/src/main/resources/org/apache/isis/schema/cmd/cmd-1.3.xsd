@@ -27,7 +27,7 @@
 
     <xs:element name="commandDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.2 of this schema.
+            <xs:documentation>Represents v1.3 of this schema, adding in 'logicalMemberIdentifier'
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -38,7 +38,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="2">
+                <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="3">
                     <xs:annotation>
                         <xs:documentation>The minor version of the schema that an XML instance was created using.
                         </xs:documentation>
@@ -77,9 +77,15 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
+            <xs:element name="logicalMemberIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Logical formal identifier (object type, as per @DomainObject(objectType=), and member name) of the member being interacted with (action or property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="memberIdentifier" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>Formal identifier of the member being interacted with (action or property).
+                    <xs:documentation>Formal identifier (class name and member name) of the member being interacted with (action or property).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

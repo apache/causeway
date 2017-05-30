@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,6 +32,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class PropertyAccessorFacetViaAccessor
@@ -43,6 +43,7 @@ public class PropertyAccessorFacetViaAccessor
     private final Method method;
 
     public PropertyAccessorFacetViaAccessor(
+            final ObjectSpecification typeSpec,
             final Method method,
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
@@ -50,7 +51,7 @@ public class PropertyAccessorFacetViaAccessor
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
-        super(holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterManager);
+        super(typeSpec, holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterManager);
         this.method = method;
     }
 
@@ -77,9 +78,6 @@ public class PropertyAccessorFacetViaAccessor
         if(referencedObject == null) {
             return null;
         }
-
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
 
         boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {

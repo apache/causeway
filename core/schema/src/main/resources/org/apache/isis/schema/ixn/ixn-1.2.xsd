@@ -26,11 +26,11 @@
 >
 
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
-    <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.2.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.3.xsd"/>
 
     <xs:element name="interactionDto">
         <xs:annotation>
-            <xs:documentation>Represents v1.1 of this schema.  This schema replaces and generalizes the earlier 'actionInvocationMemento'.
+            <xs:documentation>Represents v1.2 of this schema, adding in 'logicalMemberIdentifier'.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -41,7 +41,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
                     <xs:annotation>
                         <xs:documentation>The minor version of the schema that an XML instance was created using.
                         </xs:documentation>
@@ -74,6 +74,12 @@
             <xs:element name="target" type="com:oidDto">
                 <xs:annotation>
                     <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property edited.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="logicalMemberIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Logical formal identifier (object type, as per @DomainObject(objectType=), and member name) of the member being interacted with (action or property).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

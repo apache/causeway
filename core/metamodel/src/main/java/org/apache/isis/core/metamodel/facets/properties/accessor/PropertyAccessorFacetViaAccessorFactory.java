@@ -26,11 +26,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
@@ -49,10 +50,13 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
         final Method accessorMethod = processMethodContext.getMethod();
         processMethodContext.removeMethod(accessorMethod);
 
+        final Class<?> cls = processMethodContext.getCls();
+        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
+
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(
                 new PropertyAccessorFacetViaAccessor(
-                        accessorMethod, property,
+                        typeSpec, accessorMethod, property,
                         getDeploymentCategory(), getConfiguration(),
                         getSpecificationLoader(),
                         getAuthenticationSessionProvider(),

@@ -95,6 +95,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private ObjectAdapter mockEmployeeAdapter;
     @Mock
+    private ObjectSpecificationDefault mockOnType;
+    @Mock
     private ObjectSpecificationDefault mockEmployeeSpec;
     @Mock
     private OneToOneAssociation mockPasswordMember;
@@ -266,7 +268,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
 
         // and given
-        facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(getPasswordMethod, mockPasswordMember,
+        facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(mockOnType, getPasswordMethod, mockPasswordMember,
                 mockDeploymentCategoryProvider.getDeploymentCategory(), mockConfiguration, mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));

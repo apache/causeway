@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
@@ -124,6 +125,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     boolean isMandatory();
 
+    ObjectSpecification getOnType();
 
     // //////////////////////////////////////////////////////
     // Functions

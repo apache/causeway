@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -52,6 +53,11 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
         return get(fromObject, InteractionInitiatedBy.USER);
     }
 
+    @Override
+    public ObjectSpecification getOnType() {
+        final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
+        return facet.getOnType();
+    }
     @Override
     public abstract ObjectAdapter get(
             final ObjectAdapter fromObject,

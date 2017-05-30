@@ -78,6 +78,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected IdentifiedHolder facetHolder;
 
     @Mock
+    protected ObjectSpecification mockOnType;
+    @Mock
     protected ObjectSpecification mockObjSpec;
     @Mock
     protected OneToOneAssociation mockOneToOneAssociation;

@@ -288,8 +288,17 @@ public final class InteractionDtoUtils {
         executionDto.setTitle(targetTitle);
         executionDto.setUser(user);
 
+        final String logicalMemberId = deriveLogicalMemberId(targetBookmark, memberId);
+        executionDto.setLogicalMemberIdentifier(logicalMemberId);
         executionDto.setMemberIdentifier(memberId);
         return executionDto;
+    }
+
+    static String deriveLogicalMemberId(final Bookmark bookmark, final String memberId) {
+        String objectType = bookmark.getObjectType();
+        int hashAt = memberId.lastIndexOf("#");
+        String localMemberId = hashAt >= 0 && hashAt < memberId.length() ? memberId.substring(hashAt + 1) : memberId;
+        return objectType + "#" + localMemberId;
     }
 
     //endregion

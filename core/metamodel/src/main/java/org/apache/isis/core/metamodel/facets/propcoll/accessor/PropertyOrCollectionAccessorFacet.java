@@ -19,11 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * The mechanism by which the value of the property can be accessed.
@@ -49,4 +48,6 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
     public Object getProperty(
             final ObjectAdapter inObject,
             final InteractionInitiatedBy interactionInitiatedBy);
+
+    ObjectSpecification getOnType();
 }

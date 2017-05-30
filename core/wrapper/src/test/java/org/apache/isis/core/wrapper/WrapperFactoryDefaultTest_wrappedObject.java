@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
@@ -97,6 +98,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private Command mockCommand;
     @Mock
     private CommandDtoServiceInternal mockCommandDtoServiceInternal;
+    @Mock
+    private ObjectSpecification mockOnType;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
     @Mock
@@ -395,7 +398,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private FacetedMethod facetedMethodForProperty(
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessor, facetedMethod, mockDeploymentCategoryProvider.getDeploymentCategory(),
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod, mockDeploymentCategoryProvider.getDeploymentCategory(),
                 mockConfiguration, mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));

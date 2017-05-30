@@ -126,7 +126,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
                     mockConfiguration,
                     mockSpecificationLoader, mockAuthenticationSessionProvider,
                     mockPersistenceSessionServiceInternal
