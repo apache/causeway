@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.jmock.auto.Mock;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -66,16 +68,21 @@ import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenF
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
+    private ObjectSpecification mockSpecification;
+
     public void setUp() throws Exception {
         super.setUp();
 
-
+        // expecting
+        allowing_specificationLoader_loadSpecification_any_willReturn(mockSpecification);
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
@@ -102,6 +109,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
     }
 
+
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
 
@@ -114,6 +122,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, collectionAccessorMethod, methodRemover, facetedMethod));
 

@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.properties;
 
 import java.lang.reflect.Method;
 
+import org.jmock.auto.Mock;
+
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -76,14 +78,21 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+    @Mock
+    private ObjectSpecification mockSpecification;
+
     public void setUp() throws Exception {
         super.setUp();
+
+        // expecting
+        allowing_specificationLoader_loadSpecification_any_willReturn(mockSpecification);
     }
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
