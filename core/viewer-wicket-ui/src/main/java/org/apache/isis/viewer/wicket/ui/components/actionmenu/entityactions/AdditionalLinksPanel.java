@@ -149,7 +149,9 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.addOrReplace(viewTitleLabel);
 
                 final String cssClassFa = linkAndLabel.getCssClassFa();
-                if(!Strings.isNullOrEmpty(cssClassFa)) {
+                if (Strings.isNullOrEmpty(cssClassFa)) {
+                    viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
+                } else {
                     final CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();
                     viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
                 }
