@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
-import com.google.common.base.Strings;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -41,14 +39,12 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -167,18 +163,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textFieldFragment.add(this.textField);
         formGroup.add(textFieldFragment);
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
-
-        if(getModel().isRequired()) {
-            final String label = scalarName.getDefaultModelObjectAsString();
-            if(!Strings.isNullOrEmpty(label)) {
-                scalarName.add(new CssClassAppender("mandatory"));
-            }
-        }
+        final String labelCaption = getRendering().getLabelCaption(textField);
+        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
 
         formGroup.add(scalarName);
 

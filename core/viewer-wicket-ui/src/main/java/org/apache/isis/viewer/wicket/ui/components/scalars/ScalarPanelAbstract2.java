@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
@@ -44,6 +45,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -484,6 +486,20 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      */
     protected abstract Component createComponentForCompact();
 
+    protected Label createScalarName(final String id, final String labelCaption) {
+        final Label scalarName = new Label(id, labelCaption);
+        if(getModel().isRequired()) {
+            final String label = scalarName.getDefaultModelObjectAsString();
+            if(!Strings.isNullOrEmpty(label)) {
+                scalarName.add(new CssClassAppender("mandatory"));
+            }
+        }
+        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            scalarName.setEscapeModelStrings(namedFacet.escaped());
+        }
+        return scalarName;
+    }
 
     /**
      * Returns a container holding an empty form.  This can be switched out using {@link #switchFormForInlinePrompt(AjaxRequestTarget)}.

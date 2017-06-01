@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -32,13 +30,11 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForChoices;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
@@ -59,18 +55,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     private Label createScalarName(final String id) {
-        final Label scalarName = new Label(id, getRendering().getLabelCaption(select2.component()));
-        if(getModel().isRequired()) {
-            final String label = scalarName.getDefaultModelObjectAsString();
-            if(!Strings.isNullOrEmpty(label)) {
-                scalarName.add(new CssClassAppender("mandatory"));
-            }
-        }
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
-        return scalarName;
+        final String labelCaption = getRendering().getLabelCaption(select2.component());
+        return createScalarName(id, labelCaption);
     }
 
     protected FormGroup createFormGroupAndName(
@@ -83,7 +69,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
         formGroup.add(component);
 
-        final Label scalarName = createScalarName(nameId);
+        final String labelCaption = getRendering().getLabelCaption(select2.component());
+        final Label scalarName = createScalarName(nameId, labelCaption);
         formGroup.addOrReplace(scalarName);
         return formGroup;
     }

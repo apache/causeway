@@ -107,7 +107,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         updateFileNameLabel(ID_FILE_NAME, scalarIfRegularFormGroup);
         updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, scalarIfRegularFormGroup);
 
-
         return scalarIfRegularFormGroup;
     }
 

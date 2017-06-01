@@ -29,7 +29,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -69,17 +68,16 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             scalarIfRegularFormGroup.add(new CssClassAppender("mandatory"));
         }
 
+        final String labelCaption = getRendering().getLabelCaption(checkBox);
+        final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+
+        scalarIfRegularFormGroup.add(scalarName);
+
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
             scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
         }
-        
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
-        scalarIfRegularFormGroup.add(scalarName);
-        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
-        if (namedFacet != null) {
-            scalarName.setEscapeModelStrings(namedFacet.escaped());
-        }
+
 
         return scalarIfRegularFormGroup;
     }
