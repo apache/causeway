@@ -58,7 +58,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     protected MarkupContainer createComponentForRegular() {
         final String name = getModel().getName();
 
-        checkBox = createCheckBox(ID_SCALAR_VALUE);
+        checkBox = createCheckBox(ID_SCALAR_VALUE, CheckBoxXConfig.Sizes.lg);
 
         checkBox.setLabel(Model.of(name));
 
@@ -92,7 +92,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
      */
     @Override
     protected Component createComponentForCompact() {
-        return createCheckBox(ID_SCALAR_IF_COMPACT);
+        return createCheckBox(ID_SCALAR_IF_COMPACT, CheckBoxXConfig.Sizes.sm);
     }
 
 
@@ -121,9 +121,9 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         };
     }
 
-    private CheckBoxX createCheckBox(final String id) {
+    private CheckBoxX createCheckBox(final String id, final CheckBoxXConfig.Sizes size) {
 
-        final CheckBoxXConfig config = configFor(getModel().isRequired());
+        final CheckBoxXConfig config = configFor(getModel().isRequired(), size);
 
         final CheckBoxX checkBox = new CheckBoxX(id, new Model<Boolean>() {
             private static final long serialVersionUID = 1L;
@@ -180,7 +180,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         return checkBox;
     }
 
-    private static CheckBoxXConfig configFor(final boolean required) {
+    private static CheckBoxXConfig configFor(final boolean required, final CheckBoxXConfig.Sizes size) {
         final CheckBoxXConfig config = new CheckBoxXConfig() {
             {
                 // so can tab to the checkbox
@@ -189,7 +189,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             }
         };
         return config
-                .withSize(CheckBoxXConfig.Sizes.lg)
+                .withSize(size)
                 .withEnclosedLabel(false)
                 .withIconChecked("<i class='fa fa-fw fa-check'></i>")
                 .withIconNull("<i class='fa fa-fw fa-square'></i>")
