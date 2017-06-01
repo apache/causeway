@@ -127,7 +127,7 @@ public class FieldSet
     /**
      * Corresponds to the {@link MemberOrder#name()} (when applied to properties).
      */
-    @XmlAttribute(required = true)
+    @XmlAttribute(required = false)
     public String getName() {
         return name;
     }

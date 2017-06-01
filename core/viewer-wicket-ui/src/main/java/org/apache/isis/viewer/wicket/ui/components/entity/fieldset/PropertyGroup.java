@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -92,10 +93,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         String groupName = fieldSet.getName();
 
-        div.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
 
         final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
-
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.add(propertyRv);
 
@@ -139,19 +138,27 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             visible = true;
         }
 
-        final List<LinkAndLabel> actionsPanel = LinkAndLabel
-                .positioned(memberGroupActions, ActionLayout.Position.PANEL);
-        final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
-                .positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
+        WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
+        div.add(panelHeading);
+        if(Strings.isNullOrEmpty(groupName)) {
+            panelHeading.setVisibilityAllowed(false);
+        } else {
+            panelHeading.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
+            final List<LinkAndLabel> actionsPanel = LinkAndLabel
+                    .positioned(memberGroupActions, ActionLayout.Position.PANEL);
+            final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel
+                    .positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
 
-        AdditionalLinksPanel.addAdditionalLinks(
-                div, ID_ASSOCIATED_ACTION_LINKS_PANEL,
-                actionsPanel,
-                AdditionalLinksPanel.Style.INLINE_LIST);
-        AdditionalLinksPanel.addAdditionalLinks(
-                div, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
-                actionsPanelDropDown,
-                AdditionalLinksPanel.Style.DROPDOWN);
+            AdditionalLinksPanel.addAdditionalLinks(
+                    panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
+                    actionsPanel,
+                    AdditionalLinksPanel.Style.INLINE_LIST);
+            AdditionalLinksPanel.addAdditionalLinks(
+                    panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
+                    actionsPanelDropDown,
+                    AdditionalLinksPanel.Style.DROPDOWN);
+
+        }
 
         // either add the built content, or hide entire
         if(!visible) {

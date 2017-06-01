@@ -50,7 +50,7 @@
       <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:property"/>
       <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
     </xs:sequence>
-    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="optional"/>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="unreferencedActions" type="xs:boolean"/>
     <xs:attribute name="unreferencedProperties" type="xs:boolean"/>
