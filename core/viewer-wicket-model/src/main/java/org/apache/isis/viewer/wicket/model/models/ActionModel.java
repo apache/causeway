@@ -695,6 +695,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     public PromptStyle getPromptStyle() {
+        if(this.getActionMemento().getAction(getSpecificationLoader()).getParameterCount() == 0) {
+            return PromptStyle.DIALOG;
+        }
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
             return null;
