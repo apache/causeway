@@ -8,16 +8,23 @@
 
 Metadata providing UI hints can be specified either xref:../ugvw/ugvw.adoc#_ugvw_layout_annotation-based[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
 
-Using a file-based layout has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.
-Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+File-based layouts offer a number of benefits:
 
-Another benefit of file-based layout is that UI hints can be provided for xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
+* Probably most significantly, the layout can be updated without requiring a recompile of the code and redeploy of the app; fine-tuning the layout with your end users is easy to do
+
+* Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+
+* UI hints can be provided for xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
 
 It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
 
-The main downsides of using file-based layouts are a lack of typesafety (a typo will result in the metadata not being picked up for the element) and syntactic fragility (an invalid XML document will result in no metadata for the entire class).
+There are some downsides, though:
 
-Also, file-based layouts have no notion of inheritance, whereas the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
+* file-based layouts are not type: a typo will result in the metadata not being picked up for the element.
+They also suffer from syntactic fragility: an invalid XML document will result in no metadata for the entire class.
+
+* there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type)
+In contrast, the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
 
 The `Xxx.layout.xml` file is just the serialized form of a xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.  These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
@@ -161,6 +168,15 @@ In the first column there is a single fieldset.  Notice how actions - such as `d
 Thereafter the fieldset lists the properties in order.  Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
 Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+
+[NOTE]
+====
+As of `1.15.0-SNAPSHOT`, the ``<fieldset>``'s "name" attribute is optional.
+If omitted, then the title panel is suppressed, freeing more real estate.
+
+Do be aware though that if there are any actions that have been placed on the fieldset's panel, then these _will *not* be displayed_.
+====
+
 
 
 === Collections
