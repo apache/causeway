@@ -286,18 +286,20 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
             componentForRegular.addOrReplace(component);
 
+            boolean inlinePrompt = (scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) ||
+                                    scalarModel.hasActionWithInlineAsIfEdit();
+            if(inlinePrompt) {
+                // bit of a hack... allows us to suppress the title using CSS
+                component.add(new CssClassAppender("inlinePrompt"));
+            }
+
             if (adapter != null) {
-                if(scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit() && scalarModel.canEnterEditMode()) {
-                    // bit of a hack... allows us to suppress the title using CSS
-                    component.add(new CssClassAppender("inlinePrompt"));
-                }
 
                 Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
 
             } else {
 
-
-                if(scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit() && scalarModel.canEnterEditMode()) {
+                if(inlinePrompt) {
                     Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
                 } else {
                     componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));

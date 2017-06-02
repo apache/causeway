@@ -280,6 +280,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 final LinkAndLabel linkAndLabelAsIfEdit = inlineAsIfEditIfAny(linkAndLabels);
 
                 if(linkAndLabelAsIfEdit != null) {
+
+                    scalarModel.setHasActionWithInlineAsIfEdit(true);
+
                     // safe to do this, the inlineAsEditIfAny(...) method checks for us
                     final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLink();
 

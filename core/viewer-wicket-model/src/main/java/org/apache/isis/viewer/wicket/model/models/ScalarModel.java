@@ -1067,7 +1067,20 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         this.inlinePromptContext = inlinePromptContext;
     }
 
-    // //////////////////////////////////////
+
+    private boolean actionWithInlineAsIfEdit;
+
+    /**
+     * Whether there is an action configured for {@link PromptStyle#INLINE_AS_IF_EDIT} for this property.
+     */
+    public boolean hasActionWithInlineAsIfEdit() {
+        return actionWithInlineAsIfEdit;
+    }
+
+    public void setHasActionWithInlineAsIfEdit(final boolean inlineAsIfEditHint) {
+        this.actionWithInlineAsIfEdit = inlineAsIfEditHint;
+    }
+
 
     // //////////////////////////////////////
 
