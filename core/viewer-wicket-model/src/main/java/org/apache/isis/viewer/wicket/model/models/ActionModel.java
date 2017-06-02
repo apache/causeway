@@ -696,15 +696,23 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
     @Override
     public PromptStyle getPromptStyle() {
         if(this.getActionMemento().getAction(getSpecificationLoader()).getParameterCount() == 0) {
+            // a bit of a hack, the point being that the UI for dialog correctly handles no-args,
+            // whereas for INLINE it would render a form with no fields
             return PromptStyle.DIALOG;
         }
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
-            return null;
+            // don't think this can happen actually, see PromptStyleFacetFallback
+            return PromptStyle.INLINE;
         }
-        return facet.value() == PromptStyle.INLINE
-                ? PromptStyle.INLINE
-                : PromptStyle.DIALOG;
+        final PromptStyle promptStyle = facet.value();
+        if (promptStyle == PromptStyle.AS_CONFIGURED) {
+            // I don't think this can happen, actually...
+            // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
+            // (see PromptStyleConfiguration and PromptStyleFacetFallback)
+            return PromptStyle.INLINE;
+        }
+        return promptStyle;
     }
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {

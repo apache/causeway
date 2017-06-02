@@ -37,7 +37,6 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -197,11 +196,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(
-                scalarModel.getMode() == EntityModel.Mode.EDIT ||
-                scalarModel.getKind() == ScalarModel.Kind.PARAMETER
-                        ? select2.component()
-                        : null);
+        return InlinePromptConfig.supportedAndHide(select2.component());
     }
 
     @Override
@@ -292,7 +287,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             componentForRegular.addOrReplace(component);
 
             if (adapter != null) {
-                if(scalarModel.getPromptStyle() == PromptStyle.INLINE && scalarModel.canEnterEditMode()) {
+                if(scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit() && scalarModel.canEnterEditMode()) {
                     // bit of a hack... allows us to suppress the title using CSS
                     component.add(new CssClassAppender("inlinePrompt"));
                 }
@@ -302,7 +297,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
             } else {
 
 
-                if(scalarModel.getPromptStyle() == PromptStyle.INLINE && scalarModel.canEnterEditMode()) {
+                if(scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit() && scalarModel.canEnterEditMode()) {
                     Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
                 } else {
                     componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));

@@ -29,6 +29,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -49,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
@@ -355,7 +357,19 @@ public interface ObjectAction extends ObjectMember {
             return userActions;
         }
 
-
+        public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
+            PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
+            if(facet == null) {
+                // don't think this can occur, see PromptStyleFallback
+                return PromptStyle.INLINE;
+            }
+            final PromptStyle promptStyle = facet.value();
+            if(promptStyle == PromptStyle.AS_CONFIGURED) {
+                // don't think this can occur, see PromptStyleConfiguration
+                return PromptStyle.INLINE;
+            }
+            return promptStyle;
+        }
     }
 
     //endregion

@@ -42,5 +42,31 @@ public enum PromptStyle {
     /**
      * Show the form inline, temporarily replacing the rendering of the property.
      */
-    INLINE
+    INLINE,
+    /**
+     * Applies only to actions, show the form inline, invoked as if editing the property.
+     *
+     * <p>Note that:
+     * <ul>
+     * <li>
+     *     Only one such action should have this attribute set per property.  If there are multiple actions, then
+     *     the first one discovered with the attribute is used.
+     * </li>
+     * <li>
+     *     If the property is editable, then this attribute is ignored (and the action is treated as having a prompt style of {@link #INLINE}).
+     * </li>
+     * <li>
+     *     If applied to a property, then is the property's prompt style is simply treated as {@link #INLINE}.
+     * </li>
+     * </ul>
+     * </p>
+     *
+     */
+    INLINE_AS_IF_EDIT;
+
+    public boolean isDialog() { return this == DIALOG; }
+    public boolean isInline() { return this == INLINE; }
+    public boolean isInlineAsIfEdit() { return this == INLINE_AS_IF_EDIT; }
+
+    public boolean isInlineOrInlineAsIfEdit() { return this == INLINE || this == INLINE_AS_IF_EDIT; }
 }

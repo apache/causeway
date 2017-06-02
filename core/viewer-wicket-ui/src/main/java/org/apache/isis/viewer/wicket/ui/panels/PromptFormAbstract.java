@@ -151,7 +151,7 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
         // so can submit with invalid content (eg mandatory params missing)
         cancelButton.setDefaultFormProcessing(false);
 
-        if (formExecutorContext.getPromptStyle() == PromptStyle.INLINE) {
+        if (formExecutorContext.getPromptStyle().isInlineOrInlineAsIfEdit()) {
             cancelButton.add(new FireOnEscapeKey() {
                 @Override
                 protected void respond(final AjaxRequestTarget target) {
@@ -247,7 +247,9 @@ public abstract class PromptFormAbstract<T extends IModel<ObjectAdapter> & FormE
     private void completePrompt(final AjaxRequestTarget target) {
 
         final PromptStyle promptStyle = formExecutorContext.getPromptStyle();
-        if (promptStyle == PromptStyle.INLINE && formExecutorContext.getInlinePromptContext() != null) {
+        if (promptStyle.isInlineOrInlineAsIfEdit() &&
+            formExecutorContext.getInlinePromptContext() != null) {
+
             formExecutorContext.reset();
             rebuildGuiAfterInlinePromptDone(target);
         } else {

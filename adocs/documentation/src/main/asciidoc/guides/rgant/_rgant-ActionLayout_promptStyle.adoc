@@ -30,7 +30,11 @@ public class Customer {
 }
 ----
 <1> associate this action with the "notes" property
-<2> prompt for the action's parameters using an inline panel
+<2> prompt for the action's parameters using an inline panel.
+
+Exactly one action for a given property can be specified with `INLINE_AS_IF_EDIT`.
+Assuming that the corresponding property is not itself editable, this means that the property will be rendered as if it is editable, but the action's prompt form will be rendered instead.
+The net effect is that a property conceptually consisting of different parts (eg a name, an address or a date) can be updated using an action that lets each separate part be specified independently.
 
 
 As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:

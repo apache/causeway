@@ -114,6 +114,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="DIALOG"/>
       <xs:enumeration value="INLINE"/>
+      <xs:enumeration value="INLINE_AS_IF_EDIT"/>
       <xs:enumeration value="AS_CONFIGURED"/>
     </xs:restriction>
   </xs:simpleType>

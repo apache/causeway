@@ -93,7 +93,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         InlinePromptContext inlinePromptContext = determineInlinePromptContext();
         PromptStyle promptStyle = actionModel.getPromptStyle();
 
-        if(inlinePromptContext == null || promptStyle != PromptStyle.INLINE) {
+        if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
             final ActionPrompt prompt = promptProvider.getActionPrompt();
 

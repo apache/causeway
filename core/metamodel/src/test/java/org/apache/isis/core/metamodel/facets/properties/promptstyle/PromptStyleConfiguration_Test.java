@@ -42,6 +42,18 @@ public class PromptStyleConfiguration_Test {
     }
 
     @Test
+    public void when_inline_as_edit() throws Exception {
+        context.checking(new Expectations() {{
+            oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
+            will(returnValue("inline_as_edit"));
+        }});
+
+        // then is converted to INLINE (doesn't make sense to have INLINE_AS_EDIT as a default)
+        PromptStyle editStyle = PromptStyleConfiguration.parse(mockIsisConfiguration);
+        Assert.assertThat(editStyle, is(PromptStyle.INLINE));
+    }
+
+    @Test
     public void when_inline_mixed_case_and_superfluous_characters() throws Exception {
         context.checking(new Expectations() {{
             oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");

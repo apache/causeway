@@ -57,6 +57,7 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
             switch (promptStyle) {
                 case DIALOG:
                 case INLINE:
+                case INLINE_AS_IF_EDIT:
                     return new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
 
                 case AS_CONFIGURED:

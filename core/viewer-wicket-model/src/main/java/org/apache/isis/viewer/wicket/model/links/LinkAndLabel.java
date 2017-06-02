@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
@@ -60,6 +61,7 @@ public class LinkAndLabel implements Serializable {
         final String cssClassFa = ObjectAction.Util.cssClassFaFor(objectAction);
         final CssClassFaPosition cssClassFaPosition = ObjectAction.Util.cssClassFaPositionFor(objectAction);
         final ActionLayout.Position actionLayoutPosition = ObjectAction.Util.actionLayoutPositionOf(objectAction);
+        final PromptStyle promptStyle = ObjectAction.Util.promptStyleFor(objectAction);
         final ActionSemantics.Of semantics = objectAction.getSemantics();
 
         return new LinkAndLabel(
@@ -69,6 +71,7 @@ public class LinkAndLabel implements Serializable {
                 actionIdentifier,
                 cssClass, cssClassFa, cssClassFaPosition, actionLayoutPosition,
                 SemanticsOf.from(semantics),
+                promptStyle,
                 Parameters.fromParameterCount(objectAction.getParameterCount()));
     }
 
@@ -97,6 +100,7 @@ public class LinkAndLabel implements Serializable {
     private final CssClassFaPosition cssClassFaPosition;
     private final ActionLayout.Position position;
     private final SemanticsOf semanticsOf;
+    private final PromptStyle promptStyle;
     private Parameters parameters;
 
     private LinkAndLabel(
@@ -112,6 +116,7 @@ public class LinkAndLabel implements Serializable {
             final CssClassFaPosition cssClassFaPosition,
             final ActionLayout.Position position,
             final SemanticsOf semanticsOf,
+            final PromptStyle promptStyle,
             final Parameters parameters) {
         this.link = link;
         this.label = label;
@@ -125,6 +130,7 @@ public class LinkAndLabel implements Serializable {
         this.cssClassFaPosition = cssClassFaPosition;
         this.position = position;
         this.semanticsOf = semanticsOf;
+        this.promptStyle = promptStyle;
         this.parameters = parameters;
     }
 
@@ -174,6 +180,10 @@ public class LinkAndLabel implements Serializable {
 
     public SemanticsOf getSemantics() {
         return semanticsOf;
+    }
+
+    public PromptStyle getPromptStyle() {
+        return promptStyle;
     }
 
     public Parameters getParameters() {

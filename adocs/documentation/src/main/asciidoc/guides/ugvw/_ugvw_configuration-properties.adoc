@@ -141,6 +141,7 @@ for further details).
 |(`1.15.0-SNAPSHOT`) whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
 Can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
 
+Note that `inline_as_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 
 |`isis.viewer.wicket.` +
 `redirectEvenIfSameObject`

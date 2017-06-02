@@ -78,7 +78,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
 
         final PromptStyle promptStyle = getScalarModel().getPromptStyle();
 
-        if (promptStyle == PromptStyle.INLINE) {
+        if (promptStyle.isInlineOrInlineAsIfEdit()) {
 
             getScalarModel().toViewMode();
             getScalarModel().clearPending();

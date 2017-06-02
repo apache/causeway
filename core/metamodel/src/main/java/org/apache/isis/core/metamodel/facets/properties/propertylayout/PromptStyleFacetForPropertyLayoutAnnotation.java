@@ -58,6 +58,8 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                 case DIALOG:
                 case INLINE:
                     return new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
+                case INLINE_AS_IF_EDIT:
+                    return new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
 
                 case AS_CONFIGURED:
 

@@ -605,6 +605,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         public abstract String toStringOf(final ScalarModel scalarModel);
     }
 
+
     private final Kind kind;
     
     private final EntityModel parentEntityModel;
@@ -928,11 +929,17 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
     public PromptStyle getPromptStyle() {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
         if(facet == null) {
-            return null;
+            // don't think this can happen actually, see PromptStyleFacetFallback
+            return PromptStyle.INLINE;
         }
-        return facet.value() == PromptStyle.INLINE
-                ? PromptStyle.INLINE
-                : PromptStyle.DIALOG;
+        PromptStyle promptStyle = facet.value();
+        if (promptStyle == PromptStyle.AS_CONFIGURED) {
+            // I don't think this can happen, actually...
+            // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
+            // (see PromptStyleConfiguration and PromptStyleFacetFallback)
+            return PromptStyle.INLINE;
+        }
+        return promptStyle;
     }
 
     public boolean canEnterEditMode() {

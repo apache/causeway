@@ -2,7 +2,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -84,7 +83,7 @@ public class EntityModelForReference implements ObjectAdapterModel {
 
     @Override
     public boolean isInlinePrompt() {
-        return scalarModel.getPromptStyle() == PromptStyle.INLINE
+        return scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit()
                 && scalarModel.isEnabled();
     }
 
