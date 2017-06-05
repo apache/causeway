@@ -34,12 +34,13 @@
     <packaging>war</packaging>
 
     <properties>
-        <swagger>true</swagger>
-        <isis-maven-plugin.swagger.appManifest>domainapp.application.manifest.DomainAppAppManifest</isis-maven-plugin.swagger.appManifest>
-        <isis-maven-plugin.swagger.dependency.groupId>${project.groupId}</isis-maven-plugin.swagger.dependency.groupId>
-        <isis-maven-plugin.swagger.dependency.artifactId>${project.parent.artifactId}-application</isis-maven-plugin.swagger.dependency.artifactId>
+        <isis-maven-plugin.appManifest>
+            domainapp.application.manifest.DomainAppAppManifest
+        </isis-maven-plugin.appManifest>
 
-        <jetty-console-maven-plugin.backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</jetty-console-maven-plugin.backgroundImage>
+        <jetty-console-maven-plugin.backgroundImage>
+            ${basedir}/src/main/jettyconsole/isis-banner.png
+        </jetty-console-maven-plugin.backgroundImage>
 
         <maven-war-plugin.warName>${project.parent.artifactId}</maven-war-plugin.warName>
 
@@ -105,44 +106,36 @@
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
                 <version>${isis.version}</version>
-                <configuration>
-                    <appManifest>${isis-maven-plugin.swagger.appManifest}</appManifest>
-                    <visibilities>
-                        <visibility>PUBLIC</visibility>
-                        <visibility>PRIVATE</visibility>
-                    </visibilities>
-                    <format>${isis-maven-plugin.swagger.format}</format>
-                    <fileNamePrefix>swagger</fileNamePrefix>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>${isis-maven-plugin.swagger.dependency.groupId}</groupId>
-                        <artifactId>${isis-maven-plugin.swagger.dependency.artifactId}</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                    <!--
-                    ... workaround to avoid conflict with plexus-default
-                        (not sure why exclusions in the isis-maven-plugin aren't sufficient, though) ...
-                    -->
-                    <dependency>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                        <version>19.0</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hsqldb</groupId>
-                        <artifactId>hsqldb</artifactId>
-                        <version>2.3.1</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>swagger</goal>
                         </goals>
+                        <configuration>
+                            <appManifest>${isis-maven-plugin.appManifest}</appManifest>
+                            <visibilities>
+                                <visibility>PUBLIC</visibility>
+                                <visibility>PRIVATE</visibility>
+                            </visibilities>
+                            <format>JSON</format>
+                            <fileNamePrefix>swagger</fileNamePrefix>
+                        </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>${project.parent.artifactId}-application</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>2.3.1</version>
+                    </dependency>
+                    <!-- workaround to avoid conflict with plexus-default -->
+                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -161,7 +154,6 @@
             <artifactId>isis-mavendeps-webapp</artifactId>
             <type>pom</type>
         </dependency>
-
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
             <artifactId>isis-mavendeps-intellij</artifactId>

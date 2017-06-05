@@ -30,11 +30,12 @@
     <name>SimpleApp Simple Module</name>
 
     <properties>
-        <isis-maven-plugin.validate.appManifest>domainapp.modules.simple.SimpleModuleManifest</isis-maven-plugin.validate.appManifest>
+        <isis-maven-plugin.validate.appManifest>
+            domainapp.modules.simple.SimpleModuleManifest
+        </isis-maven-plugin.validate.appManifest>
 
         <maven-checkstyle-plugin.configLocation>${project.parent.basedir}/_checks/checkstyle.xml</maven-checkstyle-plugin.configLocation>
         <maven-pmd-plugin.ruleset>${project.parent.basedir}/_checks/pmd.xml</maven-pmd-plugin.ruleset>
-
     </properties>
 
     <build>
@@ -109,23 +110,22 @@
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
                 <version>${isis.version}</version>
-                <configuration>
-                    <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
-                </configuration>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                        <configuration>
+                            <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
+                        </configuration>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>${project.groupId}</groupId>
                         <artifactId>${project.artifactId}</artifactId>
                         <version>${project.version}</version>
-                    </dependency>
-                    <!--
-                    ... workaround to avoid conflict with plexus-default
-                        (not sure why exclusions in the isis-maven-plugin aren't sufficient, though) ...
-                    -->
-                    <dependency>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                        <version>19.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hsqldb</groupId>
@@ -133,14 +133,6 @@
                         <version>2.3.1</version>
                     </dependency>
                 </dependencies>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
