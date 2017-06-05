@@ -80,41 +80,67 @@
                     <mixins>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>standard</artifactId>
-                            <version>${mavenmixin-standard.version}</version>
+                            <artifactId>datanucleusenhance</artifactId>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>enforcerrelaxed</artifactId>
-                            <version>${mavenmixin-enforcerrelaxed.version}</version>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>datanucleusenhance</artifactId>
-                            <version>${mavenmixin-datanucleusenhance.version}</version>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>isisvalidate</artifactId>
-                            <version>${mavenmixin-isisvalidate.version}</version>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>surefire</artifactId>
-                            <version>${mavenmixin-surefire.version}</version>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>sourceandjavadoc</artifactId>
-                            <version>${mavenmixin-sourceandjavadoc.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>standard</artifactId>
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>staticanalysis</artifactId>
-                            <version>${mavenmixin-staticanalysis.version}</version>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>surefire</artifactId>
                         </mixin>
                     </mixins>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
+                <version>${isis.version}</version>
+                <configuration>
+                    <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>${project.artifactId}</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <!--
+                    ... workaround to avoid conflict with plexus-default
+                        (not sure why exclusions in the isis-maven-plugin aren't sufficient, though) ...
+                    -->
+                    <dependency>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                        <version>19.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>2.3.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -125,17 +151,24 @@
             <artifactId>isis-core-applib</artifactId>
         </dependency>
 
+        <!-- test -->
         <dependency>
-            <groupId>com.danhaywood.mavendeps</groupId>
-            <artifactId>isistesting</artifactId>
-            <version>${mavendeps-isistesting.version}</version>
+            <groupId>org.apache.isis.mavendeps</groupId>
+            <artifactId>isis-mavendeps-testing</artifactId>
             <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
