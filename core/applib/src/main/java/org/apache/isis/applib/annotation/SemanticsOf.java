@@ -34,6 +34,13 @@ public enum SemanticsOf {
      */
     SAFE,
     /**
+     * Safe, caching the returned value when invoked multiple times in the same request.
+     *
+     * <p>
+     * In other words, a query-only action.  By definition, is also idempotent.
+     */
+    SAFE_AND_REQUEST_CACHED,   
+    /**
      * Post-conditions are always the same, irrespective as to how many times called.
      *
      * <p>
