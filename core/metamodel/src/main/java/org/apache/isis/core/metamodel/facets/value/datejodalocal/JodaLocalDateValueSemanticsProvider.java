@@ -246,7 +246,17 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         }
     }
 
-    private synchronized LocalDate parse(final String data) {
+    private synchronized LocalDate parse(String data) {
+        
+        // FIXME this is only a workaround
+        // workaround the fact, that org.joda.time.format.ISODateTimeFormat 
+		// (as of joda-time ver. 2.9.4) will not print() a local-date-time that 
+		// its parseLocalDateTime() method can parse later on; 
+		// instead an exception is thrown, like
+		// java.lang.IllegalArgumentException: Invalid format: "20160910T083301.000" is too short
+		if(data!=null && data.length()==19)
+			data+='Z';
+        
         return encodingFormatter.parseLocalDate(data);
     }
 
