@@ -47,6 +47,9 @@ public class PromptStyleFacetOnPropertyFromLayoutProperties extends PromptStyleF
             return null;
         }
         String propertyPromptStyle = Strings.emptyToNull(properties.getProperty("promptStyle"));
+        if (propertyPromptStyle == null) {
+            return null;
+        }
         return PromptStyle.valueOf(propertyPromptStyle);
     }
 
