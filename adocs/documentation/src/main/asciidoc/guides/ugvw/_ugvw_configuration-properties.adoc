@@ -39,16 +39,22 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 | whether the Wicket debug mode should be enabled.
 
 |`isis.viewer.wicket.` +
-`bookmarkedPages`
+`bookmarkedPages.maxSize`
 | +ve int +
 (`_15_`)
 | number of pages to bookmark
 
 |`isis.viewer.wicket.` +
+`bookmarkedPages.showChooser`
+| +ve int +
+(`_15_`)
+| (`1.15.0-SNAPSHOT`) whether to show the bookmark panel (top-left in the Wicket viewer)
+
+|`isis.viewer.wicket.` +
 `breadcrumbs.showChooser`
 | `true`,`false` +
 (`_true_`)
-| Whether to show chooser for Breadcrumbs
+| Whether to show chooser for Breadcrumbs (bottom-left in the Wicket viewer)
 
 |`isis.viewer.wicket.` +
 `datePattern`
@@ -89,6 +95,16 @@ for further details).
 | `true`,`false` +
 (`_false_`)
 | For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+
+|`isis.viewer.wicket.` +
+`developmentUtilities.enable`
+| `true`,`false` +
+(`_false_`)
+| (`1.15.0-SNAPSHOT`) when running in production mode, whether to show enable the Wicket development utilities anyway.
+From a UI perspective, this will cause the DebugBar to be shown (top-right).
+
+If running in prototyping mode, the development utilities (debug bar) is always enabled.
+This feature is primarily just to help track any memory leakage issues that might be suspected when running in production.
 
 |`isis.viewer.wicket.` +
 `disableModalDialogs`
