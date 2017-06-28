@@ -42,10 +42,10 @@ public class PromptStyleConfiguration_Test {
     }
 
     @Test
-    public void when_inline_as_edit() throws Exception {
+    public void when_inline_as_if_edit() throws Exception {
         context.checking(new Expectations() {{
             oneOf(mockIsisConfiguration).getString("isis.viewer.wicket.promptStyle");
-            will(returnValue("inline_as_edit"));
+            will(returnValue("inline_as_if_edit"));
         }});
 
         // then is converted to INLINE (doesn't make sense to have INLINE_AS_EDIT as a default)

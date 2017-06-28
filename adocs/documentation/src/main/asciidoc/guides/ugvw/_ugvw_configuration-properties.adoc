@@ -152,12 +152,16 @@ This feature is primarily just to help track any memory leakage issues that migh
 
 |`isis.viewer.wicket.` +
 `promptStyle`
-|`dialog`,`inline` +
+|`dialog`,`inline`, +
+`inline_as_if_edit` +
 (`inline`)
 |(`1.15.0-SNAPSHOT`) whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
-Can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
+For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
+The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
 
-Note that `inline_as_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
+The property can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
+
+Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 
 |`isis.viewer.wicket.` +
 `redirectEvenIfSameObject`
