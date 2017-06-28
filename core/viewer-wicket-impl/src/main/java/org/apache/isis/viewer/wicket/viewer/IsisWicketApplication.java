@@ -48,6 +48,12 @@ import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
+import org.apache.wicket.devutils.debugbar.PageSizeDebugPanel;
+import org.apache.wicket.devutils.debugbar.SessionSizeDebugPanel;
+import org.apache.wicket.devutils.debugbar.VersionDebugContributor;
+import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
@@ -58,6 +64,7 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.settings.DebugSettings;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -157,6 +164,18 @@ public class IsisWicketApplication
     private static final String WICKET_REMEMBER_ME_COOKIE_KEY = "isis.viewer.wicket.rememberMe.cookieKey";
     private static final String WICKET_REMEMBER_ME_COOKIE_KEY_DEFAULT = "isisWicketRememberMe";
     private static final String WICKET_REMEMBER_ME_ENCRYPTION_KEY = "isis.viewer.wicket.rememberMe.encryptionKey";
+
+    /**
+     * A configuration setting which value determines whether debug bar and other stuff influenced by {@link DebugSettings#isDevelopmentUtilitiesEnabled()} is enabled or not.
+     *
+     * <p>
+     *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.
+     * </p>
+     */
+    public static final String ENABLE_DEVELOPMENT_UTILITIES_KEY = "isis.viewer.wicket.developmentUtilities.enable";
+    public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
+
+
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
@@ -359,6 +378,35 @@ public class IsisWicketApplication
             if(mmie != null) {
                 log(mmie.getValidationErrors());
             }
+
+            if(getDeploymentCategory().isPrototyping()) {
+                DebugDiskDataStore.register(this);
+                LOG.info("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
+                LOG.info("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
+            }
+
+            if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+                boolean enableDevUtils = configuration
+                        .getBoolean(ENABLE_DEVELOPMENT_UTILITIES_KEY, ENABLE_DEVELOPMENT_UTILITIES_DEFAULT);
+                if(enableDevUtils) {
+                    getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+
+                    // copied from DebugBarInitializer
+                    // this is hacky, but need to do this because IInitializer#init() called before
+                    // the Application's #init() is called.
+                    // an alternative, better, design might be to move Isis' own initialization into an
+                    // implementation of IInitializer?
+                    DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
+                    DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
+                    DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
+                    DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
+                }
+            }
+
+            LOG.info("storeSettings.inmemoryCacheSize        : " + getStoreSettings().getInmemoryCacheSize());
+            LOG.info("storeSettings.asynchronousQueueCapacity: " + getStoreSettings().getAsynchronousQueueCapacity());
+            LOG.info("storeSettings.maxSizePerSession        : " + getStoreSettings().getMaxSizePerSession());
+            LOG.info("storeSettings.fileStoreFolder          : " + getStoreSettings().getFileStoreFolder());
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.

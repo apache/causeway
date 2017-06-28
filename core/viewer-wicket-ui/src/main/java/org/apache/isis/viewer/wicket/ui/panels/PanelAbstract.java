@@ -25,6 +25,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -169,6 +170,9 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
 
     public PersistenceSession getPersistenceSession() {
         return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    }
+    protected IsisConfiguration getConfiguration() {
+        return getIsisSessionFactory().getConfiguration();
     }
 
     public SpecificationLoader getSpecificationLoader() {

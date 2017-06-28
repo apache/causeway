@@ -42,7 +42,7 @@ public class ActionPromptPage extends PageAbstract {
         addChildComponents(themeDiv, model);
 
         if(model.isBookmarkable()) {
-            bookmarkPage(model);
+            bookmarkPageIfShown(model);
         }
         addBookmarkedPages(themeDiv);
     }

@@ -488,7 +488,7 @@ msgstr "Remember Me"
 
 #: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
 msgid "resetButtonLabel"
-msgstr "CreateSimpleObjects"
+msgstr "Reset"
 
 
 #: org.wicketstuff.select2.Select2Choice

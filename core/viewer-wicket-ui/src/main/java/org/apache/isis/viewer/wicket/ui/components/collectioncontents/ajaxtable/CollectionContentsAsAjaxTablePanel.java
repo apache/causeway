@@ -42,12 +42,10 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
@@ -275,20 +273,5 @@ public class CollectionContentsAsAjaxTablePanel
     }
 
 
-    //region > dependencies
-
-    @com.google.inject.Inject
-    private WicketViewerSettings settings;
-    protected WicketViewerSettings getSettings() {
-        return settings;
-    }
-
-
-    protected ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
-    }
-
-
-    //endregion
 
 }

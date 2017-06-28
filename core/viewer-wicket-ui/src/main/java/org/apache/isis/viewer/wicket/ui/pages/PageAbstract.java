@@ -64,7 +64,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -84,6 +83,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
@@ -194,16 +195,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
 
-            DebugBar debugBar = null;
-            if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-                debugBar = newDebugBar("debugBar");
-            }
-            if (debugBar != null) {
-                add(debugBar);
-            } else {
-                add(new EmptyPanel("debugBar").setVisible(false));
-            }
-
+            boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
+            Component debugBar = devUtilitiesEnabled
+                                        ? newDebugBar("debugBar")
+                                        : new EmptyPanel("debugBar").setVisible(false);
+            add(debugBar);
 
             MarkupContainer header = createPageHeader("header");
             themeDiv.add(header);
@@ -417,8 +413,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * Convenience for subclasses
      */
     protected void addBookmarkedPages(final MarkupContainer container) {
-        Component bookmarks = getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel());
+        boolean showBookmarks = isShowBookmarks();
+        Component bookmarks = showBookmarks
+                ? getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel())
+                : new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false);
         container.add(bookmarks);
+
         bookmarks.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
@@ -430,7 +430,21 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         });
     }
 
-    protected void bookmarkPage(final BookmarkableModel<?> model) {
+    private boolean isShowBookmarks() {
+        return getConfiguration() .getBoolean(
+                        BookmarkedPagesPanel.SHOW_BOOKMARKS_KEY, BookmarkedPagesPanel.SHOW_BOOKMARKS_DEFAULT);
+    }
+
+    protected boolean isShowBreadcrumbs() {
+        return getConfiguration() .getBoolean(
+                        BreadcrumbPanel.SHOW_BREADCRUMBS_KEY, BreadcrumbPanel.SHOW_BREADCRUMBS_DEFAULT);
+    }
+
+    protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {
+        if(!isShowBookmarks()) {
+            // no need...
+            return;
+        }
         getBookmarkedPagesModel().bookmarkPage(model);
     }
 

@@ -115,7 +115,10 @@ public class EntityPage extends PageAbstract {
         buildPage();
     }
 
-    private void addBreadcrumb(final EntityModel entityModel) {
+    private void addBreadcrumbIfShown(final EntityModel entityModel) {
+        if(!isShowBreadcrumbs()) {
+            return;
+        }
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.visited(entityModel);
@@ -179,8 +182,8 @@ public class EntityPage extends PageAbstract {
         addChildComponents(entityPageContainer, model);
 
         // bookmarks and breadcrumbs
-        bookmarkPage(model);
-        addBreadcrumb(model);
+        bookmarkPageIfShown(model);
+        addBreadcrumbIfShown(model);
 
         addBookmarkedPages(entityPageContainer);
     }

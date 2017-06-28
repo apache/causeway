@@ -510,9 +510,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     @com.google.inject.Inject
     WicketViewerSettings wicketViewerSettings;
 
-    IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
-    }
 
 }
 

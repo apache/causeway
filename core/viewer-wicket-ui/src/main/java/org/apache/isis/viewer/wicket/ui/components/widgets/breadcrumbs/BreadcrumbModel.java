@@ -26,9 +26,10 @@ import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -40,12 +41,17 @@ public class BreadcrumbModel implements Serializable {
 
     private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
-    private final Map<String, EntityModel> entityModelByOidStr = Maps.newHashMap();
-    private final Map<EntityModel, String> oidStrByEntityModel = Maps.newHashMap();
-    private final List<EntityModel> list = Lists.newArrayList();
+    private final Map<String, Bookmark> bookmarkByOidStr = Maps.newHashMap();
+    private final Map<Bookmark, String> oidStrByBookmark = Maps.newHashMap();
+    private final List<Bookmark> list = Lists.newArrayList();
     
     public List<EntityModel> getList() {
-        return Collections.unmodifiableList(list);
+        List<EntityModel> entityModels = Lists.newArrayList();
+        for (Bookmark bookmark : list) {
+            EntityModel entityModel = toEntityModel(bookmark);
+            entityModels.add(entityModel);
+        }
+        return Collections.unmodifiableList(entityModels);
     }
 
     public void visited(final EntityModel entityModel) {
@@ -82,70 +88,73 @@ public class BreadcrumbModel implements Serializable {
     }
 
     private void addToStart(final String oidStr, final EntityModel entityModel) {
-        entityModelByOidStr.put(oidStr, entityModel);
-        oidStrByEntityModel.put(entityModel, oidStr);
-        list.add(0, entityModel);
+        Bookmark bookmark = toBookmark(entityModel);
+        bookmarkByOidStr.put(oidStr, bookmark);
+        oidStrByBookmark.put(bookmark, oidStr);
+        list.add(0, bookmark);
     }
 
     private void trimTo(final int size) {
         if(list.size() <= size) {
             return;
         } 
-        final List<EntityModel> modelsToRemove = list.subList(size, list.size());
-        for (final EntityModel model : modelsToRemove) {
-            final String oidStr = oidStrByEntityModel.get(model);
-            remove(oidStr, model);
+        final List<Bookmark> bookmarksToRemove = list.subList(size, list.size());
+        for (final Bookmark bookmark : bookmarksToRemove) {
+            final String oidStr = oidStrByBookmark.get(bookmark);
+            remove(oidStr, bookmark);
         }
-    }
-
-    public String titleFor(final EntityModel model) {
-        return model.getObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK,
-                model.getPersistenceSession(), model.getSpecificationLoader()).titleString(null);
     }
 
     public EntityModel lookup(final String oidStr) {
         if(oidStr == null) {
             return null;
         }
-        return entityModelByOidStr.get(oidStr);
+        final Bookmark bookmark = bookmarkByOidStr.get(oidStr);
+        if(bookmark == null) {
+            return null;
+        }
+        return toEntityModel(bookmark);
     }
 
     public void detach() {
-        for (EntityModel entityModel : list) {
-            entityModel.detach();
-        }
+        // previously list held EntityModels rather than Bookmarks
+        // this code is now redundant, I think.
+
+        // for (EntityModel entityModel : list) {
+        //     entityModel.detach();
+        // }
     }
 
-    public RootOid getId(final EntityModel choice) {
-        try {
-            final PageParameters pageParameters = choice.getPageParameters();
-            final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-            return RootOid.deString(oidStr);
-        } catch (Exception ex) {
-            remove(choice);
-            return null;
-        }
-
-    }
 
     void remove(final String rootOid) {
-        final EntityModel existingModel = entityModelByOidStr.get(rootOid);
-        if(existingModel != null) {
-            remove(rootOid, existingModel);
+        Bookmark existingBookmark = bookmarkByOidStr.get(rootOid);
+        if(existingBookmark != null) {
+            remove(rootOid, existingBookmark);
         }
     }
 
     public void remove(final EntityModel entityModel) {
-        final String oidStr = oidStrByEntityModel.get(entityModel);
+        Bookmark bookmark = toBookmark(entityModel);
+        final String oidStr = oidStrByBookmark.get(bookmark);
         if(oidStr != null) {
-            remove(oidStr, entityModel);
+            remove(oidStr, bookmark);
         }
     }
 
-    private void remove(final String rootOid, final EntityModel model) {
-        entityModelByOidStr.remove(rootOid);
-        oidStrByEntityModel.remove(model);
-        list.remove(model);
+    protected Bookmark toBookmark(final EntityModel entityModel) {
+        return entityModel.getObjectAdapterMemento().asBookmark();
+    }
+
+    protected EntityModel toEntityModel(final Bookmark bookmark) {
+        RootOid rootOid = RootOid.create(bookmark);
+        ObjectAdapterMemento oam = ObjectAdapterMemento.createPersistent(rootOid);
+        return new EntityModel(oam);
+    }
+
+    private void remove(final String rootOid, final Bookmark bookmark) {
+        bookmarkByOidStr.remove(rootOid);
+        oidStrByBookmark.remove(bookmark);
+        list.remove(bookmark);
     }
 
 }
