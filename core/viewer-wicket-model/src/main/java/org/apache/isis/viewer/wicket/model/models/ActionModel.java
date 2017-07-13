@@ -695,7 +695,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     @Override
     public PromptStyle getPromptStyle() {
-        if(this.getActionMemento().getAction(getSpecificationLoader()).getParameterCount() == 0) {
+        final ObjectAction objectAction = this.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectSpecification objectActionOwner = objectAction.getOnType();
+        if(objectActionOwner.isService()) {
+            return PromptStyle.DIALOG;
+        }
+        if(objectAction.getParameterCount() == 0) {
             // a bit of a hack, the point being that the UI for dialog correctly handles no-args,
             // whereas for INLINE it would render a form with no fields
             return PromptStyle.DIALOG;
