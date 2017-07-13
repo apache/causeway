@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfi
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBack;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline;
 
 public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFacetAbstract {
 
@@ -51,7 +51,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
                 return null;
             }
 
-            return new PromptStyleFacetFallBack(holder);
+            return new PromptStyleFacetFallBackToInline(holder);
         } else {
 
             switch (promptStyle) {

@@ -698,6 +698,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final ObjectAction objectAction = this.getActionMemento().getAction(getSpecificationLoader());
         final ObjectSpecification objectActionOwner = objectAction.getOnType();
         if(objectActionOwner.isService()) {
+            // tried to move this test into PromptStyleFacetFallback,
+            // however it's not that easy to lookup the owning type
             return PromptStyle.DIALOG;
         }
         if(objectAction.getParameterCount() == 0) {

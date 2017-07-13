@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.promptStyle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class PromptStyleFacetFallBack extends PromptStyleFacetAbstract {
+public class PromptStyleFacetFallBackToInline extends PromptStyleFacetAbstract {
 
-    public PromptStyleFacetFallBack(final FacetHolder holder) {
+    public PromptStyleFacetFallBackToInline(final FacetHolder holder) {
         super(holder, Derivation.DERIVED);
     }
 
