@@ -139,20 +139,19 @@
 
         <jetty.version>9.3.10.v20160621</jetty.version>
 
-        <wicket.version>7.6.0</wicket.version>
+        <wicket.version>7.8.0</wicket.version>
 
         <wicket-webjars.version>0.5.4</wicket-webjars.version>
-        <wicket-bootstrap.version>0.10.12</wicket-bootstrap.version>
+        <wicket-bootstrap.version>0.10.16</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
-        <wicketstuff.version>7.6.0</wicketstuff.version>
+        <wicketstuff.version>7.8.0</wicketstuff.version>
         <select2.version>4.0.3</select2.version>
 
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
         <guice.version>4.1.0</guice.version>
         <picocontainer.version>2.15</picocontainer.version>
-
 
         <dom4j.version>1.6.1</dom4j.version>
         <jdom.version>2.0.2</jdom.version>
