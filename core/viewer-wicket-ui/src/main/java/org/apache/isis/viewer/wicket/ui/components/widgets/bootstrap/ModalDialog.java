@@ -16,17 +16,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.DraggableConfig;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
+
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.DraggableConfig;
 
 /**
  * A base class for all modal dialogs
@@ -40,7 +41,7 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
     public ModalDialog(String id, IModel<T> model) {
         super(id, model);
 
-        setFadeIn(false);
+        setFadeIn(true);
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
