@@ -61,6 +61,9 @@ public class ZeroClipboardPanel extends PanelAbstract<ObjectAdapterModel> {
         EntityModel.RenderingHint renderingHint = model.getRenderingHint();
         EntityModel.Mode mode = model.getMode();
         setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == EntityModel.Mode.VIEW);
+
+        // disable, since currently not honoured if used as a URL (think that session hints are taking precedence).
+        // setVisibilityAllowed(false);
     }
 
     private AjaxLink<ObjectAdapter> createLink(String linkId) {
