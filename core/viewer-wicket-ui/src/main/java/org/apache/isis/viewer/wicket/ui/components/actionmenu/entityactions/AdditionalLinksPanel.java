@@ -90,7 +90,18 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
         final List<LinkAndLabel> linkAndLabels = getModel().getObject();
 
-        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
+        final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
+            @Override
+            public boolean isVisible() {
+                for (LinkAndLabel linkAndLabel : links) {
+                    final AbstractLink link = linkAndLabel.getLink();
+                    if(link.isVisible()) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
         addOrReplace(container);
 
         container.setOutputMarkupId(true);
@@ -106,22 +117,19 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
 
                 final AbstractLink link = linkAndLabel.getLink();
-                if(link instanceof ActionLink) {
-                    final ActionLink actionLink = (ActionLink) link;
+                final AttributeModifier attributeModifier = link instanceof ActionLink
+                        ? new AttributeModifier("title", new Model<String>() {
+                            @Override
+                            public String getObject() {
+                                final ActionLink actionLink = (ActionLink) link;
+                                final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
+                                return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
+                            }
+                        })
+                        : new AttributeModifier("title",
+                        first(linkAndLabel.getReasonDisabledIfAny(), linkAndLabel.getDescriptionIfAny()));
 
-                    item.add(new AttributeModifier("title",  new Model<String>() {
-                        @Override
-                        public String getObject() {
-                            final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
-                            return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
-                        }
-                    }));
-
-                } else {
-                    item.add(new AttributeModifier("title",
-                            first(linkAndLabel.getReasonDisabledIfAny(), linkAndLabel.getDescriptionIfAny())));
-                }
-
+                item.add(attributeModifier);
 
                 // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
                 // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
@@ -159,6 +167,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 item.addOrReplace(link);
             }
         };
+
         container.addOrReplace(listView);
     }
 
