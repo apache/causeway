@@ -19,10 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
@@ -47,7 +49,12 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         ActionModel model = getModel();
         model.primeArgumentModels();
         model.clearArguments();  // in case previously used, eg prompt displayed then cancelled
-        add(new ActionParametersForm("inputForm", this, this.getSettings(), model));
+        final ActionParametersForm inputForm =
+                new ActionParametersForm("inputForm", this, this.getSettings(), model);
+
+        final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
+        CssClassAppender.appendCssClassTo(inputForm, action.getOnType().getShortIdentifier() + "_" + action.getId());
+        add(inputForm);
     }
 
 }
