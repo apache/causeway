@@ -48,11 +48,20 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
         this(when, where, holder, Semantics.DISABLED);
     }
 
-    public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder, final Semantics semantics) {
+    public DisabledFacetAbstract(
+            final When when,
+            final Where where,
+            final FacetHolder holder,
+            final Semantics semantics) {
         this(type(), when, where, holder, semantics);
     }
 
-    private DisabledFacetAbstract(final Class<? extends Facet> type, final When when, Where where, final FacetHolder holder, final Semantics semantics) {
+    protected DisabledFacetAbstract(
+            final Class<? extends Facet> type,
+            final When when,
+            final Where where,
+            final FacetHolder holder,
+            final Semantics semantics) {
         super(type, holder, when, where);
         this.semantics = semantics;
     }

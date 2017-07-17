@@ -31,7 +31,9 @@ public class DisabledFacetOnCollectionDerivedFromRecreatableObject extends Disab
     public DisabledFacetOnCollectionDerivedFromRecreatableObject(
             final FacetHolder holder,
             final Semantics semantics) {
-        super(When.ALWAYS, Where.ANYWHERE, holder, semantics);
+        super(
+                DisabledFacetOnCollectionDerivedFromRecreatableObject.class, // so don't clobber any other DisabledFacet's
+                When.ALWAYS, Where.ANYWHERE, holder, semantics);
     }
 
     @Override
