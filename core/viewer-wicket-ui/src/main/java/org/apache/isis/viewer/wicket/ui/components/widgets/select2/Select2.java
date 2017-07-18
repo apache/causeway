@@ -87,8 +87,9 @@ public class Select2 implements Serializable {
     }
 
     public void setRequired(final boolean required) {
-        // REVIEW: causing a more severe orphaned drop-down when triggered...
-        // component().setRequired(required);
+        // previously this was commented out because causing more severe issues with the select2 drop-down;
+        // but recent changes (possibly that setOutputMarkupId(true) is called) now seem to have resolved the issue.
+        component().setRequired(required);
     }
     public boolean checkRequired() {
         return component().checkRequired();

@@ -42,8 +42,7 @@ public class Select2ChoiceExt extends Select2Choice<ObjectAdapterMemento> implem
         super(id, model, EmptyChoiceProvider.INSTANCE);
         specId = scalarModel.getTypeOfSpecification().getSpecId();
 
-        //causing a more severe orphaned drop-down when triggered...
-        //setRequired(scalarModel.isRequired());
+        getSettings().setCloseOnSelect(true);
 
         setOutputMarkupPlaceholderTag(true);
     }

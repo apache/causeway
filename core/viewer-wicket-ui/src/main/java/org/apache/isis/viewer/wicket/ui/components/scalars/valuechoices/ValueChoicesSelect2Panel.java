@@ -26,9 +26,13 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -62,6 +66,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
             select2.clearInput();
         }
 
+        this.setOutputMarkupId(true);
+        select2.component().setOutputMarkupId(true);
+
         final String name = getModel().getName();
         select2.setLabel(Model.of(name));
 
@@ -71,8 +78,38 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
             formGroup.add(new CssClassAppender("mandatory"));
         }
 
+        addStandardSemantics();
 
         return formGroup;
+    }
+
+    protected void addStandardSemantics() {
+        select2.setRequired(getModel().isRequired());
+
+        addValidatorForIsisValidation();
+    }
+
+    private void addValidatorForIsisValidation() {
+        final ScalarModel scalarModel = getModel();
+
+        select2.component().add(new IValidator<ObjectAdapterMemento>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void validate(final IValidatable<ObjectAdapterMemento> validatable) {
+                final ObjectAdapterMemento proposedValue = validatable.getValue();
+                final ObjectAdapter proposedAdapter =
+                        proposedValue.getObjectAdapter(
+                                AdapterManager.ConcurrencyChecking.NO_CHECK,
+                                getPersistenceSession(), getSpecificationLoader());
+                final String reasonIfAny = scalarModel.validate(proposedAdapter);
+                if (reasonIfAny != null) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(reasonIfAny);
+                    validatable.error(error);
+                }
+            }
+        });
     }
 
 
