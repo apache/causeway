@@ -187,7 +187,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
 
         final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+        final String disableReasonIfAny = scalarModel.whetherDisabled(getRendering().getWhere());
 
         if (scalarModel.isViewMode()) {
             onInitializeWhenViewMode();
@@ -373,6 +373,30 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
+    }
+
+
+    // //////////////////////////////////////
+
+    /**
+     * Each component is now responsible for determining if it should be visible or not.
+     *
+     * <p>
+     * Unlike the constructor and <tt>onInitialize</tt>, which are called only once, the <tt>onConfigure</tt> callback
+     * is called multiple times, just prior to <tt>onBeforeRendering</tt>.  It is therefore the correct place for
+     * components to set up their visibility/enablement.
+     * </p>
+     *
+     */
+    @Override
+    protected void onConfigure() {
+
+        final ScalarModel scalarModel = getModel();
+
+        final boolean hidden = scalarModel.whetherHidden(getRendering().getWhere());
+        setVisibilityAllowed(!hidden);
+
+        super.onConfigure();
     }
 
 

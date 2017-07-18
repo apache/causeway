@@ -25,13 +25,10 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
@@ -44,20 +41,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
-import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -188,7 +177,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
 
         final ScalarModel scalarModel = getModel();
-        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+        final String disableReasonIfAny = scalarModel.whetherDisabled(getRendering().getWhere());
 
         if (scalarModel.isViewMode()) {
             onBeforeRenderWhenViewMode();
@@ -199,6 +188,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 onBeforeRenderWhenEnabled();
             }
         }
+
         super.onBeforeRender();
     }
 

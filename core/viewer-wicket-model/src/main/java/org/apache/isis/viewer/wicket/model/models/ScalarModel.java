@@ -101,7 +101,19 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             }
 
             @Override
-            public String disable(final ScalarModel scalarModel, final Where where) {
+            public boolean whetherHidden(final ScalarModel scalarModel, final Where where) {
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
+                final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
+                try {
+                    final Consent visibility = property.isVisible(parentAdapter, InteractionInitiatedBy.USER, where);
+                    return visibility.isVetoed();
+                } catch (final Exception ex) {
+                    return true; // will be hidden
+                }
+            }
+
+            @Override
+            public String whetherDisabled(final ScalarModel scalarModel, final Where where) {
                 final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
                 try {
@@ -327,9 +339,15 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             }
 
             @Override
-            public String disable(final ScalarModel scalarModel, Where where) {
+            public String whetherDisabled(final ScalarModel scalarModel, Where where) {
                 // always enabled
                 return null;
+            }
+
+            @Override
+            public boolean whetherHidden(final ScalarModel scalarModel, Where where) {
+                // always enabled
+                return false;
             }
 
             @Override
@@ -551,7 +569,9 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
         public abstract String getIdentifier(ScalarModel scalarModel);
 
-        public abstract String disable(ScalarModel scalarModel, Where where);
+        public abstract boolean whetherHidden(ScalarModel scalarModel, Where where);
+
+        public abstract String whetherDisabled(ScalarModel scalarModel, Where where);
 
         public abstract String parseAndValidate(ScalarModel scalarModel, String proposedPojoAsStr);
 
@@ -779,8 +799,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         setObject(adapter);
     }
 
-    public String disable(Where where) {
-        return kind.disable(this, where);
+    public boolean whetherHidden(Where where) {
+        return kind.whetherHidden(this, where);
+    }
+
+    public String whetherDisabled(Where where) {
+        return kind.whetherDisabled(this, where);
     }
 
     public String validate(final ObjectAdapter proposedAdapter) {
@@ -949,7 +973,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
     boolean isEnabled() {
         Where where = getRenderingHint().isInTable() ? Where.PARENTED_TABLES : Where.OBJECT_FORMS;
-        return disable(where) == null;
+        return whetherDisabled(where) == null;
     }
 
     public String getReasonInvalidIfAny() {
