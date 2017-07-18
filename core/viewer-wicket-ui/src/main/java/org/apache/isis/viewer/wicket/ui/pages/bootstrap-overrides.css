@@ -907,6 +907,10 @@ tr.headers th form input {
     width: 85%;
 }
 
+a.form-control.scalarValueInlinePromptLink {
+    text-decoration: none;
+}
+
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
 .referencePanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink {
     width: 90%;
