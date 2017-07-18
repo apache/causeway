@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
@@ -161,6 +162,11 @@ public class Select2 implements Serializable {
 
     public void add(final Behavior behavior) {
         component().add(behavior);
+    }
+
+    public final Select2 add(final IValidator<ObjectAdapterMemento> validator) {
+        component().add(validator);
+        return this;
     }
 
     public <M extends Behavior> List<M> getBehaviors(Class<M> behaviorClass) {

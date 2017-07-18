@@ -37,8 +37,8 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -135,15 +135,18 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
 
         // add semantics
-        this.entityLink.setRequired(getModel().isRequired());
-        this.entityLink.add(new IValidator<ObjectAdapter>() {
-
+        select2.setRequired(getModel().isRequired());
+        select2.add(new IValidator<ObjectAdapterMemento>() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void validate(final IValidatable<ObjectAdapter> validatable) {
-                final ObjectAdapter proposedAdapter = validatable.getValue();
-                final String reasonIfAny = getModel().validate(proposedAdapter);
+            public void validate(final IValidatable<ObjectAdapterMemento> validatable) {
+                final ObjectAdapterMemento proposedValue = validatable.getValue();
+                final ObjectAdapter proposedAdapter =
+                        proposedValue.getObjectAdapter(
+                                AdapterManager.ConcurrencyChecking.NO_CHECK,
+                                getPersistenceSession(), getSpecificationLoader());
+                final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();
                     error.setMessage(reasonIfAny);
@@ -151,7 +154,6 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
                 }
             }
         });
-
 
         return formGroup;
     }

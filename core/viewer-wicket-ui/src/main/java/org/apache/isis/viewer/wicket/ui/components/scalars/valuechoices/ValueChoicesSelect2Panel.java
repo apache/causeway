@@ -92,7 +92,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract impleme
     private void addValidatorForIsisValidation() {
         final ScalarModel scalarModel = getModel();
 
-        select2.component().add(new IValidator<ObjectAdapterMemento>() {
+        select2.add(new IValidator<ObjectAdapterMemento>() {
             private static final long serialVersionUID = 1L;
 
             @Override
